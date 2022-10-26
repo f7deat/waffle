@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Data/Migrations
+/obj
+/Properties
+/bin/Debug/net6.0
+/Waffle.csproj.user

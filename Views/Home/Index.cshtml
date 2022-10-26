@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Waffle.Models.ComponentListItem>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@foreach (var item in Model)
+{
+    <div>
+        @await Component.InvokeAsync(item.Name, item.Arguments)
+    </div>
+}
