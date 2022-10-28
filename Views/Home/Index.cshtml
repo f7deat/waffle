@@ -1,12 +1,11 @@
-﻿@model IEnumerable<Waffle.Models.ComponentListItem>
-
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
-@foreach (var item in Model)
+@foreach (var item in ViewBag.AT)
 {
     <div>
-        @await Component.InvokeAsync(item.Name, item.Arguments)
+        @await Component.InvokeAsync(item.Name, item.Id)
     </div>
 }
+

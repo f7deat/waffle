@@ -32,13 +32,14 @@ namespace Waffle.Controllers
             }
             var items = from a in _context.WorkItems
                         join b in _context.Components on a.ComponentId equals b.Id
+                        where a.CatalogId == catalog.Id
                         select new ComponentListItem
                         {
-                            Name = b.Name,
-                            Id = a.Id,
-                            Arguments = a.Arguments
+                            Name = b.NormalizedName,
+                            Id = a.Id
                         };
-            return View(items);
+            ViewBag.AT = items;
+            return View();
         }
 
         public IActionResult Privacy()

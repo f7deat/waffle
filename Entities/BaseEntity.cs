@@ -7,5 +7,7 @@ namespace Waffle.Entities
     {
         [Key, JsonPropertyName("id")]
         public Guid Id { get; set; }
+        [JsonPropertyName("active")]
+        public bool Active { get; set; }
     }
 }

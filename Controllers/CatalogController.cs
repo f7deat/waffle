@@ -14,10 +14,6 @@ namespace Waffle.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
@@ -31,6 +27,23 @@ namespace Waffle.Controllers
         public async Task<IActionResult> ListAsync()
         {
             return Ok(await _context.Catalogs.ToListAsync());
+        }
+
+        [HttpPost("delete/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        {
+            var catalog = await _context.Catalogs.FindAsync(id);
+            if (catalog is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            if ("home".Equals(catalog.NormalizedName))
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            _context.Catalogs.Remove(catalog);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
     }
 }

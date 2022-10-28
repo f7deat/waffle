@@ -1,8 +1,8 @@
 ﻿namespace Waffle.Models
 {
-    public class ComponentListItem
+    public class WorkListItem
     {
-        public ComponentListItem()
+        public WorkListItem()
         {
             Name = string.Empty;
         }
