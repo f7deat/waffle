@@ -42,8 +42,9 @@ namespace Waffle.Controllers
                         where a.Id == id
                         select new WorkListItem
                         {
-                            Id = b.Id,
-                            Name = c.Name
+                            WorkId = b.Id,
+                            Name = c.Name,
+                            NormalizedName = c.NormalizedName
                         };
             return Ok(await query.ToListAsync());
         }

@@ -7,7 +7,10 @@ namespace Waffle.Entities
         public WorkItem()
         {
             Arguments = string.Empty;
+            Name = string.Empty;
         }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
         [JsonPropertyName("arguments")]
         public string Arguments { get; set; }
         [JsonPropertyName("componentId")]
