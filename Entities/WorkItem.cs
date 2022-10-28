@@ -14,5 +14,7 @@ namespace Waffle.Entities
         public Guid ComponentId { get; set; }
         [JsonPropertyName("catalogId")]
         public Guid CatalogId { get; set; }
+        [JsonPropertyName("parentId")]
+        public Guid? ParentId { get; set; }
     }
 }

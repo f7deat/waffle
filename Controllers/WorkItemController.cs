@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Web;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
@@ -24,10 +25,13 @@ namespace Waffle.Controllers
             {
                 return BadRequest();
             }
-            var entity = await _context.WorkItems.AddAsync(workItem);
+            await _context.WorkItems.AddAsync(workItem);
             await _context.SaveChangesAsync();
-            return Ok(entity);
+            return Ok(IdentityResult.Success);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.WorkItems.FindAsync(id));
 
         [HttpGet("list/{id}")]
         public async Task<IActionResult> ListAsync([FromRoute] Guid id)
@@ -51,17 +55,34 @@ namespace Waffle.Controllers
             {
                 return BadRequest();
             }
-            var option = new TitleOption
-            {
-                Label = model.Label
-            };
-            var args = JsonSerializer.Serialize(option);
             var title = await _context.WorkItems.FindAsync(model.WorkId);
             if (title is null)
             {
                 return Ok(IdentityResult.Failed());
             }
+            var option = new TitleOption
+            {
+                Label = model.Label
+            };
+            var args = JsonSerializer.Serialize(option);
             title.Arguments = args;
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpPost("save")]
+        public async Task<IActionResult> SaveAsync([FromBody] WorkItem model)
+        {
+            if (model is null)
+            {
+                return BadRequest();
+            }
+            var workItem = await _context.WorkItems.FindAsync(model.Id);
+            if (workItem is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            workItem.Arguments = HttpUtility.HtmlEncode(model.Arguments);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
