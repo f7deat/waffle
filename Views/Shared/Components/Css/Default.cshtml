@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Waffle.Entities.WorkItem>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var item in Model)
+    {
+        if (string.IsNullOrEmpty(item.Arguments))
+        {
+            continue;
+        }
+        <link rel="stylesheet" href="@item.Arguments" asp-append-version="true" />
+    }
+}

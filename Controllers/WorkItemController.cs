@@ -87,5 +87,35 @@ namespace Waffle.Controllers
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        [HttpPost("active/{id}")]
+        public async Task<IActionResult> ActiveAsync([FromRoute] Guid id)
+        {
+            var workItem = await _context.WorkItems.FindAsync(id);
+            if (workItem is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            workItem.Active = !workItem.Active;
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpPost("delete/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        {
+            var workItem = await _context.WorkItems.FindAsync(id);
+            if (workItem is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            if (await _context.WorkItems.AnyAsync(x => x.ParentId == id))
+            {
+                return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child items first!" }));
+            }
+            _context.WorkItems.Remove(workItem);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
     }
 }
