@@ -40,10 +40,11 @@ namespace Waffle.Controllers
                         join b in _context.WorkItems on a.Id equals b.CatalogId
                         join c in _context.Components on b.ComponentId equals c.Id
                         where a.Id == id
+                        orderby b.SortOrder ascending
                         select new WorkListItem
                         {
                             WorkId = b.Id,
-                            Name = c.Name,
+                            Name = $"[{c.Name}] {b.Name}",
                             NormalizedName = c.NormalizedName
                         };
             return Ok(await query.ToListAsync());
@@ -61,7 +62,7 @@ namespace Waffle.Controllers
             {
                 return Ok(IdentityResult.Failed());
             }
-            var option = new TitleOption
+            var option = new Title
             {
                 Label = model.Label
             };
@@ -84,6 +85,9 @@ namespace Waffle.Controllers
                 return Ok(IdentityResult.Failed());
             }
             workItem.Arguments = HttpUtility.HtmlEncode(model.Arguments);
+            workItem.Active = model.Active;
+            workItem.Name = model.Name;
+            workItem.SortOrder = model.SortOrder;
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }

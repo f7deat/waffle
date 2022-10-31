@@ -23,7 +23,7 @@ namespace Waffle.ViewComponents
             {
                 return View();
             }
-            var title = JsonSerializer.Deserialize<TitleOption>(data.Arguments);
+            var title = JsonSerializer.Deserialize<Title>(data.Arguments);
             return View(title);
         }
     }

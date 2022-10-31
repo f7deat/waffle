@@ -2,9 +2,9 @@
 
 namespace Waffle.Models.Components
 {
-    public class TitleOption
+    public class Title
     {
-        public TitleOption()
+        public Title()
         {
             Label = string.Empty;
         }
@@ -12,7 +12,7 @@ namespace Waffle.Models.Components
         public string Label { get; set; }
     }
 
-    public class UpdateTitleOption : TitleOption
+    public class UpdateTitleOption : Title
     {
         [JsonPropertyName("workId")]
         public Guid WorkId { get; set; }

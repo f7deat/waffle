@@ -33,6 +33,7 @@ namespace Waffle.Controllers
             var items = from a in _context.WorkItems
                         join b in _context.Components on a.ComponentId equals b.Id
                         where a.CatalogId == catalog.Id
+                        orderby a.SortOrder ascending
                         select new ComponentListItem
                         {
                             Name = b.NormalizedName,

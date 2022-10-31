@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models.Components;
 
 namespace Waffle.Controllers
 {
@@ -24,9 +25,27 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync()
+        public async Task<IActionResult> ListAsync() => Ok(await _context.Catalogs.ToListAsync());
+
+        [HttpGet("tree")]
+        public async Task<IActionResult> TreeAsync()
         {
-            return Ok(await _context.Catalogs.ToListAsync());
+            var returnValue = new List<Tree>();
+            var parrent = await _context.Catalogs.Where(x => x.Active && x.ParentId == null).ToListAsync();
+            foreach (var catalog in parrent)
+            {
+                List<Tree>? children = null;
+                if (await _context.Catalogs.AnyAsync(x => x.ParentId == catalog.ParentId))
+                {
+                    children = await _context.Catalogs.Where(x => x.Active && x.ParentId == catalog.Id).Select(x => new Tree
+                    {
+                        Key = x.Id,
+                        Title = x.Name
+                    }).ToListAsync();
+                }
+                returnValue.Add(new Tree { Key = catalog.Id, Title = catalog.Name, Children = children });
+            }
+            return Ok(returnValue);
         }
 
         [HttpPost("delete/{id}")]
