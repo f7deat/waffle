@@ -15,12 +15,12 @@ namespace Waffle.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var id = Guid.Parse("4473a4f2-e9c0-4db1-9558-fd99c489a3fa");
-            var data = await _context.WorkItems.Where(x => x.CatalogId == id).ToListAsync();
-            if (data is null)
-            {
-                return View();
-            }
-            return View(data);
+            var query = from a in _context.WorkItems
+                        join b in _context.WorkContents on a.WorkContentId equals b.Id
+                        where a.CatalogId == id
+                        orderby a.SortOrder ascending
+                        select b;
+            return View(await query.ToListAsync());
         }
     }
 }

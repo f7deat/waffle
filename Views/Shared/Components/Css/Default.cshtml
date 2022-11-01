@@ -1,13 +1,9 @@
-﻿@model IEnumerable<Waffle.Entities.WorkItem>
+﻿@model IEnumerable<Waffle.Entities.WorkContent>
 
 @if (Model != null && Model.Any())
 {
     @foreach (var item in Model)
     {
-        if (string.IsNullOrEmpty(item.Arguments))
-        {
-            continue;
-        }
-        <link rel="stylesheet" href="@item.Arguments" asp-append-version="true" />
+        <link rel="stylesheet" href="/css/@($"{item.Id}.css")" asp-append-version="true" />
     }
 }

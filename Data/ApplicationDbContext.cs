@@ -2,31 +2,42 @@
 using Microsoft.EntityFrameworkCore;
 using Waffle.Entities;
 using Waffle.Models.Components;
-using Waffle.ViewComponents;
 
 namespace Waffle.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
             : base(options)
         {
         }
 
-        public DbSet<Catalog> Catalogs { get; set; }
-        public DbSet<Component> Components { get; set; }
-        public DbSet<WorkItem> WorkItems { get; set; }
+        public virtual DbSet<Catalog> Catalogs { get; set; }
+        public virtual DbSet<Component> Components { get; set; }
+        public virtual DbSet<FileContent> FileContents { get; set; }
+        public virtual DbSet<FileItem> FileItems { get; set; }
+        public virtual DbSet<WorkContent> WorkContents { get; set; }
+        public virtual DbSet<WorkItem> WorkItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<FileItem>().HasKey(k => new { k.FileId, k.ItemId });
+            builder.Entity<WorkItem>().HasKey(k => new { k.WorkContentId, k.CatalogId });
+
             builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("06d5c4c9-18a6-49eb-a821-ed208631945e"), Name = "Home", NormalizedName = "home", Active = true });
             builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("4881c283-ef77-48c1-ab4e-646b61dabf4c"), Name = "Blog", NormalizedName = "blog", Active = true });
             builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("05c94032-84e5-47d5-99d7-30edb28a51bd"), Name = "Setting", NormalizedName = "setting", Active = true });
             builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("4473a4f2-e9c0-4db1-9558-fd99c489a3fa"), Name = "CSS", NormalizedName = "css", Active = true, ParentId = Guid.Parse("05c94032-84e5-47d5-99d7-30edb28a51bd") });
+            builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("1b0c4f08-7dfa-43f6-aed9-74756a1fbbcc"), Name = nameof(Header), NormalizedName = nameof(Header), Active = true, ParentId = Guid.Parse("05c94032-84e5-47d5-99d7-30edb28a51bd") });
+
             builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("b46dc729-7681-42c0-a7cb-97d0addde826"), Name = nameof(Title), NormalizedName = nameof(Title) });
             builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("2b803a7c-dc1b-4db1-9a09-aebfdef0ad1b"), Name = nameof(Html), NormalizedName = nameof(Html) });
             builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("1ad3c3f7-d3ec-4a08-884d-4bf72c81afcb"), Name = nameof(Css), NormalizedName = nameof(Css) });
+            builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("4efd4b8b-aa05-40b0-91f2-616b04d4f99b"), Name = nameof(Header), NormalizedName = nameof(Header) });
         }
     }
 }

@@ -30,13 +30,14 @@ namespace Waffle.Controllers
                 await _context.Catalogs.AddAsync(catalog);
                 await _context.SaveChangesAsync();
             }
-            var items = from a in _context.WorkItems
-                        join b in _context.Components on a.ComponentId equals b.Id
-                        where a.CatalogId == catalog.Id
-                        orderby a.SortOrder ascending
+            var items = from a in _context.WorkContents
+                        join b in _context.WorkItems on a.Id equals b.WorkContentId
+                        join c in _context.Components on a.ComponentId equals c.Id
+                        where b.CatalogId == catalog.Id
+                        orderby b.SortOrder ascending
                         select new ComponentListItem
                         {
-                            Name = b.NormalizedName,
+                            Name = c.NormalizedName,
                             Id = a.Id
                         };
             ViewBag.AT = items;
