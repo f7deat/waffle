@@ -1,5 +1,6 @@
-﻿@model Waffle.Models.Components.Header
-
-<div class="container">
-    <img src="@Model.Logo" alt="LOGO" />
-</div>
+﻿<header class="wf-header">
+    @foreach (var item in Model)
+    {
+        @await Component.InvokeAsync(item.Name, item.Id)
+    }
+</header>

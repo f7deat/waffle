@@ -38,6 +38,9 @@ namespace Waffle.Data
             builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("2b803a7c-dc1b-4db1-9a09-aebfdef0ad1b"), Name = nameof(Html), NormalizedName = nameof(Html) });
             builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("1ad3c3f7-d3ec-4a08-884d-4bf72c81afcb"), Name = nameof(Css), NormalizedName = nameof(Css) });
             builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("4efd4b8b-aa05-40b0-91f2-616b04d4f99b"), Name = nameof(Header), NormalizedName = nameof(Header) });
+            builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("f1aadc42-0c3e-4cec-b16a-55acb1409ec1"), Name = nameof(Row), NormalizedName = nameof(Row) });
+            builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("7cb9c10d-9cf4-4c7f-a0ef-ef0fe74c37fb"), Name = nameof(Column), NormalizedName = nameof(Column) });
+            builder.Entity<Component>().HasData(new Component { Id = Guid.Parse("30520f7f-e3e8-412a-ac97-936be9e8de2c"), Name = nameof(Image), NormalizedName = nameof(Image) });
         }
     }
 }

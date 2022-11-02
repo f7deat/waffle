@@ -13,6 +13,8 @@
 </head>
 <body>
 
+    @await Component.InvokeAsync(nameof(Waffle.Models.Components.Header))
+
     @RenderBody()
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Data;
+using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
@@ -11,14 +13,30 @@ namespace Waffle.ViewComponents
         {
             _context = context;
         }
-        public async Task<IViewComponentResult> InvokeAsync(Guid id)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var data = await _context.WorkContents.FindAsync(id);
-            if (data is null)
+            var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => nameof(Header).ToLower().Equals(x.NormalizedName));
+            if (catalog is null)
             {
-                return View();
+                catalog = new Entities.Catalog
+                {
+                    Name = "Home",
+                    NormalizedName = "home"
+                };
+                await _context.Catalogs.AddAsync(catalog);
+                await _context.SaveChangesAsync();
             }
-            return View(data);
+            var items = from a in _context.WorkContents
+                        join b in _context.WorkItems on a.Id equals b.WorkContentId
+                        join c in _context.Components on a.ComponentId equals c.Id
+                        where b.CatalogId == catalog.Id
+                        orderby b.SortOrder ascending
+                        select new ComponentListItem
+                        {
+                            Name = c.NormalizedName,
+                            Id = a.Id
+                        };
+            return View(items);
         }
     }
 }

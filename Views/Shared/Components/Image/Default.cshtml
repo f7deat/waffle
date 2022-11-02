@@ -1,0 +1,16 @@
+﻿@using Waffle.Models.Components
+@model Image
+
+@if (Model != null)
+{
+    if (!string.IsNullOrEmpty(Model.Url))
+    {
+        <a href="@Model.Url" aria-label="@Model.Alt">
+            <img src="@Model.Src" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image" id="@Model.Id" />
+        </a>
+    }
+    else
+    {
+        <img src="@Model.Src" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image" id="@Model.Id" />
+    }
+}

@@ -1,0 +1,9 @@
+﻿@using Waffle.Models.Components
+@model Column
+
+<div class="@Model.Value" id="@Model.Id">
+    @foreach (var item in Model.WorkListItems)
+    {
+        @await Component.InvokeAsync(item.NormalizedName, item.Id)
+    }
+</div>
