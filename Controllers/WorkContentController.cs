@@ -72,28 +72,6 @@ namespace Waffle.Controllers
             });
         }
 
-        [HttpPost("save/title")]
-        public async Task<IActionResult> SaveTitleAsync([FromBody] UpdateTitleOption model)
-        {
-            if (model is null)
-            {
-                return BadRequest();
-            }
-            var title = await _context.WorkContents.FindAsync(model.WorkId);
-            if (title is null)
-            {
-                return Ok(IdentityResult.Failed());
-            }
-            var option = new Title
-            {
-                Label = model.Label
-            };
-            var args = JsonSerializer.Serialize(option);
-            title.Arguments = args;
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
-
         [HttpPost("save")]
         public async Task<IActionResult> SaveAsync([FromBody] SaveWorkContentModel model)
         {
@@ -133,21 +111,79 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
-        [HttpPost("delete/{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteAsync([FromBody] DeleteWorkContent model)
         {
-            var workItem = await _context.WorkContents.FindAsync(id);
+            var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkContentId == model.WorkContentId && x.CatalogId == model.CatalogId);
             if (workItem is null)
             {
-                return Ok(IdentityResult.Failed());
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work item not found!"
+                }));
             }
-            if (await _context.WorkContents.AnyAsync(x => x.ParentId == id))
+
+            if (await _context.WorkContents.AnyAsync(x => x.ParentId == model.WorkContentId))
             {
                 return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child items first!" }));
             }
-            _context.WorkContents.Remove(workItem);
+            _context.WorkItems.Remove(workItem);
+
+            if (!await _context.WorkItems.AnyAsync(x => x.CatalogId == model.CatalogId))
+            {
+                var workContent = await _context.WorkContents.FindAsync(model.WorkContentId);
+                if (workContent is null)
+                {
+                    return Ok(IdentityResult.Failed(new IdentityError
+                    {
+                        Description = "No work content found!"
+                    }));
+                }
+                _context.WorkContents.Remove(workContent);
+            }
+
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        #region Custom components
+        [HttpPost("navbar/save")]
+        public async Task<IActionResult> SaveNavbarAsync([FromBody] Navbar model)
+        {
+            var workContent = await _context.WorkContents.FindAsync(model.Id);
+            if (workContent is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "No work content found!"
+                }));
+            }
+            workContent.Arguments = JsonSerializer.Serialize(model);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpPost("save/title")]
+        public async Task<IActionResult> SaveTitleAsync([FromBody] UpdateTitleOption model)
+        {
+            if (model is null)
+            {
+                return BadRequest();
+            }
+            var title = await _context.WorkContents.FindAsync(model.WorkId);
+            if (title is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            var option = new Title
+            {
+                Label = model.Label
+            };
+            var args = JsonSerializer.Serialize(option);
+            title.Arguments = args;
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+        #endregion
     }
 }

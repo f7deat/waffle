@@ -1,0 +1,9 @@
+﻿@using Waffle.Models
+@model PageVewModel
+
+<div class="@(Model.Settings.Container ? "container" : "container-fluid")" id="catalog">
+    @foreach (var item in Model.ComponentListItems)
+    {
+        @await Component.InvokeAsync(item.Name, item.Id)
+    }
+</div>

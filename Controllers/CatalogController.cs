@@ -19,6 +19,17 @@ namespace Waffle.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
         {
+            if (catalog == null || string.IsNullOrWhiteSpace(catalog.NormalizedName))
+            {
+                return BadRequest();
+            }
+            if (!string.IsNullOrWhiteSpace(catalog.NormalizedName) && await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(catalog.NormalizedName)))
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Normalized name must be unique!"
+                }));
+            }
             await _context.Catalogs.AddAsync(catalog);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);

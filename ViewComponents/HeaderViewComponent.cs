@@ -36,7 +36,8 @@ namespace Waffle.ViewComponents
                             Name = c.NormalizedName,
                             Id = a.Id
                         };
-            return View(items);
+            ViewBag.Items = items;
+            return View();
         }
     }
 }

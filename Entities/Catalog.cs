@@ -9,15 +9,28 @@ namespace Waffle.Entities
         {
             Name = string.Empty;
             NormalizedName = string.Empty;
+            Setting = string.Empty;
+            Description = string.Empty;
         }
+
         [JsonPropertyName("parrentId")]
         public Guid? ParentId { get; set; }
         [StringLength(100)]
         [JsonPropertyName("name")]
         public string Name { get; set; }
+        [StringLength(500)]
+        public string Description { get; set; }
         [StringLength(100)]
         [JsonPropertyName("normalizedName")]
         public string NormalizedName { get; set; }
+        [JsonPropertyName("setting")]
+        public string Setting { get; set; }
+        [JsonPropertyName("createdDate")]
+        public DateTime CreatedDate { get; set; }
+        [JsonPropertyName("modifiedDate")]
+        public DateTime? ModifiedDate { get; set; }
+        [JsonPropertyName("publishedDate")]
+        public DateTime? PublishedDate { get; set; }
         [JsonPropertyName("active")]
         public bool Active { get; set; }
     }
