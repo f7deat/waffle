@@ -147,6 +147,22 @@ namespace Waffle.Controllers
         }
 
         #region Custom components
+
+        [HttpGet("navbar/{id}")]
+        public async Task<IActionResult> GetNavbarAsync([FromRoute] Guid id)
+        {
+            var workContent = await _context.WorkContents.FindAsync(id);
+            if (workContent is null)
+            {
+                return NotFound();
+            }
+            if (string.IsNullOrEmpty(workContent.Arguments))
+            {
+                return NoContent();
+            }
+            return Ok(JsonSerializer.Deserialize<Navbar>(workContent.Arguments));
+        }
+
         [HttpPost("navbar/save")]
         public async Task<IActionResult> SaveNavbarAsync([FromBody] Navbar model)
         {

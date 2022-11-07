@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Data;
+using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
@@ -19,11 +20,13 @@ namespace Waffle.ViewComponents
                         where a.WorkContentId == workContentId
                         orderby a.SortOrder ascending
                         select b.Arguments;
+            var navbar = await query.FirstOrDefaultAsync();
+            if (navbar is null)
+            {
+                return View();
+            }
 
-            var image = await query.FirstOrDefaultAsync();
-            if (image == null) return View();
-
-            return View();
+            return View(JsonSerializer.Deserialize<Navbar>(navbar));
         }
     }
 }

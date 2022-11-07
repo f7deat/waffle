@@ -14,17 +14,17 @@ namespace Waffle.Controllers
             _context = context;
         }
 
-        [Route("{normalizedName}")]
+        [Route("/page/{normalizedName}")]
         public async Task<IActionResult> Index(string normalizedName)
         {
             if (string.IsNullOrWhiteSpace(normalizedName))
             {
-                return NotFound();
+                return NotFound("Missing normailized name!");
             }
             var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName));
             if (catalog is null)
             {
-                return NotFound();
+                return NotFound("Cannot get catalog!");
             }
 
             ViewData["Title"] = catalog.Name;
@@ -41,10 +41,16 @@ namespace Waffle.Controllers
                                 Name = c.NormalizedName
                             };
 
+            var settings = new PageSettingViewModel();
+            if (!string.IsNullOrEmpty(catalog.Setting))
+            {
+                settings = JsonSerializer.Deserialize<PageSettingViewModel>(catalog.Setting) ?? new PageSettingViewModel();
+            }
+
             var page = new PageVewModel
             {
                 ComponentListItems = await workItems.ToListAsync(),
-                Settings = JsonSerializer.Deserialize<PageSettingViewModel>(catalog.Setting) ?? new PageSettingViewModel()
+                Settings = settings
             };
 
             return View(page);
