@@ -45,6 +45,10 @@ namespace Waffle.Controllers
             if (!string.IsNullOrEmpty(catalog.Setting))
             {
                 settings = JsonSerializer.Deserialize<PageSettingViewModel>(catalog.Setting) ?? new PageSettingViewModel();
+                if (!string.IsNullOrEmpty(settings.Title))
+                {
+                    ViewData["Title"] = settings.Title;
+                }
             }
 
             var page = new PageVewModel

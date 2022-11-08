@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models.Components;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers
 {
@@ -14,6 +16,28 @@ namespace Waffle.Controllers
         public CatalogController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id)
+        {
+            var catalog = await _context.Catalogs.FindAsync(id);
+            if (catalog == null)
+            {
+                return NotFound();
+            }
+            var data = new CatalogViewModel
+            {
+                Id = id,
+                Name = catalog.Name,
+                NormalizedName = catalog.NormalizedName,
+                Description = catalog.Description,
+            };
+            if (!string.IsNullOrEmpty(catalog.Setting))
+            {
+                data.Setting = JsonSerializer.Deserialize<CatalogSetting>(catalog.Setting) ?? new CatalogSetting();
+            }
+            return Ok(data);
         }
 
         [HttpPost("add")]
@@ -36,7 +60,16 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync() => Ok(await _context.Catalogs.ToListAsync());
+        public async Task<IActionResult> ListAsync()
+        {
+            var data = await _context.Catalogs.ToListAsync();
+            var total = await _context.Catalogs.CountAsync();
+            return Ok(new
+            {
+                data,
+                total
+            });
+        }
 
         [HttpGet("tree")]
         public async Task<IActionResult> TreeAsync()
@@ -85,6 +118,24 @@ namespace Waffle.Controllers
                 return Ok(IdentityResult.Failed());
             }
             catalog.Active = !catalog.Active;
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpPost("save")]
+        public async Task<IActionResult> SaveAsync([FromBody] CatalogViewModel model)
+        {
+            if (model is null)
+            {
+                return BadRequest();
+            }
+            var catalog = await _context.Catalogs.FindAsync(model.Id);
+            if (catalog is null)
+            {
+                return NoContent();
+            }
+            catalog.Name = model.Name;
+            catalog.Setting = JsonSerializer.Serialize(model.Setting);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }

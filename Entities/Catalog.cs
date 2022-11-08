@@ -19,6 +19,7 @@ namespace Waffle.Entities
         [JsonPropertyName("name")]
         public string Name { get; set; }
         [StringLength(500)]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
         [StringLength(100)]
         [JsonPropertyName("normalizedName")]

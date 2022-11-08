@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Waffle.Data;
 using Waffle.Entities;
 
@@ -13,6 +14,16 @@ namespace Waffle.Controllers
         {
             _webHostEnvironment = webHostEnvironment;
             _context = context;
+        }
+
+        [HttpGet("list")]
+        public async Task<IActionResult> ListAsync()
+        {
+            return Ok(new
+            {
+                data = await _context.FileContents.ToListAsync(),
+                total = await _context.FileContents.CountAsync()
+            });
         }
 
         [HttpPost("upload")]
