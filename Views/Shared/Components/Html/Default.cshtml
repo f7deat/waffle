@@ -2,5 +2,5 @@
 
 @if (Model != null && !string.IsNullOrEmpty(Model.Arguments))
 {
-    @Html.Raw(System.Web.HttpUtility.HtmlDecode(Model.Arguments))
+    @Html.Raw(Model.Arguments)
 }

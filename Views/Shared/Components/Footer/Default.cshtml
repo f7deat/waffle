@@ -1,0 +1,6 @@
+﻿<footer class="wf-footer">
+    @foreach (var item in ViewBag.Items)
+    {
+        @await Component.InvokeAsync(item.Name, item.Id)
+    }
+</footer>

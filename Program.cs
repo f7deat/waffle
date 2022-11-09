@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Services.Catalogs;
+using Waffle.Core.Services.FileContents;
 using Waffle.Data;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -14,6 +16,10 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddTransient<ICatalogService, CatalogService>();
+builder.Services.AddTransient<IFileContentService, FileContentService>();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddCors(options =>

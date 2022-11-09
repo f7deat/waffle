@@ -7,19 +7,19 @@ using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
-    public class HeaderViewComponent : ViewComponent
+    public class FooterViewComponent : ViewComponent
     {
         private readonly ApplicationDbContext _context;
         private readonly ICatalogService _catalogService;
-        public HeaderViewComponent(ApplicationDbContext context, ICatalogService catalogService)
+        public FooterViewComponent(ApplicationDbContext context, ICatalogService catalogService)
         {
             _context = context;
             _catalogService = catalogService;
         }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var catalog = await _catalogService.EnsureDataAsync(nameof(Header));
-
+            var catalog = await _catalogService.EnsureDataAsync(nameof(Footer));
             var items = from a in _context.WorkContents
                         join b in _context.WorkItems on a.Id equals b.WorkContentId
                         join c in _context.Components on a.ComponentId equals c.Id

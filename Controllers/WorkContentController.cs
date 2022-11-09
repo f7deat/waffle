@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Web;
+using Waffle.Core.Services.FileContents;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
@@ -15,9 +16,11 @@ namespace Waffle.Controllers
     public class WorkContentController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public WorkContentController(ApplicationDbContext context)
+        private readonly IFileContentService _fileContentService;
+        public WorkContentController(ApplicationDbContext context, IFileContentService fileContentService)
         {
             _context = context;
+            _fileContentService = fileContentService;
         }
 
         [HttpPost("add")]
@@ -84,7 +87,7 @@ namespace Waffle.Controllers
             {
                 return Ok(IdentityResult.Failed());
             }
-            workContent.Arguments = HttpUtility.HtmlEncode(model.Arguments);
+            workContent.Arguments = model.Arguments;
             workContent.Active = model.Active;
             workContent.Name = model.Name;
 
@@ -141,6 +144,8 @@ namespace Waffle.Controllers
                 }
                 _context.WorkContents.Remove(workContent);
             }
+
+            await _fileContentService.RemoveFromItemAsync(workItem.WorkContentId);
 
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);

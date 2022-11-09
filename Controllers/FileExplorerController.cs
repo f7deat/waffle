@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Data;
 using Waffle.Entities;
@@ -24,6 +25,34 @@ namespace Waffle.Controllers
                 data = await _context.FileContents.ToListAsync(),
                 total = await _context.FileContents.CountAsync()
             });
+        }
+
+        [HttpPost("delete-file-content/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        {
+            if (await _context.FileItems.AnyAsync(x => x.FileId == id))
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "File in usage!"
+                }));
+            }
+            var fileContent = await _context.FileContents.FindAsync(id);
+            if (fileContent is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "File not found!"
+                }));
+            }
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, fileContent.Url);
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+            _context.FileContents.Remove(fileContent);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
 
         [HttpPost("upload")]
