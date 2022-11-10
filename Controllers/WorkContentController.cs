@@ -130,9 +130,8 @@ namespace Waffle.Controllers
             {
                 return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child items first!" }));
             }
-            _context.WorkItems.Remove(workItem);
 
-            if (!await _context.WorkItems.AnyAsync(x => x.CatalogId == model.CatalogId))
+            if (await _context.WorkItems.CountAsync(x => x.CatalogId == model.CatalogId) == 1)
             {
                 var workContent = await _context.WorkContents.FindAsync(model.WorkContentId);
                 if (workContent is null)
@@ -144,6 +143,8 @@ namespace Waffle.Controllers
                 }
                 _context.WorkContents.Remove(workContent);
             }
+
+            _context.WorkItems.Remove(workItem);
 
             await _fileContentService.RemoveFromItemAsync(workItem.WorkContentId);
 
@@ -202,6 +203,26 @@ namespace Waffle.Controllers
             };
             var args = JsonSerializer.Serialize(option);
             title.Arguments = args;
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpPost("save/contact-form")]
+        public async Task<IActionResult> SaveContactFormAsync([FromBody] ContactForm contactForm)
+        {
+            if (contactForm is null)
+            {
+                return BadRequest();
+            }
+            var workContent = await _context.WorkContents.FindAsync(contactForm.Id);
+            if (workContent is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work content not found!"
+                }));
+            }
+            workContent.Arguments = JsonSerializer.Serialize(contactForm);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }

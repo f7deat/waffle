@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Waffle.Core.Services.Catalogs;
 using Waffle.Data;
 using Waffle.Models;
 
@@ -10,38 +11,27 @@ namespace Waffle.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly ICatalogService _catalogService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, ICatalogService catalogService)
         {
             _logger = logger;
             _context = context;
+            _catalogService = catalogService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName == "home");
-            if (catalog is null)
-            {
-                catalog = new Entities.Catalog
-                {
-                    Name = "Home",
-                    NormalizedName = "home"
-                };
-                await _context.Catalogs.AddAsync(catalog);
-                await _context.SaveChangesAsync();
-            }
-            var items = from a in _context.WorkContents
-                        join b in _context.WorkItems on a.Id equals b.WorkContentId
-                        join c in _context.Components on a.ComponentId equals c.Id
-                        where b.CatalogId == catalog.Id
-                        orderby b.SortOrder ascending
-                        select new ComponentListItem
-                        {
-                            Name = c.NormalizedName,
-                            Id = a.Id
-                        };
-            ViewBag.AT = items;
-            return View();
+            var catalog = await _catalogService.EnsureDataAsync("home");
+
+            var model = await _catalogService.GetPageDataAsync(catalog);
+
+            ViewData["Title"] = model.Settings.Title;
+            ViewData["Desctiption"] = model.Description;
+
+            ViewBag.AT = model.ComponentListItems;
+
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

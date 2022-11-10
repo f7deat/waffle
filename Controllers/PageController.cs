@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Services.Catalogs;
 using Waffle.Data;
 using Waffle.Models;
 
@@ -9,9 +10,11 @@ namespace Waffle.Controllers
     public class PageController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public PageController(ApplicationDbContext context)
+        private readonly ICatalogService _catalogService;
+        public PageController(ApplicationDbContext context, ICatalogService catalogService)
         {
             _context = context;
+            _catalogService = catalogService;
         }
 
         [Route("/page/{normalizedName}")]
@@ -27,37 +30,14 @@ namespace Waffle.Controllers
                 return NotFound("Cannot get catalog!");
             }
 
-            ViewData["Title"] = catalog.Name;
-            ViewData["Desctiption"] = catalog.Description;
+            var model = await _catalogService.GetPageDataAsync(catalog);
 
-            var workItems = from a in _context.WorkItems
-                            join b in _context.WorkContents on a.WorkContentId equals b.Id
-                            join c in _context.Components on b.ComponentId equals c.Id
-                            where a.CatalogId == catalog.Id
-                            orderby a.SortOrder ascending
-                            select new ComponentListItem
-                            {
-                                Id = a.WorkContentId,
-                                Name = c.NormalizedName
-                            };
+            ViewData["Title"] = model.Settings.Title;
+            ViewData["Desctiption"] = model.Description;
 
-            var settings = new PageSettingViewModel();
-            if (!string.IsNullOrEmpty(catalog.Setting))
-            {
-                settings = JsonSerializer.Deserialize<PageSettingViewModel>(catalog.Setting) ?? new PageSettingViewModel();
-                if (!string.IsNullOrEmpty(settings.Title))
-                {
-                    ViewData["Title"] = settings.Title;
-                }
-            }
+            ViewBag.Data = model;
 
-            var page = new PageVewModel
-            {
-                ComponentListItems = await workItems.ToListAsync(),
-                Settings = settings
-            };
-
-            return View(page);
+            return View();
         }
     }
 }

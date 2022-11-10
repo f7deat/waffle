@@ -1,0 +1,24 @@
+﻿@model Waffle.Models.Components.ContactForm
+
+@if (Model != null) {
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="mb-3">
+                    <label class="form-label">@Model.Labels.Name</label>
+                    <input class="form-control" name="name" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">@Model.Labels.Email</label>
+                    <input class="form-control" name="email" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">@Model.Labels.PhoneNumber</label>
+                    <input class="form-control" name="phoneNumber" />
+                </div>
+                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-secondary" type="reset">Reset</button>
+            </form>
+        </div>
+    </div>
+}

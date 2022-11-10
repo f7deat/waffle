@@ -1,9 +1,16 @@
 ﻿@using Waffle.Models
-@model PageVewModel
+@{
+    var data = ViewBag.Data as PageVewModel;
+}
 
-<div class="@(Model.Settings.Container ? "container" : "container-fluid")" id="catalog">
-    @foreach (var item in Model.ComponentListItems)
-    {
-        @await Component.InvokeAsync(item.Name, item.Id)
-    }
-</div>
+@if (data != null) {
+    <div class="@(data.Settings.Container ? "container" : "container-fluid") wf-catalog" id="catalog">
+
+        <h1 class="h1 wf-h1">@data.Settings.Title</h1>
+
+        @foreach (var item in data.ComponentListItems)
+        {
+            @await Component.InvokeAsync(item.Name, item.Id)
+        }
+    </div>
+}

@@ -1,11 +1,10 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿
+<div class="@(Model.Settings.Container ? "container" : "container-fluid") wf-catalog" id="catalog">
+    @foreach (var item in ViewBag.AT)
+    {
+        <div>
+            @await Component.InvokeAsync(item.Name, item.Id)
+        </div>
+    }
 
-@foreach (var item in ViewBag.AT)
-{
-    <div>
-        @await Component.InvokeAsync(item.Name, item.Id)
-    </div>
-}
-
+</div>

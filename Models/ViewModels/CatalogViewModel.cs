@@ -30,5 +30,7 @@ namespace Waffle.Models.ViewModels
         }
         [JsonPropertyName("title")]
         public string Title { get; set; }
+        [JsonPropertyName("container")]
+        public bool Container { get; set; }
     }
 }

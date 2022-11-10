@@ -46,7 +46,7 @@ namespace Waffle.Controllers
                 Name = file.FileName,
                 Size = file.Length,
                 Type = file.ContentType,
-                Url = $"https://{Request.Host.Value}/imgs/{file.FileName}"
+                Url = $"/imgs/{file.FileName}"
             };
 
             await _context.FileContents.AddAsync(fileContent);

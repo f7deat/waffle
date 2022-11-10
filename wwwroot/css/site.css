@@ -1,14 +1,7 @@
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.wf-catalog {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
+.wf-h1 {
+    font-size: 2rem;
 }

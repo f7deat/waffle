@@ -20,6 +20,7 @@ namespace Waffle.Data
         public virtual DbSet<FileItem> FileItems { get; set; }
         public virtual DbSet<WorkContent> WorkContents { get; set; }
         public virtual DbSet<WorkItem> WorkItems { get; set; }
+        public virtual DbSet<AppSetting> AppSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -27,6 +28,8 @@ namespace Waffle.Data
 
             builder.Entity<FileItem>().HasKey(k => new { k.FileId, k.ItemId });
             builder.Entity<WorkItem>().HasKey(k => new { k.WorkContentId, k.CatalogId });
+
+            builder.Entity<AppSetting>().HasData(new AppSetting { Id = new Guid("21676da7-44f5-428b-831b-d29d882bbac1"), Name = "SendGrid", NormalizedName = "SendGrid" });
 
             builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("06d5c4c9-18a6-49eb-a821-ed208631945e"), Name = "Home", NormalizedName = "home", Active = true });
             builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("4881c283-ef77-48c1-ab4e-646b61dabf4c"), Name = "Blog", NormalizedName = "blog", Active = true });
