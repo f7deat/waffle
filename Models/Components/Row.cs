@@ -6,9 +6,9 @@ namespace Waffle.Models.Components
     {
         public Row()
         {
-            Cols = new List<Guid>();
+            Columns = new List<Guid>();
         }
         [JsonPropertyName("cols")]
-        public List<Guid> Cols { get; set; }
+        public List<Guid> Columns { get; set; }
     }
 }

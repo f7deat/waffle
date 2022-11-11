@@ -19,12 +19,12 @@ namespace Waffle.ViewComponents
             {
                 return View();
             }
-            var cols = await _context.WorkContents.Where(x => x.ParentId == id).Select(x => x.Id).ToListAsync();
-            var row = new Row
+            var cols = await _context.WorkContents.Where(x => x.ParentId == id && x.ComponentId != Guid.Empty).Select(x => x.Id).ToListAsync();
+            ViewBag.Row = new Row
             {
-                Cols = cols
+                Columns = cols
             };
-            return View(row);
+            return View();
         }
     }
 }

@@ -16,28 +16,30 @@ namespace Waffle.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null || string.IsNullOrEmpty(workContent.Arguments))
+            var column = await _context.WorkContents.FindAsync(id);
+            if (column is null)
             {
                 return View();
             }
-            var workItem = from a in _context.WorkItems
-                           join b in _context.WorkContents on a.WorkContentId equals b.Id
+
+            var workItem = from b in _context.WorkContents
                            join c in _context.Components on b.ComponentId equals c.Id
                            where b.ParentId == id
                            select new WorkListItem
                            {
-                               Id = a.WorkContentId,
+                               Id = b.Id,
                                Name = b.Name,
                                NormalizedName = c.NormalizedName
                            };
-            var model = new Column
+
+            ViewBag.Column = new Column
             {
                 Id = id,
-                Value = workContent.Arguments,
+                Arguments = column.Arguments,
                 WorkListItems = await workItem.ToListAsync()
             };
-            return View(model);
+
+            return View();
         }
     }
 }

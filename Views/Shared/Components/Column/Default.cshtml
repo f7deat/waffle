@@ -1,9 +1,15 @@
 ﻿@using Waffle.Models.Components
-@model Column
 
-<div class="@Model.Value" id="@Model.Id">
-    @foreach (var item in Model.WorkListItems)
-    {
-        @await Component.InvokeAsync(item.NormalizedName, item.Id)
-    }
-</div>
+@{
+    var column = ViewBag.Column as Column;
+}
+
+@if (column != null)
+{
+    <div class="@column.Arguments" id="@column.Id">
+        @foreach (var item in column.WorkListItems)
+        {
+            @await Component.InvokeAsync(item.NormalizedName, item.Id)
+        }
+    </div>
+}

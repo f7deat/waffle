@@ -75,6 +75,44 @@ namespace Waffle.Controllers
             });
         }
 
+        [HttpGet("list-child/{id}")]
+        public async Task<IActionResult> ListChildAsync([FromRoute] Guid id)
+        {
+            var query = from a in _context.WorkContents
+                        join b in _context.Components on a.ComponentId equals b.Id
+                        where a.ParentId == id
+                        select new WorkListItem
+                        {
+                            Id = a.Id,
+                            Name = a.Name,
+                            NormalizedName = b.NormalizedName
+                        };
+            return Ok(new
+            {
+                data = await query.ToListAsync()
+            });
+        }
+
+        [HttpPost("add-child")]
+        public async Task<IActionResult> AddChildAsync([FromBody] WorkContent workContent)
+        {
+            if (workContent is null)
+            {
+                return BadRequest();
+            }
+            if (!await _context.WorkContents.AnyAsync(x => x.Id == workContent.ParentId))
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Parrent component not found!"
+                }));
+            }
+            await _context.WorkContents.AddAsync(workContent);
+            await _context.SaveChangesAsync();
+
+            return Ok(IdentityResult.Success);
+        }
+
         [HttpPost("save")]
         public async Task<IActionResult> SaveAsync([FromBody] SaveWorkContentModel model)
         {
@@ -207,7 +245,7 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
-        [HttpPost("save/contact-form")]
+        [HttpPost("contact-form/save")]
         public async Task<IActionResult> SaveContactFormAsync([FromBody] ContactForm contactForm)
         {
             if (contactForm is null)
@@ -226,6 +264,48 @@ namespace Waffle.Controllers
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        [HttpPost("column/add")]
+        public async Task<IActionResult> AddColumnAsync([FromBody] Column column)
+        {
+            if (column is null)
+            {
+                return BadRequest();
+            }
+            var row = await _context.WorkContents.FindAsync(column.ParentId);
+            if (row is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Row not found!"
+                }));
+            }
+
+            var component = await _context.Components.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Column)));
+            if (component is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Component column not found!"
+                }));
+            }
+
+            var workContent = new WorkContent
+            {
+                Active = true,
+                Arguments = column.Arguments,
+                Name = column.Name,
+                ComponentId = component.Id,
+                ParentId = row.Id
+            };
+
+            await _context.WorkContents.AddAsync(workContent);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(IdentityResult.Success);
+        }
+
         #endregion
     }
 }
