@@ -21,6 +21,7 @@ namespace Waffle.Data
         public virtual DbSet<WorkContent> WorkContents { get; set; }
         public virtual DbSet<WorkItem> WorkItems { get; set; }
         public virtual DbSet<AppSetting> AppSettings { get; set; }
+        public virtual DbSet<Contact> Contacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

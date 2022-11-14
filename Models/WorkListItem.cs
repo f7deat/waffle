@@ -6,6 +6,7 @@
         {
             Name = string.Empty;
             NormalizedName = string.Empty;
+            Arguments = string.Empty;
         }
         /// <summary>
         /// WorkItemId
@@ -13,5 +14,6 @@
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string NormalizedName { get; set; }
+        public string Arguments { get; set; }
     }
 }

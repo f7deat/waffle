@@ -12,3 +12,5 @@
 /Waffle.sln
 /wwwroot/css
 /wwwroot/imgs
+*.map
+*.js

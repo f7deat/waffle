@@ -22,7 +22,8 @@ namespace Waffle.Controllers
                 workItems = await _context.WorkItems.ToListAsync(),
                 components = await _context.Components.ToListAsync(),
                 fileContents = await _context.FileContents.ToListAsync(),
-                fileItems = await _context.FileItems.ToListAsync()
+                fileItems = await _context.FileItems.ToListAsync(),
+                appSettings = await _context.AppSettings.ToListAsync()
             };
             return Ok(data);
         }

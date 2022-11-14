@@ -21,12 +21,12 @@ namespace Waffle.ViewComponents
                         orderby a.SortOrder ascending
                         select b.Arguments;
             var navbar = await query.FirstOrDefaultAsync();
-            if (navbar is null)
+            if (!string.IsNullOrEmpty(navbar))
             {
-                return View();
+                ViewBag.Navbar = JsonSerializer.Deserialize<Navbar>(navbar);
             }
 
-            return View(JsonSerializer.Deserialize<Navbar>(navbar));
+            return View();
         }
     }
 }

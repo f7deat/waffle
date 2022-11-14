@@ -85,7 +85,8 @@ namespace Waffle.Controllers
                         {
                             Id = a.Id,
                             Name = a.Name,
-                            NormalizedName = b.NormalizedName
+                            NormalizedName = b.NormalizedName,
+                            Arguments = a.Arguments
                         };
             return Ok(new
             {
@@ -263,6 +264,21 @@ namespace Waffle.Controllers
             workContent.Arguments = JsonSerializer.Serialize(contactForm);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
+        }
+
+        [HttpGet("contact-form/{id}")]
+        public async Task<IActionResult> GetContactFormAsync([FromRoute] Guid id)
+        {
+            var workContent = await _context.WorkContents.FindAsync(id);
+            if (workContent is null)
+            {
+                return BadRequest();
+            }
+            if (string.IsNullOrEmpty(workContent.Arguments))
+            {
+                return Ok();
+            }
+            return Ok(JsonSerializer.Deserialize<ContactForm>(workContent.Arguments));
         }
 
         [HttpPost("column/add")]

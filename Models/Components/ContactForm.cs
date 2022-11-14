@@ -7,8 +7,21 @@ namespace Waffle.Models.Components
     {
         public ContactForm()
         {
+            Name = string.Empty;
+            Email = string.Empty;
+            PhoneNumber = string.Empty;
+            Note = string.Empty;
             Labels = new ContactFormLabel();
         }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+        [JsonPropertyName("email")]
+        public string Email { get; set; }
+        [JsonPropertyName("phoneNumber")]
+        public string PhoneNumber { get; set; }
+        [JsonPropertyName("note")]
+        public string Note { get; set; }
         [JsonPropertyName("labels")]
         public ContactFormLabel Labels { get; set; }
     }
@@ -20,6 +33,7 @@ namespace Waffle.Models.Components
             Name = nameof(Name);
             Email = nameof(Email);
             PhoneNumber = "Phone number";
+            Note = nameof(Note);
         }
 
         [JsonPropertyName("name")]
@@ -28,5 +42,7 @@ namespace Waffle.Models.Components
         public string Email { get; set; }
         [JsonPropertyName("phoneNumber")]
         public string PhoneNumber { get; set; }
+        [JsonPropertyName("note")]
+        public string Note { get; set; }
     }
 }
