@@ -34,6 +34,7 @@ namespace Waffle.Controllers
         {
             var data = new
             {
+                catalog = await _context.Catalogs.CountAsync(),
                 workContent = await _context.WorkContents.CountAsync(),
                 workItem = await _context.WorkItems.CountAsync(),
                 component = await _context.Components.CountAsync(),

@@ -4,10 +4,12 @@ using SendGrid;
 using Waffle.Data;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Entities;
-using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
 using Waffle.ExternalAPI.SendGrid;
 using Microsoft.AspNetCore.Authorization;
+using Waffle.Core.Services.Contacts.Models;
+using Waffle.Models.Components;
+using Microsoft.AspNetCore.Identity;
 
 namespace Waffle.Controllers
 {
@@ -15,15 +17,27 @@ namespace Waffle.Controllers
     public class ContactController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public ContactController(ApplicationDbContext context)
+        private readonly ILogger<ContactController> _logger;
+        public ContactController(ApplicationDbContext context, ILogger<ContactController> logger)
         {
             _context = context;
+            _logger = logger;
+        }
+
+        [HttpGet("list")]
+        public async Task<IActionResult> ListAsync()
+        {
+            return Ok(new
+            {
+                data = await _context.Contacts.ToListAsync(),
+                total = await _context.Contacts.CountAsync()
+            });
         }
 
         [HttpPost("submit-form"), AllowAnonymous]
-        public async Task<IActionResult> SubmitContactAsync(Contact contact)
+        public async Task<IActionResult> SubmitContactAsync(SubmitFormModel model)
         {
-            if (contact is null)
+            if (model is null)
             {
                 return BadRequest();
             }
@@ -37,15 +51,51 @@ namespace Waffle.Controllers
                     var client = new SendGridClient(config.ApiKey);
                     var from = new EmailAddress(config.From.Email, config.From.Name);
                     var subject = "Sending with Twilio SendGrid is Fun";
-                    var to = new EmailAddress(contact.Email, contact.Name);
+                    var to = new EmailAddress(model.Email, model.Name);
                     var plainTextContent = "and easy to do anywhere, even with C#";
                     var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
                     var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
                     var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        _logger.LogError("Email send to {0} error!", model.Email);
+                    }
                 }
             }
-            var workContent = await _context.WorkContents.FindAsync();
-            return Redirect("");
+            var workContent = await _context.WorkContents.FindAsync(model.WorkContentId);
+            if (workContent is null || string.IsNullOrEmpty(workContent.Arguments))
+            {
+                return Redirect("/");
+            }
+            var contactForm = JsonSerializer.Deserialize<ContactForm>(workContent.Arguments);
+            var contact = new Contact
+            {
+                CreatedDate = DateTime.Now,
+                Email = model.Email,
+                Name = model.Name,
+                Note = model.Note,
+                PhoneNumber = model.PhoneNumber,
+                Meta = JsonSerializer.Serialize(meta)
+            };
+            await _context.Contacts.AddAsync(contact);
+            await _context.SaveChangesAsync();
+            return Redirect(contactForm?.ResultUrl ?? "/");
+        }
+
+        [HttpPost("delete/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        {
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Contact not found!"
+                }));
+            }
+            _context.Contacts.Remove(contact);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
     }
 }

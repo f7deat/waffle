@@ -67,7 +67,9 @@ namespace Waffle.Controllers
                         {
                             Id = c.Id,
                             Name = $"[{d.Name}] {c.Name}",
-                            NormalizedName = d.NormalizedName
+                            NormalizedName = d.NormalizedName,
+                            SortOrder = b.SortOrder,
+                            CatalogId = b.CatalogId
                         };
             return Ok(new
             {
@@ -149,6 +151,22 @@ namespace Waffle.Controllers
                 return Ok(IdentityResult.Failed());
             }
             workItem.Active = !workItem.Active;
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpPost("sort-order")]
+        public async Task<IActionResult> SortOrderAsync([FromBody] WorkItem model)
+        {
+            var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkContentId == model.WorkContentId && x.CatalogId == model.CatalogId);
+            if (workItem is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work item not found!"
+                }));
+            }
+            workItem.SortOrder = model.SortOrder;
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
@@ -261,6 +279,7 @@ namespace Waffle.Controllers
                     Description = "Work content not found!"
                 }));
             }
+            workContent.Name = contactForm.Name;
             workContent.Arguments = JsonSerializer.Serialize(contactForm);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
@@ -278,7 +297,12 @@ namespace Waffle.Controllers
             {
                 return Ok();
             }
-            return Ok(JsonSerializer.Deserialize<ContactForm>(workContent.Arguments));
+            var contactForm = JsonSerializer.Deserialize<ContactForm>(workContent.Arguments);
+            if (contactForm is not null)
+            {
+                contactForm.Name = workContent.Name;
+            }
+            return Ok(contactForm);
         }
 
         [HttpPost("column/add")]
@@ -316,6 +340,52 @@ namespace Waffle.Controllers
             };
 
             await _context.WorkContents.AddAsync(workContent);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpGet("swiper/{id}")]
+        public async Task<IActionResult> GetSwiperAsync([FromRoute] Guid id)
+        {
+            var workContent = await _context.WorkContents.FindAsync(id);
+            if (workContent is null)
+            {
+                return BadRequest();
+            }
+            var swiper = new Swiper();
+            if (!string.IsNullOrEmpty(workContent.Arguments))
+            {
+                swiper = JsonSerializer.Deserialize<Swiper>(workContent.Arguments);
+            }
+            if (swiper is not null)
+            {
+                swiper.Name = workContent.Name;
+            }
+            return Ok(swiper);
+        }
+
+        [HttpPost("swiper/add-image")]
+        public async Task<IActionResult> AddImageSync([FromBody] AddSwiperItem model)
+        {
+            var swiper = await _context.WorkContents.FindAsync(model.Id);
+            if (swiper is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work content not found!"
+                }));
+            }
+            var component = await _context.Components.FirstAsync(x => x.NormalizedName.Equals(nameof(Image)));
+
+            await _context.WorkContents.AddAsync(new WorkContent
+            {
+                ParentId = swiper.Id,
+                Active = true,
+                ComponentId = component.Id,
+                Name = model.Name,
+            });
 
             await _context.SaveChangesAsync();
 

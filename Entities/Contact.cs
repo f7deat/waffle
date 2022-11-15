@@ -7,20 +7,20 @@ namespace Waffle.Entities
         public Contact()
         {
             Name = string.Empty;
-            Email = string.Empty;
-            PhoneNumber = string.Empty;
             Meta = string.Empty;
-            Note = string.Empty;
         }
         [StringLength(450)]
         public string Name { get; set; }
         [StringLength(450)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         [StringLength(20)]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         [StringLength(1000)]
-        public string Note { get; set; }
+        public string? Note { get; set; }
+        [StringLength(500)]
+        public string? Address { get; set; }
         public string Meta { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 
     public class ContactMeta

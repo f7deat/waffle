@@ -15,5 +15,7 @@
         public string Name { get; set; }
         public string NormalizedName { get; set; }
         public string Arguments { get; set; }
+        public int SortOrder { get; set; }
+        public Guid CatalogId { get; set; }
     }
 }

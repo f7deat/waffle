@@ -36,30 +36,37 @@ namespace Waffle.Controllers
         [HttpPost("upgrade")]
         public async Task<IActionResult> UpgradeAsync()
         {
-            var sendGrid = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName == nameof(SendGrid));
-            if (sendGrid is null)
+            if (!await _context.AppSettings.AnyAsync(x => x.NormalizedName == nameof(SendGrid)))
             {
-                sendGrid = new AppSetting
+                await _context.AppSettings.AddAsync(new AppSetting
                 {
                     NormalizedName = nameof(SendGrid),
                     Name = nameof(SendGrid)
-                };
-                await _context.AppSettings.AddAsync(sendGrid);
+                });
             }
 
-            var contactForm = await _context.Components.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(ContactForm)));
-            if (contactForm is null)
+            if (!await _context.Components.AnyAsync(x => x.NormalizedName.Equals(nameof(ContactForm))))
             {
-                contactForm = new Component
+                await _context.Components.AddAsync(new Component
                 {
                     Name = nameof(ContactForm),
                     NormalizedName = nameof(ContactForm),
                     Active = true
-                };
-                await _context.Components.AddAsync(contactForm);
+                });
+            }
+
+            if (!await _context.Components.AnyAsync(x => x.NormalizedName.Equals(nameof(Swiper))))
+            {
+                await _context.Components.AddAsync(new Component
+                {
+                    Name = nameof(Swiper),
+                    NormalizedName = nameof(Swiper),
+                    Active = true
+                });
             }
 
             await _context.SaveChangesAsync();
+
             return Ok(IdentityResult.Success);
         }
     }

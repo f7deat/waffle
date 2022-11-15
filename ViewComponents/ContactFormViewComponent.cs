@@ -20,8 +20,12 @@ namespace Waffle.ViewComponents
             {
                 return View();
             }
-
-            return View(JsonSerializer.Deserialize<ContactForm>(workContent.Arguments));
+            var contactForm = JsonSerializer.Deserialize<ContactForm>(workContent.Arguments);
+            if (contactForm is not null)
+            {
+                contactForm.Id = id;
+            }
+            return View(contactForm);
         }
     }
 }

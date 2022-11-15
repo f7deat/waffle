@@ -54,6 +54,7 @@ namespace Waffle.Controllers
                     Description = "Normalized name must be unique!"
                 }));
             }
+            catalog.Active = true;
             await _context.Catalogs.AddAsync(catalog);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
@@ -98,11 +99,21 @@ namespace Waffle.Controllers
             var catalog = await _context.Catalogs.FindAsync(id);
             if (catalog is null)
             {
-                return Ok(IdentityResult.Failed());
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Catalog not found!"
+                }));
             }
             if (await _context.Catalogs.AnyAsync(x => x.ParentId == catalog.Id))
             {
                 return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child catalog first!"}));
+            }
+            if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id))
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Please remove work item first!"
+                }));
             }
             _context.Catalogs.Remove(catalog);
             await _context.SaveChangesAsync();

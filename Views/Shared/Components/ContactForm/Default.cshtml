@@ -1,45 +1,58 @@
 ﻿@model Waffle.Models.Components.ContactForm
 
-@if (Model != null) {
-    <div class="card">
+@if (Model != null)
+{
+    <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css" rel="stylesheet" crossorigin="anonymous">
+
+    <div class="card shadow-sm">
         <div class="card-body">
-            <form action="/api/contact/submit-form">
+            <form action="/api/contact/submit-form" method="post">
+                <input type="hidden" value="@Model.Id" name="workContentId" />
                 <div class="mb-3">
                     <label class="form-label">@Model.Labels.Name</label>
-                    <input class="form-control" name="name" id="contact-input-name" />
+                    <input class="form-control" type="text" name="name" id="contact-input-name" />
                 </div>
                 <div class="mb-3">
                     <label class="form-label">@Model.Labels.Email</label>
-                    <input class="form-control" name="email" id="contact-input-email" />
+                    <input class="form-control" type="email" name="email" id="contact-input-email" />
                 </div>
                 <div class="mb-3">
                     <label class="form-label">@Model.Labels.PhoneNumber</label>
-                    <input class="form-control" name="phoneNumber" id="contact-input-phoneNumber" />
+                    <input class="form-control" type="tel" name="phoneNumber" id="contact-input-phoneNumber" />
+                </div>
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Job type</label>
+                            <select class="px-4 py-2 border rounded w-full" name="JobType">
+                                <option value="decking">Decking</option>
+                                <option value="fencing">Fencing</option>
+                                <option value="gate">Gate</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Appointment</label>
+                            <input type="text" class="px-4 py-2 border rounded w-full" id="datetimepicker" name="Appointment">
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">@Model.Labels.Note</label>
                     <textarea class="form-control" name="note" id="contact-input-note"></textarea>
                 </div>
-                <button class="btn btn-primary" type="button" id="contact-btn-submit">Submit</button>
+                <button class="btn btn-primary" type="submit" id="contact-btn-submit"><i class="far fa-paper-plane me-2"></i>Submit</button>
                 <button class="btn btn-secondary" type="reset">Reset</button>
             </form>
         </div>
     </div>
-
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="contact-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <img src="..." class="rounded me-2" alt="...">
-                <strong class="me-auto">Bootstrap</strong>
-                <small>11 mins ago</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                Hello, world! This is a toast message.
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/contacts/contact-form.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js" crossorigin="anonymous"></script>
+    <script>
+        new tempusDominus.TempusDominus(document.getElementById('datetimepicker'), {
+            restrictions: {
+                daysOfWeekDisabled: [1, 2, 3, 4, 5, 6]
+            },
+        });
+    </script>
 }

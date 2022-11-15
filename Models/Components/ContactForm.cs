@@ -11,6 +11,7 @@ namespace Waffle.Models.Components
             Email = string.Empty;
             PhoneNumber = string.Empty;
             Note = string.Empty;
+            ResultUrl = string.Empty;
             Labels = new ContactFormLabel();
         }
 
@@ -22,6 +23,8 @@ namespace Waffle.Models.Components
         public string PhoneNumber { get; set; }
         [JsonPropertyName("note")]
         public string Note { get; set; }
+        [JsonPropertyName("resultUrl")]
+        public string ResultUrl { get; set; }
         [JsonPropertyName("labels")]
         public ContactFormLabel Labels { get; set; }
     }
