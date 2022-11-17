@@ -9,6 +9,8 @@ namespace Waffle.Models.Components
         {
             NavItems = new List<NavItem>();
         }
+        [JsonPropertyName("container")]
+        public bool Container { get; set; }
         [JsonPropertyName("navItems")]
         public List<NavItem> NavItems { get; set; }
     }

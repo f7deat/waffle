@@ -14,3 +14,4 @@
 /wwwroot/imgs
 *.map
 *.js
+/bin/Release/net6.0

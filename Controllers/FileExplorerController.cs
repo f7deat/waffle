@@ -22,7 +22,7 @@ namespace Waffle.Controllers
         {
             return Ok(new
             {
-                data = await _context.FileContents.ToListAsync(),
+                data = await _context.FileContents.OrderByDescending(x => x.Id).ToListAsync(),
                 total = await _context.FileContents.CountAsync()
             });
         }
@@ -78,6 +78,23 @@ namespace Waffle.Controllers
                 Type = file.ContentType,
                 Url = $"/files/{file.FileName}"
             }));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.FileContents.FindAsync(id));
+
+        [HttpGet("file-items/{id}")]
+        public async Task<IActionResult> GetFileItemsAsync([FromRoute] Guid id)
+        {
+            var fileContent = from a in _context.FileItems
+                              join b in _context.WorkContents on a.ItemId equals b.Id
+                              where a.FileId == id
+                              select b;
+            return Ok(new
+            {
+                data = await fileContent.ToListAsync(),
+                total = await fileContent.CountAsync()
+            });
         }
     }
 }

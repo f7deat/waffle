@@ -55,9 +55,26 @@ namespace Waffle.Controllers
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.WorkContents.FindAsync(id));
 
         [HttpGet("list/{id}")]
-        public async Task<IActionResult> ListAsync([FromRoute] Guid id)
+        public async Task<IActionResult> ListAsync([FromRoute] Guid id, [FromQuery] bool child = false)
         {
-            var query = from a in _context.Catalogs
+            if (child)
+            {
+                var query1 = from a in _context.WorkContents
+                            join b in _context.Components on a.ComponentId equals b.Id
+                            where a.ParentId == id
+                            select new WorkListItem
+                            {
+                                Id = a.Id,
+                                Name = a.Name,
+                                NormalizedName = b.NormalizedName,
+                                Arguments = a.Arguments
+                            };
+                return Ok(new
+                {
+                    data = await query1.ToListAsync()
+                });
+            }
+            var query2 = from a in _context.Catalogs
                         join b in _context.WorkItems on a.Id equals b.CatalogId
                         join c in _context.WorkContents on b.WorkContentId equals c.Id
                         join d in _context.Components on c.ComponentId equals d.Id
@@ -73,26 +90,7 @@ namespace Waffle.Controllers
                         };
             return Ok(new
             {
-                data = await query.ToListAsync()
-            });
-        }
-
-        [HttpGet("list-child/{id}")]
-        public async Task<IActionResult> ListChildAsync([FromRoute] Guid id)
-        {
-            var query = from a in _context.WorkContents
-                        join b in _context.Components on a.ComponentId equals b.Id
-                        where a.ParentId == id
-                        select new WorkListItem
-                        {
-                            Id = a.Id,
-                            Name = a.Name,
-                            NormalizedName = b.NormalizedName,
-                            Arguments = a.Arguments
-                        };
-            return Ok(new
-            {
-                data = await query.ToListAsync()
+                data = await query2.ToListAsync()
             });
         }
 
