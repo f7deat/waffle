@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using System.Web;
 using Waffle.Core.Services.FileContents;
 using Waffle.Data;
 using Waffle.Entities;
@@ -115,7 +114,7 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("save")]
-        public async Task<IActionResult> SaveAsync([FromBody] SaveWorkContentModel model)
+        public async Task<IActionResult> SaveAsync([FromBody] WorkContent model)
         {
             if (model is null)
             {
@@ -124,17 +123,14 @@ namespace Waffle.Controllers
             var workContent = await _context.WorkContents.FindAsync(model.Id);
             if (workContent is null)
             {
-                return Ok(IdentityResult.Failed());
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work content not found!"
+                }));
             }
             workContent.Arguments = model.Arguments;
             workContent.Active = model.Active;
             workContent.Name = model.Name;
-
-            var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkContentId == model.Id && x.CatalogId == model.CatalogId);
-            if (workItem != null)
-            {
-                workItem.SortOrder = model.SortOrder;
-            }
 
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
@@ -146,7 +142,10 @@ namespace Waffle.Controllers
             var workItem = await _context.WorkContents.FindAsync(id);
             if (workItem is null)
             {
-                return Ok(IdentityResult.Failed());
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work item not found!"
+                }));
             }
             workItem.Active = !workItem.Active;
             await _context.SaveChangesAsync();

@@ -6,11 +6,11 @@
     if (!string.IsNullOrEmpty(Model.Url))
     {
         <a href="@Model.Url" aria-label="@Model.Alt">
-            <img src="@Model.Src" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image" id="@Model.Id" />
+            <img src="@Model.Src" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image @Model.ClassName" id="@Model.Id" loading="lazy" />
         </a>
     }
     else
     {
-        <img src="@Model.Src" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image" id="@Model.Id" />
+        <img src="@Model.Src" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image @Model.ClassName" id="@Model.Id" loading="lazy" />
     }
 }
