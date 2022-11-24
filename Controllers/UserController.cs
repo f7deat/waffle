@@ -11,6 +11,7 @@ using Waffle.Models;
 namespace Waffle.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -72,7 +73,7 @@ namespace Waffle.Controllers
             return Ok(result);
         }
 
-        [HttpPost("initial")]
+        [HttpPost("initial"), AllowAnonymous]
         public async Task<IActionResult> InitialAsync()
         {
             await _roleManager.CreateAsync(new IdentityRole

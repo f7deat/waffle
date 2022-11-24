@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Services.Catalogs.Models;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models.Components;
@@ -61,10 +62,11 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync()
+        public async Task<IActionResult> ListAsync(CatalogFilterOptions filterOptions)
         {
-            var data = await _context.Catalogs.ToListAsync();
-            var total = await _context.Catalogs.CountAsync();
+            var query = _context.Catalogs.Where(x => (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active));
+            var data = await query.OrderBy(x => x.NormalizedName).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
+            var total = await query.CountAsync();
             return Ok(new
             {
                 data,

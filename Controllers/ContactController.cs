@@ -58,7 +58,7 @@ namespace Waffle.Controllers
                     var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
                     if (!response.IsSuccessStatusCode)
                     {
-                        _logger.LogError("Email send to {0} error!", model.Email);
+                        _logger.LogError("Email sending error!", model.Email);
                     }
                 }
             }
