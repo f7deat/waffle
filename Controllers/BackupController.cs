@@ -51,6 +51,7 @@ namespace Waffle.Controllers
         public async Task<IActionResult> UpgradeAsync()
         {
             await EnsureHomePage();
+            await EnsureBlockEditor();
             if (!await _context.AppSettings.AnyAsync(x => x.NormalizedName == nameof(SendGrid)))
             {
                 await _context.AppSettings.AddAsync(new AppSetting
@@ -83,6 +84,18 @@ namespace Waffle.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(IdentityResult.Success);
+        }
+
+        private async Task EnsureBlockEditor()
+        {
+            if (!await _context.Components.AllAsync(x => x.NormalizedName.Equals(nameof(BlockEditor))))
+            {
+                await _context.Components.AddAsync(new Component {
+                    Active = true,
+                    Name = "Editor block",
+                    NormalizedName = nameof(BlockEditor)
+                });
+            }
         }
 
         private async Task EnsureHomePage()

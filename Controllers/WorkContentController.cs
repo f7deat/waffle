@@ -389,6 +389,30 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
+        [HttpGet("block-editor/{id}")]
+        public async Task<IActionResult> GetBlockEditorAsync([FromRoute] Guid id)
+        {
+            var workContent = await _context.WorkContents.FindAsync(id);
+            if (workContent is null || string.IsNullOrEmpty(workContent.Arguments))
+            {
+                return Ok();
+            }
+            return Ok(JsonSerializer.Deserialize<List<BlockEditorBlock>>(workContent.Arguments));
+        }
+
+        [HttpPost("block-editor/save")]
+        public async Task<IActionResult> SaveBlockEditorAsync([FromBody] BlockEditor model)
+        {
+            var workContent = await _context.WorkContents.FindAsync(model.Id);
+            if (workContent is null)
+            {
+                return BadRequest();
+            }
+            workContent.Arguments = JsonSerializer.Serialize(model.Blocks);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
         #endregion
     }
 }

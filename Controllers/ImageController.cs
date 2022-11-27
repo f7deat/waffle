@@ -72,6 +72,52 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
+        [HttpPost("editor-block/{id}")]
+        public async Task<IActionResult> UploadEditorBlockAsync([FromRoute] Guid id, [FromForm] IFormFile image)
+        {
+            if (image is null)
+            {
+                return BadRequest();
+            }
+            var workContent = await _context.WorkContents.FindAsync(id);
+            if (workContent is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "imgs", image.FileName);
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await image.CopyToAsync(stream);
+            }
+
+            var fileContent = new FileContent
+            {
+                Name = image.FileName,
+                Size = image.Length,
+                Type = image.ContentType,
+                Url = $"/imgs/{image.FileName}"
+            };
+
+            await _context.FileContents.AddAsync(fileContent);
+            await _context.SaveChangesAsync();
+
+            await _context.FileItems.AddAsync(new FileItem
+            {
+                FileId = fileContent.Id,
+                ItemId = id
+            });
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new {
+                success = 1,
+                file = new {
+                    url = $"https://{Request.Host.Value}/{fileContent.Url}"
+                }
+            });
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id)
         {
