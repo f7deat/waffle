@@ -51,49 +51,23 @@ namespace Waffle.Controllers
         public async Task<IActionResult> UpgradeAsync()
         {
             await EnsureHomePage();
-            await EnsureBlockEditor();
-            if (!await _context.AppSettings.AnyAsync(x => x.NormalizedName == nameof(SendGrid)))
-            {
-                await _context.AppSettings.AddAsync(new AppSetting
-                {
-                    NormalizedName = nameof(SendGrid),
-                    Name = nameof(SendGrid)
-                });
-            }
-
-            if (!await _context.Components.AnyAsync(x => x.NormalizedName.Equals(nameof(ContactForm))))
-            {
-                await _context.Components.AddAsync(new Component
-                {
-                    Name = nameof(ContactForm),
-                    NormalizedName = nameof(ContactForm),
-                    Active = true
-                });
-            }
-
-            if (!await _context.Components.AnyAsync(x => x.NormalizedName.Equals(nameof(Swiper))))
-            {
-                await _context.Components.AddAsync(new Component
-                {
-                    Name = nameof(Swiper),
-                    NormalizedName = nameof(Swiper),
-                    Active = true
-                });
-            }
-
+            await EnsureComponent(nameof(BlockEditor));
+            await EnsureComponent(nameof(Document));
+            await EnsureComponent(nameof(SendGrid));
+            await EnsureComponent(nameof(ContactForm));
+            await EnsureComponent(nameof(Swiper));
             await _context.SaveChangesAsync();
-
             return Ok(IdentityResult.Success);
         }
 
-        private async Task EnsureBlockEditor()
+        private async Task EnsureComponent(string name)
         {
-            if (!await _context.Components.AllAsync(x => x.NormalizedName.Equals(nameof(BlockEditor))))
+            if (!await _context.Components.AllAsync(x => x.NormalizedName.Equals(name)))
             {
                 await _context.Components.AddAsync(new Component {
                     Active = true,
-                    Name = "Editor block",
-                    NormalizedName = nameof(BlockEditor)
+                    Name = name,
+                    NormalizedName = name,
                 });
             }
         }
@@ -109,7 +83,6 @@ namespace Waffle.Controllers
                     Active = true,
                     CreatedDate = DateTime.Now,
                 });
-                await _context.SaveChangesAsync();
             }
         }
     }
