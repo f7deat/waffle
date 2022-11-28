@@ -1,3 +1,6 @@
+:root {
+    --bs-gutter-x: -0.75rem;
+}
 .card {
     border-color: transparent;
 }
@@ -6,10 +9,6 @@
 }
 .navbar-brand {
     font-size: 1rem;
-}
-.wf-catalog {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
 }
 .wf-h1 {
     font-size: 2rem;

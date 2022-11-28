@@ -28,6 +28,7 @@ namespace Waffle.Controllers
 
             ViewData["Title"] = model.Settings.Title;
             ViewData["Desctiption"] = model.Description;
+            ViewData["NormalizedName"] = model.NormalizedName;
 
             ViewBag.AT = model.ComponentListItems;
 
