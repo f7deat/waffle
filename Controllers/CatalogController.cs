@@ -19,6 +19,9 @@ namespace Waffle.Controllers
             _context = context;
         }
 
+        [HttpGet("entry")]
+        public async Task<IActionResult> GetEntry() => Ok(await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals("home", StringComparison.OrdinalIgnoreCase)));
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id)
         {
@@ -64,14 +67,10 @@ namespace Waffle.Controllers
         [HttpGet("list")]
         public async Task<IActionResult> ListAsync(CatalogFilterOptions filterOptions)
         {
-            var query = _context.Catalogs.Where(x => (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active));
+            var query = _context.Catalogs.Where(x => x.Type == filterOptions.Type && (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active));
             var data = await query.OrderBy(x => x.NormalizedName).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
             var total = await query.CountAsync();
-            return Ok(new
-            {
-                data,
-                total
-            });
+            return Ok(new { data, total });
         }
 
         [HttpGet("tree")]

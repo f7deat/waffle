@@ -1,4 +1,5 @@
-﻿using Waffle.Models;
+﻿using Waffle.Entities;
+using Waffle.Models;
 
 namespace Waffle.Core.Services.Catalogs.Models
 {
@@ -10,5 +11,6 @@ namespace Waffle.Core.Services.Catalogs.Models
         }
         public string Name { get; set; }
         public bool? Active { get; set; }
+        public CatalogType Type { get; set; }
     }
 }

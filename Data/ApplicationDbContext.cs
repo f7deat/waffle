@@ -32,7 +32,6 @@ namespace Waffle.Data
 
             builder.Entity<AppSetting>().HasData(new AppSetting { Id = new Guid("21676da7-44f5-428b-831b-d29d882bbac1"), Name = "SendGrid", NormalizedName = "SendGrid" });
 
-            builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("4881c283-ef77-48c1-ab4e-646b61dabf4c"), Name = "Blog", NormalizedName = "blog", Active = true });
             builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("05c94032-84e5-47d5-99d7-30edb28a51bd"), Name = "Setting", NormalizedName = "setting", Active = true });
             builder.Entity<Catalog>().HasData(new Catalog { Id = Guid.Parse("1b0c4f08-7dfa-43f6-aed9-74756a1fbbcc"), Name = nameof(Header), NormalizedName = nameof(Header), Active = true, ParentId = Guid.Parse("05c94032-84e5-47d5-99d7-30edb28a51bd") });
 

@@ -50,12 +50,14 @@ namespace Waffle.Controllers
         [HttpPost("upgrade")]
         public async Task<IActionResult> UpgradeAsync()
         {
-            await EnsureHomePage();
+            await EnsureCatalog("home", CatalogType.Default);
+
             await EnsureComponent(nameof(BlockEditor));
             await EnsureComponent(nameof(Document));
             await EnsureComponent(nameof(SendGrid));
             await EnsureComponent(nameof(ContactForm));
             await EnsureComponent(nameof(Swiper));
+
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
@@ -72,15 +74,28 @@ namespace Waffle.Controllers
             }
         }
 
-        private async Task EnsureHomePage()
+        private async Task EnsureSetting(string name)
         {
-            if (!await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals("home")))
+            if (!await _context.AppSettings.AllAsync(x => x.NormalizedName.Equals(name)))
+            {
+                await _context.AppSettings.AddAsync(new AppSetting
+                {
+                    NormalizedName = name,
+                    Name = name,
+                });
+            }
+        }
+
+        private async Task EnsureCatalog(string name, CatalogType type)
+        {
+            if (!await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(name)))
             {
                 await _context.Catalogs.AddAsync(new Catalog
                 {
-                    Name = "Home",
-                    NormalizedName = "home",
+                    Name = name,
+                    NormalizedName = name,
                     Active = true,
+                    Type = type,
                     CreatedDate = DateTime.Now,
                 });
             }

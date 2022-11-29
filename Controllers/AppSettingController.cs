@@ -32,5 +32,25 @@ namespace Waffle.Controllers
                 total = await _context.AppSettings.CountAsync()
             });
         }
+
+        [HttpGet("layout/{id}")]
+        public async Task<IActionResult> GetLayoutAsync([FromRoute] Guid id)
+        {
+            var setting = await _context.AppSettings.FindAsync(id);
+            if (setting is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            var query = from a in _context.WorkItems
+                               join b in _context.WorkContents on a.CatalogId equals setting.Id
+                               where a.CatalogId == setting.Id
+                               orderby a.SortOrder ascending
+                               select b;
+            return Ok(new
+            {
+                data = await query.ToListAsync(),
+                total = await query.CountAsync()
+            });
+        }
     }
 }

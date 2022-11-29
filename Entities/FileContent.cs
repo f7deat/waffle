@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Waffle.Entities
 {
@@ -13,6 +14,7 @@ namespace Waffle.Entities
         [JsonPropertyName("name")]
         public string Name { get; set; }
         [JsonPropertyName("size")]
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal Size { get; set; }
         [JsonPropertyName("type")]
         public string Type { get; set; }

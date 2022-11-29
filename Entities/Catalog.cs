@@ -32,7 +32,17 @@ namespace Waffle.Entities
         public DateTime? ModifiedDate { get; set; }
         [JsonPropertyName("publishedDate")]
         public DateTime? PublishedDate { get; set; }
+        [JsonPropertyName("type")]
+        public CatalogType Type { get; set; }
         [JsonPropertyName("active")]
         public bool Active { get; set; }
+    }
+
+    public enum CatalogType
+    {
+        Default,
+        Article,
+        Shop,
+        Setting
     }
 }

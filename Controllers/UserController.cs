@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Waffle.Core.Helpers;
 using Waffle.Models;
 
 namespace Waffle.Controllers
@@ -28,11 +29,36 @@ namespace Waffle.Controllers
             _roleManager = roleManager;
         }
 
-        [Route("list")]
+        [HttpGet("list")]
         public async Task<IActionResult> ListAsync() => Ok(await _userManager.Users.ToListAsync());
 
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> FindByIdAsync([FromRoute] string id) => Ok(await _userManager.FindByIdAsync(id));
+
+        [HttpGet("")]
+        public async Task<IActionResult> GetUserAsync()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(new
+            {
+                succeeded = true,
+                data = new
+                {
+                    user.Id,
+                    user.Email,
+                    user.PhoneNumber,
+                    user.UserName,
+                    avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(user.Email)}?s=520",
+                    roles
+                }
+            });
+        }
 
         [HttpPost("password-sign-in"), AllowAnonymous]
         public async Task<IActionResult> PasswordSignInAsync([FromBody] LoginModel login)
@@ -73,9 +99,17 @@ namespace Waffle.Controllers
             return Ok(result);
         }
 
-        [HttpPost("initial"), AllowAnonymous]
+        [HttpGet("initial"), AllowAnonymous]
         public async Task<IActionResult> InitialAsync()
         {
+            if (await _userManager.Users.AnyAsync())
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Initialized"
+                }));
+            }
+
             await _roleManager.CreateAsync(new IdentityRole
             {
                 Name = "admin"
@@ -83,7 +117,8 @@ namespace Waffle.Controllers
             var user = new IdentityUser
             {
                 Email = "f7deat@gmail.com",
-                UserName = "f7deat"
+                UserName = "f7deat@gmail.com",
+                EmailConfirmed = true,
             };
             var result = await _userManager.CreateAsync(user, "Password@123");
             if (!result.Succeeded)
