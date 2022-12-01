@@ -18,6 +18,8 @@ namespace Waffle.Models.ViewModels
         public string NormalizedName { get; set; }
         [JsonPropertyName("description")]
         public string Description { get; set; }
+        [JsonPropertyName("type")]
+        public CatalogType Type { get; set; }
         [JsonPropertyName("setting")]
         public CatalogSetting Setting { get; set; }
     }
@@ -32,5 +34,12 @@ namespace Waffle.Models.ViewModels
         public string Title { get; set; }
         [JsonPropertyName("container")]
         public bool Container { get; set; }
+    }
+
+    public class DropModel
+    {
+        public Guid DragNodeKey { get; set; }
+        public Guid Node { get; set; }
+        public bool DropToGap { get; set; }
     }
 }

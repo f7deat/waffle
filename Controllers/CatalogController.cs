@@ -20,7 +20,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("entry")]
-        public async Task<IActionResult> GetEntry() => Ok(await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals("home", StringComparison.OrdinalIgnoreCase)));
+        public async Task<IActionResult> GetEntry() => Ok(await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals("home")));
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id)
@@ -36,6 +36,7 @@ namespace Waffle.Controllers
                 Name = catalog.Name,
                 NormalizedName = catalog.NormalizedName,
                 Description = catalog.Description,
+                Type = catalog.Type
             };
             if (!string.IsNullOrEmpty(catalog.Setting))
             {
@@ -89,9 +90,28 @@ namespace Waffle.Controllers
                         Title = x.Name
                     }).ToListAsync();
                 }
-                returnValue.Add(new Tree { Key = catalog.Id, Title = catalog.Name, Children = children });
+                returnValue.Add(new Tree
+                {
+                    Key = catalog.Id,
+                    Title = catalog.Name,
+                    Icon = GetIcon(catalog.Type),
+                    Children = children
+                });
             }
             return Ok(returnValue);
+        }
+
+        private static string GetIcon(CatalogType type)
+        {
+            switch (type)
+            {
+                case CatalogType.Entry:
+                    return "🏠";
+                case CatalogType.Setting:
+                    return "⚙️";
+                default:
+                    return "🗍";
+            }
         }
 
         [HttpPost("delete/{id}")]
@@ -107,7 +127,7 @@ namespace Waffle.Controllers
             }
             if (await _context.Catalogs.AnyAsync(x => x.ParentId == catalog.Id))
             {
-                return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child catalog first!"}));
+                return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child catalog first!" }));
             }
             if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id))
             {
@@ -147,7 +167,30 @@ namespace Waffle.Controllers
                 return NoContent();
             }
             catalog.Name = model.Name;
+            catalog.Type = model.Type;
             catalog.Setting = JsonSerializer.Serialize(model.Setting);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpPost("tree-drop")]
+        public async Task<IActionResult> DropAsync([FromBody] DropModel model)
+        {
+            var drop = await _context.Catalogs.FindAsync(model.DragNodeKey);
+            if (drop is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            var node = await _context.Catalogs.FindAsync(model.Node);
+            if (node is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            drop.ParentId = model.Node;
+            if (model.DropToGap)
+            {
+                drop.ParentId = null;
+            }
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }

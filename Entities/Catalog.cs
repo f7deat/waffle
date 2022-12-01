@@ -43,6 +43,7 @@ namespace Waffle.Entities
         Default,
         Article,
         Shop,
-        Setting
+        Setting,
+        Entry
     }
 }
