@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models.Catalogs;
 using Waffle.Models.Components;
 
 namespace Waffle.Controllers
@@ -51,6 +52,7 @@ namespace Waffle.Controllers
         public async Task<IActionResult> UpgradeAsync()
         {
             await EnsureCatalog("home", CatalogType.Default);
+            await EnsureSetting();
 
             await EnsureComponent(nameof(BlockEditor));
             await EnsureComponent(nameof(Document));
@@ -74,19 +76,28 @@ namespace Waffle.Controllers
             }
         }
 
-        private async Task EnsureSetting(string name)
+        private async Task EnsureSetting()
         {
-            if (!await _context.AppSettings.AllAsync(x => x.NormalizedName.Equals(name)))
+            var setting = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Setting)));
+            if (setting is null)
             {
-                await _context.AppSettings.AddAsync(new AppSetting
+                setting = new Catalog
                 {
-                    NormalizedName = name,
-                    Name = name,
-                });
+                    NormalizedName = nameof(Setting),
+                    Name = nameof(Setting),
+                    Active = true,
+                    CreatedDate = DateTime.Now
+                };
+                await _context.Catalogs.AddAsync(setting);
             }
+            await _context.SaveChangesAsync();
+
+            await EnsureCatalog(nameof(Header), CatalogType.Setting, setting.ParentId);
+
+            await EnsureCatalog(nameof(Footer), CatalogType.Setting, setting.ParentId);
         }
 
-        private async Task EnsureCatalog(string name, CatalogType type)
+        private async Task EnsureCatalog(string name, CatalogType type, Guid? parentId = null)
         {
             if (!await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(name)))
             {
@@ -97,6 +108,7 @@ namespace Waffle.Controllers
                     Active = true,
                     Type = type,
                     CreatedDate = DateTime.Now,
+                    ParentId = parentId
                 });
             }
         }

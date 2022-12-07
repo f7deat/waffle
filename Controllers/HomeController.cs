@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Text.Json;
 using Waffle.Core.Services.Catalogs;
 using Waffle.Data;
 using Waffle.Models;
+using Waffle.Models.Layout;
 
 namespace Waffle.Controllers
 {
@@ -26,7 +28,18 @@ namespace Waffle.Controllers
 
             var model = await _catalogService.GetPageDataAsync(catalog);
 
-            ViewData["Title"] = model.Settings.Title;
+            var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Head)));
+            var titleSuffix = string.Empty;
+            if (setting is not null && !string.IsNullOrEmpty(setting.Value))
+            {
+                var head = JsonSerializer.Deserialize<Head>(setting.Value);
+                if (head is not null)
+                {
+                    titleSuffix = " - " + head.TitleSuffix;
+                }
+            }
+
+            ViewData["Title"] = model.Settings.Title + titleSuffix;
             ViewData["Desctiption"] = model.Description;
             ViewData["NormalizedName"] = catalog.NormalizedName;
 
