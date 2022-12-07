@@ -13,4 +13,12 @@
             @Html.Raw(item.Data.Text)
         </div>
     }
+    if (BlockEditorType.DELIMITER.Equals(item.Type))
+    {
+        <div class="wf-delimiter"></div>
+    }
+    if (BlockEditorType.RAW.Equals(item.Type))
+    {
+        @Html.Raw(item.Data.Html)
+    }
 }

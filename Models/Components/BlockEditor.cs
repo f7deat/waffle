@@ -34,16 +34,20 @@ namespace Waffle.Models.Components
         public BlockEditorItemData()
         {
             Text = string.Empty;
+            Html = string.Empty;
         }
         [JsonPropertyName("text")]
         public string Text { get; set; }
         [JsonPropertyName("level")]
         public int? Level { get; set; }
+        [JsonPropertyName("html")]
+        public string Html { get; set; }
     }
 
     public class BlockEditorType {
         public const string PARAGRAPH = "paragraph";
         public const string HEADER = "header";
         public const string DELIMITER = "delimiter";
+        public const string RAW = "raw";
     }
 }

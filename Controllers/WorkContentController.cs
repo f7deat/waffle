@@ -206,6 +206,21 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
+        [HttpGet("fetch-url")]
+        public async Task<IActionResult> FetchUrlAsync([FromQuery] string url)
+        {
+            return Ok(new {
+                success = 1,
+                meta = new {
+                    title = "",
+                    description = "",
+                    image = new {
+                        url = ""
+                    }
+                }
+            });
+        }
+
         #region Custom components
 
         [HttpGet("navbar/{id}")]
