@@ -59,6 +59,7 @@ namespace Waffle.Controllers
             await EnsureComponent(nameof(SendGrid));
             await EnsureComponent(nameof(ContactForm));
             await EnsureComponent(nameof(Swiper));
+            await EnsureComponent(nameof(Card));
 
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);

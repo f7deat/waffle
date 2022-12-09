@@ -1,0 +1,18 @@
+﻿@using Waffle.Models.Components
+@{
+    var card = ViewBag.Data as Card;
+}
+
+@if (card != null)
+{
+    <div class="card">
+        @if (card.Image != null)
+        {
+            <img src="@card.Image.Src" class="card-img-top" alt="@card.Image.Alt">
+        }
+        <div class="card-body">
+            <h5 class="card-title">@card.Title</h5>
+            <p class="card-text">@Html.Raw(card.Text)</p>
+        </div>
+    </div>
+}

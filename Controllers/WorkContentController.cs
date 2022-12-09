@@ -93,7 +93,7 @@ namespace Waffle.Controllers
             });
         }
 
-        [HttpPost("add-child")]
+        [HttpPost("child/add")]
         public async Task<IActionResult> AddChildAsync([FromBody] WorkContent workContent)
         {
             if (workContent is null)
@@ -209,6 +209,12 @@ namespace Waffle.Controllers
         [HttpGet("fetch-url")]
         public async Task<IActionResult> FetchUrlAsync([FromQuery] string url)
         {
+            using var http = new HttpClient();
+            var response = await http.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                var html = await response.Content.ReadAsStringAsync();
+            }
             return Ok(new {
                 success = 1,
                 meta = new {
@@ -218,6 +224,24 @@ namespace Waffle.Controllers
                         url = ""
                     }
                 }
+            });
+        }
+
+        [HttpGet("child/list/{id}")]
+        public async Task<IActionResult> GetChildListAsync([FromRoute] Guid id)
+        {
+            var query = from a in _context.WorkContents
+                        join b in _context.Components on a.ComponentId equals b.Id
+                        where a.ParentId == id
+                        select new WorkListItem { 
+                            Id = a.Id,
+                            Name = a.Name,
+                            NormalizedName = b.NormalizedName,
+                        };
+            return Ok(new
+            {
+                data = await query.ToListAsync(),
+                total = await query.CountAsync()
             });
         }
 
@@ -358,6 +382,22 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
+        [HttpGet("column/list/{id}")]
+        public async Task<IActionResult> GetColumnListAsync([FromRoute] Guid id)
+        {
+            var row = await _context.WorkContents.FindAsync(id);
+            if (row is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            var query = _context.WorkContents.Where(x => x.ParentId == id);
+            return Ok(new
+            {
+                data = await query.ToListAsync(),
+                total = await query.CountAsync()
+            });
+        }
+
         [HttpGet("swiper/{id}")]
         public async Task<IActionResult> GetSwiperAsync([FromRoute] Guid id)
         {
@@ -426,6 +466,34 @@ namespace Waffle.Controllers
             workContent.Arguments = JsonSerializer.Serialize(model.Blocks);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
+        }
+
+        [HttpPost("card/save")]
+        public async Task<IActionResult> SaveCardAsync([FromBody] Card model)
+        {
+            var workContent = await _context.WorkContents.FindAsync(model.Id);
+            if (workContent is null)
+            {
+                return BadRequest();
+            }
+            workContent.Arguments = JsonSerializer.Serialize(model);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpGet("card/{id}")]
+        public async Task<IActionResult> GetCardAsync([FromRoute] Guid id)
+        {
+            var workContent = await _context.WorkContents.FindAsync(id);
+            if (workContent is null)
+            {
+                return BadRequest();
+            }
+            if (!string.IsNullOrEmpty(workContent.Arguments))
+            {
+                return Ok(JsonSerializer.Deserialize<Card>(workContent.Arguments));
+            }
+            return Ok();
         }
 
         #endregion

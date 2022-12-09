@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models;
 
 namespace Waffle.Controllers
 {
@@ -18,11 +19,11 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync()
+        public async Task<IActionResult> ListAsync([FromQuery] FileFilterOptions filterOptions)
         {
             return Ok(new
             {
-                data = await _context.FileContents.OrderByDescending(x => x.Id).ToListAsync(),
+                data = await _context.FileContents.OrderByDescending(x => x.Id).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(),
                 total = await _context.FileContents.CountAsync()
             });
         }

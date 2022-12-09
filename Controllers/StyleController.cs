@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models.Layout;
 
 namespace Waffle.Controllers
 {
@@ -22,13 +25,24 @@ namespace Waffle.Controllers
             return Ok(await System.IO.File.ReadAllTextAsync(GetPath()));
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id)
+        {
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, "css", $"{id}.css");
+            if (!System.IO.File.Exists(path))
+            {
+                var file = System.IO.File.Create(path);
+                file.Close();
+            }
+            return Ok(await System.IO.File.ReadAllTextAsync(path));
+        }
+
         [HttpPost("save")]
         public async Task<IActionResult> SaveAsync([FromBody] WorkContent workItem)
         {
-            var path = GetPath();
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, "css", $"{workItem.Id}.css");
             CreateFile(path);
             await System.IO.File.WriteAllTextAsync(path, workItem.Arguments);
-
             return Ok(IdentityResult.Success);
         }
 

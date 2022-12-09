@@ -1,0 +1,8 @@
+﻿@{
+    var href = ViewBag.CSS as string;
+}
+
+@if (!string.IsNullOrEmpty(href))
+{
+    <link rel="stylesheet" href="@href" asp-append-version="true" />
+}

@@ -31,17 +31,12 @@ namespace Waffle.Models.Components
 
     public class BlockEditorItemData 
     {
-        public BlockEditorItemData()
-        {
-            Text = string.Empty;
-            Html = string.Empty;
-        }
         [JsonPropertyName("text")]
-        public string Text { get; set; }
+        public string? Text { get; set; }
         [JsonPropertyName("level")]
         public int? Level { get; set; }
         [JsonPropertyName("html")]
-        public string Html { get; set; }
+        public string? Html { get; set; }
     }
 
     public class BlockEditorType {
