@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Constants;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models.Catalogs;
@@ -12,9 +13,11 @@ namespace Waffle.Controllers
     public class BackupController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public BackupController(ApplicationDbContext context)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public BackupController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _roleManager = roleManager;
         }
 
         [HttpPost("export")]
@@ -48,6 +51,30 @@ namespace Waffle.Controllers
             return Ok(data);
         }
 
+        [HttpGet("updgrade/list")]
+        public IActionResult UpgradeList()
+        {
+            var data = new List<string>();
+            data.Add("Roles");
+            return Ok(new {
+                data,
+                total = data.Count()
+            });
+        }
+
+        [HttpPost("upgrade/roles")]
+        public async Task<IActionResult> UpgradeRolesAsync()
+        {
+            if (!await _roleManager.RoleExistsAsync(RoleName.Customer))
+            {
+                var role = new IdentityRole {
+                    Name = RoleName.Customer
+                };
+                await _roleManager.CreateAsync(role);
+            }
+            return Ok(IdentityResult.Success);
+        }
+
         [HttpPost("upgrade")]
         public async Task<IActionResult> UpgradeAsync()
         {
@@ -56,10 +83,12 @@ namespace Waffle.Controllers
 
             await EnsureComponent(nameof(BlockEditor));
             await EnsureComponent(nameof(Document));
-            await EnsureComponent(nameof(SendGrid));
             await EnsureComponent(nameof(ContactForm));
             await EnsureComponent(nameof(Swiper));
             await EnsureComponent(nameof(Card));
+
+            await EnsureApp(nameof(SendGrid));
+            await EnsureApp(nameof(ExternalAPI.Telegram));
 
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
@@ -110,6 +139,17 @@ namespace Waffle.Controllers
                     Type = type,
                     CreatedDate = DateTime.Now,
                     ParentId = parentId
+                });
+            }
+        }
+
+        private async Task EnsureApp(string name)
+        {
+            if (!await _context.AppSettings.AnyAsync(x => x.NormalizedName.Equals(name)))
+            {
+                await _context.AppSettings.AddAsync(new AppSetting {
+                    Name = name,
+                    NormalizedName = name,
                 });
             }
         }
