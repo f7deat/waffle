@@ -5,8 +5,6 @@ using System.Text.Json;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.ExternalAPI.SendGrid;
-using Waffle.Models.Components;
 using Waffle.Models.Layout;
 
 namespace Waffle.Controllers
