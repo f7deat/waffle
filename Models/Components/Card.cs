@@ -15,6 +15,6 @@ namespace Waffle.Models.Components
         [JsonPropertyName("text")]
         public string Text { get; set; }
         [JsonPropertyName("image")]
-        public Image? Image { get; set; }
+        public FileContent? Image { get; set; }
     }
 }

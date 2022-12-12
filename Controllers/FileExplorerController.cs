@@ -71,14 +71,15 @@ namespace Waffle.Controllers
             {
                 await file.CopyToAsync(stream);
             }
-
-            return Ok(await _context.FileContents.AddAsync(new FileContent
+            await _context.FileContents.AddAsync(new FileContent
             {
                 Name = file.FileName,
                 Size = file.Length,
                 Type = file.ContentType,
                 Url = $"/files/{file.FileName}"
-            }));
+            });
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
 
         [HttpGet("{id}")]

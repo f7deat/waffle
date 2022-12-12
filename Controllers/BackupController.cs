@@ -6,6 +6,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models.Catalogs;
 using Waffle.Models.Components;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers
 {
@@ -51,14 +52,17 @@ namespace Waffle.Controllers
             return Ok(data);
         }
 
-        [HttpGet("updgrade/list")]
-        public IActionResult UpgradeList()
+        [HttpGet("upgrade/list")]
+        public async Task<IActionResult> UpgradeListAsync()
         {
-            var data = new List<string>();
-            data.Add("Roles");
+            var data = new List<UpgradeListItem>();
+            if (!await _roleManager.RoleExistsAsync(RoleName.Customer))
+            {
+                data.Add(new UpgradeListItem { Name = "Roles", Url = "/backup/upgrade/roles"});
+            }
             return Ok(new {
                 data,
-                total = data.Count()
+                total = data.Count
             });
         }
 

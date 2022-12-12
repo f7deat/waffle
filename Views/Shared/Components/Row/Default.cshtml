@@ -6,10 +6,14 @@
 
 @if (row != null)
 {
-    <div class="row">
-        @foreach (var col in row.Columns)
-        {
-            @await Component.InvokeAsync(nameof(Column), col)
-        }
+    <div class="@row.Layout">
+        <div class="@row.ClassName">
+            <div class="row">
+                @foreach (var col in row.Columns)
+                {
+                    @await Component.InvokeAsync(nameof(Column), col)
+                }
+            </div>
+        </div>
     </div>
 }

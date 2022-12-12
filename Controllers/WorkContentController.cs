@@ -321,6 +321,19 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
+        [HttpPost("row/save")]
+        public async Task<IActionResult> SaveRowAsync([FromBody] Row row)
+        {
+            var workContent = await _context.WorkContents.FindAsync(row.Id);
+            if (workContent is null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            workContent.Arguments = JsonSerializer.Serialize(row);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
         [HttpGet("contact-form/{id}")]
         public async Task<IActionResult> GetContactFormAsync([FromRoute] Guid id)
         {

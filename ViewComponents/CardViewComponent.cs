@@ -19,7 +19,8 @@ namespace Waffle.ViewComponents
             var workContent = await _context.WorkContents.FirstOrDefaultAsync(x => x.Id == id);
             if (workContent != null && !string.IsNullOrEmpty(workContent.Arguments))
             {
-                ViewBag.Data = JsonSerializer.Deserialize<Card>(workContent.Arguments);
+                var card = JsonSerializer.Deserialize<Card>(workContent.Arguments);
+                ViewBag.Data = card;
             }
             return View();
         }

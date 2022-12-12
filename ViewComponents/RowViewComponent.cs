@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using Waffle.Data;
 using Waffle.Models.Components;
 
@@ -19,11 +20,13 @@ namespace Waffle.ViewComponents
             {
                 return View();
             }
-            var cols = await _context.WorkContents.Where(x => x.ParentId == id && x.ComponentId != Guid.Empty).Select(x => x.Id).ToListAsync();
-            ViewBag.Row = new Row
+            var row = new Row();
+            if (!string.IsNullOrEmpty(workContent.Arguments))
             {
-                Columns = cols
-            };
+                row = JsonSerializer.Deserialize<Row>(workContent.Arguments);
+            }
+            row.Columns = await _context.WorkContents.Where(x => x.ParentId == id && x.ComponentId != Guid.Empty).Select(x => x.Id).ToListAsync();
+            ViewBag.Row = row;
             return View();
         }
     }

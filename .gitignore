@@ -12,6 +12,7 @@
 /Waffle.sln
 /wwwroot/css
 /wwwroot/imgs
+/wwwroot/files
 *.map
 *.js
 /bin/Release/net6.0

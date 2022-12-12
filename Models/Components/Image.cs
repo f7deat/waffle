@@ -10,8 +10,6 @@ namespace Waffle.Models.Components
             Alt = string.Empty;
             Url = string.Empty;
         }
-        [JsonPropertyName("id")]
-        public Guid Id { get; set; }
         [JsonPropertyName("src")]
         public string Src { get; set; }
         [JsonPropertyName("alt")]
