@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Interfaces.IServices;
 using Waffle.Core.Services.FileContents;
 using Waffle.Data;
 using Waffle.Entities;
@@ -16,10 +17,12 @@ namespace Waffle.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileContentService _fileContentService;
-        public WorkContentController(ApplicationDbContext context, IFileContentService fileContentService)
+        private readonly IWorkContentService _workContentService;
+        public WorkContentController(ApplicationDbContext context, IFileContentService fileContentService, IWorkContentService workContentService)
         {
             _context = context;
             _fileContentService = fileContentService;
+            _workContentService = workContentService;
         }
 
         [HttpPost("add")]
@@ -206,6 +209,9 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
+        [HttpPost("delete/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _workContentService.DeleteAsync(id));
+
         [HttpGet("fetch-url")]
         public async Task<IActionResult> FetchUrlAsync([FromQuery] string url)
         {
@@ -319,6 +325,21 @@ namespace Waffle.Controllers
             workContent.Arguments = JsonSerializer.Serialize(contactForm);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
+        }
+
+        [HttpGet("row/{id}")]
+        public async Task<IActionResult> GetRowAsync([FromRoute] Guid id)
+        {
+            var workContent = await _context.WorkContents.FindAsync(id);
+            if (workContent is null)
+            {
+                return NoContent();
+            }
+            if (!string.IsNullOrEmpty(workContent.Arguments))
+            {
+                return Ok(JsonSerializer.Deserialize<Row>(workContent.Arguments));
+            }
+            return Ok(new Row());
         }
 
         [HttpPost("row/save")]

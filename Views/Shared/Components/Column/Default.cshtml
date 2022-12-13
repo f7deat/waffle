@@ -6,7 +6,7 @@
 
 @if (column != null)
 {
-    <div class="@column.Arguments" id="@column.Id">
+    <div class="@column.Arguments">
         @foreach (var item in column.WorkListItems)
         {
             @await Component.InvokeAsync(item.NormalizedName, item.Id)

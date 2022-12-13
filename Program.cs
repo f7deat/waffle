@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Waffle.Core.Services.AppSettings;
-using Waffle.Core.Services.Catalogs;
-using Waffle.Core.Services.FileContents;
 using Waffle.Data;
+using Waffle.Extensions;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -23,9 +21,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddTransient<IAppSettingService, AppSettingService>();
-builder.Services.AddTransient<ICatalogService, CatalogService>();
-builder.Services.AddTransient<IFileContentService, FileContentService>();
+builder.Services.AddServices();
 
 builder.Services.AddControllersWithViews();
 
