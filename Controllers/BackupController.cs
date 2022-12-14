@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using Waffle.Core.Constants;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models;
 using Waffle.Models.Catalogs;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
@@ -22,18 +24,77 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("export")]
-        public async Task<IActionResult> ExportAsync()
+        public async Task<IActionResult> ExportAsync() => Ok(new BackupModel
         {
-            var data = new
+            WorkContents = await _context.WorkContents.ToListAsync(),
+            WorkItems = await _context.WorkItems.ToListAsync(),
+            FileContents = await _context.FileContents.ToListAsync(),
+            FileItems = await _context.FileItems.ToListAsync(),
+            AppSettings = await _context.AppSettings.ToListAsync(),
+            Components = await _context.Components.ToListAsync(),
+            Catalogs = await _context.Catalogs.ToListAsync()
+        });
+
+        [HttpPost("import")]
+        public async Task<IActionResult> ImportAsync([FromForm] IFormFile file)
+        {
+            if (file is null)
             {
-                workContents = await _context.WorkContents.ToListAsync(),
-                workItems = await _context.WorkItems.ToListAsync(),
-                components = await _context.Components.ToListAsync(),
-                fileContents = await _context.FileContents.ToListAsync(),
-                fileItems = await _context.FileItems.ToListAsync(),
-                appSettings = await _context.AppSettings.ToListAsync()
-            };
-            return Ok(data);
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "File not found!"
+                }));
+            }
+            var stream = file.OpenReadStream();
+            var data = await JsonSerializer.DeserializeAsync<BackupModel>(stream);
+            if (data is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Import failed!"
+                }));
+            }
+            if (data.WorkContents != null && data.WorkContents.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkContents");
+                await _context.WorkContents.AddRangeAsync(data.WorkContents);
+            }
+            if (data.WorkItems != null && data.WorkItems.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkItems");
+                await _context.WorkItems.AddRangeAsync(data.WorkItems);
+            }
+
+            if (data.FileContents != null && data.FileContents.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.FileContents");
+                await _context.FileContents.AddRangeAsync(data.FileContents);
+            }
+            if (data.FileItems != null && data.FileItems.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.FileItems");
+                await _context.FileItems.AddRangeAsync(data.FileItems);
+            }
+
+            if (data.Catalogs != null && data.Catalogs.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Catalogs");
+                await _context.Catalogs.AddRangeAsync(data.Catalogs);
+            }
+
+            if (data.AppSettings != null && data.AppSettings.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.AppSettings");
+                await _context.AppSettings.AddRangeAsync(data.AppSettings);
+            }
+
+            if (data.Components != null && data.Components.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Components");
+                await _context.Components.AddRangeAsync(data.Components);
+            }
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
 
         [HttpGet("statistic")]

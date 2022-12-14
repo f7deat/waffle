@@ -22,14 +22,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync([FromQuery] FileFilterOptions filterOptions)
-        {
-            return Ok(new
-            {
-                data = await _context.FileContents.OrderByDescending(x => x.Id).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(),
-                total = await _context.FileContents.CountAsync()
-            });
-        }
+        public async Task<IActionResult> ListAsync([FromQuery] FileFilterOptions filterOptions) => Ok(await _fileExplorerService.ListAsync(filterOptions));
 
         [HttpPost("delete-file-content/{id}")]
         public async Task<IActionResult> DeleteFileContentAsync([FromRoute] Guid id)

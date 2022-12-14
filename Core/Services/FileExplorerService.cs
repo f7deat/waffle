@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IServices;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models;
 
 namespace Waffle.Core.Services
 {
@@ -27,6 +28,15 @@ namespace Waffle.Core.Services
             _context.FileItems.Remove(item);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
+        }
+
+        public async Task<dynamic> ListAsync(FileFilterOptions filterOptions)
+        {
+            return new
+            {
+                data = await _context.FileContents.OrderByDescending(x => x.Id).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(),
+                total = await _context.FileContents.CountAsync()
+            };
         }
     }
 }

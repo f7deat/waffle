@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Waffle.Entities
 {
@@ -12,11 +13,15 @@ namespace Waffle.Entities
             Description = string.Empty;
         }
         [StringLength(100)]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
         [StringLength(100)]
+        [JsonPropertyName("normalizedName")]
         public string NormalizedName { get; set; }
         [StringLength(500)]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
+        [JsonPropertyName("value")]
         public string Value { get; set; }
     }
 }
