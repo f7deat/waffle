@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Core.Services.Catalogs;
 using Waffle.Data;
-using Waffle.Models.Components;
-using Waffle.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Waffle.ViewComponents
 {

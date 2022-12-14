@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Waffle.Entities;
 
 namespace Waffle.Models
 {
@@ -20,5 +21,12 @@ namespace Waffle.Models
     {
         public string? Name { get; set; }
         public string? Type { get; set; }
+    }
+
+    public class CatalogFilterOptions : FilterOptions
+    {
+        public string? Name { get; set; }
+        public bool? Active { get; set; }
+        public CatalogType Type { get; set; }
     }
 }

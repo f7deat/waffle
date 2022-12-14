@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using Waffle.Core.Services.Catalogs.Models;
+using Waffle.Core.Interfaces.IServices;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
 
@@ -14,9 +15,11 @@ namespace Waffle.Controllers
     public class CatalogController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public CatalogController(ApplicationDbContext context)
+        private readonly ICatalogService _catalogService;
+        public CatalogController(ApplicationDbContext context, ICatalogService catalogService)
         {
             _context = context;
+            _catalogService = catalogService;
         }
 
         [HttpGet("entry/{normalizedName}")]
@@ -29,7 +32,7 @@ namespace Waffle.Controllers
                     Description = "Router missing!"
                 }));
             }
-            var data = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName));
+            var data = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Type == CatalogType.Entry);
             if (data is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError
@@ -68,29 +71,13 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
-        {
-            if (catalog == null || string.IsNullOrWhiteSpace(catalog.NormalizedName))
-            {
-                return BadRequest();
-            }
-            if (!string.IsNullOrWhiteSpace(catalog.NormalizedName) && await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(catalog.NormalizedName)))
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Normalized name must be unique!"
-                }));
-            }
-            catalog.Active = true;
-            await _context.Catalogs.AddAsync(catalog);
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
+        public async Task<IActionResult> AddAsync([FromBody] Catalog catalog) => Ok(await _catalogService.AddAsync(catalog));
 
         [HttpGet("list")]
         public async Task<IActionResult> ListAsync(CatalogFilterOptions filterOptions)
         {
-            var query = _context.Catalogs.Where(x => x.Type == filterOptions.Type && (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active));
+            var query = _context.Catalogs
+                .Where(x => x.Type == filterOptions.Type && (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active));
             var data = await query.OrderBy(x => x.NormalizedName).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
             var total = await query.CountAsync();
             return Ok(new { data, total });
@@ -100,7 +87,7 @@ namespace Waffle.Controllers
         public async Task<IActionResult> TreeAsync()
         {
             var returnValue = new List<Tree>();
-            var parrent = await _context.Catalogs.Where(x => x.Active && x.ParentId == null).ToListAsync();
+            var parrent = await _context.Catalogs.Where(x => x.Active && x.ParentId == null && x.Type != CatalogType.Entry).ToListAsync();
             foreach (var catalog in parrent)
             {
                 List<Tree>? children = null;

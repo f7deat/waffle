@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Waffle.Core.Services.Catalogs;
+using Waffle.Core.Interfaces.IServices;
 using Waffle.Data;
 using Waffle.Models;
 using Waffle.Models.Components;

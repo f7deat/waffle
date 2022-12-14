@@ -8,7 +8,9 @@
     <div class="card">
         @if (card.Image != null)
         {
-            <img src="@card.Image.Url" class="card-img-top" alt="@card.Title">
+            <div class="wf-card-img">
+                <img src="@card.Image.Url" class="wf-card-img-top" alt="@card.Title">
+            </div>
         }
         <div class="card-body">
             <h5 class="card-title">@card.Title</h5>

@@ -121,6 +121,10 @@ namespace Waffle.Controllers
             {
                 data.Add(new UpgradeListItem { Name = "Roles", Url = "/backup/upgrade/roles"});
             }
+            if (!await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(CatalogType.Article.ToString().ToLower())))
+            {
+                data.Add(new UpgradeListItem { Name = "Catalogs", Url = "#" });
+            }
             return Ok(new {
                 data,
                 total = data.Count
@@ -143,7 +147,8 @@ namespace Waffle.Controllers
         [HttpPost("upgrade")]
         public async Task<IActionResult> UpgradeAsync()
         {
-            await EnsureCatalog("home", CatalogType.Default);
+            await EnsureCatalog("home", CatalogType.Entry);
+            await EnsureCatalog("shop", CatalogType.Entry);
             await EnsureSetting();
 
             await EnsureComponent(nameof(BlockEditor));
@@ -151,6 +156,7 @@ namespace Waffle.Controllers
             await EnsureComponent(nameof(ContactForm));
             await EnsureComponent(nameof(Swiper));
             await EnsureComponent(nameof(Card));
+            await EnsureComponent(nameof(Masonry));
 
             await EnsureApp(nameof(SendGrid));
             await EnsureApp(nameof(ExternalAPI.Telegram));

@@ -99,6 +99,21 @@ namespace Waffle.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "User not found!"
+                }));
+            }
+            return Ok(await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword));
+
+        }
+
         [HttpGet("initial"), AllowAnonymous]
         public async Task<IActionResult> InitialAsync()
         {

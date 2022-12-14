@@ -1,7 +1,6 @@
 ﻿using Waffle.Core.Interfaces.IServices;
 using Waffle.Core.Services;
 using Waffle.Core.Services.AppSettings;
-using Waffle.Core.Services.Catalogs;
 using Waffle.Core.Services.FileContents;
 
 namespace Waffle.Extensions
