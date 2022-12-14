@@ -1,0 +1,9 @@
+﻿@page
+@model Waffle.Pages.Article.IndexModel
+
+@if (Model.Articles != null) {
+    foreach (var article in Model.Articles)
+    {
+        <div>@article.Name</div>
+    }
+}
