@@ -140,20 +140,7 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("active/{id}")]
-        public async Task<IActionResult> ActiveAsync([FromRoute] Guid id)
-        {
-            var workItem = await _context.WorkContents.FindAsync(id);
-            if (workItem is null)
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Work item not found!"
-                }));
-            }
-            workItem.Active = !workItem.Active;
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
+        public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _workContentService.ActiveAsync(id));
 
         [HttpPost("sort-order")]
         public async Task<IActionResult> SortOrderAsync([FromBody] WorkItem model)
@@ -509,6 +496,17 @@ namespace Waffle.Controllers
             if (workContent is null)
             {
                 return BadRequest();
+            }
+            if (model.Image != null)
+            {
+                if (await _context.FileContents.AnyAsync(x => x.Id == model.Image.Id))
+                {
+                    await _context.FileItems.AddAsync(new FileItem
+                    {
+                        FileId = model.Image.Id,
+                        ItemId = workContent.Id
+                    });
+                }
             }
             workContent.Arguments = JsonSerializer.Serialize(model);
             await _context.SaveChangesAsync();

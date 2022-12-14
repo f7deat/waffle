@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Interfaces.IServices;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
@@ -12,10 +13,12 @@ namespace Waffle.Controllers
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ApplicationDbContext _context;
-        public FileExplorerController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context)
+        private readonly IFileExplorerService _fileExplorerService;
+        public FileExplorerController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IFileExplorerService fileExplorerService)
         {
             _webHostEnvironment = webHostEnvironment;
             _context = context;
+            _fileExplorerService = fileExplorerService;
         }
 
         [HttpGet("list")]
@@ -29,9 +32,13 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("delete-file-content/{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteFileContentAsync([FromRoute] Guid id)
         {
-            if (await _context.FileItems.AnyAsync(x => x.FileId == id))
+            var query = from a in _context.FileItems
+                        join b in _context.WorkContents on a.ItemId equals b.Id
+                        where a.FileId == id
+                        select a;
+            if (await query.AnyAsync())
             {
                 return Ok(IdentityResult.Failed(new IdentityError
                 {
@@ -51,10 +58,15 @@ namespace Waffle.Controllers
             {
                 System.IO.File.Delete(path);
             }
+            var fileItems = await _context.FileItems.Where(x => x.FileId == id).ToListAsync();
+            _context.FileItems.RemoveRange(fileItems);
             _context.FileContents.Remove(fileContent);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        [HttpPost("delete-file-item")]
+        public async Task<IActionResult> DeleteFileItemAsync([FromBody] FileItem fileItem) => Ok(await _fileExplorerService.DeleteFileItemAsync(fileItem));
 
         [HttpPost("upload")]
         public async Task<IActionResult> UploadAsync([FromForm] IFormFile file)
@@ -90,8 +102,14 @@ namespace Waffle.Controllers
         {
             var fileContent = from a in _context.FileItems
                               join b in _context.WorkContents on a.ItemId equals b.Id
+                              join c in _context.Components on b.ComponentId equals c.Id
                               where a.FileId == id
-                              select b;
+                              select new WorkListItem
+                              {
+                                  Id = a.ItemId,
+                                  Name = b.Name,
+                                  NormalizedName = c.NormalizedName,
+                              };
             return Ok(new
             {
                 data = await fileContent.ToListAsync(),
