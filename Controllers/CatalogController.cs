@@ -19,8 +19,30 @@ namespace Waffle.Controllers
             _context = context;
         }
 
-        [HttpGet("entry")]
-        public async Task<IActionResult> GetEntry() => Ok(await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals("home")));
+        [HttpGet("entry/{normalizedName}")]
+        public async Task<IActionResult> GetEntryAsync([FromRoute] string normalizedName)
+        {
+            if (string.IsNullOrWhiteSpace(normalizedName))
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Router missing!"
+                }));
+            }
+            var data = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName));
+            if (data is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Entry point not found!"
+                }));
+            }
+            return Ok(new
+            {
+                succeeded = true,
+                data
+            });
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id)

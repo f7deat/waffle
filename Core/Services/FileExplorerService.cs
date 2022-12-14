@@ -32,10 +32,11 @@ namespace Waffle.Core.Services
 
         public async Task<dynamic> ListAsync(FileFilterOptions filterOptions)
         {
+            var query = _context.FileContents.Where(x => string.IsNullOrWhiteSpace(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower()));
             return new
             {
-                data = await _context.FileContents.OrderByDescending(x => x.Id).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(),
-                total = await _context.FileContents.CountAsync()
+                data = await query.OrderByDescending(x => x.Id).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(),
+                total = await query.CountAsync()
             };
         }
     }

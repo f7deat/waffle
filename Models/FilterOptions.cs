@@ -18,6 +18,7 @@ namespace Waffle.Models
 
     public class FileFilterOptions : FilterOptions
     {
-
+        public string? Name { get; set; }
+        public string? Type { get; set; }
     }
 }
