@@ -11,9 +11,10 @@ namespace Waffle.Extensions
         {
             services.AddTransient<IAppSettingService, AppSettingService>();
             services.AddTransient<ICatalogService, CatalogService>();
+            services.AddTransient<IComponentService, ComponentService>();
             services.AddTransient<IFileContentService, FileContentService>();
-            services.AddTransient<IWorkContentService, WorkContentService>();
             services.AddTransient<IFileExplorerService, FileExplorerService>();
+            services.AddTransient<IWorkContentService, WorkContentService>();
         }
     }
 }

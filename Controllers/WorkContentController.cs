@@ -18,11 +18,13 @@ namespace Waffle.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IFileContentService _fileContentService;
         private readonly IWorkContentService _workContentService;
-        public WorkContentController(ApplicationDbContext context, IFileContentService fileContentService, IWorkContentService workContentService)
+        private readonly IComponentService _componentService;
+        public WorkContentController(ApplicationDbContext context, IFileContentService fileContentService, IWorkContentService workContentService, IComponentService componentService)
         {
             _context = context;
             _fileContentService = fileContentService;
             _workContentService = workContentService;
+            _componentService = componentService;
         }
 
         [HttpPost("add")]
@@ -57,25 +59,8 @@ namespace Waffle.Controllers
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.WorkContents.FindAsync(id));
 
         [HttpGet("list/{id}")]
-        public async Task<IActionResult> ListAsync([FromRoute] Guid id, [FromQuery] bool child = false)
+        public async Task<IActionResult> ListAsync([FromRoute] Guid id)
         {
-            if (child)
-            {
-                var query1 = from a in _context.WorkContents
-                            join b in _context.Components on a.ComponentId equals b.Id
-                            where a.ParentId == id
-                            select new WorkListItem
-                            {
-                                Id = a.Id,
-                                Name = a.Name,
-                                NormalizedName = b.NormalizedName,
-                                Arguments = a.Arguments
-                            };
-                return Ok(new
-                {
-                    data = await query1.ToListAsync()
-                });
-            }
             var query2 = from a in _context.Catalogs
                         join b in _context.WorkItems on a.Id equals b.CatalogId
                         join c in _context.WorkContents on b.WorkContentId equals c.Id
@@ -92,7 +77,8 @@ namespace Waffle.Controllers
                         };
             return Ok(new
             {
-                data = await query2.ToListAsync()
+                data = await query2.ToListAsync(),
+                total = await query2.CountAsync(),
             });
         }
 
@@ -526,6 +512,40 @@ namespace Waffle.Controllers
                 return Ok(JsonSerializer.Deserialize<Card>(workContent.Arguments));
             }
             return Ok();
+        }
+
+        [HttpPost("lookbook/add")]
+        public async Task<IActionResult> AddLookBookAsync([FromBody] WorkContent model)
+        {
+            if (model is null)
+            {
+                return BadRequest();
+            }
+            var workContent = await _context.WorkContents.FindAsync(model.Id);
+            if (workContent is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work content not found!"
+                }));
+            }
+            var image = await _componentService.GetByNameAsync(nameof(Image));
+            if (image is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Image component not found!"
+                }));
+            }
+            await _context.WorkContents.AddAsync(new WorkContent
+            {
+                Active = true,
+                ComponentId = image.Id,
+                Name = model.Name,
+                ParentId = workContent.Id
+            });
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
 
         #endregion

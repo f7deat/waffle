@@ -151,12 +151,7 @@ namespace Waffle.Controllers
             await EnsureCatalog("shop", CatalogType.Entry);
             await EnsureSetting();
 
-            await EnsureComponent(nameof(BlockEditor));
-            await EnsureComponent(nameof(Document));
-            await EnsureComponent(nameof(ContactForm));
-            await EnsureComponent(nameof(Swiper));
-            await EnsureComponent(nameof(Card));
-            await EnsureComponent(nameof(Masonry));
+            await EnsureComponentsAsync();
 
             await EnsureApp(nameof(SendGrid));
             await EnsureApp(nameof(ExternalAPI.Telegram));
@@ -165,9 +160,27 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
+        [HttpPost("upgrade/components")]
+        public async Task<IActionResult> UpgradeComponentAsync()
+        {
+            await EnsureComponentsAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        private async Task EnsureComponentsAsync()
+        {
+            await EnsureComponent(nameof(BlockEditor));
+            await EnsureComponent(nameof(Document));
+            await EnsureComponent(nameof(ContactForm));
+            await EnsureComponent(nameof(Swiper));
+            await EnsureComponent(nameof(Card));
+            await EnsureComponent(nameof(Masonry));
+            await EnsureComponent(nameof(Lookbook));
+        }
+
         private async Task EnsureComponent(string name)
         {
-            if (!await _context.Components.AllAsync(x => x.NormalizedName.Equals(name)))
+            if (!await _context.Components.AnyAsync(x => x.NormalizedName.Equals(name)))
             {
                 await _context.Components.AddAsync(new Component {
                     Active = true,
