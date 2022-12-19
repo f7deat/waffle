@@ -1,5 +1,27 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Waffle.Models.Components
 @{
+    var images = ViewBag.Images as IAsyncEnumerable<Image>;
 }
+
+@if (images != null)
+{
+    <div class="row" data-masonry='{"percentPosition": true }'>
+        @await foreach (var image in images)
+        {
+            if (image.FileContent != null)
+            {
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card wf-card">
+                        <img src="@image.FileContent.Url" alt="@image.Title" class="@image.ClassName" />
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">@image.Title</h5>
+                            <p class="card-text">@image.Description</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>

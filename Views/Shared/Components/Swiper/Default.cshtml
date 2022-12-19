@@ -15,9 +15,12 @@
             {
                 @await foreach (var item in swiperSlides)
                 {
-                    <div class="swiper-slide">
-                        <img src="@item.Src" alt="@item.Title" />
-                    </div>
+                    if (item.FileContent != null)
+                    {
+                        <div class="swiper-slide">
+                            <img src="@item.FileContent.Url" alt="@item.Title" />
+                        </div>
+                    }
                 }
             }
         </div>

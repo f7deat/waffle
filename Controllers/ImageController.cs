@@ -60,9 +60,11 @@ namespace Waffle.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(new {
+            return Ok(new
+            {
                 success = 1,
-                file = new {
+                file = new
+                {
                     url = $"https://{Request.Host.Value}/{fileContent.Url}"
                 }
             });
@@ -113,7 +115,7 @@ namespace Waffle.Controllers
         {
             if (model is null)
             {
-                return Ok(IdentityResult.Failed());
+                return BadRequest();
             }
 
             var workContent = await _context.WorkContents.FindAsync(model.Id);
@@ -122,16 +124,15 @@ namespace Waffle.Controllers
                 return Ok(IdentityResult.Failed());
             }
 
-            var image = JsonSerializer.Deserialize<Image>(workContent.Arguments);
+            var image = new Image();
 
-            if (image is null)
+            if (!string.IsNullOrEmpty(workContent.Arguments))
             {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "No value has been found!"
-                }));
+                image = JsonSerializer.Deserialize<Image>(workContent.Arguments);
+                image ??= new Image();
             }
-
+            image.Title = model.Title;
+            image.Description = model.Description;
             image.Width = model.Width;
             image.Height = model.Height;
             image.ClassName = model.ClassName;

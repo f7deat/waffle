@@ -6,26 +6,35 @@ using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
-    public class LookBookViewComponent : ViewComponent
+    public class LookbookViewComponent : ViewComponent
     {
         private readonly ApplicationDbContext _context;
-        public LookBookViewComponent(ApplicationDbContext context)
+        public LookbookViewComponent(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid workContentId)
+        public async Task<IViewComponentResult> InvokeAsync(Guid workId)
         {
-            var query = from a in _context.WorkItems
-                        join b in _context.WorkContents on a.WorkContentId equals b.Id
-                        where a.WorkContentId == workContentId
-                        orderby a.SortOrder ascending
-                        select b.Arguments;
+            var lookbook = await _context.WorkContents.FindAsync(workId);
+            if (lookbook is not null)
+            {
+                ViewBag.Images = GetImagesAsync(workId);
+            }
+            return View();
+        }
 
-            var image = await query.FirstOrDefaultAsync();
-            if (image == null) return View();
-
-            return View(JsonSerializer.Deserialize<Image>(image));
+        private async IAsyncEnumerable<Image?> GetImagesAsync(Guid workId)
+        {
+            var images = await _context.WorkContents.Where(x => x.Active && x.ParentId == workId).ToListAsync();
+            foreach (var image in images)
+            {
+                if (string.IsNullOrEmpty(image.Arguments))
+                {
+                    continue;
+                }
+                yield return JsonSerializer.Deserialize<Image>(image.Arguments);
+            }
         }
     }
 }

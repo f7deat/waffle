@@ -7,7 +7,6 @@ namespace Waffle.Models.Components
     {
         public Image()
         {
-            Src = string.Empty;
             Title = string.Empty;
             Description = string.Empty;
             Url = string.Empty;
@@ -18,8 +17,6 @@ namespace Waffle.Models.Components
         public string Description { get; set; }
         [JsonPropertyName("url")]
         public string Url { get; set; }
-        [JsonPropertyName("src")]
-        public string Src { get; set; }
         [JsonPropertyName("width")]
         public int? Width { get; set; }
         [JsonPropertyName("height")]

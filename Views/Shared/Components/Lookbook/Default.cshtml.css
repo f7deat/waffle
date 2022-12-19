@@ -1,0 +1,17 @@
+﻿.wf-card .card-img-overlay {
+    background-image: linear-gradient(to bottom,rgba(0,0,0,0.8),transparent);
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+}
+
+.wf-card .card-img-overlay:hover {
+    opacity: 1;
+}
+
+.wf-card .card-title, wf-card .card-text {
+    color: white;
+    text-shadow: 0 0 2px rgb(0 0 0 / 50%);
+}
