@@ -26,7 +26,7 @@ namespace Waffle.ViewComponents
 
         private async IAsyncEnumerable<Image?> GetImagesAsync(Guid workId)
         {
-            var images = await _context.WorkContents.Where(x => x.Active && x.ParentId == workId).ToListAsync();
+            var images = await _context.WorkContents.Where(x => x.Active && x.ParentId == workId).OrderByDescending(x => x.Id).Take(9).ToListAsync();
             foreach (var image in images)
             {
                 if (string.IsNullOrEmpty(image.Arguments))

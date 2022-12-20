@@ -27,6 +27,8 @@ namespace Waffle.Models.Components
         public string ResultUrl { get; set; }
         [JsonPropertyName("labels")]
         public ContactFormLabel Labels { get; set; }
+        [JsonPropertyName("sendgrid")]
+        public ContactFormSendGrid? SendGrid { get; set; }
     }
 
     public class ContactFormLabel
@@ -37,6 +39,7 @@ namespace Waffle.Models.Components
             Email = nameof(Email);
             PhoneNumber = "Phone number";
             Note = nameof(Note);
+            Address = nameof(Address);
         }
 
         [JsonPropertyName("name")]
@@ -47,5 +50,12 @@ namespace Waffle.Models.Components
         public string PhoneNumber { get; set; }
         [JsonPropertyName("note")]
         public string Note { get; set; }
+        [JsonPropertyName("address")]
+        public string Address { get; set; }
+    }
+
+    public class ContactFormSendGrid
+    {
+        public string? TemplateId { get; set; }
     }
 }

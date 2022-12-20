@@ -2,7 +2,6 @@
 @{
     var images = ViewBag.Images as IAsyncEnumerable<Image>;
 }
-
 @if (images != null)
 {
     <div class="row" data-masonry='{"percentPosition": true }'>
@@ -17,11 +16,19 @@
                             <h5 class="card-title">@image.Title</h5>
                             <p class="card-text">@image.Description</p>
                         </div>
+                        <div class="wf-card-action">
+                            <button class="btn btn-sm btn-primary" type="button">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="btn btn-sm btn-primary" type="button">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             }
         }
     </div>
 }
-
+<script src="~/js/lookbook.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>

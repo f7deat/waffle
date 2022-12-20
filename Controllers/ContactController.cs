@@ -67,7 +67,6 @@ namespace Waffle.Controllers
             {
                 return Redirect("/");
             }
-            var contactForm = JsonSerializer.Deserialize<ContactForm>(workContent.Arguments);
             var contact = new Contact
             {
                 CreatedDate = DateTime.Now,
@@ -75,10 +74,16 @@ namespace Waffle.Controllers
                 Name = model.Name,
                 Note = model.Note,
                 PhoneNumber = model.PhoneNumber,
+                Address = model.Address,
                 Meta = JsonSerializer.Serialize(meta)
             };
             await _context.Contacts.AddAsync(contact);
             await _context.SaveChangesAsync();
+            var contactForm = JsonSerializer.Deserialize<ContactForm>(workContent.Arguments);
+            if (contactForm is null)
+            {
+                return NotFound("Missing configuration!");
+            }
             return Redirect(contactForm?.ResultUrl ?? "/");
         }
 
