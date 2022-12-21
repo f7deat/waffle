@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Waffle.Core.Helpers;
+using Waffle.Core.Interfaces.IServices;
 using Waffle.Models;
 
 namespace Waffle.Controllers
@@ -20,8 +21,10 @@ namespace Waffle.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<UserController> _logger;
         private readonly IConfiguration _configuration;
-        public UserController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+        private readonly IUserService _userService;
+        public UserController(IUserService userService, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
         {
+            _userService = userService;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
@@ -99,20 +102,11 @@ namespace Waffle.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model)
-        {
-            var user = await _userManager.FindByIdAsync(model.Id);
-            if (user is null)
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "User not found!"
-                }));
-            }
-            return Ok(await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword));
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateAsync([FromBody] CreateUserModel model) => Ok(await _userService.CreateAsync(model));
 
-        }
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model) => Ok(await _userService.ChangePasswordAsync(model));
 
         [HttpGet("initial"), AllowAnonymous]
         public async Task<IActionResult> InitialAsync()

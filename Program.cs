@@ -22,6 +22,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 
 builder.Services.AddServices();
+builder.Services.AddHttpClients();
 
 builder.Services.AddControllersWithViews();
 

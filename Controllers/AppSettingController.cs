@@ -5,6 +5,7 @@ using System.Text.Json;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.ExternalAPI.Models;
 using Waffle.Models.Layout;
 
 namespace Waffle.Controllers
@@ -62,6 +63,22 @@ namespace Waffle.Controllers
             var head = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Head)));
             head ??= await _appSettingService.EnsureSettingAsync(nameof(Head));
             head.Value = JsonSerializer.Serialize(model);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
+
+        [HttpPost("facebook/save")]
+        public async Task<IActionResult> SaveFacebookAsync([FromBody] Facebook model)
+        {
+            var app = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Facebook)));
+            if (app is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "App not found!"
+                }));
+            }
+            app.Value = JsonSerializer.Serialize(model);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
