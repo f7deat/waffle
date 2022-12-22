@@ -34,6 +34,8 @@ namespace Waffle.Entities
         public DateTime? PublishedDate { get; set; }
         [JsonPropertyName("type")]
         public CatalogType Type { get; set; }
+        [JsonPropertyName("viewCount")]
+        public int ViewCount { get; set; }
         [JsonPropertyName("active")]
         public bool Active { get; set; }
     }

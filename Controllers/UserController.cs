@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IServices;
 using Waffle.Models;
 
@@ -33,10 +32,23 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync() => Ok(await _userManager.Users.ToListAsync());
+        public async Task<IActionResult> ListAsync()
+        {
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                return BadRequest();
+            }
+            var query = _userManager.Users.Where(x => x.Id != currentUserId).OrderByDescending(x => x.Id);
+            return Ok(new
+            {
+                data = await query.ToListAsync(),
+                total = await query.CountAsync()
+            });
+        }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> FindByIdAsync([FromRoute] string id) => Ok(await _userManager.FindByIdAsync(id));
+        public async Task<IActionResult> FindByIdAsync([FromRoute] string id) => Ok(await _userService.GetCurrentUserAsync(id));
 
         [HttpGet("")]
         public async Task<IActionResult> GetUserAsync()
@@ -46,20 +58,10 @@ namespace Waffle.Controllers
             {
                 return Ok(IdentityResult.Failed());
             }
-            var user = await _userManager.FindByIdAsync(userId);
-            var roles = await _userManager.GetRolesAsync(user);
             return Ok(new
             {
                 succeeded = true,
-                data = new
-                {
-                    user.Id,
-                    user.Email,
-                    user.PhoneNumber,
-                    user.UserName,
-                    avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(user.Email)}?s=520",
-                    roles
-                }
+                data = await _userService.GetCurrentUserAsync(userId)
             });
         }
 

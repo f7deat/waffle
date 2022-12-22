@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IServices;
 using Waffle.Models;
 
@@ -27,7 +28,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> CreateAsync(CreateUserModel model)
         {
-            if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password) || string.IsNullOrEmpty(model.ConfirmPassword))
+            if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
             {
                 return IdentityResult.Failed();
             }
@@ -37,6 +38,21 @@ namespace Waffle.Core.Services
                 UserName = model.Email
             };
             return await _userManager.CreateAsync(user, model.Password);
+        }
+
+        public async Task<dynamic> GetCurrentUserAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var roles = await _userManager.GetRolesAsync(user);
+            return new
+            {
+                user.Id,
+                user.Email,
+                user.PhoneNumber,
+                user.UserName,
+                avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(user.Email)}?s=520",
+                roles
+            };
         }
     }
 }
