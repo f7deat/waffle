@@ -1,8 +1,11 @@
 ﻿@{
-    var href = ViewBag.CSS as string;
+    var css = ViewBag.CSS as IEnumerable<Guid>;
 }
 
-@if (!string.IsNullOrEmpty(href))
+@if (css != null)
 {
-    <link rel="stylesheet" href="@href" asp-append-version="true" />
+    @foreach (var item in css)
+    {
+        <link rel="stylesheet" href="@($"/css/{item}.css")" asp-append-version="true" />
+    }
 }

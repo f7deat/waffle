@@ -1,5 +1,6 @@
 ﻿using Waffle.ExternalAPI.Facebook;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Wiki;
 
 namespace Waffle.Extensions
 {
@@ -8,6 +9,7 @@ namespace Waffle.Extensions
         public static void AddHttpClients(this IServiceCollection services)
         {
             services.AddHttpClient<IFacebookService, FacebookService>();
+            services.AddHttpClient<IWikiService, WikiService>();
         }
     }
 }

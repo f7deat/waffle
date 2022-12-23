@@ -3,7 +3,7 @@ using Waffle.Entities;
 
 namespace Waffle.Models.Components
 {
-    public class ContactForm : BaseEntity
+    public class ContactForm : BaseEntity<Guid>
     {
         public ContactForm()
         {

@@ -3,7 +3,7 @@ using Waffle.Entities;
 
 namespace Waffle.Models.Components
 {
-    public class Card : BaseEntity
+    public class Card : BaseEntity<Guid>
     {
         public Card()
         {

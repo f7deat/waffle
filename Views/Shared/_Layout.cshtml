@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Waffle.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+    @await Component.InvokeAsync(nameof(Waffle.Models.Components.Css), ViewBag.CatalogId)
 </head>
 <body id="@ViewData["NormalizedName"]" class="wf-body">
 

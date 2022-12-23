@@ -35,10 +35,17 @@ namespace Waffle.Controllers
             var data = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Type == CatalogType.Entry);
             if (data is null)
             {
-                return Ok(IdentityResult.Failed(new IdentityError
+                data = new Catalog
                 {
-                    Description = "Entry point not found!"
-                }));
+                    Type = CatalogType.Entry,
+                    NormalizedName = normalizedName,
+                    Name = normalizedName,
+                    CreatedDate = DateTime.Now,
+                    Active = true,
+                    ViewCount = 0
+                };
+                await _context.Catalogs.AddAsync(data);
+                await _context.SaveChangesAsync();
             }
             return Ok(new
             {

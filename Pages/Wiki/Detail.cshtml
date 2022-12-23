@@ -1,0 +1,72 @@
+﻿@page "/wiki/{id}"
+@model Waffle.Pages.Wiki.DetailModel
+@{
+}
+<style>
+    .plainlinks, .error {
+        display: none;
+    }
+
+    table.infobox.vevent {
+        width: 100% !important;
+        margin-bottom: 1rem;
+    }
+
+    .infobox {
+        width: auto !important;
+    }
+
+    table.wikitable {
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+        table.wikitable th {
+            background: #eee;
+            padding: 0.5rem 1rem;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+
+        table.wikitable td {
+            border: 1px solid #eee;
+            padding: 0.25rem 1rem;
+        }
+
+    .navbox-title {
+        text-align: center;
+        color: unset;
+    }
+
+    .mw-editsection {
+        display: none;
+    }
+
+    table.nowraplinks.mw-collapsible.autocollapse.navbox-inner {
+        width: 100%;
+    }
+
+    .h2 {
+        font-weight: bold;
+        font-size: 1.125rem;
+        padding: 0.25rem 0;
+    }
+
+    td {
+        padding: 0.25rem;
+    }
+</style>
+
+<div class="container">
+    @if (Model.Data != null)
+    {
+        <div class="card">
+            <h5 class="card-header">
+                @ViewData["Title"]
+            </h5>
+            <div class="card-body">
+                @Html.Raw(Model.Data.Text)
+            </div>
+        </div>
+    }
+</div>

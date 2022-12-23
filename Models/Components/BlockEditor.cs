@@ -3,7 +3,7 @@ using Waffle.Entities;
 
 namespace Waffle.Models.Components
 {
-    public class BlockEditor : BaseEntity
+    public class BlockEditor : BaseEntity<Guid>
     {
         public BlockEditor()
         {

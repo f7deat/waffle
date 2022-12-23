@@ -2,7 +2,7 @@
 
 namespace Waffle.Entities
 {
-    public class Localization : BaseEntity
+    public class Localization : BaseEntity<Guid>
     {
         public Localization()
         {
