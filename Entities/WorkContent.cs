@@ -2,7 +2,7 @@
 
 namespace Waffle.Entities
 {
-    public abstract class BasicWorkContent : BaseEntity<Guid>
+    public abstract class BasicWorkContent : BaseEntity
     {
         public BasicWorkContent()
         {

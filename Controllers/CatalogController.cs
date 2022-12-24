@@ -22,6 +22,9 @@ namespace Waffle.Controllers
             _catalogService = catalogService;
         }
 
+        [HttpGet("view-count")]
+        public async Task<IActionResult> GetViewCountAsync() => Ok(await _context.Catalogs.SumAsync(x => x.ViewCount));
+
         [HttpGet("entry/{normalizedName}")]
         public async Task<IActionResult> GetEntryAsync([FromRoute] string normalizedName)
         {
@@ -210,5 +213,8 @@ namespace Waffle.Controllers
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        [HttpGet("categories/{type}")]
+        public async Task<IActionResult> GetCategoriesAsync([FromRoute] CatalogType type) => Ok(await _context.Catalogs.Where(x => x.Type == type).ToListAsync());
     }
 }

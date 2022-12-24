@@ -2,3 +2,19 @@
 @model Waffle.Pages.Article.DetailsModel
 @{
 }
+
+@if (Model.Catalog != null)
+{
+    <div class="card">
+        <div class="card-header">@Model.Catalog.Name</div>
+        <div class="card-body">
+            @if (Model.BlockEditors != null)
+            {
+                foreach (var item in Model.BlockEditors)
+                {
+                    await Component.InvokeAsync(nameof(Waffle.Models.Components.BlockEditor), item);
+                }
+            }
+        </div>
+    </div>
+}

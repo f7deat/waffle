@@ -3,7 +3,7 @@ using Waffle.Entities;
 
 namespace Waffle.Models.ViewModels
 {
-    public class CatalogViewModel : BaseEntity<Guid>
+    public class CatalogViewModel : BaseEntity
     {
         public CatalogViewModel()
         {

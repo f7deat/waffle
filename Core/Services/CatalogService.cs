@@ -57,6 +57,8 @@ namespace Waffle.Core.Services
             return catalog;
         }
 
+        public async Task<Catalog?> GetByNameAsync(string normalizedName) => await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName));
+
         public async Task<PageVewModel> GetPageDataAsync(Catalog catalog)
         {
             var workItems = from a in _context.WorkItems

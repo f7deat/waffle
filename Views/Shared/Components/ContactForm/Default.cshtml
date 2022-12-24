@@ -10,21 +10,21 @@
                 <input type="hidden" value="@Model.Id" name="workContentId" />
                 <div class="mb-3">
                     <label class="form-label">@Model.Labels.Name</label>
-                    <input class="form-control" type="text" name="name" id="contact-input-name" />
+                    <input class="form-control" type="text" name="name" id="contact-input-name" required />
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                    <label class="form-label">@Model.Labels.Email</label>
-                    <input class="form-control" type="email" name="email" id="contact-input-email" />
-                </div>
+                        <label class="form-label">@Model.Labels.Email</label>
+                        <input class="form-control" type="email" name="email" id="contact-input-email" required />
+                    </div>
                     <div class="col-md-6">
-                    <label class="form-label">@Model.Labels.PhoneNumber</label>
-                    <input class="form-control" type="tel" name="phoneNumber" id="contact-input-phoneNumber" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">@Model.Labels.Address</label>
-                    <input class="form-control" type="text" name="address" />
-                </div>
+                        <label class="form-label">@Model.Labels.PhoneNumber</label>
+                        <input class="form-control" type="tel" name="phoneNumber" id="contact-input-phoneNumber" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">@Model.Labels.Address</label>
+                        <input class="form-control" type="text" name="address" />
+                    </div>
                 </div>
                 <div class="mb-3">
                     <div class="row">

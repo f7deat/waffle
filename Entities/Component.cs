@@ -2,7 +2,7 @@
 
 namespace Waffle.Entities
 {
-    public class Component : BaseEntity<Guid>
+    public class Component : BaseEntity
     {
         public Component()
         {

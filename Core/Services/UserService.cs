@@ -8,9 +8,35 @@ namespace Waffle.Core.Services
     public class UserService : IUserService
     {
         private readonly UserManager<IdentityUser> _userManager;
-        public UserService(UserManager<IdentityUser> userManager)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public UserService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
+        }
+
+        public async Task<IdentityResult> AddToRoleAsync(AddToRoleModel model)
+        {
+            if (string.IsNullOrEmpty(model.UserId) || string.IsNullOrEmpty(model.RoleName))
+            {
+                return IdentityResult.Failed();
+            }
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "User not found!"
+                });
+            }
+            if (!await _roleManager.RoleExistsAsync(model.RoleName))
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Role not found!"
+                });
+            }
+            return await _userManager.AddToRoleAsync(user, model.RoleName);
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel model)

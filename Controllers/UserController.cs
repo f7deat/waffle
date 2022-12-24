@@ -65,6 +65,9 @@ namespace Waffle.Controllers
             });
         }
 
+        [HttpPost("add-to-role")]
+        public async Task<IActionResult> AddToRoleAsync([FromBody] AddToRoleModel model) => Ok(await _userService.AddToRoleAsync(model));
+
         [HttpPost("password-sign-in"), AllowAnonymous]
         public async Task<IActionResult> PasswordSignInAsync([FromBody] LoginModel login)
         {

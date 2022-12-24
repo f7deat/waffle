@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace Waffle.Entities
 {
-    public abstract class BaseEntity<T>
+    public abstract class BaseEntity
     {
         [Key, JsonPropertyName("id")]
-        public T Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

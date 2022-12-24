@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Waffle.Entities
 {
-    public class AppSetting : BaseEntity<Guid>
+    public class AppSetting : BaseEntity
     {
         public AppSetting()
         {

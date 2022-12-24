@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Waffle.Entities
 {
-    public class Catalog : BaseEntity<Guid>
+    public class Catalog : BaseEntity
     {
         public Catalog()
         {
@@ -46,6 +46,8 @@ namespace Waffle.Entities
         Article,
         Shop,
         Setting,
-        Entry
+        Entry,
+        ArticleCategoy,
+        ProductCategory
     }
 }

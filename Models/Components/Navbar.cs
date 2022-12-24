@@ -3,7 +3,7 @@ using Waffle.Entities;
 
 namespace Waffle.Models.Components
 {
-    public class Navbar : BaseEntity<Guid>
+    public class Navbar : BaseEntity
     {
         public Navbar()
         {

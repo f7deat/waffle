@@ -29,4 +29,9 @@ namespace Waffle.Models
         public bool? Active { get; set; }
         public CatalogType Type { get; set; }
     }
+
+    public class SearchFilterOptions : FilterOptions
+    {
+        public string? SearchTerm { get; set; }
+    }
 }

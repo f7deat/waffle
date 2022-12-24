@@ -1,0 +1,29 @@
+﻿@page
+@model Waffle.Pages.Search.IndexModel
+@{
+}
+<div class="container">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4">
+        @if (Model.Keys != null)
+        {
+            <div class="card">
+                @foreach (var item in Model.Keys)
+                {
+                    <div class="border bg-white mb-1">
+                        <h2 class="px-3 py-1 m-0 font-medium bg-gray-200 text-base">
+                            <a href="/search?searchTerm=@item.Title" title="@item.Title">@item.Title</a>
+                        </h2>
+                        @if (!string.IsNullOrEmpty(item.Description))
+                        {
+                            <div class="px-3 py-1 text-gray-400 text-sm">
+                                @item.Description
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
