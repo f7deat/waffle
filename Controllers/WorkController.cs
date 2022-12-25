@@ -13,17 +13,17 @@ using Waffle.Models.Params;
 namespace Waffle.Controllers
 {
     [Route("api/[controller]")]
-    public class WorkContentController : Controller
+    public class WorkController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileContentService _fileContentService;
-        private readonly IWorkContentService _workContentService;
+        private readonly IWorkService _workService;
         private readonly IComponentService _componentService;
-        public WorkContentController(ApplicationDbContext context, IFileContentService fileContentService, IWorkContentService workContentService, IComponentService componentService)
+        public WorkController(ApplicationDbContext context, IFileContentService fileContentService, IWorkService workContentService, IComponentService componentService)
         {
             _context = context;
             _fileContentService = fileContentService;
-            _workContentService = workContentService;
+            _workService = workContentService;
             _componentService = componentService;
         }
 
@@ -126,7 +126,7 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("active/{id}")]
-        public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _workContentService.ActiveAsync(id));
+        public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _workService.ActiveAsync(id));
 
         [HttpPost("sort-order")]
         public async Task<IActionResult> SortOrderAsync([FromBody] WorkItem model)
@@ -183,7 +183,7 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("delete/{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _workContentService.DeleteAsync(id));
+        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _workService.DeleteAsync(id));
 
         [HttpGet("fetch-url")]
         public async Task<IActionResult> FetchUrlAsync([FromQuery] string url)
@@ -547,6 +547,9 @@ namespace Waffle.Controllers
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        [HttpPost("tag/save")]
+        public async Task<IActionResult> SaveTagAsync([FromBody] Tag tag) => Ok(await _workService.SaveTagAsync(tag));
 
         #endregion
     }

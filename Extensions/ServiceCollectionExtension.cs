@@ -15,7 +15,7 @@ namespace Waffle.Extensions
             services.AddTransient<IFileContentService, FileContentService>();
             services.AddTransient<IFileExplorerService, FileExplorerService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IWorkContentService, WorkContentService>();
+            services.AddTransient<IWorkService, WorkService>();
         }
     }
 }

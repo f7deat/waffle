@@ -23,12 +23,12 @@ namespace Waffle.Controllers
         {
             if (string.IsNullOrWhiteSpace(normalizedName))
             {
-                return NotFound("Missing normailized name!");
+                return NotFound();
             }
             var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName));
             if (catalog is null)
             {
-                return NotFound("Cannot get catalog!");
+                return NoContent();
             }
 
             var model = await _catalogService.GetPageDataAsync(catalog);
@@ -49,6 +49,10 @@ namespace Waffle.Controllers
             ViewData["NormalizedName"] = catalog.NormalizedName;
 
             ViewBag.Data = model;
+
+            catalog.ViewCount++;
+
+            await _context.SaveChangesAsync();
 
             return View();
         }

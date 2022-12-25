@@ -15,6 +15,22 @@
                     await Component.InvokeAsync(nameof(Waffle.Models.Components.BlockEditor), item);
                 }
             }
+            @if (Model.Tags != null)
+            {
+                <div class="mb-2">
+                    <i class="fas fa-tag mr-2"></i>
+                    @{
+                        await foreach (var item in Model.Tags)
+                        {
+                            if (item == null)
+                            {
+                                continue;
+                            }
+                            <a href="/article/tag/@item.NormalizedName" class="badge">@item.Name</a>
+                        };
+                    }
+                </div>
+            }
         </div>
     </div>
 }

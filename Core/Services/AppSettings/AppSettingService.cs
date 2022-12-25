@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.ExternalAPI.Models;
 
 namespace Waffle.Core.Services.AppSettings
 {
@@ -27,6 +30,24 @@ namespace Waffle.Core.Services.AppSettings
                 await _context.SaveChangesAsync();
             }
             return appSetting;
+        }
+
+        public async Task<IdentityResult> SaveTelegramAsync(Telegram model)
+        {
+            var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Telegram)));
+            if (setting is null)
+            {
+                setting = new AppSetting
+                {
+                    Name = nameof(Telegram),
+                    NormalizedName = nameof(Telegram),
+                    Value = JsonSerializer.Serialize(model)
+                };
+                await _context.AppSettings.AddAsync(setting);
+            }
+            setting.Value = JsonSerializer.Serialize(model);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
         }
     }
 }

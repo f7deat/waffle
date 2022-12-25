@@ -82,5 +82,8 @@ namespace Waffle.Controllers
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        [HttpPost("telegram/save")]
+        public async Task<IActionResult> SaveTelegramAsync([FromBody] Telegram model) => Ok(await _appSettingService.SaveTelegramAsync(model));
     }
 }

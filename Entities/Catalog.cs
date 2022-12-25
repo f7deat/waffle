@@ -36,6 +36,9 @@ namespace Waffle.Entities
         public CatalogType Type { get; set; }
         [JsonPropertyName("viewCount")]
         public int ViewCount { get; set; }
+        [JsonPropertyName("thumbnail")]
+        [StringLength(250)]
+        public string? Thumbnail { get; set; }
         [JsonPropertyName("active")]
         public bool Active { get; set; }
     }

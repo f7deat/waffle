@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
 using Waffle.Core.Interfaces.IServices;
 using Waffle.Data;
+using Waffle.Models.Components;
 
 namespace Waffle.Core.Services
 {
-    public class WorkContentService : IWorkContentService
+    public class WorkService : IWorkService
     {
         private readonly ApplicationDbContext _context;
-        public WorkContentService(ApplicationDbContext context)
+        public WorkService(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -38,6 +40,21 @@ namespace Waffle.Core.Services
                 });
             }
             _context.WorkContents.Remove(workContent);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> SaveTagAsync(Tag tag)
+        {
+            var work = await _context.WorkContents.FindAsync(tag.Id);
+            if (work is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Data not found!"
+                });
+            }
+            work.Arguments = JsonSerializer.Serialize(tag);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }

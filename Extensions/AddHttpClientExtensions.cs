@@ -1,5 +1,6 @@
 ﻿using Waffle.ExternalAPI.Facebook;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Telegram;
 using Waffle.ExternalAPI.Wiki;
 
 namespace Waffle.Extensions
@@ -10,6 +11,7 @@ namespace Waffle.Extensions
         {
             services.AddHttpClient<IFacebookService, FacebookService>();
             services.AddHttpClient<IWikiService, WikiService>();
+            services.AddHttpClient<ITelegramService, TelegramService>();
         }
     }
 }

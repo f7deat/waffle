@@ -21,16 +21,38 @@ namespace Waffle.Pages.Article
 
         public Catalog? Catalog;
         public IEnumerable<Guid>? BlockEditors;
+        public IAsyncEnumerable<Tag?>? Tags;
 
         public async Task OnGetAsync(string normalizedName)
         {
             Catalog = await _catalogService.GetByNameAsync(normalizedName);
-            BlockEditors = await GetBlockEditorsAsync(Catalog.Id);
+            if (Catalog != null)
+            {
+                BlockEditors = await GetBlockEditorsAsync(Catalog.Id);
+                Tags = GetTagsAsync(Catalog.Id);
+            }
         }
 
         private async Task<IEnumerable<Guid>> GetBlockEditorsAsync(Guid id)
         {
             return await _context.WorkContents.Where(x => x.Id == id).Select(x => x.Id).ToListAsync();
+        }
+
+        private async IAsyncEnumerable<Tag?>? GetTagsAsync(Guid catalogId)
+        {
+            var tags = await (from a in _context.WorkItems
+                         join b in _context.WorkContents on a.WorkContentId equals b.Id
+                         join c in _context.Components on b.ComponentId equals c.Id
+                         where a.CatalogId == catalogId && c.NormalizedName.Equals(nameof(Tag)) && b.Active
+                         select b.Arguments).ToListAsync();
+            foreach (var tag in tags)
+            {
+                if (string.IsNullOrEmpty(tag))
+                {
+                    continue;
+                }
+                yield return JsonSerializer.Deserialize<Tag>(tag);
+            }
         }
     }
 }
