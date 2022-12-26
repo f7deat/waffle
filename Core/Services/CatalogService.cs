@@ -47,6 +47,8 @@ namespace Waffle.Core.Services
                     Description = "Data exist!"
                 });
             }
+            catalog.CreatedDate = DateTime.Now;
+            catalog.ModifiedDate = DateTime.Now;
             await _context.Catalogs.AddAsync(catalog);
             await _context.SaveChangesAsync();
             return PayloadResult<Catalog>.Payload(catalog);
@@ -54,7 +56,7 @@ namespace Waffle.Core.Services
 
         public async Task<Catalog> EnsureDataAsync(string name)
         {
-            var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name));
+            var catalog = await _context.Catalogs.AsNoTracking().FirstOrDefaultAsync(x => x.NormalizedName.Equals(name));
             if (catalog is null)
             {
                 catalog = new Catalog

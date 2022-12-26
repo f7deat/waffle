@@ -16,3 +16,13 @@
 .wf-h2 {
     font-size: 1.5rem;
 }
+.wf-card-img-top {
+    object-fit: cover;
+    transition: opacity .5s ease-in-out;
+}
+.wf-card-img-wrap {
+    background-color: var(--bs-dark);
+}
+.wf-card-img-top:hover {
+    opacity: .5;
+}

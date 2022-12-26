@@ -1,36 +1,40 @@
 ﻿@using Waffle.Models.Catalogs
 @model IEnumerable<ArticleListItem>
 
-<div class="row row-cols-md-2">
+<div class="row row-cols-1 row-cols-md-2 g-4">
     @foreach (var item in Model)
     {
-        <div class="h-full bg-white shadow flex flex-col rounded mb-2">
-            <a href="@item.NomalizedName" title="@item.Name" class="bg-gray-900">
-                <img src="@item.Thumbnail" class="w-full transition-opacity duration-700 ease-in-out hover:opacity-50 object-fit-cover" alt="@item.Name" height="220" />
-            </a>
-            <div class="flex-1 p-2">
-                <a href="@item.NomalizedName" title="@item.Name"><b>@item.Name</b></a>
-                <div class="text-gray-500 entry-description">
-                    @item.Description
-                </div>
-            </div>
-            <div class="bg-gray-100 rounded-b text-gray-600 flex justify-between p-1 items-center">
-                <div class="post-info">
-                    <small class="mr-2">
-                        <i class="fas fa-clock"></i>
-                        @item.ModifiedDate
-                    </small>
-                    <small>
-                        <i class="fa fa-eye"></i> @(item.ViewCount.ToString("N0"))
-                    </small>
-                </div>
-                <div class="dropdown">
-                    <button type="button" class="bg-white w-10 h-10 flex justify-center items-center rounded-full border hover:bg-gray-900 hover:text-white transtion duration-500 btn-dropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="fa fa-share-alt"></i></button>
-                    <ul class="dropdown-menu p-0">
-                        <li><a data-title="Twitter" href="https://twitter.com/share?url=@($"{item.NomalizedName}")" rel="nofollow" target="_blank" class="w-10 h-10 flex bg-blue-300 text-white hover:text-white items-center justify-center rounded-full hover:bg-blue-400"><i class="fab fa-twitter"></i></a></li>
-                        <li><a data-title="Facebook" href="https://www.facebook.com/sharer.php?u=@($"{item.NomalizedName}")" rel="nofollow" target="_blank" class="w-10 h-10 flex bg-blue-500 text-white hover:text-white items-center justify-center rounded-full hover:bg-blue-600"><i class="fab fa-facebook"></i></a></li>
-                        <li><a data-title="Pinterest" href="https://pinterest.com/pin/create/button/?url=@($"{item.NomalizedName}")" rel="nofollow" target="_blank" class="w-10 h-10 flex bg-red-500 text-white hover:text-white items-center justify-center rounded-full hover:bg-red-600"><i class="fab fa-pinterest"></i></a></li>
-                    </ul>
+        <div class="col">
+            <div class="card">
+                <a href="/article/@item.NomalizedName" title="@item.Name" class="wf-card-img-wrap">
+                    <img src="@item.Thumbnail" class="card-img-top wf-card-img-top" alt="@item.Name" height="220" />
+                </a>
+                <div class="card-body">
+                    <div class="flex-1 p-2">
+                        <a href="/article/@item.NomalizedName" title="@item.Name"><b>@item.Name</b></a>
+                        <div class="text-gray-500 entry-description">
+                            @item.Description
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between bg-light">
+                        <div class="post-info">
+                            <small class="mr-2">
+                                <i class="fas fa-clock"></i>
+                                @item.ModifiedDate
+                            </small>
+                            <small>
+                                <i class="fa fa-eye"></i> @(item.ViewCount.ToString("N0"))
+                            </small>
+                        </div>
+                        <div class="dropdown">
+                            <button type="button" class="bg-white w-10 h-10 flex justify-center items-center rounded-full border hover:bg-gray-900 hover:text-white transtion duration-500 btn-dropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="fa fa-share-alt"></i></button>
+                            <ul class="dropdown-menu p-0">
+                                <li><a data-title="Twitter" href="https://twitter.com/share?url=@($"/article/{item.NomalizedName}")" rel="nofollow" target="_blank" class="w-10 h-10 flex bg-blue-300 text-white hover:text-white items-center justify-center rounded-full hover:bg-blue-400"><i class="fab fa-twitter"></i></a></li>
+                                <li><a data-title="Facebook" href="https://www.facebook.com/sharer.php?u=@($"/article/{item.NomalizedName}")" rel="nofollow" target="_blank" class="w-10 h-10 flex bg-blue-500 text-white hover:text-white items-center justify-center rounded-full hover:bg-blue-600"><i class="fab fa-facebook"></i></a></li>
+                                <li><a data-title="Pinterest" href="https://pinterest.com/pin/create/button/?url=@($"/article/{item.NomalizedName}")" rel="nofollow" target="_blank" class="w-10 h-10 flex bg-red-500 text-white hover:text-white items-center justify-center rounded-full hover:bg-red-600"><i class="fab fa-pinterest"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

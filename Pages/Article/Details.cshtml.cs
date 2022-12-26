@@ -28,6 +28,8 @@ namespace Waffle.Pages.Article
             Catalog = await _catalogService.GetByNameAsync(normalizedName);
             if (Catalog != null)
             {
+                Catalog.ViewCount++;
+                await _context.SaveChangesAsync();
                 BlockEditors = await GetBlockEditorsAsync(Catalog.Id);
                 Tags = GetTagsAsync(Catalog.Id);
             }

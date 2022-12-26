@@ -1,6 +1,12 @@
 ﻿@page
 @model Waffle.Pages.Article.IndexModel
-
-@if (Model.Articles != null) {
-    <partial name="_ListItem.cshtml" model="Model.Articles" />
+@{
+    ViewData["Title"] = "Danh sách bài viết";
 }
+
+<div class="container">
+    @if (Model.Articles != null)
+    {
+        <partial name="_ListItem.cshtml" model="Model.Articles" />
+    }
+</div>
