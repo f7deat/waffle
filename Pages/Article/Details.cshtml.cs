@@ -33,9 +33,9 @@ namespace Waffle.Pages.Article
             }
         }
 
-        private async Task<IEnumerable<Guid>> GetBlockEditorsAsync(Guid id)
+        private async Task<IEnumerable<Guid>> GetBlockEditorsAsync(Guid catalogId)
         {
-            return await _context.WorkContents.Where(x => x.Id == id).Select(x => x.Id).ToListAsync();
+            return await _context.WorkItems.Where(x => x.CatalogId == catalogId).Select(x => x.WorkContentId).ToListAsync();
         }
 
         private async IAsyncEnumerable<Tag?>? GetTagsAsync(Guid catalogId)

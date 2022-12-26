@@ -161,17 +161,7 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("active/{id}")]
-        public async Task<IActionResult> ActiveAsync([FromRoute] Guid id)
-        {
-            var catalog = await _context.Catalogs.FindAsync(id);
-            if (catalog is null)
-            {
-                return Ok(IdentityResult.Failed());
-            }
-            catalog.Active = !catalog.Active;
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
+        public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _catalogService.ActiveAsync(id));
 
         [HttpPost("save")]
         public async Task<IActionResult> SaveAsync([FromBody] CatalogViewModel model)

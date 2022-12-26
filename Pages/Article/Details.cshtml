@@ -1,4 +1,5 @@
-﻿@page
+﻿@page "/article/{normalizedName}"
+@using Waffle.Models.Components
 @model Waffle.Pages.Article.DetailsModel
 @{
 }
@@ -10,9 +11,9 @@
         <div class="card-body">
             @if (Model.BlockEditors != null)
             {
-                foreach (var item in Model.BlockEditors)
+                @foreach (var item in Model.BlockEditors)
                 {
-                    await Component.InvokeAsync(nameof(Waffle.Models.Components.BlockEditor), item);
+                    @await Component.InvokeAsync(nameof(BlockEditor), item)
                 }
             }
             @if (Model.Tags != null)

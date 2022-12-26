@@ -5,7 +5,13 @@
 {
     if (BlockEditorType.HEADER.Equals(item.Type))
     {
-        <h1>@item.Data.Text</h1>
+        if (item.Data.Level == 1)
+        {
+            <h1>@item.Data.Text</h1>
+        } else
+        {
+            <h2 class="wf-h2">@item.Data.Text</h2>
+        }
     }
     if (BlockEditorType.PARAGRAPH.Equals(item.Type))
     {

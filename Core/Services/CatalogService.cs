@@ -18,11 +18,23 @@ namespace Waffle.Core.Services
             _context = context;
         }
 
-        public async Task<IdentityResult> AddAsync(Catalog catalog)
+        public async Task<IdentityResult> ActiveAsync(Guid id)
+        {
+            var catalog = await _context.Catalogs.FindAsync(id);
+            if (catalog is null)
+            {
+                return IdentityResult.Failed();
+            }
+            catalog.Active = !catalog.Active;
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
+        public async Task<PayloadResult<Catalog>> AddAsync(Catalog catalog)
         {
             if (catalog is null || string.IsNullOrWhiteSpace(catalog.Name))
             {
-                return IdentityResult.Failed();
+                return PayloadResult<Catalog>.Failed(new IdentityError { });
             }
             if (string.IsNullOrEmpty(catalog.NormalizedName))
             {
@@ -30,14 +42,14 @@ namespace Waffle.Core.Services
             }
             if (await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(catalog.NormalizedName) && x.Type == catalog.Type))
             {
-                return IdentityResult.Failed(new IdentityError
+                return PayloadResult<Catalog>.Failed(new IdentityError
                 {
-                    Description = "Normalized name must be unique!"
+                    Description = "Data exist!"
                 });
             }
             await _context.Catalogs.AddAsync(catalog);
             await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+            return PayloadResult<Catalog>.Payload(catalog);
         }
 
         public async Task<Catalog> EnsureDataAsync(string name)
