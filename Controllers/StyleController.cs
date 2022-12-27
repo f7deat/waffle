@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Models.Layout;
 
 namespace Waffle.Controllers
 {
@@ -40,9 +39,8 @@ namespace Waffle.Controllers
         [HttpPost("save")]
         public async Task<IActionResult> SaveAsync([FromBody] WorkContent workItem)
         {
-            var path = Path.Combine(_webHostEnvironment.WebRootPath, "css", $"{workItem.Id}.css");
-            CreateFile(path);
-            await System.IO.File.WriteAllTextAsync(path, workItem.Arguments);
+            CreateFile(GetPath());
+            await System.IO.File.WriteAllTextAsync(GetPath(), workItem.Arguments);
             return Ok(IdentityResult.Success);
         }
 
@@ -55,6 +53,6 @@ namespace Waffle.Controllers
             }
         }
 
-        private string GetPath() => Path.Combine(_webHostEnvironment.WebRootPath, "css", "custom.css");
+        private string GetPath() => Path.Combine(_webHostEnvironment.WebRootPath, "css", $"{Request.Host.Host}.css");
     }
 }

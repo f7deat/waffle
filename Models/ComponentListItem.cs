@@ -1,12 +1,13 @@
-﻿namespace Waffle.Models
+﻿using Waffle.Entities;
+
+namespace Waffle.Models
 {
-    public class ComponentListItem
+    public class ComponentListItem : BaseEntity
     {
         public ComponentListItem()
         {
             Name = string.Empty;
         }
-        public Guid Id { get; set; }
         public string Name { get; set; }
     }
 }

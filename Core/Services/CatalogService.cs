@@ -6,6 +6,7 @@ using Waffle.Core.Interfaces.IServices;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services
@@ -56,14 +57,15 @@ namespace Waffle.Core.Services
 
         public async Task<Catalog> EnsureDataAsync(string name)
         {
-            var catalog = await _context.Catalogs.AsNoTracking().FirstOrDefaultAsync(x => x.NormalizedName.Equals(name));
+            var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name));
             if (catalog is null)
             {
                 catalog = new Catalog
                 {
                     Name = name,
                     NormalizedName = name,
-                    Active = true
+                    Active = true,
+                    CreatedDate = DateTime.Now
                 };
                 await _context.Catalogs.AddAsync(catalog);
                 await _context.SaveChangesAsync();
@@ -72,6 +74,33 @@ namespace Waffle.Core.Services
         }
 
         public async Task<Catalog?> GetByNameAsync(string normalizedName) => await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName));
+
+        public async Task<IEnumerable<ComponentListItem>> GetFooterAsync()
+        {
+            var catalog = await EnsureDataAsync(nameof(Footer));
+            return await ListComponentAsync(catalog.Id);
+        }
+
+        public async Task<IEnumerable<ComponentListItem>> GetHeaderAsync()
+        {
+            var catalog = await EnsureDataAsync(nameof(Header));
+            return await ListComponentAsync(catalog.Id);
+        }
+
+        public async Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId)
+        {
+            var query = from a in _context.WorkContents
+                        join b in _context.WorkItems on a.Id equals b.WorkContentId
+                        join c in _context.Components on a.ComponentId equals c.Id
+                        where b.CatalogId == catalogId
+                        orderby b.SortOrder ascending
+                        select new ComponentListItem
+                        {
+                            Name = c.NormalizedName,
+                            Id = a.Id
+                        };
+            return await query.ToListAsync();
+        }
 
         public async Task<PageVewModel> GetPageDataAsync(Catalog catalog)
         {

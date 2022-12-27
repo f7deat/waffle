@@ -24,7 +24,7 @@ namespace Waffle.ViewComponents
                                 join b in _context.WorkContents on a.WorkContentId equals b.Id
                                 where a.CatalogId == catalogId && b.Active && b.ComponentId == css.Id
                                 select b.Id;
-                    ViewBag.CSS = query.ToListAsync();
+                    ViewBag.CSS = await query.ToListAsync();
                 }
             }
             return View();

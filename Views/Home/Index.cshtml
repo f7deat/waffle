@@ -1,10 +1,10 @@
-﻿
-<div class="@(Model.Settings.Container ? "container" : "container-fluid") wf-catalog" id="catalog">
-    @foreach (var item in ViewBag.AT)
+﻿@model IEnumerable<Waffle.Models.ComponentListItem>
+
+<main class="wf-home">
+    @foreach (var item in Model)
     {
         <div>
             @await Component.InvokeAsync(item.Name, item.Id)
         </div>
     }
-
-</div>
+</main>

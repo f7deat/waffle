@@ -9,13 +9,13 @@ namespace Waffle.Extensions
     {
         public static void AddServices(this IServiceCollection services)
         {
-            services.AddTransient<IAppSettingService, AppSettingService>();
-            services.AddTransient<ICatalogService, CatalogService>();
-            services.AddTransient<IComponentService, ComponentService>();
-            services.AddTransient<IFileContentService, FileContentService>();
-            services.AddTransient<IFileExplorerService, FileExplorerService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IWorkService, WorkService>();
+            services.AddScoped<IAppSettingService, AppSettingService>();
+            services.AddScoped<ICatalogService, CatalogService>();
+            services.AddScoped<IComponentService, ComponentService>();
+            services.AddScoped<IFileContentService, FileContentService>();
+            services.AddScoped<IFileExplorerService, FileExplorerService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IWorkService, WorkService>();
         }
     }
 }

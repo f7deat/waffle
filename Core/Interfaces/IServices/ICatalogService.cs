@@ -11,5 +11,8 @@ namespace Waffle.Core.Interfaces.IServices
         Task<Catalog> EnsureDataAsync(string name);
         Task<Catalog?> GetByNameAsync(string normalizedName);
         Task<PageVewModel> GetPageDataAsync(Catalog catalog);
+        Task<IEnumerable<ComponentListItem>> GetHeaderAsync();
+        Task<IEnumerable<ComponentListItem>> GetFooterAsync();
+        Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId);
     }
 }
