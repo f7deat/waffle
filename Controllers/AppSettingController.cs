@@ -46,10 +46,10 @@ namespace Waffle.Controllers
                 return Ok(IdentityResult.Failed());
             }
             var query = from a in _context.WorkItems
-                               join b in _context.WorkContents on a.CatalogId equals setting.Id
-                               where a.CatalogId == setting.Id
-                               orderby a.SortOrder ascending
-                               select b;
+                        join b in _context.WorkContents on a.CatalogId equals setting.Id
+                        where a.CatalogId == setting.Id
+                        orderby a.SortOrder ascending
+                        select b;
             return Ok(new
             {
                 data = await query.ToListAsync(),
@@ -85,5 +85,31 @@ namespace Waffle.Controllers
 
         [HttpPost("telegram/save")]
         public async Task<IActionResult> SaveTelegramAsync([FromBody] Telegram model) => Ok(await _appSettingService.SaveTelegramAsync(model));
+
+        [HttpGet("telegram/configuration")]
+        public async Task<IActionResult> GetTelegramConfigurationAsync()
+        {
+            var appSetting = await _appSettingService.EnsureSettingAsync(nameof(Telegram));
+            bool bot = false;
+            if (!string.IsNullOrEmpty(appSetting.Value))
+            {
+                var telegram = JsonSerializer.Deserialize<Telegram?>(appSetting.Value);
+                if (telegram != null)
+                {
+                    bot = !string.IsNullOrEmpty(telegram.Bot);
+                }
+            }
+            return Ok(new
+            {
+                data = new[]
+                    {
+                    new {
+                        id = "bot",
+                        name = "BOT",
+                        active = bot
+                    }
+                }
+            });
+        }
     }
 }

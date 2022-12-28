@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using Waffle.Core.Services.Contacts.Models;
 using Waffle.Models.Components;
 using Microsoft.AspNetCore.Identity;
+using Waffle.ExternalAPI.Models;
+using Waffle.ExternalAPI.Interfaces;
 
 namespace Waffle.Controllers
 {
@@ -17,11 +19,13 @@ namespace Waffle.Controllers
     public class ContactController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ITelegramService _telegramService;
         private readonly ILogger<ContactController> _logger;
-        public ContactController(ApplicationDbContext context, ILogger<ContactController> logger)
+        public ContactController(ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService)
         {
             _context = context;
             _logger = logger;
+            _telegramService = telegramService;
         }
 
         [HttpGet("list")]
@@ -83,6 +87,15 @@ namespace Waffle.Controllers
             if (contactForm is null)
             {
                 return NotFound("Missing configuration!");
+            }
+            var telegram = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Telegram)));
+            if (telegram is not null && !string.IsNullOrEmpty(telegram.Value))
+            {
+                var config = JsonSerializer.Deserialize<Telegram>(telegram.Value);
+                if (config is not null)
+                {
+                    await _telegramService.SendMessageAsync(config.Bot, contactForm.ChatId, $"You have new contact: {contact.Email}");
+                }
             }
             return Redirect(contactForm?.ResultUrl ?? "/");
         }
