@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Helpers;
-using Waffle.Core.Interfaces.IServices;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Core.Interfaces.IServices;
+using Waffle.Core.Interfaces.IService;
 
 namespace Waffle.ViewComponents
 {

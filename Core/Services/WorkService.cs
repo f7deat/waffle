@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
-using Waffle.Core.Interfaces.IServices;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Models.Components;
 

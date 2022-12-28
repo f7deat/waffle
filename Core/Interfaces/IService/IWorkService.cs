@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Models.Components;
 
-namespace Waffle.Core.Interfaces.IServices
+namespace Waffle.Core.Interfaces.IService
 {
     public interface IWorkService
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Waffle.Core.Interfaces.IServices;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 

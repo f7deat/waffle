@@ -1,4 +1,4 @@
-﻿using Waffle.Core.Interfaces.IServices;
+﻿using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Core.Services.FileContents;

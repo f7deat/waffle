@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Waffle.Core.Interfaces.IServices;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Models;
 
 namespace Waffle.Controllers

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using Waffle.Core.Interfaces.IServices;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Models;
 
 namespace Waffle.Controllers

@@ -2,7 +2,7 @@
 using Waffle.Entities;
 using Waffle.Models;
 
-namespace Waffle.Core.Interfaces.IServices
+namespace Waffle.Core.Interfaces.IService
 {
     public interface IFileExplorerService
     {

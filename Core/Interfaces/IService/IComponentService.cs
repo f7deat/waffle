@@ -1,6 +1,6 @@
 ﻿using Waffle.Entities;
 
-namespace Waffle.Core.Interfaces.IServices
+namespace Waffle.Core.Interfaces.IService
 {
     public interface IComponentService
     {
