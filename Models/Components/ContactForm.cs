@@ -30,7 +30,7 @@ namespace Waffle.Models.Components
         [JsonPropertyName("sendgrid")]
         public ContactFormSendGrid? SendGrid { get; set; }
         [JsonPropertyName("chatId")]
-        public string ChatId { get; set; }
+        public string? ChatId { get; set; }
     }
 
     public class ContactFormLabel

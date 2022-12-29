@@ -1,6 +1,8 @@
-﻿namespace Waffle.Models
+﻿using Waffle.Entities;
+
+namespace Waffle.Models
 {
-    public class WorkListItem
+    public class WorkListItem : BaseEntity
     {
         public WorkListItem()
         {
@@ -8,14 +10,11 @@
             NormalizedName = string.Empty;
             Arguments = string.Empty;
         }
-        /// <summary>
-        /// WorkItemId
-        /// </summary>
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string NormalizedName { get; set; }
         public string Arguments { get; set; }
         public int SortOrder { get; set; }
         public Guid CatalogId { get; set; }
+        public bool Active { get; set; }
     }
 }

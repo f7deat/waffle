@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Data;
+using Waffle.Entities;
+using Waffle.Models;
 
 namespace Waffle.Controllers
 {
@@ -15,6 +17,9 @@ namespace Waffle.Controllers
             _context = context;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Components.FindAsync(id));
+
         [HttpGet("list-all")]
         public async Task<IActionResult> ListAllAsync() => Ok(await _context.Components.Where(x => x.Active).OrderBy(x => x.NormalizedName).ToListAsync());
 
@@ -26,12 +31,23 @@ namespace Waffle.Controllers
         });
 
         [HttpGet("list-work/{id}")]
-        public async Task<IActionResult> ListWorkAsync([FromRoute] Guid id)
+        public async Task<IActionResult> ListWorkAsync([FromRoute] Guid id, [FromQuery] WorkFilterOptions filterOptions)
         {
-            var query = _context.WorkContents.Where(x => x.ComponentId == id);
+            var query = from a in _context.WorkContents
+                        join b in _context.Components on a.ComponentId equals b.Id
+                        join c in _context.WorkItems on a.Id equals c.WorkContentId
+                        where b.Id == id
+                        select new WorkListItem
+                        {
+                            Active = a.Active,
+                            Name = a.Name,
+                            NormalizedName = b.NormalizedName,
+                            Id = a.Id,
+                            CatalogId = c.CatalogId
+                        };
             return Ok(new
             {
-                data = await query.ToListAsync(),
+                data = await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(),
                 total = await query.CountAsync()
             });
         }

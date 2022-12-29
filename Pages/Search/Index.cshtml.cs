@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Helpers;
-using Waffle.ExternalAPI.Google;
+using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 

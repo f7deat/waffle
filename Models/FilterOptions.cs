@@ -34,4 +34,9 @@ namespace Waffle.Models
     {
         public string? SearchTerm { get; set; }
     }
+
+    public class WorkFilterOptions : FilterOptions
+    {
+
+    }
 }

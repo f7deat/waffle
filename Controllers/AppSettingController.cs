@@ -5,6 +5,7 @@ using System.Text.Json;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models.Layout;
 
@@ -110,6 +111,15 @@ namespace Waffle.Controllers
                     }
                 }
             });
+        }
+
+        [HttpPost("blogger/save")]
+        public async Task<IActionResult> SaveBloggerAsync([FromBody] Blogger model)
+        {
+            var app = await _appSettingService.EnsureSettingAsync(nameof(Blogger));
+            app.Value = JsonSerializer.Serialize(model);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
     }
 }
