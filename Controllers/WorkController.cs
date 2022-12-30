@@ -238,7 +238,7 @@ namespace Waffle.Controllers
             {
                 return NoContent();
             }
-            return Ok(JsonSerializer.Deserialize<Navbar>(workContent.Arguments));
+            return Ok(_workService.Get<Navbar>(workContent.Arguments));
         }
 
         [HttpPost("navbar/save")]
@@ -280,25 +280,7 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("contact-form/save")]
-        public async Task<IActionResult> SaveContactFormAsync([FromBody] ContactForm contactForm)
-        {
-            if (contactForm is null)
-            {
-                return BadRequest();
-            }
-            var workContent = await _context.WorkContents.FindAsync(contactForm.Id);
-            if (workContent is null)
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Work content not found!"
-                }));
-            }
-            workContent.Name = contactForm.Name;
-            workContent.Arguments = JsonSerializer.Serialize(contactForm);
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
+        public async Task<IActionResult> SaveContactFormAsync([FromBody] ContactForm model) => Ok(await _workService.SaveContactFormAsync(model));
 
         [HttpGet("row/{id}")]
         public async Task<IActionResult> GetRowAsync([FromRoute] Guid id)
@@ -310,7 +292,7 @@ namespace Waffle.Controllers
             }
             if (!string.IsNullOrEmpty(workContent.Arguments))
             {
-                return Ok(JsonSerializer.Deserialize<Row>(workContent.Arguments));
+                return Ok(_workService.Get<Row>(workContent.Arguments));
             }
             return Ok(new Row());
         }
@@ -340,7 +322,7 @@ namespace Waffle.Controllers
             {
                 return Ok();
             }
-            var contactForm = JsonSerializer.Deserialize<ContactForm>(workContent.Arguments);
+            var contactForm = _workService.Get<ContactForm>(workContent.Arguments);
             if (contactForm is not null)
             {
                 contactForm.Name = workContent.Name;
@@ -355,7 +337,7 @@ namespace Waffle.Controllers
             {
                 return BadRequest();
             }
-            var row = await _context.WorkContents.FindAsync(column.ParentId);
+            var row = await _context.WorkContents.FindAsync(column.RowId);
             if (row is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError
@@ -364,22 +346,15 @@ namespace Waffle.Controllers
                 }));
             }
 
-            var component = await _context.Components.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Column)));
-            if (component is null)
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Component column not found!"
-                }));
-            }
+            var component = await _componentService.EnsureComponentAsync(nameof(Column));
 
             var workContent = new WorkContent
             {
                 Active = true,
-                Arguments = column.Arguments,
-                Name = column.Name,
+                Arguments = JsonSerializer.Serialize(column),
+                Name = column.ClassName,
                 ComponentId = component.Id,
-                ParentId = row.Id
+                ParentId = column.RowId
             };
 
             await _context.WorkContents.AddAsync(workContent);
@@ -405,6 +380,12 @@ namespace Waffle.Controllers
             });
         }
 
+        [HttpGet("column/{id}")]
+        public async Task<IActionResult> GetColumnAsync([FromRoute] Guid id) => Ok(await _workService.GetColumnAsync(id));
+
+        [HttpPost("column/save")]
+        public async Task<IActionResult> SaveColumnAsync([FromBody] Column item) => Ok(await _workService.SaveColumnAsync(item));
+
         [HttpGet("swiper/{id}")]
         public async Task<IActionResult> GetSwiperAsync([FromRoute] Guid id)
         {
@@ -416,7 +397,7 @@ namespace Waffle.Controllers
             var swiper = new Swiper();
             if (!string.IsNullOrEmpty(workContent.Arguments))
             {
-                swiper = JsonSerializer.Deserialize<Swiper>(workContent.Arguments);
+                swiper = _workService.Get<Swiper>(workContent.Arguments);
             }
             if (swiper is not null)
             {
@@ -509,7 +490,7 @@ namespace Waffle.Controllers
             }
             if (!string.IsNullOrEmpty(workContent.Arguments))
             {
-                return Ok(JsonSerializer.Deserialize<Card>(workContent.Arguments));
+                return Ok(_workService.Get<Card>(workContent.Arguments));
             }
             return Ok();
         }

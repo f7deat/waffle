@@ -44,6 +44,49 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
+        public T? Get<T>(string content) => JsonSerializer.Deserialize<T>(content);
+
+        public async Task<Column?> GetColumnAsync(Guid id)
+        {
+            var work = await _context.WorkContents.FindAsync(id);
+            if (work is null || string.IsNullOrEmpty(work.Arguments))
+            {
+                return default;
+            }
+            return Get<Column>(work.Arguments);
+        }
+
+        public async Task<IdentityResult> SaveColumnAsync(Column item)
+        {
+            var work = await _context.WorkContents.FindAsync(item.Id);
+            if (work is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work not found!"
+                });
+            }
+            work.Name = item.ClassName;
+            work.Arguments = JsonSerializer.Serialize(item);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> SaveContactFormAsync(ContactForm item)
+        {
+            var workContent = await _context.WorkContents.FindAsync(item.Id);
+            if (workContent is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work content not found!"
+                });
+            }
+            workContent.Arguments = JsonSerializer.Serialize(item);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
         public async Task<IdentityResult> SaveTagAsync(Tag tag)
         {
             var work = await _context.WorkContents.FindAsync(tag.Id);

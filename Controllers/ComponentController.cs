@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Data;
-using Waffle.Entities;
 using Waffle.Models;
 
 namespace Waffle.Controllers
@@ -35,15 +34,13 @@ namespace Waffle.Controllers
         {
             var query = from a in _context.WorkContents
                         join b in _context.Components on a.ComponentId equals b.Id
-                        join c in _context.WorkItems on a.Id equals c.WorkContentId
                         where b.Id == id
                         select new WorkListItem
                         {
                             Active = a.Active,
                             Name = a.Name,
                             NormalizedName = b.NormalizedName,
-                            Id = a.Id,
-                            CatalogId = c.CatalogId
+                            Id = a.Id
                         };
             return Ok(new
             {

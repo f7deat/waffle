@@ -12,6 +12,7 @@ namespace Waffle.Models.Components
             PhoneNumber = string.Empty;
             Note = string.Empty;
             ResultUrl = string.Empty;
+            ChatId = string.Empty;
             Labels = new ContactFormLabel();
         }
 
@@ -27,10 +28,10 @@ namespace Waffle.Models.Components
         public string ResultUrl { get; set; }
         [JsonPropertyName("labels")]
         public ContactFormLabel Labels { get; set; }
-        [JsonPropertyName("sendgrid")]
-        public ContactFormSendGrid? SendGrid { get; set; }
+        [JsonPropertyName("templateId")]
+        public string? TemplateId { get; set; }
         [JsonPropertyName("chatId")]
-        public string? ChatId { get; set; }
+        public string ChatId { get; set; }
     }
 
     public class ContactFormLabel
@@ -54,10 +55,5 @@ namespace Waffle.Models.Components
         public string Note { get; set; }
         [JsonPropertyName("address")]
         public string Address { get; set; }
-    }
-
-    public class ContactFormSendGrid
-    {
-        public string? TemplateId { get; set; }
     }
 }

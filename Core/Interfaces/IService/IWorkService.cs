@@ -8,5 +8,9 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> DeleteAsync(Guid id);
         Task<IdentityResult> ActiveAsync(Guid id);
         Task<IdentityResult> SaveTagAsync(Tag tag);
+        Task<Column?> GetColumnAsync(Guid id);
+        Task<IdentityResult> SaveColumnAsync(Column item);
+        T? Get<T>(string content);
+        Task<IdentityResult> SaveContactFormAsync(ContactForm item);
     }
 }

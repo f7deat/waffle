@@ -123,6 +123,7 @@ namespace Waffle.Core.Services
 
             return new PageVewModel
             {
+                Id = catalog.Id,
                 ComponentListItems = await workItems.ToListAsync(),
                 Settings = settings
             };

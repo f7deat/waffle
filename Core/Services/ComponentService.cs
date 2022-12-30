@@ -13,6 +13,22 @@ namespace Waffle.Core.Services
             _context = context;
         }
 
+        public async Task<Component> EnsureComponentAsync(string normalizedName)
+        {
+            var component = await _context.Components.FirstOrDefaultAsync(x => x.NormalizedName.ToLower().Equals(normalizedName.ToLower()));
+            if (component is null)
+            {
+                component = new Component
+                {
+                    NormalizedName = normalizedName,
+                    Name = normalizedName,
+                    Active = true
+                };
+                await _context.SaveChangesAsync();
+            }
+            return component;
+        }
+
         public async Task<Component?> GetByNameAsync(string name)
         {
             if (string.IsNullOrEmpty(name))
