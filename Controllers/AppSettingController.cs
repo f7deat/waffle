@@ -23,20 +23,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync()
-        {
-            return Ok(new
-            {
-                data = await _context.AppSettings.Select(x => new AppSetting
-                {
-                    Name = x.Name,
-                    Description = x.Description,
-                    NormalizedName = x.NormalizedName,
-                    Id = x.Id
-                }).ToListAsync(),
-                total = await _context.AppSettings.CountAsync()
-            });
-        }
+        public async Task<IActionResult> ListAsync() => Ok(await _appSettingService.ListAsync());
 
         [HttpGet("layout/{id}")]
         public async Task<IActionResult> GetLayoutAsync([FromRoute] Guid id)

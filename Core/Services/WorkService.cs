@@ -49,11 +49,21 @@ namespace Waffle.Core.Services
         public async Task<Column?> GetColumnAsync(Guid id)
         {
             var work = await _context.WorkContents.FindAsync(id);
-            if (work is null || string.IsNullOrEmpty(work.Arguments))
+            if (string.IsNullOrEmpty(work?.Arguments))
             {
                 return default;
             }
             return Get<Column>(work.Arguments);
+        }
+
+        public async Task<Row?> GetRowAsync(Guid id)
+        {
+            var workContent = await _context.WorkContents.FindAsync(id);
+            if (string.IsNullOrEmpty(workContent?.Arguments))
+            {
+                return default;
+            }
+            return Get<Row>(workContent.Arguments);
         }
 
         public async Task<IdentityResult> SaveColumnAsync(Column item)
@@ -66,7 +76,6 @@ namespace Waffle.Core.Services
                     Description = "Work not found!"
                 });
             }
-            work.Name = item.ClassName;
             work.Arguments = JsonSerializer.Serialize(item);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
@@ -83,6 +92,18 @@ namespace Waffle.Core.Services
                 });
             }
             workContent.Arguments = JsonSerializer.Serialize(item);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> SaveRowAsync(Row row)
+        {
+            var workContent = await _context.WorkContents.FindAsync(row.Id);
+            if (workContent is null)
+            {
+                return IdentityResult.Failed();
+            }
+            workContent.Arguments = JsonSerializer.Serialize(row);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }

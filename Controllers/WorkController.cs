@@ -283,32 +283,10 @@ namespace Waffle.Controllers
         public async Task<IActionResult> SaveContactFormAsync([FromBody] ContactForm model) => Ok(await _workService.SaveContactFormAsync(model));
 
         [HttpGet("row/{id}")]
-        public async Task<IActionResult> GetRowAsync([FromRoute] Guid id)
-        {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null)
-            {
-                return NoContent();
-            }
-            if (!string.IsNullOrEmpty(workContent.Arguments))
-            {
-                return Ok(_workService.Get<Row>(workContent.Arguments));
-            }
-            return Ok(new Row());
-        }
+        public async Task<IActionResult> GetRowAsync([FromRoute] Guid id) => Ok(await _workService.GetRowAsync(id));
 
         [HttpPost("row/save")]
-        public async Task<IActionResult> SaveRowAsync([FromBody] Row row)
-        {
-            var workContent = await _context.WorkContents.FindAsync(row.Id);
-            if (workContent is null)
-            {
-                return Ok(IdentityResult.Failed());
-            }
-            workContent.Arguments = JsonSerializer.Serialize(row);
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
+        public async Task<IActionResult> SaveRowAsync([FromBody] Row row) => Ok(await _workService.SaveRowAsync(row));
 
         [HttpGet("contact-form/{id}")]
         public async Task<IActionResult> GetContactFormAsync([FromRoute] Guid id)

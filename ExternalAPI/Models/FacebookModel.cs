@@ -13,7 +13,7 @@ namespace Waffle.ExternalAPI.Models
         [JsonPropertyName("longLivedUserAccessToken")]
         public LongLivedUserAccessToken? LongLivedUserAccessToken { get; set; }
     }
-    public class ListResult<T> where T : class
+    public class FacebookListResult<T> where T : class
     {
         [JsonPropertyName("data")]
         public List<T>? Data { get; set; }

@@ -4,6 +4,7 @@ using System.Text.Json;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
+using Waffle.Models;
 
 namespace Waffle.Core.Services.AppSettings
 {
@@ -30,6 +31,21 @@ namespace Waffle.Core.Services.AppSettings
                 await _context.SaveChangesAsync();
             }
             return appSetting;
+        }
+
+        public async Task<ListResult<AppSetting>> ListAsync()
+        {
+            return new ListResult<AppSetting>
+            {
+                Data = await _context.AppSettings.Select(x => new AppSetting
+                {
+                    Name = x.Name,
+                    Description = x.Description,
+                    NormalizedName = x.NormalizedName,
+                    Id = x.Id
+                }).ToListAsync(),
+                Total = await _context.AppSettings.CountAsync()
+            };
         }
 
         public async Task<IdentityResult> SaveTelegramAsync(Telegram model)

@@ -4,4 +4,9 @@
     {
         public string? ApiKey { get; set; }
     }
+
+    public class BloggerListResult
+    {
+
+    }
 }

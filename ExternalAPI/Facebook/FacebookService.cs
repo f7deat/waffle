@@ -18,7 +18,7 @@ namespace Waffle.ExternalAPI.Facebook
             {
                 _http.DefaultRequestHeaders.Add("Authorization", $"Bearer {access_token}");
                 var response = await _http.GetStreamAsync($"{pageId}/albums?fields=name,type,picture");
-                var data = await JsonSerializer.DeserializeAsync<ListResult<Album>>(response);
+                var data = await JsonSerializer.DeserializeAsync<FacebookListResult<Album>>(response);
                 return data?.Data?.Where(x => (x.Type == "normal" || x.Type == "wall") && x.Picture?.Data?.IsSilhouette == false).ToList();
             }
             catch (Exception)

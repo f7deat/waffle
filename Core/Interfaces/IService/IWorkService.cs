@@ -12,5 +12,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> SaveColumnAsync(Column item);
         T? Get<T>(string content);
         Task<IdentityResult> SaveContactFormAsync(ContactForm item);
+        Task<IdentityResult> SaveRowAsync(Row row);
+        Task<Row?> GetRowAsync(Guid id);
     }
 }
