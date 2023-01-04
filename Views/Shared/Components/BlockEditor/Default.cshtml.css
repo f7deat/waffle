@@ -1,3 +1,18 @@
+.wf-h1 {
+    font-size: 1.75rem;
+}
+.wf-h2 {
+    font-size: 1.5rem;
+}
+
+.wf-h3 {
+    font-size: 1.25rem;
+}
+
+.wf-h4 {
+    font-size: 1.125rem;
+}
+
 .wf-delimiter {
     line-height: 1.6em;
     width: 100%;
@@ -10,4 +25,33 @@
     line-height: 65px;
     height: 30px;
     letter-spacing: 0.2em;
+}
+
+.wf-link-tool {
+    position: relative;
+}
+
+.wf-link-tool__content {
+    padding: .5rem 1rem;
+    border: 1px dashed var(--bs-gray-200);
+    display: block;
+}
+
+.wf-code {
+    padding: .5rem 1rem;
+    border-radius: .25rem;
+    background-color: var(--bs-light);
+    border: 1px solid var(--bs-gray-200);
+    font-family: Menlo, Monaco, Consolas, Courier New, monospace;
+    color: #41314e;
+    font-size: .75rem;
+}
+
+.wf-simple-image {
+    text-align: center;
+}
+
+.wf-simple-image__caption {
+    font-size: .875rem;
+    color: var(--bs-secondary-text);
 }

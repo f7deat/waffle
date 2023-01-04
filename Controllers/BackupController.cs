@@ -176,6 +176,7 @@ namespace Waffle.Controllers
             await EnsureComponent(nameof(Card));
             await EnsureComponent(nameof(Masonry));
             await EnsureComponent(nameof(Lookbook));
+            await EnsureComponent(nameof(Tag));
         }
 
         private async Task EnsureComponent(string name)

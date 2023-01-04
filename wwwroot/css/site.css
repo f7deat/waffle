@@ -1,9 +1,6 @@
 :root {
     --bs-gutter-x: -0.75rem;
 }
-.card {
-    border-color: transparent;
-}
 .form-label {
     font-weight: 500;
 }

@@ -4,9 +4,11 @@
     ViewData["Title"] = "Danh sách bài viết";
 }
 
-<div class="container">
-    @if (Model.Articles != null)
-    {
-        <partial name="_ListItem.cshtml" model="Model.Articles" />
-    }
-</div>
+<main class="wf-article__list">
+    <div class="container">
+        @if (Model.Articles != null)
+        {
+            <partial name="_ListItem.cshtml" model="Model.Articles" />
+        }
+    </div>
+</main>

@@ -2,6 +2,8 @@
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
+using Waffle.Entities;
+using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.Core.Services
@@ -25,6 +27,38 @@ namespace Waffle.Core.Services
                 });
             }
             workItem.Active = !workItem.Active;
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
+        public async Task<List<BlockEditorBlock>?> BlogEditorGetAsync(Guid id)
+        {
+            var work = await _context.WorkContents.FindAsync(id);
+            if (string.IsNullOrEmpty(work?.Arguments))
+            {
+                return default;
+            }
+            return JsonSerializer.Deserialize<List<BlockEditorBlock>?>(work.Arguments);
+        }
+
+        public async Task<Blogger?> BloggerGetAsync(Guid id)
+        {
+            var work = await _context.WorkContents.FindAsync(id);
+            if (string.IsNullOrEmpty(work?.Arguments))
+            {
+                return default;
+            }
+            return JsonSerializer.Deserialize<Blogger?>(work.Arguments);
+        }
+
+        public async Task<IdentityResult> BloggerSaveAsync(Blogger model)
+        {
+            var work = await _context.WorkContents.FindAsync(model.Id);
+            if (work is null)
+            {
+                return IdentityResult.Failed();
+            }
+            work.Arguments = JsonSerializer.Serialize(model);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }

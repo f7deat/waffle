@@ -31,12 +31,36 @@ namespace Waffle.Models.Components
 
     public class BlockEditorItemData 
     {
+        public BlockEditorItemData()
+        {
+            Style = "ordered";
+        }
         [JsonPropertyName("text")]
         public string? Text { get; set; }
         [JsonPropertyName("level")]
         public int? Level { get; set; }
         [JsonPropertyName("html")]
         public string? Html { get; set; }
+        [JsonPropertyName("link")]
+        public string? Link { get; set; }
+        [JsonPropertyName("code")]
+        public string? Code { get; set; }
+        [JsonPropertyName("meta")]
+        public BlockEditorMeta? Meta { get; set; }
+        [JsonPropertyName("items")]
+        public List<string>? Items { get; set; }
+        [JsonPropertyName("style")]
+        public string Style { get; set; }
+        [JsonPropertyName("url")]
+        public string? Url { get; set; }
+        [JsonPropertyName("caption")]
+        public string? Caption { get; set; }
+    }
+
+    public class BlockEditorMeta
+    {
+        [JsonPropertyName("title")]
+        public string? Title { get; set; }
     }
 
     public class BlockEditorType {
@@ -44,5 +68,9 @@ namespace Waffle.Models.Components
         public const string HEADER = "header";
         public const string DELIMITER = "delimiter";
         public const string RAW = "raw";
+        public const string LINK_TOOL = "linkTool";
+        public const string CODE = "code";
+        public const string LIST = "list";
+        public const string SIMPLE_IMAGE = "simpleImage";
     }
 }

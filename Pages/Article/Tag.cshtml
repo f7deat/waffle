@@ -1,4 +1,13 @@
-﻿@page
+﻿@page "/article/tag/{id}"
 @model Waffle.Pages.Article.TagModel
 @{
 }
+
+<main class="wf-article__tag">
+    <div class="container">
+        @if (Model.Articles != null)
+        {
+            <partial name="_ListItem.cshtml" model="Model.Articles" />
+        }
+    </div>
+</main>

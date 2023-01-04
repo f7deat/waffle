@@ -6,6 +6,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.FileContents;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Params;
@@ -411,14 +412,20 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("block-editor/{id}")]
-        public async Task<IActionResult> GetBlockEditorAsync([FromRoute] Guid id)
+        public async Task<IActionResult> GetBlockEditorAsync([FromRoute] Guid id) => Ok(await _workService.BlogEditorGetAsync(id));
+
+        [HttpGet("block-editor/fetch-url")]
+        public IActionResult BlockEditorFetchUrl([FromQuery] string url)
         {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null || string.IsNullOrEmpty(workContent.Arguments))
+            return Ok(new
             {
-                return Ok();
-            }
-            return Ok(JsonSerializer.Deserialize<List<BlockEditorBlock>>(workContent.Arguments));
+                success = true,
+                link = url,
+                meta = new
+                {
+                    title = url,
+                }
+            });
         }
 
         [HttpPost("block-editor/save")]
@@ -509,6 +516,12 @@ namespace Waffle.Controllers
 
         [HttpPost("tag/save")]
         public async Task<IActionResult> SaveTagAsync([FromBody] Tag tag) => Ok(await _workService.SaveTagAsync(tag));
+
+        [HttpGet("blogger/{id}")]
+        public async Task<IActionResult> BloggerGetAsync([FromRoute] Guid id) => Ok(await _workService.BloggerGetAsync(id));
+
+        [HttpPost("blogger/save")]
+        public async Task<IActionResult> BloggerSaveAsync([FromBody] Blogger model) => Ok(await _workService.BloggerSaveAsync(model));
 
         #endregion
     }

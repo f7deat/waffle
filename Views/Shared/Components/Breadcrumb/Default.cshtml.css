@@ -1,5 +1,9 @@
 .breadcrumb {
     --bs-breadcrumb-padding-y: .5rem;
+    --bs-breadcrumb-padding-x: 1rem;
+    --bs-breadcrumb-border-radius: .25rem;
+    --bs-breadcrumb-bg: var(--bs-light);
+    --bs-breadcrumb-margin-bottom: .5rem;
 }
 
 .breadcrumb i {

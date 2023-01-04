@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.Core.Interfaces.IService
@@ -14,5 +15,8 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> SaveContactFormAsync(ContactForm item);
         Task<IdentityResult> SaveRowAsync(Row row);
         Task<Row?> GetRowAsync(Guid id);
+        Task<IdentityResult> BloggerSaveAsync(Blogger model);
+        Task<Blogger?> BloggerGetAsync(Guid id);
+        Task<List<BlockEditorBlock>?> BlogEditorGetAsync(Guid id);
     }
 }
