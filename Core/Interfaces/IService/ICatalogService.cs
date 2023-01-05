@@ -14,5 +14,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<IEnumerable<ComponentListItem>> GetHeaderAsync();
         Task<IEnumerable<ComponentListItem>> GetFooterAsync();
         Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId);
+        Task<IdentityResult> ArticleSaveAsync(Catalog args);
+        Task<IdentityResult> UpdateThumbnailAsync(Catalog args);
     }
 }

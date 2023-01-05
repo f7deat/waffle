@@ -128,5 +128,42 @@ namespace Waffle.Core.Services
                 Settings = settings
             };
         }
+
+        public async Task<IdentityResult> ArticleSaveAsync(Catalog args)
+        {
+            var article = await _context.Catalogs.FindAsync(args.Id);
+            if (article is null)
+            {
+                return IdentityResult.Failed();
+            }
+            var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
+            if (await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(normalizedName) && x.Type == CatalogType.Article))
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Article existed!"
+                });
+            }
+            article.Name = args.Name;
+            article.NormalizedName = normalizedName;
+            article.Description = args.Description;
+            article.Active = args.Active;
+            article.ModifiedDate = DateTime.Now;
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> UpdateThumbnailAsync(Catalog args)
+        {
+            var catalog = await _context.Catalogs.FindAsync(args.Id);
+            if (catalog is null)
+            {
+                return IdentityResult.Failed();
+            }
+            catalog.Thumbnail = args.Thumbnail;
+            catalog.ModifiedDate = DateTime.Now;
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
     }
 }

@@ -23,3 +23,6 @@
 .wf-card-img-top:hover {
     opacity: .5;
 }
+.card {
+    --bs-card-border-width: 0;
+}

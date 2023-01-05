@@ -22,6 +22,8 @@ namespace Waffle.Models.ViewModels
         public CatalogType Type { get; set; }
         [JsonPropertyName("setting")]
         public CatalogSetting Setting { get; set; }
+        [JsonPropertyName("viewCount")]
+        public int ViewCount { get; set; }
     }
 
     public class CatalogSetting

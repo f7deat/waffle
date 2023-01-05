@@ -30,6 +30,13 @@ namespace Waffle.ViewComponents
             var catalog = await _context.Catalogs.FindAsync(catalogId);
             if (catalog != null)
             {
+                breadcrumb.Add(new Breadcrumb
+                {
+                    Url = $"/{catalog.Type.ToString().ToLower()}",
+                    Name = GetDisplayName(catalog),
+                    Position = breadcrumb.Count + 1
+                });
+
                 if (catalog.ParentId != null)
                 {
                     var parrent = await _context.Catalogs.FindAsync(catalog.ParentId);
@@ -60,6 +67,15 @@ namespace Waffle.ViewComponents
                 return $"/article/{catalog.NormalizedName}";
             }
             return $"/page/{catalog.NormalizedName}";
+        }
+
+        private static string GetDisplayName(Catalog catalog)
+        {
+            if (catalog.Type == CatalogType.Article)
+            {
+                return "Articles";
+            }
+            return "Pages";
         }
     }
 }

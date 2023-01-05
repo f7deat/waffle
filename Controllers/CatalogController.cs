@@ -58,27 +58,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync([FromRoute] Guid id)
-        {
-            var catalog = await _context.Catalogs.FindAsync(id);
-            if (catalog == null)
-            {
-                return NotFound();
-            }
-            var data = new CatalogViewModel
-            {
-                Id = id,
-                Name = catalog.Name,
-                NormalizedName = catalog.NormalizedName,
-                Description = catalog.Description,
-                Type = catalog.Type
-            };
-            if (!string.IsNullOrEmpty(catalog.Setting))
-            {
-                data.Setting = JsonSerializer.Deserialize<CatalogSetting>(catalog.Setting) ?? new CatalogSetting();
-            }
-            return Ok(data);
-        }
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Catalogs.FindAsync(id));
 
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync([FromBody] Catalog catalog) => Ok(await _catalogService.AddAsync(catalog));
@@ -206,5 +186,11 @@ namespace Waffle.Controllers
 
         [HttpGet("categories/{type}")]
         public async Task<IActionResult> GetCategoriesAsync([FromRoute] CatalogType type) => Ok(await _context.Catalogs.Where(x => x.Type == type).ToListAsync());
+
+        [HttpPost("article/save")]
+        public async Task<IActionResult> ArticleSaveAsync([FromBody] Catalog args) => Ok(await _catalogService.ArticleSaveAsync(args));
+
+        [HttpPost("update-thumbnail")]
+        public async Task<IActionResult> UpdateThumbnailAsync([FromBody] Catalog args) => Ok(await _catalogService.UpdateThumbnailAsync(args));
     }
 }
