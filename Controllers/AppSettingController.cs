@@ -7,6 +7,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Models;
+using Waffle.Models.Components;
 using Waffle.Models.Layout;
 
 namespace Waffle.Controllers
@@ -108,5 +109,11 @@ namespace Waffle.Controllers
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        [HttpGet("footer/{id}")]
+        public async Task<IActionResult> GetFooterAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetFooterAsync(id));
+
+        [HttpPost("footer/save")]
+        public async Task<IActionResult> SaveFooterAsync([FromBody] Footer args) => Ok(await _appSettingService.SaveFooterAsync(args));
     }
 }

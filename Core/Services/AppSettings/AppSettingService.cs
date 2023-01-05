@@ -5,6 +5,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.Core.Services.AppSettings
 {
@@ -33,6 +34,16 @@ namespace Waffle.Core.Services.AppSettings
             return appSetting;
         }
 
+        public async Task<Footer?> GetFooterAsync(Guid id)
+        {
+            var setting = await _context.AppSettings.FindAsync(id);
+            if (string.IsNullOrEmpty(setting?.Value))
+            {
+                return default;
+            }
+            return JsonSerializer.Deserialize<Footer>(setting.Value);
+        }
+
         public async Task<ListResult<AppSetting>> ListAsync()
         {
             return new ListResult<AppSetting>
@@ -46,6 +57,18 @@ namespace Waffle.Core.Services.AppSettings
                 }).ToListAsync(),
                 Total = await _context.AppSettings.CountAsync()
             };
+        }
+
+        public async Task<IdentityResult> SaveFooterAsync(Footer args)
+        {
+            var setting = await _context.AppSettings.FindAsync(args.Id);
+            if (setting is null)
+            {
+                return IdentityResult.Failed();
+            }
+            setting.Value = JsonSerializer.Serialize(args);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> SaveTelegramAsync(Telegram model)

@@ -1,9 +1,63 @@
-﻿@using Waffle.Models
-@model IEnumerable<ComponentListItem>
+﻿@using Waffle.Models.Components
+@model Footer
 
-<footer class="wf-footer">
-    @foreach (var item in Model)
-    {
-        @await Component.InvokeAsync(item.Name, item.Id)
-    }
+<footer class="footer">
+    <div class="footer-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="footer-title">
+                        <i class="fa fa-bars"></i> COMMUNITY
+                    </div>
+                    <div class="footer-item">
+                        <a href="#" class="item-link"><i class="fas fa-caret-right"></i> About us</a>
+                    </div>
+                    <div class="footer-item">
+                        <a href="#" class="item-link"><i class="fas fa-caret-right"></i> Partners</a>
+                    </div>
+                    <div class="footer-item">
+                        <a href="#" class="item-link"><i class="fas fa-caret-right"></i> Term of use</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="footer-title"><i class="fa fa-bars"></i> Contact us</div>
+                    <div class="footer-item"><i class="fas fa-envelope"></i> <a href="mailto:f7deat@gmail.com" class="text-gray-500 font-bold">f7deat@gmail.com</a></div>
+                    <div class="footer-item"><i class="fas fa-phone"></i> <a href="tel:+84762559696" class="text-gray-500 font-bold">(+84) 762.559.696</a></div>
+                    <div class="footer-item"><i class="fab fa-telegram-plane"></i> <a href="/home/feedback" class="text-gray-500 font-bold">Feedback</a></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="footer-title">
+                        <i class="fa fa-bars"></i> Stay Connected
+                    </div>
+                    <form class="row g-3">
+                        <div class="col-auto">
+                            <input type="email" placeholder="Email" class="form-control" />
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary mb-3">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="company">
+            © @DateTime.Now.Year @Model.CompanyName. All rights reserved.
+        </div>
+        <div class="footer-social">
+            <a href="#">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#">
+                <i class="fab fa-youtube"></i>
+            </a>
+        </div>
+    </div>
 </footer>

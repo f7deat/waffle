@@ -1,19 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.AppSettings;
+using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
     public class FooterViewComponent : ViewComponent
     {
-        private readonly ICatalogService _catalogService;
-        public FooterViewComponent(ICatalogService catalogService)
+        private readonly IAppSettingService _appService;
+        public FooterViewComponent(IAppSettingService appService)
         {
-            _catalogService = catalogService;
+            _appService = appService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(await _catalogService.GetFooterAsync());
+            var setting = await _appService.EnsureSettingAsync(nameof(Footer));
+            if (string.IsNullOrEmpty(setting?.Value))
+            {
+                return View("~/Views/Shared/Components/Empty/Default.cshtml");
+            }
+            return View(JsonSerializer.Deserialize<Footer>(setting.Value));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models.Components;
 
@@ -18,5 +19,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> BloggerSaveAsync(Blogger model);
         Task<Blogger?> BloggerGetAsync(Guid id);
         Task<List<BlockEditorBlock>?> BlogEditorGetAsync(Guid id);
+        Task<WorkContent?> GetAsync(Guid id);
     }
 }

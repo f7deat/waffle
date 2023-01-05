@@ -80,6 +80,8 @@ namespace Waffle.Core.Services
 
         public T? Get<T>(string content) => JsonSerializer.Deserialize<T>(content);
 
+        public async Task<WorkContent?> GetAsync(Guid id) => await _context.WorkContents.FindAsync(id);
+
         public async Task<Column?> GetColumnAsync(Guid id)
         {
             var work = await _context.WorkContents.FindAsync(id);
