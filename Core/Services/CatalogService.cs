@@ -31,6 +31,8 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
+        private async Task<bool> IsExistAsync(Catalog catalog) => await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(catalog.NormalizedName) && x.Type == catalog.Type);
+
         public async Task<PayloadResult<Catalog>> AddAsync(Catalog catalog)
         {
             if (catalog is null || string.IsNullOrWhiteSpace(catalog.Name))
@@ -41,7 +43,7 @@ namespace Waffle.Core.Services
             {
                 catalog.NormalizedName = SeoHelper.ToSeoFriendly(catalog.Name);
             }
-            if (await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(catalog.NormalizedName) && x.Type == catalog.Type))
+            if (await IsExistAsync(catalog))
             {
                 return PayloadResult<Catalog>.Failed(new IdentityError
                 {

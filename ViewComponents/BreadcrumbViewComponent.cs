@@ -32,7 +32,7 @@ namespace Waffle.ViewComponents
             {
                 breadcrumb.Add(new Breadcrumb
                 {
-                    Url = $"/{catalog.Type.ToString().ToLower()}",
+                    Url = GetMasterUrl(catalog.Type),
                     Name = GetDisplayName(catalog),
                     Position = breadcrumb.Count + 1
                 });
@@ -76,6 +76,15 @@ namespace Waffle.ViewComponents
                 return "Articles";
             }
             return "Pages";
+        }
+
+        private static string GetMasterUrl(CatalogType type)
+        {
+            if (CatalogType.Default == type)
+            {
+                return "/page";
+            }
+            return $"/{type.ToString().ToLower()}";
         }
     }
 }

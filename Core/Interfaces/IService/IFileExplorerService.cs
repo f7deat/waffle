@@ -8,5 +8,6 @@ namespace Waffle.Core.Interfaces.IService
     {
         Task<IdentityResult> DeleteFileItemAsync(FileItem item);
         Task<dynamic> ListAsync(FileFilterOptions filterOptions);
+        Task<IdentityResult> UploadFromUrlAsync(string url);
     }
 }

@@ -109,5 +109,8 @@ namespace Waffle.Controllers
                 total = await fileContent.CountAsync()
             });
         }
+
+        [HttpPost("upload-from-url")]
+        public async Task<IActionResult> UploadFromUrlAsync([FromBody] FileContent file) => Ok(await _fileExplorerService.UploadFromUrlAsync(file.Url));
     }
 }

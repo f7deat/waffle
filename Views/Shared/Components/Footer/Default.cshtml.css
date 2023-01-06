@@ -1,8 +1,11 @@
 ﻿.copyright {
     display: flex;
     justify-content: space-between;
-    border-top: 1px solid var(--bs-dark);
+    border-top: 1px solid var(--bs-gray);
     padding: .5rem 1rem;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: .5rem;
 }
 
 .footer {
@@ -19,8 +22,8 @@
 }
 
 .footer-content {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
 }
 
 .footer-title {
@@ -31,4 +34,15 @@
 
 .footer-item {
     margin-bottom: .25rem;
+}
+
+@media screen and (min-width: 768px) {
+    .copyright {
+        flex-direction: row;
+    }
+
+    .footer-content {
+        padding-top: var(--wf-footer-content-padding-y);
+        padding-bottom: var(--wf-footer-content-padding-y);
+    }
 }

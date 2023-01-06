@@ -40,7 +40,7 @@ namespace Waffle.Models
 
     }
 
-    public class BasicFilterOption : FilterOptions
+    public class BasicFilterOptions : FilterOptions
     {
 
     }

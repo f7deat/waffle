@@ -17,13 +17,13 @@
                             @await Component.InvokeAsync(nameof(BlockEditor), item)
                         }
                     }
-                    <div class="mb-2">
-                        <i class="fas fa-tag mr-2"></i>
-                        @foreach (var item in Model.Tags)
-                        {
+                    @foreach (var item in Model.Tags)
+                    {
+                        <div class="mb-2">
+                            <i class="fas fa-tag mr-2"></i>
                             <a href="/article/tag/@item.Id" class="wf-badge">@item.Name</a>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
         }

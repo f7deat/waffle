@@ -1,0 +1,23 @@
+﻿@page
+@using Waffle.Models.Components
+@model Waffle.Pages.Page.IndexModel
+@{
+    ViewData["Title"] = nameof(Page);
+    ViewData["Description"] = "Danh sách trang";
+}
+
+@if (Model.Catalogs != null)
+{
+    <main class="wf-page">
+        <div class="container">
+            <div class="list-group mb-4">
+                @foreach (var item in Model.Catalogs)
+                {
+                    <div class="list-group-item">
+                        <a href="/page/@item.NormalizedName">@item.Name</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </main>
+}

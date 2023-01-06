@@ -25,38 +25,6 @@ namespace Waffle.Controllers
         [HttpGet("view-count")]
         public async Task<IActionResult> GetViewCountAsync() => Ok(await _context.Catalogs.SumAsync(x => x.ViewCount));
 
-        [HttpGet("entry/{normalizedName}")]
-        public async Task<IActionResult> GetEntryAsync([FromRoute] string normalizedName)
-        {
-            if (string.IsNullOrWhiteSpace(normalizedName))
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Router missing!"
-                }));
-            }
-            var data = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Type == CatalogType.Entry);
-            if (data is null)
-            {
-                data = new Catalog
-                {
-                    Type = CatalogType.Entry,
-                    NormalizedName = normalizedName,
-                    Name = normalizedName,
-                    CreatedDate = DateTime.Now,
-                    Active = true,
-                    ViewCount = 0
-                };
-                await _context.Catalogs.AddAsync(data);
-                await _context.SaveChangesAsync();
-            }
-            return Ok(new
-            {
-                succeeded = true,
-                data
-            });
-        }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Catalogs.FindAsync(id));
 

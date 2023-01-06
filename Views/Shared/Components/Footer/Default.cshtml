@@ -21,29 +21,33 @@
                 </div>
                 <div class="col-md-4">
                     <div class="footer-title"><i class="fa fa-bars"></i> Contact us</div>
-                    <div class="footer-item"><i class="fas fa-envelope"></i> <a href="mailto:f7deat@gmail.com" class="text-gray-500 font-bold">f7deat@gmail.com</a></div>
-                    <div class="footer-item"><i class="fas fa-phone"></i> <a href="tel:+84762559696" class="text-gray-500 font-bold">(+84) 762.559.696</a></div>
+                    <div class="footer-item"><i class="fas fa-envelope"></i> <a href="mailto:@Model.Email" class="text-gray-500 font-bold">@Model.Email</a></div>
+                    <div class="footer-item"><i class="fas fa-phone"></i> <a href="tel:@Model.PhoneNumber" class="text-gray-500 font-bold">@Model.PhoneNumber</a></div>
                     <div class="footer-item"><i class="fab fa-telegram-plane"></i> <a href="/home/feedback" class="text-gray-500 font-bold">Feedback</a></div>
                 </div>
                 <div class="col-md-4">
                     <div class="footer-title">
                         <i class="fa fa-bars"></i> Stay Connected
                     </div>
-                    <form class="row g-3">
+                    <div class="mb-2">Subscribe to receive the latest information</div>
+                    <form class="row">
                         <div class="col-auto">
                             <input type="email" placeholder="Email" class="form-control" />
                         </div>
                         <div class="col-auto">
-                            <button type="submit" class="btn btn-primary mb-3">Subscribe</button>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
                         </div>
                     </form>
+                    <div class="mb-2">
+                        <small>or <a href="#">Sign in</a></small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="copyright">
         <div class="company">
-            © @DateTime.Now.Year @Model.CompanyName. All rights reserved.
+            © @DateTime.Now.Year <a href="/">@Model.CompanyName</a>. All rights reserved.
         </div>
         <div class="footer-social">
             <a href="#">

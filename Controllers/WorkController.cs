@@ -162,7 +162,7 @@ namespace Waffle.Controllers
                 return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child items first!" }));
             }
 
-            if (await _context.WorkItems.CountAsync(x => x.CatalogId == model.CatalogId) == 1)
+            if (await _context.WorkItems.CountAsync(x => x.WorkContentId == model.WorkContentId) == 1)
             {
                 var workContent = await _context.WorkContents.FindAsync(model.WorkContentId);
                 if (workContent is null)

@@ -39,5 +39,19 @@ namespace Waffle.Core.Services
                 total = await query.CountAsync()
             };
         }
+
+        public async Task<IdentityResult> UploadFromUrlAsync(string url)
+        {
+            var uri = new Uri(url);
+            await _context.FileContents.AddAsync(new FileContent
+            {
+                Name = Path.GetFileName(uri.LocalPath),
+                Url = url,
+                Size = 0,
+                Type = Path.GetExtension(uri.LocalPath)
+            });
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
     }
 }
