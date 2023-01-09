@@ -19,11 +19,7 @@ namespace Waffle.Entities
     }
     public class WorkContent : BasicWorkContent
     {
-        public WorkContent()
-        {
-            Arguments = string.Empty;
-        }
         [JsonPropertyName("arguments")]
-        public string Arguments { get; set; }
+        public string? Arguments { get; set; }
     }
 }

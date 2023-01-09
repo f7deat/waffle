@@ -8,7 +8,7 @@ namespace Waffle.Core.Helpers
         public static string ToSeoFriendly(string title, int maxLength = 250, bool removeSign = true)
         {
             var match = Regex.Match(title.ToLower(), "[\\w]+");
-            StringBuilder result = new StringBuilder("");
+            var result = new StringBuilder("");
             bool maxLengthHit = false;
             while (match.Success && !maxLengthHit)
             {

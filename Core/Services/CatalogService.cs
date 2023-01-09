@@ -139,7 +139,7 @@ namespace Waffle.Core.Services
                 return IdentityResult.Failed();
             }
             var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
-            if (await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(normalizedName) && x.Type == CatalogType.Article))
+            if (await IsExistAsync(args) && !article.NormalizedName.Equals(args))
             {
                 return IdentityResult.Failed(new IdentityError
                 {

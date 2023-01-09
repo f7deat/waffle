@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Constants;
 using Waffle.Data;
 using Waffle.Models;
 
 namespace Waffle.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class ComponentController : Controller
     {
@@ -49,7 +52,7 @@ namespace Waffle.Controllers
             });
         }
 
-        [HttpPost("delete/{id}")]
+        [HttpPost("delete/{id}"), Authorize(Roles = RoleName.Admin)]
         public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
         {
             var component = await _context.Components.FindAsync(id);
