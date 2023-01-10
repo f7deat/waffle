@@ -177,6 +177,10 @@ namespace Waffle.Controllers
             await EnsureComponent(nameof(Masonry));
             await EnsureComponent(nameof(Lookbook));
             await EnsureComponent(nameof(Tag));
+            await EnsureComponent(nameof(Feed));
+            await EnsureComponent(nameof(Row));
+            await EnsureComponent(nameof(Column));
+            await EnsureComponent(nameof(Image));
         }
 
         private async Task EnsureComponent(string name)
@@ -186,7 +190,7 @@ namespace Waffle.Controllers
                 await _context.Components.AddAsync(new Component {
                     Active = true,
                     Name = name,
-                    NormalizedName = name,
+                    NormalizedName = name
                 });
             }
         }

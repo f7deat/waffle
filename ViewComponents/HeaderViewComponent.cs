@@ -1,18 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Core.Interfaces.IService;
+using System.Text.Json;
+using Waffle.Core.Services.AppSettings;
+using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
     public class HeaderViewComponent : ViewComponent
     {
-        private readonly ICatalogService _catalogService;
-        public HeaderViewComponent(ICatalogService catalogService)
+        private readonly IAppSettingService _settingService;
+        public HeaderViewComponent(IAppSettingService settingService)
         {
-            _catalogService = catalogService;
+            _settingService = settingService;
         }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(await _catalogService.GetHeaderAsync());
+            var setting = await _settingService.EnsureSettingAsync(nameof(Header));
+            if (string.IsNullOrEmpty(setting.Value))
+            {
+                return View(Empty.DefaultView);
+            }
+            return View(JsonSerializer.Deserialize<Header>(setting.Value));
         }
     }
 }

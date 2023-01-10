@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Catalogs;
 
 namespace Waffle.Core.Interfaces.IService
 {
@@ -16,5 +17,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId);
         Task<IdentityResult> ArticleSaveAsync(Catalog args);
         Task<IdentityResult> UpdateThumbnailAsync(Catalog args);
+        Task<ListResult<ArticleListItem>> ArticleListAsync(BasicFilterOptions filterOptions);
     }
 }

@@ -1,34 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
-using Waffle.Entities;
+using Waffle.Models;
 using Waffle.Models.Catalogs;
 
 namespace Waffle.Pages.Article
 {
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        public IndexModel(ApplicationDbContext context)
+        private readonly ICatalogService _catalogService;
+        public IndexModel(ICatalogService catalogService)
         {
-            _context = context;
+            _catalogService = catalogService;
         }
 
         public IEnumerable<ArticleListItem>? Articles;
 
         public async Task OnGetAsync()
         {
-            Articles = await _context.Catalogs.Where(x => x.Type == CatalogType.Article).Select(x => new ArticleListItem
+            var articles = await _catalogService.ArticleListAsync(new BasicFilterOptions
             {
-                Description = x.Description,
-                Name = x.Name,
-                ModifiedDate = x.ModifiedDate ?? x.CreatedDate,
-                NomalizedName = x.NormalizedName,
-                Thumbnail = x.Thumbnail,
-                ViewCount = x.ViewCount,
-                Id = x.Id
-            }).ToListAsync();
+                Current = 1,
+                PageSize = 12
+            });
+            Articles = articles.Data;
         }
     }
 }

@@ -310,38 +310,7 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("column/add")]
-        public async Task<IActionResult> AddColumnAsync([FromBody] Column column)
-        {
-            if (column is null)
-            {
-                return BadRequest();
-            }
-            var row = await _context.WorkContents.FindAsync(column.RowId);
-            if (row is null)
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Row not found!"
-                }));
-            }
-
-            var component = await _componentService.EnsureComponentAsync(nameof(Column));
-
-            var workContent = new WorkContent
-            {
-                Active = true,
-                Arguments = JsonSerializer.Serialize(column),
-                Name = column.ClassName,
-                ComponentId = component.Id,
-                ParentId = column.RowId
-            };
-
-            await _context.WorkContents.AddAsync(workContent);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(IdentityResult.Success);
-        }
+        public async Task<IActionResult> ColumnAddAsync([FromBody] Column column) => Ok(await _workService.ColumnAddAsync(column));
 
         [HttpGet("column/list/{id}")]
         public async Task<IActionResult> GetColumnListAsync([FromRoute] Guid id)

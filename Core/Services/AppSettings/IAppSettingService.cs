@@ -10,6 +10,8 @@ namespace Waffle.Core.Services.AppSettings
     {
         Task<AppSetting> EnsureSettingAsync(string name);
         Task<Footer?> GetFooterAsync(Guid id);
+        Task<Header?> HeaderGetAsync(Guid id);
+        Task<IdentityResult> HeaderSaveAsync(Header args);
         Task<ListResult<AppSetting>> ListAsync();
         Task<IdentityResult> SaveFooterAsync(Footer args);
         Task<IdentityResult> SaveTelegramAsync(Telegram model);

@@ -16,20 +16,16 @@ namespace Waffle.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
             var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent != null)
+            if (string.IsNullOrEmpty(workContent?.Arguments))
             {
-                var row = new Row();
-                if (!string.IsNullOrEmpty(workContent.Arguments))
-                {
-                    row = JsonSerializer.Deserialize<Row>(workContent.Arguments);
-                }
+                return View(Empty.DefaultView);
+            }
+                var row = JsonSerializer.Deserialize<Row>(workContent.Arguments);
                 if (row != null)
                 {
                     row.Columns = await _context.WorkContents.Where(x => x.ParentId == id && x.ComponentId != Guid.Empty).Select(x => x.Id).ToListAsync();
-                    ViewBag.Row = row;
                 }
-            }
-            return View();
+            return View(row);
         }
     }
 }

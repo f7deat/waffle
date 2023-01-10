@@ -20,5 +20,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<Blogger?> BloggerGetAsync(Guid id);
         Task<List<BlockEditorBlock>?> BlogEditorGetAsync(Guid id);
         Task<WorkContent?> GetAsync(Guid id);
+        Task<IdentityResult> ColumnAddAsync(Column column);
     }
 }

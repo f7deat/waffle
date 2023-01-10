@@ -6,6 +6,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Catalogs;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
 
@@ -67,7 +68,8 @@ namespace Waffle.Core.Services
                     Name = name,
                     NormalizedName = name,
                     Active = true,
-                    CreatedDate = DateTime.Now
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
                 };
                 await _context.Catalogs.AddAsync(catalog);
                 await _context.SaveChangesAsync();
@@ -166,6 +168,24 @@ namespace Waffle.Core.Services
             catalog.ModifiedDate = DateTime.Now;
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
+        }
+
+        public async Task<ListResult<ArticleListItem>> ArticleListAsync(BasicFilterOptions filterOptions)
+        {
+            var query = _context.Catalogs.Where(x => x.Type == CatalogType.Article && x.Active).OrderByDescending(x => x.ModifiedDate);
+            return ListResult<ArticleListItem>.Success(await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize)
+                .Take(filterOptions.PageSize)
+                .Select(x => new ArticleListItem
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    ModifiedDate = x.ModifiedDate,
+                    NomalizedName = x.NormalizedName,
+                    Thumbnail = x.Thumbnail,
+                    ViewCount = x.ViewCount
+                })
+                .ToListAsync(), await query.CountAsync());
         }
     }
 }

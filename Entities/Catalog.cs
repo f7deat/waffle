@@ -27,7 +27,7 @@ namespace Waffle.Entities
         [JsonPropertyName("createdDate")]
         public DateTime CreatedDate { get; set; }
         [JsonPropertyName("modifiedDate")]
-        public DateTime? ModifiedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
         [JsonPropertyName("publishedDate")]
         public DateTime? PublishedDate { get; set; }
         [JsonPropertyName("type")]

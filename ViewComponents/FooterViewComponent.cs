@@ -8,18 +8,18 @@ namespace Waffle.ViewComponents
 {
     public class FooterViewComponent : ViewComponent
     {
-        private readonly IAppSettingService _appService;
-        public FooterViewComponent(IAppSettingService appService)
+        private readonly IAppSettingService _settingService;
+        public FooterViewComponent(IAppSettingService settingService)
         {
-            _appService = appService;
+            _settingService = settingService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var setting = await _appService.EnsureSettingAsync(nameof(Footer));
-            if (string.IsNullOrEmpty(setting?.Value))
+            var setting = await _settingService.EnsureSettingAsync(nameof(Footer));
+            if (string.IsNullOrEmpty(setting.Value))
             {
-                return View("~/Views/Shared/Components/Empty/Default.cshtml");
+                return View(Empty.DefaultView);
             }
             return View(JsonSerializer.Deserialize<Footer>(setting.Value));
         }

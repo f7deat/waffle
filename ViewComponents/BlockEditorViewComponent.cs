@@ -15,9 +15,9 @@ namespace Waffle.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
             var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null || string.IsNullOrEmpty(workContent.Arguments))
+            if (string.IsNullOrEmpty(workContent?.Arguments))
             {
-                return View();
+                return View(Empty.DefaultView);
             }
             var blockEditor = JsonSerializer.Deserialize<List<BlockEditorBlock>>(workContent.Arguments);
             return View(blockEditor);

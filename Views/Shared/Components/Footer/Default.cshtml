@@ -4,8 +4,8 @@
 <footer class="footer">
     <div class="footer-content">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4">
+            <div class="footer-grid">
+                <div class="footer-col">
                     <div class="footer-title">
                         <i class="fa fa-bars"></i> COMMUNITY
                     </div>
@@ -19,27 +19,23 @@
                         <a href="#" class="item-link"><i class="fas fa-caret-right"></i> Term of use</a>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="footer-col">
                     <div class="footer-title"><i class="fa fa-bars"></i> Contact us</div>
                     <div class="footer-item"><i class="fas fa-envelope"></i> <a href="mailto:@Model.Email" class="text-gray-500 font-bold">@Model.Email</a></div>
                     <div class="footer-item"><i class="fas fa-phone"></i> <a href="tel:@Model.PhoneNumber" class="text-gray-500 font-bold">@Model.PhoneNumber</a></div>
                     <div class="footer-item"><i class="fab fa-telegram-plane"></i> <a href="/home/feedback" class="text-gray-500 font-bold">Feedback</a></div>
                 </div>
-                <div class="col-md-4">
+                <div class="footer-col">
                     <div class="footer-title">
                         <i class="fa fa-bars"></i> Stay Connected
                     </div>
                     <div class="mb-2">Subscribe to receive the latest information</div>
-                    <form class="row">
-                        <div class="col-auto">
-                            <input type="email" placeholder="Email" class="form-control" />
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary">Subscribe</button>
-                        </div>
+                    <form method="post" action="/home/subscribe">
+                        <input type="email" name="email" placeholder="Email" class="form-control" />
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
                     </form>
                     <div class="mb-2">
-                        <small>or <a href="#">Sign in</a></small>
+                        <small>or <a href="https://cms.defzone.net" target="_blank">Sign in</a></small>
                     </div>
                 </div>
             </div>

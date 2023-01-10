@@ -44,19 +44,37 @@ namespace Waffle.Core.Services.AppSettings
             return JsonSerializer.Deserialize<Footer>(setting.Value);
         }
 
+        public async Task<Header?> HeaderGetAsync(Guid id)
+        {
+            var setting = await _context.AppSettings.FindAsync(id);
+            if (string.IsNullOrEmpty(setting?.Value))
+            {
+                return default;
+            }
+            return JsonSerializer.Deserialize<Header>(setting.Value);
+        }
+
+        public async Task<IdentityResult> HeaderSaveAsync(Header args)
+        {
+            var setting = await _context.AppSettings.FindAsync(args.Id);
+            if (setting is null)
+            {
+                return IdentityResult.Failed();
+            }
+            setting.Value = JsonSerializer.Serialize(args);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
         public async Task<ListResult<AppSetting>> ListAsync()
         {
-            return new ListResult<AppSetting>
+            return ListResult<AppSetting>.Success(await _context.AppSettings.Select(x => new AppSetting
             {
-                Data = await _context.AppSettings.Select(x => new AppSetting
-                {
-                    Name = x.Name,
-                    Description = x.Description,
-                    NormalizedName = x.NormalizedName,
-                    Id = x.Id
-                }).ToListAsync(),
-                Total = await _context.AppSettings.CountAsync()
-            };
+                Name = x.Name,
+                Description = x.Description,
+                NormalizedName = x.NormalizedName,
+                Id = x.Id
+            }).ToListAsync(), await _context.AppSettings.CountAsync());
         }
 
         public async Task<IdentityResult> SaveFooterAsync(Footer args)

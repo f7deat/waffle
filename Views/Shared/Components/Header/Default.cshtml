@@ -1,9 +1,3 @@
-﻿@using Waffle.Models
-@model IEnumerable<ComponentListItem>
+﻿@using Waffle.Models.Components
+@model Header
 
-<header class="wf-header">
-    @foreach (var item in Model)
-    {
-        @await Component.InvokeAsync(item.Name, item.Id)
-    }
-</header>

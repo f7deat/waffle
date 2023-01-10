@@ -1,19 +1,13 @@
 ﻿@using Waffle.Models.Components
+@model Row
 
-@{
-    var row = ViewBag.Row as Row;
-}
-
-@if (row != null)
-{
-    <div class="@row.Layout">
-        <div class="@row.ClassName">
-            <div class="row">
-                @foreach (var col in row.Columns)
-                {
-                    @await Component.InvokeAsync(nameof(Column), col)
-                }
-            </div>
+<div class="@Model.Layout">
+    <div class="@Model.ClassName">
+        <div class="wf-row">
+            @foreach (var col in Model.Columns)
+            {
+                @await Component.InvokeAsync(nameof(Column), col)
+            }
         </div>
     </div>
-}
+</div>

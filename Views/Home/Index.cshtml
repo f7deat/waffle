@@ -3,8 +3,6 @@
 <main class="wf-home">
     @foreach (var item in Model)
     {
-        <div>
-            @await Component.InvokeAsync(item.Name, item.Id)
-        </div>
+        @await Component.InvokeAsync(item.Name, item.Id)
     }
 </main>

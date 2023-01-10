@@ -31,7 +31,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:8000", "https://cms.defzone.net").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                          policy.WithOrigins(
+                              "http://localhost:8000", 
+                              "https://cms.defzone.net",
+                              "https://crm.defzone.net"
+                              ).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                       });
 });
 
