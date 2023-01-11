@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
-using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models.Components;
@@ -124,6 +123,9 @@ namespace Waffle.Controllers
 
         [HttpPost("header/save")]
         public async Task<IActionResult> HeaderSaveAsync([FromBody] Header args) => Ok(await _appSettingService.HeaderSaveAsync(args));
+
+        [HttpPost("header/logo")]
+        public async Task<IActionResult> HeaderLogoAsync([FromBody] Header args) => Ok(await _appSettingService.HeaderLogoAsync(args));
         
     }
 }

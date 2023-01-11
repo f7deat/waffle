@@ -20,7 +20,12 @@ namespace Waffle.ViewComponents
             {
                 return View(Empty.DefaultView);
             }
-            return View(JsonSerializer.Deserialize<Header>(setting.Value));
+            var header = JsonSerializer.Deserialize<Header>(setting.Value);
+            if (header is null)
+            {
+                return View(Empty.DefaultView);
+            }
+            return View(header.Template, header);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿@using Waffle.Models.Components
 @model Header
+
 <header class="wf-header">
     <div class="top-header-area">
         <div class="container-fluid">
@@ -46,7 +47,7 @@
     <div class="menu-wrapper pt-4 pb-2">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <a href="/"><img src="/dliti-logo2.svg" alt="logo" width="250"></a>
+                <a href="/"><img src="@Model.Logo" alt="logo" width="250"></a>
                 <div class="menu-vertical d-none d-md-flex">
                     <a href="/page/fencing">Fencing</a>
                     <a href="/page/decking">Decking</a>

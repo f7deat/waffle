@@ -54,6 +54,30 @@ namespace Waffle.Core.Services.AppSettings
             return JsonSerializer.Deserialize<Header>(setting.Value);
         }
 
+        public async Task<IdentityResult> HeaderLogoAsync(Header args)
+        {
+            var setting = await _context.AppSettings.FindAsync(args.Id);
+            if (setting is null)
+            {
+                return IdentityResult.Failed();
+            }
+            if (string.IsNullOrEmpty(setting.Value))
+            {
+                setting.Value = JsonSerializer.Serialize(args);
+            }
+            else
+            {
+                var header = JsonSerializer.Deserialize<Header>(setting.Value);
+                if (header != null)
+                {
+                    header.Logo = args.Logo;
+                    setting.Value = JsonSerializer.Serialize(header);
+                }
+            }
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
         public async Task<IdentityResult> HeaderSaveAsync(Header args)
         {
             var setting = await _context.AppSettings.FindAsync(args.Id);
