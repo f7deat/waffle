@@ -5,6 +5,7 @@ using System.Text.Json;
 using Waffle.Core.Constants;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Catalogs;
 using Waffle.Models.Components;
@@ -181,6 +182,7 @@ namespace Waffle.Controllers
             await EnsureComponent(nameof(Row));
             await EnsureComponent(nameof(Column));
             await EnsureComponent(nameof(Image));
+            await EnsureComponent(nameof(Trend));
         }
 
         private async Task EnsureComponent(string name)

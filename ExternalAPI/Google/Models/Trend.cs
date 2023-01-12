@@ -3,7 +3,7 @@
 namespace Waffle.ExternalAPI.Google.Models
 {
     [XmlRoot(ElementName = "rss")]
-    public class TrendModel
+    public class Trend
     {
         [XmlElement("channel")]
         public Channel? Channel { get; set; }

@@ -12,6 +12,7 @@ namespace Waffle.ViewComponents
         {
             _context = context;
         }
+
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
             var data = await _context.WorkContents.FindAsync(id);

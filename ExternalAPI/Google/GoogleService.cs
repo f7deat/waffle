@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Waffle.Core.Helpers;
 using Waffle.Core.Services.AppSettings;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Interfaces;
@@ -15,7 +16,11 @@ namespace Waffle.ExternalAPI.Google
             _appService = appSettingService;
         }
 
-        public async Task<Stream> GetDailyTrendingAsync() => await _http.GetStreamAsync("https://trends.google.com.vn/trends/trendingsearches/daily/rss?geo=VN");
+        public async Task<Trend?> GetDailyTrendingAsync()
+        {
+            var response = await _http.GetStreamAsync("https://trends.google.com.vn/trends/trendingsearches/daily/rss?geo=VN");
+            return XmlHelper.Deserialize<Trend>(response);
+        }
 
         public async Task<BloggerListResult<BloggerItem>?> BloggerSearchAsync(string blogId, string apiKey, string searchTerm)
         {

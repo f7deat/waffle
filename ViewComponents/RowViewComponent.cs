@@ -20,11 +20,11 @@ namespace Waffle.ViewComponents
             {
                 return View(Empty.DefaultView);
             }
-                var row = JsonSerializer.Deserialize<Row>(workContent.Arguments);
-                if (row != null)
-                {
-                    row.Columns = await _context.WorkContents.Where(x => x.ParentId == id && x.ComponentId != Guid.Empty).Select(x => x.Id).ToListAsync();
-                }
+            var row = JsonSerializer.Deserialize<Row>(workContent.Arguments);
+            if (row != null)
+            {
+                row.Columns = await _context.WorkContents.Where(x => x.ParentId == id && x.ComponentId != Guid.Empty).Select(x => x.Id).ToListAsync();
+            }
             return View(row);
         }
     }

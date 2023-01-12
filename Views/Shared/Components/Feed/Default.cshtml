@@ -2,11 +2,9 @@
 @model Feed
 
 <div class="wf-feed">
-    <div class="container">
-        <div class="title">@Model.Name</div>
-        @if (Model.Articles != null)
-        {
-            <partial name="~/Pages/Article/_ListItem.cshtml" model="Model.Articles" />
-        }
-    </div>
+    <div class="title"><i class="fas fa-blog mr-2"></i>@Model.Name</div>
+    @if (Model.Articles != null)
+    {
+        <partial name="~/Pages/Article/_ListItem.cshtml" model="Model.Articles" />
+    }
 </div>

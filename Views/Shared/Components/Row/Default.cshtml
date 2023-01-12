@@ -1,9 +1,9 @@
 ﻿@using Waffle.Models.Components
 @model Row
 
-<div class="@Model.Layout">
-    <div class="@Model.ClassName">
-        <div class="wf-row">
+<div class="@Model.ClassName">
+    <div class="@Model.Layout">
+        <div class="wf-row @Model.Gap">
             @foreach (var col in Model.Columns)
             {
                 @await Component.InvokeAsync(nameof(Column), col)

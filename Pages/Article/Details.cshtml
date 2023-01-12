@@ -7,24 +7,22 @@
         @if (Model.Catalog != null)
         {
             @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
-            <div class="card shadow-sm">
-                <div class="card-header">@Model.Catalog.Name</div>
-                <div class="card-body">
-                    @if (Model.BlockEditors != null)
+            <h1 class="title">@Model.Catalog.Name</h1>
+            <div class="bg-white p-4 shadow mb-4">
+                @if (Model.BlockEditors != null)
+                {
+                    @foreach (var item in Model.BlockEditors)
                     {
-                        @foreach (var item in Model.BlockEditors)
-                        {
-                            @await Component.InvokeAsync(nameof(BlockEditor), item)
-                        }
+                        @await Component.InvokeAsync(nameof(BlockEditor), item)
                     }
-                    @foreach (var item in Model.Tags)
-                    {
-                        <div class="mb-2">
-                            <i class="fas fa-tag mr-2"></i>
-                            <a href="/article/tag/@item.Id" class="wf-badge">@item.Name</a>
-                        </div>
-                    }
-                </div>
+                }
+                @foreach (var item in Model.Tags)
+                {
+                    <div class="mb-2">
+                        <i class="fas fa-tag mr-2"></i>
+                        <a href="/article/tag/@item.Id" class="wf-badge">@item.Name</a>
+                    </div>
+                }
             </div>
         }
     </div>

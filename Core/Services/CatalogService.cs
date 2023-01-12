@@ -170,9 +170,10 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
-        public async Task<ListResult<ArticleListItem>> ArticleListAsync(BasicFilterOptions filterOptions)
+        public async Task<ListResult<ArticleListItem>> ArticleListAsync(ArticleFilterOptions filterOptions)
         {
-            var query = _context.Catalogs.Where(x => x.Type == CatalogType.Article && x.Active).OrderByDescending(x => x.ModifiedDate);
+            var query = _context.Catalogs.Where(x => (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower()))
+            && x.Type == CatalogType.Article && x.Active).OrderByDescending(x => x.ModifiedDate);
             return ListResult<ArticleListItem>.Success(await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize)
                 .Take(filterOptions.PageSize)
                 .Select(x => new ArticleListItem

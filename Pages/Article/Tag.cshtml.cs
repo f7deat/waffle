@@ -27,7 +27,7 @@ namespace Waffle.Pages.Article
             {
                 ViewData["Title"] = work.Name;
             }
-            var articles = await _catalogService.ArticleListAsync(new BasicFilterOptions
+            var articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
             {
                 PageSize = 12,
                 Current = 1

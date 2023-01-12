@@ -1,18 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Helpers;
+using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Google.Models;
-using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
+using Waffle.Models.Catalogs;
+using Waffle.Models.Components;
 
 namespace Waffle.Pages.Search
 {
     public class IndexModel : PageModel
     {
-        private readonly IGoogleService _googleService;
-        public IndexModel(IGoogleService googleService)
+        private readonly ICatalogService _catalogService;
+        public IndexModel(ICatalogService catalogService)
         {
-            _googleService = googleService;
+            _catalogService = catalogService;
             FilterOptions = new SearchFilterOptions
             {
                 Current = 1,
@@ -22,7 +24,7 @@ namespace Waffle.Pages.Search
 
         [BindProperty(SupportsGet = true)]
         public SearchFilterOptions FilterOptions { get; set; }
-        public List<ChannelItem>? Keys;
+        public ListResult<ArticleListItem>? Articles;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -31,10 +33,42 @@ namespace Waffle.Pages.Search
                 return NotFound();
             }
             ViewData["Title"] = FilterOptions.SearchTerm;
-            var response = await _googleService.GetDailyTrendingAsync();
-            var trend = XmlHelper.Deserialize<TrendModel>(response);
-            Keys = trend?.Channel?.Item;
+            Articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
+            {
+                Current = FilterOptions.Current,
+                PageSize = 10,
+                Name = FilterOptions.SearchTerm
+            });
             return Page();
+        }
+
+        public List<Breadcrumb> GetBreadcrumbs()
+        {
+            var breadcrumb = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Url = "/",
+                    Name = "Home",
+                    Position = 1,
+                    Icon = "fas fa-home"
+                },
+                new Breadcrumb
+                {
+                    Url = "/search",
+                    Name = "Search",
+                    Position = 2,
+                    Icon = "fas fa-search"
+                },
+                new Breadcrumb
+                {
+                    Url = $"/search?searchTerm={FilterOptions.SearchTerm}",
+                    Name = FilterOptions.SearchTerm,
+                    Position = 3,
+                    Icon = "fas fa-tags"
+                }
+            };
+            return breadcrumb;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Waffle.Pages.Article
 
         public async Task OnGetAsync()
         {
-            var articles = await _catalogService.ArticleListAsync(new BasicFilterOptions
+            var articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
             {
                 Current = 1,
                 PageSize = 12

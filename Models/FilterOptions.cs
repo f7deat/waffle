@@ -44,4 +44,9 @@ namespace Waffle.Models
     {
 
     }
+
+    public class ArticleFilterOptions : FilterOptions
+    {
+        public string? Name { get; set; }
+    }
 }

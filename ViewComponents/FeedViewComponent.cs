@@ -24,7 +24,7 @@ namespace Waffle.ViewComponents
             {
                 return View(Empty.DefaultView);
             }
-            var articles = await _catalogService.ArticleListAsync(new BasicFilterOptions
+            var articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
             {
                 PageSize = 12,
                 Current = 1
