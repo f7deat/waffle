@@ -4,12 +4,12 @@
 }
 @if (images != null)
 {
-    <div class="row" data-masonry='{"percentPosition": true }'>
+    <div class="masonry">
         @await foreach (var image in images)
         {
             if (image.FileContent != null)
             {
-                <div class="col-sm-6 col-lg-4 mb-4">
+                <div class="break-inside p-4 my-2 bg-gray-100 rounded">
                     <div class="card wf-card">
                         <img src="@image.FileContent.Url" alt="@image.Title" class="@image.ClassName" />
                         <div class="card-img-overlay">
@@ -17,10 +17,10 @@
                             <p class="card-text">@image.Description</p>
                         </div>
                         <div class="wf-card-action">
-                            <button class="btn btn-sm btn-primary" type="button">
+                            <button class="btn-action" type="button">
                                 <i class="fas fa-search-plus"></i>
                             </button>
-                            <a class="btn btn-sm btn-primary" href="@image.FileContent.Url" target="_blank">
+                            <a class="btn-action" href="@image.FileContent.Url" target="_blank">
                                 <i class="fas fa-download"></i>
                             </a>
                         </div>
@@ -31,4 +31,3 @@
     </div>
 }
 <script src="~/js/lookbook.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>

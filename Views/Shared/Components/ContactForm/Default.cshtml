@@ -12,22 +12,22 @@
                     <label class="form-label">@Model.Labels.Name</label>
                     <input class="form-control" type="text" name="name" id="contact-input-name" required />
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+                <div class="wf-row gap-4">
+                    <div class="wf-col mb-3">
                         <label class="form-label">@Model.Labels.Email</label>
                         <input class="form-control" type="email" name="email" id="contact-input-email" required />
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="wf-col mb-3">
                         <label class="form-label">@Model.Labels.PhoneNumber</label>
                         <input class="form-control" type="tel" name="phoneNumber" id="contact-input-phoneNumber" required />
                     </div>
+                </div>
                     <div class="mb-3">
                         <label class="form-label">@Model.Labels.Address</label>
                         <input class="form-control" type="text" name="address" />
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+                <div class="wf-row gap-4">
+                    <div class="wf-col mb-3">
                         <label class="form-label">Job type</label>
                         <select class="form-control" name="JobType">
                             <option value="decking">Decking</option>
@@ -36,7 +36,7 @@
                             <option value="other">Other</option>
                         </select>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="wf-col mb-3">
                         <label class="form-label">Appointment</label>
                         <input type="text" class="form-control" id="datetimepicker" name="Appointment">
                     </div>
@@ -45,7 +45,7 @@
                     <label class="form-label">@Model.Labels.Note</label>
                     <textarea class="form-control" name="note" id="contact-input-note"></textarea>
                 </div>
-                <button class="btn btn-primary" type="submit" id="contact-btn-submit"><i class="far fa-paper-plane me-2"></i>Submit</button>
+                <button class="btn btn-primary" type="submit" id="contact-btn-submit"><i class="far fa-paper-plane mr-2"></i>Submit</button>
                 <button class="btn btn-secondary" type="reset">Reset</button>
             </form>
         </div>
