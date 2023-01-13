@@ -1,28 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using Waffle.Data;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
     public class CardViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
-        public CardViewComponent(ApplicationDbContext context)
+        private readonly IWorkService _workService;
+        public CardViewComponent(IWorkService workService)
         {
-            _context = context;
+            _workService = workService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
-            var workContent = await _context.WorkContents.FirstOrDefaultAsync(x => x.Id == id);
-            if (workContent != null && !string.IsNullOrEmpty(workContent.Arguments))
+            var card = await _workService.GetAsync<Card>(id);
+            if (card is null)
             {
-                var card = JsonSerializer.Deserialize<Card>(workContent.Arguments);
-                ViewBag.Data = card;
+                return View(Empty.DefaultView);
             }
-            return View();
+            return View(card);
         }
     }
 }

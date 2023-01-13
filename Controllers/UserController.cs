@@ -11,8 +11,8 @@ using Waffle.Models;
 
 namespace Waffle.Controllers
 {
-    [Route("api/[controller]")]
     [Authorize]
+    [Route("api/[controller]")]
     public class UserController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;

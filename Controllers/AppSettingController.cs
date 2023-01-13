@@ -110,7 +110,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("footer/{id}")]
-        public async Task<IActionResult> GetFooterAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetFooterAsync(id));
+        public async Task<IActionResult> GetFooterAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Footer>(id));
 
         [HttpPost("footer/save")]
         public async Task<IActionResult> SaveFooterAsync([FromBody] Footer args) => Ok(await _appSettingService.SaveFooterAsync(args));
@@ -119,7 +119,7 @@ namespace Waffle.Controllers
         public IActionResult HeaderTemplates() => Ok(Header.Templates);
 
         [HttpGet("header/{id}")]
-        public async Task<IActionResult> HeaderGetAsync([FromRoute] Guid id) => Ok(await _appSettingService.HeaderGetAsync(id));
+        public async Task<IActionResult> HeaderGetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Header>(id));
 
         [HttpPost("header/save")]
         public async Task<IActionResult> HeaderSaveAsync([FromBody] Header args) => Ok(await _appSettingService.HeaderSaveAsync(args));

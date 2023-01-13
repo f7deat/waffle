@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -13,6 +14,7 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class BackupController : Controller
     {
@@ -183,6 +185,7 @@ namespace Waffle.Controllers
             await EnsureComponent(nameof(Column));
             await EnsureComponent(nameof(Image));
             await EnsureComponent(nameof(Trend));
+            await EnsureComponent(nameof(Navbar));
         }
 
         private async Task EnsureComponent(string name)

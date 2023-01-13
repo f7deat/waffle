@@ -34,24 +34,14 @@ namespace Waffle.Core.Services.AppSettings
             return appSetting;
         }
 
-        public async Task<Footer?> GetFooterAsync(Guid id)
+        public async Task<T?> GetAsync<T>(Guid id)
         {
             var setting = await _context.AppSettings.FindAsync(id);
             if (string.IsNullOrEmpty(setting?.Value))
             {
                 return default;
             }
-            return JsonSerializer.Deserialize<Footer>(setting.Value);
-        }
-
-        public async Task<Header?> HeaderGetAsync(Guid id)
-        {
-            var setting = await _context.AppSettings.FindAsync(id);
-            if (string.IsNullOrEmpty(setting?.Value))
-            {
-                return default;
-            }
-            return JsonSerializer.Deserialize<Header>(setting.Value);
+            return JsonSerializer.Deserialize<T>(setting.Value);
         }
 
         public async Task<IdentityResult> HeaderLogoAsync(Header args)

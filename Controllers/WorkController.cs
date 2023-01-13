@@ -228,19 +228,7 @@ namespace Waffle.Controllers
         #region Custom components
 
         [HttpGet("navbar/{id}")]
-        public async Task<IActionResult> GetNavbarAsync([FromRoute] Guid id)
-        {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null)
-            {
-                return NotFound();
-            }
-            if (string.IsNullOrEmpty(workContent.Arguments))
-            {
-                return NoContent();
-            }
-            return Ok(_workService.Get<Navbar>(workContent.Arguments));
-        }
+        public async Task<IActionResult> GetNavbarAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Navbar>(id));
 
         [HttpPost("navbar/save")]
         public async Task<IActionResult> SaveNavbarAsync([FromBody] Navbar model)
@@ -258,56 +246,20 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
-        [HttpPost("save/title")]
-        public async Task<IActionResult> SaveTitleAsync([FromBody] UpdateTitleOption model)
-        {
-            if (model is null)
-            {
-                return BadRequest();
-            }
-            var title = await _context.WorkContents.FindAsync(model.WorkId);
-            if (title is null)
-            {
-                return Ok(IdentityResult.Failed());
-            }
-            var option = new Title
-            {
-                Label = model.Label
-            };
-            var args = JsonSerializer.Serialize(option);
-            title.Arguments = args;
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
+        [HttpPost("navbar/setting/save")]
+        public async Task<IActionResult> NavbarSettingSaveAsync([FromBody] Navbar args) => Ok(await _workService.NavbarSettingSaveAsync(args));
 
         [HttpPost("contact-form/save")]
         public async Task<IActionResult> SaveContactFormAsync([FromBody] ContactForm model) => Ok(await _workService.SaveContactFormAsync(model));
 
         [HttpGet("row/{id}")]
-        public async Task<IActionResult> GetRowAsync([FromRoute] Guid id) => Ok(await _workService.GetRowAsync(id));
+        public async Task<IActionResult> GetRowAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Row>(id));
 
         [HttpPost("row/save")]
         public async Task<IActionResult> SaveRowAsync([FromBody] Row row) => Ok(await _workService.SaveRowAsync(row));
 
         [HttpGet("contact-form/{id}")]
-        public async Task<IActionResult> GetContactFormAsync([FromRoute] Guid id)
-        {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null)
-            {
-                return BadRequest();
-            }
-            if (string.IsNullOrEmpty(workContent.Arguments))
-            {
-                return Ok();
-            }
-            var contactForm = _workService.Get<ContactForm>(workContent.Arguments);
-            if (contactForm is not null)
-            {
-                contactForm.Name = workContent.Name;
-            }
-            return Ok(contactForm);
-        }
+        public async Task<IActionResult> GetContactFormAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<ContactForm>(id));
 
         [HttpPost("column/add")]
         public async Task<IActionResult> ColumnAddAsync([FromBody] Column column) => Ok(await _workService.ColumnAddAsync(column));
@@ -315,11 +267,6 @@ namespace Waffle.Controllers
         [HttpGet("column/list/{id}")]
         public async Task<IActionResult> GetColumnListAsync([FromRoute] Guid id)
         {
-            var row = await _context.WorkContents.FindAsync(id);
-            if (row is null)
-            {
-                return Ok(IdentityResult.Failed());
-            }
             var query = _context.WorkContents.Where(x => x.ParentId == id);
             return Ok(new
             {
@@ -329,30 +276,13 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("column/{id}")]
-        public async Task<IActionResult> GetColumnAsync([FromRoute] Guid id) => Ok(await _workService.GetColumnAsync(id));
+        public async Task<IActionResult> GetColumnAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Column>(id));
 
         [HttpPost("column/save")]
         public async Task<IActionResult> SaveColumnAsync([FromBody] Column item) => Ok(await _workService.SaveColumnAsync(item));
 
         [HttpGet("swiper/{id}")]
-        public async Task<IActionResult> GetSwiperAsync([FromRoute] Guid id)
-        {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null)
-            {
-                return BadRequest();
-            }
-            var swiper = new Swiper();
-            if (!string.IsNullOrEmpty(workContent.Arguments))
-            {
-                swiper = _workService.Get<Swiper>(workContent.Arguments);
-            }
-            if (swiper is not null)
-            {
-                swiper.Name = workContent.Name;
-            }
-            return Ok(swiper);
-        }
+        public async Task<IActionResult> GetSwiperAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Swiper>(id));
 
         [HttpPost("swiper/add-image")]
         public async Task<IActionResult> AddImageSync([FromBody] AddSwiperItem model)
@@ -381,7 +311,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("block-editor/{id}")]
-        public async Task<IActionResult> GetBlockEditorAsync([FromRoute] Guid id) => Ok(await _workService.BlogEditorGetAsync(id));
+        public async Task<IActionResult> GetBlockEditorAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<List<BlockEditorBlock>>(id));
 
         [HttpGet("block-editor/fetch-url")]
         public IActionResult BlockEditorFetchUrl([FromQuery] string url)
@@ -435,19 +365,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("card/{id}")]
-        public async Task<IActionResult> GetCardAsync([FromRoute] Guid id)
-        {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null)
-            {
-                return BadRequest();
-            }
-            if (!string.IsNullOrEmpty(workContent.Arguments))
-            {
-                return Ok(_workService.Get<Card>(workContent.Arguments));
-            }
-            return Ok();
-        }
+        public async Task<IActionResult> GetCardAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Card>(id));
 
         [HttpPost("lookbook/add")]
         public async Task<IActionResult> AddLookBookAsync([FromBody] WorkContent model)
@@ -487,7 +405,7 @@ namespace Waffle.Controllers
         public async Task<IActionResult> SaveTagAsync([FromBody] Tag tag) => Ok(await _workService.SaveTagAsync(tag));
 
         [HttpGet("blogger/{id}")]
-        public async Task<IActionResult> BloggerGetAsync([FromRoute] Guid id) => Ok(await _workService.BloggerGetAsync(id));
+        public async Task<IActionResult> BloggerGetAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Blogger>(id));
 
         [HttpPost("blogger/save")]
         public async Task<IActionResult> BloggerSaveAsync([FromBody] Blogger model) => Ok(await _workService.BloggerSaveAsync(model));

@@ -33,26 +33,6 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
-        public async Task<List<BlockEditorBlock>?> BlogEditorGetAsync(Guid id)
-        {
-            var work = await _context.WorkContents.FindAsync(id);
-            if (string.IsNullOrEmpty(work?.Arguments))
-            {
-                return default;
-            }
-            return JsonSerializer.Deserialize<List<BlockEditorBlock>?>(work.Arguments);
-        }
-
-        public async Task<Blogger?> BloggerGetAsync(Guid id)
-        {
-            var work = await _context.WorkContents.FindAsync(id);
-            if (string.IsNullOrEmpty(work?.Arguments))
-            {
-                return default;
-            }
-            return JsonSerializer.Deserialize<Blogger?>(work.Arguments);
-        }
-
         public async Task<IdentityResult> BloggerSaveAsync(Blogger model)
         {
             var work = await _context.WorkContents.FindAsync(model.Id);
@@ -104,28 +84,34 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
-        public T? Get<T>(string content) => JsonSerializer.Deserialize<T>(content);
-
-        public async Task<WorkContent?> GetAsync(Guid id) => await _context.WorkContents.FindAsync(id);
-
-        public async Task<Column?> GetColumnAsync(Guid id)
+        public async Task<T?> GetAsync<T>(Guid id)
         {
             var work = await _context.WorkContents.FindAsync(id);
             if (string.IsNullOrEmpty(work?.Arguments))
             {
                 return default;
             }
-            return Get<Column>(work.Arguments);
+            return JsonSerializer.Deserialize<T>(work.Arguments);
         }
 
-        public async Task<Row?> GetRowAsync(Guid id)
+        public async Task<IdentityResult> NavbarSettingSaveAsync(Navbar args)
         {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (string.IsNullOrEmpty(workContent?.Arguments))
+            var navbar = await GetAsync<Navbar>(args.Id);
+            if (navbar == null)
             {
-                return default;
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Navbar not found"
+                });
             }
-            return Get<Row>(workContent.Arguments);
+            navbar.Layout = args.Layout;
+            var work = await _context.WorkContents.FindAsync(args.Id);
+            if (work == null)
+            {
+                return IdentityResult.Failed();
+            }
+            work.Arguments = JsonSerializer.Serialize(navbar);
+            return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> SaveColumnAsync(Column item)

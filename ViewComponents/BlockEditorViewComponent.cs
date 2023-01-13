@@ -1,25 +1,23 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Waffle.Data;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
     public class BlockEditorViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
-        public BlockEditorViewComponent(ApplicationDbContext context)
+        private readonly IWorkService _workService;
+        public BlockEditorViewComponent(IWorkService workService)
         {
-            _context = context;
+            _workService = workService;
         }
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (string.IsNullOrEmpty(workContent?.Arguments))
+            var blockEditor = await _workService.GetAsync<List<BlockEditorBlock>>(id);
+            if (blockEditor is null)
             {
                 return View(Empty.DefaultView);
             }
-            var blockEditor = JsonSerializer.Deserialize<List<BlockEditorBlock>>(workContent.Arguments);
             return View(blockEditor);
         }
     }

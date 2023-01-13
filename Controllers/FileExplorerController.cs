@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
@@ -8,6 +9,7 @@ using Waffle.Models;
 
 namespace Waffle.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class FileExplorerController : Controller
     {

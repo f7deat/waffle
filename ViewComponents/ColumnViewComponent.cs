@@ -19,7 +19,7 @@ namespace Waffle.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
-            var model = await _workService.GetColumnAsync(id);
+            var model = await _workService.GetAsync<Column>(id);
             if (model != null)
             {
                 var query = from b in _context.WorkContents

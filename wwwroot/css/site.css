@@ -219,7 +219,7 @@ p {
     display: flex;
 }
 
-.hidden {
+.hidden, .collapse:not(.show) {
     display: none;
 }
 

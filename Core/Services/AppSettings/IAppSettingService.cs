@@ -9,8 +9,7 @@ namespace Waffle.Core.Services.AppSettings
     public interface IAppSettingService
     {
         Task<AppSetting> EnsureSettingAsync(string name);
-        Task<Footer?> GetFooterAsync(Guid id);
-        Task<Header?> HeaderGetAsync(Guid id);
+        Task<T?> GetAsync<T>(Guid id);
         Task<IdentityResult> HeaderLogoAsync(Header args);
         Task<IdentityResult> HeaderSaveAsync(Header args);
         Task<ListResult<AppSetting>> ListAsync();

@@ -13,7 +13,11 @@ namespace Waffle.Models.Components
         public bool Container { get; set; }
         [JsonPropertyName("navItems")]
         public List<NavItem> NavItems { get; set; }
+
+        [JsonPropertyName("layout")]
+        public Layout Layout { get; set; }
     }
+
     public class NavItem
     {
         public NavItem()
@@ -25,5 +29,11 @@ namespace Waffle.Models.Components
         public string Url { get; set; }
         [JsonPropertyName("name")]
         public string Name { get; set; }
+    }
+
+    public enum Layout
+    {
+        Default,
+        Vertical
     }
 }
