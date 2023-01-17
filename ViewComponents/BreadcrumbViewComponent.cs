@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models.Components;
 
@@ -9,11 +7,11 @@ namespace Waffle.ViewComponents
 {
     public class BreadcrumbViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
         private readonly ILocalizationService _localizationService;
-        public BreadcrumbViewComponent(ApplicationDbContext context, ILocalizationService localizationService)
+        private readonly ICatalogService _catalogService;
+        public BreadcrumbViewComponent(ICatalogService catalogService, ILocalizationService localizationService)
         {
-            _context = context;
+            _catalogService = catalogService;
             _localizationService = localizationService;
         }
 
@@ -30,19 +28,19 @@ namespace Waffle.ViewComponents
                 }
             };
 
-            var catalog = await _context.Catalogs.FindAsync(catalogId);
+            var catalog = await _catalogService.FindAsync(catalogId);
             if (catalog != null)
             {
                 breadcrumb.Add(new Breadcrumb
                 {
                     Url = GetMasterUrl(catalog.Type),
-                    Name = GetDisplayName(catalog),
+                    Name = await _localizationService.GetAsync(catalog.Type.ToString()),
                     Position = breadcrumb.Count + 1
                 });
 
                 if (catalog.ParentId != null)
                 {
-                    var parrent = await _context.Catalogs.FindAsync(catalog.ParentId);
+                    var parrent = await _catalogService.FindAsync(catalog.ParentId ?? Guid.Empty);
                     if (parrent != null)
                     {
                         breadcrumb.Add(new Breadcrumb
@@ -70,15 +68,6 @@ namespace Waffle.ViewComponents
                 return $"/article/{catalog.NormalizedName}";
             }
             return $"/page/{catalog.NormalizedName}";
-        }
-
-        private async Task<string> GetDisplayName(Catalog catalog)
-        {
-            if (catalog.Type == CatalogType.Article)
-            {
-                return await _localizationService.GetAsync(CatalogType.Article.ToString());
-            }
-            return "Pages";
         }
 
         private static string GetMasterUrl(CatalogType type)

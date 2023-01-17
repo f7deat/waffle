@@ -11,13 +11,11 @@ namespace Waffle.Core.Interfaces.IService
         Task<PayloadResult<Catalog>> AddAsync(Catalog catalog);
         Task<Catalog> EnsureDataAsync(string name);
         Task<Catalog?> GetByNameAsync(string normalizedName);
-        Task<PageVewModel> GetPageDataAsync(Catalog catalog);
-        Task<IEnumerable<ComponentListItem>> GetHeaderAsync();
-        Task<IEnumerable<ComponentListItem>> GetFooterAsync();
         Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId);
         Task<IdentityResult> ArticleSaveAsync(Catalog args);
         Task<IdentityResult> UpdateThumbnailAsync(Catalog args);
         Task<ListResult<ArticleListItem>> ArticleListAsync(ArticleFilterOptions filterOptions);
         Task<List<ArticleListItem>> ArticleRelatedListAsync(Guid id);
+        Task<Catalog?> FindAsync(Guid id);
     }
 }

@@ -7,8 +7,6 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Catalogs;
-using Waffle.Models.Components;
-using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services
 {
@@ -79,18 +77,6 @@ namespace Waffle.Core.Services
 
         public async Task<Catalog?> GetByNameAsync(string normalizedName) => await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName));
 
-        public async Task<IEnumerable<ComponentListItem>> GetFooterAsync()
-        {
-            var catalog = await EnsureDataAsync(nameof(Footer));
-            return await ListComponentAsync(catalog.Id);
-        }
-
-        public async Task<IEnumerable<ComponentListItem>> GetHeaderAsync()
-        {
-            var catalog = await EnsureDataAsync(nameof(Header));
-            return await ListComponentAsync(catalog.Id);
-        }
-
         public async Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId)
         {
             var query = from a in _context.WorkContents
@@ -104,33 +90,6 @@ namespace Waffle.Core.Services
                             Id = a.Id
                         };
             return await query.ToListAsync();
-        }
-
-        public async Task<PageVewModel> GetPageDataAsync(Catalog catalog)
-        {
-            var workItems = from a in _context.WorkItems
-                            join b in _context.WorkContents on a.WorkContentId equals b.Id
-                            join c in _context.Components on b.ComponentId equals c.Id
-                            where a.CatalogId == catalog.Id
-                            orderby a.SortOrder ascending
-                            select new ComponentListItem
-                            {
-                                Id = a.WorkContentId,
-                                Name = c.NormalizedName
-                            };
-
-            var settings = new CatalogSetting();
-            if (!string.IsNullOrEmpty(catalog.Setting))
-            {
-                settings = JsonSerializer.Deserialize<CatalogSetting>(catalog.Setting) ?? new CatalogSetting();
-            }
-
-            return new PageVewModel
-            {
-                Id = catalog.Id,
-                ComponentListItems = await workItems.ToListAsync(),
-                Settings = settings
-            };
         }
 
         public async Task<IdentityResult> ArticleSaveAsync(Catalog args)
@@ -207,5 +166,7 @@ namespace Waffle.Core.Services
                         };
             return await query.Take(4).ToListAsync();
         }
+
+        public async Task<Catalog?> FindAsync(Guid id) => await _context.Catalogs.FindAsync(id);
     }
 }

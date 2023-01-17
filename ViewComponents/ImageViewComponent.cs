@@ -1,31 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
     public class ImageViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
-        public ImageViewComponent(ApplicationDbContext context)
+        private readonly IWorkService _workService;
+        public ImageViewComponent(IWorkService workService)
         {
-            _context = context;
+            _workService = workService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid workContentId)
+        public async Task<IViewComponentResult> InvokeAsync(Guid workId)
         {
-            var query = from a in _context.WorkItems
-                        join b in _context.WorkContents on a.WorkContentId equals b.Id
-                        where a.WorkContentId == workContentId
-                        orderby a.SortOrder ascending
-                        select b.Arguments;
-
-            var image = await query.FirstOrDefaultAsync();
-            if (image == null) return View();
-
-            return View(JsonSerializer.Deserialize<Image>(image));
+            var image = await _workService.GetAsync<Image>(workId);
+            if (image is null)
+            {
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = workId.ToString()
+                });
+            }
+            return View(image);
         }
     }
 }
