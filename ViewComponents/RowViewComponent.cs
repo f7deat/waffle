@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
@@ -20,7 +21,10 @@ namespace Waffle.ViewComponents
             var row = await _workService.GetAsync<Row>(id);
             if (row is null)
             {
-                return View(Empty.DefaultView);
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = id.ToString()
+                });
             }
             row.Columns = await _context.WorkContents.Where(x => x.ParentId == id && x.Active).Select(x => x.Id).ToListAsync();
             return View(row);

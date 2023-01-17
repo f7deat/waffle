@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models.Components;
@@ -9,9 +10,11 @@ namespace Waffle.ViewComponents
     public class BreadcrumbViewComponent : ViewComponent
     {
         private readonly ApplicationDbContext _context;
-        public BreadcrumbViewComponent(ApplicationDbContext context)
+        private readonly ILocalizationService _localizationService;
+        public BreadcrumbViewComponent(ApplicationDbContext context, ILocalizationService localizationService)
         {
             _context = context;
+            _localizationService = localizationService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Guid catalogId)
@@ -21,7 +24,7 @@ namespace Waffle.ViewComponents
                 new Breadcrumb
                 {
                     Url = "/",
-                    Name = "Home",
+                    Name = await _localizationService.GetAsync("home"),
                     Position = 1,
                     Icon = "fas fa-home"
                 }
@@ -69,11 +72,11 @@ namespace Waffle.ViewComponents
             return $"/page/{catalog.NormalizedName}";
         }
 
-        private static string GetDisplayName(Catalog catalog)
+        private async Task<string> GetDisplayName(Catalog catalog)
         {
             if (catalog.Type == CatalogType.Article)
             {
-                return "Articles";
+                return await _localizationService.GetAsync(CatalogType.Article.ToString());
             }
             return "Pages";
         }

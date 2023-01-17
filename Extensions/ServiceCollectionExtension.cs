@@ -14,6 +14,7 @@ namespace Waffle.Extensions
             services.AddScoped<IComponentService, ComponentService>();
             services.AddScoped<IFileContentService, FileContentService>();
             services.AddScoped<IFileExplorerService, FileExplorerService>();
+            services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWorkService, WorkService>();
         }

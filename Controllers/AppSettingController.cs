@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -11,6 +12,7 @@ using Waffle.Models.Layout;
 
 namespace Waffle.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class AppSettingController : Controller
     {

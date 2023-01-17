@@ -6,12 +6,12 @@ namespace Waffle.Entities
     {
         public Localization()
         {
-            Language = string.Empty;
+            Language = "vi-VN";
             Key = string.Empty;
         }
-        [Required]
+        [Required, StringLength(10)]
         public string Language { get; set; }
-        [Required]
+        [Required, StringLength(100)]
         public string Key { get; set; }
         public string? Value { get; set; }
     }

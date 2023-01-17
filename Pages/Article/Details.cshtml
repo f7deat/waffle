@@ -24,6 +24,11 @@
                     </div>
                 }
             </div>
+
+            @if (Model.Tags != null && Model.Tags.Any())
+            {
+                @await Component.InvokeAsync("Related", Model.Tags.First().Id)
+            }
         }
     </div>
 </main>

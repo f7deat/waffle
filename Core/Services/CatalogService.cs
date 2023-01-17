@@ -188,5 +188,24 @@ namespace Waffle.Core.Services
                 })
                 .ToListAsync(), await query.CountAsync());
         }
+
+        public async Task<List<ArticleListItem>> ArticleRelatedListAsync(Guid workId)
+        {
+            var query = from a in _context.WorkItems
+                        join b in _context.WorkContents on a.CatalogId equals b.Id
+                        join c in _context.Catalogs on a.CatalogId equals c.Id
+                        where a.WorkContentId == workId && c.Active
+                        select new ArticleListItem
+                        {
+                            Id = c.Id,
+                            Name = c.Name,
+                            Description = c.Description,
+                            ModifiedDate = c.ModifiedDate,
+                            NomalizedName = c.NormalizedName,
+                            Thumbnail = c.Thumbnail,
+                            ViewCount = c.ViewCount
+                        };
+            return await query.Take(4).ToListAsync();
+        }
     }
 }
