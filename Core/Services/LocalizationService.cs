@@ -54,26 +54,32 @@ namespace Waffle.Core.Services
         {
             var lang = _configuration.GetValue<string>("language");
             var i18n = await _context.Localizations.FirstOrDefaultAsync(x => x.Key.Equals(key.ToLower()) && x.Language.Equals(lang));
-            if (i18n == null)
+            if (i18n is null)
             {
-                return key;
+                i18n = new Localization
+                {
+                    Key = key,
+                    Language = lang,
+                };
+                await _context.AddAsync(i18n);
+                await _context.SaveChangesAsync();
             }
             return i18n.Value ?? key;
         }
 
         public async Task<Localization?> GetAsync(Guid id) => await _context.Localizations.FindAsync(id);
 
-        public async Task<ListResult<Localization>> GetListAsync()
+        public async Task<ListResult<Localization>> GetListAsync(BasicFilterOptions filterOptions)
         {
             var lang = _configuration.GetValue<string>("language");
             var query = _context.Localizations.Where(x => x.Language.Equals(lang)).OrderBy(x => x.Key);
-            return ListResult<Localization>.Success(await query.ToListAsync(), await query.CountAsync());
+            return ListResult<Localization>.Success(await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(), await query.CountAsync());
         }
 
         public async Task<IdentityResult> SaveAsync(Localization args)
         {
             var localization = await _context.Localizations.FindAsync(args.Id);
-            if (localization is null || string.IsNullOrWhiteSpace(args.Value))
+            if (localization is null)
             {
                 return IdentityResult.Failed();
             }

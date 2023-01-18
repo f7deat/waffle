@@ -37,7 +37,7 @@ namespace Waffle.Models
 
     public class WorkFilterOptions : FilterOptions
     {
-
+        public string? Name { get; set; }
     }
 
     public class BasicFilterOptions : FilterOptions
@@ -48,5 +48,11 @@ namespace Waffle.Models
     public class ArticleFilterOptions : FilterOptions
     {
         public string? Name { get; set; }
+    }
+
+    public class ArticleRelatedFilterOption : FilterOptions
+    {
+        public Guid WorkId { get; set; }
+        public Guid CatalogId { get; set; }
     }
 }

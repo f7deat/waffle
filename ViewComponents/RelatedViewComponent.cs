@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
@@ -11,14 +13,23 @@ namespace Waffle.ViewComponents
         {
             _catalogService = catalogService;
         }
-        public async Task<IViewComponentResult> InvokeAsync(Guid workId)
+
+        public async Task<IViewComponentResult> InvokeAsync(WorkItem item)
         {
-            var articles = await _catalogService.ArticleRelatedListAsync(workId);
-            if (articles == null || !articles.Any())
+            var articles = await _catalogService.ArticleRelatedListAsync(new ArticleRelatedFilterOption
             {
-                return View(Empty.DefaultView);
+                CatalogId = item.CatalogId,
+                PageSize = 4,
+                WorkId = item.WorkContentId
+            });
+            if (articles?.Data == null || !articles.Data.Any())
+            {
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = item.WorkContentId.ToString()
+                });
             }
-            return View(articles);
+            return View(articles.Data);
         }
     }
 }

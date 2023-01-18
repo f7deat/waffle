@@ -94,6 +94,10 @@ h5, .h5 {
     font-size: 1.125rem;
 }
 
+img {
+    max-width: 100%;
+}
+
 input, textarea, select {
     font-size: 100%;
     font-family: inherit;
@@ -378,6 +382,25 @@ p {
     margin-bottom: 1rem;
 }
 
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.wf-delimiter {
+    line-height: 1.6em;
+    width: 100%;
+    text-align: center;
+}
+
+    .wf-delimiter:before {
+        display: inline-block;
+        content: "***";
+        font-size: 30px;
+        line-height: 65px;
+        height: 30px;
+        letter-spacing: 0.2em;
+    }
+
 .wf-h1 {
     font-size: 2rem;
 }
@@ -448,11 +471,13 @@ p {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .hover\:bg-gray-100:hover {
     background-color: var(--gray-100);
 }
-
-
 
 @media screen and (min-width: 640px) {
     .container {
@@ -482,8 +507,8 @@ p {
         display: none;
     }
 
-    .md\:grid-cols-4 {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+    .md\:grid {
+        display: grid;
     }
 
     .md\:w-1\/6 {

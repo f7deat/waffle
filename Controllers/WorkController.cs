@@ -83,6 +83,9 @@ namespace Waffle.Controllers
             });
         }
 
+        [HttpPost("item/add")]
+        public async Task<IActionResult> ItemAddAsync([FromBody] WorkItem args) => Ok(await _workService.ItemAddAsync(args));
+
         [HttpPost("child/add")]
         public async Task<IActionResult> AddChildAsync([FromBody] WorkContent workContent)
         {
@@ -400,6 +403,9 @@ namespace Waffle.Controllers
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        [HttpGet("tag/list")]
+        public async Task<IActionResult> TagListAsync(WorkFilterOptions filterOptions) => Ok(await _workService.TagListAsync(filterOptions));
 
         [HttpPost("tag/save")]
         public async Task<IActionResult> SaveTagAsync([FromBody] Tag tag) => Ok(await _workService.SaveTagAsync(tag));

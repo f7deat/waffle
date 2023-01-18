@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.Core.Services
@@ -84,6 +86,8 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
+        public async Task<WorkContent?> FindAsync(Guid id) => await _context.WorkContents.FindAsync(id);
+
         public async Task<T?> GetAsync<T>(Guid id)
         {
             var work = await _context.WorkContents.FindAsync(id);
@@ -92,6 +96,17 @@ namespace Waffle.Core.Services
                 return default;
             }
             return JsonSerializer.Deserialize<T>(work.Arguments);
+        }
+
+        public async Task<IdentityResult> ItemAddAsync(WorkItem args)
+        {
+            if (await _context.WorkItems.AnyAsync(x => x.CatalogId == args.CatalogId && x.WorkContentId == args.WorkContentId))
+            {
+                return IdentityResult.Failed();
+            }
+            await _context.WorkItems.AddAsync(args);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> NavbarSettingSaveAsync(Navbar args)
@@ -169,6 +184,20 @@ namespace Waffle.Core.Services
             work.Arguments = JsonSerializer.Serialize(tag);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
+        }
+
+        public async Task<IEnumerable<Option>> TagListAsync(WorkFilterOptions filterOptions)
+        {
+            var query = from a in _context.Components
+                        join b in _context.WorkContents on a.Id equals b.ComponentId
+                        where a.NormalizedName.Equals(nameof(Tag))
+                        orderby b.Name ascending
+                        select new Option
+                        {
+                            Label = b.Name,
+                            Value = b.Id.ToString()
+                        };
+            return await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
         }
     }
 }

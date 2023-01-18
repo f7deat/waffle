@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
-using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Catalogs;
 using Waffle.Models.Components;
@@ -12,9 +10,11 @@ namespace Waffle.Pages.Search
     public class IndexModel : PageModel
     {
         private readonly ICatalogService _catalogService;
-        public IndexModel(ICatalogService catalogService)
+        private readonly ILocalizationService _localizationService;
+        public IndexModel(ICatalogService catalogService, ILocalizationService localizationService)
         {
             _catalogService = catalogService;
+            _localizationService = localizationService;
             FilterOptions = new SearchFilterOptions
             {
                 Current = 1,
@@ -42,32 +42,35 @@ namespace Waffle.Pages.Search
             return Page();
         }
 
-        public List<Breadcrumb> GetBreadcrumbs()
+        public async Task<List<Breadcrumb>> GetBreadcrumbs()
         {
             var breadcrumb = new List<Breadcrumb>
             {
                 new Breadcrumb
                 {
                     Url = "/",
-                    Name = "Home",
+                    Name = await _localizationService.GetAsync("home"),
                     Position = 1,
                     Icon = "fas fa-home"
                 },
                 new Breadcrumb
                 {
                     Url = "/search",
-                    Name = "Search",
+                    Name = await _localizationService.GetAsync("search"),
                     Position = 2,
                     Icon = "fas fa-search"
-                },
-                new Breadcrumb
+                }
+            };
+            if (!string.IsNullOrWhiteSpace(FilterOptions.SearchTerm))
+            {
+                breadcrumb.Add(new Breadcrumb
                 {
                     Url = $"/search?searchTerm={FilterOptions.SearchTerm}",
                     Name = FilterOptions.SearchTerm,
                     Position = 3,
                     Icon = "fas fa-tags"
-                }
-            };
+                });
+            }
             return breadcrumb;
         }
     }

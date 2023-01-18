@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.Models;
 
 namespace Waffle.Controllers
 {
@@ -16,7 +17,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> GetListAsync() => Ok(await _localizationService.GetListAsync());
+        public async Task<IActionResult> GetListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _localizationService.GetListAsync(filterOptions));
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _localizationService.GetAsync(id));

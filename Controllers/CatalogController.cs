@@ -38,7 +38,7 @@ namespace Waffle.Controllers
         {
             var query = _context.Catalogs
                 .Where(x => x.Type == filterOptions.Type && (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active));
-            var data = await query.OrderBy(x => x.NormalizedName).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
+            var data = await query.OrderByDescending(x => x.ModifiedDate).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
             var total = await query.CountAsync();
             return Ok(new { data, total });
         }

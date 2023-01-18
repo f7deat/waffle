@@ -30,6 +30,10 @@
     align-items: center;
     border-radius: 9999px;
     background-color: white;
+    border: 1px solid var(--gray-200);
+}
+.btn-share:hover {
+    background-color: var(--gray-200);
 }
 .card-footer {
     background-color: var(--gray-100);

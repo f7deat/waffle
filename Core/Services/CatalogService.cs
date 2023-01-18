@@ -148,12 +148,12 @@ namespace Waffle.Core.Services
                 .ToListAsync(), await query.CountAsync());
         }
 
-        public async Task<List<ArticleListItem>> ArticleRelatedListAsync(Guid workId)
+        public async Task<ListResult<ArticleListItem>> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
         {
             var query = from a in _context.WorkItems
-                        join b in _context.WorkContents on a.CatalogId equals b.Id
-                        join c in _context.Catalogs on a.CatalogId equals c.Id
-                        where a.WorkContentId == workId && c.Active
+                        join b in _context.Catalogs on a.CatalogId equals b.Id into ac
+                        from c in ac.DefaultIfEmpty()
+                        where a.WorkContentId == filterOption.WorkId && a.CatalogId != filterOption.CatalogId && c.Active
                         select new ArticleListItem
                         {
                             Id = c.Id,
@@ -164,7 +164,7 @@ namespace Waffle.Core.Services
                             Thumbnail = c.Thumbnail,
                             ViewCount = c.ViewCount
                         };
-            return await query.Take(4).ToListAsync();
+            return ListResult<ArticleListItem>.Success(await query.OrderByDescending(x => x.ModifiedDate).Skip((filterOption.Current - 1) * filterOption.PageSize).Take(filterOption.PageSize).ToListAsync(), await query.CountAsync());
         }
 
         public async Task<Catalog?> FindAsync(Guid id) => await _context.Catalogs.FindAsync(id);

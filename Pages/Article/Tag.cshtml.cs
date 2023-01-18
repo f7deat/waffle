@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Data;
-using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Catalogs;
 
@@ -11,26 +7,28 @@ namespace Waffle.Pages.Article
 {
     public class TagModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
         private readonly ICatalogService _catalogService;
-        public TagModel(ApplicationDbContext context, ICatalogService catalogService)
+        private readonly IWorkService _workService;
+        public TagModel(IWorkService workService, ICatalogService catalogService)
         {
-            _context = context;
+            _workService = workService;
             _catalogService = catalogService;
         }
         public IEnumerable<ArticleListItem>? Articles;
 
         public async Task OnGetAsync(Guid id)
         {
-            var work = await _context.WorkContents.FindAsync(id);
+            var work = await _workService.FindAsync(id);
             if (work != null)
             {
                 ViewData["Title"] = work.Name;
             }
-            var articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
+            var articles = await _catalogService.ArticleRelatedListAsync(new ArticleRelatedFilterOption
             {
-                PageSize = 12,
-                Current = 1
+                CatalogId = Guid.Empty,
+                WorkId = id,
+                Current = 1,
+                PageSize = 12
             });
             Articles = articles.Data;
         }

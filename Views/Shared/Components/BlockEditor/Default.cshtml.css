@@ -13,20 +13,6 @@
     font-size: 1.125rem;
 }
 
-.wf-delimiter {
-    line-height: 1.6em;
-    width: 100%;
-    text-align: center;
-}
-.wf-delimiter:before {
-    display: inline-block;
-    content: "***";
-    font-size: 30px;
-    line-height: 65px;
-    height: 30px;
-    letter-spacing: 0.2em;
-}
-
 .wf-link-tool {
     position: relative;
 }
