@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
@@ -16,7 +17,10 @@ namespace Waffle.ViewComponents
             var navbar = await _workService.GetAsync<Navbar>(worId);
             if (navbar is null)
             {
-                return View(Empty.DefaultView);
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = worId.ToString()
+                });
             }
             if (navbar.Layout == Layout.Vertical)
             {

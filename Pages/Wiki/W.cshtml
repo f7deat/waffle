@@ -1,4 +1,8 @@
 ﻿@page "/w/index.php"
 @model Waffle.Pages.Wiki.WModel
 @{
+    ViewData["Title"] = Model.Title;
 }
+<div class="container">
+    <div class="title">@Model.Title</div>
+</div>
