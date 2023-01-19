@@ -5,12 +5,14 @@
 {
     <div class="mb-4">
         <div class="title">Daily Trending</div>
-        @foreach (var item in Model.Channel.Item)
-        {
-            <div class="px-4 py-2 hover:bg-gray-100 bg-white border-b">
-                <i class="fab fa-staylinked mr-2"></i>
-                <a href="/search?searchTerm=@item.Title" title="@item.Title">@item.Title</a>
-            </div>
-        }
+        <div class="shadow">
+            @foreach (var item in Model.Channel.Item)
+            {
+                <div class="px-4 py-2 hover:bg-gray-100 bg-white border-b">
+                    <i class="fab fa-staylinked mr-2"></i>
+                    <a href="/search?searchTerm=@item.Title" title="@item.Title">@item.Title</a>
+                </div>
+            }
+        </div>
     </div>
 }
