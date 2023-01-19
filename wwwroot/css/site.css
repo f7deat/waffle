@@ -317,6 +317,11 @@ p {
     padding-left: 1rem;
 }
 
+.py-1 {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
 .py-2 {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
@@ -430,6 +435,10 @@ p {
     border-radius: 0;
 }
 
+.rounded {
+    border-radius: 0.25rem;
+}
+
 .rounded-full {
     border-radius: 9999px;
 }
@@ -455,8 +464,16 @@ p {
     color: var(--primary);
 }
 
+.text-gray-500 {
+    color: var(--gray-500);
+}
+
 .gap-0 {
     gap: 0;
+}
+
+.gap-2 {
+    gap: 0.5rem;
 }
 
 .gap-4 {

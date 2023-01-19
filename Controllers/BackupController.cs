@@ -186,6 +186,7 @@ namespace Waffle.Controllers
             await EnsureComponent(nameof(Image));
             await EnsureComponent(nameof(Trend));
             await EnsureComponent(nameof(Navbar));
+            await EnsureComponent(nameof(ArticlePicker));
         }
 
         private async Task EnsureComponent(string name)

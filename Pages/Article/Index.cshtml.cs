@@ -14,18 +14,21 @@ namespace Waffle.Pages.Article
         public IndexModel(ICatalogService catalogService)
         {
             _catalogService = catalogService;
-        }
-
-        public IEnumerable<ArticleListItem>? Articles;
-
-        public async Task OnGetAsync()
-        {
-            var articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
+            FilterOptions = new ArticleFilterOptions
             {
                 Current = 1,
                 PageSize = 12
-            });
-            Articles = articles.Data;
+            };
+        }
+
+        [BindProperty(SupportsGet = true)]
+        public ArticleFilterOptions FilterOptions { get; set; }
+
+        public ListResult<ArticleListItem>? Articles;
+
+        public async Task OnGetAsync()
+        {
+            Articles = await _catalogService.ArticleListAsync(FilterOptions);
         }
     }
 }

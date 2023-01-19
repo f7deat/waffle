@@ -1,0 +1,14 @@
+﻿.thumbnail {
+    width: 5rem;
+    height: 4rem;
+    background-color: var(--dark);
+}
+
+.thumbnail-img {
+    max-width: none;
+    transition: all 0.5s ease-in-out;
+}
+
+.thumbnail-img:hover {
+    opacity: 0.75;
+}

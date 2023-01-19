@@ -168,5 +168,19 @@ namespace Waffle.Core.Services
         }
 
         public async Task<Catalog?> FindAsync(Guid id) => await _context.Catalogs.FindAsync(id);
+
+        public async Task<IEnumerable<ArticleListItem>> ArticlePickerListAsync()
+        {
+            return await _context.Catalogs.Where(x => x.Active && x.Type == CatalogType.Article).OrderBy(x => Guid.NewGuid()).Take(5).Select(x => new ArticleListItem
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                ModifiedDate = x.ModifiedDate,
+                NomalizedName = x.NormalizedName,
+                Thumbnail = x.Thumbnail,
+                ViewCount = x.ViewCount
+            }).ToListAsync();
+        }
     }
 }

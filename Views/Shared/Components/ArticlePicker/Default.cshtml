@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Waffle.Models.Catalogs.ArticleListItem>
+
+<div class="title">Có thể bạn thích</div>
+<div class="bg-white mb-4 shadow rounded">
+    @foreach (var item in Model)
+    {
+        <div class="flex mt-1 items-center gap-2">
+            <a href="/article/@item.NomalizedName" class="thumbnail">
+                <img class="thumbnail-img" loading="lazy" width="80" height="64" src="@item.Thumbnail" alt="@item.Name">
+            </a>
+            <div>
+                <div class="mb-1"><a href="/article/@item.NomalizedName">@item.Name</a></div>
+                <div class="text-gray-500 text-xs flex">
+                    <div class="mr-2"><i class="fa fa-calendar mr-2"></i>@item.ModifiedDate</div>
+                    <div><i class="fas fa-eye mr-2"></i>@item.ViewCount.ToString("N0")</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
