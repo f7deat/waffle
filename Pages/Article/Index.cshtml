@@ -12,7 +12,7 @@
                 <div class="title">@ViewData["Title"]</div>
                 @if (Model.Articles != null)
                 {
-                    <partial name="_ListItem.cshtml" model="Model.Articles.Data" />
+                    <partial name="_List.cshtml" model="Model.Articles.Data" />
 
                     <div class="pagination mb-4">
                         @if (Model.FilterOptions.Current * Model.FilterOptions.PageSize <= Model.Articles.Total)

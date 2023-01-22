@@ -1,3 +1,7 @@
+.wf-h1, .wf-h2, .wf-h3, .wf-h4 {
+    margin: 0.25rem 0 0.5rem 0;
+}
+
 .wf-h1 {
     font-size: 1.75rem;
 }
@@ -26,8 +30,8 @@
 .wf-code {
     padding: .5rem 1rem;
     border-radius: .25rem;
-    background-color: var(--bs-light);
-    border: 1px solid var(--bs-gray-200);
+    background-color: var(--light);
+    border: 1px solid var(--gray-200);
     font-family: Menlo, Monaco, Consolas, Courier New, monospace;
     color: #41314e;
     font-size: .75rem;

@@ -235,6 +235,10 @@ p {
     height: 100vh;
 }
 
+.w-64 {
+    width: 16rem;
+}
+
 .w-full {
     width: 100%;
 }
@@ -266,6 +270,16 @@ p {
 
 .navbar-brand {
     font-size: 1rem;
+}
+
+.search-input, .search-input input {
+    background-color: var(--gray-100);
+    border: 1px solid var(--gray-100);
+    transition: all 0.3s ease-in-out;
+}
+
+.search-input input:focus {
+    width: 20rem;
 }
 
 .shadow {

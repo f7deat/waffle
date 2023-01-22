@@ -1,10 +1,4 @@
-﻿.wf-article {
-    margin-bottom: 1rem;
-    gap: 1rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.wf-article-item {
+﻿.wf-article-item {
     height: 100%;
     margin-bottom: .5rem;
     flex-direction: column;
@@ -62,9 +56,3 @@
         .thumbnail img:hover {
             opacity: 0.75;
         }
-
-@media screen and (min-width: 768px) {
-    .wf-article {
-        display: grid;
-    }
-}

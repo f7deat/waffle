@@ -1,0 +1,9 @@
+﻿@using Waffle.Models.Catalogs
+@model IEnumerable<ArticleListItem>
+
+<div class="wf-article md:grid">
+    @foreach (var item in Model)
+    {
+        <partial name="_ListItem.cshtml" model="item" />
+    }
+</div>

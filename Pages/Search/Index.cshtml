@@ -30,7 +30,7 @@
             <div class="title">Kết quả tìm kiếm cho: @Model.FilterOptions.SearchTerm</div>
             @if (Model.Articles != null && Model.Articles.Data != null && Model.Articles.Data.Any())
             {
-                <partial name="~/Pages/Article/_ListItem.cshtml" model="Model.Articles.Data" />
+                <partial name="~/Pages/Article/_List.cshtml" model="Model.Articles.Data" />
             }
             else
             {
