@@ -72,5 +72,6 @@ namespace Waffle.Models.Components
         public const string CODE = "code";
         public const string LIST = "list";
         public const string SIMPLE_IMAGE = "simpleImage";
+        public const string QUOTE = "quote";
     }
 }

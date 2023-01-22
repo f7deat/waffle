@@ -114,20 +114,16 @@ namespace Waffle.Controllers
         public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _catalogService.ActiveAsync(id));
 
         [HttpPost("save")]
-        public async Task<IActionResult> SaveAsync([FromBody] CatalogViewModel model)
+        public async Task<IActionResult> SaveAsync([FromBody] Catalog args)
         {
-            if (model is null)
-            {
-                return BadRequest();
-            }
-            var catalog = await _context.Catalogs.FindAsync(model.Id);
+            var catalog = await _context.Catalogs.FindAsync(args.Id);
             if (catalog is null)
             {
                 return NoContent();
             }
-            catalog.Name = model.Name;
-            catalog.Type = model.Type;
-            catalog.Setting = JsonSerializer.Serialize(model.Setting);
+            catalog.Name = args.Name;
+            catalog.Type = args.Type;
+            catalog.Active = args.Active;
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }

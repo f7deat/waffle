@@ -1,34 +1,60 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using Waffle.Data;
+using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
     public class BloggerViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IWorkService _workService;
         private readonly IGoogleService _googleService;
-        public BloggerViewComponent(ApplicationDbContext context, IGoogleService googleService)
+        public BloggerViewComponent(IWorkService workService, IGoogleService googleService)
         {
-            _context = context;
+            _workService = workService;
             _googleService = googleService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
-            var work = await _context.WorkContents.FindAsync(id);
-            if (string.IsNullOrEmpty(work?.Arguments))
-            {
-                return View();
-            }
-            var blogger = JsonSerializer.Deserialize<Blogger>(work.Arguments);
+            var blogger = await _workService.GetAsync<Blogger>(id);
             if (blogger is null)
             {
-                return View();
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = id.ToString()
+                });
             }
-            return View(await _googleService.BloggerPostsAsync(blogger.BlogId, blogger.ApiKey, 5, Request.Query["pageToken"], Request.Query["labels"]));
+            var response = await _googleService.BloggerPostsAsync(blogger.BlogId, blogger.ApiKey, 5, Request.Query["pageToken"], Request.Query["labels"]);
+            if (response is null || response.Items is null)
+            {
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = id.ToString()
+                });
+            }
+            return View("~/Views/Shared/Components/ListGroup/Default.cshtml", new ListGroup
+            {
+                Name = "Feed",
+                Items = GetItems(response.Items, blogger.BlogId)
+            });
+        }
+
+        private static IEnumerable<ListGroupItem> GetItems(List<BloggerItem> items, string? blogId)
+        {
+            foreach (var item in items)
+            {
+                yield return new ListGroupItem
+                {
+                    Link = new Link
+                    {
+                        Href = $"/blogger/{blogId}?id={item.Id}",
+                        Name = item.Title
+                    }
+                };
+            }
         }
     }
 }

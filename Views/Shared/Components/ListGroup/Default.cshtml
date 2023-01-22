@@ -1,0 +1,12 @@
+﻿@model Waffle.Models.Components.ListGroup
+
+<div class="shadow mb-4 list-group">
+    <div class="title">@Model.Name</div>
+    @foreach (var item in Model.Items)
+    {
+        <div class="px-4 py-2 hover:bg-gray-100 bg-white border-b">
+            <i class="@item.Icon"></i>
+            <partial name="~/Views/Shared/Components/Link/Default.cshtml" model="item.Link" />
+        </div>
+    }
+</div>

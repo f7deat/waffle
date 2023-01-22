@@ -44,6 +44,12 @@
             @item.Data.Code
         </div>
     }
+    if (BlockEditorType.QUOTE.Equals(item.Type))
+    {
+        <div class="quote">
+            @Html.Raw(item.Data.Text)
+        </div>
+    }
     if (BlockEditorType.LIST.Equals(item.Type))
     {
         @if (item.Data.Items != null)
@@ -70,11 +76,11 @@
     }
     if (BlockEditorType.SIMPLE_IMAGE.Equals(item.Type))
     {
-        <div class="wf-simple-image">
-            <div class="wf-simple-image__picture">
-                <img src="@item.Data.Url" alt="@item.Data.Caption" />
+        <div class="simple-image">
+            <div class="simple-image__picture">
+                <img src="@item.Data.Url" alt="@(item.Data.Caption ?? "IMG")" />
             </div>
-            <div class="wf-simple-image__caption">
+            <div class="simple-image__caption">
                 @item.Data.Caption
             </div>
         </div>

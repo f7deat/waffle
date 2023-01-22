@@ -6,6 +6,7 @@
         {
             Items = new List<ListGroupItem>();
         }
+        public string? Name { get; set; }
         public IEnumerable<ListGroupItem> Items { get; set; }
     }
 
@@ -13,12 +14,10 @@
     {
         public ListGroupItem()
         {
-            Name = string.Empty;
-            Url = string.Empty;
             Icon = "fab fa-staylinked";
+            Link = new Link();
         }
-        public string Name { get; set; }
-        public string Url { get; set; }
+        public Link Link { get; set; }
         public string Icon { get; set; }
     }
 }
