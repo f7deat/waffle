@@ -1,5 +1,5 @@
-.wf-h1, .wf-h2, .wf-h3, .wf-h4 {
-    margin: 0.25rem 0 0.5rem 0;
+h1, h2, h3, h4, h5, h6 {
+    margin: 0.5rem 0 0.25rem 0;
 }
 
 .wf-h1 {

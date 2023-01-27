@@ -31,6 +31,12 @@
             @if (Model.Articles != null && Model.Articles.Data != null && Model.Articles.Data.Any())
             {
                 <partial name="~/Pages/Article/_List.cshtml" model="Model.Articles.Data" />
+                <div class="pagination mb-4">
+                    @if (Model.Articles.HasNextPage)
+                    {
+                        <a href="/search/index?searchTerm=@Model.FilterOptions.SearchTerm&current=@(Model.FilterOptions.Current + 1)" class="px-4 py-1 rounded bg-white shadow">Trang sau</a>
+                    }
+                </div>
             }
             else
             {

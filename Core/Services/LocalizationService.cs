@@ -73,7 +73,7 @@ namespace Waffle.Core.Services
         {
             var lang = _configuration.GetValue<string>("language");
             var query = _context.Localizations.Where(x => x.Language.Equals(lang)).OrderBy(x => x.Key);
-            return ListResult<Localization>.Success(await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(), await query.CountAsync());
+            return await ListResult<Localization>.Success(query, filterOptions);
         }
 
         public async Task<IdentityResult> SaveAsync(Localization args)

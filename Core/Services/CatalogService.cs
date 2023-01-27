@@ -133,9 +133,7 @@ namespace Waffle.Core.Services
         {
             var query = _context.Catalogs.Where(x => (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower()))
             && x.Type == CatalogType.Article && x.Active).OrderByDescending(x => x.ModifiedDate);
-            return ListResult<ArticleListItem>.Success(await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize)
-                .Take(filterOptions.PageSize)
-                .Select(x => new ArticleListItem
+            return await ListResult<ArticleListItem>.Success(query.Select(x => new ArticleListItem
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -144,8 +142,7 @@ namespace Waffle.Core.Services
                     NomalizedName = x.NormalizedName,
                     Thumbnail = x.Thumbnail,
                     ViewCount = x.ViewCount
-                })
-                .ToListAsync(), await query.CountAsync());
+                }), filterOptions);
         }
 
         public async Task<ListResult<ArticleListItem>> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
@@ -154,6 +151,7 @@ namespace Waffle.Core.Services
                         join b in _context.Catalogs on a.CatalogId equals b.Id into ac
                         from c in ac.DefaultIfEmpty()
                         where a.WorkContentId == filterOption.WorkId && a.CatalogId != filterOption.CatalogId && c.Active
+                        orderby c.ModifiedDate descending
                         select new ArticleListItem
                         {
                             Id = c.Id,
@@ -164,7 +162,7 @@ namespace Waffle.Core.Services
                             Thumbnail = c.Thumbnail,
                             ViewCount = c.ViewCount
                         };
-            return ListResult<ArticleListItem>.Success(await query.OrderByDescending(x => x.ModifiedDate).Skip((filterOption.Current - 1) * filterOption.PageSize).Take(filterOption.PageSize).ToListAsync(), await query.CountAsync());
+            return await ListResult<ArticleListItem>.Success(query, filterOption);
         }
 
         public async Task<Catalog?> FindAsync(Guid id) => await _context.Catalogs.FindAsync(id);

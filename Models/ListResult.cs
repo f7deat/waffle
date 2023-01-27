@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Waffle.Models
 {
@@ -10,15 +11,21 @@ namespace Waffle.Models
         public int Total { get; set; }
         [JsonPropertyName("succeeded")]
         public bool Succeeded { get; }
-        public ListResult(IEnumerable<T> data, int total)
+        private IFilterOptions FilterOptions { get; set; }
+        public bool HasNextPage => Total > FilterOptions.Current * FilterOptions.PageSize;
+        public bool HasPreviousPage => FilterOptions.Current > 1;
+
+        public ListResult(IEnumerable<T> data, int total, IFilterOptions filterOptions)
         {
             Data = data;
             Succeeded = true;
             Total = total;
+            FilterOptions = filterOptions;
         }
-        public static ListResult<T> Success(IEnumerable<T> data, int total)
+
+        public static async Task<ListResult<T>> Success(IQueryable<T> query, IFilterOptions filterOptions)
         {
-            return new ListResult<T>(data, total);
+            return new ListResult<T>(await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(), await query.CountAsync(), filterOptions);
         }
     }
 }

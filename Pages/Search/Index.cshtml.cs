@@ -32,7 +32,7 @@ namespace Waffle.Pages.Search
             {
                 return NotFound();
             }
-            ViewData["Title"] = FilterOptions.SearchTerm;
+            ViewData["Title"] = FilterOptions.SearchTerm ?? await _localizationService.GetAsync("search");
             Articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
             {
                 Current = FilterOptions.Current,

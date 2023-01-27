@@ -82,13 +82,17 @@ namespace Waffle.Core.Services.AppSettings
 
         public async Task<ListResult<AppSetting>> ListAsync()
         {
-            return ListResult<AppSetting>.Success(await _context.AppSettings.Select(x => new AppSetting
+            return await ListResult<AppSetting>.Success(_context.AppSettings.Select(x => new AppSetting
             {
                 Name = x.Name,
                 Description = x.Description,
                 NormalizedName = x.NormalizedName,
                 Id = x.Id
-            }).ToListAsync(), await _context.AppSettings.CountAsync());
+            }), new BasicFilterOptions
+            {
+                Current = 1,
+                PageSize = 10
+            });
         }
 
         public async Task<IdentityResult> SaveFooterAsync(Footer args)
