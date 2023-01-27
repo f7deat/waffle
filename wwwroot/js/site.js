@@ -2,3 +2,13 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker
+            .register("/js/serviceWorker.js", {
+                scope: '.'
+            })
+            .then(res => console.log("🍀 Service Worker registered!"))
+            .catch(err => console.log("🔥 Service Worker not registered", err))
+    })
+}

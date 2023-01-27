@@ -1,7 +1,6 @@
 ﻿@page "/wiki/{id}"
 @model Waffle.Pages.Wiki.DetailModel
-@{
-}
+
 <style>
     .plainlinks, .error {
         display: none;
@@ -60,13 +59,11 @@
 <div class="container">
     @if (Model.Data != null)
     {
-        <div class="card">
-            <h5 class="card-header">
-                @ViewData["Title"]
-            </h5>
-            <div class="card-body">
-                @Html.Raw(Model.Data.Text)
-            </div>
+        <h1 class="title text-base">
+            @ViewData["Title"]
+        </h1>
+        <div class="shadow bg-white p-4 rounded">
+            @Html.Raw(Model.Data.Text)
         </div>
     }
 </div>

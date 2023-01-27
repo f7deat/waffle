@@ -61,11 +61,20 @@ button, input, textarea, a {
         cursor: not-allowed;
     }
 
-blockquote {
+blockquote, .quote {
     background: #eee;
     padding: 0.25rem 1rem;
     margin: 0.25rem 0;
     border-left: 0.25rem solid;
+    font-style: italic;
+}
+
+figure {
+    text-align: center;
+}
+
+figcaption {
+    color: var(--gray-500);
     font-style: italic;
 }
 
@@ -75,11 +84,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1, .h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
 }
 
 h2, .h2 {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
 }
 
 h3, .h3 {
@@ -107,6 +116,11 @@ input, textarea, select {
     input::placeholder, textarea::placeholder {
         color: #9ca3af;
     }
+
+ul, ol {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
 
 pre {
     max-width: 100%;
