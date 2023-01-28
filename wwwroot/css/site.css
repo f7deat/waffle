@@ -14,7 +14,6 @@
     --primary-hover: #0b5ed7;
     --yellow-500: #eab308;
     --light: #f1f5f9;
-    --breadcrumb-bg: #f1f5f9;
 }
 
 html {
@@ -179,6 +178,11 @@ p {
         background-color: var(--primary-hover);
     }
 
+.breadcrumb {
+    --breadcrumb-bg: #FFF;
+    background-color: var(--breadcrumb-bg);
+}
+
 .container {
     margin: auto;
     padding: 0.5rem;
@@ -204,7 +208,7 @@ p {
 
 .dropdown-item {
     display: block;
-    padding: .25rem 1rem;
+    padding: 0.25rem 1rem;
 }
 
 .font-normal {
@@ -292,9 +296,9 @@ p {
     transition: all 0.3s ease-in-out;
 }
 
-.search-input input:focus {
-    width: 20rem;
-}
+    .search-input input:focus {
+        width: 20rem;
+    }
 
 .shadow {
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);

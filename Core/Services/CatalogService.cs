@@ -180,5 +180,21 @@ namespace Waffle.Core.Services
                 ViewCount = x.ViewCount
             }).ToListAsync();
         }
+
+        public async Task<IdentityResult> SaveAsync(Catalog args)
+        {
+            var catalog = await _context.Catalogs.FindAsync(args.Id);
+            if (catalog is null)
+            {
+                return IdentityResult.Failed();
+            }
+            catalog.Name = args.Name;
+            catalog.Type = args.Type;
+            catalog.Active = args.Active;
+            catalog.ModifiedDate = DateTime.Now;
+            catalog.Description = args.Description;
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
     }
 }

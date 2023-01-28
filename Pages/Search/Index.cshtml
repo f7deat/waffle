@@ -40,8 +40,14 @@
             }
             else
             {
-                <div class="bg-white shadow px-4 py-2 rounded text-center">
+                <div class="bg-white shadow px-4 py-2 rounded text-center mb-4">
                     Không có dữ liệu
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.FilterOptions.SearchTerm))
+            {
+                <div class="mb-4 quote">
+                    <u>Wiki</u> --> <a href="/wiki/@Model.FilterOptions.SearchTerm">@Model.FilterOptions.SearchTerm</a>
                 </div>
             }
         </div>

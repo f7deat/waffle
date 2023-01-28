@@ -6,9 +6,9 @@
 {
     <main class="wf-page">
         <div class="container">
+
             @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
 
-            <h1 class="h1 wf-h1">@Model.Catalog.Name</h1>
             @if (Model.Components != null)
             {
                 @foreach (var item in Model.Components)
@@ -16,6 +16,7 @@
                     @await Component.InvokeAsync(item.Name, item.Id)
                 }
             }
+
         </div>
     </main>
 }

@@ -78,7 +78,7 @@
     {
         <div class="simple-image">
             <div class="simple-image__picture">
-                <img src="@item.Data.Url" alt="@(item.Data.Caption ?? "IMG")" />
+                <img src="@item.Data.Url" alt="@(string.IsNullOrEmpty(item.Data.Caption) ? "IMG" : item.Data.Caption)" loading="lazy" />
             </div>
             <div class="simple-image__caption">
                 @item.Data.Caption
