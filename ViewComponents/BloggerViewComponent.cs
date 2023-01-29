@@ -38,11 +38,11 @@ namespace Waffle.ViewComponents
             return View("~/Views/Shared/Components/ListGroup/Default.cshtml", new ListGroup
             {
                 Name = "Feed",
-                Items = GetItems(response.Items, blogger.BlogId)
+                Items = GetItems(response.Items, blogger.NormalizedName)
             });
         }
 
-        private static IEnumerable<ListGroupItem> GetItems(List<BloggerItem> items, string? blogId)
+        private static IEnumerable<ListGroupItem> GetItems(List<BloggerItem> items, string? normalizedName)
         {
             foreach (var item in items)
             {
@@ -50,7 +50,7 @@ namespace Waffle.ViewComponents
                 {
                     Link = new Link
                     {
-                        Href = $"/blogger/{blogId}?id={item.Id}",
+                        Href = $"/blogspot/{normalizedName}{item.Path}",
                         Name = item.Title
                     }
                 };

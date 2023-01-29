@@ -1,0 +1,23 @@
+﻿@page "/blogspot/{normalizedName}/{year}/{month}/{path}"
+@using Waffle.Models.Components
+@model Waffle.Pages.Blogspot.DetailsModel
+@{
+}
+
+@if (Model.Item != null)
+{
+    <div class="container">
+
+        @if (Model.Catalog != null)
+        {
+            @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
+        }
+
+        <div class="shadow mb-4 bg-white rounded">
+            <div class="title">@Model.Item.Title</div>
+            <div class="p-4">
+                @Html.Raw(Model.Item.Content)
+            </div>
+        </div>
+    </div>
+}

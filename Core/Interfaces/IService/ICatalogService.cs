@@ -2,6 +2,7 @@
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Catalogs;
+using Waffle.Models.Components;
 
 namespace Waffle.Core.Interfaces.IService
 {
@@ -19,5 +20,8 @@ namespace Waffle.Core.Interfaces.IService
         Task<Catalog?> FindAsync(Guid id);
         Task<IEnumerable<ArticleListItem>> ArticlePickerListAsync();
         Task<IdentityResult> SaveAsync(Catalog args);
+        IEnumerable<Option> GetTypes();
+        Task<WorkContent?> FirstWorkAsync(Guid id);
+        Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions);
     }
 }

@@ -1,0 +1,22 @@
+﻿@page "/blogspot/list/{normalizedName}"
+@using Waffle.Models.Components
+@model Waffle.Pages.Blogspot.ListModel
+
+@if (Model.Catalog != null)
+{
+    <main class="wf-blogspot">
+        <div class="container">
+
+            @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
+
+            @if (Model.Components != null)
+            {
+                @foreach (var item in Model.Components)
+                {
+                    @await Component.InvokeAsync(item.Name, item.Id)
+                }
+            }
+
+        </div>
+    </main>
+}

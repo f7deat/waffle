@@ -42,9 +42,15 @@ namespace Waffle.ExternalAPI.Google
             return await JsonSerializer.DeserializeAsync<BloggerListResult<BloggerItem>>(await _http.GetStreamAsync(url));
         }
 
-        public async Task<BloggerItem?> BloggerGetAsync(string blogId, string postId, string apiKey)
+        public async Task<BloggerItem?> BloggerGetAsync(string? blogId, string postId, string? apiKey)
         {
             var response = await _http.GetStreamAsync($"https://www.googleapis.com/blogger/v3/blogs/{blogId}/posts/{postId}?key={apiKey}");
+            return await JsonSerializer.DeserializeAsync<BloggerItem?>(response);
+        }
+
+        public async Task<BloggerItem?> BloggerGetByPathAsync(string? blogId, string path, string? apiKey)
+        {
+            var response = await _http.GetStreamAsync($"https://www.googleapis.com/blogger/v3/blogs/{blogId}/posts/bypath?path={path}&key={apiKey}");
             return await JsonSerializer.DeserializeAsync<BloggerItem?>(response);
         }
     }

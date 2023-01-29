@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Catalogs;
+using Waffle.Models.Components;
 
 namespace Waffle.Core.Services
 {
@@ -75,7 +75,7 @@ namespace Waffle.Core.Services
             return catalog;
         }
 
-        public async Task<Catalog?> GetByNameAsync(string normalizedName) => await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName));
+        public async Task<Catalog?> GetByNameAsync(string normalizedName) => await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
 
         public async Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId)
         {
@@ -195,6 +195,34 @@ namespace Waffle.Core.Services
             catalog.Description = args.Description;
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
+        }
+
+        public IEnumerable<Option> GetTypes()
+        {
+            var values = Enum.GetValues(typeof(CatalogType));
+            foreach (var item in values)
+            {
+                yield return new Option
+                {
+                    Value = item.GetHashCode().ToString(),
+                    Label = item.ToString()
+                };
+            }
+        }
+
+        public async Task<WorkContent?> FirstWorkAsync(Guid id)
+        {
+            var query = from a in _context.WorkItems
+                        join b in _context.WorkContents on a.WorkContentId equals b.Id
+                        where a.CatalogId == id
+                        select b;
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions)
+        {
+            var query = _context.Catalogs.Where(x => (filterOptions.Type == null || x.Type == filterOptions.Type) && (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active)).OrderByDescending(x => x.Id);
+            return ListResult<Catalog>.Success(query, filterOptions);
         }
     }
 }

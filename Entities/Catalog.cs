@@ -49,6 +49,7 @@ namespace Waffle.Entities
         Setting,
         Entry,
         ArticleCategoy,
-        ProductCategory
+        ProductCategory,
+        Blogger
     }
 }

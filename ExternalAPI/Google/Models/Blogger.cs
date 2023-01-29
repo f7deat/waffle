@@ -10,6 +10,8 @@ namespace Waffle.ExternalAPI.Google.Models
         public string? ApiKey { get; set; }
         [JsonPropertyName("blogId")]
         public string? BlogId { get; set; }
+        [JsonPropertyName("normalizedName")]
+        public string? NormalizedName { get; set; }
     }
 
     public class BloggerListResult<T> where T : class
@@ -58,7 +60,7 @@ namespace Waffle.ExternalAPI.Google.Models
         {
             get
             {
-                int indexOfSubstring = Url.LastIndexOf("/") + 1;
+                int indexOfSubstring = Url.LastIndexOf(".com") + 4;
                 return Url[indexOfSubstring..];
             }
         }

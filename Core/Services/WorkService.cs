@@ -98,6 +98,18 @@ namespace Waffle.Core.Services
             return JsonSerializer.Deserialize<T>(work.Arguments);
         }
 
+        public async Task<IEnumerable<Option>> GetListAsync(BasicFilterOptions filterOptions)
+        {
+            var query = from a in _context.Components
+                        join b in _context.WorkContents on a.Id equals b.ComponentId
+                        select new Option
+                        {
+                            Label = $"[{a.Name}] {b.Name}",
+                            Value = b.Id
+                        };
+            return await query.ToListAsync();
+        }
+
         public async Task<IdentityResult> ItemAddAsync(WorkItem args)
         {
             if (await _context.WorkItems.AnyAsync(x => x.CatalogId == args.CatalogId && x.WorkContentId == args.WorkContentId))
@@ -195,7 +207,7 @@ namespace Waffle.Core.Services
                         select new Option
                         {
                             Label = b.Name,
-                            Value = b.Id.ToString()
+                            Value = b.Id
                         };
             return await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
         }

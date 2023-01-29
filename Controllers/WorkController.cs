@@ -59,6 +59,9 @@ namespace Waffle.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.WorkContents.FindAsync(id));
 
+        [HttpGet("list")]
+        public async Task<IActionResult> GetListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListAsync(filterOptions));
+
         [HttpGet("list/{id}")]
         public async Task<IActionResult> ListAsync([FromRoute] Guid id)
         {
