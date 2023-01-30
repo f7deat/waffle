@@ -34,14 +34,7 @@ namespace Waffle.Controllers
         public async Task<IActionResult> AddAsync([FromBody] Catalog catalog) => Ok(await _catalogService.AddAsync(catalog));
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync(CatalogFilterOptions filterOptions)
-        {
-            var query = _context.Catalogs
-                .Where(x => (filterOptions.Type == null || x.Type == filterOptions.Type) && (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active));
-            var data = await query.OrderByDescending(x => x.ModifiedDate).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
-            var total = await query.CountAsync();
-            return Ok(new { data, total });
-        }
+        public async Task<IActionResult> ListAsync([FromQuery] CatalogFilterOptions filterOptions) => Ok(await _catalogService.ListAsync(filterOptions));
 
         [HttpGet("tree")]
         public async Task<IActionResult> TreeAsync()

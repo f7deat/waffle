@@ -75,7 +75,17 @@ namespace Waffle.Core.Services
             return catalog;
         }
 
-        public async Task<Catalog?> GetByNameAsync(string normalizedName) => await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
+        public async Task<Catalog?> GetByNameAsync(string normalizedName)
+        {
+            var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
+            if (catalog is null)
+            {
+                return default;
+            }
+            catalog.ViewCount++;
+            await _context.SaveChangesAsync();
+            return catalog;
+        }
 
         public async Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId)
         {

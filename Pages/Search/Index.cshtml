@@ -31,10 +31,20 @@
             @if (Model.Articles != null && Model.Articles.Data != null && Model.Articles.Data.Any())
             {
                 <partial name="~/Pages/Article/_List.cshtml" model="Model.Articles.Data" />
-                <div class="pagination mb-4">
+                <div class="pagination mb-4 flex justify-between">
+                    @if (Model.Articles.HasPreviousPage)
+                    {
+                        <a href="/search/index?searchTerm=@Model.FilterOptions.SearchTerm&current=@(Model.FilterOptions.Current - 1)" class="px-4 py-1 rounded bg-white shadow">
+                            <i class="fas fa-angle-double-left"></i>
+                            <span>Trang trước</span>
+                        </a>
+                    }
                     @if (Model.Articles.HasNextPage)
                     {
-                        <a href="/search/index?searchTerm=@Model.FilterOptions.SearchTerm&current=@(Model.FilterOptions.Current + 1)" class="px-4 py-1 rounded bg-white shadow">Trang sau</a>
+                        <a href="/search/index?searchTerm=@Model.FilterOptions.SearchTerm&current=@(Model.FilterOptions.Current + 1)" class="px-4 py-1 rounded bg-white shadow">
+                            <span>Trang sau</span>
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
                     }
                 </div>
             }

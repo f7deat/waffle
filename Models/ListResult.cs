@@ -1,15 +1,11 @@
-﻿using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Waffle.Models
 {
     public class ListResult<T> where T : class
     {
-        [JsonPropertyName("data")]
         public IEnumerable<T>? Data { get; set; }
-        [JsonPropertyName("total")]
         public int Total { get; set; }
-        [JsonPropertyName("succeeded")]
         public bool Succeeded { get; }
         private IFilterOptions FilterOptions { get; set; }
         public bool HasNextPage => Total > FilterOptions.Current * FilterOptions.PageSize;

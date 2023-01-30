@@ -22,7 +22,7 @@ namespace Waffle.Pages.Blogspot
             Catalog = await _catalogService.ListAsync(new CatalogFilterOptions
             {
                 Active= true,
-                Type = CatalogType.Blogger
+                Type = CatalogType.Blogspot
             });
             return Page();
         }

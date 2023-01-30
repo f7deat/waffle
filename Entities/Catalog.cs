@@ -50,6 +50,6 @@ namespace Waffle.Entities
         Entry,
         ArticleCategoy,
         ProductCategory,
-        Blogger
+        Blogspot
     }
 }

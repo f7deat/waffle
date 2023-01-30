@@ -1,7 +1,6 @@
 ﻿using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services;
 using Waffle.Core.Services.AppSettings;
-using Waffle.Core.Services.FileContents;
 
 namespace Waffle.Extensions
 {
@@ -12,7 +11,6 @@ namespace Waffle.Extensions
             services.AddScoped<IAppSettingService, AppSettingService>();
             services.AddScoped<ICatalogService, CatalogService>();
             services.AddScoped<IComponentService, ComponentService>();
-            services.AddScoped<IFileContentService, FileContentService>();
             services.AddScoped<IFileExplorerService, FileExplorerService>();
             services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<IUserService, UserService>();

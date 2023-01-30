@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Core.Services.FileContents;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
@@ -17,10 +16,10 @@ namespace Waffle.Controllers
     public class WorkController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IFileContentService _fileContentService;
+        private readonly IFileExplorerService _fileContentService;
         private readonly IWorkService _workService;
         private readonly IComponentService _componentService;
-        public WorkController(ApplicationDbContext context, IFileContentService fileContentService, IWorkService workContentService, IComponentService componentService)
+        public WorkController(ApplicationDbContext context, IFileExplorerService fileContentService, IWorkService workContentService, IComponentService componentService)
         {
             _context = context;
             _fileContentService = fileContentService;
@@ -112,10 +111,6 @@ namespace Waffle.Controllers
         [HttpPost("save")]
         public async Task<IActionResult> SaveAsync([FromBody] WorkContent model)
         {
-            if (model is null)
-            {
-                return BadRequest();
-            }
             var workContent = await _context.WorkContents.FindAsync(model.Id);
             if (workContent is null)
             {

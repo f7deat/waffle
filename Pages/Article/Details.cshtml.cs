@@ -30,8 +30,6 @@ namespace Waffle.Pages.Article
             {
                 ViewData["Title"] = Catalog.Name;
                 ViewData["Description"] = Catalog.Description;
-                Catalog.ViewCount++;
-                await _context.SaveChangesAsync();
                 BlockEditors = await GetBlockEditorsAsync(Catalog.Id);
                 Tags = await GetTagsAsync(Catalog.Id);
             }
