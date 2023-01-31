@@ -10,7 +10,7 @@ namespace Waffle.Core.Interfaces.IService
     {
         Task<IdentityResult> ActiveAsync(Guid id);
         Task<PayloadResult<Catalog>> AddAsync(Catalog catalog);
-        Task<Catalog> EnsureDataAsync(string name);
+        Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default);
         Task<Catalog?> GetByNameAsync(string normalizedName);
         Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId);
         Task<IdentityResult> ArticleSaveAsync(Catalog args);

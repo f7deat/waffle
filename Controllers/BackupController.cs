@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Constants;
+using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
-using Waffle.Models.Catalogs;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
 
@@ -20,10 +21,16 @@ namespace Waffle.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public BackupController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
+        private readonly IComponentService _componentService;
+        private readonly IAppSettingService _appSettingService;
+        private readonly ICatalogService _catalogService;
+        public BackupController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService)
         {
             _context = context;
             _roleManager = roleManager;
+            _componentService = componentService;
+            _appSettingService = appSettingService;
+            _catalogService = catalogService;
         }
 
         [HttpPost("export")]
@@ -101,7 +108,6 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("statistic")]
-
         public async Task<IActionResult> StatisticAsync()
         {
             var data = new
@@ -150,14 +156,13 @@ namespace Waffle.Controllers
         [HttpPost("upgrade")]
         public async Task<IActionResult> UpgradeAsync()
         {
-            await EnsureCatalog("home", CatalogType.Entry);
-            await EnsureCatalog("shop", CatalogType.Entry);
-            await EnsureSetting();
+            await _catalogService.EnsureDataAsync("home", CatalogType.Entry);
+            await _catalogService.EnsureDataAsync("shop", CatalogType.Entry);
 
             await EnsureComponentsAsync();
 
-            await EnsureApp(nameof(SendGrid));
-            await EnsureApp(nameof(ExternalAPI.Telegram));
+            await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
+            await _appSettingService.EnsureSettingAsync(nameof(ExternalAPI.Telegram));
 
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
@@ -172,82 +177,22 @@ namespace Waffle.Controllers
 
         private async Task EnsureComponentsAsync()
         {
-            await EnsureComponent(nameof(BlockEditor));
-            await EnsureComponent(nameof(Document));
-            await EnsureComponent(nameof(ContactForm));
-            await EnsureComponent(nameof(Swiper));
-            await EnsureComponent(nameof(Card));
-            await EnsureComponent(nameof(Masonry));
-            await EnsureComponent(nameof(Lookbook));
-            await EnsureComponent(nameof(Tag));
-            await EnsureComponent(nameof(Feed));
-            await EnsureComponent(nameof(Row));
-            await EnsureComponent(nameof(Column));
-            await EnsureComponent(nameof(Image));
-            await EnsureComponent(nameof(Trend));
-            await EnsureComponent(nameof(Navbar));
-            await EnsureComponent(nameof(ArticlePicker));
-            await EnsureComponent(nameof(Blogger));
-        }
-
-        private async Task EnsureComponent(string name)
-        {
-            if (!await _context.Components.AnyAsync(x => x.NormalizedName.Equals(name)))
-            {
-                await _context.Components.AddAsync(new Component {
-                    Active = true,
-                    Name = name,
-                    NormalizedName = name
-                });
-            }
-        }
-
-        private async Task EnsureSetting()
-        {
-            var setting = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Setting)));
-            if (setting is null)
-            {
-                setting = new Catalog
-                {
-                    NormalizedName = nameof(Setting),
-                    Name = nameof(Setting),
-                    Active = true,
-                    CreatedDate = DateTime.Now
-                };
-                await _context.Catalogs.AddAsync(setting);
-            }
-            await _context.SaveChangesAsync();
-
-            await EnsureCatalog(nameof(Header), CatalogType.Setting, setting.ParentId);
-
-            await EnsureCatalog(nameof(Footer), CatalogType.Setting, setting.ParentId);
-        }
-
-        private async Task EnsureCatalog(string name, CatalogType type, Guid? parentId = null)
-        {
-            if (!await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(name)))
-            {
-                await _context.Catalogs.AddAsync(new Catalog
-                {
-                    Name = name,
-                    NormalizedName = name,
-                    Active = true,
-                    Type = type,
-                    CreatedDate = DateTime.Now,
-                    ParentId = parentId
-                });
-            }
-        }
-
-        private async Task EnsureApp(string name)
-        {
-            if (!await _context.AppSettings.AnyAsync(x => x.NormalizedName.Equals(name)))
-            {
-                await _context.AppSettings.AddAsync(new AppSetting {
-                    Name = name,
-                    NormalizedName = name,
-                });
-            }
+            await _componentService.EnsureComponentAsync(nameof(BlockEditor));
+            await _componentService.EnsureComponentAsync(nameof(Document));
+            await _componentService.EnsureComponentAsync(nameof(ContactForm));
+            await _componentService.EnsureComponentAsync(nameof(Swiper));
+            await _componentService.EnsureComponentAsync(nameof(Card));
+            await _componentService.EnsureComponentAsync(nameof(Masonry));
+            await _componentService.EnsureComponentAsync(nameof(Lookbook));
+            await _componentService.EnsureComponentAsync(nameof(Tag));
+            await _componentService.EnsureComponentAsync(nameof(Feed));
+            await _componentService.EnsureComponentAsync(nameof(Row));
+            await _componentService.EnsureComponentAsync(nameof(Column));
+            await _componentService.EnsureComponentAsync(nameof(Image));
+            await _componentService.EnsureComponentAsync(nameof(Trend));
+            await _componentService.EnsureComponentAsync(nameof(Navbar));
+            await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
+            await _componentService.EnsureComponentAsync(nameof(Blogger));
         }
     }
 }

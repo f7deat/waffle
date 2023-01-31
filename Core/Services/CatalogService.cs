@@ -56,7 +56,7 @@ namespace Waffle.Core.Services
             return PayloadResult<Catalog>.Payload(catalog);
         }
 
-        public async Task<Catalog> EnsureDataAsync(string name)
+        public async Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default)
         {
             var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name));
             if (catalog is null)
@@ -67,7 +67,8 @@ namespace Waffle.Core.Services
                     NormalizedName = name,
                     Active = true,
                     CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now
+                    ModifiedDate = DateTime.Now,
+                    Type = type
                 };
                 await _context.Catalogs.AddAsync(catalog);
                 await _context.SaveChangesAsync();
@@ -231,7 +232,7 @@ namespace Waffle.Core.Services
 
         public Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions)
         {
-            var query = _context.Catalogs.Where(x => (filterOptions.Type == null || x.Type == filterOptions.Type) && (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active)).OrderByDescending(x => x.Id);
+            var query = _context.Catalogs.Where(x => (filterOptions.Type == null || x.Type == filterOptions.Type) && (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active)).OrderByDescending(x => x.ModifiedDate);
             return ListResult<Catalog>.Success(query, filterOptions);
         }
     }

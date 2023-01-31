@@ -27,23 +27,23 @@ namespace Waffle.Pages.Blogspot
             Catalog = await _catalogService.GetByNameAsync(normalizedName);
             if (Catalog == null)
             {
-                return NotFound("Catalog not found");
+                return NotFound();
             }
             var work = await _catalogService.FirstWorkAsync(Catalog.Id);
             if (work is null)
             {
-                return NotFound("Work not found");
+                return NotFound();
             }
             var blogger = await _workService.GetAsync<Blogger>(work.Id);
             if (blogger is null)
             {
-                return NotFound("Blogger not found");
+                return NotFound();
             }
             Item = await _googleService.BloggerGetByPathAsync(blogger.BlogId, $"/{year}/{month}/{path}", blogger.ApiKey);
             if (Item != null)
             {
                 ViewData["Title"] = Item.Title;
-                ViewData["Description"] = Item.Content[..250];
+                ViewData["Description"] = Catalog.Description;
             }
             return Page();
         }

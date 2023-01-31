@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Models;
 
 namespace Waffle.Controllers
@@ -13,7 +14,7 @@ namespace Waffle.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var catalog = await _catalogService.EnsureDataAsync("home");
+            var catalog = await _catalogService.EnsureDataAsync("home", CatalogType.Entry);
             ViewData["Title"] = catalog.Name;
             ViewData["Desctiption"] = catalog.Description;
             return View(await _catalogService.ListComponentAsync(catalog.Id));
