@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Constants;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Models;
 
@@ -12,15 +13,16 @@ namespace Waffle.Controllers
     [Route("api/[controller]")]
     public class ComponentController : Controller
     {
-
+        private readonly IComponentService _componentService;
         private readonly ApplicationDbContext _context;
-        public ComponentController(ApplicationDbContext context)
+        public ComponentController(ApplicationDbContext context, IComponentService componentService)
         {
             _context = context;
+            _componentService = componentService;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Components.FindAsync(id));
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _componentService.FindAsync(id));
 
         [HttpGet("list-all")]
         public async Task<IActionResult> ListAllAsync() => Ok(await _context.Components.Where(x => x.Active).OrderBy(x => x.NormalizedName).ToListAsync());

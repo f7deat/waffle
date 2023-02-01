@@ -29,6 +29,8 @@ namespace Waffle.Core.Services
             return component;
         }
 
+        public async Task<Component?> FindAsync(Guid id) => await _context.Components.FindAsync(id);
+
         public async Task<Component?> GetByNameAsync(string name)
         {
             if (string.IsNullOrEmpty(name))
