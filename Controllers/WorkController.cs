@@ -56,7 +56,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.WorkContents.FindAsync(id));
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _workService.FindAsync(id));
 
         [HttpGet("list")]
         public async Task<IActionResult> GetListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListAsync(filterOptions));
@@ -234,7 +234,7 @@ namespace Waffle.Controllers
         [HttpPost("navbar/save")]
         public async Task<IActionResult> SaveNavbarAsync([FromBody] Navbar model)
         {
-            var workContent = await _context.WorkContents.FindAsync(model.Id);
+            var workContent = await _workService.FindAsync(model.Id);
             if (workContent is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError

@@ -11,6 +11,8 @@ namespace Waffle.Core.Interfaces.IRepository
         /// A task that represents the asynchronous operation.
         /// The task result contains a <see cref="List{T}" /> that contains elements from the input sequence.
         /// </returns>
+
+        Task<T?> FindAsync(object id);
         Task<IReadOnlyList<T>> ListAsync();
         Task<T> AddAsync(T entity);
         Task<int> AddRangeAsync(IReadOnlyList<T> entities);

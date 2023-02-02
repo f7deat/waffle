@@ -1,6 +1,8 @@
-﻿using Waffle.Core.Interfaces.IService;
+﻿using Waffle.Core.Interfaces.IRepository;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services;
 using Waffle.Core.Services.AppSettings;
+using Waffle.Infrastructure.Repositories;
 
 namespace Waffle.Extensions
 {
@@ -13,6 +15,7 @@ namespace Waffle.Extensions
             services.AddScoped<IComponentService, ComponentService>();
             services.AddScoped<IFileExplorerService, FileExplorerService>();
             services.AddScoped<ILocalizationService, LocalizationService>();
+            services.AddScoped<ILocalizationRepository, LocalizationRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWorkService, WorkService>();
         }

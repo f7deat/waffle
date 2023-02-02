@@ -2,6 +2,7 @@
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models;
 
 namespace Waffle.Core.Services
 {
@@ -38,6 +39,12 @@ namespace Waffle.Core.Services
                 return default;
             }
             return await _context.Components.FirstOrDefaultAsync(x => x.NormalizedName.ToLower().Equals(name.ToLower()));
+        }
+
+        public async Task<ListResult<Component>> ListAsync(IFilterOptions filterOptions)
+        {
+            var query = _context.Components.OrderBy(x => x.NormalizedName);
+            return await ListResult<Component>.Success(query, filterOptions);
         }
     }
 }

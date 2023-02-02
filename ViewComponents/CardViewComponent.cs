@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
@@ -17,7 +18,10 @@ namespace Waffle.ViewComponents
             var card = await _workService.GetAsync<Card>(id);
             if (card is null)
             {
-                return View(Empty.DefaultView);
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = id.ToString(),
+                });
             }
             return View(card);
         }

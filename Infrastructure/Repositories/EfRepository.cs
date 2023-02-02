@@ -19,6 +19,8 @@ namespace Waffle.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<T?> FindAsync(object id) => await _context.Set<T>().FindAsync(id);
+
         /// <inheritdoc/>
         public async Task<IReadOnlyList<T>> ListAsync() => await _context.Set<T>().ToListAsync();
 

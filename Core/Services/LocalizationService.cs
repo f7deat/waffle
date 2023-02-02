@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -11,10 +12,13 @@ namespace Waffle.Core.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
-        public LocalizationService(ApplicationDbContext context, IConfiguration configuration)
+        private readonly ILocalizationRepository _localizationRepository;
+
+        public LocalizationService(ApplicationDbContext context, IConfiguration configuration, ILocalizationRepository localizationRepository)
         {
             _context = context;
             _configuration = configuration;
+            _localizationRepository = localizationRepository;
         }
 
         public async Task<IdentityResult> AddAsync(Localization args)
@@ -33,20 +37,18 @@ namespace Waffle.Core.Services
             }
             args.Language = lang;
             args.Key = args.Key.Trim().ToLower();
-            await _context.Localizations.AddAsync(args);
-            await _context.SaveChangesAsync();
+            await _localizationRepository.AddAsync(args);
             return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> DeleteAsync(Guid id)
         {
-            var localization = await _context.Localizations.FindAsync(id);
+            var localization = await GetAsync(id);
             if (localization is null)
             {
                 return IdentityResult.Failed();
             }
-            _context.Localizations.Remove(localization);
-            await _context.SaveChangesAsync();
+            await _localizationRepository.DeleteAsync(localization);
             return IdentityResult.Success;
         }
 
@@ -61,13 +63,12 @@ namespace Waffle.Core.Services
                     Key = key,
                     Language = lang,
                 };
-                await _context.AddAsync(i18n);
-                await _context.SaveChangesAsync();
+                await _localizationRepository.AddAsync(i18n);
             }
             return i18n.Value ?? key;
         }
 
-        public async Task<Localization?> GetAsync(Guid id) => await _context.Localizations.FindAsync(id);
+        public async Task<Localization?> GetAsync(Guid id) => await _localizationRepository.FindAsync(id);
 
         public async Task<ListResult<Localization>> GetListAsync(BasicFilterOptions filterOptions)
         {
@@ -78,7 +79,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> SaveAsync(Localization args)
         {
-            var localization = await _context.Localizations.FindAsync(args.Id);
+            var localization = await GetAsync(args.Id);
             if (localization is null)
             {
                 return IdentityResult.Failed();

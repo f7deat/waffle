@@ -28,11 +28,7 @@ namespace Waffle.Controllers
         public async Task<IActionResult> ListAllAsync() => Ok(await _context.Components.Where(x => x.Active).OrderBy(x => x.NormalizedName).ToListAsync());
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync() => Ok(new
-        {
-            data = await _context.Components.ToListAsync(),
-            total = await _context.Components.CountAsync()
-        });
+        public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _componentService.ListAsync(filterOptions));
 
         [HttpGet("list-work/{id}")]
         public async Task<IActionResult> ListWorkAsync([FromRoute] Guid id, [FromQuery] WorkFilterOptions filterOptions)
@@ -40,6 +36,7 @@ namespace Waffle.Controllers
             var query = from a in _context.WorkContents
                         join b in _context.Components on a.ComponentId equals b.Id
                         where b.Id == id
+                        orderby a.Id ascending
                         select new WorkListItem
                         {
                             Active = a.Active,
@@ -47,18 +44,14 @@ namespace Waffle.Controllers
                             NormalizedName = b.NormalizedName,
                             Id = a.Id
                         };
-            return Ok(new
-            {
-                data = await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(),
-                total = await query.CountAsync()
-            });
+            return Ok(await ListResult<WorkListItem>.Success(query, filterOptions));
         }
 
         [HttpPost("delete/{id}"), Authorize(Roles = RoleName.Admin)]
         public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
         {
-            var component = await _context.Components.FindAsync(id);
-            if (component == null)
+            var component = await _componentService.FindAsync(id);
+            if (component is null)
             {
                 return BadRequest();
             }
@@ -74,7 +67,7 @@ namespace Waffle.Controllers
         [HttpPost("active/{id}")]
         public async Task<IActionResult> DraftAsync([FromRoute] Guid id)
         {
-            var component = await _context.Components.FindAsync(id);
+            var component = await _componentService.FindAsync(id);
             if (component is null)
             {
                 return Ok(IdentityResult.Failed());
