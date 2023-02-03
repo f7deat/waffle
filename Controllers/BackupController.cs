@@ -24,13 +24,15 @@ namespace Waffle.Controllers
         private readonly IComponentService _componentService;
         private readonly IAppSettingService _appSettingService;
         private readonly ICatalogService _catalogService;
-        public BackupController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService)
+        private readonly IWorkService _workService;
+        public BackupController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService, IWorkService workService)
         {
             _context = context;
             _roleManager = roleManager;
             _componentService = componentService;
             _appSettingService = appSettingService;
             _catalogService = catalogService;
+            _workService = workService;
         }
 
         [HttpPost("export")]
@@ -43,6 +45,13 @@ namespace Waffle.Controllers
             AppSettings = await _context.AppSettings.ToListAsync(),
             Components = await _context.Components.ToListAsync(),
             Catalogs = await _context.Catalogs.ToListAsync()
+        });
+
+        [HttpPost("export/catalog/{id}")]
+        public async Task<IActionResult> ExportCatalogAsync([FromRoute] Guid id) => Ok(new
+        {
+            catalog = await _catalogService.FindAsync(id),
+            items = await _workService.ExportByCatalogAsync(id)
         });
 
         [HttpPost("import")]

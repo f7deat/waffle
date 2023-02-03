@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Data;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
@@ -17,10 +16,14 @@ namespace Waffle.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
             var contactForm = await _workService.GetAsync<ContactForm>(id);
-            if (contactForm is not null)
+            if (contactForm is null)
             {
-                contactForm.Id = id;
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = id.ToString()
+                });
             }
+            contactForm.Id = id;
             return View(contactForm);
         }
     }

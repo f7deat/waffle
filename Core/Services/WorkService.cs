@@ -86,6 +86,14 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
+        public async Task<dynamic> ExportByCatalogAsync(Guid catalogId)
+        {
+            var query = from workItems in _context.WorkItems
+                        join workContents in _context.WorkContents on workItems.WorkContentId equals workContents.Id
+                        select new { workItems, workContents };
+            return await query.ToListAsync();
+        }
+
         public async Task<WorkContent?> FindAsync(Guid id) => await _context.WorkContents.FindAsync(id);
 
         public async Task<T?> GetAsync<T>(Guid id)

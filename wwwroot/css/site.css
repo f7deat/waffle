@@ -473,6 +473,10 @@ p {
     --bs-card-border-width: 0;
 }
 
+.relative {
+    position: relative;
+}
+
 .rounded-0 {
     border-radius: 0;
 }

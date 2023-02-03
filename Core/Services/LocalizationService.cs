@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -13,12 +14,14 @@ namespace Waffle.Core.Services
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly ILocalizationRepository _localizationRepository;
+        private readonly IMemoryCache _memoryCache;
 
-        public LocalizationService(ApplicationDbContext context, IConfiguration configuration, ILocalizationRepository localizationRepository)
+        public LocalizationService(ApplicationDbContext context, IConfiguration configuration, ILocalizationRepository localizationRepository, IMemoryCache memoryCache)
         {
             _context = context;
             _configuration = configuration;
             _localizationRepository = localizationRepository;
+            _memoryCache = memoryCache;
         }
 
         public async Task<IdentityResult> AddAsync(Localization args)
@@ -54,18 +57,25 @@ namespace Waffle.Core.Services
 
         public async Task<string> GetAsync(string key)
         {
-            var lang = _configuration.GetValue<string>("language");
-            var i18n = await _context.Localizations.FirstOrDefaultAsync(x => x.Key.Equals(key.ToLower()) && x.Language.Equals(lang));
-            if (i18n is null)
+            var cacheKey = $"{nameof(Localization)}-{key}";
+            if (!_memoryCache.TryGetValue($"{key}", out string cacheValue))
             {
-                i18n = new Localization
+                var lang = _configuration.GetValue<string>("language");
+                var i18n = await _context.Localizations.FirstOrDefaultAsync(x => x.Key.Equals(key.ToLower()) && x.Language.Equals(lang));
+                if (i18n is null)
                 {
-                    Key = key,
-                    Language = lang,
-                };
-                await _localizationRepository.AddAsync(i18n);
+                    i18n = new Localization
+                    {
+                        Key = key,
+                        Language = lang,
+                    };
+                    await _localizationRepository.AddAsync(i18n);
+                }
+                cacheValue = i18n.Value ?? key;
+                var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromHours(1));
+                _memoryCache.Set(cacheKey, cacheValue, cacheEntryOptions);
             }
-            return i18n.Value ?? key;
+            return cacheValue;
         }
 
         public async Task<Localization?> GetAsync(Guid id) => await _localizationRepository.FindAsync(id);

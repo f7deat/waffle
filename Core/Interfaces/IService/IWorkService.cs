@@ -22,5 +22,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> ItemAddAsync(WorkItem args);
         Task<WorkContent?> FindAsync(Guid id);
         Task<IEnumerable<Option>> GetListAsync(BasicFilterOptions filterOptions);
+        Task<dynamic> ExportByCatalogAsync(Guid catalogId);
     }
 }

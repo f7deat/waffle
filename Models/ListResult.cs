@@ -21,7 +21,7 @@ namespace Waffle.Models
 
         public static async Task<ListResult<T>> Success(IQueryable<T> query, IFilterOptions filterOptions)
         {
-            return new ListResult<T>(await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(), await query.CountAsync(), filterOptions);
+            return new ListResult<T>(await query.AsNoTracking().Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(), await query.CountAsync(), filterOptions);
         }
     }
 }

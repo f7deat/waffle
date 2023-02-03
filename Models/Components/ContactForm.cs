@@ -13,7 +13,6 @@ namespace Waffle.Models.Components
             Note = string.Empty;
             ResultUrl = string.Empty;
             ChatId = string.Empty;
-            Labels = new ContactFormLabel();
         }
 
         [JsonPropertyName("name")]
@@ -26,34 +25,9 @@ namespace Waffle.Models.Components
         public string Note { get; set; }
         [JsonPropertyName("resultUrl")]
         public string ResultUrl { get; set; }
-        [JsonPropertyName("labels")]
-        public ContactFormLabel Labels { get; set; }
         [JsonPropertyName("templateId")]
         public string? TemplateId { get; set; }
         [JsonPropertyName("chatId")]
         public string ChatId { get; set; }
-    }
-
-    public class ContactFormLabel
-    {
-        public ContactFormLabel()
-        {
-            Name = nameof(Name);
-            Email = nameof(Email);
-            PhoneNumber = "Phone number";
-            Note = nameof(Note);
-            Address = nameof(Address);
-        }
-
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-        [JsonPropertyName("email")]
-        public string Email { get; set; }
-        [JsonPropertyName("phoneNumber")]
-        public string PhoneNumber { get; set; }
-        [JsonPropertyName("note")]
-        public string Note { get; set; }
-        [JsonPropertyName("address")]
-        public string Address { get; set; }
     }
 }
