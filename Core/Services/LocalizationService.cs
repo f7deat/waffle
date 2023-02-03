@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -39,7 +40,7 @@ namespace Waffle.Core.Services
                 return IdentityResult.Failed();
             }
             args.Language = lang;
-            args.Key = args.Key.Trim().ToLower();
+            args.Key = SeoHelper.ToSeoFriendly(args.Key.Trim().ToLower());
             await _localizationRepository.AddAsync(args);
             return IdentityResult.Success;
         }

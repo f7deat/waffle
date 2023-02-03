@@ -140,6 +140,10 @@ p {
     margin-block-end: 0.25rem;
 }
 
+.absolute {
+    position: absolute;
+}
+
 .bg-white {
     background-color: white;
 }

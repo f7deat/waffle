@@ -6,7 +6,7 @@
     <div class="md:w-2/3">
         <div class="contact-map relative">
             <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14897.269892569362!2d105.8407837!3d21.01997945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1675418049913!5m2!1sen!2s" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-full"></iframe>
-            <div class="rounded shadow map-description bg-white">
+            <div class="rounded shadow map-description bg-white absolute p-4">
                 <div class="md:grid gap-4 grid-cols-2">
                     <div>
                         <div class="mb-2 font-medium">ADDRESS</div>
@@ -76,13 +76,18 @@
                         </label>
                         <textarea class="form-control" name="note" id="contact-input-note"></textarea>
                     </div>
-                    <button class="btn btn-primary" type="submit" id="contact-btn-submit">
-                        <i class="far fa-paper-plane mr-2"></i>
-                        <localize key="submit" />
-                    </button>
-                    <button class="btn btn-secondary" type="reset">
-                        <localize key="reset" />
-                    </button>
+                    <div class="mb-3">
+                        <button class="btn btn-primary" type="submit" id="contact-btn-submit">
+                            <i class="far fa-paper-plane mr-2"></i>
+                            <localize key="submit" />
+                        </button>
+                        <button class="btn btn-secondary" type="reset">
+                            <localize key="reset" />
+                        </button>
+                    </div>
+                    <div class="mb-2 text-gray-500">
+                        <small>We do not share any of your information without your consent</small>
+                    </div>
                 </form>
             </div>
         </div>
