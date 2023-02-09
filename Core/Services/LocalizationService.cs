@@ -40,7 +40,7 @@ namespace Waffle.Core.Services
                 return IdentityResult.Failed();
             }
             args.Language = lang;
-            args.Key = SeoHelper.ToSeoFriendly(args.Key.Trim().ToLower());
+            args.Key = args.Key.Trim();
             await _localizationRepository.AddAsync(args);
             return IdentityResult.Success;
         }
@@ -62,7 +62,7 @@ namespace Waffle.Core.Services
             if (!_memoryCache.TryGetValue($"{key}", out string cacheValue))
             {
                 var lang = _configuration.GetValue<string>("language");
-                var i18n = await _context.Localizations.FirstOrDefaultAsync(x => x.Key.Equals(key.ToLower()) && x.Language.Equals(lang));
+                var i18n = await _context.Localizations.FirstOrDefaultAsync(x => x.Key.ToLower().Equals(key.ToLower()) && x.Language.Equals(lang));
                 if (i18n is null)
                 {
                     i18n = new Localization
