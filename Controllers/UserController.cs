@@ -32,7 +32,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync()
+        public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions)
         {
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(currentUserId))
@@ -40,11 +40,7 @@ namespace Waffle.Controllers
                 return BadRequest();
             }
             var query = _userManager.Users.Where(x => x.Id != currentUserId).OrderByDescending(x => x.Id);
-            return Ok(new
-            {
-                data = await query.ToListAsync(),
-                total = await query.CountAsync()
-            });
+            return Ok(await ListResult<IdentityUser>.Success(query, filterOptions));
         }
 
         [HttpGet("{id}")]
@@ -65,8 +61,14 @@ namespace Waffle.Controllers
             });
         }
 
+        [HttpGet("users-in-role/{roleName}")]
+        public async Task<IActionResult> GetUsersInRoleAsync([FromRoute] string roleName) => Ok(await _userService.GetUsersInRoleAsync(roleName));
+
         [HttpPost("add-to-role")]
         public async Task<IActionResult> AddToRoleAsync([FromBody] AddToRoleModel model) => Ok(await _userService.AddToRoleAsync(model));
+
+        [HttpPost("remove-from-role")]
+        public async Task<IActionResult> RemoveFromRoleAsync([FromBody] RemoveFromRoleModel args) => Ok(await _userService.RemoveFromRoleAsync(args));
 
         [HttpPost("password-sign-in"), AllowAnonymous]
         public async Task<IActionResult> PasswordSignInAsync([FromBody] LoginModel login)
@@ -74,7 +76,6 @@ namespace Waffle.Controllers
             var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
             if (result.Succeeded)
             {
-                _logger.LogInformation("Login", login.UserName);
                 var user = await _userManager.FindByEmailAsync(login.UserName);
                 var userRoles = await _userManager.GetRolesAsync(user);
 

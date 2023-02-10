@@ -1,14 +1,17 @@
 ﻿namespace Waffle.Models
 {
+    public abstract class UserEntity
+    {
+        public string? Id { get; set; }
+    }
     public class LoginModel
     {
         public string? UserName { get; set; }
         public string? Password { get; set; }
     }
 
-    public class ChangePasswordModel
+    public class ChangePasswordModel : UserEntity
     {
-        public string? Id { get; set; }
         public string? CurrentPassword { get; set; }
         public string? NewPassword { get; set; }
     }
@@ -19,9 +22,13 @@
         public string? Password { get; set; }
     }
 
-    public class AddToRoleModel
+    public class AddToRoleModel : UserEntity
     {
-        public string? UserId { get; set; }
+        public string? RoleName { get; set; }
+    }
+
+    public class RemoveFromRoleModel : UserEntity
+    {
         public string? RoleName { get; set; }
     }
 }

@@ -9,5 +9,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel model);
         Task<dynamic> GetCurrentUserAsync(string id);
         Task<IdentityResult> AddToRoleAsync(AddToRoleModel model);
+        Task<IList<IdentityUser>> GetUsersInRoleAsync(string roleName);
+        Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args);
     }
 }

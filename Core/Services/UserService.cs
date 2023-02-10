@@ -17,11 +17,11 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> AddToRoleAsync(AddToRoleModel model)
         {
-            if (string.IsNullOrEmpty(model.UserId) || string.IsNullOrEmpty(model.RoleName))
+            if (string.IsNullOrEmpty(model.Id) || string.IsNullOrEmpty(model.RoleName))
             {
                 return IdentityResult.Failed();
             }
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -79,6 +79,21 @@ namespace Waffle.Core.Services
                 avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(user.Email)}?s=520",
                 roles
             };
+        }
+
+        public async Task<IList<IdentityUser>> GetUsersInRoleAsync(string roleName) => await _userManager.GetUsersInRoleAsync(roleName);
+
+        public async Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args)
+        {
+            var user = await _userManager.FindByIdAsync(args.Id);
+            if (user is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "User not found!"
+                });
+            }
+            return await _userManager.RemoveFromRoleAsync(user, args.RoleName);
         }
     }
 }

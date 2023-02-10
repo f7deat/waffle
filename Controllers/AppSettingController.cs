@@ -18,14 +18,27 @@ namespace Waffle.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IAppSettingService _appSettingService;
-        public AppSettingController(ApplicationDbContext context, IAppSettingService appSettingService)
+        private readonly IConfiguration _configuration;
+        
+        public AppSettingController(ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration)
         {
             _context = context;
             _appSettingService = appSettingService;
+            _configuration = configuration;
         }
 
         [HttpGet("list")]
         public async Task<IActionResult> ListAsync() => Ok(await _appSettingService.ListAsync());
+
+        [HttpGet("info")]
+        public IActionResult GetInfo()
+        {
+            return Ok(new
+            {
+                theme = _configuration.GetValue<string>("theme"),
+                language = _configuration.GetValue<string>("language")
+            });
+        }
 
         [HttpGet("layout/{id}")]
         public async Task<IActionResult> GetLayoutAsync([FromRoute] Guid id)
