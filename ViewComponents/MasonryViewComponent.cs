@@ -1,22 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Data;
+using Waffle.Core.Interfaces.IService;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
     public class MasonryViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
-        public MasonryViewComponent(ApplicationDbContext context)
+        private readonly IWorkService _workService;
+
+        public MasonryViewComponent(IWorkService workService)
         {
-            _context = context;
+            _workService = workService;
         }
-        public async Task<IViewComponentResult> InvokeAsync(Guid workContentId)
+        public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
-            var workContent = await _context.WorkContents.FindAsync(workContentId);
-            if (workContent is null)
+            var masonry = await _workService.GetAsync<Masonry>(id);
+            if (masonry is null)
             {
-                return View();
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = id.ToString()
+                });
             }
             return View();
         }

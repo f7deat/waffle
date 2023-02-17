@@ -10,7 +10,6 @@
 /Migrations
 /.vs
 /Waffle.sln
-/wwwroot/css
 /wwwroot/imgs
 /wwwroot/files
 *.map

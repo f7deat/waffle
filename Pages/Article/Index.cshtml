@@ -17,7 +17,9 @@
                     <div class="pagination mb-4">
                         @if (Model.FilterOptions.Current * Model.FilterOptions.PageSize <= Model.Articles.Total)
                         {
-                            <a href="/article?current=@(Model.FilterOptions.Current + 1)" class="px-4 py-1 border rounded bg-white">Trang sau</a>
+                            <a href="/article?current=@(Model.FilterOptions.Current + 1)" class="px-4 py-1 border rounded bg-white">
+                                <localize key="nextPage" />
+                            </a>
                         }
                     </div>
                 }

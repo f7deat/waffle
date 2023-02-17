@@ -16,6 +16,6 @@ namespace Waffle.Models.Components
         [JsonPropertyName("catalogId")]
         public Guid CatalogId { get; set; }
         [JsonIgnore]
-        public List<WorkListItem> WorkListItems { get; set; }
+        public IEnumerable<WorkListItem> WorkListItems { get; set; }
     }
 }

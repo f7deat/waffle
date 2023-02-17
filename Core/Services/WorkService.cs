@@ -129,6 +129,20 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
+        public async Task<IEnumerable<WorkListItem>> GetWorkListItemChildAsync(Guid parentId)
+        {
+            var query = from b in _context.WorkContents
+                        join c in _context.Components on b.ComponentId equals c.Id
+                        where b.ParentId == parentId && b.Active
+                        select new WorkListItem
+                        {
+                            Id = b.Id,
+                            Name = b.Name,
+                            NormalizedName = c.NormalizedName
+                        };
+            return await query.ToListAsync();
+        }
+
         public async Task<IdentityResult> NavbarSettingSaveAsync(Navbar args)
         {
             var navbar = await GetAsync<Navbar>(args.Id);
@@ -218,6 +232,11 @@ namespace Waffle.Core.Services
                             Value = b.Id
                         };
             return await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
+        }
+
+        public async Task<IEnumerable<WorkContent>> GetWorkContentChildsAsync(Guid parentId)
+        {
+            return await _context.WorkContents.Where(x => x.Active && x.ParentId == parentId).OrderByDescending(x => x.Id).ToListAsync();
         }
     }
 }

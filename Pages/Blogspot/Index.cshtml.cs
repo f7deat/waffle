@@ -13,12 +13,18 @@ namespace Waffle.Pages.Blogspot
         public IndexModel(ICatalogService catalogService)
         {
             _catalogService = catalogService;
+            Blogspot = new Catalog();
         }
 
         private ListResult<Catalog>? Catalog;
+        public Catalog Blogspot;
 
         public async Task<IActionResult> OnGetAsync()
         {
+            Blogspot = await _catalogService.EnsureDataAsync(nameof(Blogspot), CatalogType.Entry);
+            ViewData["Title"] = Blogspot.Name;
+            ViewData["Description"] = Blogspot.Description;
+
             Catalog = await _catalogService.ListAsync(new CatalogFilterOptions
             {
                 Active= true,

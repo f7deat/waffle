@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using Waffle.Data;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
     public class LookbookViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
-        public LookbookViewComponent(ApplicationDbContext context)
+        private readonly IWorkService _workService;
+        public LookbookViewComponent(IWorkService workService)
         {
-            _context = context;
+            _workService = workService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Guid workId)
         {
-            var lookbook = await _context.WorkContents.FindAsync(workId);
+            var lookbook = await _workService.FindAsync(workId);
             if (lookbook is not null)
             {
                 ViewBag.Images = GetImagesAsync(workId);
@@ -26,7 +25,7 @@ namespace Waffle.ViewComponents
 
         private async IAsyncEnumerable<Image?> GetImagesAsync(Guid workId)
         {
-            var images = await _context.WorkContents.Where(x => x.Active && x.ParentId == workId).OrderByDescending(x => x.Id).Take(9).ToListAsync();
+            var images = await _workService.GetWorkContentChildsAsync(workId);
             foreach (var image in images)
             {
                 if (string.IsNullOrEmpty(image.Arguments))
