@@ -38,6 +38,8 @@ namespace Waffle.Models
     public class WorkFilterOptions : FilterOptions
     {
         public string? Name { get; set; }
+        public Guid? ParentId { get; set; }
+        public bool? Active { get; set; }
     }
 
     public class BasicFilterOptions : FilterOptions

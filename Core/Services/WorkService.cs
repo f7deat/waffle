@@ -129,18 +129,20 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
-        public async Task<IEnumerable<WorkListItem>> GetWorkListItemChildAsync(Guid parentId)
+        public async Task<ListResult<WorkListItem>> GetWorkListItemChildAsync(WorkFilterOptions filterOptions)
         {
             var query = from b in _context.WorkContents
                         join c in _context.Components on b.ComponentId equals c.Id
-                        where b.ParentId == parentId && b.Active
+                        where (filterOptions.ParentId == null || b.ParentId == filterOptions.ParentId) && 
+                        (filterOptions.Active == null || b.Active == filterOptions.Active)
                         select new WorkListItem
                         {
                             Id = b.Id,
                             Name = b.Name,
-                            NormalizedName = c.NormalizedName
+                            NormalizedName = c.NormalizedName,
+                            Active = b.Active
                         };
-            return await query.ToListAsync();
+            return await ListResult<WorkListItem>.Success(query, filterOptions);
         }
 
         public async Task<IdentityResult> NavbarSettingSaveAsync(Navbar args)

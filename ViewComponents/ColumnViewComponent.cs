@@ -22,7 +22,11 @@ namespace Waffle.ViewComponents
                     RequestId = id.ToString()
                 });
             }
-            column.WorkListItems = await _workService.GetWorkListItemChildAsync(id);
+            var workListItems = await _workService.GetWorkListItemChildAsync(new WorkFilterOptions
+            {
+                Active = true
+            });
+            column.WorkListItems = workListItems.Data ?? new List<WorkListItem>();
             return View(column);
         }
     }

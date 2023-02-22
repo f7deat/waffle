@@ -209,24 +209,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("child/list/{id}")]
-        public async Task<IActionResult> GetChildListAsync([FromRoute] Guid id)
-        {
-            var query = from a in _context.WorkContents
-                        join b in _context.Components on a.ComponentId equals b.Id
-                        where a.ParentId == id
-                        select new WorkListItem { 
-                            Id = a.Id,
-                            Name = a.Name,
-                            NormalizedName = b.NormalizedName,
-                        };
-            return Ok(new
-            {
-                data = await query.ToListAsync(),
-                total = await query.CountAsync()
-            });
-        }
-
-        #region Custom components
+        public async Task<IActionResult> GetChildListAsync([FromRoute] Guid id) => Ok(await _workService.GetWorkListItemChildAsync(new WorkFilterOptions()));
 
         [HttpGet("navbar/{id}")]
         public async Task<IActionResult> GetNavbarAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Navbar>(id));
@@ -413,7 +396,5 @@ namespace Waffle.Controllers
 
         [HttpPost("blogger/save")]
         public async Task<IActionResult> BloggerSaveAsync([FromBody] Blogger model) => Ok(await _workService.BloggerSaveAsync(model));
-
-        #endregion
     }
 }
