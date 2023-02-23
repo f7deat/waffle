@@ -240,5 +240,22 @@ namespace Waffle.Core.Services
         {
             return await _context.WorkContents.Where(x => x.Active && x.ParentId == parentId).OrderByDescending(x => x.Id).ToListAsync();
         }
+
+        public async Task<IdentityResult> SaveAsync(WorkContent args)
+        {
+            var work = await FindAsync(args.Id);
+            if (work == null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "general.dataNotFound",
+                    Description = "Work not found"
+                });
+            }
+            work.Active = args.Active;
+            work.Name = args.Name;
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
     }
 }

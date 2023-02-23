@@ -105,23 +105,7 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("save")]
-        public async Task<IActionResult> SaveAsync([FromBody] WorkContent model)
-        {
-            var workContent = await _context.WorkContents.FindAsync(model.Id);
-            if (workContent is null)
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Work content not found!"
-                }));
-            }
-            workContent.Arguments = model.Arguments;
-            workContent.Active = model.Active;
-            workContent.Name = model.Name;
-
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
+        public async Task<IActionResult> SaveAsync([FromBody] WorkContent args) => Ok(await _workService.SaveAsync(args));
 
         [HttpPost("active/{id}")]
         public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _workService.ActiveAsync(id));

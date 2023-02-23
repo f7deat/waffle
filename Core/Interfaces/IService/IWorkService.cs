@@ -25,5 +25,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<dynamic> ExportByCatalogAsync(Guid catalogId);
         Task<ListResult<WorkListItem>> GetWorkListItemChildAsync(WorkFilterOptions filterOptions);
         Task<IEnumerable<WorkContent>> GetWorkContentChildsAsync(Guid parentId);
+        Task<IdentityResult> SaveAsync(WorkContent args);
     }
 }
