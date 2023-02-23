@@ -19,5 +19,7 @@ namespace Waffle.Models
         public List<Catalog>? Catalogs { get; set; }
         [JsonPropertyName("components")]
         public List<Component>? Components { get; set; }
+        [JsonPropertyName("localization")]
+        public List<Localization>? Localizations { get; set; }
     }
 }

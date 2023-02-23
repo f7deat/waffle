@@ -44,7 +44,8 @@ namespace Waffle.Controllers
             FileItems = await _context.FileItems.ToListAsync(),
             AppSettings = await _context.AppSettings.ToListAsync(),
             Components = await _context.Components.ToListAsync(),
-            Catalogs = await _context.Catalogs.ToListAsync()
+            Catalogs = await _context.Catalogs.ToListAsync(),
+            Localizations = await _context.Localizations.ToListAsync()
         });
 
         [HttpPost("export/catalog/{id}")]
@@ -111,6 +112,11 @@ namespace Waffle.Controllers
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Components");
                 await _context.Components.AddRangeAsync(data.Components);
+            }
+            if (data.Localizations != null && data.Localizations.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Localizations");
+                await _context.Localizations.AddRangeAsync(data.Localizations);
             }
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);

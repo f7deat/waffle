@@ -12,19 +12,20 @@ namespace Waffle.ViewComponents
         {
             _workService = workService;
         }
-        public async Task<IViewComponentResult> InvokeAsync(Guid id)
+        public async Task<IViewComponentResult> InvokeAsync(Guid workId)
         {
-            var column = await _workService.GetAsync<Column>(id);
+            var column = await _workService.GetAsync<Column>(workId);
             if (column is null)
             {
                 return View(Empty.DefaultView, new ErrorViewModel
                 {
-                    RequestId = id.ToString()
+                    RequestId = workId.ToString()
                 });
             }
             var workListItems = await _workService.GetWorkListItemChildAsync(new WorkFilterOptions
             {
-                Active = true
+                Active = true,
+                ParentId = workId
             });
             column.WorkListItems = workListItems.Data ?? new List<WorkListItem>();
             return View(column);

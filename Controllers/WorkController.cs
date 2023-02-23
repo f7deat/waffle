@@ -30,10 +30,6 @@ namespace Waffle.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync([FromBody] AddWorkContentModel model)
         {
-            if (model is null)
-            {
-                return BadRequest();
-            }
             var workContent = new WorkContent
             {
                 Name = model.Name,
@@ -209,7 +205,10 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("child/list/{id}")]
-        public async Task<IActionResult> GetChildListAsync([FromRoute] Guid id) => Ok(await _workService.GetWorkListItemChildAsync(new WorkFilterOptions()));
+        public async Task<IActionResult> GetChildListAsync([FromRoute] Guid id) => Ok(await _workService.GetWorkListItemChildAsync(new WorkFilterOptions
+        {
+            ParentId = id
+        }));
 
         [HttpGet("navbar/{id}")]
         public async Task<IActionResult> GetNavbarAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Navbar>(id));
