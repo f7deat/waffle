@@ -27,7 +27,7 @@ namespace Waffle.ViewComponents
                     RequestId = id.ToString()
                 });
             }
-            var response = await _googleService.BloggerPostsAsync(blogger.BlogId, blogger.ApiKey, 5, Request.Query["pageToken"], Request.Query["labels"]);
+            var response = await _googleService.BloggerPostsAsync(blogger.BlogId, blogger.ApiKey, 10, Request.Query["pageToken"], Request.Query["labels"]);
             if (response is null || response.Items is null)
             {
                 return View(Empty.DefaultView, new ErrorViewModel

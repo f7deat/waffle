@@ -21,7 +21,10 @@ namespace Waffle.ViewComponents
             var work = await _workService.FindAsync(workId);
             if (work is null)
             {
-                return View(Empty.DefaultView);
+                return View(Empty.DefaultView, new ErrorViewModel
+                {
+                    RequestId = workId.ToString()
+                });
             }
             var articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions());
             return View(new Feed

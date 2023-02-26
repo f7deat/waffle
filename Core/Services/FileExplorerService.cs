@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -36,7 +37,7 @@ namespace Waffle.Core.Services
         public async Task<ListResult<FileContent>> ListAsync(FileFilterOptions filterOptions)
         {
             var query = _context.FileContents
-                .Where(x => (string.IsNullOrWhiteSpace(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower())) && (string.IsNullOrEmpty(filterOptions.Type) || x.Type.Equals(filterOptions.Type.ToLower())))
+                .Where(x => (string.IsNullOrWhiteSpace(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower())) && (string.IsNullOrEmpty(filterOptions.Type) || filterOptions.Type.Contains(x.Type)))
                 .OrderByDescending(x => x.Id);
             return await ListResult<FileContent>.Success(query, filterOptions);
         }
