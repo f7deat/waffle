@@ -26,5 +26,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<ListResult<WorkListItem>> GetWorkListItemChildAsync(WorkFilterOptions filterOptions);
         Task<IEnumerable<WorkContent>> GetWorkContentChildsAsync(Guid parentId);
         Task<IdentityResult> SaveAsync(WorkContent args);
+        Task AddAsync(WorkContent workContent);
+        Task AddItemAsync(WorkItem workItem);
     }
 }

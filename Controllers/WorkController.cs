@@ -36,18 +36,13 @@ namespace Waffle.Controllers
                 ComponentId = model.ComponentId,
                 Active = true
             };
-            await _context.WorkContents.AddAsync(workContent);
-            await _context.SaveChangesAsync();
-
+            await _workService.AddAsync(workContent);
             var workItem = new WorkItem
             {
                 CatalogId = model.CatalogId,
                 WorkContentId = workContent.Id
             };
-
-            await _context.WorkItems.AddAsync(workItem);
-            await _context.SaveChangesAsync();
-
+            await _workService.AddItemAsync(workItem);
             return Ok(IdentityResult.Success);
         }
 
@@ -98,9 +93,7 @@ namespace Waffle.Controllers
                     Description = "Parrent component not found!"
                 }));
             }
-            await _context.WorkContents.AddAsync(workContent);
-            await _context.SaveChangesAsync();
-
+            await _workService.AddAsync(workContent);
             return Ok(IdentityResult.Success);
         }
 
@@ -145,7 +138,7 @@ namespace Waffle.Controllers
 
             if (await _context.WorkItems.CountAsync(x => x.WorkContentId == model.WorkContentId) == 1)
             {
-                var workContent = await _context.WorkContents.FindAsync(model.WorkContentId);
+                var workContent = await _workService.FindAsync(model.WorkContentId);
                 if (workContent is null)
                 {
                     return Ok(IdentityResult.Failed(new IdentityError
@@ -232,15 +225,10 @@ namespace Waffle.Controllers
         public async Task<IActionResult> ColumnAddAsync([FromBody] Column column) => Ok(await _workService.ColumnAddAsync(column));
 
         [HttpGet("column/list/{id}")]
-        public async Task<IActionResult> GetColumnListAsync([FromRoute] Guid id)
+        public async Task<IActionResult> GetColumnListAsync([FromRoute] Guid id) => Ok(await _workService.GetWorkListItemChildAsync(new WorkFilterOptions
         {
-            var query = _context.WorkContents.Where(x => x.ParentId == id);
-            return Ok(new
-            {
-                data = await query.ToListAsync(),
-                total = await query.CountAsync()
-            });
-        }
+            ParentId = id
+        }));
 
         [HttpGet("column/{id}")]
         public async Task<IActionResult> GetColumnAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Column>(id));
@@ -254,7 +242,7 @@ namespace Waffle.Controllers
         [HttpPost("swiper/add-image")]
         public async Task<IActionResult> AddImageSync([FromBody] AddSwiperItem model)
         {
-            var swiper = await _context.WorkContents.FindAsync(model.Id);
+            var swiper = await _workService.FindAsync(model.Id);
             if (swiper is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError
@@ -264,16 +252,13 @@ namespace Waffle.Controllers
             }
             var component = await _context.Components.FirstAsync(x => x.NormalizedName.Equals(nameof(Image)));
 
-            await _context.WorkContents.AddAsync(new WorkContent
+            await _workService.AddAsync(new WorkContent
             {
                 ParentId = swiper.Id,
                 Active = true,
                 ComponentId = component.Id,
                 Name = model.Name,
             });
-
-            await _context.SaveChangesAsync();
-
             return Ok(IdentityResult.Success);
         }
 
@@ -297,7 +282,7 @@ namespace Waffle.Controllers
         [HttpPost("block-editor/save")]
         public async Task<IActionResult> SaveBlockEditorAsync([FromBody] BlockEditor model)
         {
-            var workContent = await _context.WorkContents.FindAsync(model.Id);
+            var workContent = await _workService.FindAsync(model.Id);
             if (workContent is null)
             {
                 return BadRequest();
@@ -310,7 +295,7 @@ namespace Waffle.Controllers
         [HttpPost("card/save")]
         public async Task<IActionResult> SaveCardAsync([FromBody] Card model)
         {
-            var workContent = await _context.WorkContents.FindAsync(model.Id);
+            var workContent = await _workService.FindAsync(model.Id);
             if (workContent is null)
             {
                 return BadRequest();
@@ -341,7 +326,7 @@ namespace Waffle.Controllers
             {
                 return BadRequest();
             }
-            var workContent = await _context.WorkContents.FindAsync(model.Id);
+            var workContent = await _workService.FindAsync(model.Id);
             if (workContent is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError
@@ -357,14 +342,13 @@ namespace Waffle.Controllers
                     Description = "Image component not found!"
                 }));
             }
-            await _context.WorkContents.AddAsync(new WorkContent
+            await _workService.AddAsync(new WorkContent
             {
                 Active = true,
                 ComponentId = image.Id,
                 Name = model.Name,
                 ParentId = workContent.Id
             });
-            await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
 

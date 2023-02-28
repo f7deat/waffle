@@ -257,5 +257,17 @@ namespace Waffle.Core.Services
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }
+
+        public async Task AddAsync(WorkContent workContent)
+        {
+            await _context.AddAsync(workContent);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddItemAsync(WorkItem workItem)
+        {
+            await _context.AddAsync(workItem);
+            await _context.SaveChangesAsync();
+        }
     }
 }
