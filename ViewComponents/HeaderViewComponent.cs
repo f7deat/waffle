@@ -9,9 +9,11 @@ namespace Waffle.ViewComponents
     public class HeaderViewComponent : ViewComponent
     {
         private readonly IAppSettingService _settingService;
-        public HeaderViewComponent(IAppSettingService settingService)
+        private readonly IConfiguration _configuration;
+        public HeaderViewComponent(IAppSettingService settingService, IConfiguration configuration)
         {
             _settingService = settingService;
+            _configuration = configuration;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -32,7 +34,7 @@ namespace Waffle.ViewComponents
                     RequestId = setting.Id.ToString()
                 });
             }
-            return View(header.Template, header);
+            return View(_configuration.GetValue<string>("Theme"), header);
         }
     }
 }

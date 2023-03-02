@@ -9,9 +9,11 @@ namespace Waffle.ViewComponents
     public class FooterViewComponent : ViewComponent
     {
         private readonly IAppSettingService _settingService;
-        public FooterViewComponent(IAppSettingService settingService)
+        private readonly IConfiguration _configuration;
+        public FooterViewComponent(IAppSettingService settingService, IConfiguration configuration)
         {
             _settingService = settingService;
+            _configuration = configuration;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -24,7 +26,7 @@ namespace Waffle.ViewComponents
                     RequestId = setting.Id.ToString()
                 });
             }
-            return View(JsonSerializer.Deserialize<Footer>(setting.Value));
+            return View(_configuration.GetValue<string>("Theme"), JsonSerializer.Deserialize<Footer>(setting.Value));
         }
     }
 }

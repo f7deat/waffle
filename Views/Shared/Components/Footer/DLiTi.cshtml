@@ -1,0 +1,80 @@
+﻿@using Waffle.Models.Components
+@model Footer
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-title">
+                        <i class="fa fa-bars"></i>
+                        <localize key="community" />
+                    </div>
+                    <div class="footer-item">
+                        <a href="#" class="item-link">
+                            <i class="fas fa-caret-right"></i>
+                            <localize key="aboutUs" />
+                        </a>
+                    </div>
+                    <div class="footer-item">
+                        <a href="#" class="item-link"><i class="fas fa-caret-right"></i> Partners</a>
+                    </div>
+                    <div class="footer-item">
+                        <a href="#" class="item-link"><i class="fas fa-caret-right"></i> Term of use</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-title">
+                        <i class="fa fa-bars"></i>
+                        <localize key="contactUs" />
+                    </div>
+                    <div class="footer-item"><i class="fas fa-envelope"></i> <a href="mailto:@Model.Email" class="text-gray-500">@Model.Email</a></div>
+                    <div class="footer-item"><i class="fas fa-phone"></i> <a href="tel:@Model.PhoneNumber" class="text-gray-500">@Model.PhoneNumber</a></div>
+                    <div class="footer-item"><i class="fab fa-telegram-plane"></i> <a href="/page/feedback" class="text-gray-500">Feedback</a></div>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-title">
+                        <i class="fa fa-bars"></i>
+                        <localize key="stayConnected" />
+                    </div>
+                    <div class="mb-2">Subscribe to receive the latest information</div>
+                    <form method="post" action="/home/subscribe">
+                        <div class="flex gap-4">
+                            <input type="email" name="email" placeholder="Email" class="form-control" />
+                            <button type="submit" class="btn btn-primary">
+                                <localize key="subscribe" />
+                            </button>
+                        </div>
+                    </form>
+                    <div class="mb-2">
+                        <small>
+                            <localize key="or" />
+                            <a href="https://cms.defzone.net" target="_blank"><localize key="signIn" /></a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="company">
+            © @DateTime.Now.Year <a href="/">@Model.CompanyName</a>. All rights reserved.
+        </div>
+        <div class="footer-social">
+            <a href="https://www.facebook.com/DLiTiKingston">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#">
+                <i class="fab fa-youtube"></i>
+            </a>
+        </div>
+    </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
+<script src="~/js/dliti.js"></script>
