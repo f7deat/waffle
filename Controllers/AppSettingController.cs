@@ -7,6 +7,7 @@ using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Models;
+using Waffle.ExternalAPI.SendGrid;
 using Waffle.Models.Components;
 using Waffle.Models.Layout;
 
@@ -38,6 +39,26 @@ namespace Waffle.Controllers
                 theme = _configuration.GetValue<string>("theme"),
                 language = _configuration.GetValue<string>("language")
             });
+        }
+
+        [HttpGet("sendgrid")]
+        public async Task<IActionResult> GetSendGridAsync()
+        {
+            var app = await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
+            return Ok(await _appSettingService.GetAsync<SendGridConfigure>(app.Id));
+        }
+
+        [HttpPost("sendgrid/save")]
+        public async Task<IActionResult> SaveSendGridAsync([FromBody] SendGridConfigure args)
+        {
+            var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(SendGrid)));
+            if (setting == null)
+            {
+                return Ok(IdentityResult.Failed());
+            }
+            setting.Value = JsonSerializer.Serialize(args);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
 
         [HttpGet("layout/{id}")]
