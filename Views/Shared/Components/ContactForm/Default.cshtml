@@ -9,7 +9,9 @@
             <div class="rounded shadow map-description bg-white absolute p-4">
                 <div class="md:grid gap-4 grid-cols-2">
                     <div>
-                        <div class="mb-2 font-medium">ADDRESS</div>
+                        <div class="mb-2 font-medium uppercase">
+                            <localize key="address" />
+                        </div>
                         <div>
                             Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter
                         </div>
@@ -60,6 +62,7 @@
                                 <option value="decking">Decking</option>
                                 <option value="fencing">Fencing</option>
                                 <option value="gate">Gate</option>
+                                <option value="pergola">Pergola</option>
                                 <option value="other">Other</option>
                             </select>
                         </div>
@@ -77,7 +80,7 @@
                         <textarea class="form-control" name="note" id="contact-input-note"></textarea>
                     </div>
                     <div class="mb-3">
-                        <button class="btn btn-primary" type="submit" id="contact-btn-submit">
+                        <button class="btn btn-primary bg-primary" type="submit" id="contact-btn-submit">
                             <i class="far fa-paper-plane mr-2"></i>
                             <localize key="submit" />
                         </button>
