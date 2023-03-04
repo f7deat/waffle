@@ -12,6 +12,7 @@ using Waffle.Models.Components;
 using Microsoft.AspNetCore.Identity;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.Core.Services.AppSettings;
 
 namespace Waffle.Controllers
 {
@@ -21,11 +22,13 @@ namespace Waffle.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ITelegramService _telegramService;
         private readonly ILogger<ContactController> _logger;
-        public ContactController(ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService)
+        private readonly IAppSettingService _appSettingService;
+        public ContactController(ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, IAppSettingService appSettingService)
         {
             _context = context;
             _logger = logger;
             _telegramService = telegramService;
+            _appSettingService = appSettingService;
         }
 
         [HttpGet("list")]
@@ -46,24 +49,30 @@ namespace Waffle.Controllers
                 return BadRequest();
             }
             var meta = new ContactMeta();
-            var appSetting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(SendGrid)));
-            if (appSetting is not null && !string.IsNullOrEmpty(appSetting.Value))
+            var config = await _appSettingService.GetAsync<SendGridConfigure>(nameof(SendGrid));
+            if (config is not null)
             {
-                var config = JsonSerializer.Deserialize<SendGridConfigure>(appSetting.Value);
-                if (config is not null)
+                var client = new SendGridClient(config.ApiKey);
+                var from = new EmailAddress(config.From.Email, config.From.Name);
+                var subject = "[DLiTi.Com.Au] Thank for register";
+                var to = new EmailAddress(model.Email, model.Name);
+                var plainTextContent = $"Hi {model.Name}";
+                var htmlContent = "Thank for register, we will contact you asap!";
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+                if (!response.IsSuccessStatusCode)
                 {
-                    var client = new SendGridClient(config.ApiKey);
-                    var from = new EmailAddress(config.From.Email, config.From.Name);
-                    var subject = "Sending with Twilio SendGrid is Fun";
-                    var to = new EmailAddress(model.Email, model.Name);
-                    var plainTextContent = "and easy to do anywhere, even with C#";
-                    var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
-                    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-                    var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        _logger.LogError("Email sending error!", model.Email);
-                    }
+                    _logger.LogError("Email sending error!", model.Email);
+                }
+                subject = "[DLiTi.Com.Au] You have a new contact";
+                to = new EmailAddress("dlititimberbuild@gmail.com", "Taan");
+                plainTextContent = $"Hi there";
+                htmlContent = "You have a new contact, Please go to https://crm.defzone.net to view details";
+                msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Email sending error!");
                 }
             }
             var workContent = await _context.WorkContents.FindAsync(model.WorkContentId);
@@ -88,14 +97,10 @@ namespace Waffle.Controllers
             {
                 return NotFound("Missing configuration!");
             }
-            var telegram = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Telegram)));
-            if (telegram is not null && !string.IsNullOrEmpty(telegram.Value))
+            var telegram = await _appSettingService.GetAsync<Telegram>(nameof(Telegram));
+            if (telegram != null)
             {
-                var config = JsonSerializer.Deserialize<Telegram>(telegram.Value);
-                if (config is not null)
-                {
-                    await _telegramService.SendMessageAsync(config.Bot, contactForm.ChatId, $"You have new contact: {contact.Email}");
-                }
+                await _telegramService.SendMessageAsync(telegram.Bot, contactForm.ChatId, $"You have new contact: {contact.Email}");
             }
             return Redirect(contactForm?.ResultUrl ?? "/");
         }

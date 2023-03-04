@@ -44,6 +44,26 @@ namespace Waffle.Core.Services.AppSettings
             return JsonSerializer.Deserialize<T>(setting.Value);
         }
 
+        public async Task<T?> GetAsync<T>(string normalizedName)
+        {
+            if (string.IsNullOrEmpty(normalizedName))
+            {
+                throw new ArgumentNullException(nameof(normalizedName));
+            }
+            var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.ToLower().Equals(normalizedName));
+            if (setting is null)
+            {
+                setting = new AppSetting { Name = normalizedName, NormalizedName = normalizedName };
+                await _context.AppSettings.AddAsync(setting);
+                await _context.SaveChangesAsync();
+            }
+            if (string.IsNullOrEmpty(setting.Value))
+            {
+                return default;
+            }
+            return JsonSerializer.Deserialize<T>(setting.Value);
+        }
+
         public async Task<IdentityResult> HeaderLogoAsync(Header args)
         {
             var setting = await _context.AppSettings.FindAsync(args.Id);
