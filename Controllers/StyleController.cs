@@ -11,9 +11,11 @@ namespace Waffle.Controllers
     public class StyleController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public StyleController(IWebHostEnvironment webHostEnvironment)
+        private readonly IConfiguration _configuration;
+        public StyleController(IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _webHostEnvironment = webHostEnvironment;
+            _configuration = configuration;
         }
 
         [HttpGet("")]
@@ -53,6 +55,6 @@ namespace Waffle.Controllers
             }
         }
 
-        private string GetPath() => Path.Combine(_webHostEnvironment.WebRootPath, "css", $"{Request.Host.Host}.css");
+        private string GetPath() => Path.Combine(_webHostEnvironment.WebRootPath, "css", $"{_configuration.GetValue<string>("theme").ToLower()}.css");
     }
 }

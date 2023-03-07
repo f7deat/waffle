@@ -2,7 +2,6 @@
 using SendGrid.Helpers.Mail;
 using SendGrid;
 using Waffle.Data;
-using Microsoft.EntityFrameworkCore;
 using Waffle.Entities;
 using System.Text.Json;
 using Waffle.ExternalAPI.SendGrid;
@@ -13,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Core.Services.AppSettings;
+using Waffle.Models;
 
 namespace Waffle.Controllers
 {
@@ -32,14 +32,10 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync()
-        {
-            return Ok(new
-            {
-                data = await _context.Contacts.ToListAsync(),
-                total = await _context.Contacts.CountAsync()
-            });
-        }
+        public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await ListResult<Contact>.Success(_context.Contacts, filterOptions));
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Contacts.FindAsync(id));
 
         [HttpPost("submit-form"), AllowAnonymous]
         public async Task<IActionResult> SubmitContactAsync(SubmitFormModel model)
@@ -100,7 +96,7 @@ namespace Waffle.Controllers
             var telegram = await _appSettingService.GetAsync<Telegram>(nameof(Telegram));
             if (telegram != null)
             {
-                await _telegramService.SendMessageAsync(telegram.Bot, contactForm.ChatId, $"You have new contact: {contact.Email}");
+                await _telegramService.SendMessageAsync(telegram.Bot, contactForm.ChatId, $"You have new contact: {contact.Email}/{contact.PhoneNumber}/{contact.Address}/{contact.Note}");
             }
             return Redirect(contactForm?.ResultUrl ?? "/");
         }
