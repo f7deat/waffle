@@ -113,19 +113,15 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("statistic")]
-        public async Task<IActionResult> StatisticAsync()
+        public async Task<IActionResult> StatisticAsync() => Ok(new
         {
-            var data = new
-            {
-                catalog = await _context.Catalogs.CountAsync(),
-                workContent = await _context.WorkContents.CountAsync(),
-                workItem = await _context.WorkItems.CountAsync(),
-                component = await _context.Components.CountAsync(),
-                fileContent = await _context.FileContents.CountAsync(),
-                fileItem = await _context.FileItems.CountAsync()
-            };
-            return Ok(data);
-        }
+            catalog = await _context.Catalogs.CountAsync(),
+            workContent = await _context.WorkContents.CountAsync(),
+            workItem = await _context.WorkItems.CountAsync(),
+            component = await _context.Components.CountAsync(),
+            fileContent = await _context.FileContents.CountAsync(),
+            localization = await _context.Localizations.CountAsync()
+        });
 
         [HttpGet("upgrade/list")]
         public async Task<IActionResult> UpgradeListAsync()
@@ -198,6 +194,7 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(Navbar));
             await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
             await _componentService.EnsureComponentAsync(nameof(Blogger));
+            await _componentService.EnsureComponentAsync(nameof(Jumbotron));
         }
     }
 }

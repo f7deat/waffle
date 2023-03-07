@@ -1,9 +1,18 @@
-﻿namespace Waffle.Models.Components
+﻿using System.Text.Json.Serialization;
+
+namespace Waffle.Models.Components
 {
     public class Link
     {
-        public string? Href { get; set; }
+        public Link()
+        {
+            Href = "#";
+        }
+        [JsonPropertyName("href")]
+        public string Href { get; set; }
+        [JsonPropertyName("name")]
         public string? Name { get; set; }
+        [JsonPropertyName("target")]
         public string? Target { get; set; }
     }
 }
