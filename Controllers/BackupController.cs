@@ -36,12 +36,11 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("export")]
-        public async Task<IActionResult> ExportAsync() => Ok(new BackupModel
+        public async Task<IActionResult> ExportAsync() => Ok(new BackupListItems
         {
             WorkContents = await _context.WorkContents.ToListAsync(),
             WorkItems = await _context.WorkItems.ToListAsync(),
             FileContents = await _context.FileContents.ToListAsync(),
-            FileItems = await _context.FileItems.ToListAsync(),
             AppSettings = await _context.AppSettings.ToListAsync(),
             Components = await _context.Components.ToListAsync(),
             Catalogs = await _context.Catalogs.ToListAsync(),
@@ -66,7 +65,7 @@ namespace Waffle.Controllers
                 }));
             }
             var stream = file.OpenReadStream();
-            var data = await JsonSerializer.DeserializeAsync<BackupModel>(stream);
+            var data = await JsonSerializer.DeserializeAsync<BackupListItems>(stream);
             if (data is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError
@@ -74,46 +73,37 @@ namespace Waffle.Controllers
                     Description = "Import failed!"
                 }));
             }
-            if (data.WorkContents != null && data.WorkContents.Any())
+            if (data.WorkContents.Any())
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkContents");
                 await _context.WorkContents.AddRangeAsync(data.WorkContents);
             }
-            if (data.WorkItems != null && data.WorkItems.Any())
+            if (data.WorkItems.Any())
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkItems");
                 await _context.WorkItems.AddRangeAsync(data.WorkItems);
             }
-
-            if (data.FileContents != null && data.FileContents.Any())
+            if (data.FileContents.Any())
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.FileContents");
                 await _context.FileContents.AddRangeAsync(data.FileContents);
             }
-            if (data.FileItems != null && data.FileItems.Any())
-            {
-                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.FileItems");
-                await _context.FileItems.AddRangeAsync(data.FileItems);
-            }
-
-            if (data.Catalogs != null && data.Catalogs.Any())
+            if (data.Catalogs.Any())
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Catalogs");
                 await _context.Catalogs.AddRangeAsync(data.Catalogs);
             }
-
-            if (data.AppSettings != null && data.AppSettings.Any())
+            if (data.AppSettings.Any())
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.AppSettings");
                 await _context.AppSettings.AddRangeAsync(data.AppSettings);
             }
-
-            if (data.Components != null && data.Components.Any())
+            if (data.Components.Any())
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Components");
                 await _context.Components.AddRangeAsync(data.Components);
             }
-            if (data.Localizations != null && data.Localizations.Any())
+            if (data.Localizations.Any())
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Localizations");
                 await _context.Localizations.AddRangeAsync(data.Localizations);
