@@ -2,12 +2,6 @@
 
 namespace Waffle.Models.Params
 {
-    public class SaveWorkContentModel : WorkContent
-    {
-        public int SortOrder { get; set; }
-        public Guid CatalogId { get; set; }
-    }
-
     public class AddStyleModel
     {
         public AddStyleModel()
