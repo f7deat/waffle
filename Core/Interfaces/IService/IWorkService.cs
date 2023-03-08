@@ -28,5 +28,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> SaveAsync(WorkContent args);
         Task AddAsync(WorkContent workContent);
         Task AddItemAsync(WorkItem workItem);
+        Task<IdentityResult> SaveArgumentsAsync(Guid id, object args);
     }
 }

@@ -1,9 +1,9 @@
 ﻿import Collapse from "./collapse/index.js";
 
-Collapse.init();
+new Collapse();
 
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
+    window.addEventListener('load', () => {
         navigator.serviceWorker
             .register("/serviceWorker.js", {
                 scope: '.'

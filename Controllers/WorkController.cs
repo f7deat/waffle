@@ -100,6 +100,9 @@ namespace Waffle.Controllers
         [HttpPost("save")]
         public async Task<IActionResult> SaveAsync([FromBody] WorkContent args) => Ok(await _workService.SaveAsync(args));
 
+        [HttpPost("save/{id}")]
+        public async Task<IActionResult> SaveArgumentsAsync([FromRoute] Guid id, [FromBody] object args) => Ok(await _workService.SaveArgumentsAsync(id, args));
+
         [HttpPost("active/{id}")]
         public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _workService.ActiveAsync(id));
 

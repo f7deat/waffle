@@ -245,6 +245,10 @@ p {
     display: flex;
 }
 
+.flex-col {
+    flex-direction: column;
+}
+
 .hidden, .collapse:not(.show) {
     display: none;
 }

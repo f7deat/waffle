@@ -58,6 +58,10 @@ a {
     margin-bottom: 0;
 }
 
+.breadcrumb {
+    --breadcrumb-bg: var(--gray-100);
+}
+
 .card {
     margin-bottom: 3rem;
 }

@@ -269,5 +269,17 @@ namespace Waffle.Core.Services
             await _context.AddAsync(workItem);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IdentityResult> SaveArgumentsAsync(Guid id, object args)
+        {
+            var work = await _context.WorkContents.FindAsync(id);
+            if (work == null)
+            {
+                return IdentityResult.Failed();
+            }
+            work.Arguments = JsonSerializer.Serialize(args);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
     }
 }

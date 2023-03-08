@@ -57,6 +57,7 @@ namespace Waffle.Core.Services
                     Name = normalizedName,
                     Active = true
                 };
+                await _context.Components.AddAsync(component);
                 await _context.SaveChangesAsync();
             }
             return component;
