@@ -11,6 +11,7 @@
 a {
     transition: .5s;
     text-decoration: none;
+    color: var(--primary);
 }
 
 .menu-vertical {
@@ -28,9 +29,13 @@ a {
             color: var(--bs-primary);
         }
 
-.pt-100 {
-    padding-top: 1.5rem;
+.navbar {
+    border-bottom: 1px solid var(--gray-200);
 }
+
+    .navbar ul {
+        list-style: none;
+    }
 
 .bg-primary {
     background-color: var(--primary);
@@ -40,25 +45,12 @@ a {
     border-color: #dee2e6;
 }
 
-.footer-contact-info, .single-footer-widget ul {
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style-type: none;
-}
-
-.single-footer-widget .footer-contact-info li a {
-    color: #e8e8e8;
-    display: block;
-}
-
-.single-footer-widget .partners-list {
-    padding-left: 0;
-    list-style-type: none;
-    margin-top: 20px;
-    margin-bottom: 0;
+.hover\:text-white:hover {
+    color: white;
 }
 
 .breadcrumb {
+    --breadcrumb-margin: 0.5rem 0;
     --breadcrumb-bg: var(--gray-100);
 }
 
@@ -135,6 +127,36 @@ h4 {
 
     .md\:h-20 {
         height: 5rem;
+    }
+
+    .md\:border-0 {
+        border-width: 0;
+    }
+
+    .md\:order-1 {
+        order: 1;
+    }
+
+    .md\:order-2 {
+        order: 2;
+    }
+
+    .md\:w-auto {
+        width: auto;
+    }
+
+    .md\:text-lg {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+    }
+
+    .md\:text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+    }
+
+    .md\:font-medium {
+        font-weight: 500;
     }
 }
 

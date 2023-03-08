@@ -144,6 +144,10 @@ p {
     position: absolute;
 }
 
+.block {
+    display: block;
+}
+
 .bg-white {
     background-color: white;
 }
@@ -154,6 +158,10 @@ p {
 
 .bg-yellow-500 {
     background-color: var(--yellow-500);
+}
+
+.bg-gray-100 {
+    background-color: var(--gray-100);
 }
 
 .bg-gray-900 {
@@ -247,6 +255,10 @@ p {
 
 .flex-col {
     flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
 }
 
 .hidden, .collapse:not(.show) {
@@ -365,6 +377,11 @@ p {
     padding-left: 1rem;
 }
 
+.px-6 {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+}
+
 .py-1 {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
@@ -383,6 +400,14 @@ p {
 .py-4 {
     padding-top: 1rem;
     padding-bottom: 1rem;
+}
+
+.pr-4 {
+    padding-right: 1rem;
+}
+
+.pl-3 {
+    padding-left: 0.75rem;
 }
 
 .mt-0 {
@@ -501,6 +526,10 @@ p {
     border-radius: 0.25rem;
 }
 
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
 .rounded-full {
     border-radius: 9999px;
 }
@@ -526,12 +555,20 @@ p {
     text-align: center;
 }
 
+.text-white {
+    color: white;
+}
+
 .text-primary {
     color: var(--primary);
 }
 
 .text-gray-500 {
     color: var(--gray-500);
+}
+
+.text-gray-700 {
+    color: var(--gray-700);
 }
 
 .gap-0 {
@@ -584,6 +621,10 @@ p {
 
     .md\:flex {
         display: flex;
+    }
+
+    .md\:flex-row {
+        flex-direction: row;
     }
 
     .md\:hidden {
