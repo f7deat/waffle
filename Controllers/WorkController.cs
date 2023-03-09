@@ -243,9 +243,9 @@ namespace Waffle.Controllers
         public async Task<IActionResult> GetSwiperAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Swiper>(id));
 
         [HttpPost("swiper/add-image")]
-        public async Task<IActionResult> AddImageSync([FromBody] AddSwiperItem model)
+        public async Task<IActionResult> AddImageSync([FromRoute] Guid id, [FromBody] Image args)
         {
-            var swiper = await _workService.FindAsync(model.Id);
+            var swiper = await _workService.GetAsync<Swiper>(id);
             if (swiper is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError
@@ -253,15 +253,8 @@ namespace Waffle.Controllers
                     Description = "Work content not found!"
                 }));
             }
-            var component = await _context.Components.FirstAsync(x => x.NormalizedName.Equals(nameof(Image)));
-
-            await _workService.AddAsync(new WorkContent
-            {
-                ParentId = swiper.Id,
-                Active = true,
-                ComponentId = component.Id,
-                Name = model.Name,
-            });
+            swiper.Images.Add(args);
+            await _workService.SaveArgumentsAsync(id, swiper);
             return Ok(IdentityResult.Success);
         }
 
@@ -325,10 +318,6 @@ namespace Waffle.Controllers
         [HttpPost("lookbook/add")]
         public async Task<IActionResult> AddLookBookAsync([FromBody] WorkContent model)
         {
-            if (model is null)
-            {
-                return BadRequest();
-            }
             var workContent = await _workService.FindAsync(model.Id);
             if (workContent is null)
             {

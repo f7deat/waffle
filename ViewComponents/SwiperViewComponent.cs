@@ -1,44 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using Waffle.Data;
+using Waffle.Core.Interfaces.IService;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
     public class SwiperViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ILogger<SwiperViewComponent> _logger;
-        public SwiperViewComponent(ApplicationDbContext context, ILogger<SwiperViewComponent> logger)
+        private readonly IWorkService _workService;
+        public SwiperViewComponent(IWorkService workService)
         {
-            _context = context;
-            _logger = logger;
+            _workService = workService;
         }
+
         public async Task<IViewComponentResult> InvokeAsync(Guid id)
         {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null)
+            var swiper = await _workService.GetAsync<Swiper>(id);
+            if (swiper is null)
             {
-                _logger.LogError("Work content not found: {0}", id);
-                return View();
-            }
-            ViewBag.SwiperSlides = GetImagesAsync(id);
-
-            return View();
-        }
-
-        private async IAsyncEnumerable<Image> GetImagesAsync(Guid id)
-        {
-            var workContents = await _context.WorkContents.Where(x => x.ParentId == id && x.Active).ToListAsync();
-            foreach (var item in workContents)
-            {
-                if (string.IsNullOrEmpty(item.Arguments))
+                return View(Empty.DefaultView, new ErrorViewModel
                 {
-                    continue;
-                }
-                yield return JsonSerializer.Deserialize<Image>(item.Arguments) ?? new Image();
+                    RequestId = id.ToString()
+                });
             }
+            return View(swiper);
         }
     }
 }
