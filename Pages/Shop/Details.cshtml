@@ -1,4 +1,7 @@
-﻿@page
+﻿@page "/shop/{normalizedName}"
+
 @model Waffle.Pages.Shop.DetailsModel
 @{
+    ViewData["Title"] = Model.Catalog.Name;
+    ViewData["Description"] = Model.Catalog.Description;
 }

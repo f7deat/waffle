@@ -14,9 +14,10 @@ namespace Waffle.Pages.Shop
         {
             _catalogService = catalogService;
             Shop = new Catalog();
+            Products = new List<Catalog>();
         }
 
-        public ListResult<Catalog>? Catalogs;
+        public IEnumerable<Catalog> Products;
         public Catalog Shop;
 
         public async Task<IActionResult> OnGetAsync()
@@ -25,11 +26,12 @@ namespace Waffle.Pages.Shop
             ViewData["Title"] = Shop.Name; 
             ViewData["Description"] = Shop.Description;
 
-            Catalogs = await _catalogService.ListAsync(new CatalogFilterOptions
+            var catalog = await _catalogService.ListAsync(new CatalogFilterOptions
             {
                 Active = true,
                 Type = CatalogType.Shop
             });
+            Products = catalog.Data ?? new List<Catalog>();
             return Page();
         }
     }

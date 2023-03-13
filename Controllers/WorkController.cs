@@ -49,6 +49,12 @@ namespace Waffle.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _workService.FindAsync(id));
 
+        [HttpGet("summary/{id}")]
+        public async Task<IActionResult> GetSummaryAsync([FromRoute] Guid id) => Ok(await _workService.GetSummaryAsync(id));
+
+        [HttpPost("summary/update")]
+        public async Task<IActionResult> UpdateSummaryAsync([FromBody] WorkContent args) => Ok(await _workService.UpdateSummaryAsync(args));
+
         [HttpGet("list")]
         public async Task<IActionResult> GetListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListAsync(filterOptions));
 

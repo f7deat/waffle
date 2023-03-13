@@ -39,9 +39,9 @@ namespace Waffle.Core.Services
             return await _userManager.AddToRoleAsync(user, model.RoleName);
         }
 
-        public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel model)
+        public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel args)
         {
-            var user = await _userManager.FindByIdAsync(model.Id);
+            var user = await _userManager.FindByIdAsync(args.Id);
             if (user is null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -49,7 +49,7 @@ namespace Waffle.Core.Services
                     Description = "User not found!"
                 });
             }
-            return await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            return await _userManager.ChangePasswordAsync(user, args.CurrentPassword, args.NewPassword);
         }
 
         public async Task<IdentityResult> CreateAsync(CreateUserModel model)

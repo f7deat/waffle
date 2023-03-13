@@ -9,13 +9,7 @@
 
             @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
 
-            @if (Model.Components != null)
-            {
-                @foreach (var item in Model.Components)
-                {
-                    @await Component.InvokeAsync(item.Name, item.Id)
-                }
-            }
+            <partial name="~/Views/Shared/Components/ListGroup/Default.cshtml" model="Model.Posts" />
 
         </div>
     </main>

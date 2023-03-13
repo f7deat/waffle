@@ -266,7 +266,7 @@ namespace Waffle.Core.Services
 
         public async Task AddItemAsync(WorkItem workItem)
         {
-            await _context.AddAsync(workItem);
+            await _context.WorkItems.AddAsync(workItem);
             await _context.SaveChangesAsync();
         }
 
@@ -278,6 +278,34 @@ namespace Waffle.Core.Services
                 return IdentityResult.Failed();
             }
             work.Arguments = JsonSerializer.Serialize(args);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
+        public async Task<WorkContent?> GetSummaryAsync(Guid id)
+        {
+            return await _context.WorkContents.Select(x => new WorkContent
+            {
+                Active = x.Active,
+                Name = x.Name,
+                ComponentId = x.ComponentId,
+                Id = x.Id,
+                ParentId = x.ParentId
+            }).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<IdentityResult> UpdateSummaryAsync(WorkContent args)
+        {
+            var work = await _context.WorkContents.FindAsync(args.Id);
+            if (work == null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Data not found!"
+                });
+            }
+            work.Active = args.Active;
+            work.Name = args.Name;
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }
