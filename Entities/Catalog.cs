@@ -50,6 +50,7 @@ namespace Waffle.Entities
         Entry,
         ArticleCategoy,
         ProductCategory,
-        Blogspot
+        Blogspot,
+        Albums
     }
 }
