@@ -91,7 +91,7 @@ namespace Waffle.Core.Services
         public async Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId)
         {
             var query = from a in _context.WorkContents
-                        join b in _context.WorkItems on a.Id equals b.WorkContentId
+                        join b in _context.WorkItems on a.Id equals b.WorkId
                         join c in _context.Components on a.ComponentId equals c.Id
                         where b.CatalogId == catalogId
                         orderby b.SortOrder ascending
@@ -161,7 +161,7 @@ namespace Waffle.Core.Services
             var query = from a in _context.WorkItems
                         join b in _context.Catalogs on a.CatalogId equals b.Id into ac
                         from c in ac.DefaultIfEmpty()
-                        where a.WorkContentId == filterOption.WorkId && a.CatalogId != filterOption.CatalogId && c.Active
+                        where a.WorkId == filterOption.WorkId && a.CatalogId != filterOption.CatalogId && c.Active
                         orderby c.ModifiedDate descending
                         select new ArticleListItem
                         {
@@ -224,7 +224,7 @@ namespace Waffle.Core.Services
         public async Task<WorkContent?> FirstWorkAsync(Guid id)
         {
             var query = from a in _context.WorkItems
-                        join b in _context.WorkContents on a.WorkContentId equals b.Id
+                        join b in _context.WorkContents on a.WorkId equals b.Id
                         where a.CatalogId == id
                         select b;
             return await query.FirstOrDefaultAsync();

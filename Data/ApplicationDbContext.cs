@@ -28,7 +28,7 @@ namespace Waffle.Data
         {
             base.OnModelCreating(builder);
             builder.Entity<FileItem>().HasKey(k => new { k.FileId, k.ItemId });
-            builder.Entity<WorkItem>().HasKey(k => new { k.WorkContentId, k.CatalogId });
+            builder.Entity<WorkItem>().HasKey(k => new { k.WorkId, k.CatalogId });
         }
     }
 }

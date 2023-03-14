@@ -89,7 +89,7 @@ namespace Waffle.Core.Services
         public async Task<dynamic> ExportByCatalogAsync(Guid catalogId)
         {
             var query = from workItems in _context.WorkItems
-                        join workContents in _context.WorkContents on workItems.WorkContentId equals workContents.Id
+                        join workContents in _context.WorkContents on workItems.WorkId equals workContents.Id
                         select new { workItems, workContents };
             return await query.ToListAsync();
         }
@@ -120,7 +120,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> ItemAddAsync(WorkItem args)
         {
-            if (await _context.WorkItems.AnyAsync(x => x.CatalogId == args.CatalogId && x.WorkContentId == args.WorkContentId))
+            if (await _context.WorkItems.AnyAsync(x => x.CatalogId == args.CatalogId && x.WorkId == args.WorkId))
             {
                 return IdentityResult.Failed();
             }

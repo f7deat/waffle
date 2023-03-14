@@ -193,7 +193,6 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(Trend));
             await _componentService.EnsureComponentAsync(nameof(Navbar));
             await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
-            await _componentService.EnsureComponentAsync(nameof(Blogger));
             await _componentService.EnsureComponentAsync(nameof(Jumbotron));
         }
     }

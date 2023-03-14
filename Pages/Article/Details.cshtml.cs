@@ -38,7 +38,7 @@ namespace Waffle.Pages.Article
         private async Task<List<Guid>> GetBlockEditorsAsync(Guid catalogId)
         {
             var query = from a in _context.WorkItems
-                        join b in _context.WorkContents on a.WorkContentId equals b.Id
+                        join b in _context.WorkContents on a.WorkId equals b.Id
                         join c in _context.Components on b.ComponentId equals c.Id
                         where a.CatalogId == catalogId && c.NormalizedName.Equals(nameof(BlockEditor)) && b.Active
                         select b.Id;
@@ -48,7 +48,7 @@ namespace Waffle.Pages.Article
         private async Task<List<WorkContent>> GetTagsAsync(Guid catalogId)
         {
             var tags = from a in _context.WorkItems
-                         join b in _context.WorkContents on a.WorkContentId equals b.Id
+                         join b in _context.WorkContents on a.WorkId equals b.Id
                          join c in _context.Components on b.ComponentId equals c.Id
                          where a.CatalogId == catalogId && c.NormalizedName.Equals(nameof(Tag))
                          select b;

@@ -156,6 +156,10 @@ p {
     background-color: #f1f5f9;
 }
 
+.bg-primary {
+    background-color: var(--primary);
+}
+
 .bg-yellow-500 {
     background-color: var(--yellow-500);
 }
@@ -177,8 +181,8 @@ p {
 }
 
 .btn {
-    padding: .5rem 1.5rem;
-    border-radius: .25rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.25rem;
 }
 
 .btn-primary {
@@ -187,7 +191,9 @@ p {
 }
 
     .btn-primary:hover {
+        --primary-color-hover: white;
         background-color: var(--primary-hover);
+        color: var(--primary-color-hover);
     }
 
 .breadcrumb {
@@ -330,6 +336,10 @@ p {
 
 .shadow {
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+}
+
+.pagination {
+    margin-bottom: 0.5rem;
 }
 
 .p-0 {

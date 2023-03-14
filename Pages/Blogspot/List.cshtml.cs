@@ -21,14 +21,24 @@ namespace Waffle.Pages.Blogspot
             _googleService = googleService;
             _workService = workService;
             Posts = new ListGroup();
+            BlogUrl = string.Empty;
         }
 
         public Catalog? Catalog;
         public IEnumerable<ComponentListItem>? Components;
         public ListGroup Posts;
+        public string BlogUrl;
+        public string? NextPageToken;
+        public string? PrevPageToken;
+        public Pagination Pagination;
+        public bool HasNextPage => !string.IsNullOrEmpty(NextPageToken);
+        public bool HasPrevPage => !string.IsNullOrEmpty(PrevPageToken);
+        public string NextPageUrl => BlogUrl + $"?pageToken={NextPageToken}";
+        public string PrevPageUrl => BlogUrl + $"?pageToken={PrevPageToken}";
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
+            BlogUrl = $"/blogspot/list/{normalizedName}";
             if (string.IsNullOrWhiteSpace(normalizedName))
             {
                 return NotFound();
@@ -57,10 +67,19 @@ namespace Waffle.Pages.Blogspot
                 Name = Catalog.Name,
                 Items = GetItems(response.Items, Catalog.NormalizedName)
             };
+            NextPageToken = response.NextPageToken;
+            PrevPageToken = response.PrevPageToken;
+            Pagination = new Pagination
+            {
+                HasPrevPage = HasPrevPage,
+                HasNextPage = HasNextPage,
+                NextPageUrl = NextPageUrl,
+                PrevPageUrl = PrevPageUrl
+            };
             return Page();
         }
 
-        private IEnumerable<ListGroupItem> GetItems(List<BloggerItem> items, string? normalizedName)
+        private static IEnumerable<ListGroupItem> GetItems(List<BloggerItem> items, string? normalizedName)
         {
             foreach (var item in items)
             {

@@ -21,7 +21,7 @@ namespace Waffle.ViewComponents
                 if (css != null)
                 {
                     var query = from a in _context.WorkItems
-                                join b in _context.WorkContents on a.WorkContentId equals b.Id
+                                join b in _context.WorkContents on a.WorkId equals b.Id
                                 where a.CatalogId == catalogId && b.Active && b.ComponentId == css.Id
                                 select b.Id;
                     ViewBag.CSS = await query.ToListAsync();

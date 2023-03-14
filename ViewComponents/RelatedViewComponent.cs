@@ -20,13 +20,13 @@ namespace Waffle.ViewComponents
             {
                 CatalogId = item.CatalogId,
                 PageSize = 4,
-                WorkId = item.WorkContentId
+                WorkId = item.WorkId
             });
             if (articles?.Data == null || !articles.Data.Any())
             {
                 return View(Empty.DefaultView, new ErrorViewModel
                 {
-                    RequestId = item.WorkContentId.ToString()
+                    RequestId = item.WorkId.ToString()
                 });
             }
             return View(articles.Data);

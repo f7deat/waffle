@@ -39,7 +39,7 @@
             {
                 @await Component.InvokeAsync("Related", new Waffle.Entities.WorkItem {
         CatalogId = Model.Catalog.Id,
-        WorkContentId = Model.Tags.OrderBy(x => Guid.NewGuid()).First().Id
+        WorkId = Model.Tags.OrderBy(x => Guid.NewGuid()).First().Id
         })
             }
         }

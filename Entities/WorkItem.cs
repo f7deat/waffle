@@ -4,8 +4,8 @@ namespace Waffle.Entities
 {
     public class WorkItem
     {
-        [JsonPropertyName("workContentId")]
-        public Guid WorkContentId { get; set; }
+        [JsonPropertyName("workId")]
+        public Guid WorkId { get; set; }
         [JsonPropertyName("catalogId")]
         public Guid CatalogId { get; set; }
         [JsonPropertyName("sortOrder")]

@@ -40,7 +40,7 @@ namespace Waffle.Controllers
             var workItem = new WorkItem
             {
                 CatalogId = model.CatalogId,
-                WorkContentId = workContent.Id
+                WorkId = workContent.Id
             };
             await _workService.AddItemAsync(workItem);
             return Ok(IdentityResult.Success);
@@ -63,7 +63,7 @@ namespace Waffle.Controllers
         {
             var query2 = from a in _context.Catalogs
                         join b in _context.WorkItems on a.Id equals b.CatalogId
-                        join c in _context.WorkContents on b.WorkContentId equals c.Id
+                        join c in _context.WorkContents on b.WorkId equals c.Id
                         join d in _context.Components on c.ComponentId equals d.Id
                         where a.Id == id
                         orderby b.SortOrder ascending
@@ -115,7 +115,7 @@ namespace Waffle.Controllers
         [HttpPost("sort-order")]
         public async Task<IActionResult> SortOrderAsync([FromBody] WorkItem model)
         {
-            var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkContentId == model.WorkContentId && x.CatalogId == model.CatalogId);
+            var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkId == model.WorkId && x.CatalogId == model.CatalogId);
             if (workItem is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError
@@ -131,7 +131,7 @@ namespace Waffle.Controllers
         [HttpPost("delete")]
         public async Task<IActionResult> DeleteAsync([FromBody] DeleteWorkContent model)
         {
-            var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkContentId == model.WorkContentId && x.CatalogId == model.CatalogId);
+            var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkId == model.WorkContentId && x.CatalogId == model.CatalogId);
             if (workItem is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError
@@ -145,7 +145,7 @@ namespace Waffle.Controllers
                 return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child items first!" }));
             }
 
-            if (await _context.WorkItems.CountAsync(x => x.WorkContentId == model.WorkContentId) == 1)
+            if (await _context.WorkItems.CountAsync(x => x.WorkId == model.WorkContentId) == 1)
             {
                 var workContent = await _workService.FindAsync(model.WorkContentId);
                 if (workContent is null)
@@ -160,7 +160,7 @@ namespace Waffle.Controllers
 
             _context.WorkItems.Remove(workItem);
 
-            await _fileContentService.RemoveFromItemAsync(workItem.WorkContentId);
+            await _fileContentService.RemoveFromItemAsync(workItem.WorkId);
 
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
