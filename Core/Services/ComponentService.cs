@@ -99,5 +99,21 @@ namespace Waffle.Core.Services
                         };
             return await ListResult<WorkListItem>.Success(query, filterOptions);
         }
+
+        public async Task<IdentityResult> UpdateAsync(Component args)
+        {
+            var component = await _context.Components.FindAsync(args.Id);
+            if (component is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Data not found"
+                });
+            }
+            component.Active = args.Active;
+            component.Name = args.Name;
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
     }
 }

@@ -29,17 +29,6 @@ namespace Waffle.Controllers
         [HttpPost("delete-file-content/{id}")]
         public async Task<IActionResult> DeleteFileContentAsync([FromRoute] Guid id)
         {
-            var query = from a in _context.FileItems
-                        join b in _context.WorkContents on a.ItemId equals b.Id
-                        where a.FileId == id
-                        select a;
-            if (await query.AnyAsync())
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "File in usage!"
-                }));
-            }
             var fileContent = await _context.FileContents.FindAsync(id);
             if (fileContent is null)
             {
@@ -48,13 +37,11 @@ namespace Waffle.Controllers
                     Description = "File not found!"
                 }));
             }
-            var path = Path.Combine(_webHostEnvironment.WebRootPath, fileContent.Url);
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, "files", fileContent.Name);
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.Delete(path);
             }
-            var fileItems = await _context.FileItems.Where(x => x.FileId == id).ToListAsync();
-            _context.FileItems.RemoveRange(fileItems);
             _context.FileContents.Remove(fileContent);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
@@ -83,7 +70,7 @@ namespace Waffle.Controllers
                 Name = file.FileName,
                 Size = file.Length,
                 Type = file.ContentType,
-                Url = $"/files/{file.FileName}"
+                Url = $"https://{Request.Host.Value}/files/{file.FileName}"
             });
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);

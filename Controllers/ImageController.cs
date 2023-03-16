@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models.Components;
@@ -12,13 +13,15 @@ namespace Waffle.Controllers
     {
         private readonly ILogger<ImageController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IWorkService _workService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ImageController(ILogger<ImageController> logger, ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ImageController(ILogger<ImageController> logger, ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IWorkService workService)
         {
             _logger = logger;
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _workService = workService;
         }
 
         [HttpPost("editor-block/{id}")]
@@ -99,24 +102,11 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync([FromRoute] Guid id)
-        {
-            var workContent = await _context.WorkContents.FindAsync(id);
-            if (workContent is null || string.IsNullOrEmpty(workContent.Arguments))
-            {
-                return Ok(workContent);
-            }
-            return Ok(JsonSerializer.Deserialize<Image>(workContent.Arguments));
-        }
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Image>(id));
 
         [HttpPost("save")]
         public async Task<IActionResult> SaveAsync([FromBody] Image model)
         {
-            if (model is null)
-            {
-                return BadRequest();
-            }
-
             var workContent = await _context.WorkContents.FindAsync(model.Id);
             if (workContent is null)
             {
@@ -130,12 +120,11 @@ namespace Waffle.Controllers
                 image = JsonSerializer.Deserialize<Image>(workContent.Arguments);
                 image ??= new Image();
             }
-            image.Title = model.Title;
+            image.Alt = model.Alt;
             image.Description = model.Description;
             image.Width = model.Width;
             image.Height = model.Height;
             image.ClassName = model.ClassName;
-            image.FileContent = model.FileContent;
 
             workContent.Arguments = JsonSerializer.Serialize(image);
             await _context.SaveChangesAsync();

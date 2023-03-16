@@ -20,7 +20,7 @@ namespace Waffle.Models
     public class FileFilterOptions : FilterOptions
     {
         public string? Name { get; set; }
-        public string Type { get; set; }
+        public string? Type { get; set; }
     }
 
     public class CatalogFilterOptions : FilterOptions
@@ -56,5 +56,10 @@ namespace Waffle.Models
     {
         public Guid WorkId { get; set; }
         public Guid CatalogId { get; set; }
+    }
+
+    public class TagFilterOptions : FilterOptions
+    {
+        public string? KeyWords { get; set; }
     }
 }

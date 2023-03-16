@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Models;
 
 namespace Waffle.Controllers
@@ -33,5 +34,8 @@ namespace Waffle.Controllers
 
         [HttpPost("active/{id}")]
         public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _componentService.ActiveAsync(id));
+
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateAsync([FromBody] Component args) => Ok(await _componentService.UpdateAsync(args));
     }
 }

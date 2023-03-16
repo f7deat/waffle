@@ -122,7 +122,10 @@ namespace Waffle.Core.Services
         {
             if (await _context.WorkItems.AnyAsync(x => x.CatalogId == args.CatalogId && x.WorkId == args.WorkId))
             {
-                return IdentityResult.Failed();
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Dupplicate data"
+                });
             }
             await _context.WorkItems.AddAsync(args);
             await _context.SaveChangesAsync();
@@ -306,6 +309,21 @@ namespace Waffle.Core.Services
             }
             work.Active = args.Active;
             work.Name = args.Name;
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> ItemDeleteAsync(WorkItem args)
+        {
+            var data = await _context.WorkItems.FirstOrDefaultAsync(x => x.CatalogId == args.CatalogId && x.WorkId == args.WorkId);
+            if (data is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Data not found"
+                });
+            }
+            _context.WorkItems.Remove(data);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }

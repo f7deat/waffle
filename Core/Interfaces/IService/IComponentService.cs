@@ -15,5 +15,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> DeleteAsync(Guid id);
         Task<ListResult<WorkListItem>> ListWorkAsync(Guid id, WorkFilterOptions filterOptions);
         Task<IEnumerable<Component>> ListAllAsync();
+        Task<IdentityResult> UpdateAsync(Component args);
     }
 }

@@ -1,0 +1,7 @@
+﻿@page
+@using Waffle.Models.Components
+@model Waffle.Pages.Tag.IndexModel
+
+<div class="container">
+    @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
+</div>

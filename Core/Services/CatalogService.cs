@@ -235,5 +235,52 @@ namespace Waffle.Core.Services
             var query = _context.Catalogs.Where(x => (filterOptions.Type == null || x.Type == filterOptions.Type) && (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name)) && (filterOptions.Active == null || x.Active == filterOptions.Active)).OrderByDescending(x => x.ModifiedDate);
             return ListResult<Catalog>.Success(query, filterOptions);
         }
+
+        public async Task<dynamic> ListTagByIdAsync(Guid id)
+        {
+            var query = from a in _context.WorkItems
+                        join b in _context.Catalogs on a.WorkId equals b.Id
+                        where b.Active && a.CatalogId == id && b.Type == CatalogType.Tag
+                        select new
+                        {
+                            b.Id,
+                            b.Name,
+                            b.NormalizedName
+                        };
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions)
+        {
+            return await _context.Catalogs.Where(x => 
+            x.Active && x.Type == CatalogType.Tag && (string.IsNullOrEmpty(filterOptions.KeyWords) || x.NormalizedName.Contains(filterOptions.KeyWords.ToLower()))).Select(x => new Option
+            {
+                Label = x.Name,
+                Value = x.Id
+            }).ToListAsync();
+        }
+
+        public async Task<IdentityResult> TagAddToCatalogAsync(WorkItem args)
+        {
+            var tag = await _context.Catalogs.FindAsync(args.CatalogId);
+            if (tag is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Tag not found!"
+                });
+            }
+            var catalog = await _context.Catalogs.FindAsync(args.WorkId);
+            if (catalog is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Catalog not found!"
+                });
+            }
+            await _context.WorkItems.AddAsync(args);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
     }
 }

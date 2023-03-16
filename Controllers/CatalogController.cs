@@ -142,5 +142,14 @@ namespace Waffle.Controllers
 
         [HttpGet("types")]
         public IActionResult GetTypes() => Ok(_catalogService.GetTypes());
+
+        [HttpGet("list-tag/{id}")]
+        public async Task<IActionResult> ListTagByIdAsync([FromRoute] Guid id) => Ok(await _catalogService.ListTagByIdAsync(id));
+
+        [HttpGet("list-tag-select")]
+        public async Task<IActionResult> ListTagAsync([FromQuery] TagFilterOptions filterOptions) => Ok(await _catalogService.ListTagSelectAsync(filterOptions));
+
+        [HttpPost("tag/add-to-catalog")]
+        public async Task<IActionResult> TagAddToCatalogAsync([FromBody] WorkItem args) => Ok(await _catalogService.TagAddToCatalogAsync(args));
     }
 }

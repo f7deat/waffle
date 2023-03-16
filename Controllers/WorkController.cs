@@ -85,6 +85,9 @@ namespace Waffle.Controllers
         [HttpPost("item/add")]
         public async Task<IActionResult> ItemAddAsync([FromBody] WorkItem args) => Ok(await _workService.ItemAddAsync(args));
 
+        [HttpPost("item/delete")]
+        public async Task<IActionResult> ItemDeleteAsync([FromBody] WorkItem args) => Ok(await _workService.ItemDeleteAsync(args));
+
         [HttpPost("child/add")]
         public async Task<IActionResult> AddChildAsync([FromBody] WorkContent workContent)
         {

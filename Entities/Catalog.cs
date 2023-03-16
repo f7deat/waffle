@@ -51,6 +51,7 @@ namespace Waffle.Entities
         ArticleCategoy,
         ProductCategory,
         Blogspot,
-        Albums
+        Albums,
+        Tag
     }
 }

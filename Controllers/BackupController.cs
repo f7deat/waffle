@@ -179,10 +179,11 @@ namespace Waffle.Controllers
         private async Task EnsureComponentsAsync()
         {
             await _componentService.EnsureComponentAsync(nameof(BlockEditor));
-            await _componentService.EnsureComponentAsync(nameof(Document));
-            await _componentService.EnsureComponentAsync(nameof(ContactForm));
-            await _componentService.EnsureComponentAsync(nameof(Swiper));
             await _componentService.EnsureComponentAsync(nameof(Card));
+            await _componentService.EnsureComponentAsync(nameof(ContactForm));
+            await _componentService.EnsureComponentAsync(nameof(Document));
+            await _componentService.EnsureComponentAsync(nameof(Image));
+            await _componentService.EnsureComponentAsync(nameof(Swiper));
             await _componentService.EnsureComponentAsync(nameof(Masonry));
             await _componentService.EnsureComponentAsync(nameof(Lookbook));
             await _componentService.EnsureComponentAsync(nameof(Tag));
