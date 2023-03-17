@@ -5,7 +5,6 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Catalogs;
 using Waffle.Models.Components;
 
 namespace Waffle.Core.Services
@@ -68,11 +67,13 @@ namespace Waffle.Core.Services
                     Active = true,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
-                    Type = type
+                    Type = type,
+                    ViewCount = 0
                 };
                 await _context.Catalogs.AddAsync(catalog);
-                await _context.SaveChangesAsync();
             }
+            catalog.ViewCount++;
+            await _context.SaveChangesAsync();
             return catalog;
         }
 
@@ -122,6 +123,7 @@ namespace Waffle.Core.Services
             article.NormalizedName = normalizedName;
             article.Description = args.Description;
             article.Active = args.Active;
+            article.Type = CatalogType.Article;
             article.ModifiedDate = DateTime.Now;
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
@@ -140,56 +142,18 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
-        public async Task<ListResult<ArticleListItem>> ArticleListAsync(ArticleFilterOptions filterOptions)
+        public async Task<ListResult<Catalog>> ArticleListAsync(ArticleFilterOptions filterOptions)
         {
             var query = _context.Catalogs.Where(x => (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower()))
             && x.Type == CatalogType.Article && x.Active).OrderByDescending(x => x.ModifiedDate);
-            return await ListResult<ArticleListItem>.Success(query.Select(x => new ArticleListItem
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Description = x.Description,
-                    ModifiedDate = x.ModifiedDate,
-                    NomalizedName = x.NormalizedName,
-                    Thumbnail = x.Thumbnail,
-                    ViewCount = x.ViewCount
-                }), filterOptions);
-        }
-
-        public async Task<ListResult<ArticleListItem>> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
-        {
-            var query = from a in _context.WorkItems
-                        join b in _context.Catalogs on a.CatalogId equals b.Id into ac
-                        from c in ac.DefaultIfEmpty()
-                        where a.WorkId == filterOption.WorkId && a.CatalogId != filterOption.CatalogId && c.Active
-                        orderby c.ModifiedDate descending
-                        select new ArticleListItem
-                        {
-                            Id = c.Id,
-                            Name = c.Name,
-                            Description = c.Description,
-                            ModifiedDate = c.ModifiedDate,
-                            NomalizedName = c.NormalizedName,
-                            Thumbnail = c.Thumbnail,
-                            ViewCount = c.ViewCount
-                        };
-            return await ListResult<ArticleListItem>.Success(query, filterOption);
+            return await ListResult<Catalog>.Success(query, filterOptions);
         }
 
         public async Task<Catalog?> FindAsync(Guid id) => await _context.Catalogs.FindAsync(id);
 
-        public async Task<IEnumerable<ArticleListItem>> ArticlePickerListAsync()
+        public async Task<IEnumerable<Catalog>> ArticlePickerListAsync()
         {
-            return await _context.Catalogs.Where(x => x.Active && x.Type == CatalogType.Article).OrderBy(x => Guid.NewGuid()).Take(5).Select(x => new ArticleListItem
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                ModifiedDate = x.ModifiedDate,
-                NomalizedName = x.NormalizedName,
-                Thumbnail = x.Thumbnail,
-                ViewCount = x.ViewCount
-            }).ToListAsync();
+            return await _context.Catalogs.Where(x => x.Active && x.Type == CatalogType.Article).OrderBy(x => Guid.NewGuid()).Take(5).ToListAsync();
         }
 
         public async Task<IdentityResult> SaveAsync(Catalog args)
@@ -236,17 +200,21 @@ namespace Waffle.Core.Services
             return ListResult<Catalog>.Success(query, filterOptions);
         }
 
-        public async Task<dynamic> ListTagByIdAsync(Guid id)
+        public async Task<ListResult<Catalog>> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
         {
             var query = from a in _context.WorkItems
                         join b in _context.Catalogs on a.WorkId equals b.Id
-                        where b.Active && a.CatalogId == id && b.Type == CatalogType.Tag
-                        select new
-                        {
-                            b.Id,
-                            b.Name,
-                            b.NormalizedName
-                        };
+                        where b.Active && a.CatalogId == filterOption.CatalogId && b.Type == CatalogType.Article && b.Id != filterOption.WorkId
+                        select b;
+            return await ListResult<Catalog>.Success(query, filterOption);
+        }
+
+        public async Task<IEnumerable<Catalog>> ListTagByIdAsync(Guid catalogId)
+        {
+            var query = from a in _context.WorkItems
+                        join b in _context.Catalogs on a.CatalogId equals b.Id
+                        where b.Active && a.WorkId == catalogId && b.Type == CatalogType.Tag
+                        select b;
             return await query.ToListAsync();
         }
 
@@ -282,5 +250,17 @@ namespace Waffle.Core.Services
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }
+
+        public async Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, IFilterOptions filterOptions)
+        {
+            var query = from a in _context.WorkItems
+                        join b in _context.Catalogs on a.WorkId equals b.Id
+                        where a.CatalogId == tagId && b.Active
+                        orderby b.Id descending
+                        select b;
+            return await ListResult<Catalog>.Success(query, filterOptions);
+        }
+
+        public async Task<IEnumerable<Catalog>> ListRandomTagAsync() => await _context.Catalogs.Where(x => x.Type == CatalogType.Tag && x.Active).OrderBy(x => Guid.NewGuid()).Take(10).ToListAsync();
     }
 }

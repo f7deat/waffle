@@ -22,6 +22,7 @@ namespace Waffle.Pages.Blogspot
             _workService = workService;
             Posts = new ListGroup();
             BlogUrl = string.Empty;
+            Pagination = new Pagination();
         }
 
         public Catalog? Catalog;

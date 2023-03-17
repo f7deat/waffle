@@ -151,5 +151,8 @@ namespace Waffle.Controllers
 
         [HttpPost("tag/add-to-catalog")]
         public async Task<IActionResult> TagAddToCatalogAsync([FromBody] WorkItem args) => Ok(await _catalogService.TagAddToCatalogAsync(args));
+
+        [HttpGet("list-by-tag/{id}")]
+        public async Task<IActionResult> ListByTagAsync([FromRoute] Guid id, BasicFilterOptions filterOptions) => Ok(await _catalogService.ListByTagAsync(id, filterOptions));
     }
 }

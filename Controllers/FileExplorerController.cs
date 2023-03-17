@@ -70,7 +70,7 @@ namespace Waffle.Controllers
                 Name = file.FileName,
                 Size = file.Length,
                 Type = file.ContentType,
-                Url = $"https://{Request.Host.Value}/files/{file.FileName}"
+                Url = $"/files/{file.FileName}"
             });
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);

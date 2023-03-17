@@ -1,0 +1,19 @@
+﻿@page
+@using Waffle.Models.Components
+@model Waffle.Pages.Album.IndexModel
+@{
+}
+
+<div class="container">
+
+    @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
+    <div class="md:grid gap-4 mb-4 grid-cols-6 albums">
+        @foreach (var item in Model.Albums)
+        {
+            <div class="flex flex-col album-item shadow">
+                <img src="@item.Picture?.Data?.Url" alt="@item.Name" class="object-fit-cover w-full" />
+                <a href="#" class="py-2 px-4 bg-white text-truncate" data-toggle="tooltip" title="@item.Name">@item.Name</a>
+            </div>
+        }
+    </div>
+</div>

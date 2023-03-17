@@ -1,12 +1,12 @@
-﻿@using Waffle.Models.Catalogs
-@model ArticleListItem
+﻿@using Waffle.Entities
+@model Catalog
 
 <div class="wf-article-item shadow">
-    <a href="/article/@Model.NomalizedName" class="thumbnail">
+    <a href="/article/@Model.NormalizedName" class="thumbnail">
         <img src="@Model.Thumbnail" class="thumbnail" alt="@Html.Raw(Model.Name)" height="220" />
     </a>
     <div class="wf-article-item__body">
-        <a href="/article/@Model.NomalizedName"><b>@Html.Raw(Model.Name)</b></a>
+        <a href="/article/@Model.NormalizedName"><b>@Html.Raw(Model.Name)</b></a>
         <div class="wf-article-item__body-description">
             @Html.Raw(Model.Description)
         </div>
@@ -25,19 +25,19 @@
             <button type="button" class="btn-share" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="fa fa-share-alt"></i></button>
             <ul class="dropdown-menu p-0 border-0 shadow">
                 <li>
-                    <a class="dropdown-item" data-title="Twitter" href="https://twitter.com/share?url=@($"/article/{Model.NomalizedName}")" rel="nofollow" target="_blank">
+                    <a class="dropdown-item" data-title="Twitter" href="https://twitter.com/share?url=@($"/article/{Model.NormalizedName}")" rel="nofollow" target="_blank">
                         <i class="fab fa-twitter"></i>
                         <span>Twitter</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" data-title="Facebook" href="https://www.facebook.com/sharer.php?u=@($"/article/{Model.NomalizedName}")" rel="nofollow" target="_blank">
+                    <a class="dropdown-item" data-title="Facebook" href="https://www.facebook.com/sharer.php?u=@($"/article/{Model.NormalizedName}")" rel="nofollow" target="_blank">
                         <i class="fab fa-facebook"></i>
                         <span>Facebook</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" data-title="Pinterest" href="https://pinterest.com/pin/create/button/?url=@($"/article/{Model.NomalizedName}")" rel="nofollow" target="_blank">
+                    <a class="dropdown-item" data-title="Pinterest" href="https://pinterest.com/pin/create/button/?url=@($"/article/{Model.NormalizedName}")" rel="nofollow" target="_blank">
                         <i class="fab fa-pinterest"></i>
                         <span>Pinterest</span>
                     </a>

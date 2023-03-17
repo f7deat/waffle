@@ -7,14 +7,10 @@ namespace Waffle.Models.Components
         public Column()
         {
             WorkListItems = new List<WorkListItem>();
-            Name = nameof(Column);
         }
-        [JsonIgnore]
-        public string Name { get; set; }
         [JsonPropertyName("rowId")]
         public Guid RowId { get; set; }
-        [JsonPropertyName("catalogId")]
-        public Guid CatalogId { get; set; }
+
         [JsonIgnore]
         public IEnumerable<WorkListItem> WorkListItems { get; set; }
     }

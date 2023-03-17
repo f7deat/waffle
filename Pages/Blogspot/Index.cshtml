@@ -1,9 +1,5 @@
 ﻿@page
 @model Waffle.Pages.Blogspot.IndexModel
-@{
-    ViewData["Title"] = "Danh sách blog";
-    ViewData["Description"] = "Tổng hơn tất cả các bài viết từ những blog cá nhân của mình";
-}
 
 <div class="container">
     <partial name="~/Views/Shared/Components/ListGroup/Default.cshtml" model="Model.ListBlog()" />

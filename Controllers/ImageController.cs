@@ -11,14 +11,12 @@ namespace Waffle.Controllers
     [Route("api/[controller]")]
     public class ImageController : Controller
     {
-        private readonly ILogger<ImageController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IWorkService _workService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ImageController(ILogger<ImageController> logger, ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IWorkService workService)
+        public ImageController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IWorkService workService)
         {
-            _logger = logger;
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             _workService = workService;
@@ -67,7 +65,7 @@ namespace Waffle.Controllers
                 success = 1,
                 file = new
                 {
-                    url = $"https://{Request.Host.Value}/{fileContent.Url}"
+                    url = $"{fileContent.Url}"
                 }
             });
         }
@@ -105,31 +103,6 @@ namespace Waffle.Controllers
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Image>(id));
 
         [HttpPost("save")]
-        public async Task<IActionResult> SaveAsync([FromBody] Image model)
-        {
-            var workContent = await _context.WorkContents.FindAsync(model.Id);
-            if (workContent is null)
-            {
-                return Ok(IdentityResult.Failed());
-            }
-
-            var image = new Image();
-
-            if (!string.IsNullOrEmpty(workContent.Arguments))
-            {
-                image = JsonSerializer.Deserialize<Image>(workContent.Arguments);
-                image ??= new Image();
-            }
-            image.Alt = model.Alt;
-            image.Description = model.Description;
-            image.Width = model.Width;
-            image.Height = model.Height;
-            image.ClassName = model.ClassName;
-
-            workContent.Arguments = JsonSerializer.Serialize(image);
-            await _context.SaveChangesAsync();
-
-            return Ok(IdentityResult.Success);
-        }
+        public async Task<IActionResult> SaveAsync([FromBody] Image args) => Ok(await _workService.SaveArgumentsAsync(args.Id, args));
     }
 }

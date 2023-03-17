@@ -6,6 +6,7 @@ using System.Text.Json;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
 using Waffle.ExternalAPI.Google.Models;
+using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.SendGrid;
 using Waffle.Models.Components;
@@ -20,12 +21,14 @@ namespace Waffle.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IAppSettingService _appSettingService;
         private readonly IConfiguration _configuration;
-        
-        public AppSettingController(ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration)
+        private readonly IFacebookService _facebookService;
+
+        public AppSettingController(ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration, IFacebookService facebookService)
         {
             _context = context;
             _appSettingService = appSettingService;
             _configuration = configuration;
+            _facebookService = facebookService;
         }
 
         [HttpGet("list")]
@@ -91,20 +94,48 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
+        [HttpGet("facebook/{id}")]
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Facebook>(id));
+
         [HttpPost("facebook/save")]
         public async Task<IActionResult> SaveFacebookAsync([FromBody] Facebook model)
         {
-            var app = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Facebook)));
-            if (app is null)
+            var app = await _appSettingService.EnsureSettingAsync(nameof(Facebook));
+            var facebook = await _appSettingService.GetAsync<Facebook>(app.Id);
+            if (facebook != null)
             {
-                return Ok(IdentityResult.Failed(new IdentityError
+                var userToken = await _facebookService.GetLongLivedUserAccessTokenAsync(facebook.AppId, facebook.AppSecret, model.ShortLiveToken);
+                if (userToken != null)
                 {
-                    Description = "App not found!"
-                }));
+                    facebook.LongLivedUserAccessToken = userToken;
+                    var pageToken = await _facebookService.GetLongLivedPageAccessTokenAsync(facebook.PageId, facebook.LongLivedUserAccessToken.AccessToken);
+                    if (pageToken != null)
+                    {
+                        facebook.PageAccessToken = pageToken.AccessToken;
+                    }
+                }
+                facebook.AppId = model.AppId;
+                facebook.AppSecret = model.AppSecret;
+                facebook.PageId = model.PageId;
             }
-            app.Value = JsonSerializer.Serialize(model);
+            else
+            {
+                facebook = model;
+            }
+            app.Value = JsonSerializer.Serialize(facebook);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
+        }
+
+        [HttpGet("long-lived-user-access-token")]
+        public async Task<IActionResult> GetLongLivedUserAccessTokenAsync([FromQuery] string shortLiveToken)
+        {
+            var app = await _appSettingService.GetAsync<Facebook>(nameof(Facebook));
+            if (app is null)
+            {
+                return NotFound();
+            }
+            return Ok(await _facebookService.GetLongLivedUserAccessTokenAsync(app.AppId, app.AppSecret, shortLiveToken));
         }
 
         [HttpPost("telegram/save")]
@@ -162,6 +193,6 @@ namespace Waffle.Controllers
 
         [HttpPost("header/logo")]
         public async Task<IActionResult> HeaderLogoAsync([FromBody] Header args) => Ok(await _appSettingService.HeaderLogoAsync(args));
-        
+
     }
 }

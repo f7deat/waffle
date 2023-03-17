@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Waffle.Entities;
 
 namespace Waffle.Models.Components
 {
@@ -8,27 +9,25 @@ namespace Waffle.Models.Components
         {
             Alt = string.Empty;
             Description = string.Empty;
-            Src = string.Empty;
             Link = new Link();
+            File = new FileContent();
+            Wrapper = string.Empty;
         }
+
         [JsonPropertyName("alt")]
         public string Alt { get; set; }
         [JsonPropertyName("description")]
         public string Description { get; set; }
-        [JsonPropertyName("url")]
-        public string Src { get; set; }
         [JsonPropertyName("width")]
         public int? Width { get; set; }
         [JsonPropertyName("height")]
         public int? Height { get; set; }
-        [JsonPropertyName("containerClassName")]
-        public string? ContainerClassName { get; set; }
         [JsonPropertyName("link")]
         public Link Link { get; set; }
-        [JsonPropertyName("fileId")]
-        public Guid FileId { get; set; }
-        [JsonPropertyName("workId")]
-        public Guid WorkId { get; set; }
+        [JsonPropertyName("file")]
+        public FileContent File { get; set; }
+        [JsonPropertyName("wrapper")]
+        public string Wrapper { get; set; }
 
         [JsonIgnore]
         public bool HasLink => !string.IsNullOrEmpty(Link.Name);

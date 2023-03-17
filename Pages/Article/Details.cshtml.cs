@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -19,20 +18,22 @@ namespace Waffle.Pages.Article
             _context = context;
         }
 
-        public Catalog? Catalog;
+        public Catalog Catalog = new();
         public List<Guid> BlockEditors = new();
-        public List<WorkContent> Tags = new();
+        public IEnumerable<Catalog> Tags = new List<Catalog>();
 
-        public async Task OnGetAsync(string normalizedName)
+        public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
-            Catalog = await _catalogService.GetByNameAsync(normalizedName);
-            if (Catalog != null)
+            Catalog = await _catalogService.GetByNameAsync(normalizedName) ?? new Catalog();
+            if (string.IsNullOrEmpty(Catalog.NormalizedName))
             {
-                ViewData["Title"] = Catalog.Name;
-                ViewData["Description"] = Catalog.Description;
-                BlockEditors = await GetBlockEditorsAsync(Catalog.Id);
-                Tags = await GetTagsAsync(Catalog.Id);
+                return NotFound();
             }
+            ViewData["Title"] = Catalog.Name;
+            ViewData["Description"] = Catalog.Description;
+            BlockEditors = await GetBlockEditorsAsync(Catalog.Id);
+            Tags = await _catalogService.ListTagByIdAsync(Catalog.Id);
+            return Page();
         }
 
         private async Task<List<Guid>> GetBlockEditorsAsync(Guid catalogId)
@@ -43,16 +44,6 @@ namespace Waffle.Pages.Article
                         where a.CatalogId == catalogId && c.NormalizedName.Equals(nameof(BlockEditor)) && b.Active
                         select b.Id;
             return await query.ToListAsync();
-        }
-
-        private async Task<List<WorkContent>> GetTagsAsync(Guid catalogId)
-        {
-            var tags = from a in _context.WorkItems
-                         join b in _context.WorkContents on a.WorkId equals b.Id
-                         join c in _context.Components on b.ComponentId equals c.Id
-                         where a.CatalogId == catalogId && c.NormalizedName.Equals(nameof(Tag))
-                         select b;
-            return await tags.ToListAsync();
         }
     }
 }

@@ -1,5 +1,12 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using Waffle.Entities
+@model IEnumerable<Catalog>
+
+<div class="shadow mb-4">
+    <div class="title">Tags</div>
+    <div class="p-2 bg-white rounded flex flex-wrap gap-2">
+        @foreach (var item in Model)
+        {
+            <a href="/tag/@item.NormalizedName" class="bg-gray-100 px-2 py-1 tag-item">@item.Name</a>
+        }
+    </div>
+</div>

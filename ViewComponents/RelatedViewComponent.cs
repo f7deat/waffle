@@ -18,9 +18,10 @@ namespace Waffle.ViewComponents
         {
             var articles = await _catalogService.ArticleRelatedListAsync(new ArticleRelatedFilterOption
             {
-                CatalogId = item.CatalogId,
+                Current = 1,
                 PageSize = 4,
-                WorkId = item.WorkId
+                CatalogId = item.CatalogId,
+                WorkId = item.WorkId,
             });
             if (articles?.Data == null || !articles.Data.Any())
             {

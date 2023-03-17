@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Catalogs;
 
 namespace Waffle.Pages.Article
 {
@@ -14,7 +14,7 @@ namespace Waffle.Pages.Article
             _workService = workService;
             _catalogService = catalogService;
         }
-        public IEnumerable<ArticleListItem>? Articles;
+        public IEnumerable<Catalog>? Articles;
 
         public async Task OnGetAsync(Guid id)
         {

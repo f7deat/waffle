@@ -62,7 +62,7 @@ namespace Waffle.Core.Services
             {
                 Active = true,
                 Arguments = JsonSerializer.Serialize(column),
-                Name = column.Name,
+                Name = column.ClassName,
                 ComponentId = component.Id,
                 ParentId = column.RowId
             };
@@ -98,7 +98,7 @@ namespace Waffle.Core.Services
 
         public async Task<T?> GetAsync<T>(Guid id)
         {
-            var work = await _context.WorkContents.FindAsync(id);
+            var work = await FindAsync(id);
             if (string.IsNullOrEmpty(work?.Arguments))
             {
                 return default;
@@ -278,7 +278,10 @@ namespace Waffle.Core.Services
             var work = await _context.WorkContents.FindAsync(id);
             if (work == null)
             {
-                return IdentityResult.Failed();
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Data not found"
+                });
             }
             work.Arguments = JsonSerializer.Serialize(args);
             await _context.SaveChangesAsync();

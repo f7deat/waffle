@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
@@ -15,15 +14,9 @@ namespace Waffle.ViewComponents
 
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid id)
+        public async Task<IViewComponentResult> InvokeAsync(Guid workId)
         {
-            var tag = await _workService.GetAsync<Tag>(id);
-            var catalogs = await _catalogService.ListAsync(new Models.CatalogFilterOptions
-            {
-                Active = true,
-                Type = Entities.CatalogType.Tag
-            });
-            return View();
+            return View(await _catalogService.ListRandomTagAsync());
         }
     }
 }

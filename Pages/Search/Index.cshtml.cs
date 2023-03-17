@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Catalogs;
 using Waffle.Models.Components;
 
 namespace Waffle.Pages.Search
@@ -24,7 +24,7 @@ namespace Waffle.Pages.Search
 
         [BindProperty(SupportsGet = true)]
         public SearchFilterOptions FilterOptions { get; set; }
-        public ListResult<ArticleListItem>? Articles;
+        public ListResult<Catalog>? Articles;
 
         public async Task<IActionResult> OnGetAsync()
         {

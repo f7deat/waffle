@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Data;
+using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Catalogs;
 
 namespace Waffle.Pages.Article
 {
@@ -14,21 +12,22 @@ namespace Waffle.Pages.Article
         public IndexModel(ICatalogService catalogService)
         {
             _catalogService = catalogService;
-            FilterOptions = new ArticleFilterOptions
+            FilterOptions = new CatalogFilterOptions
             {
                 Current = 1,
-                PageSize = 12
+                PageSize = 12,
+                Type = CatalogType.Article
             };
         }
 
         [BindProperty(SupportsGet = true)]
-        public ArticleFilterOptions FilterOptions { get; set; }
+        public CatalogFilterOptions FilterOptions { get; set; }
 
-        public ListResult<ArticleListItem>? Articles;
+        public ListResult<Catalog>? Articles;
 
         public async Task OnGetAsync()
         {
-            Articles = await _catalogService.ArticleListAsync(FilterOptions);
+            Articles = await _catalogService.ListAsync(FilterOptions);
         }
     }
 }

@@ -5,13 +5,17 @@ namespace Waffle.ExternalAPI.Models
     public class Facebook
     {
         [JsonPropertyName("appId")]
-        public string? AppId { get; set; }
+        public string AppId { get; set; } = string.Empty;
         [JsonPropertyName("appSecret")]
-        public string? AppSecret { get; set; }
+        public string AppSecret { get; set; } = string.Empty;
         [JsonPropertyName("pageAccessToken")]
-        public string? PageAccessToken { get; set; }
+        public string PageAccessToken { get; set; } = string.Empty;
         [JsonPropertyName("longLivedUserAccessToken")]
-        public LongLivedUserAccessToken? LongLivedUserAccessToken { get; set; }
+        public LongLivedUserAccessToken LongLivedUserAccessToken { get; set; } = new LongLivedUserAccessToken();
+        [JsonPropertyName("pageId")]
+        public string PageId { get; set; } = string.Empty;
+        [JsonPropertyName("shortLiveToken")]
+        public string ShortLiveToken { get; set; } = string.Empty;
     }
     public class FacebookListResult<T> where T : class
     {
@@ -60,22 +64,26 @@ namespace Waffle.ExternalAPI.Models
     }
     public abstract class BaseAccessToken
     {
+        public BaseAccessToken()
+        {
+            AccessToken = string.Empty;
+        }
         [JsonPropertyName("access_token")]
-        public string? AccessToken { get; set; }
+        public string AccessToken { get; set; }
     }
 
     public class LongLivedUserAccessToken : BaseAccessToken
     {
         [JsonPropertyName("token_type")]
         public string? TokenType { get; set; }
-        [JsonPropertyName("expires_in")]
-        public string? ExpiresIn { get; set; }
     }
 
     public class LongLivedPageAccessToken
     {
-        [JsonPropertyName("data")]
-        public LongLivedPageAccessTokenData? Data { get; set; }
+        [JsonPropertyName("access_token")]
+        public string AccessToken { get; set; } = string.Empty;
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
     }
 
     public class LongLivedPageAccessTokenData : BaseAccessToken
