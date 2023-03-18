@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Text.Json;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 
@@ -17,8 +19,7 @@ namespace Waffle.ExternalAPI.Facebook
         {
             try
             {
-                _http.DefaultRequestHeaders.Add("Authorization", $"Bearer {access_token}");
-                var response = await _http.GetStreamAsync($"{pageId}/albums?fields=name,type,picture");
+                var response = await _http.GetStreamAsync($"{pageId}/albums?fields=name,type,picture&access_token={access_token}");
                 var data = await JsonSerializer.DeserializeAsync<FacebookListResult<Album>>(response);
                 return data?.Data?.Where(x => (x.Type == "normal" || x.Type == "wall") && x.Picture?.Data?.IsSilhouette == false).ToList() ?? new List<Album>();
             }
@@ -37,7 +38,8 @@ namespace Waffle.ExternalAPI.Facebook
             }
             catch (Exception ex)
             {
-                return new LongLivedUserAccessToken { 
+                return new LongLivedUserAccessToken
+                {
                     AccessToken = ex.ToString()
                 };
             }
@@ -52,8 +54,42 @@ namespace Waffle.ExternalAPI.Facebook
             }
             catch (Exception ex)
             {
-                return new LongLivedPageAccessToken { 
+                return new LongLivedPageAccessToken
+                {
                     AccessToken = ex.ToString()
+                };
+            }
+        }
+
+        public async Task<FacebookListResult<FacebookPhoto>> GetPhotosAsync(string id, int limit, string before, string after, string access_token)
+        {
+            try
+            {
+                _http.DefaultRequestHeaders.Add("Authorization", $"Bearer {access_token}");
+                var response = await _http.GetStreamAsync(id + "/photos?fields=name,picture,images&limit=" + limit + "&before=" + before + "&after=" + after);
+                return await JsonSerializer.DeserializeAsync<FacebookListResult<FacebookPhoto>>(response) ?? new FacebookListResult<FacebookPhoto>();
+            }
+            catch (Exception ex)
+            {
+                return new FacebookListResult<FacebookPhoto>
+                {
+                    ErrorMessage = ex.ToString()
+                };
+            }
+        }
+
+        public async Task<FacebookSummary> GetSummaryAsync(string id, string access_token)
+        {
+            try
+            {
+                var response = await _http.GetStreamAsync($"{id}?fields=description,name&access_token={access_token}");
+                return await JsonSerializer.DeserializeAsync<FacebookSummary>(response) ?? new FacebookSummary();
+            }
+            catch (Exception ex)
+            {
+                return new FacebookSummary
+                {
+                    Description = ex.ToString()
                 };
             }
         }

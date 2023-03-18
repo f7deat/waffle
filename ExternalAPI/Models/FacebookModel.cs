@@ -17,18 +17,29 @@ namespace Waffle.ExternalAPI.Models
         [JsonPropertyName("shortLiveToken")]
         public string ShortLiveToken { get; set; } = string.Empty;
     }
+
     public class FacebookListResult<T> where T : class
     {
         [JsonPropertyName("data")]
         public List<T>? Data { get; set; }
         [JsonPropertyName("paging")]
         public Paging? Paging { get; set; }
+        [JsonIgnore]
+        public string? ErrorMessage { get; set; }
     }
 
     public class ObjectResult<T> where T : class
     {
         [JsonPropertyName("data")]
         public T? Data { get; set; }
+    }
+
+    public class FacebookSummary
+    {
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
     }
 
     public class Album
@@ -42,10 +53,40 @@ namespace Waffle.ExternalAPI.Models
         [JsonPropertyName("type")]
         public string? Type { get; set; }
     }
+
+    public class FacebookImage
+    {
+        [JsonPropertyName("source")]
+        public string Source { get; set; } = string.Empty;
+        [JsonPropertyName("width")]
+        public int Width { get; set; }
+        [JsonPropertyName("height")]
+        public int Height { get; set; }
+    }
+
+    public class FacebookPhoto
+    {
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+        [JsonPropertyName("images")]
+        public List<FacebookImage> Images { get; set; } = new List<FacebookImage>();
+        [JsonPropertyName("next")]
+        public string Next { get; set; } = string.Empty;
+        [JsonPropertyName("paging")]
+        public Paging Paging { get; set; } = new Paging();
+
+        [JsonIgnore]
+        public string? Src => Images.FirstOrDefault()?.Source;
+    }
+
     public class Paging
     {
         [JsonPropertyName("cursors")]
         public Cursors? Cursors { get; set; }
+        [JsonPropertyName("next")]
+        public string? Next { get; set; }
+        [JsonPropertyName("previous")]
+        public string? Previous { get; set; }
     }
     public class Cursors
     {

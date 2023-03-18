@@ -4,7 +4,6 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
-using Waffle.ExternalAPI.Models;
 
 namespace Waffle.Pages.Album
 {
@@ -29,7 +28,7 @@ namespace Waffle.Pages.Album
             ViewData["Title"] = Catalog.Name;
             ViewData["Description"] = Catalog.Description;
 
-            var app = await _appService.GetAsync<Facebook>(nameof(Facebook));
+            var app = await _appService.GetAsync<ExternalAPI.Models.Facebook>(nameof(Facebook));
             if (app != null)
             {
                 Albums = await _facebookService.GetAlbumsAsync(app.PageId, app.PageAccessToken);
