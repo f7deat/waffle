@@ -34,6 +34,12 @@ namespace Waffle.ExternalAPI.Models
         public T? Data { get; set; }
     }
 
+    public abstract class BaseFacebookModel
+    {
+        [JsonPropertyName("id")]
+        public string? Id { get; set; }
+    }
+
     public class FacebookSummary
     {
         [JsonPropertyName("name")]
@@ -42,12 +48,10 @@ namespace Waffle.ExternalAPI.Models
         public string? Description { get; set; }
     }
 
-    public class Album
+    public class Album : BaseFacebookModel
     {
         [JsonPropertyName("name")]
         public string? Name { get; set; }
-        [JsonPropertyName("id")]
-        public string? Id { get; set; }
         [JsonPropertyName("picture")]
         public ObjectResult<Picture>? Picture { get; set; }
         [JsonPropertyName("type")]
@@ -77,6 +81,16 @@ namespace Waffle.ExternalAPI.Models
 
         [JsonIgnore]
         public string? Src => Images.FirstOrDefault()?.Source;
+    }
+
+    public class FacebookProduct : BaseFacebookModel
+    {
+        [JsonPropertyName("image_url")]
+        public string? ImageUrl { get; set; }
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+        [JsonPropertyName("url")]
+        public string? Url { get; set; }
     }
 
     public class Paging

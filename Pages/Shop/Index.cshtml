@@ -25,6 +25,27 @@
                     </div>
                 </div>
             }
+
+            <div class="title">Sản phẩm mới</div>
+            <div class="mb-4 md:grid grid-cols-4 gap-4">
+                @if (Model.FacebookProducts.Data != null)
+                {
+                    @foreach (var item in Model.FacebookProducts.Data)
+                    {
+                        <div class="bg-white shadow">
+                            <div class="bg-gray-900">
+                                <a href="@item.Url">
+                                    <img src="@item.ImageUrl" alt="@item.Name" class="thumbnail-img" />
+                                </a>
+                            </div>
+                            <div class="p-2">
+                                <a href="@item.Url">@item.Name</a>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
         </div>
         <div class="w-1/3">
             @await Component.InvokeAsync(nameof(ArticlePicker))

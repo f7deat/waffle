@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.Pages.Article
 {
@@ -12,22 +13,29 @@ namespace Waffle.Pages.Article
         public IndexModel(ICatalogService catalogService)
         {
             _catalogService = catalogService;
-            FilterOptions = new CatalogFilterOptions
-            {
-                Current = 1,
-                PageSize = 12,
-                Type = CatalogType.Article
-            };
         }
 
         [BindProperty(SupportsGet = true)]
-        public CatalogFilterOptions FilterOptions { get; set; }
+        public int Current { get; set; }
 
         public ListResult<Catalog>? Articles;
 
+        public Pagination Pagination => new()
+        {
+            HasNextPage = Articles?.Total > Current * 12,
+            HasPrevPage = Current > 1,
+            NextPageUrl = $"/article?current={Current + 1}",
+            PrevPageUrl = $"/article?current={Current - 1}",
+        };
+
         public async Task OnGetAsync()
         {
-            Articles = await _catalogService.ListAsync(FilterOptions);
+            Articles = await _catalogService.ListAsync(new CatalogFilterOptions
+            {
+                Active = true,
+                PageSize = 12,
+                Current = Current
+            });
         }
     }
 }

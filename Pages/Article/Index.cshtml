@@ -1,4 +1,5 @@
 ﻿@page
+@using Waffle.Models.Components
 @model Waffle.Pages.Article.IndexModel
 @{
     ViewData["Title"] = "Danh sách bài viết";
@@ -14,18 +15,12 @@
                 {
                     <partial name="_List.cshtml" model="Model.Articles.Data" />
 
-                    <div class="pagination mb-4">
-                        @if (Model.FilterOptions.Current * Model.FilterOptions.PageSize <= Model.Articles.Total)
-                        {
-                            <a href="/article?current=@(Model.FilterOptions.Current + 1)" class="px-4 py-1 border rounded bg-white">
-                                <localize key="nextPage" />
-                            </a>
-                        }
-                    </div>
+                    <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
                 }
             </div>
             <div class="md:w-1/3">
-                @await Component.InvokeAsync(nameof(Waffle.Models.Components.ArticlePicker))
+                @await Component.InvokeAsync(nameof(ArticlePicker))
+                @await Component.InvokeAsync(nameof(Tag))
             </div>
         </div>
     </div>

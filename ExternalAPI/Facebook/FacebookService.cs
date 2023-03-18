@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 
@@ -90,6 +88,22 @@ namespace Waffle.ExternalAPI.Facebook
                 return new FacebookSummary
                 {
                     Description = ex.ToString()
+                };
+            }
+        }
+
+        public async Task<FacebookListResult<FacebookProduct>> GetProductsAsync(string id, string access_token)
+        {
+            try
+            {
+                var response = await _http.GetStreamAsync($"{id}/products?fields=image_url,name,url&access_token={access_token}");
+                return await JsonSerializer.DeserializeAsync<FacebookListResult<FacebookProduct>>(response) ?? new FacebookListResult<FacebookProduct>();
+            }
+            catch (Exception ex)
+            {
+                return new FacebookListResult<FacebookProduct>
+                {
+                    ErrorMessage = ex.ToString()
                 };
             }
         }
