@@ -17,7 +17,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> GetListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _localizationService.GetListAsync(filterOptions));
+        public async Task<IActionResult> GetListAsync([FromQuery] LocalizationFilterOptions filterOptions) => Ok(await _localizationService.GetListAsync(filterOptions));
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _localizationService.GetAsync(id));

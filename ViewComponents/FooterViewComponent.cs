@@ -18,15 +18,20 @@ namespace Waffle.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var setting = await _settingService.EnsureSettingAsync(nameof(Footer));
-            if (string.IsNullOrEmpty(setting.Value))
+            var footer = await _settingService.GetAsync<Footer>(nameof(Footer));
+            if (footer is null)
             {
                 return View(Empty.DefaultView, new ErrorViewModel
                 {
-                    RequestId = setting.Id.ToString()
+                    RequestId = string.Empty
                 });
             }
-            return View(_configuration.GetValue<string>("Theme"), JsonSerializer.Deserialize<Footer>(setting.Value));
+            var social = await _settingService.GetAsync<Social>(nameof(Social));
+            if (social != null)
+            {
+                footer.Social = social;
+            }
+            return View(footer);
         }
     }
 }

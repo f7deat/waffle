@@ -10,7 +10,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> DeleteAsync(Guid id);
         Task<string> GetAsync(string key);
         Task<Localization?> GetAsync(Guid id);
-        Task<ListResult<Localization>> GetListAsync(BasicFilterOptions filterOptions);
+        Task<ListResult<Localization>> GetListAsync(LocalizationFilterOptions filterOptions);
         Task<IdentityResult> SaveAsync(Localization args);
     }
 }

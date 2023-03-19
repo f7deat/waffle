@@ -40,7 +40,7 @@
                     <div class="mb-2">Subscribe to receive the latest information</div>
                     <form method="post" action="/home/subscribe">
                         <div class="flex gap-4">
-                            <input type="email" name="email" placeholder="Email" class="form-control" />
+                            <input type="email" name="email" placeholder="Email" class="form-control" required />
                             <button type="submit" class="btn btn-primary">
                                 <localize key="subscribe" />
                             </button>
@@ -61,16 +61,16 @@
             © @DateTime.Now.Year <a href="/">@Model.CompanyName</a>. All rights reserved.
         </div>
         <div class="footer-social">
-            <a href="#">
+            <a href="@Model.Social.FacebookUrl">
                 <i class="fab fa-facebook"></i>
             </a>
-            <a href="#">
+            <a href="@Model.Social.InstagramUrl">
                 <i class="fab fa-instagram"></i>
             </a>
-            <a href="#">
+            <a href="@Model.Social.TwitterUrl">
                 <i class="fab fa-twitter"></i>
             </a>
-            <a href="#">
+            <a href="@Model.Social.YoutubeUrl">
                 <i class="fab fa-youtube"></i>
             </a>
         </div>

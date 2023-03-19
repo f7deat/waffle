@@ -11,6 +11,7 @@ using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.SendGrid;
 using Waffle.Models.Components;
 using Waffle.Models.Layout;
+using Waffle.Models.Settings;
 
 namespace Waffle.Controllers
 {
@@ -193,6 +194,18 @@ namespace Waffle.Controllers
 
         [HttpPost("header/logo")]
         public async Task<IActionResult> HeaderLogoAsync([FromBody] Header args) => Ok(await _appSettingService.HeaderLogoAsync(args));
+
+        [HttpGet("social/{id}")]
+        public async Task<IActionResult> GetSocialLinkAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Social>(id));
+
+        [HttpPost("social/save")]
+        public async Task<IActionResult> SaveSocialLinkAsync([FromBody] Social args)
+        {
+            var setting = await _appSettingService.EnsureSettingAsync(nameof(Social));
+            setting.Value = JsonSerializer.Serialize(args);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
 
     }
 }

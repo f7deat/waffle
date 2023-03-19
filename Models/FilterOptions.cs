@@ -62,4 +62,9 @@ namespace Waffle.Models
     {
         public string? KeyWords { get; set; }
     }
+
+    public class LocalizationFilterOptions: FilterOptions
+    {
+        public string? Key { get; set; }
+    }
 }

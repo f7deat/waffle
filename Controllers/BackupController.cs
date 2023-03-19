@@ -11,6 +11,7 @@ using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.Settings;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers
@@ -165,6 +166,7 @@ namespace Waffle.Controllers
             await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
             await _appSettingService.EnsureSettingAsync(nameof(ExternalAPI.Telegram));
             await _appSettingService.EnsureSettingAsync(nameof(ExternalAPI.Facebook));
+            await _appSettingService.EnsureSettingAsync(nameof(Social));
 
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
