@@ -96,7 +96,7 @@ namespace Waffle.ExternalAPI.Facebook
         {
             try
             {
-                var response = await _http.GetStreamAsync($"{id}/products?fields=image_url,name,url&access_token={access_token}");
+                var response = await _http.GetStreamAsync($"{id}/products?fields=image_url,name,url,price,sale_price&access_token={access_token}");
                 return await JsonSerializer.DeserializeAsync<FacebookListResult<FacebookProduct>>(response) ?? new FacebookListResult<FacebookProduct>();
             }
             catch (Exception ex)

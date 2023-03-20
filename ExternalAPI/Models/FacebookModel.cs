@@ -91,6 +91,10 @@ namespace Waffle.ExternalAPI.Models
         public string? Name { get; set; }
         [JsonPropertyName("url")]
         public string? Url { get; set; }
+        [JsonPropertyName("price")]
+        public string? Price { get; set; }
+        [JsonPropertyName("sale_price")]
+        public string? SalePrice { get; set; }
     }
 
     public class Paging

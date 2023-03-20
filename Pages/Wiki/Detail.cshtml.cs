@@ -13,13 +13,18 @@ namespace Waffle.Pages.Wiki
             _wikiService = wikiService;
         }
 
-        public Parse? Data;
+        public Parse Data = new();
 
         public async Task<IActionResult> OnGetAsync(string id, string lang = "vi")
         {
             var response = await _wikiService.ParseAsync(id, lang);
+            if (response is null)
+            {
+                return NotFound();
+            }
             Data = response;
-            ViewData["Title"] = response?.Title ?? "Không có dữ liệu!";
+            ViewData["Title"] = Data.Title;
+            ViewData["Description"] = Data.Title;
             return Page();
         }
     }

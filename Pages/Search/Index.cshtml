@@ -57,7 +57,7 @@
             @if (!string.IsNullOrWhiteSpace(Model.FilterOptions.SearchTerm))
             {
                 <div class="mb-4 quote">
-                    <u>Wiki</u> --> <a href="/wiki/@Model.FilterOptions.SearchTerm">@Model.FilterOptions.SearchTerm</a>
+                    <u>Wiki</u> --> <a href="/wiki/@Waffle.Core.Helpers.SeoHelper.ToWikiFriendly(Model.FilterOptions.SearchTerm)">@Model.FilterOptions.SearchTerm</a>
                 </div>
             }
         </div>

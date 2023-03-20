@@ -9,6 +9,7 @@
     --gray-600: #4B5563;
     --gray-800: #1f2937;
     --gray-900: #111827;
+    --red-500: #ef4444;
     --wf-footer-content-padding-y: 2rem;
     --primary: #2563EB;
     --primary-hover: #0b5ed7;
@@ -63,7 +64,7 @@ button, input, textarea, a {
 blockquote, .quote {
     background: #eee;
     padding: 0.25rem 1rem;
-    margin: 0.25rem 0;
+    margin: 0.5rem 0;
     border-left: 0.25rem solid;
     font-style: italic;
 }
@@ -104,6 +105,10 @@ h4, .h4 {
 
 h5, .h5 {
     font-size: 1.125rem;
+}
+
+th {
+    text-align: inherit;
 }
 
 img {
@@ -317,6 +322,10 @@ p {
 
 .justify-between {
     justify-content: space-between;
+}
+
+.justify-end {
+    justify-content: flex-end;
 }
 
 .form-control {
@@ -583,6 +592,10 @@ p {
     font-size: 1rem;
 }
 
+.text-sm {
+    font-size: 0.875rem;
+}
+
 .text-xl {
     font-size: 1.25rem;
     line-height: 1.75rem;
@@ -598,6 +611,10 @@ p {
 
 .text-primary {
     color: var(--primary);
+}
+
+.text-red-500 {
+    color: var(--red-500);
 }
 
 .text-gray-500 {

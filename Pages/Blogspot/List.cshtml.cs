@@ -20,18 +20,18 @@ namespace Waffle.Pages.Blogspot
             _catalogService = catalogService;
             _googleService = googleService;
             _workService = workService;
-            Posts = new ListGroup();
             BlogUrl = string.Empty;
             Pagination = new Pagination();
         }
 
-        public Catalog? Catalog;
+        public Catalog Catalog = new();
         public IEnumerable<ComponentListItem>? Components;
-        public ListGroup Posts;
+        public List<BloggerItem> Posts = new();
         public string BlogUrl;
         public string? NextPageToken;
         public string? PrevPageToken;
         public Pagination Pagination;
+        private string NormalizedName = string.Empty;
         public bool HasNextPage => !string.IsNullOrEmpty(NextPageToken);
         public bool HasPrevPage => !string.IsNullOrEmpty(PrevPageToken);
         public string NextPageUrl => BlogUrl + $"?pageToken={NextPageToken}";
@@ -44,7 +44,8 @@ namespace Waffle.Pages.Blogspot
             {
                 return NotFound();
             }
-            Catalog = await _catalogService.GetByNameAsync(normalizedName);
+            NormalizedName = normalizedName;
+            Catalog = await _catalogService.GetByNameAsync(normalizedName) ?? new Catalog();
             if (Catalog is null)
             {
                 return NotFound();
@@ -63,11 +64,8 @@ namespace Waffle.Pages.Blogspot
             {
                 return NotFound();
             }
-            Posts = new ListGroup
-            {
-                Name = Catalog.Name,
-                Items = GetItems(response.Items, Catalog.NormalizedName)
-            };
+            Posts = response.Items;
+
             NextPageToken = response.NextPageToken;
             PrevPageToken = response.PrevPageToken;
             Pagination = new Pagination
@@ -79,6 +77,8 @@ namespace Waffle.Pages.Blogspot
             };
             return Page();
         }
+
+        public string GetUrl(string path) => $"/blogspot/{NormalizedName}{path}";
 
         private static IEnumerable<ListGroupItem> GetItems(List<BloggerItem> items, string? normalizedName)
         {

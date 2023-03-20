@@ -9,11 +9,9 @@ namespace Waffle.ExternalAPI.Google
     public class GoogleService : IGoogleService
     {
         private readonly HttpClient _http;
-        private readonly IAppSettingService _appService;
-        public GoogleService(HttpClient httpClient, IAppSettingService appSettingService)
+        public GoogleService(HttpClient httpClient)
         {
             _http = httpClient;
-            _appService = appSettingService;
         }
 
         public async Task<Trend?> GetDailyTrendingAsync()
@@ -30,7 +28,7 @@ namespace Waffle.ExternalAPI.Google
 
         public async Task<BloggerListResult<BloggerItem>?> BloggerPostsAsync(string? blogId, string? apiKey, int maxResults, string pageToken, string labels)
         {
-            var url = $"https://www.googleapis.com/blogger/v3/blogs/{blogId}/posts?key={apiKey}&maxResults={maxResults}";
+            var url = $"https://www.googleapis.com/blogger/v3/blogs/{blogId}/posts?fetchImages=true&fetchBodies=false&key={apiKey}&maxResults={maxResults}";
             if (!string.IsNullOrEmpty(pageToken))
             {
                 url += $"&pageToken={pageToken}";

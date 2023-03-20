@@ -2,17 +2,74 @@
 @using Waffle.Models.Components
 @model Waffle.Pages.Blogspot.ListModel
 
-@if (Model.Catalog != null)
-{
-    <main class="wf-blogspot">
-        <div class="container">
+<main class="wf-blogspot">
+    <div class="container">
 
-            @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
+        <div class="wf-row gap-4">
+            <div class="w-2/3">
+                @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
 
-            <partial name="~/Views/Shared/Components/ListGroup/Default.cshtml" model="Model.Posts" />
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    @foreach (var item in Model.Posts)
+                    {
+                        <div class="bg-white shadow">
+                            <a href="@Model.GetUrl(item.Path)" class="thumbnail">
+                                <img src="@item.Thumbnail" class="w-full object-fit-cover" alt="@Html.Raw(item.Title)" height="220" />
+                            </a>
+                            <div class="p-2">
+                                <div class="mb-2 flex justify-end text-sm">
+                                    @foreach(var label in item.Labels)
+                                    {
+                                        <span class="text-red-500">@label</span>
+                                    }
+                                </div>
+                                <a href="@Model.GetUrl(item.Path)"><b>@Html.Raw(item.Title)</b></a>
+                            </div>
+                            <div class="flex items-center justify-between bg-gray-100 p-2">
+                                <div>
+                                    <small class="mr-2">
+                                        <i class="fas fa-clock"></i>
+                                        @item.Published
+                                    </small>
+                                    <small>
+                                        <i class="fas fa-comment"></i> @item.Replies.TotalItems
+                                    </small>
+                                </div>
+                                <div class="dropdown">
+                                    <button type="button" class="btn-share" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="fa fa-share-alt"></i></button>
+                                    <ul class="dropdown-menu p-0 border-0 shadow">
+                                        <li>
+                                            <a class="dropdown-item" data-title="Twitter" href="#" rel="nofollow" target="_blank">
+                                                <i class="fab fa-twitter"></i>
+                                                <span>Twitter</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" data-title="Facebook" href="#" rel="nofollow" target="_blank">
+                                                <i class="fab fa-facebook"></i>
+                                                <span>Facebook</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" data-title="Pinterest" href="#" rel="nofollow" target="_blank">
+                                                <i class="fab fa-pinterest"></i>
+                                                <span>Pinterest</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+            </div>
+            <div class="md:w-1/3">
+                @await Component.InvokeAsync(nameof(ArticlePicker))
 
-            <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
-
+                @await Component.InvokeAsync(nameof(Tag))
+            </div>
         </div>
-    </main>
-}
+
+    </div>
+</main>

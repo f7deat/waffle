@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 using Waffle.Entities;
 
 namespace Waffle.ExternalAPI.Google.Models
@@ -44,18 +43,10 @@ namespace Waffle.ExternalAPI.Google.Models
         public DateTime Updated { get; set; }
         [JsonPropertyName("url")]
         public string Url { get; set; }
-        public string Image
-        {
-            get
-            {
-                var thumbnail = Regex.Match(Content, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase).Groups[1].Value;
-                if (string.IsNullOrEmpty(thumbnail))
-                {
-                    return "https://picsum.photos/490/200";
-                }
-                return thumbnail;
-            }
-        }
+        [JsonPropertyName("images")]
+        public List<BloggerImage> Images { get; set; } = new List<BloggerImage>();
+        [JsonIgnore]
+        public string Thumbnail => Images.Any() ? Images.First().Url : "https://placehold.jp/22254e/ffffff/350x240.png?text=IMAGE";
         public string Path
         {
             get
@@ -65,9 +56,15 @@ namespace Waffle.ExternalAPI.Google.Models
             }
         }
         [JsonPropertyName("replies")]
-        public BloggerReplies? Replies { get; set; }
+        public BloggerReplies Replies { get; set; } = new BloggerReplies();
         [JsonPropertyName("labels")]
-        public List<string>? Labels { get; set; }
+        public List<string> Labels { get; set; } = new List<string>();
+    }
+
+    public class BloggerImage
+    {
+        [JsonPropertyName("url")]
+        public string Url { get; set; } = string.Empty;
     }
 
     public class BloggerReplies
@@ -100,11 +97,5 @@ namespace Waffle.ExternalAPI.Google.Models
         public string? DisplayName { get; set; }
         [JsonPropertyName("image")]
         public BloggerImage? Image { get; set; }
-    }
-
-    public class BloggerImage
-    {
-        [JsonPropertyName("url")]
-        public string? Url { get; set; }
     }
 }

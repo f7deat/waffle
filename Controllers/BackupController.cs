@@ -11,7 +11,6 @@ using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
-using Waffle.Models.Settings;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers

@@ -33,6 +33,15 @@ namespace Waffle.Core.Helpers
             return result.ToString();
         }
 
+        public static string ToWikiFriendly(string page)
+        {
+            if (string.IsNullOrWhiteSpace(page))
+            {
+                return string.Empty;
+            }
+            return page.Replace(" ", "_");
+        }
+
         private static readonly string[] VietnameseSigns = new string[]
         {
 
