@@ -22,6 +22,7 @@ namespace Waffle.ViewComponents
                     RequestId = worId.ToString()
                 });
             }
+            navbar.NavItems = await _workService.GetListChildAsync<NavItem>(worId);
             if (navbar.Layout == Layout.Vertical)
             {
                 return View(Layout.Vertical.ToString(), navbar);

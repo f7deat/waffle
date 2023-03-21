@@ -30,4 +30,10 @@ namespace Waffle.Models.Params
         public Guid WorkContentId { get; set; }
         public Guid CatalogId { get; set; }
     }
+
+    public class DeleteNavItemModel
+    {
+        public Guid LinkId { get; set; }
+        public Guid WorkId { get; set; }
+    }
 }

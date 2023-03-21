@@ -16,6 +16,8 @@ namespace Waffle.ViewComponents
             _workService = workService;
         }
 
+        public Pagination Pagination => new();
+
         public async Task<IViewComponentResult> InvokeAsync(Guid workId)
         {
             var work = await _workService.FindAsync(workId);

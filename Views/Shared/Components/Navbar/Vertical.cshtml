@@ -1,45 +1,29 @@
-﻿<nav class="navbar shadow mb-4">
+﻿@using Waffle.Models.Components
+@model Navbar
+
+<nav class="navbar shadow mb-4">
     <ul class="navbar-nav">
-        <li class="navbar-item">
-            <button class="navbar-link collapsed" type="button" data-bs-target="#collapse-932e6c0f-d8c5-4744-bae8-08da4318d1c6" data-bs-toggle="collapse" aria-expanded="false">
-                <div>
-                    <i class="fa fa-film mr-2"></i>
-                    Xem gì
-                </div>
-                <i class="fas fa-angle-right"></i>
-            </button>
-            <div class="shadow z-10 min-w-full md:min-w-64 bg-white collapse" aria-labelledby="dropdown-menu-932e6c0f-d8c5-4744-bae8-08da4318d1c6" id="collapse-932e6c0f-d8c5-4744-bae8-08da4318d1c6" style="">
-                <a class="py-2 px-4 hover:bg-gray-200 flex items-center text-gray-800 flex" href="/video">
-                    Video
-                </a>
-                <a class="py-2 px-4 hover:bg-gray-200 flex items-center text-gray-800 flex" href="/album">
-                    Albums
-                </a>
-            </div>
-        </li>
-        <li class="navbar-item">
-            <a class="navbar-link" href="/games">
-                <div>
-                    <i class="fas fa-gamepad mr-2"></i>
-                    Games
-                </div>
-            </a>
-        </li>
-        <li class="navbar-item">
-            <a class="navbar-link" href="/blogspot">
-                <div>
-                    <i class="fas fa-rss mr-2"></i>
-                    Blogs
-                </div>
-            </a>
-        </li>
-        <li class="navbar-item">
-            <a class="navbar-link" href="/shop">
-                <div>
-                    <i class="fas fa-cart-plus mr-2"></i>
-                    Mua sắm
-                </div>
-            </a>
-        </li>
+        @foreach(var navItem in Model.NavItems)
+        {
+            if (!navItem.Links.Any())
+            {
+                continue;
+            }
+            if (navItem.HasSubItem)
+            {
+                
+            }
+            else
+            {
+                <li class="navbar-item">
+                    <a class="navbar-link" href="@navItem.Links.First().Href">
+                        <div>
+                            <i class="fab fa-staylinked mr-2"></i>
+                            @navItem.Links.First().Name
+                        </div>
+                    </a>
+                </li>
+            }
+        }
     </ul>
 </nav>

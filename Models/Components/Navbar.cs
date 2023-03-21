@@ -5,30 +5,22 @@ namespace Waffle.Models.Components
 {
     public class Navbar : BaseEntity
     {
-        public Navbar()
-        {
-            NavItems = new List<NavItem>();
-        }
         [JsonPropertyName("container")]
         public bool Container { get; set; }
-        [JsonPropertyName("navItems")]
-        public List<NavItem> NavItems { get; set; }
-
         [JsonPropertyName("layout")]
         public Layout Layout { get; set; }
+        [JsonIgnore]
+        public List<NavItem> NavItems { get; set; } = new List<NavItem>();
     }
 
-    public class NavItem
+    public class NavItem : BaseEntity
     {
-        public NavItem()
-        {
-            Url = string.Empty;
-            Name = string.Empty;
-        }
-        [JsonPropertyName("url")]
-        public string Url { get; set; }
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("links")]
+        public List<Link> Links { get; set; } = new List<Link>();
+        [JsonIgnore]
+        public bool HasSubItem => Links.Count > 1;
     }
 
     public enum Layout

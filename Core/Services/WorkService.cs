@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -78,7 +79,14 @@ namespace Waffle.Core.Services
             {
                 return IdentityResult.Failed(new IdentityError
                 {
-                    Description = "Content not found!"
+                    Description = "Work not found!"
+                });
+            }
+            if (await _context.WorkContents.AnyAsync(x => x.ParentId == id))
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Please remove child"
                 });
             }
             _context.WorkContents.Remove(workContent);
@@ -329,6 +337,25 @@ namespace Waffle.Core.Services
             _context.WorkItems.Remove(data);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
+        }
+
+        public async Task<List<T>> GetListChildAsync<T>(Guid parentId)
+        {
+            var r = new List<T>();
+            var works = await _context.WorkContents.Where(x => x.ParentId == parentId && x.Active).ToListAsync();
+            foreach (var work in works)
+            {
+                if (string.IsNullOrEmpty(work.Arguments))
+                {
+                    continue;
+                }
+                var w = JsonSerializer.Deserialize<T>(work.Arguments);
+                if (w != null)
+                {
+                    r.Add(w);
+                }
+            }
+            return r;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Waffle.Pages.Article
         }
 
         [BindProperty(SupportsGet = true)]
-        public int Current { get; set; }
+        public int Current { get; set; } = 1;
 
         public ListResult<Catalog>? Articles;
 
@@ -34,7 +34,8 @@ namespace Waffle.Pages.Article
             {
                 Active = true,
                 PageSize = 12,
-                Current = Current
+                Current = Current,
+                Type = CatalogType.Article
             });
         }
     }

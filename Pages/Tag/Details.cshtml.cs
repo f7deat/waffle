@@ -24,11 +24,10 @@ namespace Waffle.Pages.Tag
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
-            var catalog = await _catalogService.GetByNameAsync(normalizedName);
-            if (catalog == null)
-            {
-                return NotFound();
-            }
+            var catalog = await _catalogService.GetByNameAsync(normalizedName) ?? new Catalog { 
+                NormalizedName = normalizedName,
+                Name = normalizedName
+            };
             Catalog = catalog;
             ViewData["Title"] = Catalog.Name;
             ViewData["Description"] = Catalog.Description;

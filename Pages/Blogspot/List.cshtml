@@ -1,5 +1,6 @@
 ﻿@page "/blogspot/list/{normalizedName}"
 @using Waffle.Models.Components
+@using Waffle.Core.Helpers
 @model Waffle.Pages.Blogspot.ListModel
 
 <main class="wf-blogspot">
@@ -17,10 +18,10 @@
                                 <img src="@item.Thumbnail" class="w-full object-fit-cover" alt="@Html.Raw(item.Title)" height="220" />
                             </a>
                             <div class="p-2">
-                                <div class="mb-2 flex justify-end text-sm">
+                                <div class="mb-2 flex justify-end text-sm gap-2">
                                     @foreach(var label in item.Labels)
                                     {
-                                        <span class="text-red-500">@label</span>
+                                        <a href="/tag/@SeoHelper.ToSeoFriendly(label)" class="bg-gray-100 py-1 px-2 rounded">@label</a>
                                     }
                                 </div>
                                 <a href="@Model.GetUrl(item.Path)"><b>@Html.Raw(item.Title)</b></a>
