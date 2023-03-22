@@ -2,17 +2,18 @@
 @inject IConfiguration Configuration
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@Html.Raw(ViewData["Title"])</title>
+    <title>@Html.Raw(ViewData["Title"]) - @(Configuration.GetValue<string>("Settings:TitleSuffix")) </title>
     <meta name="description" content="@Html.Raw(ViewData["Description"])" />
+    <partial name="_MetaPartial" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Waffle.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="@($"~/css/{Configuration.GetValue<string>("theme").ToLower()}.css")" asp-append-version="true" />
-    @if (false)
+    @if (Configuration.GetValue<bool>("Settings:PWA"))
     {
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="imgs/icons/icon-72x72.png" />

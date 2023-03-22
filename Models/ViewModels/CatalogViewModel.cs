@@ -44,4 +44,9 @@ namespace Waffle.Models.ViewModels
         public Guid Node { get; set; }
         public bool DropToGap { get; set; }
     }
+
+    public class TagListItem : Catalog
+    {
+        public int PostCount { get; set; }
+    }
 }

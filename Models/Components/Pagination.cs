@@ -11,5 +11,6 @@
         public bool HasNextPage { get; set; }
         public string NextPageUrl { get; set; }
         public string PrevPageUrl { get; set; }
+        public int Total { get; set; }
     }
 }

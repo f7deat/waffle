@@ -6,11 +6,18 @@
     <div class="wf-row gap-4">
         <div class="w-2/3">
             @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
-            <div class="title">@Model.Catalog.Name</div>
+            <div class="title flex justify-between">
+                <div>@Model.Catalog.Name</div>
+                <div class="font-normal">
+                    <span>@Model.Pagination.Total</span>
+                </div>
+            </div>
             <partial name="~/Pages/Article/_List.cshtml" model="Model.Catalogs" />
+            <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
         </div>
         <div class="md:w-1/3">
             @await Component.InvokeAsync(nameof(ArticlePicker))
+            @await Component.InvokeAsync(nameof(Tag))
         </div>
     </div>
 </div>

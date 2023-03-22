@@ -2,6 +2,7 @@
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Interfaces.IService
 {
@@ -27,5 +28,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> TagAddToCatalogAsync(WorkItem args);
         Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, IFilterOptions filterOptions);
         Task<IEnumerable<Catalog>> ListRandomTagAsync();
+        Task<ListResult<TagListItem>> ListTagAsync(IFilterOptions filterOptions);
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.Pages.Tag
 {
@@ -21,6 +22,7 @@ namespace Waffle.Pages.Tag
             Current = 1,
             PageSize = 10
         };
+        public Pagination Pagination = new();
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
@@ -34,7 +36,14 @@ namespace Waffle.Pages.Tag
 
             var catalogs = await _catalogService.ListByTagAsync(catalog.Id, FilterOptions);
             Catalogs = catalogs.Data ?? new List<Catalog>();
-
+            Pagination = new Pagination
+            {
+                HasNextPage = catalogs.HasNextPage,
+                HasPrevPage = catalogs.HasPreviousPage,
+                NextPageUrl = $"/tag/{normalizedName}?current={FilterOptions.Current + 1}",
+                PrevPageUrl = $"/tag/{normalizedName}?current={FilterOptions.Current - 1}",
+                Total = catalogs.Total
+            };
             return Page();
         }
     }

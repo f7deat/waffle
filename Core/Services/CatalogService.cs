@@ -6,6 +6,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services
 {
@@ -264,5 +265,18 @@ namespace Waffle.Core.Services
         }
 
         public async Task<IEnumerable<Catalog>> ListRandomTagAsync() => await _context.Catalogs.Where(x => x.Type == CatalogType.Tag && x.Active).OrderBy(x => Guid.NewGuid()).Take(10).ToListAsync();
+
+        public async Task<ListResult<TagListItem>> ListTagAsync(IFilterOptions filterOptions)
+        {
+            var query = _context.Catalogs.Where(x => x.Type == CatalogType.Tag && x.Active).Select(x => new TagListItem
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NormalizedName = x.NormalizedName,
+                ViewCount = x.ViewCount,
+                PostCount = _context.WorkItems.Count(y => y.CatalogId == x.Id)
+            }).OrderBy(x => x.Id);
+            return await ListResult<TagListItem>.Success(query, filterOptions);
+        }
     }
 }
