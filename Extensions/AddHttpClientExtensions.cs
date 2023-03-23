@@ -1,4 +1,5 @@
 ﻿using Waffle.ExternalAPI.Facebook;
+using Waffle.ExternalAPI.Game;
 using Waffle.ExternalAPI.Google;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Telegram;
@@ -11,9 +12,10 @@ namespace Waffle.Extensions
         public static void AddHttpClients(this IServiceCollection services)
         {
             services.AddHttpClient<IFacebookService, FacebookService>();
-            services.AddHttpClient<IWikiService, WikiService>();
-            services.AddHttpClient<ITelegramService, TelegramService>();
+            services.AddHttpClient<IGameService, GameService>();
             services.AddHttpClient<IGoogleService, GoogleService>();
+            services.AddHttpClient<ITelegramService, TelegramService>();
+            services.AddHttpClient<IWikiService, WikiService>();
         }
     }
 }

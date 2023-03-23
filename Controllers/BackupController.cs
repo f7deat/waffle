@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Constants;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
@@ -157,16 +158,11 @@ namespace Waffle.Controllers
         [HttpPost("upgrade")]
         public async Task<IActionResult> UpgradeAsync()
         {
-            await _catalogService.EnsureDataAsync("home", CatalogType.Entry);
-            await _catalogService.EnsureDataAsync("shop", CatalogType.Entry);
-
             await EnsureComponentsAsync();
-
             await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
             await _appSettingService.EnsureSettingAsync(nameof(ExternalAPI.Telegram));
             await _appSettingService.EnsureSettingAsync(nameof(ExternalAPI.Facebook));
             await _appSettingService.EnsureSettingAsync(nameof(Social));
-
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
@@ -187,6 +183,7 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(Image));
             await _componentService.EnsureComponentAsync(nameof(Swiper));
             await _componentService.EnsureComponentAsync(nameof(Masonry));
+            await _componentService.EnsureComponentAsync(nameof(ListGroup));
             await _componentService.EnsureComponentAsync(nameof(Lookbook));
             await _componentService.EnsureComponentAsync(nameof(Tag));
             await _componentService.EnsureComponentAsync(nameof(Feed));

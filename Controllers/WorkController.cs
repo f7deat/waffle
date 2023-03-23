@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.Text.Json;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -422,5 +424,25 @@ namespace Waffle.Controllers
 
         [HttpPost("blogger/save")]
         public async Task<IActionResult> BloggerSaveAsync([FromBody] Blogger model) => Ok(await _workService.BloggerSaveAsync(model));
+
+        [HttpGet("list-group/{id}")]
+        public async Task<IActionResult> GetListGroupAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<ListGroup>(id));
+
+        [HttpPost("list-group/item/add/{id}")]
+        public async Task<IActionResult> AddListGroupItemAsync([FromRoute] Guid id, [FromBody] ListGroupItem args)
+        {
+            var component = await _componentService.EnsureComponentAsync(nameof(ListGroupItem));
+            var work = new WorkContent
+            {
+                Active = true,
+                Arguments = JsonSerializer.Serialize(args),
+                ParentId = id,
+                ComponentId = component.Id,
+                Name = args.Link.Name ?? args.Link.Href
+            };
+            await _context.WorkContents.AddAsync(work);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
+        }
     }
 }

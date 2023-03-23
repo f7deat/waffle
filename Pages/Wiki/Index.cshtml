@@ -1,10 +1,17 @@
 ﻿@page
 @model Waffle.Pages.Wiki.IndexModel
 @{
+    ViewData["Title"] = Model.Catalog.Name;
+    ViewData["Description"] = Model.Catalog.Description;
+    ViewData["Image"] = Model.Catalog.Thumbnail;
 }
+
 <div class="p-4 shadow bg-white rounded">
-    <form class="flex gap-4" action="/wiki/search" method="get">
+    <form class="flex gap-4" action="/search" method="get">
         <input class="border rounded px-4 py-2" type="search" placeholder="Nhập tên trang..." name="searchTerm">
-        <button class="px-4 py-2 rounded bg-gray-800 hover:bg-gray-900 text-white hover:text-white" type="submit"><i class="fas fa-search"></i> Đi đến</button>
+        <button class="px-4 py-2 rounded bg-gray-800 hover:bg-gray-900 text-white hover:text-white" type="submit">
+            <i class="fas fa-search"></i>
+            <localize key="search" />
+        </button>
     </form>
 </div>
