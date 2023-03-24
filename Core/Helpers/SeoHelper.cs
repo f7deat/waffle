@@ -33,7 +33,7 @@ namespace Waffle.Core.Helpers
             return result.ToString();
         }
 
-        public static string ToWikiFriendly(string page)
+        public static string ToWikiFriendly(string? page)
         {
             if (string.IsNullOrWhiteSpace(page))
             {

@@ -1,0 +1,9 @@
+﻿@page "/wiki/try-another-language/{id}"
+@model Waffle.Pages.Wiki.TryAnotherLanguageModel
+
+<div class="container">
+    @foreach (var item in Model.ListGroups)
+    {
+        <partial name="~/Views/Shared/Components/ListGroup/Default.cshtml" model="item" />
+    }
+</div>

@@ -6,5 +6,6 @@ namespace Waffle.ExternalAPI.Interfaces
     {
         Task<Parse?> ParseAsync(string page, string lang);
         Task<Parse> FandomAsync(string page, string name, string lang);
+        Task<WikiQuery> GetLangLinksAsync(string titles);
     }
 }

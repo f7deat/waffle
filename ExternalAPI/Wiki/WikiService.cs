@@ -6,9 +6,11 @@ namespace Waffle.ExternalAPI.Wiki
     public class WikiService : IWikiService
     {
         private readonly HttpClient _http;
-        public WikiService(HttpClient http)
+        private readonly ILogger<WikiService> _logger;
+        public WikiService(HttpClient http, ILogger<WikiService> logger)
         {
             _http = http;
+            _logger = logger;
         }
 
         public async Task<Parse> FandomAsync(string page, string name, string lang)
@@ -26,6 +28,21 @@ namespace Waffle.ExternalAPI.Wiki
             }
         }
 
+        public async Task<WikiQuery> GetLangLinksAsync(string titles)
+        {
+            try
+            {
+                var url = $"https://wikipedia.org/w/api.php?action=query&format=json&formatversion=2&prop=langlinks&titles={titles}";
+                var response = await _http.GetStreamAsync(url);
+                var data = await JsonSerializer.DeserializeAsync<WikiQueryResult>(response);
+                return data?.Query ?? new WikiQuery();
+            }
+            catch (Exception)
+            {
+                return new WikiQuery();
+            }
+        }
+
         public async Task<Parse?> ParseAsync(string page, string lang)
         {
             try
@@ -35,8 +52,9 @@ namespace Waffle.ExternalAPI.Wiki
                 var data = await JsonSerializer.DeserializeAsync<Action>(response);
                 return data?.Parse;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogWarning(ex, "Parse wiki errors");
                 return default;
             }
         }

@@ -12,11 +12,13 @@ namespace Waffle.Pages.Blogspot
         private readonly IGoogleService _googleService;
         private readonly ICatalogService _catalogService;
         private readonly IWorkService _workService;
-        public DetailsModel(IGoogleService googleService, ICatalogService catalogService, IWorkService workService)
+        private readonly ILogger<DetailsModel> _logger;
+        public DetailsModel(IGoogleService googleService, ICatalogService catalogService, IWorkService workService, ILogger<DetailsModel> logger)
         {
             _googleService = googleService;
             _catalogService = catalogService;
             _workService = workService;
+            _logger = logger;
         }
 
         public BloggerItem? Item;
@@ -27,6 +29,7 @@ namespace Waffle.Pages.Blogspot
             Catalog = await _catalogService.GetByNameAsync(normalizedName);
             if (Catalog == null)
             {
+                _logger.LogWarning("Catalog not found");
                 return NotFound();
             }
             var work = await _catalogService.FirstWorkAsync(Catalog.Id);

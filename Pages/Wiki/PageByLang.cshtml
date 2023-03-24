@@ -1,0 +1,66 @@
+﻿@page "/wiki/{lang}/{id}"
+@model Waffle.Pages.Wiki.PageByLangModel
+
+<style>
+    .plainlinks, .error {
+        display: none;
+    }
+
+    table.infobox.vevent {
+        width: 100% !important;
+        margin-bottom: 1rem;
+    }
+
+    .infobox {
+        width: auto !important;
+    }
+
+    table.wikitable {
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+        table.wikitable th {
+            background: #eee;
+            padding: 0.5rem 1rem;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+
+        table.wikitable td {
+            border: 1px solid #eee;
+            padding: 0.25rem 1rem;
+        }
+
+    .navbox-title {
+        text-align: center;
+        color: unset;
+    }
+
+    .mw-editsection {
+        display: none;
+    }
+
+    table.nowraplinks.mw-collapsible.autocollapse.navbox-inner {
+        width: 100%;
+    }
+
+    .h2 {
+        font-weight: bold;
+        font-size: 1.125rem;
+        padding: 0.25rem 0;
+    }
+
+    td {
+        padding: 0.25rem;
+    }
+</style>
+
+<div class="container">
+    <h1 class="title text-base">
+        @Model.Data.Title
+    </h1>
+    <div class="shadow bg-white p-4 rounded mb-4">
+        @Html.Raw(Model.Data.Text)
+    </div>
+</div>
