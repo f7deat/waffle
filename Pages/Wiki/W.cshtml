@@ -4,5 +4,8 @@
     ViewData["Title"] = Model.Title;
 }
 <div class="container">
-    <div class="title">@Model.Title</div>
+    @foreach (var item in Model.ListGroups)
+    {
+        <partial name="~/Views/Shared/Components/ListGroup/Default.cshtml" model="item" />
+    }
 </div>

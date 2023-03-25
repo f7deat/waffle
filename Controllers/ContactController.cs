@@ -96,7 +96,7 @@ namespace Waffle.Controllers
             var telegram = await _appSettingService.GetAsync<Telegram>(nameof(Telegram));
             if (telegram != null)
             {
-                await _telegramService.SendMessageAsync(telegram.Bot, contactForm.ChatId, $"You have new contact: {contact.Email}/{contact.PhoneNumber}/{contact.Address}/{contact.Note}");
+                await _telegramService.SendMessageAsync(telegram.Token, contactForm.ChatId, $"You have new contact: {contact.Email}/{contact.PhoneNumber}/{contact.Address}/{contact.Note}");
             }
             return Redirect(contactForm?.ResultUrl ?? "/");
         }

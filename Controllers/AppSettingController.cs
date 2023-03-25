@@ -11,7 +11,6 @@ using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.SendGrid;
 using Waffle.Models.Components;
 using Waffle.Models.Layout;
-using Waffle.Models.Settings;
 
 namespace Waffle.Controllers
 {
@@ -23,13 +22,15 @@ namespace Waffle.Controllers
         private readonly IAppSettingService _appSettingService;
         private readonly IConfiguration _configuration;
         private readonly IFacebookService _facebookService;
+        private readonly ITelegramService _telegramService;
 
-        public AppSettingController(ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration, IFacebookService facebookService)
+        public AppSettingController(ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService)
         {
             _context = context;
             _appSettingService = appSettingService;
             _configuration = configuration;
             _facebookService = facebookService;
+            _telegramService = telegramService;
         }
 
         [HttpGet("list")]
@@ -139,33 +140,25 @@ namespace Waffle.Controllers
             return Ok(await _facebookService.GetLongLivedUserAccessTokenAsync(app.AppId, app.AppSecret, shortLiveToken));
         }
 
-        [HttpPost("telegram/save")]
-        public async Task<IActionResult> SaveTelegramAsync([FromBody] Telegram model) => Ok(await _appSettingService.SaveTelegramAsync(model));
+        [HttpPost("telegram/save/{id}")]
+        public async Task<IActionResult> SaveTelegramAsync([FromRoute] Guid id, [FromBody] Telegram args) => Ok(await _appSettingService.SaveTelegramAsync(id, args));
 
-        [HttpGet("telegram/configuration")]
-        public async Task<IActionResult> GetTelegramConfigurationAsync()
+        [HttpGet("telegram/{id}")]
+        public async Task<IActionResult> GetTelegramAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Telegram>(id));
+
+        [HttpPost("telegram/test")]
+        public async Task<IActionResult> TestTelegramAsync([FromBody] TelegramMessage message)
         {
-            var appSetting = await _appSettingService.EnsureSettingAsync(nameof(Telegram));
-            bool bot = false;
-            if (!string.IsNullOrEmpty(appSetting.Value))
+            var telegram = await _appSettingService.GetAsync<Telegram>(nameof(Telegram));
+            if (telegram is null)
             {
-                var telegram = JsonSerializer.Deserialize<Telegram?>(appSetting.Value);
-                if (telegram != null)
+                return Ok(IdentityResult.Failed(new IdentityError
                 {
-                    bot = !string.IsNullOrEmpty(telegram.Bot);
-                }
+                    Description = "Config not found"
+                }));
             }
-            return Ok(new
-            {
-                data = new[]
-                    {
-                    new {
-                        id = "bot",
-                        name = "BOT",
-                        active = bot
-                    }
-                }
-            });
+            var response = await _telegramService.SendMessageAsync(telegram.Token, telegram.ChatId, message.Message);
+            return Ok(IdentityResult.Success);
         }
 
         [HttpPost("blogger/save")]

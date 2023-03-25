@@ -92,11 +92,11 @@ namespace Waffle.ExternalAPI.Facebook
             }
         }
 
-        public async Task<FacebookListResult<FacebookProduct>> GetProductsAsync(string id, string access_token)
+        public async Task<FacebookListResult<FacebookProduct>> GetProductsAsync(string id, string access_token, int limit)
         {
             try
             {
-                var response = await _http.GetStreamAsync($"{id}/products?fields=image_url,name,url,price,sale_price&access_token={access_token}");
+                var response = await _http.GetStreamAsync($"{id}/products?fields=image_url,name,url,price,sale_price&access_token={access_token}&limit={limit}");
                 return await JsonSerializer.DeserializeAsync<FacebookListResult<FacebookProduct>>(response) ?? new FacebookListResult<FacebookProduct>();
             }
             catch (Exception ex)

@@ -5,13 +5,15 @@
         public string? UserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public OrderStatus Status { get; set; }
+        public string? CustomerId { get; set; }
     }
 
     public enum OrderStatus
     {
         Open,
         Confirmed,
-        Completed,
+        Paid,
+        Refunded,
         Cancelled
     }
 }

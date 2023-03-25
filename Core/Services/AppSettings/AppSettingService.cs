@@ -12,9 +12,11 @@ namespace Waffle.Core.Services.AppSettings
     public class AppSettingService : IAppSettingService
     {
         private readonly ApplicationDbContext _context;
-        public AppSettingService(ApplicationDbContext context)
+        private readonly ILogger<AppSettingService> _logger;
+        public AppSettingService(ApplicationDbContext context, ILogger<AppSettingService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<AppSetting> EnsureSettingAsync(string name)
@@ -127,20 +129,18 @@ namespace Waffle.Core.Services.AppSettings
             return IdentityResult.Success;
         }
 
-        public async Task<IdentityResult> SaveTelegramAsync(Telegram model)
+        public async Task<IdentityResult> SaveTelegramAsync(Guid id, Telegram args)
         {
-            var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Telegram)));
+            var setting = await _context.AppSettings.FindAsync(id);
             if (setting is null)
             {
-                setting = new AppSetting
+                _logger.LogError("Data not found");
+                return IdentityResult.Failed(new IdentityError
                 {
-                    Name = nameof(Telegram),
-                    NormalizedName = nameof(Telegram),
-                    Value = JsonSerializer.Serialize(model)
-                };
-                await _context.AppSettings.AddAsync(setting);
+                    Description = "Data not found"
+                });
             }
-            setting.Value = JsonSerializer.Serialize(model);
+            setting.Value = JsonSerializer.Serialize(args);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }

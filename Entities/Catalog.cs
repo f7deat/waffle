@@ -43,15 +43,15 @@ namespace Waffle.Entities
 
     public enum CatalogType
     {
-        Default,
-        Article,
-        Shop,
+        Default = 0,
+        Article = 1,
+        Shop = 2,
         Setting,
-        Entry,
+        Entry = 4,
         ArticleCategoy,
         ProductCategory,
-        Blogspot,
+        Blogspot = 7,
         Albums,
-        Tag
+        Tag = 9
     }
 }

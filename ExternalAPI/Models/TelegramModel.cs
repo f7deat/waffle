@@ -4,11 +4,14 @@ namespace Waffle.ExternalAPI.Models
 {
     public class Telegram
     {
-        public Telegram()
-        {
-            Bot = string.Empty;
-        }
-        [JsonPropertyName("bot")]
-        public string Bot { get; set; }
+        [JsonPropertyName("token")]
+        public string Token { get; set; } = string.Empty;
+        [JsonPropertyName("chatId")]
+        public string ChatId { get; set; } = string.Empty;
+    }
+
+    public class TelegramMessage
+    {
+        public string Message { get; set; } = string.Empty;
     }
 }

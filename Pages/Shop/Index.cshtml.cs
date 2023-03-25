@@ -27,6 +27,7 @@ namespace Waffle.Pages.Shop
         public IEnumerable<Catalog> Products;
         public Catalog Shop;
         public FacebookListResult<FacebookProduct> FacebookProducts = new();
+        public ListResult<Catalog>? Categories;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -44,8 +45,15 @@ namespace Waffle.Pages.Shop
             var app = await _appService.GetAsync<Facebook>(nameof(Facebook));
             if (app != null)
             {
-                FacebookProducts = await _facebookService.GetProductsAsync("243943267914049", app.PageAccessToken);
+                FacebookProducts = await _facebookService.GetProductsAsync("243943267914049", app.PageAccessToken, 4);
             }
+
+            Categories = await _catalogService.ListAsync(new CatalogFilterOptions
+            {
+                Active = true,
+                Current = 1,
+                Type = CatalogType.Tag
+            });
 
             return Page();
         }
