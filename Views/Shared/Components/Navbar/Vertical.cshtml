@@ -1,7 +1,7 @@
 ﻿@using Waffle.Models.Components
 @model Navbar
 
-<nav class="navbar shadow mb-4">
+<nav class="shadow mb-4 navbar-collapse bg-white">
     <ul class="navbar-nav">
         @foreach(var navItem in Model.NavItems)
         {
@@ -26,4 +26,9 @@
             }
         }
     </ul>
+    <div class="navbar-footer">
+        <button type="button" class="py-3 px-4 navbar-toggler" aria-label="Navigation bars">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
 </nav>

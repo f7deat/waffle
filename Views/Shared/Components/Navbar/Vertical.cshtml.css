@@ -1,5 +1,4 @@
 ﻿.navbar {
-    height: auto;
     border-radius: 0.25rem;
 }
 
@@ -25,4 +24,19 @@
     font-weight: 500;
     color: rgb(51 65 85);
     width: 100%;
+}
+
+.navbar-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--gray-100);
+}
+
+@media screen and (min-width: 768px) {
+    .navbar-footer {
+        display: none;
+    }
+
 }

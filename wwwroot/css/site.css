@@ -337,6 +337,21 @@ p {
     font-size: 1rem;
 }
 
+.navbar-collapse {
+    display: none;
+}
+
+.navbar-collapse.show {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 16rem;
+    height: 100vh;
+}
+
 .search-input, .search-input input {
     background-color: var(--gray-100);
     border: 1px solid var(--gray-100);
@@ -667,6 +682,11 @@ p {
 
     .wf-row {
         display: flex;
+    }
+
+    .navbar-collapse {
+        display: block;
+        height: auto;
     }
 
     .wf-col {
