@@ -6,21 +6,24 @@
     <div class="wf-row gap-4">
         <div class="w-2/3">
 
-            @foreach (var item in Model.Products)
-            {
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="card">
-                        <div class="card-image">
-                            <img src="@item.Thumbnail" alt="@item.Name" />
-                        </div>
-                        <div class="card-title">
-                            <a href="/shop/@item.NormalizedName">
-                                @item.Name
-                            </a>
+            <div class="title">Lựa chọn của biên tập viên</div>
+            <div class="mb-4">
+                @foreach (var item in Model.Products)
+                {
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="card bg-white shadow rounded">
+                            <div class="card-image">
+                                <img src="@item.Thumbnail" alt="@item.Name" class="object-fit-cover" />
+                            </div>
+                            <div class="p-2">
+                                <a href="/shop/@item.NormalizedName">
+                                    @item.Name
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
 
             <div class="title">Sản phẩm mới</div>
             <div class="mb-4 md:grid grid-cols-4 gap-4">

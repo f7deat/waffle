@@ -33,5 +33,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> UpdateSummaryAsync(WorkContent args);
         Task<IdentityResult> ItemDeleteAsync(WorkItem args);
         Task<List<T>> GetListChildAsync<T>(Guid parentId);
+        IEnumerable<T?> ListAsync<T>(List<string> list);
     }
 }

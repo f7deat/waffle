@@ -25,5 +25,11 @@ namespace Waffle.Controllers
 
         [HttpPost]
         public IActionResult Subscribe() => Redirect("/page/thank");
+
+        [Route("/post/{url}-{id}.html")]
+        public IActionResult Post(string url, string id)
+        {
+            return RedirectPermanent($"/article/{url}");
+        }
     }
 }

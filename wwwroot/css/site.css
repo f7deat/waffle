@@ -682,6 +682,7 @@ p {
 
     .wf-row {
         display: flex;
+        gap: 1rem;
     }
 
     .navbar-collapse {
@@ -709,7 +710,7 @@ p {
         display: grid;
     }
 
-    .md\:w-1\/6 {
+    .md\:w-1\/6, .w-1\/6 {
         width: 16.666667%;
     }
 

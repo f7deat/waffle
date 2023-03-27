@@ -162,7 +162,10 @@ namespace Waffle.Core.Services
             var catalog = await _context.Catalogs.FindAsync(args.Id);
             if (catalog is null)
             {
-                return IdentityResult.Failed();
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Data not found!"
+                });
             }
             catalog.Name = args.Name;
             catalog.Type = args.Type;
