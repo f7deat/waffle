@@ -334,7 +334,19 @@ namespace Waffle.Core.Services
                     Description = "Data not found"
                 });
             }
-            _context.WorkItems.Remove(data);
+            if (await _context.WorkItems.CountAsync(x => x.WorkId == args.WorkId) > 1)
+            {
+                _context.WorkItems.Remove(data);
+            }
+            else
+            {
+                var work = await _context.WorkContents.FindAsync(args.WorkId);
+                if (work != null)
+                {
+                    _context.WorkContents.Remove(work);
+                }
+                _context.WorkItems.Remove(data);
+            }
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }
@@ -356,6 +368,18 @@ namespace Waffle.Core.Services
                 }
             }
             return r;
+        }
+
+        public IEnumerable<T?> ListAsync<T>(List<string> list)
+        {
+            foreach (var item in list)
+            {
+                if (string.IsNullOrEmpty(item))
+                {
+                    continue;
+                }
+                yield return JsonSerializer.Deserialize<T>(item);
+            }
         }
     }
 }

@@ -183,6 +183,7 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(Image));
             await _componentService.EnsureComponentAsync(nameof(Swiper));
             await _componentService.EnsureComponentAsync(nameof(Masonry));
+            await _componentService.EnsureComponentAsync(nameof(Link));
             await _componentService.EnsureComponentAsync(nameof(ListGroup));
             await _componentService.EnsureComponentAsync(nameof(Lookbook));
             await _componentService.EnsureComponentAsync(nameof(Tag));

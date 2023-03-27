@@ -444,5 +444,11 @@ namespace Waffle.Controllers
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
+
+        [HttpPost("link/save/{id}")]
+        public async Task<IActionResult> SaveLinkAsync([FromRoute] Guid id, [FromBody] Link args) => Ok(await _workService.SaveArgumentsAsync(id, args));
+
+        [HttpGet("link/{id}")]
+        public async Task<IActionResult> GetLinkAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Link>(id));
     }
 }

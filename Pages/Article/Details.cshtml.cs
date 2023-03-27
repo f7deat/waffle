@@ -29,8 +29,11 @@ namespace Waffle.Pages.Article
             {
                 return NotFound();
             }
+
             ViewData["Title"] = Catalog.Name;
             ViewData["Description"] = Catalog.Description;
+            ViewData["Image"] = Catalog.Thumbnail;
+
             BlockEditors = await GetBlockEditorsAsync(Catalog.Id);
             Tags = await _catalogService.ListTagByIdAsync(Catalog.Id);
             return Page();
