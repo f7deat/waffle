@@ -1,0 +1,24 @@
+﻿@page "/shop/group/{groupId}"
+@model Waffle.Pages.Shop.GroupModel
+@{
+
+}
+
+<div class="container">
+    <div class="title">Danh mục (@Model.Data.TotalCount)</div>
+    <div class="grid grid-cols-4 gap-4 mb-4">
+        @foreach (var item in Model.Data.LinkList)
+        {
+            <div class="card bg-white shadow rounded">
+                <div class="card-image">
+                    <img src="@item.Image" alt="@item.LinkName" class="object-fit-cover" loading="lazy" />
+                </div>
+                <div class="p-2">
+                    <a href="@item.Link">
+                        @item.LinkName
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

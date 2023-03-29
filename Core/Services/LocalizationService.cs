@@ -84,7 +84,7 @@ namespace Waffle.Core.Services
         public async Task<ListResult<Localization>> GetListAsync(LocalizationFilterOptions filterOptions)
         {
             var lang = _configuration.GetValue<string>("language");
-            var query = _context.Localizations.Where(x => x.Language.Equals(lang) && (string.IsNullOrEmpty(filterOptions.Key) || x.Key.ToLower().Contains(x.Key.ToLower()))).OrderBy(x => x.Key);
+            var query = _context.Localizations.Where(x => x.Language.Equals(lang) && (string.IsNullOrEmpty(filterOptions.Key) || x.Key.ToLower().Contains(filterOptions.Key.ToLower()))).OrderBy(x => x.Key);
             return await ListResult<Localization>.Success(query, filterOptions);
         }
 

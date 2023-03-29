@@ -4,16 +4,13 @@ namespace Waffle.Models.Components
 {
     public class Jumbotron
     {
-        public Jumbotron()
-        {
-            Image = new Image();
-            Links = new List<Link>();
-        }
-
-        [JsonPropertyName("image")]
-        public Image Image { get; set; }
+        [JsonPropertyName("backgroundImage")]
+        public string BackgroundImage { get; set; } = string.Empty;
 
         [JsonPropertyName("links")]
-        public List<Link> Links { get; set; }
+        public List<Link> Links { get; set; } = new();
+
+        [JsonIgnore]
+        public bool HasBackgroundImage => !string.IsNullOrEmpty(BackgroundImage);
     }
 }

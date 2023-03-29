@@ -38,6 +38,10 @@
                         <ul>
                             @foreach (var link in Model.ReferalLinks)
                             {
+                                if (link is null)
+                                {
+                                    continue;
+                                }
                                 <li>
                                     <a href="@link.Href" target="@link.Target">@link.Name</a>
                                 </li>

@@ -450,5 +450,11 @@ namespace Waffle.Controllers
 
         [HttpGet("link/{id}")]
         public async Task<IActionResult> GetLinkAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Link>(id));
+
+        [HttpPost("jumbotron/save/{id}")]
+        public async Task<IActionResult> SaveJumbotronAsync([FromRoute] Guid id, [FromBody] Jumbotron args) => Ok(await _workService.SaveArgumentsAsync(id, args));
+
+        [HttpGet("jumbotron/{id}")]
+        public async Task<IActionResult> GetJumbotronAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Jumbotron>(id));
     }
 }

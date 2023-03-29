@@ -30,6 +30,12 @@ namespace Waffle.Models.Components
         public string Wrapper { get; set; }
 
         [JsonIgnore]
+        public string Src => File.Url;
+
+        [JsonIgnore]
+        public bool HasImage => !string.IsNullOrEmpty(Src);
+
+        [JsonIgnore]
         public bool HasLink => !string.IsNullOrEmpty(Link.Name);
     }
 }
