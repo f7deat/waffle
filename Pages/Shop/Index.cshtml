@@ -6,30 +6,31 @@
     <div class="wf-row gap-4">
         <div class="w-2/3">
 
-            <div class="p-4 bg-white shadow rounded mb-4">
+            <div class="p-4 bg-white shadow rounded mb-4 flex gap-2 flex-wrap">
                 @foreach (var group in Model.BaseInfoAndLinks.LandingPageBaseInfo.GroupList)
                 {
                     <a href="/shop/group/@group.GroupId" class="px-4 py-1 rounded bg-gray-100 rounded">@group.GroupName</a>
                 }
             </div>
 
-            <div class="title">@Model.BaseInfoAndLinks.LandingPageBaseInfo.Name (@Model.BaseInfoAndLinks.LandingPageLinkList.TotalCount)</div>
-            <div class="grid grid-cols-4 gap-4 mb-4">
-                @foreach (var item in Model.BaseInfoAndLinks.LandingPageLinkList.LinkList)
-                {
-                    <div class="card bg-white shadow rounded">
-                        <div class="card-image">
-                            <img src="@item.Image" alt="@item.LinkName" class="object-fit-cover" loading="lazy" />
+            <div class="mb-4">
+                <div class="title">@Model.BaseInfoAndLinks.LandingPageBaseInfo.Name (@Model.BaseInfoAndLinks.LandingPageLinkList.TotalCount)</div>
+                <div class="grid grid-cols-4 gap-4">
+                    @foreach (var item in Model.BaseInfoAndLinks.LandingPageLinkList.LinkList)
+                    {
+                        <div class="card bg-white shadow rounded">
+                            <div class="card-image">
+                                <img src="@item.Image" alt="@item.LinkName" class="object-fit-cover" loading="lazy" />
+                            </div>
+                            <div class="p-2">
+                                <a href="@item.Link">
+                                    @item.LinkName
+                                </a>
+                            </div>
                         </div>
-                        <div class="p-2">
-                            <a href="@item.Link">
-                                @item.LinkName
-                            </a>
-                        </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
-
 
             @if (Model.HasProduct)
             {
@@ -50,41 +51,6 @@
                     }
                 </div>
             }
-
-            <div class="title">Sản phẩm mới</div>
-            <div class="mb-4 md:grid grid-cols-4 gap-4">
-                @if (Model.FacebookProducts.Data != null)
-                {
-                    @foreach (var item in Model.FacebookProducts.Data)
-                    {
-                        <div class="bg-white shadow">
-                            <div class="bg-gray-900">
-                                <a href="@item.Url">
-                                    <img src="@item.ImageUrl" alt="@item.Name" class="thumbnail-img" />
-                                </a>
-                            </div>
-                            <div class="p-2">
-                                <div class="mb-2">
-                                    <a href="@item.Url">@item.Name</a>
-                                </div>
-                                <div class="flex justify-end gap-2 text-sm">
-                                    @if (!string.IsNullOrEmpty(item.SalePrice))
-                                    {
-                                        <div class="text-gray-500">
-                                            <s>@item.Price</s>
-                                        </div>
-                                        <div class="text-red-500">@item.SalePrice</div>
-                                    }
-                                    else
-                                    {
-                                        <div class="text-red-500">@item.Price</div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
 
         </div>
         <div class="w-1/3">

@@ -120,6 +120,7 @@ namespace Waffle.Core.Services
                     Description = "Article existed!"
                 });
             }
+            article.Thumbnail = args.Thumbnail;
             article.Name = args.Name;
             article.NormalizedName = normalizedName;
             article.Description = args.Description;

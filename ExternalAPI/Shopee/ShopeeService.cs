@@ -14,7 +14,7 @@ namespace Waffle.ExternalAPI.Shopee
 
         }
 
-        public async Task<BaseInfoAndLinks> GetBaseInfoAndLinksAsync()
+        public async Task<BaseInfoAndLinks> GetBaseInfoAndLinksAsync(int pageNum)
         {
             try
             {
@@ -25,7 +25,7 @@ namespace Waffle.ExternalAPI.Shopee
                     Query = "query getBaseInfoAndLinks($urlSuffix: String!, $pageSize: String, $pageNum: String, $groupId: String, $linkNameKeyword: String) {\r\n  landingPageBaseInfo(urlSuffix: $urlSuffix) {\r\n    name\r\n    headPortrait\r\n    description\r\n    region\r\n    affiliateId\r\n    shopLink\r\n    background\r\n    groupList {\r\n      groupId\r\n      groupName\r\n      groupType\r\n    }\r\n    topFiveExternalLinkImages\r\n  }\r\n  landingPageLinkList(\r\n    urlSuffix: $urlSuffix\r\n    pageSize: $pageSize\r\n    pageNum: $pageNum\r\n    groupId: $groupId\r\n    linkNameKeyword: $linkNameKeyword\r\n  ) {\r\n    totalCount\r\n    linkList {\r\n      linkId\r\n      link\r\n      linkName\r\n      image\r\n      linkType\r\n      groupIds\r\n    }\r\n  }\r\n}\r\n",
                     Variables = new Variables
                     {
-                        PageNum = "1",
+                        PageNum = $"{pageNum}",
                         PageSize = "20",
                         UrlSuffix = "banhque",
                     }
