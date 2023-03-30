@@ -18,13 +18,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .wf-link-tool {
-    position: relative;
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0;
+    border: 1px dashed var(--gray-200);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.wf-link-tool__image {
+    width: 100px;
 }
 
 .wf-link-tool__content {
-    padding: 0.5rem 1rem;
-    border: 1px dashed var(--gray-200);
-    display: block;
+    flex: 1;
 }
 
 .wf-code {

@@ -46,7 +46,7 @@ namespace Waffle.Models.Components
         [JsonPropertyName("code")]
         public string? Code { get; set; }
         [JsonPropertyName("meta")]
-        public BlockEditorMeta? Meta { get; set; }
+        public BlockEditorMeta Meta { get; set; } = new();
         [JsonPropertyName("items")]
         public List<string>? Items { get; set; }
         [JsonPropertyName("style")]
@@ -61,6 +61,16 @@ namespace Waffle.Models.Components
     {
         [JsonPropertyName("title")]
         public string? Title { get; set; }
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
+        [JsonPropertyName("image")]
+        public BlockEditorImage Image { get; set; } = new();
+    }
+
+    public class BlockEditorImage
+    {
+        [JsonPropertyName("url")]
+        public string? Url { get; set; }
     }
 
     public class BlockEditorType {

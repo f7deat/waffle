@@ -180,6 +180,7 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(Card));
             await _componentService.EnsureComponentAsync(nameof(ContactForm));
             await _componentService.EnsureComponentAsync(nameof(Document));
+            await _componentService.EnsureComponentAsync(nameof(GoogleMap));
             await _componentService.EnsureComponentAsync(nameof(Image));
             await _componentService.EnsureComponentAsync(nameof(Swiper));
             await _componentService.EnsureComponentAsync(nameof(Masonry));

@@ -20,9 +20,9 @@
     }
     if (BlockEditorType.PARAGRAPH.Equals(item.Type))
     {
-        <div id="@item.Id">
+        <p id="@item.Id">
             @Html.Raw(item.Data.Text)
-        </div>
+        </p>
     }
     if (BlockEditorType.DELIMITER.Equals(item.Type))
     {
@@ -35,7 +35,19 @@
     if (BlockEditorType.LINK_TOOL.Equals(item.Type))
     {
         <div class="wf-link-tool">
-            <a href="@item.Data.Link" class="wf-link-tool__content">@item.Data.Meta?.Title</a>
+            <div class="wf-link-tool__image">
+                <img src="@item.Data.Meta.Image.Url" loading="lazy" alt="@item.Data.Meta.Title" width="100" height="100" class="object-fit-cover" />
+            </div>
+            <div class="wf-link-tool__content">
+                <div class="mb-2">
+                    <a href="@item.Data.Link">
+                        <b>@item.Data.Meta.Title</b>
+                    </a>
+                </div>
+                <div class="text-gray-500 text-sm">
+                    @item.Data.Meta.Description
+                </div>
+            </div>
         </div>
     }
     if (BlockEditorType.CODE.Equals(item.Type))

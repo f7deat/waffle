@@ -21,12 +21,14 @@ namespace Waffle.Controllers
         private readonly IFileExplorerService _fileContentService;
         private readonly IWorkService _workService;
         private readonly IComponentService _componentService;
-        public WorkController(ApplicationDbContext context, IFileExplorerService fileContentService, IWorkService workContentService, IComponentService componentService)
+        private readonly ICatalogService _catalogService;
+        public WorkController(ApplicationDbContext context, IFileExplorerService fileContentService, IWorkService workContentService, IComponentService componentService, ICatalogService catalogService)
         {
             _context = context;
             _fileContentService = fileContentService;
             _workService = workContentService;
             _componentService = componentService;
+            _catalogService = catalogService;
         }
 
         [HttpPost("add")]
@@ -331,8 +333,41 @@ namespace Waffle.Controllers
         public async Task<IActionResult> GetBlockEditorAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<List<BlockEditorBlock>>(id));
 
         [HttpGet("block-editor/fetch-url")]
-        public IActionResult BlockEditorFetchUrl([FromQuery] string url)
+        public async Task<IActionResult> BlockEditorFetchUrlAsync([FromQuery] string url)
         {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return Ok(new
+                {
+                    success = false
+                });
+            }
+            if (url.Contains(Request.Host.Value, StringComparison.OrdinalIgnoreCase))
+            {
+                var normalizedName = url[(url.LastIndexOf("/") + 1)..];
+                var catalog = await _catalogService.GetByNameAsync(normalizedName);
+                if (catalog is null)
+                {
+                    return Ok(new
+                    {
+                        success = false
+                    });
+                }
+                return Ok(new
+                {
+                    success = true,
+                    link = url,
+                    meta = new
+                    {
+                        title = catalog.Name,
+                        description = catalog.Description,
+                        image = new
+                        {
+                            url = catalog.Thumbnail
+                        }
+                    }
+                });
+            }
             return Ok(new
             {
                 success = true,
@@ -456,5 +491,11 @@ namespace Waffle.Controllers
 
         [HttpGet("jumbotron/{id}")]
         public async Task<IActionResult> GetJumbotronAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Jumbotron>(id));
+
+        [HttpGet("google-map/{id}")]
+        public async Task<IActionResult> GetGoogleMapAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<GoogleMap>(id));
+
+        [HttpPost("google-map/save/{id}")]
+        public async Task<IActionResult> SaveGoogleMapAsync([FromRoute] Guid id, [FromBody] GoogleMap args) => Ok(await _workService.SaveArgumentsAsync(id, args));
     }
 }
