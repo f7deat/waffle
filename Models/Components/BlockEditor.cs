@@ -5,36 +5,22 @@ namespace Waffle.Models.Components
 {
     public class BlockEditor : BaseEntity
     {
-        public BlockEditor()
-        {
-            Blocks = new List<BlockEditorBlock>();
-        }
         [JsonPropertyName("blocks")]
-        public List<BlockEditorBlock> Blocks { get; set; }
+        public List<BlockEditorBlock> Blocks { get; set; } = new();
     }
 
     public class BlockEditorBlock
     {
-        public BlockEditorBlock()
-        {
-            Id = string.Empty;
-            Type = string.Empty;
-            Data = new BlockEditorItemData();
-        }
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
         [JsonPropertyName("data")]
-        public BlockEditorItemData Data { get; set; }
+        public BlockEditorItemData Data { get; set; } = new();
     }
 
     public class BlockEditorItemData 
     {
-        public BlockEditorItemData()
-        {
-            Style = "ordered";
-        }
         [JsonPropertyName("text")]
         public string? Text { get; set; }
         [JsonPropertyName("level")]
@@ -50,11 +36,13 @@ namespace Waffle.Models.Components
         [JsonPropertyName("items")]
         public List<string>? Items { get; set; }
         [JsonPropertyName("style")]
-        public string Style { get; set; }
+        public string Style { get; set; } = "ordered";
         [JsonPropertyName("url")]
         public string? Url { get; set; }
         [JsonPropertyName("caption")]
         public string? Caption { get; set; }
+        [JsonPropertyName("withBackground")]
+        public bool WithBackground { get; set; }
     }
 
     public class BlockEditorMeta

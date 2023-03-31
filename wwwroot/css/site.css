@@ -10,6 +10,7 @@
     --gray-800: #1f2937;
     --gray-900: #111827;
     --red-500: #ef4444;
+    --green-500: #22c55e;
     --wf-footer-content-padding-y: 2rem;
     --primary: #2563EB;
     --primary-hover: #0b5ed7;
@@ -293,8 +294,16 @@ p {
     height: 100vh;
 }
 
+.h-6 {
+    height: 1rem;
+}
+
 .h-10 {
     height: 2.5rem;
+}
+
+.w-6 {
+    width: 1rem;
 }
 
 .w-10 {
@@ -609,6 +618,10 @@ p {
     border-radius: 9999px;
 }
 
+.text-right {
+    text-align: right;
+}
+
 .text-truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -650,6 +663,10 @@ p {
 
 .text-red-500 {
     color: var(--red-500);
+}
+
+.text-green-500 {
+    color: var(--green-500);
 }
 
 .text-gray-500 {

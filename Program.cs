@@ -56,6 +56,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -71,6 +73,18 @@ else
 }
 
 app.UseHttpsRedirection();
+
+app.UseSession();
+app.Use(async (context, next) =>
+{
+    var token = context.Session.GetString("wf_token");
+    if (!string.IsNullOrEmpty(token))
+    {
+        context.Request.Headers.Add("Authorization", "Bearer " + token);
+    }
+    await next();
+});
+
 app.UseStaticFiles();
 
 app.UseRouting();

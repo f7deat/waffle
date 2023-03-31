@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -12,15 +13,21 @@ namespace Waffle.Pages.Article
     {
         private readonly ICatalogService _catalogService;
         private readonly ApplicationDbContext _context;
-        public DetailsModel(ICatalogService catalogService, ApplicationDbContext context)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _catalogService = catalogService;
             _context = context;
+            _userManager = userManager;
         }
 
         public Catalog Catalog = new();
         public List<Guid> BlockEditors = new();
         public IEnumerable<Catalog> Tags = new List<Catalog>();
+
+        public string Email = string.Empty;
+        public bool IsAuthenticated = false;
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
@@ -36,6 +43,14 @@ namespace Waffle.Pages.Article
 
             BlockEditors = await GetBlockEditorsAsync(Catalog.Id);
             Tags = await _catalogService.ListTagByIdAsync(Catalog.Id);
+
+            IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
+            if (IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                Email = user.Email;
+            }
+
             return Page();
         }
 

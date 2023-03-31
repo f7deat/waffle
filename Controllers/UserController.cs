@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -98,9 +99,11 @@ namespace Waffle.Controllers
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
 
+                var generatedToken = new JwtSecurityTokenHandler().WriteToken(token);
+
                 return Ok(new
                 {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    token = generatedToken,
                     expiration = token.ValidTo,
                     succeeded = true
                 });

@@ -53,3 +53,8 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--gray-500);
     font-style: italic;
 }
+
+.simple-image__picture--with-background {
+    background-color: #eff2f5;
+    padding: 1rem;
+}

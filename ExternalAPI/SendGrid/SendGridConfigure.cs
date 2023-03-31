@@ -4,28 +4,16 @@ namespace Waffle.ExternalAPI.SendGrid
 {
     public class SendGridConfigure
     {
-        public SendGridConfigure()
-        {
-            ApiKey = string.Empty;
-            From = new SendGridConfigureFrom();
-        }
-
         [JsonPropertyName("apiKey")]
-        public string ApiKey { get; set; }
+        public string ApiKey { get; set; } = string.Empty;
         [JsonPropertyName("from")]
-        public SendGridConfigureFrom From { get; set; }
+        public SendGridConfigureFrom From { get; set; } = new();
     }
     public class SendGridConfigureFrom
     {
-        public SendGridConfigureFrom()
-        {
-            Email = string.Empty;
-            Name = string.Empty;
-        }
-
         [JsonPropertyName("email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = "f7deat@gmail.com";
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = "Taan";
     }
 }

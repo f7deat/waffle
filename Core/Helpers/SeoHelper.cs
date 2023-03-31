@@ -5,8 +5,12 @@ namespace Waffle.Core.Helpers
 {
     public class SeoHelper
     {
-        public static string ToSeoFriendly(string title, int maxLength = 250, bool removeSign = true)
+        public static string ToSeoFriendly(string? title, int maxLength = 250, bool removeSign = true)
         {
+            if (string.IsNullOrEmpty(title))
+            {
+                return string.Empty;
+            }
             var match = Regex.Match(title.ToLower(), "[\\w]+");
             var result = new StringBuilder("");
             bool maxLengthHit = false;

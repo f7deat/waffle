@@ -2,75 +2,53 @@
 @model Waffle.Pages.User.LoginModel
 
 <div class="container">
-    <div style="color: red">
-        @Model.IsAuthenticated
-    </div>
     <div class="wf-row">
         <div class="w-1/3">
-            <div class="card">
-                <form>
-                    <div class="form-item">
-                        <div class="form-label">
-                            <localize key="userName" />
+            <div class="mb-4">
+                <div class="card">
+                    @if (Model.SignInResult != null && !Model.SignInResult.Succeeded)
+                    {
+                        <div class="text-red-500 mb-4">
+                            Đăng nhập thất bại
                         </div>
-                        <input type="text" class="form-control" placeholder="Username or Email" id="userName" />
-                    </div>
-                    <div class="form-item">
-                        <div class="form-label">
-                            <localize key="password" />
+                    }
+                    <form method="post">
+                        <div class="form-item">
+                            <div class="form-label">
+                                <localize key="userName" />
+                            </div>
+                            <input type="text" class="form-control" name="UserName" placeholder="Email" required />
                         </div>
-                        <input type="password" class="form-control" id="password" />
-                    </div>
-                    <div class="form-item">
-                        <label>
-                            <input type="checkbox" />
-                            <localize key="rememberMe" />
-                        </label>
-                    </div>
-                    <div class="form-item">
-                        <button class="btn btn-primary" type="button" id="loginButton">
-                            <localize key="login" />
-                        </button>
-                        <button class="btn" type="reset">
-                            <localize key="reset" />
-                        </button>
-                    </div>
-                </form>
+                        <div class="form-item">
+                            <div class="form-label">
+                                <localize key="password" />
+                            </div>
+                            <input type="password" class="form-control" name="Password" required placeholder="Password" />
+                        </div>
+                        <div class="form-item">
+                            <label>
+                                <input type="checkbox" />
+                                <localize key="rememberMe" />
+                            </label>
+                        </div>
+                        <div class="form-item">
+                            <button class="btn btn-primary" type="submit">
+                                <localize key="login" />
+                            </button>
+                            <button class="btn" type="reset">
+                                <localize key="reset" />
+                            </button>
+                        </div>
+                        <div class="form-item">
+                            <div class="text-right">
+                                <a href="/User/ForgotPassword">
+                                    <localize key="forgotPassword" />    
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-@section scripts {
-    <script type="module">
-        import Message from "/js/message/index.js";
-
-        function init() {
-            const loginButton = document.getElementById('loginButton');
-            loginButton.addEventListener('click', onLogin)
-        }
-
-        init();
-
-        function onLogin() {
-            const userName = document.getElementById('userName').value;
-            const password = document.getElementById('password').value;
-            fetch('/api/user/password-sign-in', {
-                method: 'POST',
-                body: JSON.stringify({
-                    userName,
-                    password
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            }).then(response => {
-                response.json().then(json => {
-                    if (!json.succeeded) {
-                        Message.success('Đăng nhập thất bại');
-                    }
-                });
-            });
-        }
-    </script>
-}

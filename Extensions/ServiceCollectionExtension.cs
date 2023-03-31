@@ -1,5 +1,7 @@
-﻿using Waffle.Core.Interfaces.IRepository;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Senders;
 using Waffle.Core.Services;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Infrastructure.Repositories;
@@ -10,6 +12,7 @@ namespace Waffle.Extensions
     {
         public static void AddServices(this IServiceCollection services)
         {
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IAppSettingService, AppSettingService>();
             services.AddScoped<ICatalogService, CatalogService>();
             services.AddScoped<IComponentService, ComponentService>();

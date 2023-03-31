@@ -89,7 +89,7 @@
     if (BlockEditorType.SIMPLE_IMAGE.Equals(item.Type))
     {
         <div class="simple-image">
-            <div class="simple-image__picture">
+            <div class="@(item.Data.WithBackground ? "simple-image__picture simple-image__picture--with-background" : "simple-image__picture")">
                 <img src="@item.Data.Url" alt="@(string.IsNullOrEmpty(item.Data.Caption) ? "IMG" : item.Data.Caption)" loading="lazy" />
             </div>
             <div class="simple-image__caption">

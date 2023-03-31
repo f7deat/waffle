@@ -17,6 +17,7 @@ namespace Waffle.Controllers
             var catalog = await _catalogService.EnsureDataAsync("home", CatalogType.Entry);
             ViewData["Title"] = catalog.Name;
             ViewData["Desctiption"] = catalog.Description;
+            ViewData["Image"] = catalog.Thumbnail;
             return View(await _catalogService.ListComponentAsync(catalog.Id));
         }
 

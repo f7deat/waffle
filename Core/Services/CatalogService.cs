@@ -227,12 +227,14 @@ namespace Waffle.Core.Services
 
         public async Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions)
         {
-            return await _context.Catalogs.Where(x => 
-            x.Active && x.Type == CatalogType.Tag && (string.IsNullOrEmpty(filterOptions.KeyWords) || x.NormalizedName.Contains(filterOptions.KeyWords.ToLower()))).Select(x => new Option
-            {
-                Label = x.Name,
-                Value = x.Id
-            }).ToListAsync();
+            var normalizedName = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
+            return await _context.Catalogs.Where(x =>
+            x.Active && x.Type == CatalogType.Tag && (string.IsNullOrEmpty(normalizedName) || x.NormalizedName.Contains(normalizedName)))
+                .Select(x => new Option
+                {
+                    Label = x.Name,
+                    Value = x.Id
+                }).ToListAsync();
         }
 
         public async Task<IdentityResult> TagAddToCatalogAsync(WorkItem args)
@@ -279,7 +281,7 @@ namespace Waffle.Core.Services
                 NormalizedName = x.NormalizedName,
                 ViewCount = x.ViewCount,
                 PostCount = _context.WorkItems.Count(y => y.CatalogId == x.Id)
-            }).OrderBy(x => x.Id);
+            }).OrderBy(x => Guid.NewGuid());
             return await ListResult<TagListItem>.Success(query, filterOptions);
         }
     }

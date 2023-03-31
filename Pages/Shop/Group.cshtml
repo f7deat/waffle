@@ -3,7 +3,8 @@
 
 <div class="container">
     <div class="title">Danh mục (@Model.Data.TotalCount)</div>
-    <div class="grid grid-cols-4 gap-4 mb-4">
+    <div class="mb-2">
+        <div class="grid grid-cols-4 gap-4 mb-4">
         @foreach (var item in Model.Data.LinkList)
         {
             <div class="card bg-white shadow rounded">
@@ -18,4 +19,6 @@
             </div>
         }
     </div>
+    </div>
+    <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
 </div>

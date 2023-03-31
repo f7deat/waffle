@@ -13,7 +13,7 @@
                 }
             </div>
 
-            <div class="mb-4">
+            <div class="mb-2">
                 <div class="title">@Model.BaseInfoAndLinks.LandingPageBaseInfo.Name (@Model.BaseInfoAndLinks.LandingPageLinkList.TotalCount)</div>
                 <div class="grid grid-cols-4 gap-4">
                     @foreach (var item in Model.BaseInfoAndLinks.LandingPageLinkList.LinkList)
@@ -31,6 +31,8 @@
                     }
                 </div>
             </div>
+            
+            <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
 
             @if (Model.HasProduct)
             {

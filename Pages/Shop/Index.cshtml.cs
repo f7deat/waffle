@@ -7,6 +7,7 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.Shopee;
 using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.Pages.Shop
 {
@@ -31,6 +32,13 @@ namespace Waffle.Pages.Shop
 
         [BindProperty(SupportsGet = true)]
         public int Current { get; set; } = 1;
+        public Pagination Pagination => new()
+        {
+            HasNextPage = BaseInfoAndLinks.LandingPageLinkList.TotalCount > Current * 20,
+            HasPrevPage = Current > 1,
+            NextPageUrl = $"/shop?current={Current + 1}",
+            PrevPageUrl = $"/shop?current={Current - 1}",
+        };
 
         public async Task<IActionResult> OnGetAsync()
         {
