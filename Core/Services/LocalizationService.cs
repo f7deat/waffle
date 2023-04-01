@@ -59,7 +59,7 @@ namespace Waffle.Core.Services
         public async Task<string> GetAsync(string key)
         {
             var cacheKey = $"{nameof(Localization)}-{key}";
-            if (!_memoryCache.TryGetValue($"{key}", out string cacheValue))
+            if (!_memoryCache.TryGetValue($"{cacheKey}", out string cacheValue))
             {
                 var lang = _configuration.GetValue<string>("language");
                 var i18n = await _context.Localizations.FirstOrDefaultAsync(x => x.Key.ToLower().Equals(key.ToLower()) && x.Language.Equals(lang));

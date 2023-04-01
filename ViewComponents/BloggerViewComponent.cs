@@ -51,7 +51,7 @@ namespace Waffle.ViewComponents
                     Link = new Link
                     {
                         Href = $"/blogspot/{normalizedName}{item.Path}",
-                        Name = item.Title
+                        Name = item.Title ?? string.Empty
                     }
                 };
             }

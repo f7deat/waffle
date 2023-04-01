@@ -48,7 +48,7 @@ namespace Waffle.Pages.Wiki
                     Link = new Link
                     {
                         Href = langLink.Url,
-                        Name = langLink.Title
+                        Name = langLink.Title ?? string.Empty
                     },
                 });
             }

@@ -39,8 +39,10 @@ namespace Waffle.Pages.User
             ViewData["Image"] = catalog.Thumbnail;
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string? returnUrl)
         {
+            returnUrl ??= Url.Content("~/");
+
             if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))
             {
                 return Page();
@@ -74,7 +76,7 @@ namespace Waffle.Pages.User
 
                 HttpContext.Session.SetString("wf_token", generatedToken);
 
-                return Redirect("/");
+                return LocalRedirect(returnUrl);
             }
             return Page();
         }

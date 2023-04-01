@@ -36,7 +36,7 @@ namespace Waffle.ViewComponents
                     Link = new Link
                     {
                         Href = $"/search?searchTerm={item.Title}",
-                        Name = item.Title
+                        Name = item.Title ?? string.Empty
                     }
                 };
             }

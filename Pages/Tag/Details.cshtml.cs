@@ -17,11 +17,9 @@ namespace Waffle.Pages.Tag
 
         public Catalog Catalog = new();
         public IEnumerable<Catalog> Catalogs = new List<Catalog>();
-        public BasicFilterOptions FilterOptions = new()
-        { 
-            Current = 1,
-            PageSize = 10
-        };
+        [BindProperty(SupportsGet = true)]
+        public int Current { get; set; } = 1;
+
         public Pagination Pagination = new();
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
@@ -33,15 +31,19 @@ namespace Waffle.Pages.Tag
             Catalog = catalog;
             ViewData["Title"] = Catalog.Name;
             ViewData["Description"] = Catalog.Description;
+            ViewData["Image"] = catalog.Thumbnail;
 
-            var catalogs = await _catalogService.ListByTagAsync(catalog.Id, FilterOptions);
+            var catalogs = await _catalogService.ListByTagAsync(catalog.Id, new BasicFilterOptions
+            {
+                Current = Current
+            });
             Catalogs = catalogs.Data ?? new List<Catalog>();
             Pagination = new Pagination
             {
                 HasNextPage = catalogs.HasNextPage,
                 HasPrevPage = catalogs.HasPreviousPage,
-                NextPageUrl = $"/tag/{normalizedName}?current={FilterOptions.Current + 1}",
-                PrevPageUrl = $"/tag/{normalizedName}?current={FilterOptions.Current - 1}",
+                NextPageUrl = $"/tag/{normalizedName}?current={Current + 1}",
+                PrevPageUrl = $"/tag/{normalizedName}?current={Current - 1}",
                 Total = catalogs.Total
             };
             return Page();

@@ -10,7 +10,6 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.SendGrid;
 using Waffle.Models.Components;
-using Waffle.Models.Layout;
 
 namespace Waffle.Controllers
 {
@@ -84,16 +83,6 @@ namespace Waffle.Controllers
                 data = await query.ToListAsync(),
                 total = await query.CountAsync()
             });
-        }
-
-        [HttpPost("layout/head/save")]
-        public async Task<IActionResult> SaveLayoutHeadAsync([FromBody] Head model)
-        {
-            var head = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(Head)));
-            head ??= await _appSettingService.EnsureSettingAsync(nameof(Head));
-            head.Value = JsonSerializer.Serialize(model);
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
         }
 
         [HttpGet("facebook/{id}")]

@@ -12,7 +12,7 @@ namespace Waffle.ExternalAPI.Google.Models
     public class Channel
     {
         [XmlElement("item")]
-        public List<ChannelItem>? Item { get; set; }
+        public List<ChannelItem> Item { get; set; } = new();
     }
 
     public class ChannelItem
