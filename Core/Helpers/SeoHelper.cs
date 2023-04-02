@@ -7,7 +7,7 @@ namespace Waffle.Core.Helpers
     {
         public static string ToSeoFriendly(string? title, int maxLength = 250, bool removeSign = true)
         {
-            if (string.IsNullOrEmpty(title))
+            if (string.IsNullOrWhiteSpace(title))
             {
                 return string.Empty;
             }

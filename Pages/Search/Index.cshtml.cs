@@ -24,7 +24,7 @@ namespace Waffle.Pages.Search
 
         [BindProperty(SupportsGet = true)]
         public SearchFilterOptions FilterOptions { get; set; }
-        public ListResult<Catalog>? Articles;
+        public ListResult<Catalog> Articles = new();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -36,7 +36,6 @@ namespace Waffle.Pages.Search
             Articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
             {
                 Current = FilterOptions.Current,
-                PageSize = 10,
                 Name = FilterOptions.SearchTerm
             });
             return Page();

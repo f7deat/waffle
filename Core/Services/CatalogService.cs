@@ -146,7 +146,8 @@ namespace Waffle.Core.Services
 
         public async Task<ListResult<Catalog>> ArticleListAsync(ArticleFilterOptions filterOptions)
         {
-            var query = _context.Catalogs.Where(x => (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower()))
+            var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.Name);
+            var query = _context.Catalogs.Where(x => (string.IsNullOrEmpty(searchTerm) || x.NormalizedName.Contains(searchTerm))
             && x.Type == CatalogType.Article && x.Active).OrderByDescending(x => x.ModifiedDate);
             return await ListResult<Catalog>.Success(query, filterOptions);
         }
@@ -260,11 +261,12 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
-        public async Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, IFilterOptions filterOptions)
+        public async Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, SearchFilterOptions filterOptions)
         {
+            var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.SearchTerm);
             var query = from a in _context.WorkItems
                         join b in _context.Catalogs on a.WorkId equals b.Id
-                        where a.CatalogId == tagId && b.Active
+                        where a.CatalogId == tagId && b.Active && (string.IsNullOrEmpty(searchTerm) || b.NormalizedName.Contains(searchTerm))
                         orderby b.Id descending
                         select b;
             return await ListResult<Catalog>.Success(query, filterOptions);
@@ -281,7 +283,7 @@ namespace Waffle.Core.Services
                 NormalizedName = x.NormalizedName,
                 ViewCount = x.ViewCount,
                 PostCount = _context.WorkItems.Count(y => y.CatalogId == x.Id)
-            }).OrderBy(x => Guid.NewGuid());
+            }).OrderByDescending(x => x.Id);
             return await ListResult<TagListItem>.Success(query, filterOptions);
         }
     }

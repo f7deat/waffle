@@ -10,6 +10,12 @@ namespace Waffle.Models
         private IFilterOptions FilterOptions { get; set; }
         public bool HasNextPage => Total > FilterOptions.Current * FilterOptions.PageSize;
         public bool HasPreviousPage => FilterOptions.Current > 1;
+        public bool HasData => Data != null && Data.Any();
+
+        public ListResult()
+        {
+            FilterOptions = new BasicFilterOptions();
+        }
 
         public ListResult(IEnumerable<T> data, int total, IFilterOptions filterOptions)
         {

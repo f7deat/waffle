@@ -282,6 +282,10 @@ p {
     flex-wrap: wrap;
 }
 
+.flex-grow {
+    flex-grow: 1;
+}
+
 .hidden, .collapse:not(.show) {
     display: none;
 }

@@ -5,7 +5,18 @@
 <div class="container">
     <div class="wf-row gap-4">
         <div class="w-2/3">
+
             @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
+
+            <form class="mb-2" method="get">
+                <div class="border rounded-full flex bg-white">
+                    <input type="search" name="searchTerm" placeholder="Tìm kiếm..." class="flex-grow px-4 rounded-full" value="@Model.SearchTerm" autocomplete="off">
+                    <button type="submit" class="py-2 px-3">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+
             <div class="title flex justify-between">
                 <div>@Model.Catalog.Name</div>
                 <div class="font-normal">

@@ -27,8 +27,8 @@
                     </div>
                 </div>
             </div>
-            <div class="title">Kết quả tìm kiếm cho: @Model.FilterOptions.SearchTerm</div>
-            @if (Model.Articles != null && Model.Articles.Data != null && Model.Articles.Data.Any())
+            <div class="title">@Model.Articles.Total kết quả tìm kiếm cho: @Model.FilterOptions.SearchTerm</div>
+            @if (Model.Articles.HasData)
             {
                 <partial name="~/Pages/Article/_List.cshtml" model="Model.Articles.Data" />
                 <div class="pagination mb-4 flex justify-between">

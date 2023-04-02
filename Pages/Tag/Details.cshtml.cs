@@ -19,6 +19,8 @@ namespace Waffle.Pages.Tag
         public IEnumerable<Catalog> Catalogs = new List<Catalog>();
         [BindProperty(SupportsGet = true)]
         public int Current { get; set; } = 1;
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
 
         public Pagination Pagination = new();
 
@@ -33,9 +35,10 @@ namespace Waffle.Pages.Tag
             ViewData["Description"] = Catalog.Description;
             ViewData["Image"] = catalog.Thumbnail;
 
-            var catalogs = await _catalogService.ListByTagAsync(catalog.Id, new BasicFilterOptions
+            var catalogs = await _catalogService.ListByTagAsync(catalog.Id, new SearchFilterOptions
             {
-                Current = Current
+                Current = Current,
+                SearchTerm = SearchTerm
             });
             Catalogs = catalogs.Data ?? new List<Catalog>();
             Pagination = new Pagination
