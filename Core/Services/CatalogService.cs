@@ -202,8 +202,9 @@ namespace Waffle.Core.Services
 
         public Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions)
         {
+            var name = SeoHelper.ToSeoFriendly(filterOptions.Name);
             var query = _context.Catalogs.Where(x => (filterOptions.Type == null || x.Type == filterOptions.Type) &&
-            (string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower())) &&
+            (string.IsNullOrEmpty(name) || x.NormalizedName.Contains(name)) &&
             (filterOptions.Active == null || x.Active == filterOptions.Active)).OrderByDescending(x => x.ModifiedDate);
             return ListResult<Catalog>.Success(query, filterOptions);
         }
