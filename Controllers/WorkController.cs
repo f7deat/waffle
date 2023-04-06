@@ -356,7 +356,7 @@ namespace Waffle.Controllers
                 return Ok(new
                 {
                     success = true,
-                    link = url,
+                    link = $"/{catalog.Type.ToString().ToLower()}/{normalizedName}",
                     meta = new
                     {
                         title = catalog.Name,

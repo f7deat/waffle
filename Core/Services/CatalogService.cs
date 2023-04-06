@@ -166,6 +166,7 @@ namespace Waffle.Core.Services
             {
                 return IdentityResult.Failed(new IdentityError
                 {
+                    Code = "catalog.notFound",
                     Description = "Data not found!"
                 });
             }
@@ -174,6 +175,7 @@ namespace Waffle.Core.Services
             catalog.Active = args.Active;
             catalog.ModifiedDate = DateTime.Now;
             catalog.Description = args.Description;
+            catalog.Thumbnail = args.Thumbnail;
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }
