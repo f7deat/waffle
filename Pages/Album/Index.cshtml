@@ -5,8 +5,6 @@
 }
 
 <div class="container">
-
-    @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
     <div class="md:grid gap-4 mb-4 grid-cols-6 albums">
         @foreach (var item in Model.Albums)
         {

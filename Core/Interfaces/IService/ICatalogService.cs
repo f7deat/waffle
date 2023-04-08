@@ -26,7 +26,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<IEnumerable<Catalog>> ListTagByIdAsync(Guid id);
         Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions);
         Task<IdentityResult> TagAddToCatalogAsync(WorkItem args);
-        Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, SearchFilterOptions filterOptions);
+        Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);
         Task<IEnumerable<Catalog>> ListRandomTagAsync();
         Task<ListResult<TagListItem>> ListTagAsync(IFilterOptions filterOptions);
     }

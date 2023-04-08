@@ -264,12 +264,14 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
-        public async Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, SearchFilterOptions filterOptions)
+        public async Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions)
         {
-            var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.SearchTerm);
+            var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.Name);
             var query = from a in _context.WorkItems
                         join b in _context.Catalogs on a.WorkId equals b.Id
-                        where a.CatalogId == tagId && b.Active && (string.IsNullOrEmpty(searchTerm) || b.NormalizedName.Contains(searchTerm))
+                        where a.CatalogId == tagId && b.Active &&
+                        (string.IsNullOrEmpty(searchTerm) || b.NormalizedName.Contains(searchTerm)) &&
+                        (filterOptions.Type == null || b.Type == filterOptions.Type)
                         orderby b.Id descending
                         select b;
             return await ListResult<Catalog>.Success(query, filterOptions);

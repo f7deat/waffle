@@ -23,6 +23,7 @@ namespace Waffle.Pages.Tag
         public string? SearchTerm { get; set; }
 
         public Pagination Pagination = new();
+        public ListResult<Catalog> Products = new();
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
@@ -35,11 +36,20 @@ namespace Waffle.Pages.Tag
             ViewData["Description"] = Catalog.Description;
             ViewData["Image"] = catalog.Thumbnail;
 
-            var catalogs = await _catalogService.ListByTagAsync(catalog.Id, new SearchFilterOptions
+            var catalogs = await _catalogService.ListByTagAsync(catalog.Id, new CatalogFilterOptions
             {
                 Current = Current,
-                SearchTerm = SearchTerm
+                Name = SearchTerm,
+                Type = CatalogType.Default
             });
+
+            Products = await _catalogService.ListByTagAsync(catalog.Id, new CatalogFilterOptions
+            {
+                Current = Current,
+                Name = SearchTerm,
+                Type = CatalogType.Shop
+            });
+
             Catalogs = catalogs.Data ?? new List<Catalog>();
             Pagination = new Pagination
             {

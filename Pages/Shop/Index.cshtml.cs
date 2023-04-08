@@ -49,7 +49,7 @@ namespace Waffle.Pages.Shop
             var catalog = await _catalogService.ListAsync(new CatalogFilterOptions
             {
                 Active = true,
-                Type = CatalogType.Product,
+                Type = CatalogType.Shop,
                 PageSize = 4
             });
             Products = catalog.Data ?? new List<Catalog>();
