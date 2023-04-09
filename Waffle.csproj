@@ -8,6 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ClientApp\node_modules\**" />
+    <Content Remove="ClientApp\node_modules\**" />
+    <EmbeddedResource Remove="ClientApp\node_modules\**" />
+    <None Remove="ClientApp\node_modules\**" />
+    <TypeScriptCompile Remove="ClientApp\node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.8" />
