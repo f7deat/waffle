@@ -40,7 +40,7 @@ namespace Waffle.Pages.Tag
             {
                 Current = Current,
                 Name = SearchTerm,
-                Type = CatalogType.Default
+                Type = CatalogType.Article
             });
 
             Products = await _catalogService.ListByTagAsync(catalog.Id, new CatalogFilterOptions

@@ -3,7 +3,7 @@
 
 <div class="wf-article-item shadow">
     <a href="/article/@Model.NormalizedName" class="thumbnail">
-        <img src="@Model.Thumbnail" class="thumbnail" alt="@Html.Raw(Model.Name)" height="220" />
+        <img src="@Model.Thumbnail" class="thumbnail" alt="@Html.Raw(Model.Name)" height="220" loading="lazy" />
     </a>
     <div class="wf-article-item__body">
         <a href="/article/@Model.NormalizedName"><b>@Html.Raw(Model.Name)</b></a>
