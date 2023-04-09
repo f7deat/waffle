@@ -5,15 +5,10 @@ namespace Waffle.Models.Components
 {
     public class Header : BaseEntity
     {
-        public Header()
-        {
-            Logo = string.Empty;
-            Template = "Default";
-        }
         [JsonPropertyName("logo")]
-        public string Logo { get; set; }
+        public string Logo { get; set; } = string.Empty;
         [JsonPropertyName("template")]
-        public string Template { get; set; }
+        public string Template { get; set; } = "Default";
 
         [JsonIgnore]
         public static readonly List<Option> Templates = new()
@@ -21,5 +16,8 @@ namespace Waffle.Models.Components
             new Option { Label = "Default", Value= "~/Views/Shared/Components/Header/Default.cshtml" },
             new Option { Label = "DLiTi", Value= "~/Views/Shared/Components/Header/DLiTi.cshtml" }
         };
+
+        [JsonIgnore]
+        public bool IsAuthenticated { get; set; }
     }
 }

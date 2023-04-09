@@ -34,6 +34,7 @@ namespace Waffle.ViewComponents
                     RequestId = setting.Id.ToString()
                 });
             }
+            header.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
             return View(_configuration.GetValue<string>("Theme"), header);
         }
     }

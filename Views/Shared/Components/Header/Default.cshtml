@@ -21,6 +21,12 @@
                 <button type="button" class="navbar-icon" aria-label="Dark mode">
                     <i class="fas fa-cloud-sun"></i>
                 </button>
+                @if (Model.IsAuthenticated)
+                {
+                    <a href="/user" class="navbar-icon h-10 w-10 flex items-center justify-center text-dark">
+                        <i class="fas fa-user"></i>
+                    </a>
+                }
             </div>
         </div>
     </nav>
