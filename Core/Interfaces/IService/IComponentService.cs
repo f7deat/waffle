@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.Core.Interfaces.IService
 {
@@ -16,5 +17,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<ListResult<WorkListItem>> ListWorkAsync(Guid id, WorkFilterOptions filterOptions);
         Task<IEnumerable<Component>> ListAllAsync();
         Task<IdentityResult> UpdateAsync(Component args);
+        Task<IEnumerable<Option>> FormSelectAsync(SearchFilterOptions filterOptions);
     }
 }

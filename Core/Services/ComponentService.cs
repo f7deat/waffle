@@ -5,6 +5,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.Core.Services
 {
@@ -65,6 +66,18 @@ namespace Waffle.Core.Services
         }
 
         public async Task<Component?> FindAsync(Guid id) => await _context.Components.FindAsync(id);
+
+        public async Task<IEnumerable<Option>> FormSelectAsync(SearchFilterOptions filterOptions)
+        {
+            var normalizedName = SeoHelper.ToSeoFriendly(filterOptions.SearchTerm);
+            return await _context.Components.Where(x => (string.IsNullOrEmpty(normalizedName) || x.NormalizedName.Contains(normalizedName)) && x.Active)
+                .OrderBy(x => x.NormalizedName)
+                .Select(x => new Option
+                {
+                    Label = x.Name,
+                    Value = x.Id
+                }).ToListAsync();
+        }
 
         public async Task<Component?> GetByNameAsync(string name)
         {

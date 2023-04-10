@@ -19,6 +19,36 @@ namespace Waffle.Core.Services.AppSettings
             _logger = logger;
         }
 
+        public async Task<IdentityResult> AddWorkAsync(WorkContent args)
+        {
+            var setting = await _context.AppSettings.FindAsync(args.ParentId);
+            if (setting is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "App setting not found"
+                });
+            }
+            await _context.WorkContents.AddAsync(args);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityResult> DeleteWorkAsync(Guid id)
+        {
+            var work = await _context.WorkContents.FindAsync(id);
+            if (work is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Work not found!"
+                });
+            }
+            _context.WorkContents.Remove(work);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
         public async Task<AppSetting> EnsureSettingAsync(string name)
         {
             var appSetting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name));
@@ -35,6 +65,8 @@ namespace Waffle.Core.Services.AppSettings
             }
             return appSetting;
         }
+
+        public async Task<AppSetting?> FindAsync(Guid id) => await _context.AppSettings.FindAsync(id);
 
         public async Task<T?> GetAsync<T>(Guid id)
         {

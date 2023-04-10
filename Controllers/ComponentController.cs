@@ -20,9 +20,6 @@ namespace Waffle.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _componentService.FindAsync(id));
 
-        [HttpGet("list-all")]
-        public async Task<IActionResult> ListAllAsync() => Ok(await _componentService.ListAllAsync());
-
         [HttpGet("list")]
         public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _componentService.ListAsync(filterOptions));
 
@@ -37,5 +34,8 @@ namespace Waffle.Controllers
 
         [HttpPost("update")]
         public async Task<IActionResult> UpdateAsync([FromBody] Component args) => Ok(await _componentService.UpdateAsync(args));
+
+        [HttpGet("form-select")]
+        public async Task<IActionResult> FormSelectAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _componentService.FormSelectAsync(filterOptions));
     }
 }

@@ -8,7 +8,10 @@ namespace Waffle.Core.Services.AppSettings
 {
     public interface IAppSettingService
     {
+        Task<IdentityResult> AddWorkAsync(WorkContent args);
+        Task<IdentityResult> DeleteWorkAsync(Guid id);
         Task<AppSetting> EnsureSettingAsync(string name);
+        Task<AppSetting?> FindAsync(Guid catalogId);
         Task<T?> GetAsync<T>(Guid id);
         Task<T?> GetAsync<T>(string normalizedName);
         Task<IdentityResult> HeaderLogoAsync(Header args);

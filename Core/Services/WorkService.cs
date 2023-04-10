@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -380,6 +379,21 @@ namespace Waffle.Core.Services
                 }
                 yield return JsonSerializer.Deserialize<T>(item);
             }
+        }
+
+        public async Task<ListResult<WorkListItem>> ListBySettingIdAsync(Guid id)
+        {
+            var query = from a in _context.WorkContents
+                        join b in _context.Components on a.ComponentId equals b.Id
+                        where a.ParentId == id
+                        select new WorkListItem
+                        {
+                            Id = a.Id,
+                            Name = a.Name,
+                            Active = a.Active,
+                            NormalizedName = b.NormalizedName,
+                        };
+            return await ListResult<WorkListItem>.Success(query, new BasicFilterOptions());
         }
     }
 }

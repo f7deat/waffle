@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
+using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.SendGrid;
 using Waffle.Models.Components;
+using Waffle.Models.Settings;
 
 namespace Waffle.Controllers
 {
@@ -22,14 +25,16 @@ namespace Waffle.Controllers
         private readonly IConfiguration _configuration;
         private readonly IFacebookService _facebookService;
         private readonly ITelegramService _telegramService;
+        private readonly IWorkService _workService;
 
-        public AppSettingController(ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService)
+        public AppSettingController(ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService, IWorkService workService)
         {
             _context = context;
             _appSettingService = appSettingService;
             _configuration = configuration;
             _facebookService = facebookService;
             _telegramService = telegramService;
+            _workService = workService;
         }
 
         [HttpGet("list")]
@@ -189,5 +194,18 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
+        [HttpGet("sidebar")]
+        public async Task<IActionResult> GetSidebarAsync()
+        {
+            var sidebar = await _appSettingService.EnsureSettingAsync(nameof(Sidebar));
+            var components = await _workService.ListBySettingIdAsync(sidebar.Id);
+            return Ok(components);
+        }
+
+        [HttpPost("work/add")]
+        public async Task<IActionResult> AddWorkAsync([FromBody] WorkContent args) => Ok(await _appSettingService.AddWorkAsync(args));
+
+        [HttpPost("delete/work/{id}")]
+        public async Task<IActionResult> DeleteWorkAsync([FromRoute] Guid id) => Ok(await _appSettingService.DeleteWorkAsync(id));
     }
 }
