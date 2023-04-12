@@ -11,12 +11,9 @@
                 <h1 class="title">@Model.Catalog.Name</h1>
                 <div class="shadow mb-4">
                     <div class="bg-white p-4">
-                        @if (Model.BlockEditors != null)
+                        @foreach (var item in Model.Works)
                         {
-                            @foreach (var item in Model.BlockEditors)
-                            {
-                                @await Component.InvokeAsync(nameof(BlockEditor), item)
-                            }
+                            @await Component.InvokeAsync(item.NormalizedName, item.Id)
                         }
                         <div class="wf-delimiter"></div>
                         <div class="mb-2">
@@ -51,7 +48,7 @@
                             </div>
                             <button type="button" class="btn btn-primary">
                                 <i class="fa-solid fa-paper-plane-top"></i>
-                                <span>Gửi bình luận</span>    
+                                <span>Gửi bình luận</span>
                             </button>
                         </div>
                     }
@@ -68,9 +65,9 @@
         @if (Model.Tags.Any())
         {
             @await Component.InvokeAsync("Related", new Waffle.Entities.WorkItem {
-            CatalogId = Model.Tags.OrderBy(x => Guid.NewGuid()).First().Id,
-            WorkId = Model.Catalog.Id
-            })
+        CatalogId = Model.Tags.OrderBy(x => Guid.NewGuid()).First().Id,
+        WorkId = Model.Catalog.Id
+        })
         }
     </div>
 </main>

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.Pages.Article
@@ -23,7 +24,7 @@ namespace Waffle.Pages.Article
         }
 
         public Catalog Catalog = new();
-        public List<Guid> BlockEditors = new();
+        public List<WorkListItem> Works = new();
         public IEnumerable<Catalog> Tags = new List<Catalog>();
 
         public string Email = string.Empty;
@@ -41,7 +42,7 @@ namespace Waffle.Pages.Article
             ViewData["Description"] = Catalog.Description;
             ViewData["Image"] = Catalog.Thumbnail;
 
-            BlockEditors = await GetBlockEditorsAsync(Catalog.Id);
+            Works = await GetBlockEditorsAsync(Catalog.Id);
             Tags = await _catalogService.ListTagByIdAsync(Catalog.Id);
 
             IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
@@ -54,13 +55,18 @@ namespace Waffle.Pages.Article
             return Page();
         }
 
-        private async Task<List<Guid>> GetBlockEditorsAsync(Guid catalogId)
+        private async Task<List<WorkListItem>> GetBlockEditorsAsync(Guid catalogId)
         {
             var query = from a in _context.WorkItems
                         join b in _context.WorkContents on a.WorkId equals b.Id
                         join c in _context.Components on b.ComponentId equals c.Id
-                        where a.CatalogId == catalogId && c.NormalizedName.Equals(nameof(BlockEditor)) && b.Active
-                        select b.Id;
+                        where a.CatalogId == catalogId && b.Active
+                        orderby a.SortOrder
+                        select new WorkListItem { 
+                            Id = b.Id,
+                            Name = b.Name,
+                            NormalizedName = c.NormalizedName
+                        };
             return await query.ToListAsync();
         }
     }

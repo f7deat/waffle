@@ -2,6 +2,7 @@
 using Waffle.ExternalAPI.Game;
 using Waffle.ExternalAPI.Google;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Services;
 using Waffle.ExternalAPI.Shopee;
 using Waffle.ExternalAPI.Telegram;
 using Waffle.ExternalAPI.Wiki;
@@ -18,6 +19,7 @@ namespace Waffle.Extensions
             services.AddHttpClient<IShopeeService, ShopeeService>();
             services.AddHttpClient<ITelegramService, TelegramService>();
             services.AddHttpClient<IWikiService, WikiService>();
+            services.AddHttpClient<IWordPressService, WordPressService>();
         }
     }
 }

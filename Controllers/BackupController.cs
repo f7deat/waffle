@@ -10,6 +10,7 @@ using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
+using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Settings;
@@ -198,6 +199,7 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(Navbar));
             await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
             await _componentService.EnsureComponentAsync(nameof(Jumbotron));
+            await _componentService.EnsureComponentAsync(nameof(WordPressPost));
         }
     }
 }
