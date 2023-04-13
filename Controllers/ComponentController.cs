@@ -37,5 +37,8 @@ namespace Waffle.Controllers
 
         [HttpGet("form-select")]
         public async Task<IActionResult> FormSelectAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _componentService.FormSelectAsync(filterOptions));
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddAsync([FromBody] Component args) => Ok(await _componentService.AddAsync(args));
     }
 }

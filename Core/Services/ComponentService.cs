@@ -29,6 +29,27 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
+        public async Task<IdentityResult> AddAsync(Component args)
+        {
+            if (args == null || string.IsNullOrEmpty(args.NormalizedName))
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Missing params!"
+                });
+            }
+            if (await _context.Components.AnyAsync(x => x.NormalizedName.Equals(args.NormalizedName)))
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Component exist!"
+                });
+            }
+            await _context.Components.AddAsync(args);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
         public async Task<IdentityResult> DeleteAsync(Guid id)
         {
             var component = await FindAsync(id);

@@ -18,5 +18,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<IEnumerable<Component>> ListAllAsync();
         Task<IdentityResult> UpdateAsync(Component args);
         Task<IEnumerable<Option>> FormSelectAsync(SearchFilterOptions filterOptions);
+        Task<IdentityResult> AddAsync(Component args);
     }
 }
