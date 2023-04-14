@@ -201,7 +201,6 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
             await _componentService.EnsureComponentAsync(nameof(Jumbotron));
             await _componentService.EnsureComponentAsync(nameof(PostContent));
-            await _componentService.EnsureComponentAsync(nameof(WordPressPost));
         }
     }
 }

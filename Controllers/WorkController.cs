@@ -10,6 +10,7 @@ using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.Components.Specifications;
 using Waffle.Models.Params;
 
 namespace Waffle.Controllers
@@ -167,11 +168,7 @@ namespace Waffle.Controllers
                 }
                 _context.WorkContents.Remove(workContent);
             }
-
             _context.WorkItems.Remove(workItem);
-
-            await _fileContentService.RemoveFromItemAsync(workItem.WorkId);
-
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
         }
@@ -497,5 +494,8 @@ namespace Waffle.Controllers
 
         [HttpPost("google-map/save/{id}")]
         public async Task<IActionResult> SaveGoogleMapAsync([FromRoute] Guid id, [FromBody] GoogleMap args) => Ok(await _workService.SaveArgumentsAsync(id, args));
+
+        [HttpGet("list-post-content")]
+        public IActionResult GetListPostContent() => Ok(Enum.GetNames(typeof(PostContentType)).ToList());
     }
 }

@@ -5,7 +5,7 @@ namespace Waffle.Models.Components
     public class WordPressPostComponent
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; } = string.Empty;
+        public int Id { get; set; }
         [JsonPropertyName("domain")]
         public string Domain { get; set; } = string.Empty;
     }

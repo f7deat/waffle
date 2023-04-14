@@ -11,7 +11,7 @@ namespace Waffle.ExternalAPI.Services
         {
             _httpClient = httpClient;
         }
-        public async Task<WordPressPost?> GetPostAsync(string domain, string id)
+        public async Task<WordPressPost?> GetPostAsync(string domain, int id)
         {
             try
             {

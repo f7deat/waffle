@@ -91,13 +91,10 @@ namespace Waffle.Controllers
             {
                 return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child catalog first!" }));
             }
-            if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id))
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Please remove work item first!"
-                }));
-            }
+
+            var workItem = await _context.WorkItems.Where(x => x.CatalogId == id).ToListAsync();
+            _context.RemoveRange(workItem);
+
             _context.Catalogs.Remove(catalog);
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);

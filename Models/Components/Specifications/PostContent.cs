@@ -12,6 +12,9 @@ namespace Waffle.Models.Components.Specifications
         public WordPressContent WordPress { get; set; } = new();
         [JsonPropertyName("blockEditor")]
         public BlockEditor BlockEditor { get; set; } = new();
+
+        [JsonIgnore]
+        public string Content { get; set; } = string.Empty;
     }
 
     public enum PostContentType
