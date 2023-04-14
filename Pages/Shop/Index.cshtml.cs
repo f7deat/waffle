@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Core.Services.AppSettings;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
-using Waffle.ExternalAPI.Shopee;
 using Waffle.Models;
 using Waffle.Models.Components;
 

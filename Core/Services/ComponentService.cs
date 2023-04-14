@@ -123,7 +123,7 @@ namespace Waffle.Core.Services
         {
             var query = from a in _context.WorkContents
                         join b in _context.Components on a.ComponentId equals b.Id
-                        where b.Id == id
+                        where a.ComponentId == id
                         orderby a.Id ascending
                         select new WorkListItem
                         {

@@ -164,8 +164,8 @@ namespace Waffle.Controllers
             await EnsureComponentsAsync();
             await _context.SaveChangesAsync();
             await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
-            await _appSettingService.EnsureSettingAsync(nameof(ExternalAPI.Telegram));
-            await _appSettingService.EnsureSettingAsync(nameof(ExternalAPI.Facebook));
+            await _appSettingService.EnsureSettingAsync(nameof(Telegram));
+            await _appSettingService.EnsureSettingAsync(nameof(Facebook));
             await _appSettingService.EnsureSettingAsync(nameof(Social));
             await _appSettingService.EnsureSettingAsync(nameof(Sidebar));
             return Ok(IdentityResult.Success);

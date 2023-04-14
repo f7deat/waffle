@@ -43,7 +43,7 @@ namespace Waffle.Pages.Album.Facebook
                 return NotFound();
             }
             Id = id;
-            var app = await _appService.GetAsync<ExternalAPI.Models.Facebook>(nameof(ExternalAPI.Facebook));
+            var app = await _appService.GetAsync<ExternalAPI.Models.Facebook>(nameof(Facebook));
             if (app == null)
             {
                 return NotFound();

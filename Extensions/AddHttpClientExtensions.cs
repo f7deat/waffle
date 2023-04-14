@@ -1,11 +1,6 @@
-﻿using Waffle.ExternalAPI.Facebook;
-using Waffle.ExternalAPI.Game;
-using Waffle.ExternalAPI.Google;
+﻿using Waffle.ExternalAPI.Game;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Services;
-using Waffle.ExternalAPI.Shopee;
-using Waffle.ExternalAPI.Telegram;
-using Waffle.ExternalAPI.Wiki;
 
 namespace Waffle.Extensions
 {

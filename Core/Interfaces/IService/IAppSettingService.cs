@@ -4,7 +4,7 @@ using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.Core.Services.AppSettings
+namespace Waffle.Core.Interfaces.IService
 {
     public interface IAppSettingService
     {

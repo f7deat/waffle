@@ -88,6 +88,8 @@ namespace Waffle.Core.Services
                     Description = "Please remove child"
                 });
             }
+            var workItems = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
+            _context.WorkItems.RemoveRange(workItems);
             _context.WorkContents.Remove(workContent);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;

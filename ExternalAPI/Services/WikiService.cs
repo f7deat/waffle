@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Models;
+using Action = Waffle.ExternalAPI.Models.Action;
 
-namespace Waffle.ExternalAPI.Wiki
+namespace Waffle.ExternalAPI.Services
 {
     public class WikiService : IWikiService
     {

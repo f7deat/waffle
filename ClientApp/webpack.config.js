@@ -20,6 +20,6 @@ module.exports = {
             type: 'var'
         },
         filename: 'app-client.js',
-        path: path.resolve(__dirname, '../wwwroot/js'),
+        path: path.resolve(__dirname, '../wwwroot'),
     }
 };

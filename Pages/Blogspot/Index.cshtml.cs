@@ -13,11 +13,11 @@ namespace Waffle.Pages.Blogspot
         public IndexModel(ICatalogService catalogService)
         {
             _catalogService = catalogService;
-            Blogspot = new Catalog();
         }
 
         private ListResult<Catalog>? Catalog;
-        public Catalog Blogspot;
+        public Catalog Blogspot = new();
+        public List<ComponentListItem> WorkListItem = new();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -30,6 +30,9 @@ namespace Waffle.Pages.Blogspot
                 Active= true,
                 Type = CatalogType.Blogspot
             });
+
+            WorkListItem = await _catalogService.ListComponentAsync(Blogspot.Id);
+
             return Page();
         }
 

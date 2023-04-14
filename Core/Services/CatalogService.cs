@@ -90,7 +90,7 @@ namespace Waffle.Core.Services
             return catalog;
         }
 
-        public async Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId)
+        public async Task<List<ComponentListItem>> ListComponentAsync(Guid catalogId)
         {
             var query = from a in _context.WorkContents
                         join b in _context.WorkItems on a.Id equals b.WorkId

@@ -1,10 +1,9 @@
 ﻿using System.Text.Json;
 using Waffle.Core.Helpers;
-using Waffle.Core.Services.AppSettings;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Interfaces;
 
-namespace Waffle.ExternalAPI.Google
+namespace Waffle.ExternalAPI.Services
 {
     public class GoogleService : IGoogleService
     {

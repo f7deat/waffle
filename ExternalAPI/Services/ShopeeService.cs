@@ -1,7 +1,8 @@
 ﻿using System.Text.Json;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Models;
 
-namespace Waffle.ExternalAPI.Shopee
+namespace Waffle.ExternalAPI.Services
 {
     public class ShopeeService : IShopeeService
     {

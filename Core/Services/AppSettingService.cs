@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.Core.Services.AppSettings
+namespace Waffle.Core.Services
 {
     public class AppSettingService : IAppSettingService
     {

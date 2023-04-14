@@ -1,4 +1,4 @@
-﻿using Waffle.ExternalAPI.Shopee;
+﻿using Waffle.ExternalAPI.Models;
 
 namespace Waffle.ExternalAPI.Interfaces
 {

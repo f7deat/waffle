@@ -12,7 +12,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<PayloadResult<Catalog>> AddAsync(Catalog catalog);
         Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default);
         Task<Catalog?> GetByNameAsync(string normalizedName);
-        Task<IEnumerable<ComponentListItem>> ListComponentAsync(Guid catalogId);
+        Task<List<ComponentListItem>> ListComponentAsync(Guid catalogId);
         Task<IdentityResult> ArticleSaveAsync(Catalog args);
         Task<IdentityResult> UpdateThumbnailAsync(Catalog args);
         Task<ListResult<Catalog>> ArticleListAsync(ArticleFilterOptions filterOptions);

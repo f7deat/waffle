@@ -1,6 +1,6 @@
 using Waffle.ExternalAPI.Interfaces;
 
-namespace Waffle.ExternalAPI.Telegram
+namespace Waffle.ExternalAPI.Services
 {
     public class TelegramService : ITelegramService
     {

@@ -2,5 +2,9 @@
 @model Waffle.Pages.Blogspot.IndexModel
 
 <div class="container">
+    @foreach (var item in Model.WorkListItem)
+    {
+        @await Component.InvokeAsync(item.Name, item.Id)
+    }
     <partial name="~/Views/Shared/Components/ListGroup/Default.cshtml" model="Model.ListBlog()" />
 </div>

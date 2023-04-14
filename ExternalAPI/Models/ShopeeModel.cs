@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Waffle.ExternalAPI.Shopee
+namespace Waffle.ExternalAPI.Models
 {
     public class ShopeeResult<T> where T : class
     {

@@ -2,7 +2,7 @@
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 
-namespace Waffle.ExternalAPI.Facebook
+namespace Waffle.ExternalAPI.Services
 {
     public class FacebookService : IFacebookService
     {

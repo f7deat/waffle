@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Web;
 using Waffle.ExternalAPI.Interfaces;
-using Waffle.ExternalAPI.Wiki;
+using Waffle.ExternalAPI.Models;
 
 namespace Waffle.Pages.Wiki
 {

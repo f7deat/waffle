@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Waffle.Core.Helpers;
 
-namespace Waffle.ExternalAPI.Wiki
+namespace Waffle.ExternalAPI.Models
 {
     public class Parse
     {

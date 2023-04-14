@@ -1,4 +1,4 @@
-﻿using Waffle.ExternalAPI.Wiki;
+﻿using Waffle.ExternalAPI.Models;
 
 namespace Waffle.ExternalAPI.Interfaces
 {
