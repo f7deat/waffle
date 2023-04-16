@@ -20,7 +20,7 @@ namespace Waffle.Pages.Video
             Catalog = await _catalogService.EnsureDataAsync(nameof(Video), CatalogType.Entry);
             ViewData["Title"] = Catalog.Name;
             ViewData["Description"] = Catalog.Description;
-
+            ViewData["Image"] = Catalog.Thumbnail;
             return Page();
         }
     }

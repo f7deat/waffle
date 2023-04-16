@@ -12,6 +12,8 @@ namespace Waffle.Models.Components.Specifications
         public WordPressContent WordPress { get; set; } = new();
         [JsonPropertyName("blockEditor")]
         public BlockEditor BlockEditor { get; set; } = new();
+        [JsonPropertyName("blogger")]
+        public BloggerContent Blogger { get; set; } = new();
 
         [JsonIgnore]
         public string Content { get; set; } = string.Empty;
@@ -30,5 +32,13 @@ namespace Waffle.Models.Components.Specifications
         public int Id { get; set; }
         [JsonPropertyName("domain")]
         public string Domain { get; set; } = string.Empty;
+    }
+
+    public class BloggerContent
+    {
+        [JsonPropertyName("blogId")]
+        public string? BlogId { get; set; }
+        [JsonPropertyName("postId")]
+        public string PostId { get; set; } = string.Empty;
     }
 }

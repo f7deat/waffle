@@ -150,6 +150,21 @@ namespace Waffle.Core.Services
             });
         }
 
+        public async Task<IdentityResult> SaveAsync(Guid id, object args)
+        {
+            var data = await _context.AppSettings.FindAsync(id);
+            if (data is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Data not found"
+                });
+            }
+            data.Value = JsonSerializer.Serialize(args);
+            await _context.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+
         public async Task<IdentityResult> SaveFooterAsync(Footer args)
         {
             var setting = await _context.AppSettings.FindAsync(args.Id);

@@ -1,4 +1,5 @@
 ﻿using Waffle.ExternalAPI.Google.Models;
+using Waffle.ExternalAPI.Models.GoogleAggregate;
 
 namespace Waffle.ExternalAPI.Interfaces
 {

@@ -2,6 +2,7 @@
 using Waffle.Core.Helpers;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Models.GoogleAggregate;
 
 namespace Waffle.ExternalAPI.Services
 {

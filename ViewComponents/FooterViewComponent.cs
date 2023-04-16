@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using Waffle.Core.Services.AppSettings;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Models;
 using Waffle.Models.Components;
 

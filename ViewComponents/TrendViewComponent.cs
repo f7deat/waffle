@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Models.GoogleAggregate;
 using Waffle.Models;
 using Waffle.Models.Components;
 

@@ -1,0 +1,11 @@
+﻿@page "/video/{normalizedName}"
+@model Waffle.Pages.Video.DetailsModel
+
+<main class="wf-video">
+    <div class="container">
+        @foreach (var item in Model.Components)
+        {
+            @await Component.InvokeAsync(item.Name, item.Id)
+        }
+    </div>
+</main>

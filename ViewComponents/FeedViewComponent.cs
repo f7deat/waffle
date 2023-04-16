@@ -6,34 +6,22 @@ using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
-    public class FeedViewComponent : ViewComponent
+    public class FeedViewComponent : BaseViewComponent<Feed>
     {
         private readonly ICatalogService _catalogService;
-        private readonly IWorkService _workService;
-        public FeedViewComponent(ICatalogService catalogService, ApplicationDbContext context, IWorkService workService)
+
+        public FeedViewComponent(ICatalogService catalogService, IWorkService workService) : base(workService)
         {
             _catalogService = catalogService;
-            _workService = workService;
         }
 
         public Pagination Pagination => new();
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid workId)
+        protected override async Task<Feed> ExtendAsync(Feed feed)
         {
-            var work = await _workService.FindAsync(workId);
-            if (work is null)
-            {
-                return View(Empty.DefaultView, new ErrorViewModel
-                {
-                    RequestId = workId.ToString()
-                });
-            }
             var articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions());
-            return View(new Feed
-            {
-                Name = work.Name,
-                Articles = articles.Data
-            });
+            feed.Articles = articles.Data;
+            return feed;
         }
     }
 }

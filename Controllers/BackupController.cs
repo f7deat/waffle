@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Constants;
-using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Models;
+using Waffle.ExternalAPI.Models.GoogleAggregate;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Specifications;
@@ -163,9 +161,10 @@ namespace Waffle.Controllers
         {
             await EnsureComponentsAsync();
             await _context.SaveChangesAsync();
+            await _appSettingService.EnsureSettingAsync(nameof(Facebook));
+            await _appSettingService.EnsureSettingAsync(nameof(ExternalAPI.Google));
             await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
             await _appSettingService.EnsureSettingAsync(nameof(Telegram));
-            await _appSettingService.EnsureSettingAsync(nameof(Facebook));
             await _appSettingService.EnsureSettingAsync(nameof(Social));
             await _appSettingService.EnsureSettingAsync(nameof(Sidebar));
             return Ok(IdentityResult.Success);
@@ -201,6 +200,7 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
             await _componentService.EnsureComponentAsync(nameof(Jumbotron));
             await _componentService.EnsureComponentAsync(nameof(PostContent));
+            await _componentService.EnsureComponentAsync(nameof(VideoPlayer));
         }
     }
 }

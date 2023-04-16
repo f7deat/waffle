@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Mail;
 using SendGrid;
-using Waffle.Core.Services.AppSettings;
+using Waffle.Core.Interfaces.IService;
 
 namespace Waffle.Core.Senders
 {

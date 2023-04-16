@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Waffle.ExternalAPI.Google.Models
+namespace Waffle.ExternalAPI.Models.GoogleAggregate
 {
     [XmlRoot(ElementName = "rss")]
     public class Trend

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Core.Services.AppSettings;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
@@ -37,8 +36,14 @@ namespace Waffle.Controllers
             _workService = workService;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<object>(id));
+
         [HttpGet("list")]
         public async Task<IActionResult> ListAsync() => Ok(await _appSettingService.ListAsync());
+
+        [HttpPost("save/{id}")]
+        public async Task<IActionResult> SaveAsync([FromRoute] Guid id, [FromBody] object args) => Ok(await _appSettingService.SaveAsync(id, args));
 
         [HttpGet("info")]
         public IActionResult GetInfo()
@@ -91,7 +96,7 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("facebook/{id}")]
-        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Facebook>(id));
+        public async Task<IActionResult> FacebookGetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Facebook>(id));
 
         [HttpPost("facebook/save")]
         public async Task<IActionResult> SaveFacebookAsync([FromBody] Facebook model)

@@ -11,8 +11,8 @@ using Waffle.Models.Components;
 using Microsoft.AspNetCore.Identity;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.Interfaces;
-using Waffle.Core.Services.AppSettings;
 using Waffle.Models;
+using Waffle.Core.Interfaces.IService;
 
 namespace Waffle.Controllers
 {

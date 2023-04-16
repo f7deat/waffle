@@ -17,6 +17,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> HeaderLogoAsync(Header args);
         Task<IdentityResult> HeaderSaveAsync(Header args);
         Task<ListResult<AppSetting>> ListAsync();
+        Task<IdentityResult> SaveAsync(Guid id, object args);
         Task<IdentityResult> SaveFooterAsync(Footer args);
         Task<IdentityResult> SaveTelegramAsync(Guid id, Telegram model);
     }

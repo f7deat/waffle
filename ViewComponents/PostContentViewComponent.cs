@@ -1,4 +1,5 @@
 ﻿using Waffle.Core.Interfaces.IService;
+using Waffle.ExternalAPI.GoogleAggregate;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models.Components.Specifications;
 
@@ -7,9 +8,14 @@ namespace Waffle.ViewComponents
     public class PostContentViewComponent : BaseViewComponent<PostContent>
     {
         private readonly IWordPressService _wordPressService;
-        public PostContentViewComponent(IWorkService workService, IWordPressService wordPressService) : base(workService)
+        private readonly IGoogleService _googleService;
+        private readonly IAppSettingService _appService;
+
+        public PostContentViewComponent(IWorkService workService, IWordPressService wordPressService, IGoogleService googleService, IAppSettingService appService) : base(workService)
         {
             _wordPressService = wordPressService;
+            _googleService = googleService;
+            _appService = appService;
         }
 
         protected override async Task<PostContent> ExtendAsync(PostContent work)
@@ -24,6 +30,12 @@ namespace Waffle.ViewComponents
                     work.Content = wordPress?.Content.Rendered ?? string.Empty;
                     break;
                 case PostContentType.Blogspot:
+                    var blogger = await _appService.GetAsync<Google>(nameof(Google));
+                    if (blogger != null)
+                    {
+                        var post = await _googleService.BloggerGetAsync(work.Blogger.BlogId, work.Blogger.PostId, blogger.BloggerApiKey);
+                        work.Content = post?.Content ?? string.Empty;
+                    }
                     break;
                 default:
                     break;
