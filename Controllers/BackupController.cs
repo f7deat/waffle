@@ -179,6 +179,8 @@ namespace Waffle.Controllers
 
         private async Task EnsureComponentsAsync()
         {
+            await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
+            await _componentService.EnsureComponentAsync(nameof(ArticleSpotlight));
             await _componentService.EnsureComponentAsync(nameof(BlockEditor));
             await _componentService.EnsureComponentAsync(nameof(Card));
             await _componentService.EnsureComponentAsync(nameof(ContactForm));
@@ -197,7 +199,6 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(Image));
             await _componentService.EnsureComponentAsync(nameof(Trend));
             await _componentService.EnsureComponentAsync(nameof(Navbar));
-            await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
             await _componentService.EnsureComponentAsync(nameof(Jumbotron));
             await _componentService.EnsureComponentAsync(nameof(PostContent));
             await _componentService.EnsureComponentAsync(nameof(VideoPlayer));

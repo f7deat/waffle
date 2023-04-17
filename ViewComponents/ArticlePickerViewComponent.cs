@@ -1,28 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Core.Interfaces.IService;
+﻿using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
-    public class ArticlePickerViewComponent : ViewComponent
+    public class ArticlePickerViewComponent : BaseViewComponent<ArticlePicker>
     {
         private readonly ICatalogService _catalogService;
-        public ArticlePickerViewComponent(ICatalogService catalogService)
+
+        public ArticlePickerViewComponent(IWorkService workService, ICatalogService catalogService) : base(workService)
         {
             _catalogService = catalogService;
         }
-        public async Task<IViewComponentResult> InvokeAsync()
+
+        protected override async Task<ArticlePicker> ExtendAsync(ArticlePicker work)
         {
-            var articles = await _catalogService.ArticlePickerListAsync();
-            if (articles is null)
+            var articles = await _catalogService.ListByTagAsync(work.TagId, new CatalogFilterOptions
             {
-                return View(Empty.DefaultView, new ErrorViewModel
-                {
-                    RequestId = Guid.Empty.ToString()
-                });
-            }
-            return View(articles);
+                Type = CatalogType.Article,
+                Active = true,
+                PageSize = 5
+            });
+            work.Articles = articles.Data?.ToList() ?? new();
+            return work;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿@page
 @using Waffle.Models.Components
+@using Waffle.Models.Components.Specifications
 @model Waffle.Pages.Article.IndexModel
 @{
     ViewData["Title"] = "Danh sách bài viết";
@@ -19,7 +20,7 @@
                 }
             </div>
             <div class="md:w-1/3">
-                @await Component.InvokeAsync(nameof(ArticlePicker))
+                @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
             </div>
         </div>

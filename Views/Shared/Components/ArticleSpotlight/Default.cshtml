@@ -1,0 +1,23 @@
+﻿@using Waffle.Models.Components.Specifications
+@model ArticleSpotlight
+
+<div class="title">
+    @Model.Title
+</div>
+<div class="bg-white mb-4 shadow rounded">
+    @foreach (var item in Model.Articles)
+    {
+        <div class="flex mt-1 items-center gap-2">
+            <a href="/article/@item.NormalizedName" class="thumbnail bg-gray-900">
+                <img class="thumbnail-img" loading="lazy" width="80" height="64" src="@item.Thumbnail" alt="@Html.Raw(item.Name)">
+            </a>
+            <div>
+                <div class="mb-1"><a href="/article/@item.NormalizedName">@Html.Raw(item.Name)</a></div>
+                <div class="text-gray-500 text-xs flex">
+                    <div class="mr-2"><i class="fa fa-calendar mr-2"></i>@item.ModifiedDate</div>
+                    <div><i class="fas fa-eye mr-2"></i>@item.ViewCount.ToString("N0")</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

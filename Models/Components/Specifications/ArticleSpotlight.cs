@@ -1,15 +1,17 @@
 ﻿using System.Text.Json.Serialization;
 using Waffle.Entities;
 
-namespace Waffle.Models.Components
+namespace Waffle.Models.Components.Specifications
 {
-    public class ArticlePicker
+    public class ArticleSpotlight
     {
-        [JsonPropertyName("tagId")]
-        public Guid TagId { get; set; }
         [JsonPropertyName("title")]
         public string Title { get; set; } = string.Empty;
+        [JsonPropertyName("pageSize")]
+        public int PageSize { get; set; } = 5;
 
+        [JsonIgnore]
+        public Guid TagId { get; set; }
         [JsonIgnore]
         public List<Catalog> Articles { get; set; } = new();
     }

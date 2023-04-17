@@ -7,7 +7,10 @@ namespace Waffle.Models.Components
     {
         [JsonPropertyName("name")]
         public string? Name { get; set; }
+        [JsonPropertyName("pageSize")]
+        public int PageSize { get; set; }
+
         [JsonIgnore]
-        public IEnumerable<Catalog>? Articles { get; set; }
+        public List<Catalog> Articles { get; set; } = new();
     }
 }

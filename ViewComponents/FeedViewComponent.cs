@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
+using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
 
@@ -15,12 +16,15 @@ namespace Waffle.ViewComponents
             _catalogService = catalogService;
         }
 
-        public Pagination Pagination => new();
-
         protected override async Task<Feed> ExtendAsync(Feed feed)
         {
-            var articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions());
-            feed.Articles = articles.Data;
+            var articles = await _catalogService.ListAsync(new CatalogFilterOptions
+            {
+                Active = true,
+                PageSize = feed.PageSize,
+                Type = CatalogType.Article
+            });
+            feed.Articles = articles.Data?.ToList() ?? new();
             return feed;
         }
     }
