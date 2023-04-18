@@ -5,11 +5,19 @@
         return;
     }
     navbarTogglers.forEach(navbarToggler => navbarToggler.addEventListener('click', (e) => {
-        const navbarCollapse = document.querySelector('.navbar-collapse') as HTMLElement;
-        if (!navbarCollapse) {
-            console.error('Navbar collapse not found!');
+        const navbarMenu = document.querySelector('.navbar-menu') as HTMLElement;
+        if (!navbarMenu) {
+            console.error('Navbar menu not found!');
             return;
         }
-        navbarCollapse.classList.toggle('show');
+        if (navbarMenu.classList.contains('show')) {
+            const fade = document.querySelector('.fade');
+            fade.remove();
+        } else {
+            const fade = document.createElement('div');
+            fade.className = 'fade';
+            document.body.appendChild(fade);
+        }
+        navbarMenu.classList.toggle('show');
     }));
 }

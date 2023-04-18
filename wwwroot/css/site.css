@@ -187,6 +187,10 @@ p {
     border-width: 1px;
 }
 
+.border-dashed {
+    border-style: dashed;
+}
+
 .border-t {
     border-top-width: 1px;
 }
@@ -242,6 +246,17 @@ p {
 .dropdown-item {
     display: block;
     padding: 0.25rem 1rem;
+}
+
+.fade {
+    background-color: var(--dark);
+    z-index: 20;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.5;
 }
 
 .font-normal {
@@ -310,12 +325,20 @@ p {
     height: 2.5rem;
 }
 
+.h-12 {
+    height: 3rem;
+}
+
 .w-6 {
     width: 1rem;
 }
 
 .w-10 {
     width: 2.5rem;
+}
+
+.w-12 {
+    width: 3rem;
 }
 
 .w-64 {
@@ -667,6 +690,10 @@ p {
 
 .text-white {
     color: white;
+}
+
+.text-dark {
+    color: var(--dark);
 }
 
 .text-primary {
