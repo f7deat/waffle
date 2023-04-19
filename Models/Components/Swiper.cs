@@ -4,6 +4,8 @@ namespace Waffle.Models.Components
 {
     public class Swiper : AbstractComponent
     {
+        [JsonPropertyName("title")]
+        public string? Title { get; set; }
         [JsonPropertyName("mode")]
         public string Mode { get; set; } = "default";
 

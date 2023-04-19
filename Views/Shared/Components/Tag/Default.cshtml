@@ -1,9 +1,9 @@
 ﻿@using Waffle.Entities
 @model IEnumerable<Catalog>
 
-<div class="shadow mb-4">
+<div class="mb-4 tags">
     <div class="title">Tags</div>
-    <div class="p-2 bg-white rounded flex flex-wrap gap-2">
+    <div class="bg-white rounded flex flex-wrap gap-2">
         @foreach (var item in Model)
         {
             <a href="/tag/@item.NormalizedName" class="bg-gray-100 px-2 py-1 tag-item">@item.Name</a>

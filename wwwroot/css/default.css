@@ -1,8 +1,4 @@
-﻿body {
-    background-color: var(--gray-100);
-}
-
-.breadcrumb {
+﻿.breadcrumb {
     --breadcrumb-margin: 0 0 0.5rem 0;
 }
 
@@ -28,14 +24,25 @@
         }
 
 .title {
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem 0.25rem 0 0;
-    background-color: var(--dark);
-    color: #fff;
+    padding: 0.5rem 0;
     font-weight: bold;
     font-size: 1rem;
-    margin-bottom: 0.25rem;
+    border-bottom: 2px solid var(--gray-200);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    position: relative;
 }
+
+    .title::after {
+        content: '';
+        color: transparent;
+        background-color: var(--primary);
+        width: 20%;
+        display: block;
+        height: 2px;
+        position: absolute;
+        bottom: -2px;
+    }
 
 @media screen and (min-width: 640px) {
     .navbar {
