@@ -310,25 +310,6 @@ namespace Waffle.Controllers
         [HttpPost("column/save")]
         public async Task<IActionResult> SaveColumnAsync([FromBody] Column item) => Ok(await _workService.SaveColumnAsync(item));
 
-        [HttpGet("swiper/{id}")]
-        public async Task<IActionResult> GetSwiperAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Swiper>(id));
-
-        [HttpPost("swiper/add-image")]
-        public async Task<IActionResult> AddImageSync([FromRoute] Guid id, [FromBody] Image args)
-        {
-            var swiper = await _workService.GetAsync<Swiper>(id);
-            if (swiper is null)
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Work content not found!"
-                }));
-            }
-            swiper.Images.Add(args);
-            await _workService.SaveArgumentsAsync(id, swiper);
-            return Ok(IdentityResult.Success);
-        }
-
         [HttpGet("block-editor/{id}")]
         public async Task<IActionResult> GetBlockEditorAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<List<BlockEditorBlock>>(id));
 

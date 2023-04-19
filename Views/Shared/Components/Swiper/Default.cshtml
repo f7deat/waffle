@@ -6,12 +6,25 @@
 
 <div class="swiper mySwiper">
     <div class="swiper-wrapper">
-        @if (Model.Images.Any())
+        @if (Model.Items.Any())
         {
-            @foreach (var item in Model.Images)
+            @foreach (var item in Model.Items)
             {
                 <div class="swiper-slide">
-                    <img src="@item.File.Url" alt="@item.Alt" />
+                    <div class="swiper-album">
+                        <img src="@item.Image" alt="@item.Title" loading="lazy" class="w-full" />
+                        <div class="swiper-album__overlay">
+                            <div class="swiper-album__overlay--title">
+                                <a href="@item.Url">
+                                    @item.Title
+                                </a>
+                            </div>
+                            <div class="swiper-album__overlay--delimiter"></div>
+                            <div class="swiper-album__overlay--description">
+                                @item.Description
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
         }
@@ -19,22 +32,15 @@
     <div class="swiper-pagination"></div>
 </div>
 
-<script async src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <script>
     var swiper = new Swiper(".mySwiper", {
-        effect: "coverflow",
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: "auto",
-        coverflowEffect: {
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: true,
-        },
+        slidesPerView: 1,
+        loop: true, 
+        autoplay: true,
         pagination: {
             el: ".swiper-pagination",
-        },
+            clickable: true
+        }
     });
 </script>

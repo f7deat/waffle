@@ -332,22 +332,19 @@ namespace Waffle.Core.Services
             {
                 return IdentityResult.Failed(new IdentityError
                 {
-                    Description = "Data not found"
+                    Description = $"Data not found: WorkId ({args.WorkId}) / CatalogId ({args.CatalogId})"
                 });
             }
-            if (await _context.WorkItems.CountAsync(x => x.WorkId == args.WorkId) > 1)
-            {
-                _context.WorkItems.Remove(data);
-            }
-            else
+            if (await _context.WorkItems.CountAsync(x => x.WorkId == args.WorkId) == 1)
             {
                 var work = await _context.WorkContents.FindAsync(args.WorkId);
                 if (work != null)
                 {
                     _context.WorkContents.Remove(work);
                 }
-                _context.WorkItems.Remove(data);
             }
+
+            _context.WorkItems.Remove(data);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }

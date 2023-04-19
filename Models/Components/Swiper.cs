@@ -1,20 +1,21 @@
 ﻿using System.Text.Json.Serialization;
-using Waffle.Entities;
 
 namespace Waffle.Models.Components
 {
     public class Swiper : AbstractComponent
     {
-        public Swiper()
-        {
-            Images = new List<Image>();
-        }
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; } = "default";
 
-        [JsonPropertyName("images")]
-        public List<Image> Images { get; set; }
+        [JsonIgnore]
+        public List<SwiperItem> Items { get; set; } = new();
     }
 
-    public class AddSwiperItem : BasicWorkContent
+    public class SwiperItem
     {
+        public string? Title { get; set; }
+        public string? Image { get; set; }
+        public string? Description { get; set; }
+        public string? Url { get; set; }
     }
 }

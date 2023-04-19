@@ -18,10 +18,11 @@
             </form>
 
             <div class="title flex justify-between">
-                <div>@Model.Catalog.Name</div>
-                <div class="font-normal">
-                    <span>@Model.Pagination.Total</span>
-                </div>
+                <h1 class="text-base">
+                    @Model.Catalog.Name
+                    <span class="font-normal">(@Model.Pagination.Total)</span>
+                </h1>
+
             </div>
             <partial name="~/Pages/Article/_List.cshtml" model="Model.Catalogs" />
             <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />

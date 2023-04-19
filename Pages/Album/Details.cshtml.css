@@ -1,0 +1,18 @@
+﻿.wf-badge {
+    padding: .25rem 1rem;
+    border-radius: 999px;
+    font-size: .875rem;
+    border: 1px solid var(--gray-200);
+    color: var(--body-color);
+}
+    .wf-badge:hover {
+        background-color: var(--light);
+    }
+
+    .card {
+        margin-bottom: 1rem;
+    }
+
+.card-header {
+    font-weight: 500;
+}

@@ -1,29 +1,36 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Core.Interfaces.IService;
+﻿using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
-    public class SwiperViewComponent : ViewComponent
+    public class SwiperViewComponent : BaseViewComponent<Swiper>
     {
-        private readonly IWorkService _workService;
-        public SwiperViewComponent(IWorkService workService)
+        private readonly ICatalogService _catalogService;
+        public SwiperViewComponent(IWorkService workService, ICatalogService catalogService) : base(workService)
         {
-            _workService = workService;
+            _catalogService = catalogService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid id)
+        protected override async Task<Swiper> ExtendAsync(Swiper work)
         {
-            var swiper = await _workService.GetAsync<Swiper>(id);
-            if (swiper is null)
+            var albums = await _catalogService.ListAsync(new CatalogFilterOptions
             {
-                return View(Empty.DefaultView, new ErrorViewModel
+                Active = true,
+                Type = CatalogType.Albums
+            });
+            if (albums.Data != null)
+            {
+                work.Items = albums.Data.Select(x => new SwiperItem
                 {
-                    RequestId = id.ToString()
-                });
+                    Title = x.Name,
+                    Image = x.Thumbnail,
+                    Description = x.Description,
+                    Url = $"/album/{x.NormalizedName}"
+                }).ToList();
             }
-            return View(swiper);
+            return work;
         }
     }
 }
