@@ -55,7 +55,7 @@ namespace Waffle.Pages.Tag
             {
                 Active = true,
                 Name = SearchTerm,
-                Type = CatalogType.Albums
+                Type = CatalogType.Album
             });
             Albums = albums.Data?.ToList() ?? new();
 

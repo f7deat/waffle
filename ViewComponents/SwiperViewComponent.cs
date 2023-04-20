@@ -18,7 +18,7 @@ namespace Waffle.ViewComponents
             var albums = await _catalogService.ListAsync(new CatalogFilterOptions
             {
                 Active = true,
-                Type = CatalogType.Albums
+                Type = CatalogType.Album
             });
             if (albums.Data != null)
             {

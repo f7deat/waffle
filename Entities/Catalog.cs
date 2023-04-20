@@ -51,7 +51,7 @@ namespace Waffle.Entities
         ArticleCategoy,
         ProductCategory,
         Blogspot = 7,
-        Albums,
+        Album = 8,
         Tag = 9,
         Video = 10
     }

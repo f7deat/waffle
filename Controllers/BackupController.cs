@@ -11,6 +11,7 @@ using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.Models.GoogleAggregate;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.Components.Lister;
 using Waffle.Models.Components.Specifications;
 using Waffle.Models.Settings;
 using Waffle.Models.ViewModels;
@@ -202,6 +203,7 @@ namespace Waffle.Controllers
             await _componentService.EnsureComponentAsync(nameof(Jumbotron));
             await _componentService.EnsureComponentAsync(nameof(PostContent));
             await _componentService.EnsureComponentAsync(nameof(VideoPlayer));
+            await _componentService.EnsureComponentAsync(nameof(VideoPlayList));
         }
     }
 }

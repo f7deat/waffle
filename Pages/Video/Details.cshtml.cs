@@ -19,15 +19,17 @@ namespace Waffle.Pages.Video
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
-            var catalog = await _catalogService.GetByNameAsync(normalizedName);
-            if (catalog == null)
+            Catalog = await _catalogService.GetByNameAsync(normalizedName) ?? new();
+            if (string.IsNullOrEmpty(Catalog.NormalizedName))
             {
                 return NotFound();
             }
-            ViewData["Title"] = catalog.Name;
-            ViewData["Description"] = catalog.Description;
-            ViewData["Image"] = catalog.Thumbnail;
-            Components = await _catalogService.ListComponentAsync(catalog.Id);
+
+            ViewData["Title"] = Catalog.Name;
+            ViewData["Description"] = Catalog.Description;
+            ViewData["Image"] = Catalog.Thumbnail;
+            Components = await _catalogService.ListComponentAsync(Catalog.Id);
+
             return Page();
         }
     }
