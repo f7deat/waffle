@@ -8,5 +8,11 @@ namespace Waffle.ViewComponents
         public VideoPlayerViewComponent(IWorkService workService) : base(workService)
         {
         }
+
+        protected override Task<VideoPlayer> ExtendAsync(VideoPlayer work)
+        {
+            work.Description = PageData.Description;
+            return base.ExtendAsync(work);
+        }
     }
 }

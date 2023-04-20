@@ -7,9 +7,9 @@
     <div class="container">
         <div class="md:flex gap-4">
             <div class="md:w-2/3">
-                @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
+                @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
 
-                <h1 class="title">@Model.Catalog.Name</h1>
+                <h1 class="title">@Model.PageData.Name</h1>
 
                 @foreach (var item in Model.Components)
                 {

@@ -2,12 +2,21 @@
 using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Components;
 using Waffle.Models;
+using Waffle.Entities;
 
 namespace Waffle.ViewComponents
 {
     public abstract class BaseViewComponent<T> : ViewComponent where T : class
     {
         private readonly IWorkService _workService;
+        protected Catalog PageData
+        {
+            get
+            {
+                RouteData.Values.TryGetValue(nameof(Catalog), out var values);
+                return values as Catalog ?? new();
+            }
+        }
         public BaseViewComponent(IWorkService workService)
         {
             _workService = workService;

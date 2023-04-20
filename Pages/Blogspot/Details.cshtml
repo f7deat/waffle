@@ -5,11 +5,7 @@
 @if (Model.Item != null)
 {
     <div class="container">
-
-        @if (Model.Catalog != null)
-        {
-            @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
-        }
+        @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
 
         <div class="shadow mb-4 bg-white rounded">
             <div class="title">@Model.Item.Title</div>

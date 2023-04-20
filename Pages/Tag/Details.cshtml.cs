@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
@@ -7,15 +7,12 @@ using Waffle.Models.Components;
 
 namespace Waffle.Pages.Tag
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : DynamicPageModel
     {
-        private readonly ICatalogService _catalogService;
-        public DetailsModel(ICatalogService catalogService)
+        public DetailsModel(ICatalogService catalogService) : base(catalogService)
         {
-            _catalogService = catalogService;
         }
 
-        public Catalog Catalog = new();
         public IEnumerable<Catalog> Catalogs = new List<Catalog>();
         [BindProperty(SupportsGet = true)]
         public int Current { get; set; } = 1;
@@ -28,30 +25,21 @@ namespace Waffle.Pages.Tag
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
-            var catalog = await _catalogService.GetByNameAsync(normalizedName) ?? new Catalog { 
-                NormalizedName = normalizedName,
-                Name = normalizedName
-            };
-            Catalog = catalog;
-            ViewData["Title"] = Catalog.Name;
-            ViewData["Description"] = Catalog.Description;
-            ViewData["Image"] = catalog.Thumbnail;
-
-            var catalogs = await _catalogService.ListByTagAsync(catalog.Id, new CatalogFilterOptions
+            var catalogs = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
             {
                 Current = Current,
                 Name = SearchTerm,
                 Type = CatalogType.Article
             });
 
-            Products = await _catalogService.ListByTagAsync(catalog.Id, new CatalogFilterOptions
+            Products = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
             {
                 Current = Current,
                 Name = SearchTerm,
                 Type = CatalogType.Shop
             });
 
-            var albums = await _catalogService.ListByTagAsync(catalog.Id, new CatalogFilterOptions
+            var albums = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
             {
                 Active = true,
                 Name = SearchTerm,

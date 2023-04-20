@@ -6,7 +6,7 @@
     <div class="wf-row gap-4">
         <div class="w-2/3">
 
-            @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
+            @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
 
             <form class="mb-2" method="get">
                 <div class="border rounded-full flex bg-white">
@@ -19,7 +19,7 @@
 
             <div class="title flex justify-between">
                 <h1 class="text-base">
-                    @Model.Catalog.Name
+                    @Model.PageData.Name
                     <span class="font-normal">(@Model.Pagination.Total)</span>
                 </h1>
 

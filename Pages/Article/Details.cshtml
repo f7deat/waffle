@@ -7,9 +7,9 @@
     <div class="container">
         <div class="wf-row gap-4">
             <div class="md:w-2/3">
-                @await Component.InvokeAsync(nameof(Breadcrumb), Model.Catalog.Id)
+                @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
 
-                <h1 class="title">@Model.Catalog.Name</h1>
+                <h1 class="title">@Model.PageData.Name</h1>
                 <div class="shadow mb-4">
                     <div class="bg-white p-4">
                         @foreach (var item in Model.Works)
@@ -29,12 +29,12 @@
                         <div class="flex gap-4">
                             <span>
                                 <i class="fas fa-eye mr-1"></i>
-                                <span>@Model.Catalog.ViewCount.ToString("N0")</span>
+                                <span>@Model.PageData.ViewCount.ToString("N0")</span>
                             </span>
                             <span>|</span>
                             <span>
                                 <i class="fas fa-calendar mr-1"></i>
-                                <span>@Model.Catalog.ModifiedDate</span>
+                                <span>@Model.PageData.ModifiedDate</span>
                             </span>
                         </div>
                     </div>
@@ -65,9 +65,9 @@
         @if (Model.Tags.Any())
         {
             @await Component.InvokeAsync("Related", new Waffle.Entities.WorkItem {
-        CatalogId = Model.Tags.OrderBy(x => Guid.NewGuid()).First().Id,
-        WorkId = Model.Catalog.Id
-        })
+                CatalogId = Model.Tags.OrderBy(x => Guid.NewGuid()).First().Id,
+                WorkId = Model.PageData.Id
+            })
         }
     </div>
 </main>

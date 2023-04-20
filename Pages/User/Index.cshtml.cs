@@ -2,19 +2,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Helpers;
-using Waffle.Core.Interfaces.IService;
 
 namespace Waffle.Pages.User
 {
     public class IndexModel : PageModel
     {
-        private readonly ICatalogService _catalogService;
         private readonly UserManager<IdentityUser> _userService;
-        public IndexModel(ICatalogService catalogService, UserManager<IdentityUser> userService)
+        public IndexModel(UserManager<IdentityUser> userService)
         {
-            _catalogService = catalogService;
             _userService = userService;
-
         }
 
         public IdentityUser IdentityUser = new();
@@ -22,10 +18,6 @@ namespace Waffle.Pages.User
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var catalog = await _catalogService.EnsureDataAsync("User", Entities.CatalogType.Entry);
-            ViewData["Title"] = catalog.Name;
-            ViewData["Description"] = catalog.Description;
-
             IdentityUser = await _userService.GetUserAsync(User);
 
             if (IdentityUser is null)

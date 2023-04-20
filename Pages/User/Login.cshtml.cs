@@ -5,20 +5,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 
 namespace Waffle.Pages.User
 {
     public class LoginModel : PageModel
     {
-        private readonly ICatalogService _catalogService;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
-        public LoginModel(ICatalogService catalogService, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IConfiguration configuration)
         {
-            _catalogService = catalogService;
             _signInManager = signInManager;
             _userManager = userManager;
             _configuration = configuration;
@@ -31,12 +27,8 @@ namespace Waffle.Pages.User
 
         public Microsoft.AspNetCore.Identity.SignInResult? SignInResult;
 
-        public async Task OnGetAsync()
+        public void OnGet()
         {
-            var catalog = await _catalogService.EnsureDataAsync("Login", CatalogType.Entry);
-            ViewData["Title"] = catalog.Name;
-            ViewData["Description"] = catalog.Description;
-            ViewData["Image"] = catalog.Thumbnail;
         }
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl)

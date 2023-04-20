@@ -37,11 +37,8 @@ namespace Waffle.Pages.User
 
         public IdentityResult? Result;
 
-        public async Task OnGetAsync()
+        public void OnGet()
         {
-            var catalog = await _catalogService.EnsureDataAsync("Register", Entities.CatalogType.Entry);
-            ViewData["Title"] = catalog.Name;
-            ViewData["Description"] = catalog.Description;
         }
 
         public async Task<IActionResult> OnPostAsync()

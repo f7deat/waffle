@@ -1,38 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Interfaces;
 
 namespace Waffle.Pages.Blogspot
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : DynamicPageModel
     {
         private readonly IGoogleService _googleService;
-        private readonly ICatalogService _catalogService;
         private readonly IWorkService _workService;
-        private readonly ILogger<DetailsModel> _logger;
-        public DetailsModel(IGoogleService googleService, ICatalogService catalogService, IWorkService workService, ILogger<DetailsModel> logger)
+        public DetailsModel(IGoogleService googleService, ICatalogService catalogService, IWorkService workService) : base(catalogService)
         {
             _googleService = googleService;
-            _catalogService = catalogService;
             _workService = workService;
-            _logger = logger;
         }
 
         public BloggerItem? Item;
-        public Catalog? Catalog;
 
-        public async Task<IActionResult> OnGetAsync(string normalizedName, string year, string month, string path)
+        public async Task<IActionResult> OnGetAsync(string year, string month, string path)
         {
-            Catalog = await _catalogService.GetByNameAsync(normalizedName);
-            if (Catalog == null)
-            {
-                _logger.LogWarning("Catalog not found");
-                return NotFound();
-            }
-            var work = await _catalogService.FirstWorkAsync(Catalog.Id);
+            var work = await _catalogService.FirstWorkAsync(PageData.Id);
             if (work is null)
             {
                 return NotFound();
@@ -46,7 +34,6 @@ namespace Waffle.Pages.Blogspot
             if (Item != null)
             {
                 ViewData["Title"] = Item.Title;
-                ViewData["Description"] = Catalog.Description;
             }
             return Page();
         }

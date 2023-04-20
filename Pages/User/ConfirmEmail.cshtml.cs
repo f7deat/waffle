@@ -8,12 +8,10 @@ namespace Waffle.Pages.User
     public class ConfirmEmailModel : PageModel
     {
         private readonly ILogger<ConfirmEmailModel> _logger;
-        private readonly ICatalogService _catalogService;
         private readonly UserManager<IdentityUser> _userManager;
-        public ConfirmEmailModel(ILogger<ConfirmEmailModel> logger, ICatalogService catalogService, UserManager<IdentityUser> userManager)
+        public ConfirmEmailModel(ILogger<ConfirmEmailModel> logger, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
-            _catalogService = catalogService;
             _userManager = userManager;
 
         }
@@ -22,10 +20,6 @@ namespace Waffle.Pages.User
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
-            var catalog = await _catalogService.EnsureDataAsync("ConfirmEmail", Entities.CatalogType.Entry);
-            ViewData["Title"] = catalog.Name;
-            ViewData["Description"] = catalog.Description;
-
             if (userId == null || code == null)
             {
                 return RedirectToPage("/Index");

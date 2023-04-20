@@ -78,8 +78,12 @@ namespace Waffle.Core.Services
             return catalog;
         }
 
-        public async Task<Catalog?> GetByNameAsync(string normalizedName)
+        public async Task<Catalog?> GetByNameAsync(string? normalizedName)
         {
+            if (string.IsNullOrEmpty(normalizedName))
+            {
+                return default;
+            }
             var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
             if (catalog is null)
             {

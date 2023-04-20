@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -9,40 +9,27 @@ using Waffle.Models;
 
 namespace Waffle.Pages.Album
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : DynamicPageModel
     {
-        private readonly ICatalogService _catalogService;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<IdentityUser> userManager) : base(catalogService)
         {
-            _catalogService = catalogService;
             _context = context;
             _userManager = userManager;
         }
 
-        public Catalog Catalog = new();
         public List<WorkListItem> Works = new();
         public IEnumerable<Catalog> Tags = new List<Catalog>();
 
         public string Email = string.Empty;
         public bool IsAuthenticated = false;
 
-        public async Task<IActionResult> OnGetAsync(string normalizedName)
+        public async Task<IActionResult> OnGetAsync()
         {
-            Catalog = await _catalogService.GetByNameAsync(normalizedName) ?? new Catalog();
-            if (string.IsNullOrEmpty(Catalog.NormalizedName))
-            {
-                return NotFound();
-            }
-
-            ViewData["Title"] = Catalog.Name;
-            ViewData["Description"] = Catalog.Description;
-            ViewData["Image"] = Catalog.Thumbnail;
-
-            Works = await GetBlockEditorsAsync(Catalog.Id);
-            Tags = await _catalogService.ListTagByIdAsync(Catalog.Id);
+            Works = await GetBlockEditorsAsync(PageData.Id);
+            Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
 
             IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
             if (IsAuthenticated)
