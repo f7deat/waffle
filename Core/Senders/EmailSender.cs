@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Options;
 using SendGrid.Helpers.Mail;
 using SendGrid;
 using Waffle.Core.Interfaces.IService;
@@ -17,17 +16,15 @@ namespace Waffle.Core.Senders
             _logger = logger;
         }
 
-        public async Task SendEmailAsync(string toEmail, string subject, string message)
-        {
-            await Execute(subject, message, toEmail);
-        }
+        public async Task SendEmailAsync(string toEmail, string subject, string message) => await Execute(subject, message, toEmail);
 
         public async Task Execute(string subject, string message, string toEmail)
         {
             var app = await _appService.GetAsync<ExternalAPI.SendGrid.SendGridConfigure>(nameof(SendGrid));
             if (string.IsNullOrEmpty(app?.ApiKey))
             {
-                throw new Exception("Null SendGridKey");
+                _logger.LogError("Null SendGridKey");
+                return;
             }
             var client = new SendGridClient(app.ApiKey);
             var msg = new SendGridMessage()
@@ -35,7 +32,7 @@ namespace Waffle.Core.Senders
                 From = new EmailAddress(app.From.Email, app.From.Name),
                 Subject = subject,
                 PlainTextContent = message,
-                HtmlContent = message
+                HtmlContent = message,
             };
             msg.AddTo(new EmailAddress(toEmail));
 

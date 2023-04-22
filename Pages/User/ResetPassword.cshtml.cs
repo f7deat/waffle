@@ -39,7 +39,7 @@ namespace Waffle.Pages.User
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToPage("./ResetPasswordConfirmation");
+                return Page();
             }
 
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);

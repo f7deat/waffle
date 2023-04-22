@@ -15,12 +15,30 @@ namespace Waffle.Pages.User
             _emailSender = emailSender;
         }
 
+        public string Error { get; set; } = string.Empty;
+
         public override async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.FindByEmailAsync(Input.Email);
-            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+            if (user == null)
             {
-                // Don't reveal that the user does not exist or is not confirmed
+                Error = "User not found!";
+                return Page();
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                var userId = await _userManager.GetUserIdAsync(user);
+                var confirmCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmUrl = Url.Page(
+                    "/User/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { userId, code = confirmCode },
+                protocol: Request.Scheme) ?? "/User/ConfirmEmail";
+
+                await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(confirmUrl)}'>clicking here</a>.");
+
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 
@@ -28,7 +46,7 @@ namespace Waffle.Pages.User
             // visit https://go.microsoft.com/fwlink/?LinkID=532713
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             var callbackUrl = Url.Page(
-                "/Account/ResetPassword",
+                "/User/ResetPassword",
                 pageHandler: null,
                 values: new { code },
                 protocol: Request.Scheme) ?? "/";

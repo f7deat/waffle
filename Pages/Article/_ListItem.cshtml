@@ -6,7 +6,7 @@
         <img src="@Model.Thumbnail" class="thumbnail" alt="@Html.Raw(Model.Name)" height="220" loading="lazy" />
     </a>
     <div class="wf-article-item__body">
-        <a href="/article/@Model.NormalizedName"><b>@Html.Raw(Model.Name)</b></a>
+        <a href="/article/@Model.NormalizedName" class="font-medium">@Html.Raw(Model.Name)</a>
         <div class="wf-article-item__body-description">
             @Html.Raw(Model.Description)
         </div>

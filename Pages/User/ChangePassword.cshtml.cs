@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -5,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Waffle.Pages.User
 {
+    [Authorize]
     public class ChangePasswordModel : PageModel
     {
         [TempData]
@@ -48,10 +50,6 @@ namespace Waffle.Pages.User
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return Redirect("/user/login?returnUrl=/user/changepassword");
-            }
 
             var hasPassword = await _userManager.HasPasswordAsync(user);
             if (!hasPassword)

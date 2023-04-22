@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -29,6 +28,8 @@ namespace Waffle.Pages.User
         [BindProperty(SupportsGet = true)]
         public string? UserName { get; set; }
         [BindProperty(SupportsGet = true)]
+        public string? Email { get; set; }
+        [BindProperty(SupportsGet = true)]
         public string? Password { get; set; }
         [BindProperty(SupportsGet = true)]
         public string? ConfirmPassword { get; set; }
@@ -54,7 +55,7 @@ namespace Waffle.Pages.User
             var user = CreateUser();
 
             await _userStore.SetUserNameAsync(user, UserName, CancellationToken.None);
-            await _emailStore.SetEmailAsync(user, UserName, CancellationToken.None);
+            await _emailStore.SetEmailAsync(user, Email, CancellationToken.None);
 
             Result = await _userManager.CreateAsync(user, Password);
             if (Result.Succeeded)
@@ -69,7 +70,7 @@ namespace Waffle.Pages.User
                     values: new { userId, code },
                 protocol: Request.Scheme) ?? "/User/ConfirmEmail";
 
-                await _emailSender.SendEmailAsync(UserName, "Confirm your email",
+                await _emailSender.SendEmailAsync(Email, "Confirm your email",
                     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
             }
             // If we got this far, something failed, redisplay form
