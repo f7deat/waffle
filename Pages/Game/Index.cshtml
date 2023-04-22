@@ -1,10 +1,5 @@
 ﻿@page
 @model Waffle.Pages.Game.IndexModel
-@{
-    ViewData["Title"] = Model.Catalog.Name;
-    ViewData["Description"] = Model.Catalog.Description;
-    ViewData["Image"] = Model.Catalog.Thumbnail;
-}
 
 <div class="container">
     @foreach (var component in Model.Components)

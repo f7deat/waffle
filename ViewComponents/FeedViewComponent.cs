@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Core.Interfaces.IService;
-using Waffle.Data;
+﻿using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
@@ -18,12 +16,14 @@ namespace Waffle.ViewComponents
 
         protected override async Task<Feed> ExtendAsync(Feed feed)
         {
+            var type = feed.Type ?? CatalogType.Article;
             var articles = await _catalogService.ListAsync(new CatalogFilterOptions
             {
                 Active = true,
                 PageSize = feed.PageSize,
-                Type = CatalogType.Article
+                Type = type
             });
+            ViewName = type.ToString();
             feed.Articles = articles.Data?.ToList() ?? new();
             return feed;
         }

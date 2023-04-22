@@ -1,22 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Pages.Tag
 {
-    public class IndexModel : PageModel
+    public class IndexModel : EntryPageModel
     {
-        private readonly ICatalogService _catalogService;
-        public IndexModel(ICatalogService catalogService)
-        {
-            _catalogService = catalogService;
-        }
+        public IndexModel(ICatalogService catalogService) : base(catalogService) { }
 
-        public Catalog Catalog = new();
         public ListGroup Tags = new();
 
         [BindProperty(SupportsGet = true)]
@@ -26,10 +20,6 @@ namespace Waffle.Pages.Tag
 
         public async Task OnGetAsync()
         {
-            Catalog = await _catalogService.EnsureDataAsync(nameof(Tag), CatalogType.Entry);
-            ViewData["Title"] = Catalog.Name;
-            ViewData["Description"] = Catalog.Description;
-            ViewData["Image"] = Catalog.Thumbnail;
             var tags = await _catalogService.ListTagAsync(new BasicFilterOptions
             {
                 Current = Current,
@@ -37,7 +27,7 @@ namespace Waffle.Pages.Tag
             });
             Tags = new ListGroup
             {
-                Name = Catalog.Name,
+                Name = PageData.Name,
                 Items = GetItems(tags.Data ?? new List<TagListItem>()),
                 HasBadge = true
             };

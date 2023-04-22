@@ -36,21 +36,11 @@
                         <span>@Model.Products.Total</span>
                     </div>
                 </div>
-                <div class="grid grid-cols-4 gap-4 mb-4">
-                    @foreach (var item in Model.Products.Data)
-                    {
-                        <div class="card bg-white shadow rounded">
-                            <div class="card-image">
-                                <img src="@item.Thumbnail" alt="@item.Name" class="object-fit-cover" loading="lazy" />
-                            </div>
-                            <div class="p-2">
-                                <a href="/shop/@item.NormalizedName">
-                                    @item.Name
-                                </a>
-                            </div>
-                        </div>
-                    }
-                </div>
+
+                @await Html.PartialAsync("~/Views/Shared/Components/Feed/Shop.cshtml", new Feed {
+                    Name = "Sản phẩm",
+                    Articles = Model.Products.Data.ToList()
+                })
             }
 
             @if (Model.Albums.Any())

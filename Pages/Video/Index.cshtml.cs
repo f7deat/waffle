@@ -1,26 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 
 namespace Waffle.Pages.Video
 {
-    public class IndexModel : PageModel
+    public class IndexModel : EntryPageModel
     {
-        private readonly ICatalogService _catalogService;
-        public IndexModel(ICatalogService catalogService)
-        {
-            _catalogService = catalogService;
-        }
+        public IndexModel(ICatalogService catalogService) : base(catalogService) { }
 
-        public Catalog Catalog = new();
-
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
-            Catalog = await _catalogService.EnsureDataAsync(nameof(Video), CatalogType.Entry);
-            ViewData["Title"] = Catalog.Name;
-            ViewData["Description"] = Catalog.Description;
-            ViewData["Image"] = Catalog.Thumbnail;
             return Page();
         }
     }

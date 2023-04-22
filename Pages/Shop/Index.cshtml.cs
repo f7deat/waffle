@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
@@ -9,24 +9,18 @@ using Waffle.Models.Components;
 
 namespace Waffle.Pages.Shop
 {
-    public class IndexModel : PageModel
+    public class IndexModel : EntryPageModel
     {
-        private readonly ICatalogService _catalogService;
         private readonly IShopeeService _shopeeService;
 
-        public IndexModel(ICatalogService catalogService, IShopeeService shopeeService)
+        public IndexModel(ICatalogService catalogService, IShopeeService shopeeService) : base(catalogService)
         {
-            _catalogService = catalogService;
-            Shop = new Catalog();
-            Products = new List<Catalog>();
             _shopeeService = shopeeService;
         }
 
-        public IEnumerable<Catalog> Products;
-        public Catalog Shop;
         public ListResult<Catalog>? Categories;
-        public bool HasProduct;
         public BaseInfoAndLinks BaseInfoAndLinks = new();
+        public List<ComponentListItem> Components = new();
 
         [BindProperty(SupportsGet = true)]
         public int Current { get; set; } = 1;
@@ -40,21 +34,9 @@ namespace Waffle.Pages.Shop
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Shop = await _catalogService.EnsureDataAsync(nameof(Shop), CatalogType.Entry);
-            ViewData["Title"] = Shop.Name; 
-            ViewData["Description"] = Shop.Description;
-
-            var catalog = await _catalogService.ListAsync(new CatalogFilterOptions
-            {
-                Active = true,
-                Type = CatalogType.Shop,
-                PageSize = 4
-            });
-            Products = catalog.Data ?? new List<Catalog>();
-
-            HasProduct = Products.Any();
-
             BaseInfoAndLinks = await _shopeeService.GetBaseInfoAndLinksAsync(Current);
+
+            Components = await _catalogService.ListComponentAsync(PageData.Id);
 
             return Page();
         }

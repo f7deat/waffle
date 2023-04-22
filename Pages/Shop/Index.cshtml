@@ -36,24 +36,9 @@
             
             <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
 
-            @if (Model.HasProduct)
+            @foreach (var item in Model.Components)
             {
-                <div class="title">Lựa chọn của biên tập viên</div>
-                <div class="grid md:grid-cols-4 gap-4 mb-4">
-                    @foreach (var item in Model.Products)
-                    {
-                        <div class="card bg-white shadow rounded">
-                            <div class="card-image">
-                                <img src="@item.Thumbnail" alt="@item.Name" class="object-fit-cover" loading="lazy" />
-                            </div>
-                            <div class="p-2">
-                                <a href="/shop/@item.NormalizedName">
-                                    @item.Name
-                                </a>
-                            </div>
-                        </div>
-                    }
-                </div>
+                @await Component.InvokeAsync(item.Name, item.Id)
             }
 
         </div>
