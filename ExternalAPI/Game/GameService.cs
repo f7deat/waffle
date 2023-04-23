@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Waffle.ExternalAPI.Game.Models;
 using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Models;
 
 namespace Waffle.ExternalAPI.Game
 {
@@ -18,6 +19,14 @@ namespace Waffle.ExternalAPI.Game
             var response = await _http.GetStreamAsync($"http://ddragon.leagueoflegends.com/cdn/{version}/data/{lang}/champion.json");
             var data = await JsonSerializer.DeserializeAsync<LoL_Data<LoL_Champion>>(response) ?? new LoL_Data<LoL_Champion>();
             return data?.Data ?? new Dictionary<string, LoL_Champion>();
+        }
+
+        public async Task<List<EpicGamesElement>> GetEpicGamesFreeGamesPromotionsAsync()
+        {
+            var url = "https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=en-US&country=VN&allowCountries=VN";
+            var response = await _http.GetStreamAsync(url);
+            var data = await JsonSerializer.DeserializeAsync<EpicGamesFreeGamesPromotions>(response);
+            return data?.Data.Catalog.SearchStore.Elements ?? new();
         }
 
         public async Task<List<string>> LOL_GetLanguagesAsync()

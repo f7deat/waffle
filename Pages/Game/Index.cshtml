@@ -2,6 +2,31 @@
 @model Waffle.Pages.Game.IndexModel
 
 <div class="container">
+
+    <div class="mb-4">
+        <div class="title">Game miễn phí</div>
+        <div class="grid xl:grid-cols-5 gap-4 grid-cols-2">
+            @foreach (var item in Model.EpicGamesFree)
+            {
+                <div class="bg-white">
+                    <div>
+                        <img src="@item.Thumbnail" alt="@item.Title" />
+                    </div>
+                    <div class="font-medium">
+                        <a href="https://store.epicgames.com/en-US/p/@item.UrlSlug" rel="nofollow">@item.Title</a>
+                    </div>
+                    <div class="text-sm text-right">
+                        <s class="text-red-500">@item.Price.TotalPrice.FmtPrice.OriginalPrice</s>
+                        <span>0đ</span>
+                    </div>
+                    <div class="text-sm text-gray-500 line-clampin">
+                        @item.Description
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
     @foreach (var component in Model.Components)
     {
         @await Component.InvokeAsync(component.Name, component.Id)

@@ -850,6 +850,10 @@ p {
     .grid-cols-3 {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+
+    .xl\:grid-cols-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
 }
 
 @media screen and (min-width: 1536px) {

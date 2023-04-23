@@ -2,11 +2,10 @@
     display: none;
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 1rem;
 }
 
 .navbar .show {
-    display: flex;
     position: fixed;
     top: 0;
     left: 0;
@@ -16,11 +15,13 @@
     flex-direction: column;
     align-items: start;
     z-index: 100;
+    display: flex;
 }
 
 @media screen and (min-width: 768px) {
 
     .navbar-menu {
+        gap: 2rem;
         display: flex;
     }
 
@@ -31,4 +32,11 @@
         flex-direction: row;
     }
 
+    .navbar-menu a {
+        color: var(--gray-600);
+    }
+
+    .navbar-menu a:hover {
+        color: var(--dark);
+    }
 }
