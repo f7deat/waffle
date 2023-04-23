@@ -1,5 +1,5 @@
 ﻿@page
-@using Waffle.Models.Components
+@using Waffle.Models.Components.Specifications
 @model Waffle.Pages.Tag.IndexModel
 
 <div class="container">
@@ -9,7 +9,8 @@
             <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
         </div>
         <div class="w-1/3">
-            @await Component.InvokeAsync(nameof(ArticlePicker))
+            @await Component.InvokeAsync(nameof(ArticleSpotlight))
+            @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))
         </div>
     </div>
 </div>

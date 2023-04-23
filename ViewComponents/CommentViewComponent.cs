@@ -12,6 +12,7 @@ namespace Waffle.ViewComponents
         {
             _catalogService = catalogService;
         }
+
         public async Task<IViewComponentResult> InvokeAsync(Guid catalogId)
         {
             var catalog = await _catalogService.FindAsync(catalogId);

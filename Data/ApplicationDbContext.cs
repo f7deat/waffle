@@ -17,7 +17,6 @@ namespace Waffle.Data
         public virtual DbSet<Catalog> Catalogs { get; set; }
         public virtual DbSet<Component> Components { get; set; }
         public virtual DbSet<FileContent> FileContents { get; set; }
-        public virtual DbSet<FileItem> FileItems { get; set; }
         public virtual DbSet<WorkContent> WorkContents { get; set; }
         public virtual DbSet<WorkItem> WorkItems { get; set; }
         public virtual DbSet<AppSetting> AppSettings { get; set; }
@@ -27,7 +26,6 @@ namespace Waffle.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<FileItem>().HasKey(k => new { k.FileId, k.ItemId });
             builder.Entity<WorkItem>().HasKey(k => new { k.WorkId, k.CatalogId });
         }
     }

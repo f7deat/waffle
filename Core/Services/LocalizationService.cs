@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 
@@ -12,14 +9,12 @@ namespace Waffle.Core.Services
 {
     public class LocalizationService : ILocalizationService
     {
-        private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly ILocalizationRepository _localizationRepository;
         private readonly IMemoryCache _memoryCache;
 
-        public LocalizationService(ApplicationDbContext context, IConfiguration configuration, ILocalizationRepository localizationRepository, IMemoryCache memoryCache)
+        public LocalizationService(IConfiguration configuration, ILocalizationRepository localizationRepository, IMemoryCache memoryCache)
         {
-            _context = context;
             _configuration = configuration;
             _localizationRepository = localizationRepository;
             _memoryCache = memoryCache;
@@ -28,7 +23,7 @@ namespace Waffle.Core.Services
         public async Task<IdentityResult> AddAsync(Localization args)
         {
             var lang = _configuration.GetValue<string>("language");
-            if (await _context.Localizations.AnyAsync(x => x.Language.Equals(lang) && x.Key.Equals(args.Key)))
+            if (await _localizationRepository.IsExistAsync(lang, args.Key))
             {
                 return IdentityResult.Failed(new IdentityError
                 {
@@ -62,7 +57,7 @@ namespace Waffle.Core.Services
             if (!_memoryCache.TryGetValue($"{cacheKey}", out string cacheValue))
             {
                 var lang = _configuration.GetValue<string>("language");
-                var i18n = await _context.Localizations.FirstOrDefaultAsync(x => x.Key.ToLower().Equals(key.ToLower()) && x.Language.Equals(lang));
+                var i18n = await _localizationRepository.FindAsync(key, lang);
                 if (i18n is null)
                 {
                     i18n = new Localization
@@ -84,7 +79,7 @@ namespace Waffle.Core.Services
         public async Task<ListResult<Localization>> GetListAsync(LocalizationFilterOptions filterOptions)
         {
             var lang = _configuration.GetValue<string>("language");
-            var query = _context.Localizations.Where(x => x.Language.Equals(lang) && (string.IsNullOrEmpty(filterOptions.Key) || x.Key.ToLower().Contains(filterOptions.Key.ToLower()))).OrderBy(x => x.Key);
+            var query = _localizationRepository.GetListAsync(lang, filterOptions.Key);
             return await ListResult<Localization>.Success(query, filterOptions);
         }
 
@@ -96,7 +91,7 @@ namespace Waffle.Core.Services
                 return IdentityResult.Failed();
             }
             localization.Value = args.Value;
-            await _context.SaveChangesAsync();
+            await _localizationRepository.SaveChangesAsync();
             return IdentityResult.Success;
         }
     }

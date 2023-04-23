@@ -1,7 +1,8 @@
-﻿@model List<Waffle.Models.ComponentListItem>
+﻿@page
+@model Waffle.Pages.IndexModel
 
 <main class="wf-home">
-    @foreach (var item in Model)
+    @foreach (var item in Model.Components)
     {
         @await Component.InvokeAsync(item.Name, item.Id)
     }

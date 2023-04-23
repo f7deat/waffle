@@ -137,7 +137,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> UpdateAsync(Component args)
         {
-            var component = await _context.Components.FindAsync(args.Id);
+            var component = await FindAsync(args.Id);
             if (component is null)
             {
                 return IdentityResult.Failed(new IdentityError

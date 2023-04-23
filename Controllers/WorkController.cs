@@ -373,30 +373,6 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
-        [HttpPost("card/save")]
-        public async Task<IActionResult> SaveCardAsync([FromBody] Card model)
-        {
-            var workContent = await _workService.FindAsync(model.Id);
-            if (workContent is null)
-            {
-                return BadRequest();
-            }
-            if (model.Image != null)
-            {
-                if (await _context.FileContents.AnyAsync(x => x.Id == model.Image.Id))
-                {
-                    await _context.FileItems.AddAsync(new FileItem
-                    {
-                        FileId = model.Image.Id,
-                        ItemId = workContent.Id
-                    });
-                }
-            }
-            workContent.Arguments = JsonSerializer.Serialize(model);
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
-
         [HttpGet("card/{id}")]
         public async Task<IActionResult> GetCardAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Card>(id));
 

@@ -28,7 +28,7 @@ namespace Waffle.Controllers
         public async Task<IActionResult> GetViewCountAsync() => Ok(await _context.Catalogs.SumAsync(x => x.ViewCount));
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Catalogs.FindAsync(id));
+        public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _catalogService.FindAsync(id));
 
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync([FromBody] Catalog catalog) => Ok(await _catalogService.AddAsync(catalog));
@@ -154,5 +154,8 @@ namespace Waffle.Controllers
         { 
             Name = filterOptions.SearchTerm,
         }));
+
+        [HttpGet("pie-chart")]
+        public async Task<IActionResult> PieChartAsync() => Ok(await _catalogService.PieChartAsync());
     }
 }

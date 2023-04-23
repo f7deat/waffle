@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -14,15 +15,17 @@ namespace Waffle.Core.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IComponentService _componentService;
-        public WorkService(ApplicationDbContext context, IComponentService componentService)
+        private readonly IWorkContentRepository _workContentRepository;
+        public WorkService(ApplicationDbContext context, IComponentService componentService, IWorkContentRepository workContentRepository)
         {
             _context = context;
             _componentService = componentService;
+            _workContentRepository = workContentRepository;
         }
 
         public async Task<IdentityResult> ActiveAsync(Guid id)
         {
-            var workItem = await _context.WorkContents.FindAsync(id);
+            var workItem = await FindAsync(id);
             if (workItem is null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -37,7 +40,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> BloggerSaveAsync(Blogger model)
         {
-            var work = await _context.WorkContents.FindAsync(model.Id);
+            var work = await FindAsync(model.Id);
             if (work is null)
             {
                 return IdentityResult.Failed();
@@ -49,7 +52,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> ColumnAddAsync(Column column)
         {
-            var row = await _context.WorkContents.FindAsync(column.RowId);
+            var row = await FindAsync(column.RowId);
             if (row is null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -62,7 +65,7 @@ namespace Waffle.Core.Services
             {
                 Active = true,
                 Arguments = JsonSerializer.Serialize(column),
-                Name = column.ClassName,
+                Name = column.ClassName ?? string.Empty,
                 ComponentId = component.Id,
                 ParentId = column.RowId
             };
@@ -73,7 +76,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> DeleteAsync(Guid id)
         {
-            var workContent = await _context.WorkContents.FindAsync(id);
+            var workContent = await FindAsync(id);
             if (workContent is null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -103,7 +106,7 @@ namespace Waffle.Core.Services
             return await query.ToListAsync();
         }
 
-        public async Task<WorkContent?> FindAsync(Guid id) => await _context.WorkContents.FindAsync(id);
+        public async Task<WorkContent?> FindAsync(Guid id) => await _workContentRepository.FindAsync(id);
 
         public async Task<T?> GetAsync<T>(Guid id)
         {
@@ -168,7 +171,7 @@ namespace Waffle.Core.Services
                 });
             }
             navbar.Layout = args.Layout;
-            var work = await _context.WorkContents.FindAsync(args.Id);
+            var work = await FindAsync(args.Id);
             if (work == null)
             {
                 return IdentityResult.Failed();
@@ -179,7 +182,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> SaveColumnAsync(Column item)
         {
-            var work = await _context.WorkContents.FindAsync(item.Id);
+            var work = await FindAsync(item.Id);
             if (work is null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -194,7 +197,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> SaveContactFormAsync(ContactForm item)
         {
-            var workContent = await _context.WorkContents.FindAsync(item.Id);
+            var workContent = await FindAsync(item.Id);
             if (workContent is null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -209,7 +212,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> SaveRowAsync(Row row)
         {
-            var workContent = await _context.WorkContents.FindAsync(row.Id);
+            var workContent = await FindAsync(row.Id);
             if (workContent is null)
             {
                 return IdentityResult.Failed();
@@ -221,7 +224,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> SaveTagAsync(Tag tag)
         {
-            var work = await _context.WorkContents.FindAsync(tag.Id);
+            var work = await FindAsync(tag.Id);
             if (work is null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -284,7 +287,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> SaveArgumentsAsync(Guid id, object args)
         {
-            var work = await _context.WorkContents.FindAsync(id);
+            var work = await FindAsync(id);
             if (work == null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -311,7 +314,7 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> UpdateSummaryAsync(WorkContent args)
         {
-            var work = await _context.WorkContents.FindAsync(args.Id);
+            var work = await FindAsync(args.Id);
             if (work == null)
             {
                 return IdentityResult.Failed(new IdentityError
@@ -337,7 +340,7 @@ namespace Waffle.Core.Services
             }
             if (await _context.WorkItems.CountAsync(x => x.WorkId == args.WorkId) == 1)
             {
-                var work = await _context.WorkContents.FindAsync(args.WorkId);
+                var work = await FindAsync(args.WorkId);
                 if (work != null)
                 {
                     _context.WorkContents.Remove(work);

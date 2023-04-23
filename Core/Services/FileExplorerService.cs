@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -12,26 +9,9 @@ namespace Waffle.Core.Services
     public class FileExplorerService : IFileExplorerService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        public FileExplorerService(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public FileExplorerService(ApplicationDbContext context)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
-        }
-
-        public async Task<IdentityResult> DeleteFileItemAsync(FileItem item)
-        {
-            var fileItem = await _context.FileItems.FirstOrDefaultAsync(x => x.ItemId == item.ItemId && x.FileId == item.FileId);
-            if (fileItem is null)
-            {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "File not found!"
-                });
-            }
-            _context.FileItems.Remove(item);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
         }
 
         public async Task<ListResult<FileContent>> ListAsync(FileFilterOptions filterOptions)
@@ -54,29 +34,6 @@ namespace Waffle.Core.Services
             });
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
-        }
-
-        public async Task RemoveFromItemAsync(Guid itemId)
-        {
-            if (!await _context.FileItems.AnyAsync(x => x.ItemId == itemId))
-            {
-                return;
-            }
-            var fileItem = await _context.FileItems.FirstAsync(x => x.ItemId == itemId);
-            if (await _context.FileItems.CountAsync(x => x.ItemId == itemId) == 1)
-            {
-                var fileContents = await _context.FileContents.FindAsync(fileItem.FileId);
-                if (fileContents != null)
-                {
-                    var path = Path.Combine(_webHostEnvironment.WebRootPath, fileContents.Url);
-                    if (File.Exists(path))
-                    {
-                        File.Delete(path);
-                    }
-                    _context.FileContents.Remove(fileContents);
-                }
-            }
-            _context.FileItems.Remove(fileItem);
         }
     }
 }

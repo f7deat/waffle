@@ -175,6 +175,7 @@ namespace Waffle.Core.Services
                 });
             }
             catalog.Name = args.Name;
+            catalog.NormalizedName = args.NormalizedName;
             catalog.Type = args.Type;
             catalog.Active = args.Active;
             catalog.ModifiedDate = DateTime.Now;
@@ -294,6 +295,15 @@ namespace Waffle.Core.Services
                 PostCount = _context.WorkItems.Count(y => y.CatalogId == x.Id)
             }).OrderByDescending(x => x.Id);
             return await ListResult<TagListItem>.Success(query, filterOptions);
+        }
+
+        public async Task<object?> PieChartAsync()
+        {
+            return await _context.Catalogs.GroupBy(x => x.Type).Select(x => new
+            {
+                label = x.Key.ToString(),
+                value = x.Count()
+            }).ToListAsync();
         }
     }
 }

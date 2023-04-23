@@ -5,25 +5,8 @@ using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
-    public class CardViewComponent : ViewComponent
+    public class CardViewComponent : BaseViewComponent<Card>
     {
-        private readonly IWorkService _workService;
-        public CardViewComponent(IWorkService workService)
-        {
-            _workService = workService;
-        }
-
-        public async Task<IViewComponentResult> InvokeAsync(Guid id)
-        {
-            var card = await _workService.GetAsync<Card>(id);
-            if (card is null)
-            {
-                return View(Empty.DefaultView, new ErrorViewModel
-                {
-                    RequestId = id.ToString(),
-                });
-            }
-            return View(card);
-        }
+        public CardViewComponent(IWorkService workService) : base(workService) { }
     }
 }

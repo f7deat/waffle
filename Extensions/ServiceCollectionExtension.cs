@@ -20,6 +20,8 @@ namespace Waffle.Extensions
             services.AddScoped<ILocalizationRepository, LocalizationRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWorkService, WorkService>();
+            services.AddScoped<IWorkContentRepository, WorkItemRepository>();
+            services.AddScoped<IFileContentRepository, FileContentRepository>();
         }
     }
 }

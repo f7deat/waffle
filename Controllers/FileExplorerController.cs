@@ -47,9 +47,6 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
-        [HttpPost("delete-file-item")]
-        public async Task<IActionResult> DeleteFileItemAsync([FromBody] FileItem fileItem) => Ok(await _fileExplorerService.DeleteFileItemAsync(fileItem));
-
         [HttpPost("upload")]
         public async Task<IActionResult> UploadAsync([FromForm] IFormFile file)
         {
@@ -78,26 +75,6 @@ namespace Waffle.Controllers
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.FileContents.FindAsync(id));
-
-        [HttpGet("file-items/{id}")]
-        public async Task<IActionResult> GetFileItemsAsync([FromRoute] Guid id)
-        {
-            var fileContent = from a in _context.FileItems
-                              join b in _context.WorkContents on a.ItemId equals b.Id
-                              join c in _context.Components on b.ComponentId equals c.Id
-                              where a.FileId == id
-                              select new WorkListItem
-                              {
-                                  Id = a.ItemId,
-                                  Name = b.Name,
-                                  NormalizedName = c.NormalizedName,
-                              };
-            return Ok(new
-            {
-                data = await fileContent.ToListAsync(),
-                total = await fileContent.CountAsync()
-            });
-        }
 
         [HttpPost("upload-from-url")]
         public async Task<IActionResult> UploadFromUrlAsync([FromBody] FileContent file) => Ok(await _fileExplorerService.UploadFromUrlAsync(file.Url));
