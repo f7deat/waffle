@@ -53,6 +53,7 @@ namespace Waffle.Entities
         Blogspot = 7,
         Album = 8,
         Tag = 9,
-        Video = 10
+        Video = 10,
+        Game = 11
     }
 }

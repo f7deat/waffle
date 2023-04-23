@@ -29,6 +29,20 @@ namespace Waffle.ExternalAPI.Game
             return data?.Data.Catalog.SearchStore.Elements ?? new();
         }
 
+        public async Task<EpicGamesProduct?> GetEpicGamesProductAsync(string normalizedName)
+        {
+            try
+            {
+                var url = $"https://store-content-ipv4.ak.epicgames.com/api/en-US/content/products/{normalizedName}";
+                var response = await _http.GetStreamAsync(url);
+                return await JsonSerializer.DeserializeAsync<EpicGamesProduct>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
         public async Task<List<string>> LOL_GetLanguagesAsync()
         {
             var response = await _http.GetStreamAsync("https://ddragon.leagueoflegends.com/cdn/languages.json");

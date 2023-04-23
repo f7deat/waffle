@@ -9,5 +9,6 @@ namespace Waffle.ExternalAPI.Interfaces
         Task<List<string>> LOL_GetLanguagesAsync();
         Task<IDictionary<string, LoL_Champion>> GetChampionsAsync(string version, string lang);
         Task<List<EpicGamesElement>> GetEpicGamesFreeGamesPromotionsAsync();
+        Task<EpicGamesProduct?> GetEpicGamesProductAsync(string normalizedName);
     }
 }

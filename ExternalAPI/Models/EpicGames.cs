@@ -68,4 +68,42 @@ namespace Waffle.ExternalAPI.Models
         [JsonPropertyName("originalPrice")]
         public string? OriginalPrice { get; set; }
     }
+
+    public class EpicGamesProduct
+    {
+        [JsonPropertyName("productName")]
+        public string? ProductName { get; set; }
+        [JsonPropertyName("_slug")]
+        public string? Slug { get; set;}
+        [JsonPropertyName("pages")]
+        public List<EpicGamesPage> Pages { get; set; } = new();
+        [JsonPropertyName("_images_")]
+        public List<string> Images { get; set; } = new();
+    }
+
+    public class EpicGamesPage
+    {
+        [JsonPropertyName("data")]
+        public EpicGamesProductData Data { get; set; } = new();
+    }
+
+    public class EpicGamesProductData
+    {
+        [JsonPropertyName("about")]
+        public EpicGamesAbout About { get; set; } = new();
+    }
+
+    public class EpicGamesAbout
+    {
+        [JsonPropertyName("shortDescription")]
+        public string? ShortDescription { get; set; }
+        [JsonPropertyName("image")]
+        public EpicGamesImage Image { get; set; } = new();
+    }
+
+    public class EpicGamesImage
+    {
+        [JsonPropertyName("src")]
+        public string? Src { get; set; }
+    }
 }
