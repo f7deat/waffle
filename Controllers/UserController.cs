@@ -117,6 +117,20 @@ namespace Waffle.Controllers
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model) => Ok(await _userService.ChangePasswordAsync(model));
 
+        [HttpPost("delete/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user is null)
+            {
+                return Ok(IdentityResult.Failed(new IdentityError
+                {
+                    Description = "User not found"
+                }));
+            }
+            return Ok(await _userManager.DeleteAsync(user));
+        }
+
         [HttpGet("initial"), AllowAnonymous]
         public async Task<IActionResult> InitialAsync()
         {

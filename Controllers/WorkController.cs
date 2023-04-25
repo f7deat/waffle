@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.IO;
 using System.Text.Json;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
@@ -59,6 +60,9 @@ namespace Waffle.Controllers
 
         [HttpPost("summary/update")]
         public async Task<IActionResult> UpdateSummaryAsync([FromBody] WorkContent args) => Ok(await _workService.UpdateSummaryAsync(args));
+
+        [HttpGet("list-unuse")]
+        public async Task<IActionResult> GetListUnuseAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListUnuseAsync(filterOptions));
 
         [HttpGet("list")]
         public async Task<IActionResult> GetListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListAsync(filterOptions));

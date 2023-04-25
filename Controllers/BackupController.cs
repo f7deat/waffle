@@ -182,6 +182,7 @@ namespace Waffle.Controllers
         {
             await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
             await _componentService.EnsureComponentAsync(nameof(ArticleSpotlight));
+            await _componentService.EnsureComponentAsync("Block");
             await _componentService.EnsureComponentAsync(nameof(BlockEditor));
             await _componentService.EnsureComponentAsync(nameof(Card));
             await _componentService.EnsureComponentAsync(nameof(ContactForm));

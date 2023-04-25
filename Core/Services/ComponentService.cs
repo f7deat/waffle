@@ -147,6 +147,7 @@ namespace Waffle.Core.Services
             }
             component.Active = args.Active;
             component.Name = args.Name;
+            component.NormalizedName = args.NormalizedName;
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
         }

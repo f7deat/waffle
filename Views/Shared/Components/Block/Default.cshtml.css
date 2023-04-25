@@ -1,0 +1,9 @@
+﻿.video-player {
+    height: 350px;
+}
+
+@media screen and (min-width: 768px) {
+    .video-player {
+        height: 550px;
+    }
+}

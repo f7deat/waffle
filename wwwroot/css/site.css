@@ -158,6 +158,10 @@ p {
     overflow: hidden;
 }
 
+.cdx-marker {
+    background-color: rgba(245,235,111,0.29);
+}
+
 .absolute {
     position: absolute;
 }

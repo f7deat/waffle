@@ -35,5 +35,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<List<T>> GetListChildAsync<T>(Guid parentId);
         IEnumerable<T?> ListAsync<T>(List<string> list);
         Task<ListResult<WorkListItem>> ListBySettingIdAsync(Guid id);
+        Task<object?> GetListUnuseAsync(BasicFilterOptions filterOptions);
     }
 }

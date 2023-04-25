@@ -397,5 +397,17 @@ namespace Waffle.Core.Services
                         };
             return await ListResult<WorkListItem>.Success(query, new BasicFilterOptions());
         }
+
+        public async Task<object?> GetListUnuseAsync(BasicFilterOptions filterOptions)
+        {
+            var query = from a in _context.WorkContents
+                        join b in _context.WorkItems on a.Id equals b.WorkId into g
+                        from g2 in g.DefaultIfEmpty()
+                        where g2 == null && (a.ParentId == null || a.ParentId == Guid.Empty)
+                        select a;
+            return new { 
+                data = await query.ToListAsync()
+            };
+        }
     }
 }
