@@ -160,15 +160,6 @@ namespace Waffle.Controllers
             return Ok(IdentityResult.Success);
         }
 
-        [HttpPost("blogger/save")]
-        public async Task<IActionResult> SaveBloggerAsync([FromBody] Blogger model)
-        {
-            var app = await _appSettingService.EnsureSettingAsync(nameof(Blogger));
-            app.Value = JsonSerializer.Serialize(model);
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
-
         [HttpGet("footer/{id}")]
         public async Task<IActionResult> GetFooterAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Footer>(id));
 

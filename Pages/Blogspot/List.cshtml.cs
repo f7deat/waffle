@@ -13,13 +13,9 @@ namespace Waffle.Pages.Blogspot
     public class ListModel : PageModel
     {
         private readonly ICatalogService _catalogService;
-        private readonly IGoogleService _googleService;
-        private readonly IWorkService _workService;
-        public ListModel(ICatalogService catalogService, IGoogleService googleService, IWorkService workService)
+        public ListModel(ICatalogService catalogService)
         {
             _catalogService = catalogService;
-            _googleService = googleService;
-            _workService = workService;
             BlogUrl = string.Empty;
             Pagination = new Pagination();
         }
@@ -54,20 +50,6 @@ namespace Waffle.Pages.Blogspot
             ViewData["Desctiption"] = Catalog.Description;
             Components = await _catalogService.ListComponentAsync(Catalog.Id);
 
-            var blogger = await _workService.GetAsync<Blogger>(Components.First().Id);
-            if (blogger is null)
-            {
-                return NotFound();
-            }
-            var response = await _googleService.BloggerPostsAsync(blogger.BlogId, blogger.ApiKey, 10, Request.Query["pageToken"], Request.Query["labels"]);
-            if (response is null || response.Items is null)
-            {
-                return NotFound();
-            }
-            Posts = response.Items;
-
-            NextPageToken = response.NextPageToken;
-            PrevPageToken = response.PrevPageToken;
             Pagination = new Pagination
             {
                 HasPrevPage = HasPrevPage,
@@ -79,20 +61,5 @@ namespace Waffle.Pages.Blogspot
         }
 
         public string GetUrl(string path) => $"/blogspot/{NormalizedName}{path}";
-
-        private static IEnumerable<ListGroupItem> GetItems(List<BloggerItem> items, string? normalizedName)
-        {
-            foreach (var item in items)
-            {
-                yield return new ListGroupItem
-                {
-                    Link = new Link
-                    {
-                        Href = $"/blogspot/{normalizedName}{item.Path}",
-                        Name = item.Title ?? string.Empty
-                    }
-                };
-            }
-        }
     }
 }

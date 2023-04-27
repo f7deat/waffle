@@ -415,12 +415,6 @@ namespace Waffle.Controllers
         [HttpPost("tag/save")]
         public async Task<IActionResult> SaveTagAsync([FromBody] Tag tag) => Ok(await _workService.SaveTagAsync(tag));
 
-        [HttpGet("blogger/{id}")]
-        public async Task<IActionResult> BloggerGetAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Blogger>(id));
-
-        [HttpPost("blogger/save")]
-        public async Task<IActionResult> BloggerSaveAsync([FromBody] Blogger model) => Ok(await _workService.BloggerSaveAsync(model));
-
         [HttpGet("list-group/{id}")]
         public async Task<IActionResult> GetListGroupAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<ListGroup>(id));
 

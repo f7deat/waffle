@@ -6,14 +6,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Waffle.Pages.User
+namespace Waffle.Pages.User.Login
 {
-    public class LoginModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
-        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public IndexModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -59,7 +59,7 @@ namespace Waffle.Pages.User
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
-                    expires: DateTime.Now.AddDays(1),
+                    expires: DateTime.Now.AddDays(7),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );

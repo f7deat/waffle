@@ -41,8 +41,11 @@
                     </button>
                     @if (Model.IsAuthenticated)
                     {
-                        <a href="/user" class="h-12 w-12 flex items-center justify-center">
+                        <a href="/user" class="h-12 w-12 flex items-center justify-center text-dark">
                             <i class="fas fa-user"></i>
+                        </a>
+                        <a href="/shop/cart" class="h-12 w-12 flex items-center justify-center text-dark">
+                            <i class="fas fa-cart-shopping"></i>
                         </a>
                     }
                 </div>

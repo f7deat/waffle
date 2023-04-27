@@ -36,7 +36,7 @@ namespace Waffle.Pages.Tag
             {
                 Current = Current,
                 Name = SearchTerm,
-                Type = CatalogType.Shop
+                Type = CatalogType.Product
             });
 
             var albums = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions

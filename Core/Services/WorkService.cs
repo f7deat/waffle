@@ -38,18 +38,6 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
-        public async Task<IdentityResult> BloggerSaveAsync(Blogger model)
-        {
-            var work = await FindAsync(model.Id);
-            if (work is null)
-            {
-                return IdentityResult.Failed();
-            }
-            work.Arguments = JsonSerializer.Serialize(model);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
-        }
-
         public async Task<IdentityResult> ColumnAddAsync(Column column)
         {
             var row = await FindAsync(column.RowId);

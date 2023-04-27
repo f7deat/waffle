@@ -43,6 +43,8 @@ namespace Waffle.Models.Components
         public string? Caption { get; set; }
         [JsonPropertyName("withBackground")]
         public bool WithBackground { get; set; }
+        [JsonPropertyName("blogger")]
+        public Blogger Blogger { get; set; } = new();
     }
 
     public class BlockEditorMeta
@@ -61,6 +63,14 @@ namespace Waffle.Models.Components
         public string? Url { get; set; }
     }
 
+    public class Blogger
+    {
+        [JsonPropertyName("blogId")]
+        public string? BlogId { get; set; }
+        [JsonPropertyName("postId")]
+        public string? PostId { get; set; }
+    }
+
     public class BlockEditorType {
         public const string PARAGRAPH = "paragraph";
         public const string HEADER = "header";
@@ -71,5 +81,7 @@ namespace Waffle.Models.Components
         public const string LIST = "list";
         public const string SIMPLE_IMAGE = "simpleImage";
         public const string QUOTE = "quote";
+        public const string BLOGGER = "blogger";
+        public const string YOUTUBE = "youtube";
     }
 }

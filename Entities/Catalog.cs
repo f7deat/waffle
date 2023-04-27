@@ -45,7 +45,7 @@ namespace Waffle.Entities
     {
         Default = 0,
         Article = 1,
-        Shop = 2,
+        Product = 2,
         Setting,
         Entry = 4,
         ArticleCategoy,
