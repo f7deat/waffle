@@ -4,7 +4,6 @@ using Waffle.ExternalAPI.GoogleAggregate;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Models.Components;
-using Blogger = Waffle.Models.Components.Blogger;
 
 namespace Waffle.ViewComponents
 {

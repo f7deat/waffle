@@ -277,7 +277,7 @@ namespace Waffle.Core.Services
                         where a.CatalogId == tagId && b.Active &&
                         (string.IsNullOrEmpty(searchTerm) || b.NormalizedName.Contains(searchTerm)) &&
                         (filterOptions.Type == null || b.Type == filterOptions.Type)
-                        orderby b.Id descending
+                        orderby b.ModifiedDate descending
                         select b;
             return await ListResult<Catalog>.Success(query, filterOptions);
         }

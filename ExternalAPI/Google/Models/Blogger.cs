@@ -1,18 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using Waffle.Entities;
 
 namespace Waffle.ExternalAPI.Google.Models
 {
-    public class Blogger : BaseEntity
-    {
-        [JsonPropertyName("apiKey")]
-        public string? ApiKey { get; set; }
-        [JsonPropertyName("blogId")]
-        public string? BlogId { get; set; }
-        [JsonPropertyName("normalizedName")]
-        public string? NormalizedName { get; set; }
-    }
-
     public class BloggerListResult<T> where T : class
     {
         [JsonPropertyName("nextPageToken")]
