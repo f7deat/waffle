@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 
-namespace Waffle.Pages.Shop.Cart
+namespace Waffle.Pages.Shop.Checkout
 {
     public class IndexModel : PageModel
     {
@@ -14,18 +14,20 @@ namespace Waffle.Pages.Shop.Cart
         }
 
         [BindProperty(SupportsGet = true)]
-        public Guid ProductId { get; set; }
+        public List<Guid> ProductIds { get; set; } = new();
 
-        public Catalog Product = new();
+        public List<Catalog> Products { get; set; } = new();
 
         public async Task OnGetAsync()
         {
-            Product = await _catalogService.FindAsync(ProductId) ?? new();
-        }
-
-        public IActionResult OnPost()
-        {
-            return Redirect($"/shop/checkout?productIds={ProductId}");
+            foreach (var productId in ProductIds)
+            {
+                var product = await _catalogService.FindAsync(productId);
+                if (product != null)
+                {
+                    Products.Add(product);
+                }
+            }
         }
     }
 }

@@ -166,6 +166,10 @@ p {
     background-color: rgba(245,235,111,0.29);
 }
 
+.video-player {
+    margin-top: 0.5rem;
+}
+
 .absolute {
     position: absolute;
 }
@@ -805,7 +809,7 @@ p {
         width: 25%;
     }
 
-    .w-1\/2 {
+    .md\:w-1\/2 {
         width: 50%;
     }
 
@@ -835,6 +839,11 @@ p {
 
     .grid-cols-3 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .md\:text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
     }
 }
 

@@ -9,11 +9,11 @@
             @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
             <div class="title">@Model.PageData.Name</div>
             <div class="bg-white rounded mb-4">
-                <div class="wf-row">
-                    <div class="w-1/3">
+                <div class="md:flex gap-4">
+                    <div class="md:w-1/3">
                         <img src="@Model.PageData.Thumbnail" loading="lazy" alt="@Model.PageData.Name" />
                     </div>
-                    <div class="w-2/3">
+                    <div class="md:w-2/3">
                         <h1 class="text-xl font-bold mb-2">@Model.PageData.Name</h1>
                         <div class="text-red-500 flex gap-2 text-sm mb-4">
                             <i class="fas fa-star"></i>
@@ -25,9 +25,13 @@
                         <div class="text-gray-500 mb-4">
                             @Model.PageData.Description
                         </div>
-                        <div class="flex mb-4 gap-4">
-                            <a href="#" class="btn btn-primary">
-                                <i class="fas fa-cart-shopping"></i>
+                        <div class="md:flex mb-4 gap-4">
+                            <a href="/shop/cart?productId=@Model.PageData.Id" class="btn border block mb-2">
+                                <i class="fas fa-cart-shopping mr-2"></i>
+                                <span>Thêm vào giỏ hàng</span>
+                            </a>
+                            <a href="/shop/checkout?productIds=@Model.PageData.Id" class="btn btn-primary block mb-2">
+                                <i class="fas fa-cart-shopping mr-2"></i>
                                 <span>Mua ngay</span>
                             </a>
                         </div>
