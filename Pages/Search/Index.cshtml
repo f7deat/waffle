@@ -1,6 +1,7 @@
 ﻿@page
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
+@using Waffle.Models.Components.Lister
 @model Waffle.Pages.Search.IndexModel
 
 <div class="container">
@@ -55,6 +56,12 @@
                     Không có dữ liệu
                 </div>
             }
+
+            @await Html.PartialAsync("/Views/Shared/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
+                Title = "Playlist",
+                PlaylistItems = Model.PlaylistItems
+            })
+
             @if (!string.IsNullOrWhiteSpace(Model.FilterOptions.SearchTerm))
             {
                 <div class="mb-4 quote">

@@ -4,6 +4,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.Components.Lister;
 
 namespace Waffle.Pages.Search
 {
@@ -25,6 +26,7 @@ namespace Waffle.Pages.Search
         [BindProperty(SupportsGet = true)]
         public SearchFilterOptions FilterOptions { get; set; }
         public ListResult<Catalog> Articles = new();
+        public List<PlaylistItem> PlaylistItems = new();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -38,6 +40,25 @@ namespace Waffle.Pages.Search
                 Current = FilterOptions.Current,
                 Name = FilterOptions.SearchTerm
             });
+
+            var videos = await _catalogService.ListAsync(new CatalogFilterOptions
+            {
+                Name = FilterOptions.SearchTerm,
+                Current = FilterOptions.Current,
+                Active = true,
+                Type = CatalogType.Video,
+                PageSize = 4
+            });
+
+            PlaylistItems = videos.Data?.Select(x => new PlaylistItem
+            {
+                Name = x.Name,
+                Date = x.ModifiedDate.ToString("D"),
+                Thumbnail = x.Thumbnail,
+                ViewCount = x.ViewCount.ToString("N0"),
+                Url = $"/{CatalogType.Video}/{x.NormalizedName}".ToLower()
+            }).ToList() ?? new() ;
+
             return Page();
         }
 

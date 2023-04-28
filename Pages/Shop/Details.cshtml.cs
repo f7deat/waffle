@@ -4,6 +4,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.Pages.Shop
@@ -21,6 +22,7 @@ namespace Waffle.Pages.Shop
             _workService = workService;
         }
 
+        public List<WorkListItem> Works = new();
         public IEnumerable<Catalog> Tags = new List<Catalog>();
         public IEnumerable<Link?> ReferalLinks = new List<Link>();
 
@@ -28,6 +30,7 @@ namespace Waffle.Pages.Shop
         {
             Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
             ReferalLinks = await GetLinksAsync() ?? new List<Link>();
+            Works = await GetBlockEditorsAsync();
             return Page();
         }
 
@@ -41,6 +44,22 @@ namespace Waffle.Pages.Shop
                         orderby a.SortOrder ascending
                         select b.Arguments;
             return _workService.ListAsync<Link>(await works.ToListAsync());
+        }
+
+        private async Task<List<WorkListItem>> GetBlockEditorsAsync()
+        {
+            var query = from a in _context.WorkItems
+                        join b in _context.WorkContents on a.WorkId equals b.Id
+                        join c in _context.Components on b.ComponentId equals c.Id
+                        where a.CatalogId == PageData.Id && b.Active
+                        orderby a.SortOrder
+                        select new WorkListItem
+                        {
+                            Id = b.Id,
+                            Name = b.Name,
+                            NormalizedName = c.NormalizedName
+                        };
+            return await query.ToListAsync();
         }
     }
 }

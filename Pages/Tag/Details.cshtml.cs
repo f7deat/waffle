@@ -21,7 +21,7 @@ namespace Waffle.Pages.Tag
 
         public Pagination Pagination = new();
         public ListResult<Catalog> Products = new();
-        public List<Catalog> Albums = new();
+        public ListResult<Catalog> Albums = new();
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
@@ -39,13 +39,12 @@ namespace Waffle.Pages.Tag
                 Type = CatalogType.Product
             });
 
-            var albums = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
+            Albums = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
             {
                 Active = true,
                 Name = SearchTerm,
                 Type = CatalogType.Album
             });
-            Albums = albums.Data?.ToList() ?? new();
 
             Catalogs = catalogs.Data ?? new List<Catalog>();
             Pagination = new Pagination
