@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
@@ -6,6 +6,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.Pages.Article
 {
@@ -22,6 +23,7 @@ namespace Waffle.Pages.Article
 
         public List<WorkListItem> Works = new();
         public IEnumerable<Catalog> Tags = new List<Catalog>();
+        public Feed ProductFeed = new();
 
         public string Email = string.Empty;
         public bool IsAuthenticated = false;
@@ -36,6 +38,23 @@ namespace Waffle.Pages.Article
             {
                 var user = await _userManager.GetUserAsync(User);
                 Email = user.Email;
+            }
+
+            if (Tags.Any())
+            {
+                var product = await _catalogService.ListByTagAsync(Tags.Last().Id, new CatalogFilterOptions
+                {
+                    Active = true,
+                    PageSize = 4,
+                    Type = CatalogType.Product
+                });
+                ProductFeed = new Feed
+                {
+                    Name = "Sản phẩm liên quan",
+                    Articles = product.Data?.ToList() ?? new(),
+                    ViewSizeDesktop = 2,
+                    ViewSizeMobile = 2
+                };
             }
 
             return Page();

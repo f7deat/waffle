@@ -57,6 +57,9 @@
             <div class="md:w-1/3">
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
+
+                @await Html.PartialAsync("~/Views/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
+
                 @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))
             </div>
         </div>
