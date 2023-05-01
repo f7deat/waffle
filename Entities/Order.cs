@@ -5,7 +5,7 @@
         public string? UserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public OrderStatus Status { get; set; }
-        public string? CustomerId { get; set; }
+        public DateTime? ModifiedDate { get; set; }
     }
 
     public enum OrderStatus

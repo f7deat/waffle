@@ -1,6 +1,6 @@
-﻿using Waffle.Core.Interfaces.IRepository;
+﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 
@@ -9,12 +9,19 @@ namespace Waffle.Core.Services
     public class OrderSerivce : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly ApplicationDbContext _context;
-        public OrderSerivce(IOrderRepository orderRepository, ApplicationDbContext context)
+        public OrderSerivce(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
-            _context = context;
         }
+
+        public async Task<IdentityResult> AddAsync(Order order)
+        {
+            order.Status = OrderStatus.Open;
+            order.CreatedDate = DateTime.Now;
+            await _orderRepository.AddAsync(order);
+            return IdentityResult.Success;
+        }
+
         public Task<ListResult<Order>> ListAsync(IFilterOptions filterOptions)
         {
             throw new NotImplementedException();

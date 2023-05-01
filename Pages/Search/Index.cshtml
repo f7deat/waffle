@@ -57,6 +57,8 @@
                 </div>
             }
 
+            @await Html.PartialAsync("~/Views/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
+
             @await Html.PartialAsync("/Views/Shared/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
                 Title = "Playlist",
                 PlaylistItems = Model.PlaylistItems

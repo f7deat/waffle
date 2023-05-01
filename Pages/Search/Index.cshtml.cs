@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
@@ -27,6 +27,7 @@ namespace Waffle.Pages.Search
         public SearchFilterOptions FilterOptions { get; set; }
         public ListResult<Catalog> Articles = new();
         public List<PlaylistItem> PlaylistItems = new();
+        public Feed ProductFeed = new();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -57,7 +58,23 @@ namespace Waffle.Pages.Search
                 Thumbnail = x.Thumbnail,
                 ViewCount = x.ViewCount.ToString("N0"),
                 Url = $"/{CatalogType.Video}/{x.NormalizedName}".ToLower()
-            }).ToList() ?? new() ;
+            }).ToList() ?? new();
+
+
+            var product = await _catalogService.ListAsync(new CatalogFilterOptions
+            {
+                Name = FilterOptions.SearchTerm,
+                Active = true,
+                PageSize = 8,
+                Type = CatalogType.Product
+            });
+            ProductFeed = new Feed
+            {
+                Name = "Sản phẩm",
+                Articles = product.Data?.ToList() ?? new(),
+                ViewSizeDesktop = 4,
+                ViewSizeMobile = 2
+            };
 
             return Page();
         }

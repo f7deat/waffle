@@ -2,6 +2,6 @@
 {
     public interface ITelegramService
     {
-        Task<bool> SendMessageAsync(string bot, string chatId, string message);
+        Task<bool> SendMessageAsync(string token, string chatId, string message);
     }
 }

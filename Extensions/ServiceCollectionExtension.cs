@@ -22,6 +22,8 @@ namespace Waffle.Extensions
             services.AddScoped<IWorkService, WorkService>();
             services.AddScoped<IWorkContentRepository, WorkItemRepository>();
             services.AddScoped<IFileContentRepository, FileContentRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderSerivce>();
         }
     }
 }

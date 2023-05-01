@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
@@ -8,9 +9,13 @@ namespace Waffle.Pages.Shop.Cart
     public class IndexModel : PageModel
     {
         private readonly ICatalogService _catalogService;
-        public IndexModel(ICatalogService catalogService)
+        private readonly IOrderService _orderService;
+        private readonly UserManager<IdentityUser> _userManager;
+        public IndexModel(ICatalogService catalogService, IOrderService orderService, UserManager<IdentityUser> userManager)
         {
             _catalogService = catalogService;
+            _orderService = orderService;
+            _userManager = userManager;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -23,8 +28,14 @@ namespace Waffle.Pages.Shop.Cart
             Product = await _catalogService.FindAsync(ProductId) ?? new();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
+            var user = await _userManager.GetUserAsync(User);
+            var order = new Order
+            {
+                UserId = user?.Id
+            };
+            await _orderService.AddAsync(order);
             return Redirect($"/shop/checkout?productIds={ProductId}");
         }
     }
