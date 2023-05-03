@@ -63,7 +63,10 @@
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
 
-                @await Html.PartialAsync("~/Views/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
+                @if (Model.HasProduct)
+                {
+                    @await Html.PartialAsync("~/Views/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
+                }
 
                 @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))
             </div>

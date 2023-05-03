@@ -25,6 +25,7 @@ namespace Waffle.Pages.Article
         public List<Catalog> Tags = new();
         public bool HasTag => Tags.Any();
         public Feed ProductFeed = new();
+        public bool HasProduct = false;
 
         public string Email = string.Empty;
         public bool IsAuthenticated = false;
@@ -49,10 +50,12 @@ namespace Waffle.Pages.Article
                     PageSize = 4,
                     Type = CatalogType.Product
                 });
+                HasProduct = product.HasData;
                 ProductFeed = new Feed
                 {
                     Name = "Sản phẩm liên quan",
-                    Articles = product.Data?.ToList() ?? new()
+                    Articles = product.Data?.ToList() ?? new(),
+                    ItemPerRow = "grid-cols-2"
                 };
             }
 

@@ -35,19 +35,6 @@
                                 <span>Mua ngay</span>
                             </a>
                         </div>*@
-                        <div class="font-bold mb-2">Tham khảo</div>
-                        <ul>
-                            @foreach (var link in Model.ReferalLinks)
-                            {
-                                if (link is null)
-                                {
-                                    continue;
-                                }
-                                <li>
-                                    <a href="@link.Href" target="@link.Target">@link.Name</a>
-                                </li>
-                            }
-                        </ul>
                     </div>
                 </div>
             </div>
