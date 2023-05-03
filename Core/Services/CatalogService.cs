@@ -32,11 +32,13 @@ namespace Waffle.Core.Services
 
         private async Task<bool> IsExistAsync(Catalog catalog) => await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(catalog.NormalizedName) && x.Type == catalog.Type);
 
-        public async Task<PayloadResult<Catalog>> AddAsync(Catalog catalog)
+        public async Task<IdentityResult> AddAsync(Catalog catalog)
         {
             if (catalog is null || string.IsNullOrWhiteSpace(catalog.Name))
             {
-                return PayloadResult<Catalog>.Failed(new IdentityError { });
+                return IdentityResult.Failed(new IdentityError {
+                    Description = "Name can not empty!"
+                });
             }
             if (string.IsNullOrEmpty(catalog.NormalizedName))
             {
@@ -44,7 +46,7 @@ namespace Waffle.Core.Services
             }
             if (await IsExistAsync(catalog))
             {
-                return PayloadResult<Catalog>.Failed(new IdentityError
+                return IdentityResult.Failed(new IdentityError
                 {
                     Description = "Data exist!"
                 });
@@ -53,7 +55,7 @@ namespace Waffle.Core.Services
             catalog.ModifiedDate = DateTime.Now;
             await _context.Catalogs.AddAsync(catalog);
             await _context.SaveChangesAsync();
-            return PayloadResult<Catalog>.Payload(catalog);
+            return IdentityResult.Success;
         }
 
         public async Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default)
@@ -225,11 +227,12 @@ namespace Waffle.Core.Services
             return await ListResult<Catalog>.Success(query, filterOption);
         }
 
-        public async Task<IEnumerable<Catalog>> ListTagByIdAsync(Guid catalogId)
+        public async Task<List<Catalog>> ListTagByIdAsync(Guid catalogId)
         {
             var query = from a in _context.WorkItems
                         join b in _context.Catalogs on a.CatalogId equals b.Id
                         where b.Active && a.WorkId == catalogId && b.Type == CatalogType.Tag
+                        orderby a.SortOrder ascending
                         select b;
             return await query.ToListAsync();
         }

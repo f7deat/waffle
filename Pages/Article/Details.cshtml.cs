@@ -22,7 +22,8 @@ namespace Waffle.Pages.Article
         }
 
         public List<WorkListItem> Works = new();
-        public IEnumerable<Catalog> Tags = new List<Catalog>();
+        public List<Catalog> Tags = new();
+        public bool HasTag => Tags.Any();
         public Feed ProductFeed = new();
 
         public string Email = string.Empty;

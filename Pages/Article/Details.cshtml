@@ -15,14 +15,19 @@
                     {
                         @await Component.InvokeAsync(item.NormalizedName, item.Id)
                     }
-                    <div class="wf-delimiter"></div>
-                    <div class="mb-4">
-                        <i class="fas fa-tag mr-2"></i>
-                        @foreach (var item in Model.Tags)
-                        {
-                            <a href="/tag/@item.NormalizedName" class="wf-badge inline-block">@item.Name</a>
-                        }
-                    </div>
+                    
+                    @if (Model.HasTag)
+                    {
+                        <div class="wf-delimiter"></div>
+                        <div class="mb-4">
+                            <i class="fas fa-tag mr-2"></i>
+                            @foreach (var item in Model.Tags)
+                            {
+                                <a href="/tag/@item.NormalizedName" class="wf-badge inline-block">@item.Name</a>
+                            }
+                        </div>
+                    }
+
                     <div class="bg-gray-100 px-4 py-2 flex justify-between items-center text-gray-500 text-sm">
                         <div class="flex gap-4">
                             <span>

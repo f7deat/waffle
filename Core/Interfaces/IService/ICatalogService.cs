@@ -9,7 +9,7 @@ namespace Waffle.Core.Interfaces.IService
     public interface ICatalogService
     {
         Task<IdentityResult> ActiveAsync(Guid id);
-        Task<PayloadResult<Catalog>> AddAsync(Catalog catalog);
+        Task<IdentityResult> AddAsync(Catalog catalog);
         Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default);
         Task<Catalog?> GetByNameAsync(string? normalizedName);
         Task<List<ComponentListItem>> ListComponentAsync(Guid catalogId);
@@ -23,7 +23,7 @@ namespace Waffle.Core.Interfaces.IService
         IEnumerable<Option> GetTypes();
         Task<WorkContent?> FirstWorkAsync(Guid id);
         Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions);
-        Task<IEnumerable<Catalog>> ListTagByIdAsync(Guid id);
+        Task<List<Catalog>> ListTagByIdAsync(Guid id);
         Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions);
         Task<IdentityResult> TagAddToCatalogAsync(WorkItem args);
         Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);

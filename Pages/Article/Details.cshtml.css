@@ -8,11 +8,3 @@
     .wf-badge:hover {
         background-color: var(--light);
     }
-
-    .card {
-        margin-bottom: 1rem;
-    }
-
-.card-header {
-    font-weight: 500;
-}
