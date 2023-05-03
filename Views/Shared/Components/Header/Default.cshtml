@@ -1,4 +1,5 @@
 ﻿@using Waffle.Models.Components
+@using Waffle.Entities
 @model Header
 
 <header class="wf-header">
@@ -21,9 +22,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/game" class="font-medium py-2 text-gray-700 inline-block">
+                    <a href="/@CatalogType.Game.ToString()" class="font-medium py-2 text-gray-700 inline-block">
                         <i class="fa-solid fa-puzzle-piece mr-1"></i>
-                        Games
+                        @CatalogType.Game.ToString()
+                    </a>
+                </li>
+                <li>
+                    <a href="/@CatalogType.Video.ToString()" class="font-medium py-2 text-gray-700 inline-block">
+                        <i class="fa-solid fa-play mr-1"></i>
+                        @CatalogType.Video.ToString()
                     </a>
                 </li>
             </ul>

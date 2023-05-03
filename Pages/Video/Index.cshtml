@@ -7,7 +7,10 @@
 <div class="container">
     <div class="md:flex gap-4">
         <div class="md:w-2/3">
-            @await Component.InvokeAsync(nameof(VideoPlayList))
+            @await Html.PartialAsync("/Views/Shared/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
+                Title = "Video mới",
+                PlaylistItems = Model.PlaylistItems
+            })
         </div>
         <div class="md:w-1/3">
             @await Component.InvokeAsync(nameof(ArticleSpotlight))

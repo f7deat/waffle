@@ -60,7 +60,19 @@
     <h1 class="title text-base">
         @Model.Data.Title
     </h1>
-    <div class="shadow bg-white p-4 rounded mb-4">
+    <div class="bg-white mb-4">
         @Html.Raw(Model.Data.Text)
     </div>
+    @if (Model.HasArticle)
+    {
+        <div class="mb-4">
+            <div class="title">Bài viết liên quan</div>
+            <div class="grid md:grid-cols-4 gap-4 mb-4">
+                @foreach (var item in Model.Catalogs)
+                {
+                    <partial name="~/Pages/Article/_ListItem.cshtml" model="item" />
+                }
+            </div>
+        </div>
+    }
 </div>
