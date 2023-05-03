@@ -3,7 +3,7 @@
 
 <div class="mb-4 feed">
     <div class="title">@Model.Name</div>
-    <div class="grid grid-cols-@Model.ViewSizeMobile md:grid-cols-@Model.ViewSizeDesktop gap-4">
+    <div class="grid grid-cols-2 @(Model.Articles.Count > 2 ? "md:grid-cols-4" : "") gap-4">
         @foreach (var item in Model.Articles)
         {
             <div class="bg-white">

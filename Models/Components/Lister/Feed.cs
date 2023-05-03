@@ -14,9 +14,5 @@ namespace Waffle.Models.Components
 
         [JsonIgnore]
         public List<Catalog> Articles { get; set; } = new();
-        [JsonIgnore]
-        public int ViewSizeMobile { get; set; } = 1;
-        [JsonIgnore]
-        public int ViewSizeDesktop { get; set; } = 4;
     }
 }

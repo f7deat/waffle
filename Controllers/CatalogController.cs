@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -151,11 +150,28 @@ namespace Waffle.Controllers
 
         [HttpGet("list-by-tag/{id}")]
         public async Task<IActionResult> ListByTagAsync([FromRoute] Guid id, SearchFilterOptions filterOptions) => Ok(await _catalogService.ListByTagAsync(id, new CatalogFilterOptions
-        { 
+        {
             Name = filterOptions.SearchTerm,
         }));
 
         [HttpGet("pie-chart")]
         public async Task<IActionResult> PieChartAsync() => Ok(await _catalogService.PieChartAsync());
+
+        [HttpGet("column-chart/by-day")]
+        public async Task<IActionResult> ColumnChartByDayAsync()
+        {
+            var today = DateTime.Today;
+            var ranges = new List<int?>
+            {
+                7 * 2 
+            };
+            var defaultGroups =
+      from h in _context.Catalogs
+      let daysFromToday = (int)(today - h.CreatedDate).TotalDays
+      group h by ranges.FirstOrDefault(range => daysFromToday <= range) into g
+      orderby g.Min(x => x.CreatedDate)
+      select g;
+            return Ok(defaultGroups);
+        }
     }
 }

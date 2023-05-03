@@ -51,9 +51,7 @@ namespace Waffle.Pages.Article
                 ProductFeed = new Feed
                 {
                     Name = "Sản phẩm liên quan",
-                    Articles = product.Data?.ToList() ?? new(),
-                    ViewSizeDesktop = 2,
-                    ViewSizeMobile = 2
+                    Articles = product.Data?.ToList() ?? new()
                 };
             }
 
