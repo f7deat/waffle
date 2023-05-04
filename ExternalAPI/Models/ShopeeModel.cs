@@ -64,6 +64,8 @@ namespace Waffle.ExternalAPI.Models
         public string? UrlSuffix { get; set; }
         [JsonPropertyName("groupId")]
         public string? GroupId { get; set; }
+        [JsonPropertyName("linkNameKeyword")]
+        public string? LinkNameKeyWord { get; set; }
     }
 
     public class LandingPageLinkList

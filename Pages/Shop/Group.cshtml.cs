@@ -18,6 +18,8 @@ namespace Waffle.Pages.Shop
         public string GroupId = string.Empty;
         [BindProperty(SupportsGet = true)]
         public int Current { get; set; } = 1;
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; } = string.Empty;
         public Pagination Pagination => new()
         {
             HasNextPage = Data.TotalCount > Current * 12,
@@ -31,9 +33,9 @@ namespace Waffle.Pages.Shop
             if (string.IsNullOrEmpty(groupId)) {
                 return NotFound();
             }
-            ViewData["Title"] = groupId;
+            ViewData["Title"] = string.IsNullOrEmpty(SearchTerm) ? groupId : SearchTerm;
             GroupId = groupId;
-            Data = await _shopeeService.GetLinkListAsync(groupId);
+            Data = await _shopeeService.GetLinkListAsync(groupId, SearchTerm);
             return Page();
         }
     }

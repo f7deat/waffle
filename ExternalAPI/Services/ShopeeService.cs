@@ -27,7 +27,7 @@ namespace Waffle.ExternalAPI.Services
                     Variables = new Variables
                     {
                         PageNum = $"{pageNum}",
-                        PageSize = "20",
+                        PageSize = "8",
                         UrlSuffix = "banhque",
                     }
                 };
@@ -45,7 +45,7 @@ namespace Waffle.ExternalAPI.Services
             return new BaseInfoAndLinks();
         }
 
-        public async Task<LandingPageLinkList> GetLinkListAsync(string groupId)
+        public async Task<LandingPageLinkList> GetLinkListAsync(string groupId, string searchTerm)
         {
             try
             {
@@ -59,7 +59,8 @@ namespace Waffle.ExternalAPI.Services
                         PageNum = "1",
                         PageSize = "20",
                         UrlSuffix = "banhque",
-                        GroupId = groupId
+                        GroupId = groupId,
+                        LinkNameKeyWord = searchTerm
                     }
                 };
                 var response = await _http.PostAsJsonAsync(url, value);
