@@ -11,6 +11,8 @@ namespace Waffle.Models.Components.Lister
 
         [JsonIgnore]
         public List<PlaylistItem> PlaylistItems { get; set; } = new();
+        [JsonIgnore]
+        public bool HasData { get; set; }
     }
 
     public class PlaylistItem

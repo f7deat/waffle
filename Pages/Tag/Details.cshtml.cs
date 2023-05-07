@@ -4,6 +4,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.Components.Lister;
 
 namespace Waffle.Pages.Tag
 {
@@ -22,6 +23,7 @@ namespace Waffle.Pages.Tag
         public Pagination Pagination = new();
         public ListResult<Catalog> Products = new();
         public ListResult<Catalog> Albums = new();
+        public VideoPlayList Videos = new();
 
         public async Task<IActionResult> OnGetAsync(string normalizedName)
         {
@@ -46,7 +48,29 @@ namespace Waffle.Pages.Tag
                 Type = CatalogType.Album
             });
 
+
+            var videos = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
+            {
+                Active = true,
+                Name = SearchTerm,
+                Type = CatalogType.Video
+            });
+            Videos.HasData = videos.HasData;
+            if (videos.HasData)
+            {
+                Videos.Title = "Videos";
+                Videos.PlaylistItems = videos.Data?.Select(x => new PlaylistItem
+                {
+                    Date = x.ModifiedDate.ToString("D"),
+                    Name = x.Name,
+                    Thumbnail = x.Thumbnail,
+                    Url = $"{CatalogType.Video}/{x.NormalizedName}",
+                    ViewCount = x.ViewCount.ToString("N0")
+                }).ToList() ?? new();
+            }
+
             Catalogs = catalogs.Data ?? new List<Catalog>();
+
             Pagination = new Pagination
             {
                 HasNextPage = catalogs.HasNextPage,

@@ -58,6 +58,11 @@
                 </div>
             }
 
+            @if (Model.Videos.HasData)
+            {
+                @await Html.PartialAsync("~/Views/Shared/Components/VideoPlaylist/Default.cshtml", Model.Videos)
+            }
+
         </div>
         <div class="md:w-1/3">
             @await Component.InvokeAsync(nameof(ArticleSpotlight))
