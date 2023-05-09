@@ -45,6 +45,10 @@ namespace Waffle.Models.Components
         public bool WithBackground { get; set; }
         [JsonPropertyName("blogger")]
         public Blogger Blogger { get; set; } = new();
+        [JsonPropertyName("service")]
+        public string? Service { get; set; }
+        [JsonPropertyName("embed")]
+        public string? Embed { get; set; }
     }
 
     public class BlockEditorMeta
@@ -83,5 +87,6 @@ namespace Waffle.Models.Components
         public const string QUOTE = "quote";
         public const string BLOGGER = "blogger";
         public const string YOUTUBE = "youtube";
+        public const string EMBED = "embed";
     }
 }

@@ -38,9 +38,10 @@
     margin: 0.25rem 0 0.5rem 0;
 }
 
-.simple-image__caption {
-    color: var(--gray-500);
+.simple-image__caption, .caption {
     font-style: italic;
+    text-align: center;
+    opacity: 0.75;
 }
 
 .simple-image__picture--with-background {

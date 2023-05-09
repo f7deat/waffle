@@ -98,5 +98,16 @@
         case BlockEditorType.BLOGGER:
             @await Component.InvokeAsync(nameof(Blogger), item.Data.Blogger)
             break;
+        case BlockEditorType.EMBED:
+            <div class="video-player">
+                @if (item.Data.Service == "youtube")
+                {
+                    <iframe class="w-full h-full" src="@item.Data.Embed" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                }
+                <div class="caption">
+                    @item.Data.Caption
+                </div>
+            </div>
+            break;
     }
 }
