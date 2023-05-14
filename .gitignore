@@ -18,3 +18,4 @@
 .vscode
 /.config
 /ClientApp/node_modules
+/appsettings.Development.json
