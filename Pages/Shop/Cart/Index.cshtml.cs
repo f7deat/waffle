@@ -10,8 +10,8 @@ namespace Waffle.Pages.Shop.Cart
     {
         private readonly ICatalogService _catalogService;
         private readonly IOrderService _orderService;
-        private readonly UserManager<IdentityUser> _userManager;
-        public IndexModel(ICatalogService catalogService, IOrderService orderService, UserManager<IdentityUser> userManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public IndexModel(ICatalogService catalogService, IOrderService orderService, UserManager<ApplicationUser> userManager)
         {
             _catalogService = catalogService;
             _orderService = orderService;

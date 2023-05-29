@@ -13,9 +13,9 @@ namespace Waffle.Pages.Article
     public class DetailsModel : DynamicPageModel
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<IdentityUser> userManager) : base(catalogService)
+        public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<ApplicationUser> userManager) : base(catalogService)
         {
             _context = context;
             _userManager = userManager;

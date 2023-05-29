@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Waffle.Data;
+using Waffle.Entities;
 using Waffle.Extensions;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -16,10 +17,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+//builder.Services.Configure<MongoDbStoreSetting>(builder.Configuration.GetSection("MongoDbStore"));
 
 builder.Services.AddServices();
 builder.Services.AddHttpClients();

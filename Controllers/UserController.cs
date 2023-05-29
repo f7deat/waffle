@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Models;
 
 namespace Waffle.Controllers
@@ -16,13 +16,13 @@ namespace Waffle.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<UserController> _logger;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        public UserController(IUserService userService, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+        public UserController(IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
         {
             _userService = userService;
             _userManager = userManager;
@@ -41,7 +41,7 @@ namespace Waffle.Controllers
                 return BadRequest();
             }
             var query = _userManager.Users.Where(x => x.Id != currentUserId).OrderByDescending(x => x.Id);
-            return Ok(await ListResult<IdentityUser>.Success(query, filterOptions));
+            return Ok(await ListResult<ApplicationUser>.Success(query, filterOptions));
         }
 
         [HttpGet("{id}")]
@@ -146,7 +146,7 @@ namespace Waffle.Controllers
             {
                 Name = "admin"
             });
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
                 Email = "f7deat@gmail.com",
                 UserName = "f7deat@gmail.com",

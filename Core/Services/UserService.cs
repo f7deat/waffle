@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Models;
 
 namespace Waffle.Core.Services
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public UserService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -58,7 +59,7 @@ namespace Waffle.Core.Services
             {
                 return IdentityResult.Failed();
             }
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
                 Email = model.Email,
                 UserName = model.Email
@@ -81,7 +82,7 @@ namespace Waffle.Core.Services
             };
         }
 
-        public async Task<IList<IdentityUser>> GetUsersInRoleAsync(string roleName) => await _userManager.GetUsersInRoleAsync(roleName);
+        public async Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName) => await _userManager.GetUsersInRoleAsync(roleName);
 
         public async Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args)
         {

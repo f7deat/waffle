@@ -2,14 +2,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
+using Waffle.Entities;
 
 namespace Waffle.Pages.User
 {
     public class ForgotPasswordModel : Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.ForgotPasswordModel
     {
-        private readonly UserManager<IdentityUser> _userManager; 
+        private readonly UserManager<ApplicationUser> _userManager; 
         private readonly IEmailSender _emailSender;
-        public ForgotPasswordModel(UserManager<IdentityUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

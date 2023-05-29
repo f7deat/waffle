@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 
 namespace Waffle.Pages.User
 {
     public class ConfirmEmailModel : PageModel
     {
         private readonly ILogger<ConfirmEmailModel> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
-        public ConfirmEmailModel(ILogger<ConfirmEmailModel> logger, UserManager<IdentityUser> userManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ConfirmEmailModel(ILogger<ConfirmEmailModel> logger, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _userManager = userManager;

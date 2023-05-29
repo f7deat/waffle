@@ -21,6 +21,11 @@ namespace Waffle.ExternalAPI.Game
             return data?.Data ?? new Dictionary<string, LoL_Champion>();
         }
 
+        public Task<CreatorListItem> GetCreatorsAsync(int pageIndex, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<EpicGamesElement>> GetEpicGamesFreeGamesPromotionsAsync()
         {
             var url = "https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=en-US&country=VN&allowCountries=VN";

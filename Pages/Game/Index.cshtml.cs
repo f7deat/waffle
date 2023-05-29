@@ -20,7 +20,6 @@ namespace Waffle.Pages.Game
         public async Task OnGetAsync()
         {
             Components = await _catalogService.ListComponentAsync(PageData.Id);
-            EpicGamesFree = await _gameService.GetEpicGamesFreeGamesPromotionsAsync();
         }
     }
 }

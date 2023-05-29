@@ -3,14 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Helpers;
+using Waffle.Entities;
 
 namespace Waffle.Pages.User
 {
     [Authorize]
     public class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userService;
-        public IndexModel(UserManager<IdentityUser> userService)
+        private readonly UserManager<ApplicationUser> _userService;
+        public IndexModel(UserManager<ApplicationUser> userService)
         {
             _userService = userService;
         }

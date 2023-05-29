@@ -4,18 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Encodings.Web;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 
 namespace Waffle.Pages.User
 {
     public class RegisterModel : PageModel
     {
         private readonly ICatalogService _catalogService;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
-        private readonly IUserStore<IdentityUser> _userStore;
-        public RegisterModel(ICatalogService catalogService, UserManager<IdentityUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender, IUserStore<IdentityUser> userStore)
+        private readonly IUserEmailStore<ApplicationUser> _emailStore;
+        private readonly IUserStore<ApplicationUser> _userStore;
+        public RegisterModel(ICatalogService catalogService, UserManager<ApplicationUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender, IUserStore<ApplicationUser> userStore)
         {
             _catalogService = catalogService;
             _userManager = userManager;
@@ -77,27 +78,27 @@ namespace Waffle.Pages.User
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<ApplicationUser>)_userStore;
         }
     }
 }

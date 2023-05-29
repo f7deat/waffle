@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Entities;
 using Waffle.Models;
 
 namespace Waffle.Core.Interfaces.IService
@@ -9,7 +10,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel model);
         Task<dynamic> GetCurrentUserAsync(string id);
         Task<IdentityResult> AddToRoleAsync(AddToRoleModel model);
-        Task<IList<IdentityUser>> GetUsersInRoleAsync(string roleName);
+        Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName);
         Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args);
     }
 }
