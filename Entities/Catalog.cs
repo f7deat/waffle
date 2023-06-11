@@ -48,6 +48,7 @@ namespace Waffle.Entities
         Product = 2,
         Setting = 3,
         Entry = 4,
+        Location = 5,
         Album = 8,
         Tag = 9,
         Video = 10,

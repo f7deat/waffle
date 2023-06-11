@@ -1,0 +1,24 @@
+﻿@page
+@using Waffle.Models.Components
+@using Waffle.Models.Components.Specifications
+@model Waffle.Pages.Location.IndexModel
+
+<main class="wf-article__list">
+    <div class="container">
+        <div class="md:flex gap-4">
+            <div class="md:w-2/3">
+                <div class="title">@ViewData["Title"]</div>
+                @if (Model.Articles != null)
+                {
+                    <partial name="../Article/_List.cshtml" model="Model.Articles.Data" />
+
+                    <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+                }
+            </div>
+            <div class="md:w-1/3">
+                @await Component.InvokeAsync(nameof(ArticleSpotlight))
+                @await Component.InvokeAsync(nameof(Tag))
+            </div>
+        </div>
+    </div>
+</main>
