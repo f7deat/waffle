@@ -2,7 +2,7 @@
 
 @if (Model != null && Model.ShowRequestId)
 {
-    <div hidden>
-        Work ID: @Model.RequestId
+    <div id="@Model.RequestId">
+        <img src="/imgs/no-data.svg" alt="No data" />
     </div>
 }

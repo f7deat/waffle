@@ -17,6 +17,7 @@ namespace Waffle.Pages.Tag
         public int Current { get; set; } = 1;
 
         public Pagination Pagination = new();
+        public string? SearchTerm { get; set; }
 
         public async Task OnGetAsync()
         {

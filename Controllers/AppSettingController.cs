@@ -6,7 +6,6 @@ using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.ExternalAPI.Google.Models;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.SendGrid;

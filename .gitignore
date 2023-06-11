@@ -9,7 +9,6 @@
 /Waffle.csproj.user
 /Migrations
 /.vs
-/Waffle.sln
 /wwwroot/imgs
 /wwwroot/files
 *.map
@@ -18,4 +17,3 @@
 .vscode
 /.config
 /ClientApp/node_modules
-/appsettings.Development.json

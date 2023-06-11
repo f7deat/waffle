@@ -26,11 +26,11 @@
 
             </div>
             <partial name="~/Pages/Article/_List.cshtml" model="Model.Catalogs" />
-            <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+            <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
 
             @if (Model.Products.Data != null && Model.Products.HasData)
             {
-                @await Html.PartialAsync("~/Views/Shared/Components/Feed/Product.cshtml", new Feed {
+                @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", new Feed {
                     Name = "Sản phẩm",
                     Articles = Model.Products.Data.ToList()
                 })
@@ -60,7 +60,7 @@
 
             @if (Model.Videos.HasData)
             {
-                @await Html.PartialAsync("~/Views/Shared/Components/VideoPlaylist/Default.cshtml", Model.Videos)
+                @await Html.PartialAsync("~/Pages/Shared/Components/VideoPlaylist/Default.cshtml", Model.Videos)
             }
 
         </div>

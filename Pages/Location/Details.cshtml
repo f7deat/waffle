@@ -1,7 +1,7 @@
-﻿@page "/article/{normalizedName}"
+﻿@page "/location/{normalizedName}"
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
-@model Waffle.Pages.Article.DetailsModel
+@model Waffle.Pages.Location.DetailsModel
 
 <main class="wf-article__detail">
     <div class="container">
@@ -15,7 +15,7 @@
                     {
                         @await Component.InvokeAsync(item.NormalizedName, item.Id)
                     }
-                    
+
                     @if (Model.HasTag)
                     {
                         <div class="wf-delimiter"></div>

@@ -1,11 +1,7 @@
 ﻿@page
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
-@model Waffle.Pages.Article.IndexModel
-@{
-    ViewData["Title"] = "Danh sách bài viết";
-    ViewData["Description"] = "Danh sách bài viết hay được biên tập viên lựa chọn";
-}
+@model Waffle.Pages.Location.IndexModel
 
 <main class="wf-article__list">
     <div class="container">
@@ -14,7 +10,7 @@
                 <div class="title">@ViewData["Title"]</div>
                 @if (Model.Articles != null)
                 {
-                    <partial name="_List.cshtml" model="Model.Articles.Data" />
+                    <partial name="../Article/_List.cshtml" model="Model.Articles.Data" />
 
                     <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
                 }

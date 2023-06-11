@@ -23,13 +23,6 @@ namespace Waffle.Controllers
             //_commentsCollection = mongoDatabase.GetCollection<Comment>(options.Value.CommentsCollectionName);
         }
 
-        [HttpPost("insert-one")]
-        public async Task<IActionResult> InsertOneAsync(Comment newComment)
-        {
-            //await _commentsCollection.InsertOneAsync(newComment);
-            return Ok(IdentityResult.Success);
-        }
-
         //public async Task UpdateAsync(string id, Comment updatedComment) =>
         //await _commentsCollection.ReplaceOneAsync(x => x.Id == id, updatedComment);
 

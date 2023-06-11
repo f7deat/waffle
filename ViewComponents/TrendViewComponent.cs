@@ -20,7 +20,7 @@ namespace Waffle.ViewComponents
                     RequestId = id.ToString()
                 });
             }
-            return View("~/Views/Shared/Components/ListGroup/Default.cshtml", new ListGroup
+            return View("~/Pages/Shared/Components/ListGroup/Default.cshtml", new ListGroup
             {
                 Name = "Daily Trending",
                 Items = GetItems(trend.Channel.Item)
