@@ -20,7 +20,9 @@
                         <div class="p-2 flex justify-between items-center bg-white">
                             <div class="flex gap-2">
                                 <a href="@item.Src" title="download"><i class="fas fa-download text-blue-600"></i></a>
-                                <div class="text-truncate" style="max-width: 250px">@item.Name</div>
+                                <div data-bs-toggle="tooltip" data-bs-title="@item.Name">
+                                    @item.Name
+                                </div>
                             </div>
                             <i class="far fa-heart text-red-600 cursor-pointer"></i>
                         </div>
@@ -52,6 +54,8 @@
                     $(".filterable-content").fadeTo(100, 0), $(".filterable-content .filter-item").not("." + e).fadeOut().removeClass(""),
                     setTimeout(function () { $("." + e).fadeIn().addClass(""), $(".filterable-content").fadeTo(300, 1) }, 300)
             })
-        })
+        });
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
 }

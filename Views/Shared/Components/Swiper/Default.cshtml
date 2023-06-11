@@ -5,7 +5,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
 
 <div class="wf-swiper">
-    <div class="title">@Model.Title</div>
+    <div class="title">
+        @Model.Title
+        <div class="extra">
+            <a href="/album">Xem thêm</a>
+        </div>
+    </div>
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
             @if (Model.Items.Any())

@@ -31,6 +31,8 @@
     text-transform: uppercase;
     margin-bottom: 0.75rem;
     position: relative;
+    display: flex;
+    justify-content: space-between;
 }
 
     .title::after {
