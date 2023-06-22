@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 
-namespace Waffle.Pages.Shop.Cart
+namespace Waffle.Pages.Products.Cart
 {
     public class IndexModel : PageModel
     {

@@ -1,22 +1,33 @@
-﻿.navbar-menu {
-    display: none;
+﻿.navbar-brand {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: bold;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.navbar-menu {
+    transform: translateX(-300%);
     list-style: none;
     margin: 0;
     padding: 0 1rem;
+    transition: transform 0.3s ease-in-out;
 }
 
-.navbar .show {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 250px;
-    background-color: white;
-    flex-direction: column;
-    align-items: start;
-    z-index: 100;
-    display: flex;
-}
+    .navbar-menu.show {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px;
+        background-color: white;
+        flex-direction: column;
+        align-items: start;
+        z-index: 100;
+        display: flex;
+        transform: none;
+    }
 
 .btn-icon {
     width: 2.5rem;
@@ -31,6 +42,7 @@
     .navbar-menu {
         gap: 2rem;
         display: flex;
+        transform: none;
     }
 
     .navbar .show {

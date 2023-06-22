@@ -7,7 +7,7 @@ using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.Pages.Shop
+namespace Waffle.Pages.Products
 {
     public class IndexModel : EntryPageModel
     {

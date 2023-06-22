@@ -1,7 +1,7 @@
-﻿@page "/product/{normalizedName}"
+﻿@page "/products/{normalizedName}"
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
-@model Waffle.Pages.Shop.DetailsModel
+@model Waffle.Pages.Products.DetailsModel
 
 <div class="container">
     <div class="wf-row gap-4">
@@ -22,8 +22,11 @@
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                         </div>
-                        <div class="text-gray-500 mb-4">
+                        <div class="text-gray-500 mb-2 border-dashed border-b">
                             @Model.PageData.Description
+                        </div>
+                        <div class="text-gray-500">
+                            Lượt xem: @Model.PageData.ViewCount.ToString("N0")
                         </div>
                         @*<div class="md:flex mb-4 gap-4">
                             <a href="/shop/cart?productId=@Model.PageData.Id" class="btn border block mb-2">
@@ -49,7 +52,9 @@
             </div>
 
             <div class="mb-4">
-                <div class="title">Thông tin tiệm tạp hóa <span class="text-red-500">Querencia</span></div>
+                <div class="title">
+                    <div>Thông tin tiệm tạp hóa <span class="text-red-500">Querencia</span></div>
+                </div>
                 <ul>
                     <li>
                         <i class="fas fa-location-dot"></i> Thôn Đồng Giá, xã Thiên Hương, huyện Thủy Nguyên, Hải Phòng

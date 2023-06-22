@@ -4,7 +4,7 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.Pages.Shop
+namespace Waffle.Pages.Products
 {
     public class GroupModel : PageModel
     {

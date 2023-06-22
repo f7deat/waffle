@@ -5,7 +5,7 @@ using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 
-namespace Waffle.Pages.Shop.Checkout
+namespace Waffle.Pages.Products.Checkout
 {
     public class IndexModel : PageModel
     {

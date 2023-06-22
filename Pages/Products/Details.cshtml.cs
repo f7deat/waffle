@@ -6,7 +6,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 
-namespace Waffle.Pages.Shop
+namespace Waffle.Pages.Products
 {
     public class DetailsModel : DynamicPageModel
     {

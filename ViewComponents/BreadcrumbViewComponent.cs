@@ -72,11 +72,17 @@ namespace Waffle.ViewComponents
 
         private static string GetMasterUrl(CatalogType type)
         {
-            if (CatalogType.Default == type)
+            switch (type)
             {
-                return "/page";
+                case CatalogType.Default:
+                    return "/page";
+                case CatalogType.Article:
+                    return "/article";
+                case CatalogType.Product:
+                    return "/products";
+                default:
+                    return $"/{type.ToString().ToLower()}";
             }
-            return $"/{type.ToString().ToLower()}";
         }
     }
 }
