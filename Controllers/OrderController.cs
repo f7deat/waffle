@@ -6,9 +6,7 @@ using Waffle.Models;
 
 namespace Waffle.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    public class OrderController : Controller
+    public class OrderController : BaseController
     {
         private readonly List<Order> Orders = new() { 
             new Order

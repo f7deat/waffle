@@ -5,6 +5,25 @@
 <div class="container">
     <div class="md:flex gap-4">
         <div class="md:w-2/3">
+            <div class="mb-4 flex justify-between items-center">
+                <form class="mb-2" method="get">
+                    <div class="border rounded-full flex bg-white">
+                        <input type="search" name="searchTerm" placeholder="Tìm kiếm..." class="flex-grow px-4 rounded-full" autocomplete="off">
+                        <button type="submit" class="py-2 px-3">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="dropdown">
+                    <button class="py-2 font-medium" data-bs-toggle="dropdown" aria-expanded="false" id="drp-sort">
+                        <i class="fas fa-sort-amount-up"></i> Sắp xếp
+                    </button>
+                    <div class="dropdown-menu bg-white shadow dropdown-menu-end shadow-lg rounded" aria-labelledby="drp-sort" style="">
+                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=@Model.SearchTerm&orderby=VIEW">Lượt xem</a>
+                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=@Model.SearchTerm&orderby=COUNT">Số lượng</a>
+                    </div>
+                </div>
+            </div>
             <partial name="~/Pages/Shared/Components/ListGroup/Default.cshtml" model="Model.Tags" />
             <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
         </div>

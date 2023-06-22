@@ -7,9 +7,7 @@ using Waffle.Models;
 
 namespace Waffle.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    public class ComponentController : Controller
+    public class ComponentController : BaseController
     {
         private readonly IComponentService _componentService;
         public ComponentController(IComponentService componentService)

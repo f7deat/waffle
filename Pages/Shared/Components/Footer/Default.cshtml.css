@@ -18,6 +18,10 @@
         color: var(--gray-400);
     }
 
+    .footer a:hover {
+        color: white;
+    }
+
 .footer-social a {
     padding: 0 .75rem;
 }

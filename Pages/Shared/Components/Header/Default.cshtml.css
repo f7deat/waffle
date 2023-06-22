@@ -18,8 +18,16 @@
     display: flex;
 }
 
-@media screen and (min-width: 768px) {
+.btn-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--dark);
+}
 
+@media screen and (min-width: 768px) {
     .navbar-menu {
         gap: 2rem;
         display: flex;

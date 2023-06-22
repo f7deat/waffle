@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
@@ -11,9 +10,7 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    public class CatalogController : Controller
+    public class CatalogController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly ICatalogService _catalogService;

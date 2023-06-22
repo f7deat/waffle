@@ -36,22 +36,22 @@
             </ul>
             <div class="flex-grow flex justify-end">
                 <div class="flex">
-                    <form class="hidden md:flex items-center rounded-full px-3 gap-2 search-input" action="/search/index" method="get">
+                    <form class="hidden md:flex items-center rounded-full px-3 gap-2 search-input" action="/search" method="get">
                         <input class="h-full py-2 rounded-full w-64" type="text" placeholder="Nhập từ khóa" aria-label="Search" name="searchTerm" autocomplete="off">
                         <button class="flex items-center justify-center rounded-full" type="submit" aria-label="Tìm kiếm"><i class="fa fa-search"></i></button>
                     </form>
                     <a href="/search" class="md:hidden h-12 w-12 flex items-center justify-center text-dark" aria-label="Search">
                         <i class="fas fa-search"></i>
                     </a>
-                    <button type="button" class="h-12 w-12 flex items-center justify-center" aria-label="Dark mode">
+                    <button type="button" class="btn-icon" aria-label="Dark mode">
                         <i class="fas fa-cloud-sun"></i>
                     </button>
                     @if (Model.IsAuthenticated)
                     {
-                        <a href="/user" class="h-12 w-12 flex items-center justify-center text-dark">
+                        <a href="/user" class="btn-icon">
                             <i class="fas fa-user"></i>
                         </a>
-                        <a href="/shop/cart" class="h-12 w-12 flex items-center justify-center text-dark">
+                        <a href="/shop/cart" class="text-dark">
                             <i class="fas fa-cart-shopping"></i>
                         </a>
                     }

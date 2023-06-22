@@ -16,8 +16,15 @@ namespace Waffle.ExternalAPI.Services
 
         public async Task<Trend?> GetDailyTrendingAsync()
         {
-            var response = await _http.GetStreamAsync("https://trends.google.com.vn/trends/trendingsearches/daily/rss?geo=VN");
-            return XmlHelper.Deserialize<Trend>(response);
+            try
+            {
+                var response = await _http.GetStreamAsync("https://trends.google.com.vn/trends/trendingsearches/daily/rss?geo=VN");
+                return XmlHelper.Deserialize<Trend>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
 
         public async Task<BloggerListResult<BloggerItem>?> BloggerSearchAsync(string blogId, string apiKey, string searchTerm)
@@ -42,8 +49,15 @@ namespace Waffle.ExternalAPI.Services
 
         public async Task<BloggerItem?> BloggerGetAsync(string? blogId, string? postId, string? apiKey)
         {
-            var response = await _http.GetStreamAsync($"https://www.googleapis.com/blogger/v3/blogs/{blogId}/posts/{postId}?key={apiKey}");
-            return await JsonSerializer.DeserializeAsync<BloggerItem?>(response);
+            try
+            {
+                var response = await _http.GetStreamAsync($"https://www.googleapis.com/blogger/v3/blogs/{blogId}/posts/{postId}?key={apiKey}");
+                return await JsonSerializer.DeserializeAsync<BloggerItem?>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
 
         public async Task<BloggerItem?> BloggerGetByPathAsync(string? blogId, string path, string? apiKey)

@@ -16,15 +16,18 @@ namespace Waffle.Pages.Tag
         [BindProperty(SupportsGet = true)]
         public int Current { get; set; } = 1;
 
-        public Pagination Pagination = new();
+        [BindProperty(SupportsGet = true)]
         public string? SearchTerm { get; set; }
+
+        public Pagination Pagination = new();
 
         public async Task OnGetAsync()
         {
-            var tags = await _catalogService.ListTagAsync(new BasicFilterOptions
+            var tags = await _catalogService.ListTagAsync(new SearchFilterOptions
             {
                 Current = Current,
-                PageSize = 20
+                PageSize = 20,
+                SearchTerm = SearchTerm
             });
             Tags = new ListGroup
             {

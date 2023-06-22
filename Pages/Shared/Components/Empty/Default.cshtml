@@ -2,7 +2,14 @@
 
 @if (Model != null && Model.ShowRequestId)
 {
-    <div id="@Model.RequestId">
-        <img src="/imgs/no-data.svg" alt="No data" />
+    <div class="text-center p-4">
+        <div id="@Model.RequestId">
+            <img src="/imgs/no-data.svg" alt="No data" width="150" height="150" />
+            <div class="text-gray-500">
+                <small>
+                    <i>Không có dữ liệu</i>
+                </small>
+            </div>
+        </div>
     </div>
 }

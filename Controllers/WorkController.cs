@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
-using System.IO;
 using System.Text.Json;
-using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Specifications;
@@ -16,8 +12,7 @@ using Waffle.Models.Params;
 
 namespace Waffle.Controllers
 {
-    [Route("api/[controller]")]
-    public class WorkController : Controller
+    public class WorkController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileExplorerService _fileContentService;

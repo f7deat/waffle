@@ -3,7 +3,9 @@
 
 <div class="@Model.ClassName">
     <div class="mb-4 video-playlist">
-        <div class="title"><i class="fas fa-video mr-1"></i>@Model.Title</div>
+        <div class="title">
+            <div><i class="fas fa-video mr-1"></i>@Model.Title</div>
+        </div>
         <div class="grid md:grid-cols-4 gap-4">
             @foreach (var item in Model.PlaylistItems)
             {

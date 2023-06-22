@@ -287,9 +287,13 @@ namespace Waffle.Core.Services
 
         public async Task<IEnumerable<Catalog>> ListRandomTagAsync() => await _context.Catalogs.Where(x => x.Type == CatalogType.Tag && x.Active).OrderBy(x => Guid.NewGuid()).Take(10).ToListAsync();
 
-        public async Task<ListResult<TagListItem>> ListTagAsync(IFilterOptions filterOptions)
+        public async Task<ListResult<TagListItem>> ListTagAsync(SearchFilterOptions filterOptions)
         {
-            var query = _context.Catalogs.Where(x => x.Type == CatalogType.Tag && x.Active).Select(x => new TagListItem
+            var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.SearchTerm);
+            var query = _context.Catalogs
+                .Where(x => x.Type == CatalogType.Tag && x.Active)
+                .Where(x => string.IsNullOrEmpty(searchTerm) || x.NormalizedName.Contains(searchTerm))
+                .Select(x => new TagListItem
             {
                 Id = x.Id,
                 Name = x.Name,

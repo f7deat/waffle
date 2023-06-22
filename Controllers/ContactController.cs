@@ -17,7 +17,7 @@ using Waffle.Core.Interfaces.IService;
 namespace Waffle.Controllers
 {
     [Route("api/[controller]")]
-    public class ContactController : Controller
+    public class ContactController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly ITelegramService _telegramService;

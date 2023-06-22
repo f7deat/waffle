@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 //using MongoDB.Driver;
@@ -8,9 +7,7 @@ using Waffle.Models;
 
 namespace Waffle.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    public class CommentController : Controller
+    public class CommentController : BaseController
     {
         //private readonly IMongoCollection<Comment> _commentsCollection;
 
