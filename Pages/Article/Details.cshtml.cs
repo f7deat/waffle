@@ -44,7 +44,8 @@ namespace Waffle.Pages.Article
 
             if (Tags.Any())
             {
-                var product = await _catalogService.ListByTagAsync(Tags.Last().Id, new CatalogFilterOptions
+                var tagIds = Tags.Select(x => x.Id);
+                var product = await _catalogService.ListByTagsAsync(tagIds, new CatalogFilterOptions
                 {
                     Active = true,
                     PageSize = 4,

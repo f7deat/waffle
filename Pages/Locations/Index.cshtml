@@ -1,16 +1,16 @@
 ﻿@page
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
-@model Waffle.Pages.Location.IndexModel
+@model Waffle.Pages.Locations.IndexModel
 
 <main class="wf-article__list">
     <div class="container">
         <div class="md:flex gap-4">
             <div class="md:w-2/3">
                 <div class="title">@ViewData["Title"]</div>
-                @if (Model.Articles != null)
+                @if (Model.Catalogs != null)
                 {
-                    <partial name="../Article/_List.cshtml" model="Model.Articles.Data" />
+                    <partial name="../Article/_List.cshtml" model="Model.Catalogs.Data" />
 
                     <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
                 }

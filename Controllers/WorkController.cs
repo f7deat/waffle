@@ -95,10 +95,6 @@ namespace Waffle.Controllers
         [HttpPost("child/add")]
         public async Task<IActionResult> AddChildAsync([FromBody] WorkContent workContent)
         {
-            if (workContent is null)
-            {
-                return BadRequest();
-            }
             if (!await _context.WorkContents.AnyAsync(x => x.Id == workContent.ParentId))
             {
                 return Ok(IdentityResult.Failed(new IdentityError

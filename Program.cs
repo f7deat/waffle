@@ -22,8 +22,6 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-//builder.Services.Configure<MongoDbStoreSetting>(builder.Configuration.GetSection("MongoDbStore"));
-
 builder.Services.AddServices();
 builder.Services.AddHttpClients();
 
@@ -43,7 +41,6 @@ builder.Services.AddCors(options =>
                       });
 });
 
-// Adding Authentication  
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

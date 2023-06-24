@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Interfaces.IService
 {
@@ -12,5 +13,6 @@ namespace Waffle.Core.Interfaces.IService
         Task<IdentityResult> AddToRoleAsync(AddToRoleModel model);
         Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName);
         Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args);
+        Task<ListResult<UserViewModel>> ListContactAsync(SearchFilterOptions filterOptions);
     }
 }

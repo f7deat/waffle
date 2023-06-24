@@ -23,16 +23,19 @@ namespace Waffle.Controllers
         private readonly ITelegramService _telegramService;
         private readonly ILogger<ContactController> _logger;
         private readonly IAppSettingService _appSettingService;
-        public ContactController(ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, IAppSettingService appSettingService)
+        private readonly IUserService _userService;
+
+        public ContactController(ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, IAppSettingService appSettingService, IUserService userService)
         {
             _context = context;
             _logger = logger;
             _telegramService = telegramService;
             _appSettingService = appSettingService;
+            _userService = userService;
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await ListResult<Contact>.Success(_context.Contacts, filterOptions));
+        public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _userService.ListContactAsync(filterOptions));
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Contacts.FindAsync(id));

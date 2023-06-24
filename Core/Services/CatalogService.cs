@@ -222,7 +222,7 @@ namespace Waffle.Core.Services
         {
             var query = from a in _context.WorkItems
                         join b in _context.Catalogs on a.WorkId equals b.Id
-                        where b.Active && a.CatalogId == filterOption.CatalogId && b.Type == CatalogType.Article && b.Id != filterOption.WorkId
+                        where b.Active && filterOption.TagIds.Contains(a.CatalogId) && b.Type == CatalogType.Article && b.Id != filterOption.CatalogId
                         select b;
             return await ListResult<Catalog>.Success(query, filterOption);
         }
@@ -270,6 +270,19 @@ namespace Waffle.Core.Services
             await _context.WorkItems.AddAsync(args);
             await _context.SaveChangesAsync();
             return IdentityResult.Success;
+        }
+
+        public async Task<ListResult<Catalog>> ListByTagsAsync(IEnumerable<Guid> tagIds, CatalogFilterOptions filterOptions)
+        {
+            var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.Name);
+            var query = from a in _context.WorkItems
+                        join b in _context.Catalogs on a.WorkId equals b.Id
+                        where tagIds.Contains(a.CatalogId) && b.Active &&
+                        (string.IsNullOrEmpty(searchTerm) || b.NormalizedName.Contains(searchTerm)) &&
+                        (filterOptions.Type == null || b.Type == filterOptions.Type)
+                        orderby b.ModifiedDate descending
+                        select b;
+            return await ListResult<Catalog>.Success(query, filterOptions);
         }
 
         public async Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions)

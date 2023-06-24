@@ -1,0 +1,92 @@
+﻿@page
+@using Waffle.Entities
+@model Waffle.Pages.Contacts.IndexModel<ApplicationUser>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow rounded p-4 bg-white">
+                <div class="card-body">
+                    @if (!Model.IdentityResult.Succeeded)
+                    {
+                        <div class="alert">
+                            <div class="alert-title">Error: Something Wrong Here!</div>
+                            <ul>
+                                @foreach (var item in Model.IdentityResult.Errors)
+                                {
+                                    <li>@item.Description</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <localize key="name" />
+                            </label>
+                            <input class="form-control" type="text" name="name" id="contact-input-name" required />
+                        </div>
+                        <div class="wf-row gap-4">
+                            <div class="wf-col mb-3">
+                                <label class="form-label">Email</label>
+                                <input class="form-control" type="email" name="email" id="contact-input-email" required />
+                            </div>
+                            <div class="wf-col mb-3">
+                                <label class="form-label">
+                                    <localize key="phoneNumber" />
+                                </label>
+                                <input class="form-control" type="tel" name="phoneNumber" id="contact-input-phoneNumber" required />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <localize key="address" />
+                            </label>
+                            <input class="form-control" type="text" name="address" />
+                        </div>
+                        <div class="wf-row gap-4">
+                            <div class="wf-col mb-3">
+                                <label class="form-label">
+                                    <localize key="jobType" />
+                                </label>
+                                <select class="form-control" name="JobType">
+                                    <option value="decking">Decking</option>
+                                    <option value="fencing">Fencing</option>
+                                    <option value="gate">Gate</option>
+                                    <option value="pergola">Pergola</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="wf-col mb-3">
+                                <label class="form-label">
+                                    <localize key="appointment" />
+                                </label>
+                                <input type="text" class="form-control" id="datetimepicker" name="appointment">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <localize key="note" />
+                            </label>
+                            <textarea class="form-control" name="note" id="contact-input-note"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary bg-primary" type="submit" id="contact-btn-submit">
+                                <i class="far fa-paper-plane mr-2"></i>
+                                <localize key="submit" />
+                            </button>
+                            <button class="btn btn-secondary" type="reset">
+                                <localize key="reset" />
+                            </button>
+                        </div>
+                        <div class="mb-2 text-gray-500">
+                            <small>We do not share any of your information without your consent</small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
