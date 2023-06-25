@@ -4,7 +4,7 @@
 @model Waffle.Pages.Products.DetailsModel
 
 <div class="container">
-    <div class="wf-row gap-4">
+    <div class="row gap-4">
         <div class="w-2/3">
             @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
             <div class="title">@Model.PageData.Name</div>

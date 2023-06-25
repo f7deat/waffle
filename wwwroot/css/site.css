@@ -255,6 +255,10 @@ p {
     padding: 0.5rem;
 }
 
+.col-md-4, .col-md-8, .col-md-6 {
+    width: 100%;
+}
+
 .dropdown {
     position: relative;
 }
@@ -336,7 +340,6 @@ p {
 }
 
 .row {
-    flex-wrap: wrap;
     gap: 1rem;
 }
 
@@ -840,7 +843,7 @@ p {
         width: 83.333333%;
     }
 
-    .md\:grid-cols-4 {
+    .md\:grid-cols-4, .md-grid-cols-4 {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 

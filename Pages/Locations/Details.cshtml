@@ -1,11 +1,12 @@
-﻿@page "/location/{normalizedName}"
+﻿@page "/locations/{normalizedName}"
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
+@using Waffle.ViewComponents
 @model Waffle.Pages.Locations.DetailsModel
 
 <main class="wf-article__detail">
     <div class="container">
-        <div class="wf-row gap-4">
+        <div class="row gap-4">
             <div class="md:w-2/3">
                 @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
 
@@ -60,6 +61,17 @@
 
             </div>
             <div class="md:w-1/3">
+
+                <div class="mb-4">
+                    <div class="title">Direct for work</div>
+                    <ul>
+                        <li><i class="fab fa-instagram mr-1"></i>Instagram: <a href="https://www.instagram.com/f7deat/">f7deat</a></li>
+                        <li><i class="fab fa-square-facebook mr-1"></i>Facebook: <a href="https://www.facebook.com/tan.dct/">Công Tân Đinh</a></li>
+                        <li><i class="fas fa-square-phone mr-1"></i>SĐT/Zalo: <a href="tel:0762559696">0762.559.696</a></li>
+                        <li><i class="fas fa-envelope mr-1"></i>Email: <a href="mailto:f7deat@gmail.com">f7deat@gmail.com</a></li>
+                    </ul>
+                </div>
+
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
 
@@ -74,10 +86,10 @@
 
         @if (Model.Tags.Any())
         {
-            @await Component.InvokeAsync("Related", new Waffle.Entities.WorkItem {
-        CatalogId = Model.Tags.OrderBy(x => Guid.NewGuid()).First().Id,
-        WorkId = Model.PageData.Id
-        })
+            @await Component.InvokeAsync("Related", new RelatedProps {
+                TagIds = Model.Tags.Select(x => x.Id),
+                CatalogId = Model.PageData.Id
+            })
         }
     </div>
 </main>

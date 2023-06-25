@@ -3,7 +3,7 @@
 
 <div class="@Model.ClassName">
     <div class="@Model.Layout">
-        <div class="wf-row @Model.Gap">
+        <div class="row">
             @foreach (var col in Model.Columns)
             {
                 @await Component.InvokeAsync(nameof(Column), col)

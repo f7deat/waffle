@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 
 namespace Waffle.Pages.Contacts
 {
@@ -27,9 +26,14 @@ namespace Waffle.Pages.Contacts
             [Required]
             [EmailAddress]
             public string Email { get; set; } = default!;
+            public string? Name { get; set; }
+            public string? Address { get; set; }
+            [Phone]
+            public string? PhoneNumber { get; set; }
+            public string? Note { get; set; }
         }
 
-        public IdentityResult IdentityResult { get; set; }
+        public IdentityResult IdentityResult { get; set; } = new();
 
         public void OnGet()
         {
