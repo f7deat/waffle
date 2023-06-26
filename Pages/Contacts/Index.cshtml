@@ -1,10 +1,15 @@
 ﻿@page
 @using Waffle.Entities
+@using Waffle.Models.Components
 @model Waffle.Pages.Contacts.IndexModel<ApplicationUser>
 
 <div class="container">
+
+    @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
+
     <div class="row">
         <div class="col-md-8">
+
         </div>
         <div class="col-md-4">
             <div class="card shadow rounded p-4 bg-white">

@@ -22,6 +22,7 @@ namespace Waffle.ViewComponents
                 PageSize = 4,
                 CatalogId = props.CatalogId,
                 TagIds = props.TagIds,
+                Type = props.Type
             });
             if (articles?.Data == null || !articles.Data.Any())
             {
@@ -38,5 +39,6 @@ namespace Waffle.ViewComponents
     {
         public IEnumerable<Guid> TagIds { get; set; } = null!;
         public Guid CatalogId { get; set; }
+        public CatalogType Type { get; set; }
     }
 }

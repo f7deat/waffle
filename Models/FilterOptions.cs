@@ -56,6 +56,7 @@ namespace Waffle.Models
     {
         public IEnumerable<Guid> TagIds { get; set; } = null!;
         public Guid CatalogId { get; set; }
+        public CatalogType Type { get; set; }
     }
 
     public class TagFilterOptions : FilterOptions

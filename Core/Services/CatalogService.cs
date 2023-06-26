@@ -222,7 +222,7 @@ namespace Waffle.Core.Services
         {
             var query = from a in _context.WorkItems
                         join b in _context.Catalogs on a.WorkId equals b.Id
-                        where b.Active && filterOption.TagIds.Contains(a.CatalogId) && b.Type == CatalogType.Article && b.Id != filterOption.CatalogId
+                        where b.Active && filterOption.TagIds.Contains(a.CatalogId) && b.Type == filterOption.Type && b.Id != filterOption.CatalogId
                         select b;
             return await ListResult<Catalog>.Success(query, filterOption);
         }

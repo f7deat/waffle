@@ -88,7 +88,8 @@
         {
             @await Component.InvokeAsync("Related", new RelatedProps {
                 TagIds = Model.Tags.Select(x => x.Id),
-                CatalogId = Model.PageData.Id
+                CatalogId = Model.PageData.Id,
+                Type = Waffle.Entities.CatalogType.Location
             })
         }
     </div>

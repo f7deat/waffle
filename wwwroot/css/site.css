@@ -130,6 +130,9 @@ input, textarea, select {
 ul, ol {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 2rem;
 }
 
 li {
@@ -255,10 +258,6 @@ p {
     padding: 0.5rem;
 }
 
-.col-md-4, .col-md-8, .col-md-6 {
-    width: 100%;
-}
-
 .dropdown {
     position: relative;
 }
@@ -323,7 +322,7 @@ p {
     border: 1px solid #dee2e6;
 }
 
-.flex, .row {
+.flex {
     display: flex;
 }
 
@@ -785,6 +784,11 @@ p {
 }
 
 @media screen and (min-width: 768px) {
+
+    .row {
+        display: flex;
+    }
+
     .container {
         max-width: 768px;
         padding: 0;

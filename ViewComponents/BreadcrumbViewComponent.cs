@@ -31,12 +31,15 @@ namespace Waffle.ViewComponents
             var catalog = await _catalogService.FindAsync(catalogId);
             if (catalog != null)
             {
-                breadcrumb.Add(new Breadcrumb
+                if (catalog.Type != CatalogType.Entry && catalog.Type != CatalogType.Default)
                 {
-                    Url = GetMasterUrl(catalog.Type),
-                    Name = await _localizationService.GetAsync(catalog.Type.ToString()),
-                    Position = breadcrumb.Count + 1
-                });
+                    breadcrumb.Add(new Breadcrumb
+                    {
+                        Url = GetMasterUrl(catalog.Type),
+                        Name = await _localizationService.GetAsync(catalog.Type.ToString()),
+                        Position = breadcrumb.Count + 1
+                    });
+                }
 
                 if (catalog.ParentId != null)
                 {

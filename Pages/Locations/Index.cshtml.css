@@ -1,7 +1,7 @@
 ﻿.locations {
     margin-bottom: 0.5rem;
     gap: 1rem;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .wf-article-item {
@@ -63,3 +63,9 @@
         .thumbnail img:hover {
             opacity: 0.75;
         }
+
+@media screen and (min-width: 768px) {
+    .locations {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}

@@ -2,6 +2,7 @@
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
 @using Waffle.ViewComponents
+@using Waffle.Entities
 @model Waffle.Pages.Article.DetailsModel
 
 <main class="wf-article__detail">
@@ -77,7 +78,8 @@
         {
             @await Component.InvokeAsync("Related", new RelatedProps {
                 TagIds = Model.Tags.Select(x => x.Id),
-                CatalogId = Model.PageData.Id
+                CatalogId = Model.PageData.Id,
+                Type = CatalogType.Article
             })
         }
     </div>

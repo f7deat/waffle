@@ -89,5 +89,14 @@ namespace Waffle.Core.Helpers
             }
             return str;
         }
+
+        public static string GetDomain(HttpRequest request)
+        {
+            if (!request.Host.HasValue || request.Host.Value.StartsWith("localhost"))
+            {
+                return "defzone.net";
+            }
+            return request.Host.Value;
+        }
     }
 }
