@@ -4,7 +4,7 @@ namespace Waffle.Models.ViewModels
 {
     public class UserViewModel
     {
-        public string Id { get; set; } = null!;
+        public Guid Id { get; set; }
         public string UserName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Name { get; set; } = null!;

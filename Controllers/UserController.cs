@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.Extensions;
 using Waffle.Models;
 
 namespace Waffle.Controllers
@@ -15,12 +16,12 @@ namespace Waffle.Controllers
     public class UserController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<UserController> _logger;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        public UserController(IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+        public UserController(IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<ApplicationRole> roleManager)
         {
             _userService = userService;
             _userManager = userManager;
@@ -33,11 +34,7 @@ namespace Waffle.Controllers
         [HttpGet("list")]
         public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions)
         {
-            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(currentUserId))
-            {
-                return BadRequest();
-            }
+            var currentUserId = User.GetId();
             var query = _userManager.Users.Where(x => x.Id != currentUserId).OrderByDescending(x => x.Id);
             return Ok(await ListResult<ApplicationUser>.Success(query, filterOptions));
         }
@@ -80,7 +77,7 @@ namespace Waffle.Controllers
 
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id, ClaimValueTypes.String),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -140,7 +137,7 @@ namespace Waffle.Controllers
                 }));
             }
 
-            await _roleManager.CreateAsync(new IdentityRole
+            await _roleManager.CreateAsync(new ApplicationRole
             {
                 Name = "admin"
             });

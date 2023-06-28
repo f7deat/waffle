@@ -33,7 +33,7 @@ namespace Waffle.Pages.Products.Cart
             var user = await _userManager.GetUserAsync(User);
             var order = new Order
             {
-                UserId = user?.Id
+                UserId = user.Id
             };
             await _orderService.AddAsync(order);
             return Redirect($"/shop/checkout?productIds={ProductId}");

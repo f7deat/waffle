@@ -34,28 +34,41 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> AddAsync(Catalog catalog)
         {
-            if (catalog is null || string.IsNullOrWhiteSpace(catalog.Name))
+            try
             {
-                return IdentityResult.Failed(new IdentityError {
-                    Description = "Name can not empty!"
-                });
+                if (catalog is null || string.IsNullOrWhiteSpace(catalog.Name))
+                {
+                    return IdentityResult.Failed(new IdentityError
+                    {
+                        Description = "Name can not empty!"
+                    });
+                }
+                if (string.IsNullOrEmpty(catalog.NormalizedName))
+                {
+                    catalog.NormalizedName = SeoHelper.ToSeoFriendly(catalog.Name);
+                }
+                if (await IsExistAsync(catalog))
+                {
+                    return IdentityResult.Failed(new IdentityError
+                    {
+                        Code = "error.dupplicate",
+                        Description = "Data exist!"
+                    });
+                }
+                catalog.CreatedDate = DateTime.Now;
+                catalog.ModifiedDate = DateTime.Now;
+                await _context.Catalogs.AddAsync(catalog);
+                await _context.SaveChangesAsync();
+                return IdentityResult.Success;
             }
-            if (string.IsNullOrEmpty(catalog.NormalizedName))
-            {
-                catalog.NormalizedName = SeoHelper.ToSeoFriendly(catalog.Name);
-            }
-            if (await IsExistAsync(catalog))
+            catch (Exception ex)
             {
                 return IdentityResult.Failed(new IdentityError
                 {
-                    Description = "Data exist!"
+                    Code = nameof(Exception),
+                    Description = ex.ToString()
                 });
             }
-            catalog.CreatedDate = DateTime.Now;
-            catalog.ModifiedDate = DateTime.Now;
-            await _context.Catalogs.AddAsync(catalog);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
         }
 
         public async Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default)
@@ -82,15 +95,11 @@ namespace Waffle.Core.Services
 
         public async Task<Catalog?> GetByNameAsync(string? normalizedName)
         {
-            if (string.IsNullOrEmpty(normalizedName))
-            {
-                return default;
-            }
+            if (string.IsNullOrEmpty(normalizedName)) return default;
+
             var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
-            if (catalog is null)
-            {
-                return default;
-            }
+            if (catalog is null) return default;
+
             catalog.ViewCount++;
             await _context.SaveChangesAsync();
             return catalog;

@@ -16,7 +16,7 @@ namespace Waffle.Pages.User
             _userService = userService;
         }
 
-        public IdentityUser IdentityUser = new();
+        public ApplicationUser IdentityUser = new();
         public string Avatar = string.Empty;
 
         public async Task<IActionResult> OnGetAsync()

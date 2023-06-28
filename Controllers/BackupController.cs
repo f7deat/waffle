@@ -20,12 +20,12 @@ namespace Waffle.Controllers
     public class BackupController : BaseController
     {
         private readonly ApplicationDbContext _context;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IComponentService _componentService;
         private readonly IAppSettingService _appSettingService;
         private readonly ICatalogService _catalogService;
         private readonly IWorkService _workService;
-        public BackupController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService, IWorkService workService)
+        public BackupController(ApplicationDbContext context, RoleManager<ApplicationRole> roleManager, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService, IWorkService workService)
         {
             _context = context;
             _roleManager = roleManager;
@@ -36,7 +36,7 @@ namespace Waffle.Controllers
         }
 
         [HttpPost("export")]
-        public async Task<IActionResult> ExportAsync() => Ok(new BackupListItems
+        public async Task<IActionResult> ExportAsync() => Ok(new BackupListItem
         {
             WorkContents = await _context.WorkContents.ToListAsync(),
             WorkItems = await _context.WorkItems.ToListAsync(),
@@ -65,7 +65,7 @@ namespace Waffle.Controllers
                 }));
             }
             var stream = file.OpenReadStream();
-            var data = await JsonSerializer.DeserializeAsync<BackupListItems>(stream);
+            var data = await JsonSerializer.DeserializeAsync<BackupListItem>(stream);
             if (data is null)
             {
                 return Ok(IdentityResult.Failed(new IdentityError
@@ -146,7 +146,8 @@ namespace Waffle.Controllers
         {
             if (!await _roleManager.RoleExistsAsync(RoleName.Customer))
             {
-                var role = new IdentityRole {
+                var role = new ApplicationRole
+                {
                     Name = RoleName.Customer
                 };
                 await _roleManager.CreateAsync(role);
