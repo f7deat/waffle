@@ -3,7 +3,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Models;
 
-namespace Waffle.Pages.Page
+namespace Waffle.Pages.Leaf
 {
     public class DetailsModel : DynamicPageModel
     {

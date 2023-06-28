@@ -83,6 +83,8 @@ namespace Waffle.ViewComponents
                     return "/article";
                 case CatalogType.Product:
                     return "/products";
+                case CatalogType.Location:
+                    return "/locations";
                 default:
                     return $"/{type.ToString().ToLower()}";
             }

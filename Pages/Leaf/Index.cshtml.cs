@@ -4,7 +4,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
 
-namespace Waffle.Pages.Page
+namespace Waffle.Pages.Leaf
 {
     public class IndexModel : PageModel
     {
