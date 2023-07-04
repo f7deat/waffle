@@ -6,5 +6,6 @@ namespace Waffle.ExternalAPI.Interfaces
     {
         Task<BaseInfoAndLinks> GetBaseInfoAndLinksAsync(int pageNum);
         Task<LandingPageLinkList> GetLinkListAsync(string groupId, string searchTerm);
+        Task<LandingPageLinkList> GetLinkListsAsync(string tag);
     }
 }

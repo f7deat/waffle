@@ -229,10 +229,10 @@ namespace Waffle.Core.Services
 
         public async Task<ListResult<Catalog>> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
         {
-            var query = from a in _context.WorkItems
-                        join b in _context.Catalogs on a.WorkId equals b.Id
-                        where b.Active && filterOption.TagIds.Contains(a.CatalogId) && b.Type == filterOption.Type && b.Id != filterOption.CatalogId
-                        select b;
+            var query = (from a in _context.WorkItems
+                         join b in _context.Catalogs on a.WorkId equals b.Id
+                         where b.Active && filterOption.TagIds.Contains(a.CatalogId) && b.Type == filterOption.Type && b.Id != filterOption.CatalogId
+                         select b).Distinct();
             return await ListResult<Catalog>.Success(query, filterOption);
         }
 

@@ -5,23 +5,17 @@ namespace Waffle.Entities
 {
     public class Catalog : BaseEntity
     {
-        public Catalog()
-        {
-            Name = string.Empty;
-            NormalizedName = string.Empty;
-        }
-
         [JsonPropertyName("parrentId")]
         public Guid? ParentId { get; set; }
         [StringLength(200)]
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
         [StringLength(500)]
         [JsonPropertyName("description")]
         public string? Description { get; set; }
         [StringLength(200)]
         [JsonPropertyName("normalizedName")]
-        public string NormalizedName { get; set; }
+        public string NormalizedName { get; set; } = default!;
         [JsonPropertyName("setting")]
         public string? Setting { get; set; }
         [JsonPropertyName("createdDate")]

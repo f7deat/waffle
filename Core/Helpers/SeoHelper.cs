@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using System.Text;
+using Waffle.Entities;
 
 namespace Waffle.Core.Helpers
 {
@@ -44,6 +45,24 @@ namespace Waffle.Core.Helpers
                 return string.Empty;
             }
             return page.Replace(" ", "_");
+        }
+
+        public static string CatalogUrl(CatalogType type)
+        {
+            switch (type)
+            {
+                case CatalogType.Default:
+                    return "leaf";
+                case CatalogType.Article:
+                    return "article";
+                case CatalogType.Product:
+                    return "products";
+                case CatalogType.Location:
+                    return "locations";
+                case CatalogType.Tag:
+                    return "tag";
+                default: return "leaf";
+            }
         }
 
         private static readonly string[] VietnameseSigns = new string[]

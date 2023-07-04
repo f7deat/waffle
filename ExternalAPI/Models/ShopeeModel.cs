@@ -68,6 +68,18 @@ namespace Waffle.ExternalAPI.Models
         public string? LinkNameKeyWord { get; set; }
     }
 
+    public class Variables3
+    {
+        [JsonPropertyName("pageNum")]
+        public string? PageNum { get; set; }
+        [JsonPropertyName("pageSize")]
+        public string? PageSize { get; set; }
+        [JsonPropertyName("urlSuffix")]
+        public string? UrlSuffix { get; set; }
+        [JsonPropertyName("linkNameKeyword")]
+        public string? LinkNameKeyWord { get; set; }
+    }
+
     public class LandingPageLinkList
     {
         [JsonPropertyName("totalCount")]

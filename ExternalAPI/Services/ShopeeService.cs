@@ -76,5 +76,36 @@ namespace Waffle.ExternalAPI.Services
             }
             return new LandingPageLinkList();
         }
+
+        public async Task<LandingPageLinkList> GetLinkListsAsync(string tag)
+        {
+            try
+            {
+                var url = "https://mycollection.shop/api/v3/gql/graphql";
+                var value = new BaseInfoAndLinksPayload<Variables3>
+                {
+                    OperationName = "getLinkLists",
+                    Query = "query getLinkLists($urlSuffix: String!, $pageSize: String, $pageNum: String, $groupId: String, $linkNameKeyword: String) {\r\n  landingPageLinkList(\r\n    urlSuffix: $urlSuffix\r\n    pageSize: $pageSize\r\n    pageNum: $pageNum\r\n    groupId: $groupId\r\n    linkNameKeyword: $linkNameKeyword\r\n  ) {\r\n    totalCount\r\n    linkList {\r\n      linkId\r\n      link\r\n      linkName\r\n      image\r\n      linkType\r\n      groupIds\r\n    }\r\n  }\r\n}\r\n",
+                    Variables = new Variables3
+                    {
+                        PageNum = "1",
+                        PageSize = "4",
+                        UrlSuffix = "banhque",
+                        LinkNameKeyWord = tag
+                    }
+                };
+                var response = await _http.PostAsJsonAsync(url, value);
+                if (response.IsSuccessStatusCode)
+                {
+                    var data = await JsonSerializer.DeserializeAsync<ShopeeResult<BaseInfoAndLinks>>(await response.Content.ReadAsStreamAsync());
+                    return data?.Data?.LandingPageLinkList ?? new LandingPageLinkList();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex.ToString());
+            }
+            return new LandingPageLinkList();
+        }
     }
 }

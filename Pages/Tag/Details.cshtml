@@ -18,13 +18,13 @@
                 </div>
             </form>
 
-            <div class="title flex justify-between">
+            <div class="title flex justify-between mb-0">
                 <h1 class="text-base">
                     @Model.PageData.Name
                     <span class="font-normal">(@Model.Pagination.Total)</span>
                 </h1>
-
             </div>
+            <div class="bg-gray-100 px-2 py-1 mb-2">Lượt xem: @Model.PageData.ViewCount.ToString("N0")</div>
             <partial name="~/Pages/Article/_List.cshtml" model="Model.Catalogs" />
             <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
 
