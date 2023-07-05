@@ -6,6 +6,7 @@ namespace Waffle.Core.Interfaces.IService
 {
     public interface IFileExplorerService
     {
+        Task<int> CountAsync();
         Task<ListResult<FileContent>> ListAsync(FileFilterOptions filterOptions);
         Task<IdentityResult> UploadFromUrlAsync(string url);
     }

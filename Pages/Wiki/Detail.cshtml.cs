@@ -6,6 +6,7 @@ using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.Pages.Wiki
 {
@@ -13,15 +14,18 @@ namespace Waffle.Pages.Wiki
     {
         private readonly IWikiService _wikiService;
         private readonly ICatalogService _catalogService;
-        public DetailModel(IWikiService wikiService, ICatalogService catalogService)
+        private readonly IShopeeService _shopeeService;
+        public DetailModel(IWikiService wikiService, ICatalogService catalogService, IShopeeService shopeeService)
         {
             _wikiService = wikiService;
             _catalogService = catalogService;
+            _shopeeService = shopeeService;
         }
 
         public Parse Data = new();
         public List<Catalog> Catalogs = new();
         public bool HasArticle = false;
+        public LandingPageLinkList ShopeeProducts = new();
 
         public async Task<IActionResult> OnGetAsync(string id, string lang = "vi")
         {
@@ -38,10 +42,13 @@ namespace Waffle.Pages.Wiki
             {
                 Active = true,
                 Name = Data.Title,
-                Type = CatalogType.Article
+                Type = CatalogType.Article,
+                PageSize = 4
             });
             HasArticle = articles.HasData;
             Catalogs = articles.Data?.ToList() ?? new();
+
+            ShopeeProducts = await _shopeeService.GetLinkListsAsync(id.Replace("_", " "), 6);
 
             return Page();
         }

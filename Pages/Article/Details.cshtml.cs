@@ -64,7 +64,7 @@ namespace Waffle.Pages.Article
                     ItemPerRow = "grid-cols-2"
                 };
 
-                ShopeeProducts = await _shopeeService.GetLinkListsAsync(Tags.Last().Name);
+                ShopeeProducts = await _shopeeService.GetLinkListsAsync(Tags.Last().Name, 4);
             }
 
             return Page();

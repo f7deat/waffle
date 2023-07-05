@@ -77,7 +77,7 @@ namespace Waffle.ExternalAPI.Services
             return new LandingPageLinkList();
         }
 
-        public async Task<LandingPageLinkList> GetLinkListsAsync(string tag)
+        public async Task<LandingPageLinkList> GetLinkListsAsync(string tag, int pageSize)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace Waffle.ExternalAPI.Services
                     Variables = new Variables3
                     {
                         PageNum = "1",
-                        PageSize = "4",
+                        PageSize = pageSize.ToString(),
                         UrlSuffix = "banhque",
                         LinkNameKeyWord = tag
                     }

@@ -11,16 +11,16 @@ namespace Waffle.Controllers
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ApplicationDbContext _context;
-        private readonly IFileExplorerService _fileExplorerService;
+        private readonly IFileExplorerService _fileService;
         public FileExplorerController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IFileExplorerService fileExplorerService)
         {
             _webHostEnvironment = webHostEnvironment;
             _context = context;
-            _fileExplorerService = fileExplorerService;
+            _fileService = fileExplorerService;
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> ListAsync([FromQuery] FileFilterOptions filterOptions) => Ok(await _fileExplorerService.ListAsync(filterOptions));
+        public async Task<IActionResult> ListAsync([FromQuery] FileFilterOptions filterOptions) => Ok(await _fileService.ListAsync(filterOptions));
 
         [HttpPost("delete-file-content/{id}")]
         public async Task<IActionResult> DeleteFileContentAsync([FromRoute] Guid id)
@@ -73,6 +73,9 @@ namespace Waffle.Controllers
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.FileContents.FindAsync(id));
 
         [HttpPost("upload-from-url")]
-        public async Task<IActionResult> UploadFromUrlAsync([FromBody] FileContent file) => Ok(await _fileExplorerService.UploadFromUrlAsync(file.Url));
+        public async Task<IActionResult> UploadFromUrlAsync([FromBody] FileContent file) => Ok(await _fileService.UploadFromUrlAsync(file.Url));
+
+        [HttpGet("count")]
+        public async Task<IActionResult> CountAsync() => Ok(await _fileService.CountAsync());
     }
 }

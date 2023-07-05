@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -13,6 +14,8 @@ namespace Waffle.Core.Services
         {
             _context = context;
         }
+
+        public async Task<int> CountAsync() => await _context.FileContents.CountAsync();
 
         public async Task<ListResult<FileContent>> ListAsync(FileFilterOptions filterOptions)
         {
