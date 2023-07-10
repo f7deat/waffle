@@ -4,7 +4,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 
-namespace Waffle.Pages.Game
+namespace Waffle.Pages.Games
 {
     public class RedirectModel : PageModel
     {

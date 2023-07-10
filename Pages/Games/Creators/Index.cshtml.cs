@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Waffle.Pages.Game.Creators
+namespace Waffle.Pages.Games.Creators
 {
     public class IndexModel : PageModel
     {

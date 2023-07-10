@@ -4,7 +4,7 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 
-namespace Waffle.Pages.Game
+namespace Waffle.Pages.Games
 {
     public class IndexModel : EntryPageModel
     {

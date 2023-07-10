@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models.Components;
 
-namespace Waffle.Pages.Game.LeagueOfLegends
+namespace Waffle.Pages.Games.LeagueOfLegends
 {
     public class IndexModel : PageModel
     {
