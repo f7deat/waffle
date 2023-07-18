@@ -5,7 +5,6 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 

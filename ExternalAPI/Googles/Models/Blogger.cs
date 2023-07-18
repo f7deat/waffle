@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Waffle.ExternalAPI.Google.Models
+namespace Waffle.ExternalAPI.Googles.Models
 {
     public class BloggerListResult<T> where T : class
     {
