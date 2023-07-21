@@ -1,7 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Waffle.Models.Components
 {
+    [Display(Name = "Swiper")]
     public class Swiper : AbstractComponent
     {
         [JsonPropertyName("title")]
@@ -13,6 +15,7 @@ namespace Waffle.Models.Components
         public List<SwiperItem> Items { get; set; } = new();
     }
 
+    [Display(Name = "Swiper Item")]
     public class SwiperItem
     {
         public string? Title { get; set; }

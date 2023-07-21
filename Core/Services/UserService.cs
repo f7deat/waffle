@@ -60,16 +60,12 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> CreateAsync(CreateUserModel model)
         {
-            if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
-            {
-                return IdentityResult.Failed();
-            }
-            var user = new ApplicationUser
+            return await _userManager.CreateAsync(new ApplicationUser
             {
                 Email = model.Email,
-                UserName = model.Email
-            };
-            return await _userManager.CreateAsync(user, model.Password);
+                UserName = model.UserName,
+                PhoneNumber = model.PhoneNumber
+            }, model.Password);
         }
 
         public async Task<dynamic> GetCurrentUserAsync(string id)

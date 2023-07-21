@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Hosting.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Waffle.Core.Constants;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Extensions;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.Settings;
 
 namespace Waffle.Core.Services
 {
@@ -14,10 +20,12 @@ namespace Waffle.Core.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<AppSettingService> _logger;
-        public AppSettingService(ApplicationDbContext context, ILogger<AppSettingService> logger)
+        private readonly ILookupNormalizer _lookupNormalizer;
+        public AppSettingService(ApplicationDbContext context, ILogger<AppSettingService> logger, ILookupNormalizer lookupNormalizer)
         {
             _context = context;
             _logger = logger;
+            _lookupNormalizer = lookupNormalizer;
         }
 
         public async Task<IdentityResult> AddWorkAsync(WorkContent args)
@@ -81,10 +89,8 @@ namespace Waffle.Core.Services
 
         public async Task<T?> GetAsync<T>(string normalizedName)
         {
-            if (string.IsNullOrEmpty(normalizedName))
-            {
-                throw new ArgumentNullException(nameof(normalizedName));
-            }
+            if (string.IsNullOrEmpty(normalizedName)) throw new ArgumentNullException(nameof(normalizedName));
+
             var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.ToLower().Equals(normalizedName));
             if (setting is null)
             {
@@ -92,11 +98,29 @@ namespace Waffle.Core.Services
                 await _context.AppSettings.AddAsync(setting);
                 await _context.SaveChangesAsync();
             }
-            if (string.IsNullOrEmpty(setting.Value))
-            {
-                return default;
-            }
+            if (string.IsNullOrEmpty(setting.Value)) return default;
+
             return JsonSerializer.Deserialize<T>(setting.Value);
+        }
+
+        public async Task<object?> GetByNameAsync(string normalizedName)
+        {
+            if (!SupportSetting.Values.Any(x => x.Equals(normalizedName, StringComparison.OrdinalIgnoreCase))) return default;
+
+            var name = _lookupNormalizer.NormalizeName(normalizedName);
+
+            var data = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName == name);
+            if (data is null)
+            {
+                data = new AppSetting
+                {
+                    Name = AttributeHelper.GetName(typeof(GoogleTagManager)) ?? name,
+                    NormalizedName = name
+                };
+                await _context.AppSettings.AddAsync(data);
+                await _context.SaveChangesAsync();
+            };
+            return data;
         }
 
         public async Task<IdentityResult> HeaderLogoAsync(Header args)

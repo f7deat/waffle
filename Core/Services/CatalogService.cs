@@ -169,9 +169,9 @@ namespace Waffle.Core.Services
 
         public async Task<Catalog?> FindAsync(Guid id) => await _context.Catalogs.FindAsync(id);
 
-        public async Task<IEnumerable<Catalog>> ArticlePickerListAsync()
+        public async Task<IEnumerable<Catalog>> ArticlePickerListAsync(CatalogType type = CatalogType.Article)
         {
-            return await _context.Catalogs.Where(x => x.Active && x.Type == CatalogType.Article).OrderBy(x => Guid.NewGuid()).Take(5).ToListAsync();
+            return await _context.Catalogs.Where(x => x.Active && x.Type == type).OrderBy(x => Guid.NewGuid()).Take(5).ToListAsync();
         }
 
         public async Task<IdentityResult> SaveAsync(Catalog args)
@@ -232,6 +232,7 @@ namespace Waffle.Core.Services
             var query = (from a in _context.WorkItems
                          join b in _context.Catalogs on a.WorkId equals b.Id
                          where b.Active && filterOption.TagIds.Contains(a.CatalogId) && b.Type == filterOption.Type && b.Id != filterOption.CatalogId
+                         orderby b.ModifiedDate descending
                          select b).Distinct();
             return await ListResult<Catalog>.Success(query, filterOption);
         }

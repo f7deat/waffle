@@ -18,7 +18,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<ListResult<Catalog>> ArticleListAsync(ArticleFilterOptions filterOptions);
         Task<ListResult<Catalog>> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOptions);
         Task<Catalog?> FindAsync(Guid id);
-        Task<IEnumerable<Catalog>> ArticlePickerListAsync();
+        Task<IEnumerable<Catalog>> ArticlePickerListAsync(CatalogType type = CatalogType.Article);
         Task<IdentityResult> SaveAsync(Catalog args);
         IEnumerable<Option> GetTypes();
         Task<WorkContent?> FirstWorkAsync(Guid id);

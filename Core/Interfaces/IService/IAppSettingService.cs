@@ -14,6 +14,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<AppSetting?> FindAsync(Guid catalogId);
         Task<T?> GetAsync<T>(Guid id);
         Task<T?> GetAsync<T>(string normalizedName);
+        Task<object?> GetByNameAsync(string normalizedName);
         Task<IdentityResult> HeaderLogoAsync(Header args);
         Task<IdentityResult> HeaderSaveAsync(Header args);
         Task<ListResult<AppSetting>> ListAsync();

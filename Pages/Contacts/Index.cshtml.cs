@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SendGrid;
@@ -7,7 +6,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
-using Waffle.ExternalAPI.SendGrid;
+using Waffle.ExternalAPI.SendGrids;
 
 namespace Waffle.Pages.Contacts
 {
@@ -38,7 +37,7 @@ namespace Waffle.Pages.Contacts
                 return Page();
             }
 
-            var sendGrid = await _appSettingService.GetAsync<SendGridConfigure>(nameof(SendGrid));
+            var sendGrid = await _appSettingService.GetAsync<ExternalAPI.SendGrids.SendGrid>(nameof(SendGrid));
             if (sendGrid is null)
             {
                 IdentityResult = IdentityResult.Failed(new IdentityError

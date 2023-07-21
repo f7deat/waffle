@@ -8,7 +8,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
-using Waffle.ExternalAPI.SendGrid;
+using Waffle.ExternalAPI.SendGrids;
 using Waffle.Models.Components;
 using Waffle.Models.Settings;
 
@@ -35,6 +35,9 @@ namespace Waffle.Controllers
             _workService = workService;
         }
 
+        [HttpGet("by-name/{normalizedName}")]
+        public async Task<IActionResult> GetAsync([FromRoute] string normalizedName) => Ok(await _appSettingService.GetByNameAsync(normalizedName));
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<object>(id));
 
@@ -58,11 +61,11 @@ namespace Waffle.Controllers
         public async Task<IActionResult> GetSendGridAsync()
         {
             var app = await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
-            return Ok(await _appSettingService.GetAsync<SendGridConfigure>(app.Id));
+            return base.Ok(await _appSettingService.GetAsync<ExternalAPI.SendGrids.SendGrid>(app.Id));
         }
 
         [HttpPost("sendgrid/save")]
-        public async Task<IActionResult> SaveSendGridAsync([FromBody] SendGridConfigure args)
+        public async Task<IActionResult> SaveSendGridAsync([FromBody] ExternalAPI.SendGrids.SendGrid args)
         {
             var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(SendGrid)));
             if (setting == null)

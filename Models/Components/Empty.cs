@@ -1,7 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Waffle.Models.Components
 {
+    [Display(Name = "Empty")]
     public class Empty
     {
         [JsonIgnore]

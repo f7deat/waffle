@@ -17,6 +17,7 @@
     --yellow-500: #eab308;
     --light: #f1f5f9;
     --shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+    --body-color: #0e1c71;
 }
 
 html {
@@ -24,7 +25,7 @@ html {
 }
 
 body {
-    color: #0e1c71;
+    color: var(--body-color);
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
     margin: 0;
 }
@@ -712,6 +713,10 @@ p {
 .text-xl {
     font-size: 1.25rem;
     line-height: 1.75rem;
+}
+
+.text-body {
+    color: var(--body-color);
 }
 
 .text-center {

@@ -6,6 +6,7 @@ using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.ExternalAPI.GoogleAggregate;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.Models.GoogleAggregate;
 using Waffle.Models;
@@ -161,7 +162,7 @@ namespace Waffle.Controllers
             await EnsureComponentsAsync();
             await _context.SaveChangesAsync();
             await _appSettingService.EnsureSettingAsync(nameof(Facebook));
-            await _appSettingService.EnsureSettingAsync(nameof(ExternalAPI.Google));
+            await _appSettingService.EnsureSettingAsync(nameof(Google));
             await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
             await _appSettingService.EnsureSettingAsync(nameof(Telegram));
             await _appSettingService.EnsureSettingAsync(nameof(Social));

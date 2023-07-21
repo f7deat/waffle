@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Đăng nhập";
 }
-
+<script src="https://accounts.google.com/gsi/client" async></script>
 <div class="container">
     <div class="flex justify-center">
         <div class="md:w-1/3">
@@ -63,6 +63,22 @@
                 <a href="#" class="border h-12 w-12 flex justify-center items-center rounded-full hover:bg-gray-100 text-dark">
                     <i class="fab fa-google"></i>
                 </a>
+                <div id="g_id_onload"
+                     data-client_id="AIzaSyAu30fAEnWdAKhlbLTggWue-qtVzFeg7hA"
+                     data-context="signin"
+                     data-ux_mode="popup"
+                     data-login_uri="signin-google"
+                     data-auto_select="true"
+                     data-itp_support="true">
+                </div>
+
+                <div class="g_id_signin"
+                     data-type="icon"
+                     data-shape="circle"
+                     data-theme="filled_black"
+                     data-text="signin_with"
+                     data-size="large">
+                </div>
             </div>
             <div class="text-center mb-4">
                 Bạn chưa có tài khoản? <a href="/user/register">Đăng ký</a>
