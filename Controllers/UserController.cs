@@ -40,22 +40,10 @@ namespace Waffle.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> FindByIdAsync([FromRoute] string id) => Ok(await _userService.GetCurrentUserAsync(id));
+        public async Task<IActionResult> FindByIdAsync([FromRoute] Guid id) => Ok(await _userService.GetCurrentUserAsync(id));
 
         [HttpGet("")]
-        public async Task<IActionResult> GetUserAsync()
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Ok(IdentityResult.Failed());
-            }
-            return Ok(new
-            {
-                succeeded = true,
-                data = await _userService.GetCurrentUserAsync(userId)
-            });
-        }
+        public async Task<IActionResult> GetCurrentUserAsync() => Ok(await _userService.GetCurrentUserAsync(User.GetId()));
 
         [HttpGet("users-in-role/{roleName}")]
         public async Task<IActionResult> GetUsersInRoleAsync([FromRoute] string roleName) => Ok(await _userService.GetUsersInRoleAsync(roleName));

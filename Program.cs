@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Waffle.Core.Constants;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Extensions;
@@ -60,7 +61,7 @@ builder.Services
         {
             OnMessageReceived = context =>
             {
-                var token = context.HttpContext.Request.Cookies["wf_token"];
+                var token = context.HttpContext.Request.Cookies[CookieKey.Token];
                 if (!string.IsNullOrEmpty(token))
                 {
                     context.Token = token;

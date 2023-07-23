@@ -1,11 +1,10 @@
 ﻿using Waffle.Entities;
 
-namespace Waffle.Core.Interfaces.IRepository
+namespace Waffle.Core.Interfaces.IRepository;
+
+public interface ILocalizationRepository : IAsyncRepository<Localization>
 {
-    public interface ILocalizationRepository : IAsyncRepository<Localization>
-    {
-        Task<Localization?> FindAsync(string key, string lang);
-        IQueryable<Localization> GetListAsync(string lang, string? key);
-        Task<bool> IsExistAsync(string lang, string key);
-    }
+    Task<Localization?> FindAsync(string key, string lang);
+    IQueryable<Localization> GetListAsync(string lang, string? key);
+    Task<bool> IsExistAsync(string lang, string key);
 }

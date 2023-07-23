@@ -5,10 +5,9 @@ using Microsoft.Extensions.Options;
 using Waffle.Data;
 using Waffle.Models;
 
-namespace Waffle.Controllers
+namespace Waffle.Controllers;
+
+public class CommentController : BaseController
 {
-    public class CommentController : BaseController
-    {
-        
-    }
+    
 }

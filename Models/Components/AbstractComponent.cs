@@ -1,12 +1,14 @@
 ﻿using System.Text.Json.Serialization;
+using Waffle.Core.Interfaces;
 
-namespace Waffle.Models.Components
+namespace Waffle.Models.Components;
+
+public abstract class AbstractComponent : IComponent
 {
-    public abstract class AbstractComponent
-    {
-        [JsonPropertyName("id")]
-        public Guid Id { get; set; }
-        [JsonPropertyName("className")]
-        public string? ClassName { get; set; }
-    }
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; }
+    [JsonPropertyName("className")]
+    public string? ClassName { get; set; }
+    [JsonIgnore]
+    public string NormalizedName { get; set; } = default!;
 }

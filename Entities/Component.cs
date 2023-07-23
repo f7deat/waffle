@@ -1,8 +1,9 @@
 ﻿using System.Text.Json.Serialization;
+using Waffle.Core.Interfaces;
 
 namespace Waffle.Entities;
 
-public class Component : BaseEntity
+public class Component : BaseEntity, IComponent
 {
     public Component()
     {

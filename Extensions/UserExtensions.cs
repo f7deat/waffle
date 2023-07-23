@@ -1,17 +1,13 @@
 ﻿using System.Security.Claims;
 
-namespace Waffle.Extensions
+namespace Waffle.Extensions;
+
+public static class UserExtensions
 {
-    public static class UserExtensions
+    public static Guid GetId(this ClaimsPrincipal claimsPrincipal)
     {
-        public static Guid GetId(this ClaimsPrincipal claimsPrincipal)
-        {
-            var id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(id))
-            {
-                return Guid.Empty;
-            }
-            return Guid.Parse(id);
-        }
+        var id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(id)) return Guid.Empty;
+        return Guid.Parse(id);
     }
 }

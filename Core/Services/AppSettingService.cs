@@ -112,13 +112,7 @@ namespace Waffle.Core.Services
             var data = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName == name);
             if (data is null)
             {
-                data = new AppSetting
-                {
-                    Name = AttributeHelper.GetName(typeof(GoogleTagManager)) ?? name,
-                    NormalizedName = name
-                };
-                await _context.AppSettings.AddAsync(data);
-                await _context.SaveChangesAsync();
+                
             };
             return data;
         }
