@@ -1,13 +1,11 @@
 ﻿@using Waffle.Models.Components
 @model Row
 
-<div class="@Model.ClassName">
-    <div class="@Model.Layout">
-        <div class="row">
-            @foreach (var col in Model.Columns)
-            {
-                @await Component.InvokeAsync(nameof(Column), col)
-            }
-        </div>
+<div class="@Model.Layout">
+    <div class="row">
+        @foreach (var col in Model.Columns)
+        {
+            @await Component.InvokeAsync(nameof(Column), col)
+        }
     </div>
 </div>

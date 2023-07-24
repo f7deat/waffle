@@ -52,7 +52,6 @@ public class WorkService : IWorkService
         {
             Active = true,
             Arguments = JsonSerializer.Serialize(column),
-            Name = column.ClassName ?? string.Empty,
             ComponentId = component.Id,
             ParentId = column.RowId
         };

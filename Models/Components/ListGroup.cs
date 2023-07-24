@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components
 {
     [Display(Name = "List Group", ShortName ="LIST_GROUP")]
-    public class ListGroup
+    public class ListGroup : AbstractComponent
     {
         [JsonPropertyName("name")]
         public string? Name { get; set; }

@@ -1,8 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Waffle.Core.Foundations;
 using Waffle.Entities;
 
 namespace Waffle.Models.Components;
 
+[Display(Name = "Card", ShortName = "CARD", GroupName = "")]
 public class Card : AbstractComponent
 {
     public Card()

@@ -6,10 +6,8 @@ namespace Waffle.Data.ContentGenerators
 {
     public class UserGenerator : BaseGenerator
     {
-        private readonly ApplicationDbContext _context;
-        public UserGenerator()
+        public UserGenerator(ApplicationDbContext context) : base(context)
         {
-            _context = Activator.CreateInstance<ApplicationDbContext>(); ;
         }
 
         public async Task EnsureUsersAsync()
@@ -24,6 +22,11 @@ namespace Waffle.Data.ContentGenerators
             user.PasswordHash = hashedPassword;
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+        }
+
+        public override Task RunAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -5,11 +5,11 @@
     @if (Model.HasLink)
     {
         <a href="@Model.Link.Href" aria-label="@Model.Link.Name" target="@Model.Link.Target">
-            <img src="@Model.File.Url" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image @Model.ClassName" loading="lazy" />
+            <img src="@Model.File.Url" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image" loading="lazy" />
         </a>
     }
     else
     {
-        <img src="@Model.File.Url" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image @Model.ClassName" loading="lazy" />
+        <img src="@Model.File.Url" alt="@Model.Alt" width="@Model.Width" height="@Model.Height" class="wf-image" loading="lazy" />
     }
 </div>
