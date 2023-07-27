@@ -9,7 +9,7 @@ using Waffle.Infrastructure.Repositories;
 
 namespace Waffle.Extensions;
 
-public static class ServiceCollectionExtension
+public static class ServiceCollectionExtensions
 {
     public static void AddServices(this IServiceCollection services)
     {
@@ -26,5 +26,8 @@ public static class ServiceCollectionExtension
         services.AddScoped<IFileContentRepository, FileContentRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderService, OrderSerivce>();
+
+        services.AddScoped<IGenerator, LeafGenerator>();
+        services.AddScoped<IGenerator, ComponentGenerator>();
     }
 }

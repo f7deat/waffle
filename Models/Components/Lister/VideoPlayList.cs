@@ -9,6 +9,8 @@ namespace Waffle.Models.Components.Lister
         public string? Title { get; set; }
         [JsonPropertyName("pageSize")]
         public int PageSize { get; set; }
+        [JsonPropertyName("className")]
+        public string? ClassName { get; set; }
 
         [JsonIgnore]
         public List<PlaylistItem> PlaylistItems { get; set; } = new();

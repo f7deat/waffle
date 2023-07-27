@@ -11,6 +11,8 @@ public class Swiper : AbstractComponent
     public string? Title { get; set; }
     [JsonPropertyName("mode")]
     public string Mode { get; set; } = "default";
+    [JsonPropertyName("slidesPerView")]
+    public int SlidesPerView { get; set; }
 
     [JsonIgnore]
     public List<SwiperItem> Items { get; set; } = new();

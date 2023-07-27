@@ -1,39 +1,41 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces;
 using Waffle.Entities;
 
 namespace Waffle.Data.ContentGenerators;
 
-public class ComponentGenerator
+public class ComponentGenerator : BaseGenerator
 {
-    private readonly ApplicationDbContext _context;
-    public ComponentGenerator()
+    private readonly ILookupNormalizer _lookupNormalizer;
+    public ComponentGenerator(ApplicationDbContext context, ILookupNormalizer lookupNormalizer) : base(context)
     {
-        _context = Activator.CreateInstance<ApplicationDbContext>();
-        
+        _lookupNormalizer = lookupNormalizer;
     }
 
-    private static IEnumerable<Component> GetData()
+    private IEnumerable<Component> GetData()
     {
-        var classes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "Waffle.Models.Components" && t.IsClass).ToList();
+        var classes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "Waffle.Models.Components" && t.IsClass && typeof(IComponent).IsAssignableFrom(t)).ToList();
         if (!classes.Any()) throw new NullReferenceException();
 
         foreach (var cls in classes)
         {
             var display = AttributeHelper.GetDisplay(cls);
-            if (display is null) continue; 
+            if (display is null || string.IsNullOrEmpty(display.ShortName)) continue;
+            var normalizedName = _lookupNormalizer.NormalizeName(display.ShortName);
             yield return new Component
             {
                 Active = true,
-                Name = display.Name ?? string.Empty,
-                NormalizedName = display.ShortName ?? string.Empty
+                Name = display.Name ?? cls.Name,
+                NormalizedName = normalizedName
             };
         }
     }
 
-    public async Task EnsureComponentsAsync()
+    private async Task EnsureComponentsAsync()
     {
         var components = GetData();
         foreach (var component in components)
@@ -62,4 +64,6 @@ public class ComponentGenerator
         await _context.Components.AddAsync(data);
         return data;
     }
+
+    public override async Task RunAsync() => await EnsureComponentsAsync();
 }
