@@ -1,16 +1,18 @@
 ﻿@using Waffle.Models.Components
 @model Waffle.Models.Components.Sponsor
 
-<div class="sponsor">
-    @await Html.PartialAsync("/Pages/Shared/Components/Swiper/Parallax.cshtml", new Swiper {
+<div class="sponsor mb-4">
+    <div class="container">
+        <div class="title">Sponsors</div>
+        @await Html.PartialAsync("/Pages/Shared/Components/Swiper/Parallax.cshtml", new Swiper {
         Id = new Guid(),
-    SlidesPerView = 6,
-    Mode = "parallax",
-    Items = Model.Brands.Select(x => new SwiperItem {
-            Image = x.Logo,
-            Title = x.Name,
-            Url = x.Url
+        Mode = "parallax",
+        Items = Model.Brands.Select(x => new SwiperItem {
+        Image = x.Logo,
+        Title = x.Name,
+        Url = x.Url
         }).ToList()
-    })
+        })
+    </div>
 </div>
 

@@ -59,6 +59,7 @@ namespace Waffle.Data.ContentGenerators
                 {
                     sponsorBrands.Add(new SponsorBrand
                     {
+                        Id = Guid.NewGuid(),
                         Logo = "https://placehold.jp/150x100.png",
                         Name = "Brand Name",
                         Url = "#"

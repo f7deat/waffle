@@ -2,32 +2,20 @@
 @using Waffle.Models.Components
 @model Swiper
 
-<div class="swiper js-swiper-@Model.Mode">
-    <!-- Parallax background element -->
-    <div class="parallax-bg"
-         style="background-image:url(path/to/image.jpg)"
-         data-swiper-parallax="-23%"></div>
+<div class="swiper js-swiper-@Model.Mode" data-slidesPerView="@Model.SlidesPerView">
     <div class="swiper-wrapper">
-        
         @if (Model.Items.Any())
         {
             @foreach (var item in Model.Items)
             {
                 <div class="swiper-slide">
-                    <!-- Each slide has parallax title -->
-                    <div class="title" data-swiper-parallax="-100">@item.Title</div>
-                    <!-- Parallax subtitle -->
-                    <div class="subtitle" data-swiper-parallax="-200">Subtitle</div>
-                    <!-- And parallax text with custom transition duration -->
-                    <div class="text"
-                         data-swiper-parallax="-300"
-                         data-swiper-parallax-duration="600">
-                        <img src="@item.Image" />
+                    <div class="text" data-swiper-parallax="-300" data-swiper-parallax-duration="600">
+                        <div class="h-24 flex items-center justify-center">
+                            <a href="@item.Url" aria-label="@item.Title" rel="nofollow" target="_blank">
+                                <img src="@item.Image" alt="@item.Title" class="w-full" loading="lazy" />
+                            </a>
+                        </div>
                     </div>
-                    <!-- Opacity parallax -->
-                    <div data-swiper-parallax-opacity="0.5">I will change opacity</div>
-                    <!-- Scale parallax -->
-                    <div data-swiper-parallax-scale="0.15">I will change scale</div>
                 </div>
             }
         }

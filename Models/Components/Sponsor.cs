@@ -13,6 +13,8 @@ namespace Waffle.Models.Components
 
     public class SponsorBrand
     {
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; } = new Guid();
         [JsonPropertyName("logo")]
         public string? Logo { get; set; }
         [JsonPropertyName("url")]
