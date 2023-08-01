@@ -25,8 +25,9 @@
                             <i class="fas fa-tag mr-2"></i>
                             @foreach (var item in Model.Tags)
                             {
-                                <a href="/tag/@item.NormalizedName" class="wf-badge inline-block">@item.Name</a>
+                                <a href="/tag/@item.NormalizedName" class="bg-gray-100 px-2 py-1 inline-block rounded tag-item">@item.Name</a>
                             }
+                            
                         </div>
                     }
 

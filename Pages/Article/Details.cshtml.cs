@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -26,6 +28,7 @@ namespace Waffle.Pages.Article
         }
 
         public List<WorkListItem> Works = new();
+        [UIHint(UIHint.Tags)]
         public List<Catalog> Tags = new();
         public bool HasTag => Tags.Any();
         public Feed ProductFeed = new();

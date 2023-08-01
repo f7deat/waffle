@@ -4,15 +4,23 @@
 <div class="sponsor mb-4">
     <div class="container">
         <div class="title">Sponsors</div>
-        @await Html.PartialAsync("/Pages/Shared/Components/Swiper/Parallax.cshtml", new Swiper {
-        Id = new Guid(),
-        Mode = "parallax",
-        Items = Model.Brands.Select(x => new SwiperItem {
-        Image = x.Logo,
-        Title = x.Name,
-        Url = x.Url
-        }).ToList()
-        })
+        <div class="swiper js-swiper-sponsor">
+            <div class="swiper-wrapper">
+                @if (Model.Brands.Any())
+                {
+                    @foreach (var item in Model.Brands)
+                    {
+                        <div class="swiper-slide">
+                            <div class="h-24 flex items-center justify-center">
+                                <a href="@item.Url" aria-label="@item.Name" rel="nofollow" target="_blank">
+                                    <img src="@item.Logo" alt="@item.Name" class="w-full" loading="lazy" />
+                                </a>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
     </div>
 </div>
 

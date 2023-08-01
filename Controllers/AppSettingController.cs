@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -10,6 +10,8 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Settings;
+using Waffle.UnitTest;
+using WFSendGrid = Waffle.ExternalAPI.SendGrids.SendGrid;
 
 namespace Waffle.Controllers;
 
@@ -21,8 +23,9 @@ public class AppSettingController : BaseController
     private readonly IFacebookService _facebookService;
     private readonly ITelegramService _telegramService;
     private readonly IWorkService _workService;
+    private readonly IEmailSender _emailSender;
 
-    public AppSettingController(ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService, IWorkService workService)
+    public AppSettingController(IEmailSender emailSender, ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService, IWorkService workService)
     {
         _context = context;
         _appSettingService = appSettingService;
@@ -30,6 +33,7 @@ public class AppSettingController : BaseController
         _facebookService = facebookService;
         _telegramService = telegramService;
         _workService = workService;
+        _emailSender = emailSender;
     }
 
     [HttpGet("by-name/{normalizedName}")]
@@ -58,18 +62,14 @@ public class AppSettingController : BaseController
     public async Task<IActionResult> GetSendGridAsync()
     {
         var app = await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
-        return base.Ok(await _appSettingService.GetAsync<ExternalAPI.SendGrids.SendGrid>(app.Id));
+        return base.Ok(await _appSettingService.GetAsync<WFSendGrid>(app.Id));
     }
 
     [HttpPost("sendgrid/save")]
-    public async Task<IActionResult> SaveSendGridAsync([FromBody] ExternalAPI.SendGrids.SendGrid args)
+    public async Task<IActionResult> SaveSendGridAsync([FromBody] WFSendGrid args)
     {
-        var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(nameof(SendGrid)));
-        if (setting == null)
-        {
-            return Ok(IdentityResult.Failed());
-        }
-        setting.Value = JsonSerializer.Serialize(args);
+        var app = await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
+        app.Value = JsonSerializer.Serialize(args);
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
     }
@@ -202,4 +202,11 @@ public class AppSettingController : BaseController
 
     [HttpPost("delete/work/{id}")]
     public async Task<IActionResult> DeleteWorkAsync([FromRoute] Guid id) => Ok(await _appSettingService.DeleteWorkAsync(id));
+
+    [HttpPost("test-send-mail")]
+    public async Task<IActionResult> TestSendMailAsync([FromBody] EmailSenderMessageUnitTest args)
+    {
+        await _emailSender.SendEmailAsync(args.Email, args.Subject, args.Message);
+        return Ok(args);
+    }
 }

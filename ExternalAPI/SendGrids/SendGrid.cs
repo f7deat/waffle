@@ -9,6 +9,7 @@ public class SendGrid
     [JsonPropertyName("from")]
     public SendGridConfigureFrom From { get; set; } = new();
 }
+
 public class SendGridConfigureFrom
 {
     [JsonPropertyName("email")]
