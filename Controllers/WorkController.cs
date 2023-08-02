@@ -77,7 +77,8 @@ namespace Waffle.Controllers
                             Name = $"[{d.Name}] {c.Name}",
                             NormalizedName = d.NormalizedName,
                             SortOrder = b.SortOrder,
-                            CatalogId = b.CatalogId
+                            CatalogId = b.CatalogId,
+                            Active = c.Active
                         };
             return Ok(new
             {

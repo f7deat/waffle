@@ -25,18 +25,11 @@ namespace Waffle.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Guid workId)
         {
             var work = await _workService.GetAsync<T>(workId);
-            if (work is null)
-            {
-                return View(Empty.DefaultView, new ErrorViewModel
-                {
-                    RequestId = workId.ToString()
-                });
-            }
             work = await ExtendAsync(work);
             return View(ViewName, work);
         }
 
-        protected virtual Task<T> ExtendAsync(T work) => Task.FromResult(work);
+        protected virtual Task<T?> ExtendAsync(T? work) => Task.FromResult(work);
 
         protected virtual string ViewName { get; set; } = "Default";
     }

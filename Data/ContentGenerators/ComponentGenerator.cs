@@ -25,7 +25,7 @@ public class ComponentGenerator : BaseGenerator
         {
             var display = AttributeHelper.GetDisplay(cls);
             if (display is null || string.IsNullOrEmpty(display.ShortName)) continue;
-            var normalizedName = _lookupNormalizer.NormalizeName(display.ShortName);
+            var normalizedName = cls.Name;
             yield return new Component
             {
                 Active = true,

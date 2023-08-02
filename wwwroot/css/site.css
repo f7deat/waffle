@@ -159,6 +159,10 @@ p {
     margin-block-end: 0.25rem;
 }
 
+table {
+    border-collapse: collapse
+}
+
 .line-clampin {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -388,7 +392,7 @@ p {
     width: 16rem;
 }
 
-.w-full {
+.w-full, .table {
     width: 100%;
 }
 
@@ -690,6 +694,11 @@ p {
 
 .rounded-full {
     border-radius: 9999px;
+}
+
+.table-bordered>:not(caption)>*>* {
+    border-width: 1px;
+    padding: 0.25rem 0.5rem;
 }
 
 .text-right {
