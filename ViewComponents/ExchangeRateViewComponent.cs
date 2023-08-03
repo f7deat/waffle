@@ -5,7 +5,6 @@ using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents
 {
-    [ViewComponent(Name = "EXCHANGERATE")]
     public class ExchangeRateViewComponent : BaseViewComponent<ExchangeRate>
     {
         private readonly HttpClient _httpClient;

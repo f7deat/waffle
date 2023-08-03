@@ -21,5 +21,6 @@ namespace Waffle.Core.Interfaces.IRepository
         Task<bool> AnyAsync();
         Task<int> SaveChangesAsync();
         IDbContextTransaction BeginTransaction();
+        IQueryable<T> Queryable();
     }
 }

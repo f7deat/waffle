@@ -26,6 +26,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IFileContentRepository, FileContentRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderService, OrderSerivce>();
+        services.AddScoped<ICommentRepository, CommentRepository>();
+        services.AddScoped<ICommentService, CommentService>();
 
         services.AddScoped<IGenerator, LeafGenerator>();
         services.AddScoped<IGenerator, ComponentGenerator>();

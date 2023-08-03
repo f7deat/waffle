@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Waffle.Data;
 using Waffle.Core.Interfaces.IRepository;
 
-namespace Waffle.Infrastructure.Repositories
+namespace Waffle.Core.Foundations
 {
     /// <summary>
     /// "There's some repetition here - couldn't we have some the sync methods call the async?"

@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Extensions;
@@ -48,7 +49,7 @@ namespace Waffle.Controllers
         [HttpGet("users-in-role/{roleName}")]
         public async Task<IActionResult> GetUsersInRoleAsync([FromRoute] string roleName) => Ok(await _userService.GetUsersInRoleAsync(roleName));
 
-        [HttpPost("add-to-role")]
+        [HttpPost("add-to-role"), Authorize(Roles = RoleName.Admin)]
         public async Task<IActionResult> AddToRoleAsync([FromBody] AddToRoleModel model) => Ok(await _userService.AddToRoleAsync(model));
 
         [HttpPost("remove-from-role")]

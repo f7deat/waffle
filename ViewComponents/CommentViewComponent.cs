@@ -1,29 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Models.Components;
-using Waffle.Models;
-using Waffle.Core.Interfaces.IService;
+﻿using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
+using Waffle.Models.Filters;
 
-namespace Waffle.ViewComponents
+namespace Waffle.ViewComponents;
+
+public class CommentViewComponent : BaseViewComponent<Comment>
 {
-    public class CommentViewComponent : ViewComponent
+    private readonly ICommentService _commentService;
+    public CommentViewComponent(ICommentService commentService, IWorkService workService) : base(workService)
     {
-        private readonly ICatalogService _catalogService;
-        public CommentViewComponent(ICatalogService catalogService)
-        {
-            _catalogService = catalogService;
-        }
+        _commentService = commentService;
+    }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid catalogId)
+    protected override async Task<Comment?> ExtendAsync(Comment? work)
+    {
+        var comment = await _commentService.ListAsync(new CommentFilterOptions
         {
-            var catalog = await _catalogService.FindAsync(catalogId);
-            if (catalog is null)
-            {
-                return View(Empty.DefaultView, new ErrorViewModel
-                {
-                    RequestId = catalogId.ToString()
-                });
-            }
-            return View();
-        }
+            CatalogId = PageData.Id
+        });
+        
+        return work;
     }
 }

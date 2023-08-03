@@ -5,9 +5,9 @@ using Waffle.Entities;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class FileContentRepository : EfRepository<FileContent>, IFileContentRepository
+public class CommentRepository : EfRepository<Comment>, ICommentRepository
 {
-    public FileContentRepository(ApplicationDbContext context) : base(context)
+    public CommentRepository(ApplicationDbContext context) : base(context)
     {
     }
 }

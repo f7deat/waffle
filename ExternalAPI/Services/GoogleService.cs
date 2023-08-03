@@ -9,9 +9,11 @@ namespace Waffle.ExternalAPI.Services;
 public class GoogleService : IGoogleService
 {
     private readonly HttpClient _http;
-    public GoogleService(HttpClient httpClient)
+    private readonly ILogger<GoogleService> _logger;
+    public GoogleService(HttpClient httpClient, ILogger<GoogleService> logger)
     {
         _http = httpClient;
+        _logger = logger;
     }
 
     public async Task<Trend?> GetDailyTrendingAsync()
@@ -21,8 +23,9 @@ public class GoogleService : IGoogleService
             var response = await _http.GetStreamAsync("https://trends.google.com.vn/trends/trendingsearches/daily/rss?geo=VN");
             return XmlHelper.Deserialize<Trend>(response);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError("{Message}", ex.Message);
             return default;
         }
     }
@@ -54,8 +57,9 @@ public class GoogleService : IGoogleService
             var response = await _http.GetStreamAsync($"https://www.googleapis.com/blogger/v3/blogs/{blogId}/posts/{postId}?key={apiKey}");
             return await JsonSerializer.DeserializeAsync<BloggerItem?>(response);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError("{Message}", ex.Message);
             return default;
         }
     }

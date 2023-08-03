@@ -614,11 +614,15 @@ table {
     margin-bottom: 1rem;
 }
 
+.overflow-auto {
+    overflow: auto;
+}
+
 .object-fit-contain {
     object-fit: contain;
 }
 
-.object-fit-cover {
+.object-cover {
     object-fit: cover;
 }
 
