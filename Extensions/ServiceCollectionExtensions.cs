@@ -15,6 +15,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddTransient<IEmailSender, EmailSender>();
         services.AddScoped<IAppSettingService, AppSettingService>();
+        services.AddScoped<IAppLogRepository, AppLogRepository>();
+        services.AddScoped<IAppLogService, AppLogService>();
         services.AddScoped<ICatalogService, CatalogService>();
         services.AddScoped<IComponentService, ComponentService>();
         services.AddScoped<IFileExplorerService, FileExplorerService>();

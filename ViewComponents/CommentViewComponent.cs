@@ -12,7 +12,7 @@ public class CommentViewComponent : BaseViewComponent<Comment>
         _commentService = commentService;
     }
 
-    protected override async Task<Comment?> ExtendAsync(Comment? work)
+    protected override async Task<Comment> ExtendAsync(Comment work)
     {
         var comment = await _commentService.ListAsync(new CommentFilterOptions
         {

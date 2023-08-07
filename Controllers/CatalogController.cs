@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
@@ -27,7 +28,11 @@ public class CatalogController : BaseController
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _catalogService.FindAsync(id));
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] Catalog catalog) => Ok(await _catalogService.AddAsync(catalog));
+    public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
+    {
+        catalog.CreatedBy = User.GetId();
+        return Ok(await _catalogService.AddAsync(catalog));
+    }
 
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] CatalogFilterOptions filterOptions) => Ok(await _catalogService.ListAsync(filterOptions));

@@ -13,9 +13,11 @@ namespace Waffle.Core.Services
     public class CatalogService : ICatalogService
     {
         private readonly ApplicationDbContext _context;
-        public CatalogService(ApplicationDbContext context)
+        private readonly ILookupNormalizer _lookupNormalizer;
+        public CatalogService(ApplicationDbContext context, ILookupNormalizer lookupNormalizer)
         {
             _context = context;
+            _lookupNormalizer = lookupNormalizer;
         }
 
         public async Task<IdentityResult> ActiveAsync(Guid id)
@@ -249,9 +251,9 @@ namespace Waffle.Core.Services
 
         public async Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions)
         {
-            var normalizedName = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
+            var normalizedName = _lookupNormalizer.NormalizeName(filterOptions.KeyWords);
             return await _context.Catalogs.Where(x =>
-            x.Active && x.Type == CatalogType.Tag && (string.IsNullOrEmpty(normalizedName) || x.NormalizedName.Contains(normalizedName)))
+            x.Active && x.Type == CatalogType.Tag && (string.IsNullOrEmpty(normalizedName) || x.NormalizedName.ToUpper().Contains(normalizedName)))
                 .Select(x => new Option
                 {
                     Label = x.Name,
