@@ -8,5 +8,12 @@ public class Comment : BaseEntity
     public DateTime CreatedDate { get; set; }
     public DateTime? ModifiedDate { get; set; }
     public Guid? ParrentId { get; set; }
-    public int Status { get; set; }
+    public CommentStatus Status { get; set; }
+}
+
+public enum CommentStatus
+{
+    Draft,
+    Active,
+    Deleted
 }
