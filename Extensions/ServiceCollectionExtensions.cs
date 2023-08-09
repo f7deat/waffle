@@ -31,6 +31,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ICommentService, CommentService>();
 
+        services.AddScoped<ICurrentUser, CurrentUser>();
+
         services.AddScoped<IGenerator, LeafGenerator>();
         services.AddScoped<IGenerator, ComponentGenerator>();
     }

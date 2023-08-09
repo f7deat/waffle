@@ -1,6 +1,4 @@
-﻿using Waffle.Entities;
-
-namespace Waffle.Controllers
+﻿namespace Waffle.Entities
 {
     public class AppLog : BaseEntity
     {

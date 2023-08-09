@@ -4,11 +4,17 @@ using Waffle.Entities;
 using Waffle.Models.Components;
 using Waffle.Models;
 
-namespace Waffle.ViewComponents;
+namespace Waffle.Core.Foundations;
 
 public abstract class BaseViewComponent<T> : ViewComponent where T : class
 {
     private readonly IWorkService _workService;
+
+    public BaseViewComponent(IWorkService workService)
+    {
+        _workService = workService;
+    }
+
     protected Catalog PageData
     {
         get
@@ -16,10 +22,6 @@ public abstract class BaseViewComponent<T> : ViewComponent where T : class
             RouteData.Values.TryGetValue(nameof(Catalog), out var values);
             return values as Catalog ?? new();
         }
-    }
-    public BaseViewComponent(IWorkService workService)
-    {
-        _workService = workService;
     }
 
     public async Task<IViewComponentResult> InvokeAsync(Guid workId)

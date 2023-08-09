@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Components;
@@ -13,9 +13,8 @@ namespace Waffle.ViewComponents
             _httpClient = httpClient;
         }
 
-        protected override async Task<ExchangeRate?> ExtendAsync(ExchangeRate? work)
+        protected override async Task<ExchangeRate> ExtendAsync(ExchangeRate work)
         {
-            work ??= new();
             var response = await _httpClient.GetStreamAsync("https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx");
             var data = XmlHelper.Deserialize<ExrateList>(response);
             work.ExrateList = data ?? new();

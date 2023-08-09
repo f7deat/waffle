@@ -210,6 +210,10 @@ table {
     background-color: var(--primary);
 }
 
+.bg-red-500 {
+    background-color: var(--red-500);
+}
+
 .bg-yellow-500 {
     background-color: var(--yellow-500);
 }
@@ -660,6 +664,10 @@ table {
 
 .wf-card-img-top:hover {
     opacity: .5;
+}
+
+.opacity-50 {
+    opacity: 0.5;
 }
 
 .wf-message {

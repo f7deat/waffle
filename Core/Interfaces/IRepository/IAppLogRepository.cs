@@ -1,4 +1,4 @@
-﻿using Waffle.Controllers;
+﻿using Waffle.Entities;
 
 namespace Waffle.Core.Interfaces.IRepository;
 
