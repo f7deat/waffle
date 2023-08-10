@@ -1,7 +1,7 @@
-﻿using Waffle.Controllers;
-using Waffle.Core.Foundations;
+﻿using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
+using Waffle.Entities;
 
 namespace Waffle.Infrastructure.Repositories;
 

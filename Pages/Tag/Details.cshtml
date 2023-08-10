@@ -24,7 +24,13 @@
                     <span class="font-normal">(@Model.Pagination.Total)</span>
                 </h1>
             </div>
-            <div class="bg-gray-100 px-2 py-1 mb-2">Lượt xem: @Model.PageData.ViewCount.ToString("N0")</div>
+            <div class="bg-gray-100 px-2 py-1 mb-2 flex justify-between text-sm text-gray-500">
+                <div>Lượt xem: @Model.PageData.ViewCount.ToString("N0")</div>
+                <div>
+                    <i class="fas fa-calendar mr-1"></i>
+                    <span>@Model.PageData.ModifiedDate.ToLongDateString()</span>
+                </div>
+            </div>
             <partial name="~/Pages/Article/_List.cshtml" model="Model.Catalogs" />
             <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
 
