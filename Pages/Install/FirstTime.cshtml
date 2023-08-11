@@ -1,0 +1,31 @@
+﻿@page
+@model Waffle.Pages.Install.FirstTimeModel
+@{
+    ViewData["Title"] = "First time";
+}
+
+<main class="container">
+    <div class="flex justify-center">
+        <form method="post">
+            <div class="form-item">
+                <label class="form-label">
+                    <localize key="userName" />
+                </label>
+                <input type="text" name="userName" required />
+            </div>
+            <div class="form-item">
+                <label class="form-label">
+                    <localize key="password" />
+                </label>
+                <input type="password" name="password" required />
+            </div>
+            <div class="form-item">
+                <label class="form-label">Confirm password</label>
+                <input type="password" name="confirmPassword" required />
+            </div>
+            <div class="form-item">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</main>
