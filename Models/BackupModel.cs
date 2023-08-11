@@ -24,5 +24,9 @@ namespace Waffle.Models
         public List<ApplicationUser> Users { get; set; } = new();
         [JsonPropertyName("roles")]
         public List<ApplicationRole> Roles { get; set; } = new();
+        [JsonPropertyName("userRoles")]
+        public List<IdentityUserRole<Guid>> UserRoles { get; set; } = new();
+        [JsonPropertyName("comments")]
+        public List<Comment> Comments { get; set; } = new();
     }
 }

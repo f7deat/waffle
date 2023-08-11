@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO.Compression;
 using System.Text.Json;
-using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
-using Waffle.Entities;
 using Waffle.ExternalAPI.GoogleAggregate;
 using Waffle.ExternalAPI.Models;
 using Waffle.ExternalAPI.Models.GoogleAggregate;
@@ -14,39 +13,66 @@ using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
 using Waffle.Models.Components.Specifications;
 using Waffle.Models.Settings;
-using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers;
 
 public class BackupController : BaseController
 {
     private readonly ApplicationDbContext _context;
-    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IComponentService _componentService;
     private readonly IAppSettingService _appSettingService;
     private readonly ICatalogService _catalogService;
     private readonly IWorkService _workService;
-    public BackupController(ApplicationDbContext context, RoleManager<ApplicationRole> roleManager, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService, IWorkService workService)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    public BackupController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService, IWorkService workService)
     {
         _context = context;
-        _roleManager = roleManager;
         _componentService = componentService;
         _appSettingService = appSettingService;
         _catalogService = catalogService;
         _workService = workService;
+        _webHostEnvironment = webHostEnvironment;
     }
 
-    [HttpPost("export")]
-    public async Task<IActionResult> ExportAsync() => Ok(new BackupListItem
+    [HttpGet("export")]
+    public async Task<IActionResult> ExportAsync()
     {
-        WorkContents = await _context.WorkContents.ToListAsync(),
-        WorkItems = await _context.WorkItems.ToListAsync(),
-        FileContents = await _context.FileContents.ToListAsync(),
-        AppSettings = await _context.AppSettings.ToListAsync(),
-        Components = await _context.Components.ToListAsync(),
-        Catalogs = await _context.Catalogs.ToListAsync(),
-        Localizations = await _context.Localizations.ToListAsync()
-    });
+        var json = new BackupListItem
+        {
+            WorkContents = await _context.WorkContents.ToListAsync(),
+            WorkItems = await _context.WorkItems.ToListAsync(),
+            FileContents = await _context.FileContents.ToListAsync(),
+            AppSettings = await _context.AppSettings.ToListAsync(),
+            Components = await _context.Components.ToListAsync(),
+            Catalogs = await _context.Catalogs.ToListAsync(),
+            Localizations = await _context.Localizations.ToListAsync(),
+            Users = await _context.Users.ToListAsync(),
+            Roles = await _context.Roles.ToListAsync(),
+            UserRoles = await _context.UserRoles.ToListAsync(),
+            Comments = await _context.Comments.ToListAsync(),
+        };
+        var path = Path.Combine(_webHostEnvironment.WebRootPath, "backup");
+        if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+        var directoryInfo = new DirectoryInfo(path);
+        var files = directoryInfo.GetFiles();
+        foreach (var file in files)
+        {
+            file.Delete();
+        }
+        var fileName = Path.Combine(path, $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.json");
+        using (var outputFile = new StreamWriter(fileName))
+        {
+            await outputFile.WriteAsync(JsonSerializer.Serialize(json));
+        }
+        if (System.IO.File.Exists(Path.Combine(_webHostEnvironment.WebRootPath, "files", $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip")))
+        {
+            return Redirect($"/files/{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip");
+        }
+
+        ZipFile.CreateFromDirectory(path, Path.Combine(_webHostEnvironment.WebRootPath, "files", $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip"), CompressionLevel.SmallestSize, false);
+        
+        return Redirect($"/files/{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip");
+    }
 
     [HttpPost("export/catalog/{id}")]
     public async Task<IActionResult> ExportCatalogAsync([FromRoute] Guid id) => Ok(new
@@ -123,38 +149,6 @@ public class BackupController : BaseController
         fileContent = await _context.FileContents.CountAsync(),
         localization = await _context.Localizations.CountAsync()
     });
-
-    [HttpGet("upgrade/list")]
-    public async Task<IActionResult> UpgradeListAsync()
-    {
-        var data = new List<UpgradeListItem>();
-        if (!await _roleManager.RoleExistsAsync(RoleName.Customer))
-        {
-            data.Add(new UpgradeListItem { Name = "Roles", Url = "/backup/upgrade/roles"});
-        }
-        if (!await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(CatalogType.Article.ToString().ToLower())))
-        {
-            data.Add(new UpgradeListItem { Name = "Catalogs", Url = "#" });
-        }
-        return Ok(new {
-            data,
-            total = data.Count
-        });
-    }
-
-    [HttpPost("upgrade/roles")]
-    public async Task<IActionResult> UpgradeRolesAsync()
-    {
-        if (!await _roleManager.RoleExistsAsync(RoleName.Customer))
-        {
-            var role = new ApplicationRole
-            {
-                Name = RoleName.Customer
-            };
-            await _roleManager.CreateAsync(role);
-        }
-        return Ok(IdentityResult.Success);
-    }
 
     [HttpPost("upgrade")]
     public async Task<IActionResult> UpgradeAsync()

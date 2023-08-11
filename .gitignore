@@ -19,3 +19,4 @@
 /ClientApp/node_modules
 /ClientApp/package-lock.json
 /appsettings.Development.json
+/wwwroot/backup

@@ -29,7 +29,7 @@ public class Catalog : BaseEntity
     public string? Thumbnail { get; set; }
     [JsonPropertyName("active")]
     public bool Active { get; set; }
-    public Guid CreatedBy { get; set; }
+    public Guid? CreatedBy { get; set; }
 }
 
 public enum CatalogType
