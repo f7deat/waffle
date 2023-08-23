@@ -81,7 +81,15 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName) => await _userManager.GetUsersInRoleAsync(roleName);
+    public async Task<dynamic> GetUsersInRoleAsync(string roleName)
+    {
+        var data = await _userManager.GetUsersInRoleAsync(roleName);
+        return new
+        {
+            data,
+            total = data.Count,
+        };
+    }
 
     public async Task<ListResult<UserViewModel>> ListContactAsync(SearchFilterOptions filterOptions)
     {

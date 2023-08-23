@@ -12,12 +12,18 @@ namespace Waffle.Pages.Install
             _generators = generators;
         }
 
-        public async Task OnGetAsync()
+        public void OnGet()
+        {
+
+        }
+
+        public async Task<IActionResult> OnPostAsync()
         {
             foreach (var generator in _generators)
             {
                 await generator.RunAsync();
             }
+            return Redirect("/install/success");
         }
     }
 }
