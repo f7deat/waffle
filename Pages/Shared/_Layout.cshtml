@@ -9,6 +9,7 @@
     <title>@Html.Raw(ViewData["Title"]) - @(Configuration.GetValue<string>("Settings:TitleSuffix")) </title>
     <meta name="description" content="@Html.Raw(ViewData["Description"])" />
     <partial name="_MetaPartial" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Waffle.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="@($"~/css/{Configuration.GetValue<string>("theme").ToLower()}.css")" asp-append-version="true" />

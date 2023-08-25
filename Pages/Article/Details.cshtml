@@ -8,8 +8,8 @@
 
 <main class="wf-article__detail">
     <div class="container">
-        <div class="row gap-4">
-            <div class="md:w-2/3">
+        <div class="row">
+            <div class="col-md-8">
                 @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
 
                 <h1 class="title">@Model.PageData.Name</h1>
@@ -48,7 +48,7 @@
                 </div>
                 @await Component.InvokeAsync(ComponentName.COMMENT)
             </div>
-            <div class="md:w-1/3">
+            <div class="col-md-4">
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
 
