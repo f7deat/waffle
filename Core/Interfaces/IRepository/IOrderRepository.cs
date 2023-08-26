@@ -1,8 +1,7 @@
 ﻿using Waffle.Entities;
 
-namespace Waffle.Core.Interfaces.IRepository
+namespace Waffle.Core.Interfaces.IRepository;
+
+public interface IOrderRepository : IAsyncRepository<Order>
 {
-    public interface IOrderRepository : IAsyncRepository<Order>
-    {
-    }
 }

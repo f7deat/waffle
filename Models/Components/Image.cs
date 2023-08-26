@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Waffle.Core.Foundations;
 using Waffle.Entities;
 
 namespace Waffle.Models.Components

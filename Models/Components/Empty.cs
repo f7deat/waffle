@@ -1,10 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components
 {
-    public class Empty
+    [Display(Name = "Empty")]
+    public class Empty : AbstractComponent
     {
         [JsonIgnore]
-        public const string DefaultView = "~/Views/Shared/Components/Empty/Default.cshtml";
+        public const string DefaultView = "~/Pages/Shared/Components/Empty/Default.cshtml";
     }
 }

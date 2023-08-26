@@ -1,0 +1,39 @@
+﻿@using Waffle.Entities
+@using Waffle.Models.Components
+@model Swiper
+
+<div class="wf-swiper">
+    <div class="title">
+        @Model.Title
+        <div class="extra">
+            <a href="/album">Xem thêm</a>
+        </div>
+    </div>
+    <div class="swiper js-swiper-@Model.Mode">
+        <div class="swiper-wrapper">
+            @if (Model.Items.Any())
+            {
+                @foreach (var item in Model.Items)
+                {
+                    <div class="swiper-slide">
+                        <div class="swiper-album">
+                            <img src="@item.Image" alt="@item.Title" loading="lazy" class="w-full" />
+                            <div class="swiper-album__overlay">
+                                <div class="swiper-album__overlay--title">
+                                    <a href="@item.Url">
+                                        @item.Title
+                                    </a>
+                                </div>
+                                <div class="swiper-album__overlay--delimiter"></div>
+                                <div class="swiper-album__overlay--description">
+                                    @item.Description
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</div>

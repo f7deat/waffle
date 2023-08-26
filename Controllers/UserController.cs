@@ -6,23 +6,23 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.Extensions;
 using Waffle.Models;
 
 namespace Waffle.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<UserController> _logger;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        public UserController(IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+        public UserController(IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<ApplicationRole> roleManager)
         {
             _userService = userService;
             _userManager = userManager;
@@ -35,37 +35,21 @@ namespace Waffle.Controllers
         [HttpGet("list")]
         public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions)
         {
-            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(currentUserId))
-            {
-                return BadRequest();
-            }
+            var currentUserId = User.GetId();
             var query = _userManager.Users.Where(x => x.Id != currentUserId).OrderByDescending(x => x.Id);
             return Ok(await ListResult<ApplicationUser>.Success(query, filterOptions));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> FindByIdAsync([FromRoute] string id) => Ok(await _userService.GetCurrentUserAsync(id));
+        public async Task<IActionResult> FindByIdAsync([FromRoute] Guid id) => Ok(await _userService.GetCurrentUserAsync(id));
 
         [HttpGet("")]
-        public async Task<IActionResult> GetUserAsync()
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Ok(IdentityResult.Failed());
-            }
-            return Ok(new
-            {
-                succeeded = true,
-                data = await _userService.GetCurrentUserAsync(userId)
-            });
-        }
+        public async Task<IActionResult> GetCurrentUserAsync() => Ok(await _userService.GetCurrentUserAsync(User.GetId()));
 
         [HttpGet("users-in-role/{roleName}")]
         public async Task<IActionResult> GetUsersInRoleAsync([FromRoute] string roleName) => Ok(await _userService.GetUsersInRoleAsync(roleName));
 
-        [HttpPost("add-to-role")]
+        [HttpPost("add-to-role"), Authorize(Roles = RoleName.Admin)]
         public async Task<IActionResult> AddToRoleAsync([FromBody] AddToRoleModel model) => Ok(await _userService.AddToRoleAsync(model));
 
         [HttpPost("remove-from-role")]
@@ -82,7 +66,7 @@ namespace Waffle.Controllers
 
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id, ClaimValueTypes.String),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -94,7 +78,7 @@ namespace Waffle.Controllers
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
-                    expires: DateTime.Now.AddDays(1),
+                    expires: DateTime.Now.AddDays(7),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
@@ -142,7 +126,7 @@ namespace Waffle.Controllers
                 }));
             }
 
-            await _roleManager.CreateAsync(new IdentityRole
+            await _roleManager.CreateAsync(new ApplicationRole
             {
                 Name = "admin"
             });

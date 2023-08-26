@@ -1,0 +1,10 @@
+﻿@page
+@model Waffle.Pages.Games.IndexModel
+
+<div class="container">
+
+    @foreach (var component in Model.Components)
+    {
+        @await Component.InvokeAsync(component.Name, component.Id)
+    }
+</div>

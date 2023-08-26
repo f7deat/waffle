@@ -1,17 +1,24 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Waffle.Core.Constants;
+using Waffle.Core.Foundations;
 
-namespace Waffle.Models.Components
+namespace Waffle.Models.Components;
+
+[Display(Name = "Column", ShortName = "COLUMN", GroupName = GroupName.Grid)]
+public class Column : AbstractComponent
 {
-    public class Column : AbstractComponent
+    public Column()
     {
-        public Column()
-        {
-            WorkListItems = new List<WorkListItem>();
-        }
-        [JsonPropertyName("rowId")]
-        public Guid RowId { get; set; }
-
-        [JsonIgnore]
-        public IEnumerable<WorkListItem> WorkListItems { get; set; }
+        WorkListItems = new List<WorkListItem>();
     }
+
+    [JsonPropertyName("className")]
+    public string? ClassName { get; set; }
+
+    [JsonPropertyName("rowId")]
+    public Guid RowId { get; set; }
+
+    [JsonIgnore]
+    public IEnumerable<WorkListItem> WorkListItems { get; set; }
 }

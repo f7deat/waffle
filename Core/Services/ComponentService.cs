@@ -57,7 +57,7 @@ namespace Waffle.Core.Services
             {
                 return IdentityResult.Failed();
             }
-            if (!await HasWorkContentAsync(id))
+            if (await HasWorkContentAsync(id))
             {
                 return IdentityResult.Failed(new IdentityError
                 {

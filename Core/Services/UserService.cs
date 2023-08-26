@@ -1,100 +1,114 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Waffle.Core.Helpers;
+using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.ViewModels;
+using Waffle.Models.ViewModels.Users;
 
-namespace Waffle.Core.Services
+namespace Waffle.Core.Services;
+
+public class UserService : IUserService
 {
-    public class UserService : IUserService
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly ApplicationDbContext _context;
+    public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext context)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        public UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
-        {
-            _userManager = userManager;
-            _roleManager = roleManager;
-        }
+        _userManager = userManager;
+        _roleManager = roleManager;
+        _context = context;
+    }
 
-        public async Task<IdentityResult> AddToRoleAsync(AddToRoleModel model)
-        {
-            if (string.IsNullOrEmpty(model.Id) || string.IsNullOrEmpty(model.RoleName))
-            {
-                return IdentityResult.Failed();
-            }
-            var user = await _userManager.FindByIdAsync(model.Id);
-            if (user == null)
-            {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "User not found!"
-                });
-            }
-            if (!await _roleManager.RoleExistsAsync(model.RoleName))
-            {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Role not found!"
-                });
-            }
-            return await _userManager.AddToRoleAsync(user, model.RoleName);
-        }
+    private async Task<ApplicationUser?> FindAsync(Guid id) => await _context.Users.FindAsync(id);
 
-        public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel args)
+    public async Task<IdentityResult> AddToRoleAsync(AddToRoleModel model)
+    {
+        var user = await FindAsync(model.Id);
+        if (user is null)
         {
-            var user = await _userManager.FindByIdAsync(args.Id);
-            if (user is null)
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "User not found!"
-                });
-            }
-            return await _userManager.ChangePasswordAsync(user, args.CurrentPassword, args.NewPassword);
+                Description = "User not found!"
+            });
         }
-
-        public async Task<IdentityResult> CreateAsync(CreateUserModel model)
+        if (!await _roleManager.RoleExistsAsync(model.RoleName))
         {
-            if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password))
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed();
-            }
-            var user = new ApplicationUser
-            {
-                Email = model.Email,
-                UserName = model.Email
-            };
-            return await _userManager.CreateAsync(user, model.Password);
+                Description = "Role not found!"
+            });
         }
+        return await _userManager.AddToRoleAsync(user, model.RoleName);
+    }
 
-        public async Task<dynamic> GetCurrentUserAsync(string id)
+    public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel args)
+    {
+        var user = await FindAsync(args.Id);
+        if (user is null)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            var roles = await _userManager.GetRolesAsync(user);
-            return new
+            return IdentityResult.Failed(new IdentityError
             {
-                user.Id,
-                user.Email,
-                user.PhoneNumber,
-                user.UserName,
-                avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(user.Email)}?s=520",
-                roles
-            };
+                Code = "UserNotFound",
+                Description = "User not found!"
+            });
         }
+        return await _userManager.ChangePasswordAsync(user, args.CurrentPassword, args.NewPassword);
+    }
 
-        public async Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName) => await _userManager.GetUsersInRoleAsync(roleName);
-
-        public async Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args)
+    public async Task<IdentityResult> CreateAsync(CreateUserModel model)
+    {
+        return await _userManager.CreateAsync(new ApplicationUser
         {
-            var user = await _userManager.FindByIdAsync(args.Id);
-            if (user is null)
+            Email = model.Email,
+            UserName = model.UserName,
+            PhoneNumber = model.PhoneNumber
+        }, model.Password);
+    }
+
+    public async Task<CurrentUserViewModel> GetCurrentUserAsync(Guid id)
+    {
+        var user = await FindAsync(id);
+        if (user is null) return new CurrentUserViewModel();
+        return new CurrentUserViewModel
+        {
+            Id = user.Id,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            UserName = user.UserName,
+            Roles = await _userManager.GetRolesAsync(user)
+        };
+    }
+
+    public async Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName) => await _userManager.GetUsersInRoleAsync(roleName);
+
+    public async Task<ListResult<UserViewModel>> ListContactAsync(SearchFilterOptions filterOptions)
+    {
+        var query = from a in _context.Users
+                    join b in _context.UserRoles on a.Id equals b.UserId
+                    join c in _context.Roles on b.RoleId equals c.Id
+                    where c.NormalizedName == _roleManager.NormalizeKey(RoleName.Contact)
+                    orderby a.Id descending
+                    select new UserViewModel
+                    {
+                        Id = a.Id,
+                        UserName = a.UserName,
+                        Email = a.Email
+                    };
+        return await ListResult<UserViewModel>.Success(query, filterOptions);
+    }
+
+    public async Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args)
+    {
+        var user = await FindAsync(args.Id);
+        if (user is null)
+        {
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "User not found!"
-                });
-            }
-            return await _userManager.RemoveFromRoleAsync(user, args.RoleName);
+                Description = "User not found!"
+            });
         }
+        return await _userManager.RemoveFromRoleAsync(user, args.RoleName);
     }
 }

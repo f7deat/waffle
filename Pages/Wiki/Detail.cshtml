@@ -54,6 +54,20 @@
     td {
         padding: 0.25rem;
     }
+
+    th.navbox-group {
+        white-space: nowrap;
+    }
+
+    .hlist dd, .hlist dt, .hlist li {
+        margin: 0;
+        display: inline;
+    }
+
+    .navbox-group, .navbox-title, .navbox-abovebelow {
+        padding: 0.25em 1em;
+        line-height: 1.5em;
+    }
 </style>
 
 <div class="container">
@@ -63,11 +77,34 @@
     <div class="bg-white mb-4">
         @Html.Raw(Model.Data.Text)
     </div>
+    <div class="mb-4">
+        @if (Model.ShopeeProducts.LinkList.Any())
+        {
+            <div class="mb-4">
+                <div class="title">Sản phẩm mới (@Model.ShopeeProducts.TotalCount)</div>
+                <div class="grid md-grid-cols-6 grid-cols-2 gap-4">
+                    @foreach (var item in Model.ShopeeProducts.LinkList)
+                    {
+                        <div class="bg-white">
+                            <div class="card-image">
+                                <img src="@item.Image" alt="@item.LinkName" class="object-cover" loading="lazy" />
+                            </div>
+                            <div class="p-2">
+                                <a href="@item.Link" class="line-clampin">
+                                    @item.LinkName
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
     @if (Model.HasArticle)
     {
         <div class="mb-4">
             <div class="title">Bài viết liên quan</div>
-            <div class="grid md:grid-cols-4 gap-4 mb-4">
+            <div class="grid md-grid-cols-4 gap-4 mb-4">
                 @foreach (var item in Model.Catalogs)
                 {
                     <partial name="~/Pages/Article/_ListItem.cshtml" model="item" />

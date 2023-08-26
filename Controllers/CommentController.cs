@@ -1,32 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-//using MongoDB.Driver;
-using Waffle.Data;
-using Waffle.Models;
+using Waffle.Core.Constants;
+using Waffle.Core.Interfaces.IService;
+using Waffle.Models.Params;
 
-namespace Waffle.Controllers
+namespace Waffle.Controllers;
+
+public class CommentController : BaseController
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    public class CommentController : Controller
+    private readonly ICommentService _commentService;
+
+    public CommentController(ICommentService commentService)
     {
-        //private readonly IMongoCollection<Comment> _commentsCollection;
-
-        public CommentController(IOptions<MongoDbStoreSetting> options)
-        {
-            //var mongoClient = new MongoClient(options.Value.ConnectionString);
-
-            //var mongoDatabase = mongoClient.GetDatabase(options.Value.DatabaseName);
-
-            //_commentsCollection = mongoDatabase.GetCollection<Comment>(options.Value.CommentsCollectionName);
-        }
-
-        //public async Task UpdateAsync(string id, Comment updatedComment) =>
-        //await _commentsCollection.ReplaceOneAsync(x => x.Id == id, updatedComment);
-
-        //public async Task RemoveAsync(string id) =>
-        //    await _commentsCollection.DeleteOneAsync(x => x.Id == id);
+        _commentService = commentService;
     }
+
+    [HttpPost("add")]
+    public async Task<IActionResult> AddAsync([FromBody] AddComment addComment) => Ok(await _commentService.AddAsync(addComment));
+
+    [HttpPost("delete/{id}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _commentService.DeleteAsync(id));
+
+    [HttpPost("remove/{id}")]
+    public async Task<IActionResult> RemoveAsync([FromRoute] Guid id) => Ok(await _commentService.RemoveAsync(id));
+
+    [HttpPost("active/{id}"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _commentService.ActiveAsync(id));
 }

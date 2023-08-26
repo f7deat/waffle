@@ -1,4 +1,5 @@
 ﻿@using Waffle.Entities
+@using Waffle.Core.Helpers
 @model Catalog
 @{
     var domain = Context.Request.Host;
@@ -9,8 +10,8 @@
         <img src="@Model.Thumbnail" class="thumbnail" alt="@Html.Raw(Model.Name)" height="220" loading="lazy" />
     </a>
     <div class="wf-article-item__body">
-        <a href="/article/@Model.NormalizedName" class="font-medium">@Html.Raw(Model.Name)</a>
-        <div class="wf-article-item__body-description">
+        <a href="/@SeoHelper.CatalogUrl(Model.Type)/@Model.NormalizedName" class="font-medium">@Html.Raw(Model.Name)</a>
+        <div class="line-clampin">
             @Html.Raw(Model.Description)
         </div>
     </div>

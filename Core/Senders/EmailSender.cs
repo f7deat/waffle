@@ -20,7 +20,7 @@ namespace Waffle.Core.Senders
 
         public async Task Execute(string subject, string message, string toEmail)
         {
-            var app = await _appService.GetAsync<ExternalAPI.SendGrid.SendGridConfigure>(nameof(SendGrid));
+            var app = await _appService.GetAsync<ExternalAPI.SendGrids.SendGrid>(nameof(SendGrid));
             if (string.IsNullOrEmpty(app?.ApiKey))
             {
                 _logger.LogError("Null SendGridKey");

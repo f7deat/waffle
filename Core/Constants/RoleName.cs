@@ -4,5 +4,6 @@ namespace Waffle.Core.Constants
     {
         public const string Admin = "admin";
         public const string Customer = "customer";
+        public const string Contact = "contact";
     }
 }

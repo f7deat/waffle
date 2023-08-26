@@ -23,7 +23,7 @@ namespace Waffle.ViewComponents
             if (blogger != null)
             {
                 var post = await _googleService.BloggerGetAsync(args.BlogId, args.PostId, blogger.BloggerApiKey);
-                return View("~/Views/Shared/Components/Html/Default.cshtml", new Html
+                return View("~/Pages/Shared/Components/Html/Default.cshtml", new Html
                 {
                     Value = post?.Content
                 });

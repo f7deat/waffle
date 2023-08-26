@@ -5,397 +5,394 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.Core.Services
+namespace Waffle.Core.Services;
+
+public class WorkService : IWorkService
 {
-    public class WorkService : IWorkService
+    private readonly ApplicationDbContext _context;
+    private readonly IComponentService _componentService;
+    private readonly IWorkContentRepository _workContentRepository;
+    public WorkService(ApplicationDbContext context, IComponentService componentService, IWorkContentRepository workContentRepository)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IComponentService _componentService;
-        private readonly IWorkContentRepository _workContentRepository;
-        public WorkService(ApplicationDbContext context, IComponentService componentService, IWorkContentRepository workContentRepository)
-        {
-            _context = context;
-            _componentService = componentService;
-            _workContentRepository = workContentRepository;
-        }
+        _context = context;
+        _componentService = componentService;
+        _workContentRepository = workContentRepository;
+    }
 
-        public async Task<IdentityResult> ActiveAsync(Guid id)
+    public async Task<IdentityResult> ActiveAsync(Guid id)
+    {
+        var workItem = await FindAsync(id);
+        if (workItem is null)
         {
-            var workItem = await FindAsync(id);
-            if (workItem is null)
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Work item not found!"
-                });
-            }
-            workItem.Active = !workItem.Active;
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+                Description = "Work item not found!"
+            });
         }
+        workItem.Active = !workItem.Active;
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
 
-        public async Task<IdentityResult> ColumnAddAsync(Column column)
+    public async Task<IdentityResult> ColumnAddAsync(Column column)
+    {
+        var row = await FindAsync(column.RowId);
+        if (row is null)
         {
-            var row = await FindAsync(column.RowId);
-            if (row is null)
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Row not found!"
-                });
-            }
-            var component = await _componentService.EnsureComponentAsync(nameof(Column));
-            var workContent = new WorkContent
+                Description = "Row not found!"
+            });
+        }
+        var component = await _componentService.EnsureComponentAsync(nameof(Column));
+        var workContent = new WorkContent
+        {
+            Active = true,
+            Arguments = JsonSerializer.Serialize(column),
+            ComponentId = component.Id,
+            ParentId = column.RowId
+        };
+        await _context.WorkContents.AddAsync(workContent);
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
+
+    public async Task<IdentityResult> DeleteAsync(Guid id)
+    {
+        var workContent = await FindAsync(id);
+        if (workContent is null)
+        {
+            return IdentityResult.Failed(new IdentityError
             {
-                Active = true,
-                Arguments = JsonSerializer.Serialize(column),
-                Name = column.ClassName ?? string.Empty,
-                ComponentId = component.Id,
-                ParentId = column.RowId
-            };
-            await _context.WorkContents.AddAsync(workContent);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+                Description = "Work not found!"
+            });
         }
-
-        public async Task<IdentityResult> DeleteAsync(Guid id)
+        if (await _context.WorkContents.AnyAsync(x => x.ParentId == id))
         {
-            var workContent = await FindAsync(id);
-            if (workContent is null)
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Work not found!"
-                });
-            }
-            if (await _context.WorkContents.AnyAsync(x => x.ParentId == id))
+                Description = "Please remove child"
+            });
+        }
+        var workItems = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
+        _context.WorkItems.RemoveRange(workItems);
+        _context.WorkContents.Remove(workContent);
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
+
+    public async Task<dynamic> ExportByCatalogAsync(Guid catalogId)
+    {
+        var query = from workItems in _context.WorkItems
+                    join workContents in _context.WorkContents on workItems.WorkId equals workContents.Id
+                    select new { workItems, workContents };
+        return await query.ToListAsync();
+    }
+
+    public async Task<WorkContent?> FindAsync(Guid id) => await _workContentRepository.FindAsync(id);
+
+    public async Task<T?> GetAsync<T>(Guid id)
+    {
+        var work = await FindAsync(id);
+        if (string.IsNullOrEmpty(work?.Arguments))
+        {
+            return default;
+        }
+        return JsonSerializer.Deserialize<T>(work.Arguments);
+    }
+
+    public async Task<IEnumerable<Option>> GetListAsync(BasicFilterOptions filterOptions)
+    {
+        var query = from a in _context.Components
+                    join b in _context.WorkContents on a.Id equals b.ComponentId
+                    select new Option
+                    {
+                        Label = $"[{a.Name}] {b.Name}",
+                        Value = b.Id
+                    };
+        return await query.ToListAsync();
+    }
+
+    public async Task<IdentityResult> ItemAddAsync(WorkItem args)
+    {
+        if (await _context.WorkItems.AnyAsync(x => x.CatalogId == args.CatalogId && x.WorkId == args.WorkId))
+        {
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Please remove child"
-                });
-            }
-            var workItems = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
-            _context.WorkItems.RemoveRange(workItems);
-            _context.WorkContents.Remove(workContent);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+                Description = "Dupplicate data"
+            });
         }
+        await _context.WorkItems.AddAsync(args);
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
 
-        public async Task<dynamic> ExportByCatalogAsync(Guid catalogId)
+    public async Task<ListResult<WorkListItem>> GetWorkListItemChildAsync(WorkFilterOptions filterOptions)
+    {
+        var query = from b in _context.WorkContents
+                    join c in _context.Components on b.ComponentId equals c.Id
+                    where (filterOptions.ParentId == null || b.ParentId == filterOptions.ParentId) && 
+                    (filterOptions.Active == null || b.Active == filterOptions.Active)
+                    select new WorkListItem
+                    {
+                        Id = b.Id,
+                        Name = b.Name,
+                        NormalizedName = c.NormalizedName,
+                        Active = b.Active
+                    };
+        return await ListResult<WorkListItem>.Success(query, filterOptions);
+    }
+
+    public async Task<IdentityResult> NavbarSettingSaveAsync(Navbar args)
+    {
+        var navbar = await GetAsync<Navbar>(args.Id);
+        if (navbar == null)
         {
-            var query = from workItems in _context.WorkItems
-                        join workContents in _context.WorkContents on workItems.WorkId equals workContents.Id
-                        select new { workItems, workContents };
-            return await query.ToListAsync();
-        }
-
-        public async Task<WorkContent?> FindAsync(Guid id) => await _workContentRepository.FindAsync(id);
-
-        public async Task<T?> GetAsync<T>(Guid id)
-        {
-            var work = await FindAsync(id);
-            if (string.IsNullOrEmpty(work?.Arguments))
+            return IdentityResult.Failed(new IdentityError
             {
-                return default;
-            }
-            return JsonSerializer.Deserialize<T>(work.Arguments);
+                Description = "Navbar not found"
+            });
         }
-
-        public async Task<IEnumerable<Option>> GetListAsync(BasicFilterOptions filterOptions)
+        navbar.Layout = args.Layout;
+        var work = await FindAsync(args.Id);
+        if (work == null)
         {
-            var query = from a in _context.Components
-                        join b in _context.WorkContents on a.Id equals b.ComponentId
-                        select new Option
-                        {
-                            Label = $"[{a.Name}] {b.Name}",
-                            Value = b.Id
-                        };
-            return await query.ToListAsync();
+            return IdentityResult.Failed();
         }
+        work.Arguments = JsonSerializer.Serialize(navbar);
+        return IdentityResult.Success;
+    }
 
-        public async Task<IdentityResult> ItemAddAsync(WorkItem args)
+    public async Task<IdentityResult> SaveColumnAsync(Column item)
+    {
+        var work = await FindAsync(item.Id);
+        if (work is null)
         {
-            if (await _context.WorkItems.AnyAsync(x => x.CatalogId == args.CatalogId && x.WorkId == args.WorkId))
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Dupplicate data"
-                });
-            }
-            await _context.WorkItems.AddAsync(args);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+                Description = "Work not found!"
+            });
         }
+        work.Arguments = JsonSerializer.Serialize(item);
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
 
-        public async Task<ListResult<WorkListItem>> GetWorkListItemChildAsync(WorkFilterOptions filterOptions)
+    public async Task<IdentityResult> SaveContactFormAsync(ContactForm item)
+    {
+        var workContent = await FindAsync(item.Id);
+        if (workContent is null)
         {
-            var query = from b in _context.WorkContents
-                        join c in _context.Components on b.ComponentId equals c.Id
-                        where (filterOptions.ParentId == null || b.ParentId == filterOptions.ParentId) && 
-                        (filterOptions.Active == null || b.Active == filterOptions.Active)
-                        select new WorkListItem
-                        {
-                            Id = b.Id,
-                            Name = b.Name,
-                            NormalizedName = c.NormalizedName,
-                            Active = b.Active
-                        };
-            return await ListResult<WorkListItem>.Success(query, filterOptions);
-        }
-
-        public async Task<IdentityResult> NavbarSettingSaveAsync(Navbar args)
-        {
-            var navbar = await GetAsync<Navbar>(args.Id);
-            if (navbar == null)
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Navbar not found"
-                });
-            }
-            navbar.Layout = args.Layout;
-            var work = await FindAsync(args.Id);
-            if (work == null)
+                Description = "Work content not found!"
+            });
+        }
+        workContent.Arguments = JsonSerializer.Serialize(item);
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
+
+    public async Task<IdentityResult> SaveRowAsync(Row row)
+    {
+        var workContent = await FindAsync(row.Id);
+        if (workContent is null)
+        {
+            return IdentityResult.Failed();
+        }
+        workContent.Arguments = JsonSerializer.Serialize(row);
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
+
+    public async Task<IdentityResult> SaveTagAsync(Tag tag)
+    {
+        var work = await FindAsync(tag.Id);
+        if (work is null)
+        {
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed();
-            }
-            work.Arguments = JsonSerializer.Serialize(navbar);
-            return IdentityResult.Success;
+                Description = "Data not found!"
+            });
         }
+        work.Arguments = JsonSerializer.Serialize(tag);
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
 
-        public async Task<IdentityResult> SaveColumnAsync(Column item)
+    public async Task<IEnumerable<Option>> TagListAsync(WorkFilterOptions filterOptions)
+    {
+        var query = from a in _context.Components
+                    join b in _context.WorkContents on a.Id equals b.ComponentId
+                    where a.NormalizedName.Equals(nameof(Tag))
+                    orderby b.Name ascending
+                    select new Option
+                    {
+                        Label = b.Name,
+                        Value = b.Id
+                    };
+        return await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
+    }
+
+    public async Task<IEnumerable<WorkContent>> GetWorkContentChildsAsync(Guid parentId)
+    {
+        return await _context.WorkContents.Where(x => x.Active && x.ParentId == parentId).OrderByDescending(x => x.Id).ToListAsync();
+    }
+
+    public async Task<IdentityResult> SaveAsync(WorkContent args)
+    {
+        var work = await FindAsync(args.Id);
+        if (work == null)
         {
-            var work = await FindAsync(item.Id);
-            if (work is null)
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Work not found!"
-                });
-            }
-            work.Arguments = JsonSerializer.Serialize(item);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+                Code = "general.dataNotFound",
+                Description = "Work not found"
+            });
         }
+        work.Active = args.Active;
+        work.Name = args.Name;
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
 
-        public async Task<IdentityResult> SaveContactFormAsync(ContactForm item)
+    public async Task AddAsync(WorkContent workContent)
+    {
+        await _context.AddAsync(workContent);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddItemAsync(WorkItem workItem)
+    {
+        await _context.WorkItems.AddAsync(workItem);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<IdentityResult> SaveArgumentsAsync(Guid id, object args)
+    {
+        var work = await FindAsync(id);
+        if (work == null)
         {
-            var workContent = await FindAsync(item.Id);
-            if (workContent is null)
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Work content not found!"
-                });
-            }
-            workContent.Arguments = JsonSerializer.Serialize(item);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+                Description = "Data not found"
+            });
         }
+        work.Arguments = JsonSerializer.Serialize(args);
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
 
-        public async Task<IdentityResult> SaveRowAsync(Row row)
+    public async Task<WorkContent?> GetSummaryAsync(Guid id)
+    {
+        return await _context.WorkContents.Select(x => new WorkContent
         {
-            var workContent = await FindAsync(row.Id);
-            if (workContent is null)
+            Active = x.Active,
+            Name = x.Name,
+            ComponentId = x.ComponentId,
+            Id = x.Id,
+            ParentId = x.ParentId
+        }).FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<IdentityResult> UpdateSummaryAsync(WorkContent args)
+    {
+        var work = await FindAsync(args.Id);
+        if (work == null)
+        {
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed();
-            }
-            workContent.Arguments = JsonSerializer.Serialize(row);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+                Description = "Data not found!"
+            });
         }
+        work.Active = args.Active;
+        work.Name = args.Name;
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
 
-        public async Task<IdentityResult> SaveTagAsync(Tag tag)
+    public async Task<IdentityResult> ItemDeleteAsync(WorkItem args)
+    {
+        var data = await _context.WorkItems.FirstOrDefaultAsync(x => x.CatalogId == args.CatalogId && x.WorkId == args.WorkId);
+        if (data is null)
         {
-            var work = await FindAsync(tag.Id);
-            if (work is null)
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Data not found!"
-                });
-            }
-            work.Arguments = JsonSerializer.Serialize(tag);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
+                Description = $"Data not found: WorkId ({args.WorkId}) / CatalogId ({args.CatalogId})"
+            });
         }
-
-        public async Task<IEnumerable<Option>> TagListAsync(WorkFilterOptions filterOptions)
+        if (await _context.WorkItems.CountAsync(x => x.WorkId == args.WorkId) == 1)
         {
-            var query = from a in _context.Components
-                        join b in _context.WorkContents on a.Id equals b.ComponentId
-                        where a.NormalizedName.Equals(nameof(Tag))
-                        orderby b.Name ascending
-                        select new Option
-                        {
-                            Label = b.Name,
-                            Value = b.Id
-                        };
-            return await query.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
-        }
-
-        public async Task<IEnumerable<WorkContent>> GetWorkContentChildsAsync(Guid parentId)
-        {
-            return await _context.WorkContents.Where(x => x.Active && x.ParentId == parentId).OrderByDescending(x => x.Id).ToListAsync();
-        }
-
-        public async Task<IdentityResult> SaveAsync(WorkContent args)
-        {
-            var work = await FindAsync(args.Id);
-            if (work == null)
+            var work = await FindAsync(args.WorkId);
+            if (work != null)
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Code = "general.dataNotFound",
-                    Description = "Work not found"
-                });
-            }
-            work.Active = args.Active;
-            work.Name = args.Name;
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
-        }
-
-        public async Task AddAsync(WorkContent workContent)
-        {
-            await _context.AddAsync(workContent);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddItemAsync(WorkItem workItem)
-        {
-            await _context.WorkItems.AddAsync(workItem);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IdentityResult> SaveArgumentsAsync(Guid id, object args)
-        {
-            var work = await FindAsync(id);
-            if (work == null)
-            {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Data not found"
-                });
-            }
-            work.Arguments = JsonSerializer.Serialize(args);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
-        }
-
-        public async Task<WorkContent?> GetSummaryAsync(Guid id)
-        {
-            return await _context.WorkContents.Select(x => new WorkContent
-            {
-                Active = x.Active,
-                Name = x.Name,
-                ComponentId = x.ComponentId,
-                Id = x.Id,
-                ParentId = x.ParentId
-            }).FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public async Task<IdentityResult> UpdateSummaryAsync(WorkContent args)
-        {
-            var work = await FindAsync(args.Id);
-            if (work == null)
-            {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "Data not found!"
-                });
-            }
-            work.Active = args.Active;
-            work.Name = args.Name;
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
-        }
-
-        public async Task<IdentityResult> ItemDeleteAsync(WorkItem args)
-        {
-            var data = await _context.WorkItems.FirstOrDefaultAsync(x => x.CatalogId == args.CatalogId && x.WorkId == args.WorkId);
-            if (data is null)
-            {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = $"Data not found: WorkId ({args.WorkId}) / CatalogId ({args.CatalogId})"
-                });
-            }
-            if (await _context.WorkItems.CountAsync(x => x.WorkId == args.WorkId) == 1)
-            {
-                var work = await FindAsync(args.WorkId);
-                if (work != null)
-                {
-                    _context.WorkContents.Remove(work);
-                }
-            }
-
-            _context.WorkItems.Remove(data);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
-        }
-
-        public async Task<List<T>> GetListChildAsync<T>(Guid parentId)
-        {
-            var r = new List<T>();
-            var works = await _context.WorkContents.Where(x => x.ParentId == parentId && x.Active).ToListAsync();
-            foreach (var work in works)
-            {
-                if (string.IsNullOrEmpty(work.Arguments))
-                {
-                    continue;
-                }
-                var w = JsonSerializer.Deserialize<T>(work.Arguments);
-                if (w != null)
-                {
-                    r.Add(w);
-                }
-            }
-            return r;
-        }
-
-        public IEnumerable<T?> ListAsync<T>(List<string> list)
-        {
-            foreach (var item in list)
-            {
-                if (string.IsNullOrEmpty(item))
-                {
-                    continue;
-                }
-                yield return JsonSerializer.Deserialize<T>(item);
+                _context.WorkContents.Remove(work);
             }
         }
 
-        public async Task<ListResult<WorkListItem>> ListBySettingIdAsync(Guid id)
-        {
-            var query = from a in _context.WorkContents
-                        join b in _context.Components on a.ComponentId equals b.Id
-                        where a.ParentId == id
-                        select new WorkListItem
-                        {
-                            Id = a.Id,
-                            Name = a.Name,
-                            Active = a.Active,
-                            NormalizedName = b.NormalizedName,
-                        };
-            return await ListResult<WorkListItem>.Success(query, new BasicFilterOptions());
-        }
+        _context.WorkItems.Remove(data);
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
 
-        public async Task<object?> GetListUnuseAsync(BasicFilterOptions filterOptions)
+    public async Task<List<T>> GetListChildAsync<T>(Guid parentId)
+    {
+        var r = new List<T>();
+        var works = await _context.WorkContents.Where(x => x.ParentId == parentId && x.Active).ToListAsync();
+        foreach (var work in works)
         {
-            var query = from a in _context.WorkContents
-                        join b in _context.WorkItems on a.Id equals b.WorkId into g
-                        from g2 in g.DefaultIfEmpty()
-                        where g2 == null && (a.ParentId == null || a.ParentId == Guid.Empty)
-                        select a;
-            return new { 
-                data = await query.ToListAsync()
-            };
+            if (string.IsNullOrEmpty(work.Arguments))
+            {
+                continue;
+            }
+            var w = JsonSerializer.Deserialize<T>(work.Arguments);
+            if (w != null)
+            {
+                r.Add(w);
+            }
         }
+        return r;
+    }
+
+    public IEnumerable<T?> ListAsync<T>(List<string> list)
+    {
+        foreach (var item in list)
+        {
+            if (string.IsNullOrEmpty(item))
+            {
+                continue;
+            }
+            yield return JsonSerializer.Deserialize<T>(item);
+        }
+    }
+
+    public async Task<ListResult<WorkListItem>> ListBySettingIdAsync(Guid id)
+    {
+        var query = from a in _context.WorkContents
+                    join b in _context.Components on a.ComponentId equals b.Id
+                    where a.ParentId == id
+                    select new WorkListItem
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Active = a.Active,
+                        NormalizedName = b.NormalizedName,
+                    };
+        return await ListResult<WorkListItem>.Success(query, new BasicFilterOptions());
+    }
+
+    public async Task<object?> GetListUnuseAsync(BasicFilterOptions filterOptions)
+    {
+        var query = from a in _context.WorkContents
+                    join b in _context.WorkItems on a.Id equals b.WorkId into g
+                    from g2 in g.DefaultIfEmpty()
+                    where g2 == null && (a.ParentId == null || a.ParentId == Guid.Empty)
+                    select a;
+        return new { 
+            data = await query.ToListAsync()
+        };
     }
 }

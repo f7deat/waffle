@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Waffle.Entities;
 
 namespace Waffle.Models.Components.Specifications
 {
+    [Display(Name = "Article Spotlight")]
     public class ArticleSpotlight
     {
         [JsonPropertyName("title")]

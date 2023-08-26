@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
@@ -57,7 +58,7 @@ namespace Waffle.Pages.Search
                 Date = x.ModifiedDate.ToString("D"),
                 Thumbnail = x.Thumbnail,
                 ViewCount = x.ViewCount.ToString("N0"),
-                Url = $"/{CatalogType.Video}/{x.NormalizedName}".ToLower()
+                Url = x.GetUrl()
             }).ToList() ?? new();
 
 

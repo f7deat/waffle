@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components
 {
-    [DefaultValue("list-group"), DisplayName("List Group")]
-    public class ListGroup
+    [Display(Name = "List Group", ShortName ="LIST_GROUP")]
+    public class ListGroup : AbstractComponent
     {
         [JsonPropertyName("name")]
         public string? Name { get; set; }
@@ -14,7 +15,7 @@ namespace Waffle.Models.Components
         public IEnumerable<ListGroupItem> Items { get; set; } = new List<ListGroupItem>();
     }
 
-    [DisplayName("List Group Item")]
+    [Display(Name = "List Group Item", ShortName = "LIST_GROUP_ITEM")]
     public class ListGroupItem
     {
         [JsonPropertyName("link")]

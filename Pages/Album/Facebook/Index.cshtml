@@ -15,7 +15,7 @@
                 <figure class="bg-gray-100 rounded">
                     <div class="shadow h-100">
                         <a href="@item.Src" class="bg-gray-900 image-popup">
-                            <img src="@item.Src" class="object-fit-cover cursor-zoom-in" alt="image">
+                            <img src="@item.Src" class="object-cover cursor-zoom-in" alt="image">
                         </a>
                         <div class="p-2 flex justify-between items-center bg-white">
                             <div class="flex gap-2">
@@ -31,7 +31,7 @@
             }
         </div>
 
-        <partial name="~/Views/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+        <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
 
     </div>
 }

@@ -13,8 +13,8 @@ namespace Waffle.Models.Components
         [JsonIgnore]
         public static readonly List<Option> Templates = new()
         {
-            new Option { Label = "Default", Value= "~/Views/Shared/Components/Header/Default.cshtml" },
-            new Option { Label = "DLiTi", Value= "~/Views/Shared/Components/Header/DLiTi.cshtml" }
+            new Option { Label = "Default", Value= "~/Pages/Shared/Components/Header/Default.cshtml" },
+            new Option { Label = "DLiTi", Value= "~/Pages/Shared/Components/Header/DLiTi.cshtml" }
         };
 
         [JsonIgnore]

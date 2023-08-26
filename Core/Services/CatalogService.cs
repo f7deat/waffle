@@ -13,9 +13,11 @@ namespace Waffle.Core.Services
     public class CatalogService : ICatalogService
     {
         private readonly ApplicationDbContext _context;
-        public CatalogService(ApplicationDbContext context)
+        private readonly ILookupNormalizer _lookupNormalizer;
+        public CatalogService(ApplicationDbContext context, ILookupNormalizer lookupNormalizer)
         {
             _context = context;
+            _lookupNormalizer = lookupNormalizer;
         }
 
         public async Task<IdentityResult> ActiveAsync(Guid id)
@@ -34,28 +36,41 @@ namespace Waffle.Core.Services
 
         public async Task<IdentityResult> AddAsync(Catalog catalog)
         {
-            if (catalog is null || string.IsNullOrWhiteSpace(catalog.Name))
+            try
             {
-                return IdentityResult.Failed(new IdentityError {
-                    Description = "Name can not empty!"
-                });
+                if (catalog is null || string.IsNullOrWhiteSpace(catalog.Name))
+                {
+                    return IdentityResult.Failed(new IdentityError
+                    {
+                        Description = "Name can not empty!"
+                    });
+                }
+                if (string.IsNullOrEmpty(catalog.NormalizedName))
+                {
+                    catalog.NormalizedName = SeoHelper.ToSeoFriendly(catalog.Name);
+                }
+                if (await IsExistAsync(catalog))
+                {
+                    return IdentityResult.Failed(new IdentityError
+                    {
+                        Code = "error.dupplicate",
+                        Description = "Data exist!"
+                    });
+                }
+                catalog.CreatedDate = DateTime.Now;
+                catalog.ModifiedDate = DateTime.Now;
+                await _context.Catalogs.AddAsync(catalog);
+                await _context.SaveChangesAsync();
+                return IdentityResult.Success;
             }
-            if (string.IsNullOrEmpty(catalog.NormalizedName))
-            {
-                catalog.NormalizedName = SeoHelper.ToSeoFriendly(catalog.Name);
-            }
-            if (await IsExistAsync(catalog))
+            catch (Exception ex)
             {
                 return IdentityResult.Failed(new IdentityError
                 {
-                    Description = "Data exist!"
+                    Code = nameof(Exception),
+                    Description = ex.ToString()
                 });
             }
-            catalog.CreatedDate = DateTime.Now;
-            catalog.ModifiedDate = DateTime.Now;
-            await _context.Catalogs.AddAsync(catalog);
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
         }
 
         public async Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default)
@@ -82,15 +97,11 @@ namespace Waffle.Core.Services
 
         public async Task<Catalog?> GetByNameAsync(string? normalizedName)
         {
-            if (string.IsNullOrEmpty(normalizedName))
-            {
-                return default;
-            }
+            if (string.IsNullOrEmpty(normalizedName)) return default;
+
             var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
-            if (catalog is null)
-            {
-                return default;
-            }
+            if (catalog is null) return default;
+
             catalog.ViewCount++;
             await _context.SaveChangesAsync();
             return catalog;
@@ -160,9 +171,9 @@ namespace Waffle.Core.Services
 
         public async Task<Catalog?> FindAsync(Guid id) => await _context.Catalogs.FindAsync(id);
 
-        public async Task<IEnumerable<Catalog>> ArticlePickerListAsync()
+        public async Task<IEnumerable<Catalog>> ArticlePickerListAsync(CatalogType type = CatalogType.Article)
         {
-            return await _context.Catalogs.Where(x => x.Active && x.Type == CatalogType.Article).OrderBy(x => Guid.NewGuid()).Take(5).ToListAsync();
+            return await _context.Catalogs.Where(x => x.Active && x.Type == type).OrderBy(x => Guid.NewGuid()).Take(5).ToListAsync();
         }
 
         public async Task<IdentityResult> SaveAsync(Catalog args)
@@ -220,10 +231,11 @@ namespace Waffle.Core.Services
 
         public async Task<ListResult<Catalog>> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
         {
-            var query = from a in _context.WorkItems
-                        join b in _context.Catalogs on a.WorkId equals b.Id
-                        where b.Active && a.CatalogId == filterOption.CatalogId && b.Type == CatalogType.Article && b.Id != filterOption.WorkId
-                        select b;
+            var query = (from a in _context.WorkItems
+                         join b in _context.Catalogs on a.WorkId equals b.Id
+                         where b.Active && filterOption.TagIds.Contains(a.CatalogId) && b.Type == filterOption.Type && b.Id != filterOption.CatalogId
+                         orderby b.ModifiedDate descending
+                         select b).Distinct();
             return await ListResult<Catalog>.Success(query, filterOption);
         }
 
@@ -239,9 +251,9 @@ namespace Waffle.Core.Services
 
         public async Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions)
         {
-            var normalizedName = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
+            var normalizedName = _lookupNormalizer.NormalizeName(filterOptions.KeyWords);
             return await _context.Catalogs.Where(x =>
-            x.Active && x.Type == CatalogType.Tag && (string.IsNullOrEmpty(normalizedName) || x.NormalizedName.Contains(normalizedName)))
+            x.Active && x.Type == CatalogType.Tag && (string.IsNullOrEmpty(normalizedName) || x.NormalizedName.ToUpper().Contains(normalizedName)))
                 .Select(x => new Option
                 {
                     Label = x.Name,
@@ -272,6 +284,19 @@ namespace Waffle.Core.Services
             return IdentityResult.Success;
         }
 
+        public async Task<ListResult<Catalog>> ListByTagsAsync(IEnumerable<Guid> tagIds, CatalogFilterOptions filterOptions)
+        {
+            var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.Name);
+            var query = from a in _context.WorkItems
+                        join b in _context.Catalogs on a.WorkId equals b.Id
+                        where tagIds.Contains(a.CatalogId) && b.Active &&
+                        (string.IsNullOrEmpty(searchTerm) || b.NormalizedName.Contains(searchTerm)) &&
+                        (filterOptions.Type == null || b.Type == filterOptions.Type)
+                        orderby b.ModifiedDate descending
+                        select b;
+            return await ListResult<Catalog>.Success(query, filterOptions);
+        }
+
         public async Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions)
         {
             var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.Name);
@@ -287,9 +312,13 @@ namespace Waffle.Core.Services
 
         public async Task<IEnumerable<Catalog>> ListRandomTagAsync() => await _context.Catalogs.Where(x => x.Type == CatalogType.Tag && x.Active).OrderBy(x => Guid.NewGuid()).Take(10).ToListAsync();
 
-        public async Task<ListResult<TagListItem>> ListTagAsync(IFilterOptions filterOptions)
+        public async Task<ListResult<TagListItem>> ListTagAsync(SearchFilterOptions filterOptions)
         {
-            var query = _context.Catalogs.Where(x => x.Type == CatalogType.Tag && x.Active).Select(x => new TagListItem
+            var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.SearchTerm);
+            var query = _context.Catalogs
+                .Where(x => x.Type == CatalogType.Tag && x.Active)
+                .Where(x => string.IsNullOrEmpty(searchTerm) || x.NormalizedName.Contains(searchTerm))
+                .Select(x => new TagListItem
             {
                 Id = x.Id,
                 Name = x.Name,

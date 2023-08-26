@@ -6,9 +6,7 @@ using Waffle.Models;
 
 namespace Waffle.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    public class LocalizationController : Controller
+    public class LocalizationController : BaseController
     {
         private readonly ILocalizationService _localizationService;
         public LocalizationController(ILocalizationService localizationService)

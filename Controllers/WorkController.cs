@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
-using System.IO;
 using System.Text.Json;
-using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.ExternalAPI.Google.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Specifications;
@@ -16,8 +12,7 @@ using Waffle.Models.Params;
 
 namespace Waffle.Controllers
 {
-    [Route("api/[controller]")]
-    public class WorkController : Controller
+    public class WorkController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileExplorerService _fileContentService;
@@ -82,7 +77,8 @@ namespace Waffle.Controllers
                             Name = $"[{d.Name}] {c.Name}",
                             NormalizedName = d.NormalizedName,
                             SortOrder = b.SortOrder,
-                            CatalogId = b.CatalogId
+                            CatalogId = b.CatalogId,
+                            Active = c.Active
                         };
             return Ok(new
             {
@@ -100,10 +96,6 @@ namespace Waffle.Controllers
         [HttpPost("child/add")]
         public async Task<IActionResult> AddChildAsync([FromBody] WorkContent workContent)
         {
-            if (workContent is null)
-            {
-                return BadRequest();
-            }
             if (!await _context.WorkContents.AnyAsync(x => x.Id == workContent.ParentId))
             {
                 return Ok(IdentityResult.Failed(new IdentityError

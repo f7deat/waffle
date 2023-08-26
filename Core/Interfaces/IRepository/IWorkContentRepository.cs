@@ -1,8 +1,7 @@
 ﻿using Waffle.Entities;
 
-namespace Waffle.Core.Interfaces.IRepository
+namespace Waffle.Core.Interfaces.IRepository;
+
+public interface IWorkContentRepository : IAsyncRepository<WorkContent>
 {
-    public interface IWorkContentRepository : IAsyncRepository<WorkContent>
-    {
-    }
 }

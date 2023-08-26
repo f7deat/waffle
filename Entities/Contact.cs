@@ -4,13 +4,8 @@ namespace Waffle.Entities
 {
     public class Contact : BaseEntity
     {
-        public Contact()
-        {
-            Name = string.Empty;
-            Meta = string.Empty;
-        }
         [StringLength(450)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [StringLength(450)]
         public string? Email { get; set; }
         [StringLength(20)]
@@ -19,7 +14,7 @@ namespace Waffle.Entities
         public string? Note { get; set; }
         [StringLength(500)]
         public string? Address { get; set; }
-        public string Meta { get; set; }
+        public string? Meta { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 

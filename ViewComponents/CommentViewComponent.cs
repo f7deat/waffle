@@ -1,29 +1,42 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Models.Components;
-using Waffle.Models;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
+using Waffle.Extensions;
+using Waffle.Models.Components;
+using Waffle.Models.Filters;
 
-namespace Waffle.ViewComponents
+namespace Waffle.ViewComponents;
+
+[ViewComponent( Name = "COMMENT")]
+public class CommentViewComponent : ViewComponent
 {
-    public class CommentViewComponent : ViewComponent
+    private readonly ICommentService _commentService;
+    public CommentViewComponent(ICommentService commentService)
     {
-        private readonly ICatalogService _catalogService;
-        public CommentViewComponent(ICatalogService catalogService)
-        {
-            _catalogService = catalogService;
-        }
+        _commentService = commentService;
+    }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid catalogId)
+    protected Catalog PageData
+    {
+        get
         {
-            var catalog = await _catalogService.FindAsync(catalogId);
-            if (catalog is null)
-            {
-                return View(Empty.DefaultView, new ErrorViewModel
-                {
-                    RequestId = catalogId.ToString()
-                });
-            }
-            return View();
+            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
+            return values as Catalog ?? new();
         }
+    }
+
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        var work = new CommentComponent
+        {
+            Comments = await _commentService.ListInCatalogAsync(new CommentFilterOptions
+            {
+                CatalogId = PageData.Id
+            }),
+            IsAuthenticated = User.Identity?.IsAuthenticated ?? false,
+            CurrentUrl = PageData.GetUrl(),
+            CatalogId = PageData.Id
+        };
+        return View(work);
     }
 }

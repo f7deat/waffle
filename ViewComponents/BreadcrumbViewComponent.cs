@@ -31,12 +31,15 @@ namespace Waffle.ViewComponents
             var catalog = await _catalogService.FindAsync(catalogId);
             if (catalog != null)
             {
-                breadcrumb.Add(new Breadcrumb
+                if (catalog.Type != CatalogType.Entry && catalog.Type != CatalogType.Default)
                 {
-                    Url = GetMasterUrl(catalog.Type),
-                    Name = await _localizationService.GetAsync(catalog.Type.ToString()),
-                    Position = breadcrumb.Count + 1
-                });
+                    breadcrumb.Add(new Breadcrumb
+                    {
+                        Url = GetMasterUrl(catalog.Type),
+                        Name = await _localizationService.GetAsync(catalog.Type.ToString()),
+                        Position = breadcrumb.Count + 1
+                    });
+                }
 
                 if (catalog.ParentId != null)
                 {
@@ -72,11 +75,21 @@ namespace Waffle.ViewComponents
 
         private static string GetMasterUrl(CatalogType type)
         {
-            if (CatalogType.Default == type)
+            switch (type)
             {
-                return "/page";
+                case CatalogType.Default:
+                    return "/page";
+                case CatalogType.Article:
+                    return "/article";
+                case CatalogType.Product:
+                    return "/products";
+                case CatalogType.Location:
+                    return "/locations";
+                case CatalogType.Game:
+                    return "/games";
+                default:
+                    return $"/{type.ToString().ToLower()}";
             }
-            return $"/{type.ToString().ToLower()}";
         }
     }
 }

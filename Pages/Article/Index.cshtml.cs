@@ -20,6 +20,9 @@ namespace Waffle.Pages.Article
 
         public ListResult<Catalog>? Articles;
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
         public Pagination Pagination => new()
         {
             HasNextPage = Articles?.Total > Current * 12,
@@ -35,7 +38,8 @@ namespace Waffle.Pages.Article
                 Active = true,
                 PageSize = 12,
                 Current = Current,
-                Type = CatalogType.Article
+                Type = CatalogType.Article,
+                Name = SearchTerm
             });
         }
     }

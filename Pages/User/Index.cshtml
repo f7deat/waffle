@@ -1,54 +1,68 @@
-﻿@page
+﻿@page "/user/{id?}"
 @model Waffle.Pages.User.IndexModel
+@{
+    ViewData["Title"] = Model.ApplicationUser.UserName;
+}
 
 <div class="container">
-    <div class="wf-row">
+    <div class="row">
         <div class="w-1/4 mb-4">
             <div class="card mb-2 shadow">
                 <div class="flex justify-center mb-4">
-                    <img src="@Model.Avatar" loading="lazy" alt="Avatar" class="w-40 h-40 rounded-full" />
+                    <img src="@Model.Avatar" loading="lazy" alt="Avatar" class="rounded-full object-cover" width="200" height="200" />
                 </div>
-                <div class="text-xl font-bold mb-3 text-center">@Model.IdentityUser.UserName</div>
+                <div class="text-xl font-bold mb-3 text-center">@Model.ApplicationUser.UserName</div>
                 <div class="mb-4 text-center text-gray-500">
-                    Phone: @Model.IdentityUser.PhoneNumber
+                    Phone: @Model.ApplicationUser.PhoneNumber
                 </div>
                 <div class="flex items-center justify-center gap-4">
-                    <button class="px-4 py-2 bg-primary text-white rounded">Nhắn tin</button>
-                    <button class="px-4 py-2 border rounded">Theo dõi</button>
+                    <button class="px-4 py-2 bg-primary text-white rounded">
+                        <i class="fa-solid fa-message mr-1"></i>
+                        <span>Nhắn tin</span>
+                    </button>
+                    <button class="px-4 py-2 border rounded">
+                        <i class="fa-solid fa-user-plus mr-1"></i>
+                        <span>Theo dõi</span>
+                    </button>
                 </div>
             </div>
             <div class="bg-white shadow">
                 <div class="px-4 py-2 border-b flex justify-between">
                     <div>
-                        <i class="fas fa-globe mr-1"></i>Website
+                        <i class="fas fa-globe mr-1"></i>Website:
                     </div>
                     <div class="text-gray-500 text-right"></div>
                 </div>
                 <div class="px-4 py-2 border-b flex justify-between">
                     <div>
-                        <i class="fab fa-facebook mr-1"></i>Facebook
+                        <i class="fab fa-facebook mr-1"></i>Facebook:
                     </div>
                     <div class="text-gray-500 text-right"></div>
                 </div>
+                @if (Model.IsCurrentUser)
+                {
+                    <div class="px-4 py-2 border-b flex justify-center">
+                        <a href="/user/changepassword">
+                            <i class="fa-solid fa-lock mr-1"></i>
+                            <span>Đổi mật khẩu</span>
+                        </a>
+                    </div>
+                    <div class="px-4 py-2 border-b flex justify-center">
+                        <a href="/user/logout" class="text-red-500">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i>
+                            <span>Đăng xuất</span>
+                        </a>
+                    </div>
+                }
             </div>
         </div>
         <div class="w-3/4 mb-4">
-            <div class="card">
-                <div class="wf-row">
-                    <div class="w-1/4">
-                        <div class="border">
-                            <a href="/user">
-                                <div class="px-4 py-2 border-b">
-                                    Thông tin cá nhân
-                                </div>
-                            </a>
-                            <a href="/user/changepassword">
-                                <div class="px-4 py-2 border-b">
-                                    Đổi mật khẩu
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+            <div class="card shadow">
+                <div class="flex">
+                    <a href="#">Hoạt động</a>
+                </div>
+                <div class="row">
+                    
                 </div>
             </div>
         </div>

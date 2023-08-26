@@ -7,7 +7,7 @@
 <div class="container">
     <div class="md:flex gap-4">
         <div class="md:w-2/3">
-            @await Html.PartialAsync("/Views/Shared/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
+            @await Html.PartialAsync("/Pages/Shared/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
                 Title = "Video mới",
                 PlaylistItems = Model.PlaylistItems
             })

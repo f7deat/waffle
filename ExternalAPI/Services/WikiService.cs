@@ -56,7 +56,7 @@ namespace Waffle.ExternalAPI.Services
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Parse wiki errors");
+                _logger.LogWarning(ex, "Wiki Exception");
                 return default;
             }
         }

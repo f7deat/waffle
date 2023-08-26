@@ -1,6 +1,5 @@
-﻿namespace Waffle.Core.Interfaces.IRepository
+﻿namespace Waffle.Core.Interfaces.IRepository;
+
+public interface IFileContentRepository
 {
-    public interface IFileContentRepository
-    {
-    }
 }

@@ -7,7 +7,7 @@
         @foreach (var item in Model.Albums)
         {
             <div class="flex flex-col album-item shadow">
-                <img src="@item.Picture?.Data?.Url" alt="@item.Name" class="object-fit-cover w-full" />
+                <img src="@item.Picture?.Data?.Url" alt="@item.Name" class="object-cover w-full" />
                 <a href="/album/facebook/@item.Id" class="py-2 px-4 bg-white text-truncate" data-toggle="tooltip" title="@item.Name">@item.Name</a>
             </div>
         }

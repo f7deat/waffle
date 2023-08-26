@@ -1,10 +1,10 @@
-﻿using Waffle.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using Waffle.Core.Foundations;
 
-namespace Waffle.Models.Components
+namespace Waffle.Models.Components;
+
+[Display(Name = "Tag", ShortName = "TAG")]
+public class Tag : AbstractComponent
 {
-    public class Tag : BaseEntity
-    {
-        public string? NormalizedName { get; set; }
-        public string? Name { get; set; }
-    }
+    public string? Name { get; set; }
 }

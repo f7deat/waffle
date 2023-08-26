@@ -1,8 +1,7 @@
-﻿using Waffle.Entities;
+﻿using Waffle.Core.Foundations;
 
-namespace Waffle.Models.Components
+namespace Waffle.Models.Components;
+
+public class Pricing : AbstractComponent
 {
-    public class Pricing : BaseEntity
-    {
-    }
 }

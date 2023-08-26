@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 
@@ -14,18 +18,22 @@ namespace Waffle.Pages.Article
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IShopeeService _shopeeService;
 
-        public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<ApplicationUser> userManager) : base(catalogService)
+        public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, IShopeeService shopeeService) : base(catalogService)
         {
             _context = context;
             _userManager = userManager;
+            _shopeeService = shopeeService;
         }
 
         public List<WorkListItem> Works = new();
+        [UIHint(UIHint.Tags)]
         public List<Catalog> Tags = new();
         public bool HasTag => Tags.Any();
         public Feed ProductFeed = new();
         public bool HasProduct = false;
+        public LandingPageLinkList ShopeeProducts = new();
 
         public string Email = string.Empty;
         public bool IsAuthenticated = false;
@@ -44,7 +52,8 @@ namespace Waffle.Pages.Article
 
             if (Tags.Any())
             {
-                var product = await _catalogService.ListByTagAsync(Tags.Last().Id, new CatalogFilterOptions
+                var tagIds = Tags.Select(x => x.Id);
+                var product = await _catalogService.ListByTagsAsync(tagIds, new CatalogFilterOptions
                 {
                     Active = true,
                     PageSize = 4,
@@ -57,6 +66,8 @@ namespace Waffle.Pages.Article
                     Articles = product.Data?.ToList() ?? new(),
                     ItemPerRow = "grid-cols-2"
                 };
+
+                ShopeeProducts = await _shopeeService.GetLinkListsAsync(Tags.Last().Name, 4);
             }
 
             return Page();

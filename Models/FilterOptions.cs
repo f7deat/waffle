@@ -54,8 +54,9 @@ namespace Waffle.Models
 
     public class ArticleRelatedFilterOption : FilterOptions
     {
-        public Guid WorkId { get; set; }
+        public IEnumerable<Guid> TagIds { get; set; } = null!;
         public Guid CatalogId { get; set; }
+        public CatalogType Type { get; set; }
     }
 
     public class TagFilterOptions : FilterOptions

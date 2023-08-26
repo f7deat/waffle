@@ -1,11 +1,14 @@
 ﻿@page "/article/{normalizedName}"
+@using Waffle.Core.Constants;
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
+@using Waffle.ViewComponents
+@using Waffle.Entities
 @model Waffle.Pages.Article.DetailsModel
 
 <main class="wf-article__detail">
     <div class="container">
-        <div class="wf-row gap-4">
+        <div class="row gap-4">
             <div class="md:w-2/3">
                 @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
 
@@ -15,7 +18,7 @@
                     {
                         @await Component.InvokeAsync(item.NormalizedName, item.Id)
                     }
-                    
+
                     @if (Model.HasTag)
                     {
                         <div class="wf-delimiter"></div>
@@ -23,8 +26,9 @@
                             <i class="fas fa-tag mr-2"></i>
                             @foreach (var item in Model.Tags)
                             {
-                                <a href="/tag/@item.NormalizedName" class="wf-badge inline-block">@item.Name</a>
+                                <a href="/tag/@item.NormalizedName" class="bg-gray-100 px-2 py-1 inline-block rounded tag-item">@item.Name</a>
                             }
+
                         </div>
                     }
 
@@ -42,22 +46,7 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="mb-4">
-                    @if (Model.IsAuthenticated)
-                    {
-                        <div class="card">
-                            <div class="form-item">
-                                <textarea class="form-control"></textarea>
-                            </div>
-                            <button type="button" class="btn btn-primary">
-                                <i class="fa-solid fa-paper-plane-top"></i>
-                                <span>Gửi bình luận</span>
-                            </button>
-                        </div>
-                    }
-                </div>
-
+                @await Component.InvokeAsync(ComponentName.COMMENT)
             </div>
             <div class="md:w-1/3">
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
@@ -65,7 +54,29 @@
 
                 @if (Model.HasProduct)
                 {
-                    @await Html.PartialAsync("~/Views/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
+                    @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
+                }
+
+                @if (Model.ShopeeProducts.LinkList.Any())
+                {
+                    <div class="mb-4">
+                        <div class="title">Sản phẩm mới (@Model.ShopeeProducts.TotalCount)</div>
+                        <div class="grid grid-cols-2 gap-4">
+                            @foreach (var item in Model.ShopeeProducts.LinkList)
+                            {
+                                <div class="bg-white">
+                                    <div class="card-image">
+                                        <img src="@item.Image" alt="@item.LinkName" class="object-cover" loading="lazy" />
+                                    </div>
+                                    <div class="p-2">
+                                        <a href="@item.Link" class="line-clampin">
+                                            @item.LinkName
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 }
 
                 @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))
@@ -74,9 +85,10 @@
 
         @if (Model.Tags.Any())
         {
-            @await Component.InvokeAsync("Related", new Waffle.Entities.WorkItem {
-        CatalogId = Model.Tags.OrderBy(x => Guid.NewGuid()).First().Id,
-        WorkId = Model.PageData.Id
+            @await Component.InvokeAsync("Related", new RelatedProps {
+        TagIds = Model.Tags.Select(x => x.Id),
+        CatalogId = Model.PageData.Id,
+        Type = CatalogType.Article
         })
         }
     </div>
