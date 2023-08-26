@@ -18,9 +18,9 @@ public class IndexModel : PageModel
     public string Avatar = string.Empty;
     public bool IsCurrentUser = false;
 
-    public async Task<IActionResult> OnGetAsync(Guid? id)
+    public async Task<IActionResult> OnGetAsync(string id)
     {
-        if (id is null || id == Guid.Empty)
+        if (string.IsNullOrEmpty(id))
         {
             if (!User.Identity?.IsAuthenticated ?? false)
             {
@@ -32,7 +32,7 @@ public class IndexModel : PageModel
         }
         else
         {
-            ApplicationUser = await _userManager.FindByIdAsync(id.ToString());
+            ApplicationUser = await _userManager.FindByNameAsync(id);
             if (ApplicationUser is null)
             {
                 return NotFound();
@@ -41,7 +41,7 @@ public class IndexModel : PageModel
             if (User.Identity?.IsAuthenticated ?? false)
             {
                 var currentUser = await _userManager.GetUserAsync(User);
-                IsCurrentUser = currentUser.Id == id;
+                IsCurrentUser = currentUser.UserName.Equals(id, StringComparison.OrdinalIgnoreCase);
             }
         }
         return Page();

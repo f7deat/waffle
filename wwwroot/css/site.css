@@ -188,7 +188,9 @@ table {
 .absolute {
     position: absolute;
 }
-
+.navbar-nav {
+    --bs-nav-link-font-weight: 500;
+}
 .block {
     display: block;
 }

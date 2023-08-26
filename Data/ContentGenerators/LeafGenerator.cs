@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Foundations;
+using Waffle.Entities;
 using Waffle.Models.Components;
 
 namespace Waffle.Data.ContentGenerators;
@@ -18,6 +19,23 @@ public class LeafGenerator : BaseGenerator
         if (pricing is null)
         {
             
+        }
+    }
+
+    public async Task EnsureThankToSubscribleAsync()
+    {
+        var normalizedName = "thank-to-subscribe";
+        var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName == normalizedName);
+        if (catalog is null)
+        {
+            catalog = new Catalog
+            {
+                Active = true,
+                NormalizedName = normalizedName
+            };
+
+            await _context.Catalogs.AddAsync(catalog);
+            await _context.SaveChangesAsync();
         }
     }
 
@@ -92,5 +110,6 @@ public class LeafGenerator : BaseGenerator
     {
         await EnsureHomeAsync();
         await EnsurePricingAsync();
+        await EnsureThankToSubscribleAsync();
     }
 }

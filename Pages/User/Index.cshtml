@@ -1,4 +1,4 @@
-﻿@page "/user/{id?}"
+﻿@page "/user/{id:alpha}"
 @model Waffle.Pages.User.IndexModel
 @{
     ViewData["Title"] = Model.ApplicationUser.UserName;
@@ -10,9 +10,12 @@
             <div class="card mb-2 shadow">
                 <div class="flex justify-center mb-4 relative">
                     <img src="@Model.Avatar" loading="lazy" alt="Avatar" class="rounded-full object-cover" width="200" height="200" />
-                    <a href="https://gravatar.com/" class="absolute text-dark rounded-full bg-white shadow flex items-center justify-center right-0" style="width: 2rem; height: 2rem">
-                        <i class="fa-solid fa-pen" data-bs-toggle="tooltip" data-bs-title="Chỉnh sửa Avatar"></i>
-                    </a>
+                    @if (Model.IsCurrentUser)
+                    {
+                        <a href="https://gravatar.com/" class="absolute text-dark rounded-full bg-white shadow flex items-center justify-center right-0" style="width: 2rem; height: 2rem">
+                            <i class="fa-solid fa-pen" data-bs-toggle="tooltip" data-bs-title="Chỉnh sửa Avatar"></i>
+                        </a>
+                    }
                 </div>
                 <div class="text-xl font-bold mb-3 text-center">@Model.ApplicationUser.UserName</div>
                 <div class="mb-4 text-center text-gray-500">
