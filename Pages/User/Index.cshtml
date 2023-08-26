@@ -6,21 +6,24 @@
 
 <div class="container">
     <div class="row">
-        <div class="w-1/4 mb-4">
+        <div class="col-md-3 mb-4">
             <div class="card mb-2 shadow">
-                <div class="flex justify-center mb-4">
+                <div class="flex justify-center mb-4 relative">
                     <img src="@Model.Avatar" loading="lazy" alt="Avatar" class="rounded-full object-cover" width="200" height="200" />
+                    <a href="https://gravatar.com/" class="absolute text-dark rounded-full bg-white shadow flex items-center justify-center right-0" style="width: 2rem; height: 2rem">
+                        <i class="fa-solid fa-pen" data-bs-toggle="tooltip" data-bs-title="Chỉnh sửa Avatar"></i>
+                    </a>
                 </div>
                 <div class="text-xl font-bold mb-3 text-center">@Model.ApplicationUser.UserName</div>
                 <div class="mb-4 text-center text-gray-500">
                     Phone: @Model.ApplicationUser.PhoneNumber
                 </div>
                 <div class="flex items-center justify-center gap-4">
-                    <button class="px-4 py-2 bg-primary text-white rounded">
+                    <button class="btn btn-primary">
                         <i class="fa-solid fa-message mr-1"></i>
                         <span>Nhắn tin</span>
                     </button>
-                    <button class="px-4 py-2 border rounded">
+                    <button class="btn btn-light">
                         <i class="fa-solid fa-user-plus mr-1"></i>
                         <span>Theo dõi</span>
                     </button>
@@ -56,7 +59,7 @@
                 }
             </div>
         </div>
-        <div class="w-3/4 mb-4">
+        <div class="col-md-9 mb-4">
             <div class="card shadow">
                 <div class="flex">
                     <a href="#">Hoạt động</a>
@@ -68,3 +71,10 @@
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+}

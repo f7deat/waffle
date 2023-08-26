@@ -2,12 +2,6 @@
     --breadcrumb-margin: 0 0 0.5rem 0;
 }
 
-.navbar {
-    height: 3rem;
-    background-color: white;
-    margin-bottom: 1rem;
-}
-
 .search-input {
     background-color: var(--gray-100);
     border: 1px solid var(--gray-100);
@@ -49,12 +43,6 @@
     .title .view-more {
         border: 1px solid var(--gray-200);
     }
-
-    @media screen and (min-width: 640px) {
-        .navbar {
-        height: 3.5rem;
-    }
-}
 
 @media screen and (min-width: 768px) {
     .search-input {

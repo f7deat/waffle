@@ -4,7 +4,7 @@
     <div class="title">@Model.Name</div>
     @foreach (var item in Model.Items)
     {
-        <div class="px-4 py-2 hover:bg-gray-100 bg-white border-b flex justify-between">
+        <div class="py-2 hover:bg-gray-100 bg-white border-b flex justify-between">
             <div>
                 <i class="@item.Icon"></i>
                 <partial name="~/Pages/Shared/Components/Link/Default.cshtml" model="item.Link" />

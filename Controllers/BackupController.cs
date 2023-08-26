@@ -135,6 +135,11 @@ public class BackupController : BaseController
             await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Localizations");
             await _context.Localizations.AddRangeAsync(data.Localizations);
         }
+        if (data.Comments.Any())
+        {
+            await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Comments");
+            await _context.Comments.AddRangeAsync(data.Comments);
+        }
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
     }

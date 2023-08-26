@@ -1,23 +1,35 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 
-namespace Waffle.Pages.Install
+namespace Waffle.Pages.Install;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
-    {
-        private readonly IEnumerable<IGenerator> _generators;
-        public IndexModel(IEnumerable<IGenerator> generators)
-        {
-            _generators = generators;
-        }
+    private readonly IEnumerable<IGenerator> _generators;
+    private readonly IComponentService _componentService;
 
-        public async Task OnGetAsync()
+    public IndexModel(IEnumerable<IGenerator> generators, IComponentService componentService)
+    {
+        _generators = generators;
+        _componentService = componentService;
+    }
+
+    public IEnumerable<Component> Components = new List<Component>();
+
+    public async Task OnGetAsync()
+    {
+        Components = await _componentService.ListAllAsync();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        foreach (var generator in _generators)
         {
-            foreach (var generator in _generators)
-            {
-                await generator.RunAsync();
-            }
+            await generator.RunAsync();
         }
+        return Redirect("/install/success");
     }
 }

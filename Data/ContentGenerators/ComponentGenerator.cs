@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
@@ -10,13 +9,12 @@ namespace Waffle.Data.ContentGenerators;
 
 public class ComponentGenerator : BaseGenerator
 {
-    private readonly ILookupNormalizer _lookupNormalizer;
-    public ComponentGenerator(ApplicationDbContext context, ILookupNormalizer lookupNormalizer) : base(context)
+    public ComponentGenerator(ApplicationDbContext context) : base(context)
     {
-        _lookupNormalizer = lookupNormalizer;
+
     }
 
-    private IEnumerable<Component> GetData()
+    private static IEnumerable<Component> GetData()
     {
         var classes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "Waffle.Models.Components" && t.IsClass && typeof(IComponent).IsAssignableFrom(t)).ToList();
         if (!classes.Any()) throw new NullReferenceException();
@@ -25,12 +23,11 @@ public class ComponentGenerator : BaseGenerator
         {
             var display = AttributeHelper.GetDisplay(cls);
             if (display is null || string.IsNullOrEmpty(display.ShortName)) continue;
-            var normalizedName = cls.Name;
             yield return new Component
             {
                 Active = true,
                 Name = display.Name ?? cls.Name,
-                NormalizedName = normalizedName
+                NormalizedName = display.ShortName
             };
         }
     }

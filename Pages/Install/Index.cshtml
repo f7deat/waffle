@@ -1,4 +1,33 @@
 ﻿@page
 @model Waffle.Pages.Install.IndexModel
 @{
+    ViewData["Title"] = "Install";
 }
+
+<main class="container">
+    <div class="mb-4">
+        <div class="flex justify-end">
+            <form method="post">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fa-solid fa-bolt"></i>
+                    Install Now
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="mb-4">
+        <div class="title">Integrations</div>
+        <div class="grid md-grid-cols-4 grid-cols-2 gap-4">
+            @foreach (var item in Model.Components)
+            {
+                <div class="shadow">
+                    <div class="font-bold p-2">@item.Name</div>
+                    <div class="text-gray-500 p-2">Bring to you!</div>
+                    <div class="bg-gray-100 p-2 flex justify-between">
+                        <b>Installed</b>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</main>

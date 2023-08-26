@@ -2,19 +2,18 @@
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Services;
 
-namespace Waffle.Extensions
+namespace Waffle.Extensions;
+
+public static class AddHttpClientExtensions
 {
-    public static class AddHttpClientExtensions
+    public static void AddHttpClients(this IServiceCollection services)
     {
-        public static void AddHttpClients(this IServiceCollection services)
-        {
-            services.AddHttpClient<IFacebookService, FacebookService>();
-            services.AddHttpClient<IGameService, GameService>();
-            services.AddHttpClient<IGoogleService, GoogleService>();
-            services.AddHttpClient<IShopeeService, ShopeeService>();
-            services.AddHttpClient<ITelegramService, TelegramService>();
-            services.AddHttpClient<IWikiService, WikiService>();
-            services.AddHttpClient<IWordPressService, WordPressService>();
-        }
+        services.AddHttpClient<IFacebookService, FacebookService>();
+        services.AddHttpClient<IGameService, GameService>();
+        services.AddHttpClient<IGoogleService, GoogleService>();
+        services.AddHttpClient<IShopeeService, ShopeeService>();
+        services.AddHttpClient<ITelegramService, TelegramService>();
+        services.AddHttpClient<IWikiService, WikiService>();
+        services.AddHttpClient<IWordPressService, WordPressService>();
     }
 }

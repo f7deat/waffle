@@ -251,14 +251,17 @@ namespace Waffle.Core.Services
 
         public async Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions)
         {
-            var normalizedName = _lookupNormalizer.NormalizeName(filterOptions.KeyWords);
+            if (string.IsNullOrWhiteSpace(filterOptions.KeyWords)) return new List<Option>();
+
+            var normalizedName = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
+
             return await _context.Catalogs.Where(x =>
-            x.Active && x.Type == CatalogType.Tag && (string.IsNullOrEmpty(normalizedName) || x.NormalizedName.ToUpper().Contains(normalizedName)))
+            x.Active && x.Type == CatalogType.Tag && x.NormalizedName.Contains(normalizedName))
                 .Select(x => new Option
                 {
                     Label = x.Name,
                     Value = x.Id
-                }).ToListAsync();
+                }).Take(20).ToListAsync();
         }
 
         public async Task<IdentityResult> TagAddToCatalogAsync(WorkItem args)
