@@ -35,10 +35,11 @@ namespace Waffle.ExternalAPI.Services
             }
         }
 
-        public async Task<bool> SendMessageAsync(string token, string chatId, string message)
+        public async Task<bool> SendMessageAsync(string token, string? chatId, string message)
         {
             try
             {
+                if (string.IsNullOrEmpty(chatId)) return false;
                 var setting = await _appService.GetAsync<Telegram>(nameof(Telegram));
                 if (setting == null)
                 {
