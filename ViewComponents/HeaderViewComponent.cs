@@ -46,6 +46,7 @@ public class HeaderViewComponent : ViewComponent
             });
         }
         header.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
+        header.Catalog = PageData;
         return View(_configuration.GetValue<string>("Theme"), header);
     }
 }

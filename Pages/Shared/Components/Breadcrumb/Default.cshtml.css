@@ -2,7 +2,6 @@
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    gap: .75rem;
     padding: 0.5rem 0;
     background-color: var(--breadcrumb-bg);
     margin: var(--breadcrumb-margin);

@@ -579,6 +579,14 @@ table {
     --bs-offcanvas-width: 250px;
 }
 
+.offcanvas-header {
+    border-bottom: 1px dashed var(--bs-gray-500);
+}
+
+.offcanvas-body {
+    --bs-offcanvas-padding-y: 0;
+}
+
 .object-fit-contain {
     object-fit: contain;
 }
@@ -731,18 +739,6 @@ table {
 
 .text-gray-700 {
     color: var(--gray-700);
-}
-
-.gap-0 {
-    gap: 0;
-}
-
-.gap-2 {
-    gap: 0.5rem;
-}
-
-.gap-4 {
-    gap: 1rem;
 }
 
 .grid {

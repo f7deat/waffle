@@ -5,7 +5,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Column", ShortName = "COLUMN", GroupName = GroupName.Grid)]
+[Display(Name = "Column", ShortName = nameof(Column), GroupName = GroupName.Grid)]
 public class Column : AbstractComponent
 {
     public Column()
