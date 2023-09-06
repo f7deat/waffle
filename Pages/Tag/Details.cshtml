@@ -28,7 +28,7 @@
                 <div>Lượt xem: @Model.PageData.ViewCount.ToString("N0")</div>
                 <div>
                     <i class="fas fa-calendar mr-1"></i>
-                    <span>@Model.PageData.ModifiedDate.ToLongDateString()</span>
+                    <span>@Model.PageData.ModifiedDate</span>
                 </div>
             </div>
             <partial name="~/Pages/Article/_List.cshtml" model="Model.Catalogs" />

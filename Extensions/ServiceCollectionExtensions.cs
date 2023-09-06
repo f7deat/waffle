@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IOrderService, OrderSerivce>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<IMigrationService, MigrationService>();
 
         services.AddScoped<ICurrentUser, CurrentUser>();
 

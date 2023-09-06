@@ -52,9 +52,7 @@
             }
             else
             {
-                <div class="bg-white shadow px-4 py-2 rounded text-center mb-4">
-                    Không có dữ liệu
-                </div>
+                <partial name="~/Pages/Shared/Components/Empty/Default.cshtml" model="new ErrorViewModel{ RequestId = Guid.Empty.ToString() }" />
             }
 
             @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)

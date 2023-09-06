@@ -195,8 +195,8 @@ table {
     display: block;
 }
 
-.bg-white {
-    background-color: white;
+.dropdown-menu {
+    --bs-dropdown-border-width: 0;
 }
 
 .bg-light {
@@ -266,20 +266,6 @@ table {
 .dropdown {
     position: relative;
 }
-
-.dropdown-menu {
-    position: absolute;
-    z-index: 1000;
-    display: none;
-    list-style: none;
-    background-color: white;
-    padding: 0;
-    min-width: 10rem;
-}
-
-    .dropdown-menu.show {
-        display: block;
-    }
 
 .dropdown-item {
     display: block;
