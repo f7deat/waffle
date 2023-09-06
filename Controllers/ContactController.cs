@@ -3,7 +3,6 @@ using SendGrid.Helpers.Mail;
 using Waffle.Data;
 using Waffle.Entities;
 using System.Text.Json;
-using Waffle.ExternalAPI.SendGrids;
 using Microsoft.AspNetCore.Authorization;
 using Waffle.Core.Services.Contacts.Models;
 using Waffle.Models.Components;
@@ -24,14 +23,16 @@ public class ContactController : BaseController
     private readonly ILogger<ContactController> _logger;
     private readonly IAppSettingService _appSettingService;
     private readonly IUserService _userService;
+    private readonly IAppLogService _appLogService;
 
-    public ContactController(ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, IAppSettingService appSettingService, IUserService userService)
+    public ContactController(IAppLogService appLogService, ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, IAppSettingService appSettingService, IUserService userService)
     {
         _context = context;
         _logger = logger;
         _telegramService = telegramService;
         _appSettingService = appSettingService;
         _userService = userService;
+        _appLogService = appLogService;
     }
 
     [HttpGet("list")]
@@ -43,10 +44,7 @@ public class ContactController : BaseController
     [HttpPost("submit-form"), AllowAnonymous]
     public async Task<IActionResult> SubmitContactAsync(SubmitFormModel model)
     {
-        if (model is null)
-        {
-            return BadRequest();
-        }
+        if (model is null) return BadRequest();
         var meta = new ContactMeta();
         var config = await _appSettingService.GetAsync<ExternalAPI.SendGrids.SendGrid>(nameof(SendGrid));
         if (config is not null)
@@ -116,6 +114,7 @@ public class ContactController : BaseController
             }));
         }
         _context.Contacts.Remove(contact);
+        await _appLogService.AddAsync("Delete contact", id);
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
     }

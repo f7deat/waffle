@@ -1,11 +1,13 @@
-﻿@{
-    var css = ViewBag.CSS as IEnumerable<Guid>;
-}
+﻿@using Waffle.Models.Components;
+@model Waffle.Models.Components.Css
 
-@if (css != null)
+@if (Model.Type == CssType.Critical)
 {
-    @foreach (var item in css)
-    {
-        <link rel="stylesheet" href="@($"/css/{item}.css")" asp-append-version="true" />
-    }
+    <style>
+        @Html.Raw(Model.Value)
+    </style>
+} 
+else
+{
+    <link rel="stylesheet" href="@Model.Url" asp-append-version="true" />
 }
