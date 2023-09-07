@@ -19,7 +19,7 @@ namespace Waffle.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(Blogger args)
         {
-            var blogger = await _appService.GetAsync<Google>(nameof(Google));
+            var blogger = await _appService.GetAsync<ExternalAPI.GoogleAggregate.Google>(nameof(Google));
             if (blogger != null)
             {
                 var post = await _googleService.BloggerGetAsync(args.BlogId, args.PostId, blogger.BloggerApiKey);

@@ -4,6 +4,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Extensions;
 
 namespace Waffle.ViewComponents;
 
@@ -46,6 +47,7 @@ public class HeaderViewComponent : ViewComponent
             });
         }
         header.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
+        header.UserId = UserClaimsPrincipal.GetId();
         header.Catalog = PageData;
         return View(_configuration.GetValue<string>("Theme"), header);
     }

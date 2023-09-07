@@ -31,14 +31,9 @@ html {
 }
 
 a {
-    color: #007bff;
     text-decoration: none;
     transition: all .3s ease-in-out;
 }
-
-    a:hover {
-        color: #0056b3
-    }
 
 
 button {

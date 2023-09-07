@@ -31,7 +31,7 @@ namespace Waffle.ViewComponents
                     work.Content = wordPress?.Content.Rendered ?? string.Empty;
                     break;
                 case PostContentType.Blogspot:
-                    var blogger = await _appService.GetAsync<Google>(nameof(Google));
+                    var blogger = await _appService.GetAsync<ExternalAPI.GoogleAggregate.Google>(nameof(Google));
                     if (blogger != null)
                     {
                         var post = await _googleService.BloggerGetAsync(work.Blogger.BlogId, work.Blogger.PostId, blogger.BloggerApiKey);

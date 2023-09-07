@@ -20,29 +20,17 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(string id)
     {
-        if (string.IsNullOrEmpty(id))
+        if (string.IsNullOrEmpty(id)) return NotFound();
+        ApplicationUser = await _userManager.FindByIdAsync(id);
+        if (ApplicationUser is null)
         {
-            if (!User.Identity?.IsAuthenticated ?? false)
-            {
-                return Unauthorized();
-            }
-            ApplicationUser = await _userManager.GetUserAsync(User);
-            Avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(ApplicationUser.Email)}?s=520";
-            IsCurrentUser = true;
+            return NotFound();
         }
-        else
+        Avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(ApplicationUser.Email)}?s=520";
+        if (User.Identity?.IsAuthenticated ?? false)
         {
-            ApplicationUser = await _userManager.FindByNameAsync(id);
-            if (ApplicationUser is null)
-            {
-                return NotFound();
-            }
-            Avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(ApplicationUser.Email)}?s=520";
-            if (User.Identity?.IsAuthenticated ?? false)
-            {
-                var currentUser = await _userManager.GetUserAsync(User);
-                IsCurrentUser = currentUser.UserName.Equals(id, StringComparison.OrdinalIgnoreCase);
-            }
+            var currentUser = await _userManager.GetUserAsync(User);
+            IsCurrentUser = currentUser.Id.ToString().Equals(id, StringComparison.OrdinalIgnoreCase);
         }
         return Page();
     }

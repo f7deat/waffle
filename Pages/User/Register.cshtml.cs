@@ -3,27 +3,29 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Encodings.Web;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 
 namespace Waffle.Pages.User
 {
-    public class RegisterModel : PageModel
+    public class RegisterModel : EntryPageModel
     {
-        private readonly ICatalogService _catalogService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly IUserStore<ApplicationUser> _userStore;
-        public RegisterModel(ICatalogService catalogService, UserManager<ApplicationUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender, IUserStore<ApplicationUser> userStore)
+        private readonly IAppSettingService _appSettingService;
+
+        public RegisterModel(ICatalogService catalogService, UserManager<ApplicationUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender, IUserStore<ApplicationUser> userStore, IAppSettingService appSettingService) : base(catalogService)
         {
-            _catalogService = catalogService;
             _userManager = userManager;
             _logger = logger;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _emailSender = emailSender;
+            _appSettingService = appSettingService;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -38,9 +40,15 @@ namespace Waffle.Pages.User
         public bool IsAccept { get; set; }
 
         public IdentityResult? Result;
+        public string? ClientId;
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
+            var google = await _appSettingService.GetAsync<ExternalAPI.GoogleAggregate.Google>(nameof(Google));
+            if (google != null)
+            {
+                ClientId = google.ClientId;
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()

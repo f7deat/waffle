@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -204,9 +204,5 @@ public class AppSettingController : BaseController
     public async Task<IActionResult> DeleteWorkAsync([FromRoute] Guid id) => Ok(await _appSettingService.DeleteWorkAsync(id));
 
     [HttpPost("test-send-mail")]
-    public async Task<IActionResult> TestSendMailAsync([FromBody] EmailSenderMessageUnitTest args)
-    {
-        await _emailSender.SendEmailAsync(args.Email, args.Subject, args.Message);
-        return Ok(args);
-    }
+    public async Task<IActionResult> TestSendMailAsync([FromBody] EmailSenderMessageUnitTest args) => Ok(await _emailSender.SendEmailAsync(args.Email, args.Subject, args.Message));
 }

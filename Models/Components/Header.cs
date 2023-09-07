@@ -22,5 +22,8 @@ public class Header : AbstractComponent
     public bool IsAuthenticated { get; set; }
 
     [JsonIgnore]
+    public Guid UserId { get; set; }
+
+    [JsonIgnore]
     public Catalog Catalog { get; set; } = new();
 }
