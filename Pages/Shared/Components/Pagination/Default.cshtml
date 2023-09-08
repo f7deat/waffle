@@ -1,0 +1,19 @@
+﻿@model Waffle.Models.Components.Pagination
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        <li class="@(Model.HasPrevPage ? "page-item" : "page-item disabled")">
+            <a class="page-link" href="?current=@(Model.Current - 1)">
+                <i class="fa-solid fa-angle-left"></i>
+            </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">@(Model.Current)</a></li>
+        <li class="page-item"><a class="page-link" href="#">@(Model.Current + 1)</a></li>
+        <li class="page-item"><a class="page-link" href="#">@(Model.Current + 2)</a></li>
+        <li class="page-item">
+            <a class="page-link" href="?current=@(Model.Current + 1)">
+                <i class="fa-solid fa-angle-right"></i>
+            </a>
+        </li>
+    </ul>
+</nav>

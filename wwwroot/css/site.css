@@ -169,6 +169,17 @@ table {
     margin-top: 0.5rem;
 }
 
+.tag-item {
+    background-color: var(--bs-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+    .tag-item:hover {
+        background-color: var(--bs-dark);
+        color: white;
+    }
+
 .alert {
     box-shadow: var(--shadow);
     padding: 0.5rem 1rem;
@@ -183,9 +194,11 @@ table {
 .absolute {
     position: absolute;
 }
+
 .navbar-nav {
     --bs-nav-link-font-weight: 500;
 }
+
 .block {
     display: block;
 }
@@ -654,7 +667,7 @@ table {
     border-radius: 9999px;
 }
 
-.table-bordered>:not(caption)>*>* {
+.table-bordered > :not(caption) > * > * {
     border-width: 1px;
     padding: 0.25rem 0.5rem;
 }

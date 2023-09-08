@@ -1,0 +1,17 @@
+﻿@page "/games/genshin-impact/detail/{id}"
+@using Waffle.Models.Components;
+@model Waffle.Pages.Games.GenshinImpact.DetailModel
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="title">@Model.Data.Title</div>
+            <div class="mb-4">
+                @Html.Raw(Model.Data.Content)
+            </div>
+        </div>
+        <div class="col-md-4">
+            @await Component.InvokeAsync(nameof(ArticleSpotlight))
+        </div>
+    </div>
+</main>

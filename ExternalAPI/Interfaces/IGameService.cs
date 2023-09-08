@@ -1,5 +1,6 @@
 ﻿using Waffle.ExternalAPI.Game.Models;
 using Waffle.ExternalAPI.Models;
+using Waffle.Models;
 
 namespace Waffle.ExternalAPI.Interfaces
 {
@@ -11,5 +12,8 @@ namespace Waffle.ExternalAPI.Interfaces
         Task<List<EpicGamesElement>> GetEpicGamesFreeGamesPromotionsAsync();
         Task<EpicGamesProduct?> GetEpicGamesProductAsync(string normalizedName);
         Task<CreatorListItem> GetCreatorsAsync(int pageIndex, int pageSize);
+
+        Task<GIContentList> GetGIContentListAsync(BasicFilterOptions filterOptions);
+        Task<GIContent?> GetGIContentDetailAsync(int id);
     }
 }

@@ -1,4 +1,40 @@
-﻿@page
+﻿@page "/games/genshin-impact"
+@using Waffle.Core.Constants;
+@using Waffle.Models.Components;
 @model Waffle.Pages.Games.GenshinImpact.IndexModel
 @{
+    ViewData["Title"] = "Genshin Impact";
 }
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="mb-4 list-group">
+                <div class="title">Tin tức mới</div>
+                <div>
+                    @foreach (var item in Model.ContentList.List)
+                    {
+                        <div class="py-2 hover:bg-gray-100 bg-white border-b flex justify-between">
+                            <div>
+                                <i class="fab fa-staylinked"></i>
+                                <a href="/games/genshin-impact/detail/@item.InfoId">
+                                    @item.Title
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                @await Html.PartialAsync(PartialName.Pagination, new Pagination 
+                    { 
+                        Current = Model.FilterOptions.Current, 
+                        Total = Model.ContentList.Total, 
+                        HasPrevPage = Model.FilterOptions.Current > 1 
+                    }
+                )
+            </div>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+</main>

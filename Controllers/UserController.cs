@@ -24,7 +24,9 @@ public class UserController : BaseController
     private readonly ILogger<UserController> _logger;
     private readonly IConfiguration _configuration;
     private readonly IUserService _userService;
-    public UserController(IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<ApplicationRole> roleManager)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+
+    public UserController(IWebHostEnvironment webHostEnvironment, IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<ApplicationRole> roleManager)
     {
         _userService = userService;
         _userManager = userManager;
@@ -32,6 +34,7 @@ public class UserController : BaseController
         _logger = logger;
         _configuration = configuration;
         _roleManager = roleManager;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     [HttpGet("list")]

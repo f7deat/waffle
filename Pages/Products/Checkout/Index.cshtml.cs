@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations.PageModels;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
@@ -7,7 +7,7 @@ using Waffle.ExternalAPI.Models;
 
 namespace Waffle.Pages.Products.Checkout
 {
-    public class IndexModel : PageModel
+    public class IndexModel : CheckoutPageModel
     {
         private readonly ICatalogService _catalogService;
         private readonly ITelegramService _telegramService;

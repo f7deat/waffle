@@ -28,16 +28,12 @@
                         <div class="text-gray-500">
                             Lượt xem: @Model.PageData.ViewCount.ToString("N0")
                         </div>
-                        @*<div class="md:flex mb-4 gap-4">
-                            <a href="/shop/cart?productId=@Model.PageData.Id" class="btn border block mb-2">
-                                <i class="fas fa-cart-shopping mr-2"></i>
-                                <span>Thêm vào giỏ hàng</span>
-                            </a>
-                            <a href="/shop/checkout?productIds=@Model.PageData.Id" class="btn btn-primary block mb-2">
+                        <div class="md:flex mb-4 gap-4">
+                            <a href="/products/checkout?productIds=@Model.PageData.Id" class="btn btn-primary block mb-2">
                                 <i class="fas fa-cart-shopping mr-2"></i>
                                 <span>Mua ngay</span>
                             </a>
-                        </div>*@
+                        </div>
                     </div>
                 </div>
             </div>

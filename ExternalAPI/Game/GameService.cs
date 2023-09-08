@@ -2,6 +2,7 @@
 using Waffle.ExternalAPI.Game.Models;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
+using Waffle.Models;
 
 namespace Waffle.ExternalAPI.Game
 {
@@ -10,7 +11,6 @@ namespace Waffle.ExternalAPI.Game
         private readonly HttpClient _http;
         public GameService(HttpClient httpClient)
         {
-
             _http = httpClient;
         }
 
@@ -46,6 +46,30 @@ namespace Waffle.ExternalAPI.Game
             {
                 return default;
             }
+        }
+
+        public async Task<GIContentList> GetGIContentListAsync(BasicFilterOptions filterOptions)
+        {
+            var url = $"https://api-os-takumi-static.hoyoverse.com/content_v2_user/app/a1b1f9d3315447cc/getContentList?iAppId=32&iChanId=395&iPageSize=5&iPage={filterOptions.Current}&sLangKey=vi-vn";
+            var response = await _http.GetStreamAsync(url);
+            var data = await JsonSerializer.DeserializeAsync<GIResult<GIContentList>>(response);
+            if (data is null)
+            {
+                return new GIContentList();
+            }
+            return data.Data ?? new GIContentList();
+        }
+
+        public async Task<GIContent?> GetGIContentDetailAsync(int id)
+        {
+            var url = $"https://api-os-takumi-static.hoyoverse.com/content_v2_user/app/a1b1f9d3315447cc/getContent?iAppId=32&iInfoId={id}&sLangKey=vi-vn&iAround=0";
+            var response = await _http.GetStreamAsync(url);
+            var data = await JsonSerializer.DeserializeAsync<GIResult<GIContent>>(response);
+            if (data is null)
+            {
+                return default;
+            }
+            return data.Data;
         }
 
         public async Task<List<string>> LOL_GetLanguagesAsync()
