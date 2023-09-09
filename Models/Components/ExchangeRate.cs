@@ -5,7 +5,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Exchange Rate", ShortName = nameof(ExchangeRate))]
+[Display(Name = "Exchange Rate", Prompt = "exchange-rate")]
 public class ExchangeRate : AbstractComponent
 {
     [JsonIgnore]

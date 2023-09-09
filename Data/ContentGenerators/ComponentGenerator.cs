@@ -22,7 +22,7 @@ public class ComponentGenerator : BaseGenerator
         foreach (var cls in classes)
         {
             var display = AttributeHelper.GetDisplay(cls);
-            if (display is null || string.IsNullOrEmpty(display.ShortName)) continue;
+            if (display is null) continue;
             yield return new Component
             {
                 Active = true,
@@ -44,21 +44,6 @@ public class ComponentGenerator : BaseGenerator
             await _context.Components.AddAsync(component);
         }
         await _context.SaveChangesAsync();
-    }
-
-    public async Task<IComponent> EnsureComponentAsync(IComponent component)
-    {
-        var components = GetData();
-        if (!components.Any(x => x.NormalizedName.Equals(component.NormalizedName))) throw new NullReferenceException();
-
-        var display = AttributeHelper.GetDisplay(typeof(IComponent)) ?? throw new NullReferenceException();
-        var data = new Component
-        {
-            Name = display.Name ?? string.Empty,
-            NormalizedName = display.ShortName ?? string.Empty
-        };
-        await _context.Components.AddAsync(data);
-        return data;
     }
 
     public override async Task RunAsync() => await EnsureComponentsAsync();

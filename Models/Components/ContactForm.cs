@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
+[Display(Name = "Contact form", Prompt = "contact-form")]
 public class ContactForm : AbstractComponent
 {
     [JsonPropertyName("name")]

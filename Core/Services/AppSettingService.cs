@@ -18,6 +18,7 @@ public class AppSettingService : IAppSettingService
     private readonly ILogger<AppSettingService> _logger;
     private readonly ILookupNormalizer _lookupNormalizer;
     private readonly IMemoryCache _memoryCache;
+
     public AppSettingService(ApplicationDbContext context, ILogger<AppSettingService> logger, ILookupNormalizer lookupNormalizer, IMemoryCache memoryCache)
     {
         _context = context;

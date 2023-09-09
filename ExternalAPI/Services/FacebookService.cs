@@ -3,131 +3,137 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 
-namespace Waffle.ExternalAPI.Services
+namespace Waffle.ExternalAPI.Services;
+
+public class FacebookService : IFacebookService
 {
-    public class FacebookService : IFacebookService
+    private readonly HttpClient _http;
+    private readonly IAppSettingService _appService;
+
+    public FacebookService(HttpClient http, IAppSettingService appSettingService)
     {
-        private readonly HttpClient _http;
-        private readonly IAppSettingService _appService;
+        http.BaseAddress = new Uri("https://graph.facebook.com");
+        _http = http;
+        _appService = appSettingService;
+    }
 
-        public FacebookService(HttpClient http, IAppSettingService appSettingService)
+    public async Task<List<Album>> GetAlbumsAsync(string pageId, string access_token)
+    {
+        try
         {
-            http.BaseAddress = new Uri("https://graph.facebook.com");
-            _http = http;
-            _appService = appSettingService;
+            var response = await _http.GetStreamAsync($"{pageId}/albums?fields=name,type,picture&access_token={access_token}");
+            var data = await JsonSerializer.DeserializeAsync<FacebookListResult<Album>>(response);
+            return data?.Data?.Where(x => (x.Type == "normal" || x.Type == "wall") && x.Picture?.Data?.IsSilhouette == false).ToList() ?? new List<Album>();
         }
-
-        public async Task<List<Album>> GetAlbumsAsync(string pageId, string access_token)
+        catch (Exception)
         {
-            try
-            {
-                var response = await _http.GetStreamAsync($"{pageId}/albums?fields=name,type,picture&access_token={access_token}");
-                var data = await JsonSerializer.DeserializeAsync<FacebookListResult<Album>>(response);
-                return data?.Data?.Where(x => (x.Type == "normal" || x.Type == "wall") && x.Picture?.Data?.IsSilhouette == false).ToList() ?? new List<Album>();
-            }
-            catch (Exception)
-            {
-                return new List<Album>();
-            }
+            return new List<Album>();
         }
+    }
 
-        public async Task<LongLivedUserAccessToken?> GetLongLivedUserAccessTokenAsync(string appId, string appSercet, string shortLiveToken)
+    public async Task<LongLivedUserAccessToken?> GetLongLivedUserAccessTokenAsync(string appId, string appSercet, string shortLiveToken)
+    {
+        try
         {
-            try
-            {
-                var response = await _http.GetStreamAsync($"/oauth/access_token?grant_type=fb_exchange_token&client_id={appId}&client_secret={appSercet}&fb_exchange_token={shortLiveToken}");
-                return await JsonSerializer.DeserializeAsync<LongLivedUserAccessToken>(response);
-            }
-            catch (Exception ex)
-            {
-                return new LongLivedUserAccessToken
-                {
-                    AccessToken = ex.ToString()
-                };
-            }
+            var response = await _http.GetStreamAsync($"/oauth/access_token?grant_type=fb_exchange_token&client_id={appId}&client_secret={appSercet}&fb_exchange_token={shortLiveToken}");
+            return await JsonSerializer.DeserializeAsync<LongLivedUserAccessToken>(response);
         }
-
-        public async Task<LongLivedPageAccessToken?> GetLongLivedPageAccessTokenAsync(string pageId, string longLivedUserAccessToken)
+        catch (Exception ex)
         {
-            try
+            return new LongLivedUserAccessToken
             {
-                var response = await _http.GetStreamAsync($"/{pageId}?fields=access_token&access_token={longLivedUserAccessToken}");
-                return await JsonSerializer.DeserializeAsync<LongLivedPageAccessToken>(response);
-            }
-            catch (Exception ex)
-            {
-                return new LongLivedPageAccessToken
-                {
-                    AccessToken = ex.ToString()
-                };
-            }
+                AccessToken = ex.ToString()
+            };
         }
+    }
 
-        public async Task<FacebookListResult<FacebookPhoto>> GetPhotosAsync(string id, int limit, string before, string after, string access_token)
+    public async Task<LongLivedPageAccessToken?> GetLongLivedPageAccessTokenAsync(string pageId, string longLivedUserAccessToken)
+    {
+        try
         {
-            try
+            var response = await _http.GetStreamAsync($"/{pageId}?fields=access_token&access_token={longLivedUserAccessToken}");
+            return await JsonSerializer.DeserializeAsync<LongLivedPageAccessToken>(response);
+        }
+        catch (Exception ex)
+        {
+            return new LongLivedPageAccessToken
             {
-                _http.DefaultRequestHeaders.Add("Authorization", $"Bearer {access_token}");
-                var response = await _http.GetStreamAsync(id + "/photos?fields=name,picture,images&limit=" + limit + "&before=" + before + "&after=" + after);
-                return await JsonSerializer.DeserializeAsync<FacebookListResult<FacebookPhoto>>(response) ?? new FacebookListResult<FacebookPhoto>();
-            }
-            catch (Exception ex)
+                AccessToken = ex.ToString()
+            };
+        }
+    }
+
+    public async Task<FacebookListResult<FacebookPhoto>> GetPhotosAsync(string? id, int limit, string? before, string? after, string access_token)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(id))
             {
                 return new FacebookListResult<FacebookPhoto>
                 {
-                    ErrorMessage = ex.ToString()
+                    ErrorMessage = "Album not found"
                 };
             }
+            _http.DefaultRequestHeaders.Add("Authorization", $"Bearer {access_token}");
+            var response = await _http.GetStreamAsync(id + "/photos?fields=name,picture,images&limit=" + limit + "&before=" + before + "&after=" + after);
+            return await JsonSerializer.DeserializeAsync<FacebookListResult<FacebookPhoto>>(response) ?? new FacebookListResult<FacebookPhoto>();
         }
-
-        public async Task<FacebookSummary> GetSummaryAsync(string id, string access_token)
+        catch (Exception ex)
         {
-            try
+            return new FacebookListResult<FacebookPhoto>
             {
-                var response = await _http.GetStreamAsync($"{id}?fields=description,name&access_token={access_token}");
-                return await JsonSerializer.DeserializeAsync<FacebookSummary>(response) ?? new FacebookSummary();
-            }
-            catch (Exception ex)
-            {
-                return new FacebookSummary
-                {
-                    Description = ex.ToString()
-                };
-            }
+                ErrorMessage = ex.ToString()
+            };
         }
+    }
 
-        public async Task<FacebookListResult<FacebookProduct>> GetProductsAsync(string id, string access_token, int limit)
+    public async Task<FacebookSummary> GetSummaryAsync(string id, string access_token)
+    {
+        try
         {
-            try
-            {
-                var response = await _http.GetStreamAsync($"{id}/products?fields=image_url,name,url,price,sale_price&access_token={access_token}&limit={limit}");
-                return await JsonSerializer.DeserializeAsync<FacebookListResult<FacebookProduct>>(response) ?? new FacebookListResult<FacebookProduct>();
-            }
-            catch (Exception ex)
-            {
-                return new FacebookListResult<FacebookProduct>
-                {
-                    ErrorMessage = ex.ToString()
-                };
-            }
+            var response = await _http.GetStreamAsync($"{id}?fields=description,name&access_token={access_token}");
+            return await JsonSerializer.DeserializeAsync<FacebookSummary>(response) ?? new FacebookSummary();
         }
-
-        public async Task<string> GraphAPIExplorerAsync(string query)
+        catch (Exception ex)
         {
-            try
+            return new FacebookSummary
             {
-                if (string.IsNullOrWhiteSpace(query)) return "Query empty";
-                var setting = await _appService.GetAsync<Facebook>(nameof(Facebook));
-                if (setting is null)
-                {
-                    return "Config not found";
-                }
-                return await _http.GetStringAsync($"{query}&access_token={setting.LongLivedUserAccessToken.AccessToken}");
-            }
-            catch (Exception ex)
+                Description = ex.ToString()
+            };
+        }
+    }
+
+    public async Task<FacebookListResult<FacebookProduct>> GetProductsAsync(string id, string access_token, int limit)
+    {
+        try
+        {
+            var response = await _http.GetStreamAsync($"{id}/products?fields=image_url,name,url,price,sale_price&access_token={access_token}&limit={limit}");
+            return await JsonSerializer.DeserializeAsync<FacebookListResult<FacebookProduct>>(response) ?? new FacebookListResult<FacebookProduct>();
+        }
+        catch (Exception ex)
+        {
+            return new FacebookListResult<FacebookProduct>
             {
-                return ex.ToString();
+                ErrorMessage = ex.ToString()
+            };
+        }
+    }
+
+    public async Task<string> GraphAPIExplorerAsync(string query)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(query)) return "Query empty";
+            var setting = await _appService.GetAsync<Facebook>(nameof(Facebook));
+            if (setting is null)
+            {
+                return "Config not found";
             }
+            return await _http.GetStringAsync($"{query}&access_token={setting.LongLivedUserAccessToken.AccessToken}");
+        }
+        catch (Exception ex)
+        {
+            return ex.ToString();
         }
     }
 }
