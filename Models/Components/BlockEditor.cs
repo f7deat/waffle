@@ -7,6 +7,8 @@ public class BlockEditor : BaseEntity
 {
     [JsonPropertyName("blocks")]
     public List<BlockEditorBlock> Blocks { get; set; } = new();
+    [JsonPropertyName("version")]
+    public string? Version { get; set; }
 }
 
 public class BlockEditorBlock

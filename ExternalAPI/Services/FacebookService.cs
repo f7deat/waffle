@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 
@@ -7,10 +8,13 @@ namespace Waffle.ExternalAPI.Services
     public class FacebookService : IFacebookService
     {
         private readonly HttpClient _http;
-        public FacebookService(HttpClient http)
+        private readonly IAppSettingService _appService;
+
+        public FacebookService(HttpClient http, IAppSettingService appSettingService)
         {
             http.BaseAddress = new Uri("https://graph.facebook.com");
             _http = http;
+            _appService = appSettingService;
         }
 
         public async Task<List<Album>> GetAlbumsAsync(string pageId, string access_token)
@@ -105,6 +109,24 @@ namespace Waffle.ExternalAPI.Services
                 {
                     ErrorMessage = ex.ToString()
                 };
+            }
+        }
+
+        public async Task<string> GraphAPIExplorerAsync(string query)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(query)) return "Query empty";
+                var setting = await _appService.GetAsync<Facebook>(nameof(Facebook));
+                if (setting is null)
+                {
+                    return "Config not found";
+                }
+                return await _http.GetStringAsync($"{query}&access_token={setting.LongLivedUserAccessToken.AccessToken}");
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
             }
         }
     }

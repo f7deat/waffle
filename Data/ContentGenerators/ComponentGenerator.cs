@@ -27,7 +27,7 @@ public class ComponentGenerator : BaseGenerator
             {
                 Active = true,
                 Name = display.Name ?? cls.Name,
-                NormalizedName = display.ShortName
+                NormalizedName = cls.Name
             };
         }
     }
@@ -51,8 +51,7 @@ public class ComponentGenerator : BaseGenerator
         var components = GetData();
         if (!components.Any(x => x.NormalizedName.Equals(component.NormalizedName))) throw new NullReferenceException();
 
-        var display = AttributeHelper.GetDisplay(typeof(IComponent));
-        if (display is null) throw new NullReferenceException();
+        var display = AttributeHelper.GetDisplay(typeof(IComponent)) ?? throw new NullReferenceException();
         var data = new Component
         {
             Name = display.Name ?? string.Empty,

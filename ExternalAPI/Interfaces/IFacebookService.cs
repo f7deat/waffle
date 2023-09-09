@@ -10,5 +10,6 @@ namespace Waffle.ExternalAPI.Interfaces
         Task<LongLivedUserAccessToken?> GetLongLivedUserAccessTokenAsync(string appId, string appSercet, string shortLiveToken);
         Task<LongLivedPageAccessToken?> GetLongLivedPageAccessTokenAsync(string appId, string longLivedUserAccessToken);
         Task<FacebookListResult<FacebookProduct>> GetProductsAsync(string id, string access_token, int limit);
+        Task<string> GraphAPIExplorerAsync(string query);
     }
 }

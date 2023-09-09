@@ -31,7 +31,9 @@ public class LeafGenerator : BaseGenerator
             catalog = new Catalog
             {
                 Active = true,
-                NormalizedName = normalizedName
+                NormalizedName = normalizedName,
+                Name = "Thank to subscribe",
+                Type = CatalogType.Default
             };
 
             await _context.Catalogs.AddAsync(catalog);
@@ -44,12 +46,12 @@ public class LeafGenerator : BaseGenerator
         var home = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName == "/index");
         if (home is null)
         {
-            home = new Entities.Catalog
+            home = new Catalog
             {
                 NormalizedName = "/index",
                 Active = true,
                 CreatedDate = DateTime.Now,
-                Type = Entities.CatalogType.Entry,
+                Type = CatalogType.Entry,
             };
             await _context.Catalogs.AddAsync(home);
             await _context.SaveChangesAsync();
@@ -61,7 +63,7 @@ public class LeafGenerator : BaseGenerator
         var sponsorComponent = await _context.Components.FirstOrDefaultAsync(x => x.NormalizedName == "Sponsor");
         if (sponsorComponent is null)
         {
-            sponsorComponent = new Entities.Component
+            sponsorComponent = new Component
             {
                 Active = true,
                 NormalizedName = "Sponsor"
@@ -108,8 +110,8 @@ public class LeafGenerator : BaseGenerator
 
     public override async Task RunAsync()
     {
-        await EnsureHomeAsync();
+        //await EnsureHomeAsync();
         await EnsurePricingAsync();
-        await EnsureThankToSubscribleAsync();
+        //await EnsureThankToSubscribleAsync();
     }
 }

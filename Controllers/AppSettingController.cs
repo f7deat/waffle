@@ -205,4 +205,10 @@ public class AppSettingController : BaseController
 
     [HttpPost("test-send-mail")]
     public async Task<IActionResult> TestSendMailAsync([FromBody] EmailSenderMessageUnitTest args) => Ok(await _emailSender.SendEmailAsync(args.Email, args.Subject, args.Message));
+
+    [HttpGet("graph-api-explorer")]
+    public async Task<IActionResult> GraphAPIExplorerAsync([FromQuery] string query)
+    {
+        return Ok(await _facebookService.GraphAPIExplorerAsync(query));
+    }
 }
