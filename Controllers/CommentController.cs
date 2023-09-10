@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Models.Filters;
 using Waffle.Models.Params;
 
 namespace Waffle.Controllers;
@@ -14,6 +15,9 @@ public class CommentController : BaseController
     {
         _commentService = commentService;
     }
+
+    [HttpGet("list")]
+    public async Task<IActionResult> ListAsync([FromQuery] CommentFilterOptions filterOptions) => Ok(await _commentService.ListAsync(filterOptions));
 
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync([FromBody] AddComment addComment) => Ok(await _commentService.AddAsync(addComment));

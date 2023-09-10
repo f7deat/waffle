@@ -17,14 +17,16 @@ public class CommentService : ICommentService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<CommentService> _logger;
     private readonly IAppLogRepository _appLogRepository;
+    private readonly ICatalogRepository _catalogRepository;
 
-    public CommentService(ILogger<CommentService> logger, IAppLogRepository appLogRepository, ICurrentUser currentUser, ICommentRepository commentRepository, UserManager<ApplicationUser> userManager)
+    public CommentService(ICatalogRepository catalogRepository, ILogger<CommentService> logger, IAppLogRepository appLogRepository, ICurrentUser currentUser, ICommentRepository commentRepository, UserManager<ApplicationUser> userManager)
     {
         _commentRepository = commentRepository;
         _userManager = userManager;
         _currentUser = currentUser;
         _logger = logger;
         _appLogRepository = appLogRepository;
+        _catalogRepository = catalogRepository;
     }
 
     public async Task<IdentityResult> ActiveAsync(Guid id)
@@ -111,13 +113,26 @@ public class CommentService : ICommentService
         return IdentityResult.Success;
     }
 
-    public async Task<ListResult<Comment>> ListAsync(CommentFilterOptions filterOptions)
+    public async Task<ListResult<CommentListItem>> ListAsync(CommentFilterOptions filterOptions)
     {
         var query = from comment in _commentRepository.Queryable()
                     join user in _userManager.Users on comment.UserId equals user.Id
-                    where comment.CatalogId == filterOptions.CatalogId && (filterOptions.Status == null || comment.Status == filterOptions.Status)
-                    select comment;
-        return await ListResult<Comment>.Success(query, filterOptions);
+                    join catalog in _catalogRepository.Queryable() on comment.CatalogId equals catalog.Id
+                    where filterOptions.Status == null || comment.Status == filterOptions.Status
+                    select new CommentListItem
+                    {
+                        CatalogId = comment.CatalogId,
+                        UserId = user.Id,
+                        Content = comment.Content,
+                        CreatedDate = comment.CreatedDate,
+                        Id = comment.Id,
+                        ModifiedDate = comment.ModifiedDate,
+                        ParrentId = comment.ParrentId,
+                        Status = comment.Status,
+                        UserName = user.UserName,
+                        CatalogName = catalog.Name
+                    };
+        return await ListResult<CommentListItem>.Success(query, filterOptions);
     }
 
     public Task<ListResult<CommentListItem>> ListInCatalogAsync(CommentFilterOptions filterOptions) => _commentRepository.ListInCatalogAsync(filterOptions);
