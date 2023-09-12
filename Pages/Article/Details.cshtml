@@ -87,7 +87,6 @@
         {
             @await Component.InvokeAsync("Related", new RelatedProps {
         TagIds = Model.Tags.Select(x => x.Id),
-        CatalogId = Model.PageData.Id,
         Type = CatalogType.Article
         })
         }

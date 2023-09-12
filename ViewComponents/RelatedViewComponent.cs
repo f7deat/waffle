@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
@@ -14,13 +15,22 @@ public class RelatedViewComponent : ViewComponent
         _catalogService = catalogService;
     }
 
+    private Catalog PageData
+    {
+        get
+        {
+            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
+            return values as Catalog ?? new();
+        }
+    }
+
     public async Task<IViewComponentResult> InvokeAsync(RelatedProps props)
     {
         var articles = await _catalogService.ArticleRelatedListAsync(new ArticleRelatedFilterOption
         {
             Current = 1,
             PageSize = 4,
-            CatalogId = props.CatalogId,
+            CatalogId = PageData.Id,
             TagIds = props.TagIds,
             Type = props.Type
         });
@@ -28,7 +38,7 @@ public class RelatedViewComponent : ViewComponent
         {
             return View(Empty.DefaultView, new ErrorViewModel
             {
-                RequestId = props.CatalogId.ToString()
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
         }
         return View(articles.Data);
@@ -38,6 +48,5 @@ public class RelatedViewComponent : ViewComponent
 public class RelatedProps
 {
     public IEnumerable<Guid> TagIds { get; set; } = null!;
-    public Guid CatalogId { get; set; }
     public CatalogType Type { get; set; }
 }

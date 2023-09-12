@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
@@ -30,7 +29,7 @@ public class CatalogController : BaseController
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
     {
-        catalog.CreatedBy = User.GetId();
+        if (string.IsNullOrWhiteSpace(catalog.Name)) return BadRequest("Please enter name!");
         return Ok(await _catalogService.AddAsync(catalog));
     }
 
@@ -81,13 +80,8 @@ public class CatalogController : BaseController
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         var catalog = await _context.Catalogs.FindAsync(id);
-        if (catalog is null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "Catalog not found!"
-            }));
-        }
+        if (catalog is null) return BadRequest("Catalog not found!");
+
         if (await _context.Catalogs.AnyAsync(x => x.ParentId == catalog.Id))
         {
             return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child catalog first!" }));
@@ -131,9 +125,6 @@ public class CatalogController : BaseController
 
     [HttpGet("categories/{type}")]
     public async Task<IActionResult> GetCategoriesAsync([FromRoute] CatalogType type) => Ok(await _context.Catalogs.Where(x => x.Type == type).ToListAsync());
-
-    [HttpPost("article/save")]
-    public async Task<IActionResult> ArticleSaveAsync([FromBody] Catalog args) => Ok(await _catalogService.ArticleSaveAsync(args));
 
     [HttpPost("update-thumbnail")]
     public async Task<IActionResult> UpdateThumbnailAsync([FromBody] Catalog args) => Ok(await _catalogService.UpdateThumbnailAsync(args));

@@ -23,11 +23,11 @@ namespace Waffle.Pages.Tag
 
         public async Task OnGetAsync()
         {
-            var tags = await _catalogService.ListTagAsync(new SearchFilterOptions
+            var tags = await _catalogService.ListTagAsync(new TagFilterOptions
             {
                 Current = Current,
                 PageSize = 20,
-                SearchTerm = SearchTerm
+                KeyWords = SearchTerm
             });
             Tags = new ListGroup
             {

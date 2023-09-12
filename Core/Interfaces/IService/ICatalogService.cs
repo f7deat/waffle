@@ -13,10 +13,9 @@ public interface ICatalogService
     Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default);
     Task<Catalog?> GetByNameAsync(string? normalizedName);
     Task<List<ComponentListItem>> ListComponentAsync(Guid catalogId);
-    Task<IdentityResult> ArticleSaveAsync(Catalog args);
     Task<IdentityResult> UpdateThumbnailAsync(Catalog args);
     Task<ListResult<Catalog>> ArticleListAsync(ArticleFilterOptions filterOptions);
-    Task<ListResult<Catalog>> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOptions);
+    Task<ListResult<Catalog>?> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOptions);
     Task<Catalog?> FindAsync(Guid id);
     Task<IEnumerable<Catalog>> ArticlePickerListAsync(CatalogType type = CatalogType.Article);
     Task<IdentityResult> SaveAsync(Catalog args);
@@ -29,6 +28,6 @@ public interface ICatalogService
     Task<ListResult<Catalog>> ListByTagsAsync(IEnumerable<Guid> tagIds, CatalogFilterOptions filterOptions);
     Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);
     Task<IEnumerable<Catalog>> ListRandomTagAsync();
-    Task<ListResult<TagListItem>> ListTagAsync(SearchFilterOptions filterOptions);
+    Task<ListResult<TagListItem>> ListTagAsync(TagFilterOptions filterOptions);
     Task<object?> PieChartAsync();
 }

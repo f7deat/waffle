@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Waffle.Core.Constants;
 using Waffle.Entities;
 
 namespace Waffle.Models
@@ -62,6 +63,7 @@ namespace Waffle.Models
     public class TagFilterOptions : FilterOptions
     {
         public string? KeyWords { get; set; }
+        public OrderBy? OrderBy { get; set; }
     }
 
     public class LocalizationFilterOptions: FilterOptions
