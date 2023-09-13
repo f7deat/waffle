@@ -55,10 +55,7 @@ public class BackupController : BaseController
         if (!Directory.Exists(path)) Directory.CreateDirectory(path);
         var directoryInfo = new DirectoryInfo(path);
         var files = directoryInfo.GetFiles();
-        foreach (var file in files)
-        {
-            file.Delete();
-        }
+        foreach (var file in files) file.Delete();
         var fileName = Path.Combine(path, $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.json");
         using (var outputFile = new StreamWriter(fileName))
         {
@@ -84,13 +81,7 @@ public class BackupController : BaseController
     [HttpPost("import")]
     public async Task<IActionResult> ImportAsync([FromForm] IFormFile file)
     {
-        if (file is null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "File not found!"
-            }));
-        }
+        if (file is null) return BadRequest("File not found!");
         var stream = file.OpenReadStream();
         var data = await JsonSerializer.DeserializeAsync<BackupListItem>(stream);
         if (data is null)

@@ -77,7 +77,7 @@ public class CommentService : ICommentService
             CreatedDate = DateTime.Now,
             ModifiedDate = DateTime.Now,
             UserId = _currentUser.GetId(),
-            Status = CommentStatus.Draft,
+            Status = CommentStatus.Active,
             CatalogId = addComment.CatalogId,
             Content = addComment.Message,
             ParrentId = addComment.ParrentId
