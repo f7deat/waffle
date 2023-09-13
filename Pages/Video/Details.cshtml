@@ -7,7 +7,7 @@
     <div class="container">
         <div class="md:flex gap-4">
             <div class="md:w-2/3">
-                @await Component.InvokeAsync(nameof(Breadcrumb), Model.PageData.Id)
+                @await Component.InvokeAsync(nameof(Breadcrumb))
 
                 <h1 class="title">@Model.PageData.Name</h1>
 

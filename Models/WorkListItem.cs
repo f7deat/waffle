@@ -16,4 +16,5 @@ public class WorkListItem : BaseEntity
     public int SortOrder { get; set; }
     public Guid CatalogId { get; set; }
     public bool Active { get; set; }
+    public bool AutoGenerateField { get; set; }
 }

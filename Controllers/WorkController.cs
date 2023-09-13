@@ -85,7 +85,9 @@ public class WorkController : BaseController
         var data = await query.ToListAsync();
         foreach (var item in data)
         {
-            item.NormalizedName = ComponentHelper.GetNormalizedName(item.NormalizedName);
+            var display = ComponentHelper.GetNormalizedName(item.NormalizedName);
+            item.NormalizedName = display?.Name ?? item.NormalizedName;
+            item.AutoGenerateField = display?.AutoGenerateField ?? true;
         }
         return Ok(new
         {
@@ -213,13 +215,7 @@ public class WorkController : BaseController
     public async Task<IActionResult> SaveNavbarAsync([FromBody] Navbar model)
     {
         var workContent = await _workService.FindAsync(model.Id);
-        if (workContent is null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "No work content found!"
-            }));
-        }
+        if (workContent is null) return BadRequest("Work not found!");
         workContent.Arguments = JsonSerializer.Serialize(model);
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
@@ -451,4 +447,22 @@ public class WorkController : BaseController
 
     [HttpGet("list-post-content")]
     public IActionResult GetListPostContent() => Ok(Enum.GetNames(typeof(PostContentType)).ToList());
+
+    [HttpPost("sort")]
+    public async Task<IActionResult> SortAsync([FromBody] List<Guid> workIds)
+    {
+        if (!workIds.Any()) return BadRequest("No work was found!");
+        int i = 0;
+        foreach (var workId in workIds)
+        {
+            var work = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkId == workId);
+            if (work != null)
+            {
+                work.SortOrder = i;
+                i++;
+            }
+        }
+        await _context.SaveChangesAsync();
+        return Ok(IdentityResult.Success);
+    }
 }

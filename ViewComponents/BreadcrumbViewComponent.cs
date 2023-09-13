@@ -3,93 +3,97 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models.Components;
 
-namespace Waffle.ViewComponents
+namespace Waffle.ViewComponents;
+
+public class BreadcrumbViewComponent : ViewComponent
 {
-    public class BreadcrumbViewComponent : ViewComponent
+    private readonly ILocalizationService _localizationService;
+    private readonly ICatalogService _catalogService;
+    public BreadcrumbViewComponent(ICatalogService catalogService, ILocalizationService localizationService)
     {
-        private readonly ILocalizationService _localizationService;
-        private readonly ICatalogService _catalogService;
-        public BreadcrumbViewComponent(ICatalogService catalogService, ILocalizationService localizationService)
+        _catalogService = catalogService;
+        _localizationService = localizationService;
+    }
+
+    private Catalog PageData
+    {
+        get
         {
-            _catalogService = catalogService;
-            _localizationService = localizationService;
+            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
+            return values as Catalog ?? new();
+        }
+    }
+
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        var breadcrumb = new List<Breadcrumb>
+        {
+            new Breadcrumb
+            {
+                Url = "/",
+                Name = await _localizationService.GetAsync("home"),
+                Position = 1,
+                Icon = "fas fa-home"
+            }
+        };
+
+        if (PageData.Type != CatalogType.Entry && PageData.Type != CatalogType.Default)
+        {
+            breadcrumb.Add(new Breadcrumb
+            {
+                Url = GetMasterUrl(PageData.Type),
+                Name = await _localizationService.GetAsync(PageData.Type.ToString()),
+                Position = breadcrumb.Count + 1
+            });
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid catalogId)
+        if (PageData.ParentId != null)
         {
-            var breadcrumb = new List<Breadcrumb>
+            var parrent = await _catalogService.FindAsync(PageData.ParentId ?? Guid.Empty);
+            if (parrent != null)
             {
-                new Breadcrumb
-                {
-                    Url = "/",
-                    Name = await _localizationService.GetAsync("home"),
-                    Position = 1,
-                    Icon = "fas fa-home"
-                }
-            };
-
-            var catalog = await _catalogService.FindAsync(catalogId);
-            if (catalog != null)
-            {
-                if (catalog.Type != CatalogType.Entry && catalog.Type != CatalogType.Default)
-                {
-                    breadcrumb.Add(new Breadcrumb
-                    {
-                        Url = GetMasterUrl(catalog.Type),
-                        Name = await _localizationService.GetAsync(catalog.Type.ToString()),
-                        Position = breadcrumb.Count + 1
-                    });
-                }
-
-                if (catalog.ParentId != null)
-                {
-                    var parrent = await _catalogService.FindAsync(catalog.ParentId ?? Guid.Empty);
-                    if (parrent != null)
-                    {
-                        breadcrumb.Add(new Breadcrumb
-                        {
-                            Url = GetUrl(parrent),
-                            Name = parrent.Name,
-                            Position = breadcrumb.Count + 1
-                        });
-                    }
-                }
                 breadcrumb.Add(new Breadcrumb
                 {
-                    Url = GetUrl(catalog),
-                    Name = catalog.Name,
+                    Url = GetUrl(parrent),
+                    Name = parrent.Name,
                     Position = breadcrumb.Count + 1
                 });
             }
-            return View(breadcrumb);
         }
-
-        private static string GetUrl(Catalog catalog)
+        breadcrumb.Add(new Breadcrumb
         {
-            if (catalog.Type == CatalogType.Article)
-            {
-                return $"/article/{catalog.NormalizedName}";
-            }
-            return $"/page/{catalog.NormalizedName}";
+            Url = GetUrl(PageData),
+            Name = PageData.Name,
+            Position = breadcrumb.Count + 1
+        });
+        return View(breadcrumb);
+    }
+
+    private static string GetUrl(Catalog catalog)
+    {
+        if (catalog.Type == CatalogType.Article)
+        {
+            return $"/article/{catalog.NormalizedName}";
         }
+        return $"/page/{catalog.NormalizedName}";
+    }
 
-        private static string GetMasterUrl(CatalogType type)
+    private static string GetMasterUrl(CatalogType type)
+    {
+        switch (type)
         {
-            switch (type)
-            {
-                case CatalogType.Default:
-                    return "/page";
-                case CatalogType.Article:
-                    return "/article";
-                case CatalogType.Product:
-                    return "/products";
-                case CatalogType.Location:
-                    return "/locations";
-                case CatalogType.Game:
-                    return "/games";
-                default:
-                    return $"/{type.ToString().ToLower()}";
-            }
+            case CatalogType.Default:
+                return "/page";
+            case CatalogType.Article:
+                return "/article";
+            case CatalogType.Product:
+                return "/products";
+            case CatalogType.Location:
+                return "/locations";
+            case CatalogType.Game:
+                return "/games";
+            default:
+                return $"/{type.ToString().ToLower()}";
         }
     }
 }
