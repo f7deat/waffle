@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 
 namespace Waffle.Core.Interfaces.IService;

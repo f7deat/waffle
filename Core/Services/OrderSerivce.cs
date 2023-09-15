@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 
 namespace Waffle.Core.Services

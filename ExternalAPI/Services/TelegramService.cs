@@ -59,7 +59,7 @@ namespace Waffle.ExternalAPI.Services
             try
             {
                 var setting = await _appService.GetAsync<Telegram>(nameof(Telegram));
-                if (setting == null)
+                if (setting is null)
                 {
                     _logger.LogWarning("Telegram setting not found!");
                     return false;

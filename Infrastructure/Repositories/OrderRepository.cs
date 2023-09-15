@@ -1,7 +1,7 @@
 ﻿using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
-using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 
 namespace Waffle.Infrastructure.Repositories
 {

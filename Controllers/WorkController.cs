@@ -87,7 +87,7 @@ public class WorkController : BaseController
         {
             var display = ComponentHelper.GetNormalizedName(item.NormalizedName);
             item.NormalizedName = display?.Name ?? item.NormalizedName;
-            item.AutoGenerateField = display?.AutoGenerateField ?? true;
+            item.AutoGenerateField = display?.GetAutoGenerateField() ?? true;
         }
         return Ok(new
         {

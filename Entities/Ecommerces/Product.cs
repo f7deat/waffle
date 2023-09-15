@@ -5,5 +5,6 @@
         public Guid CatalogId { get; set; }
         public decimal? Price { get; set; }
         public string? SKU { get; set; }
+        public decimal? UnitInStock { get; set; }
     }
 }

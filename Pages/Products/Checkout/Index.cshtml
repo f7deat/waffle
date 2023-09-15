@@ -4,11 +4,12 @@
 @{
     ViewData["Title"] = "Thanh toán";
     ViewData["Description"] = "Thanh toán đơn hàng";
+    var disabled = Model.IsAuthenticated ? "disabled" : "";
 }
 
-<div class="container">
-    <div class="md:flex gap-4">
-        <div class="md:w-1/2 mb-4">
+<main class="container">
+    <div class="row">
+        <div class="col-md-6 mb-4">
             <div class="title">Thông tin đơn hàng</div>
             @foreach (var product in Model.Products)
             {
@@ -27,23 +28,32 @@
                 </div>
             }
         </div>
-        <div class="md:w-1/2 mb-4">
+        <div class="col-md-6 mb-4">
             <div class="title">Thông tin thanh toán</div>
-            <div class="mb-2 text-center border-b pb-2">
-                Đã có tài khoản? <a href="/user/login">Đăng nhập</a>
-            </div>
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger">
+                    @Model.ErrorMessage
+                </div>
+            }
+            @if (!Model.IsAuthenticated)
+            {
+                <div class="mb-2 text-center border-b pb-2">
+                    Đã có tài khoản? <a href="/users/login">Đăng nhập</a>
+                </div>
+            }
             <form method="post">
                 <div class="form-item">
                     <label class="form-label">Họ và Tên</label>
-                    <input type="text" class="form-control" required name="name" />
+                    <input type="text" class="form-control" required name="name" @disabled />
                 </div>
                 <div class="form-item">
                     <label class="form-label">Số điện thoại</label>
-                    <input type="tel" class="form-control" required name="phoneNumber" />
+                    <input type="tel" class="form-control" required name="phoneNumber" @disabled value="@Model.CurrentUser?.PhoneNumber" />
                 </div>
                 <div class="form-item">
                     <label class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control" required name="address" />
+                    <input type="text" class="form-control" required name="address" @disabled />
                 </div>
                 <div class="form-item">
                     <label class="form-label">Ghi chú</label>
@@ -55,8 +65,8 @@
                 </div>
             </form>
             <div class="text-gray-500">
-                Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo <a href="/page/dieu-khoan">Điều khoản</a>
+                Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo <a href="/leaf/dieu-khoan">Điều khoản</a>
             </div>
         </div>
     </div>
-</div>
+</main>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Helpers;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -51,6 +52,14 @@ public class CatalogService : ICatalogService
         }
         if (await IsExistAsync(catalog.NormalizedName))
         {
+            if (catalog.Type == CatalogType.Tag)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "error.dataDupplicate",
+                    Description = "Tag was existed!"
+                });
+            }
             var count = await _context.Catalogs.CountAsync(x => x.NormalizedName.Contains(catalog.NormalizedName));
             catalog.NormalizedName += $"-{count + 1}";
         }
@@ -66,7 +75,7 @@ public class CatalogService : ICatalogService
 
     public async Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default)
     {
-        var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name));
+        var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name.ToLower()));
         if (catalog is null)
         {
             catalog = new Catalog

@@ -180,12 +180,8 @@ table {
     }
 
 .alert {
-    box-shadow: var(--shadow);
-    padding: 0.5rem 1rem;
-    border-left: 4px solid var(--dark);
-    margin-bottom: 1rem;
+    --bs-alert-padding-y: 0.5rem;
 }
-
 .alert-title {
     font-weight: 500;
 }

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Editor", ShortName = "Editor")]
+[Display(Name = "Editor", Prompt = "editor")]
 public class Editor : BlockEditor
 {
 

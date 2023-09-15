@@ -1,0 +1,21 @@
+﻿@page "/users/{id}"
+@model Waffle.Pages.Users.IndexModel
+@{
+    ViewData["Title"] = Model.ApplicationUser.UserName;
+}
+
+<main class="container">
+    <div class="row">
+        <partial name="_Leftbar" model="Model.ApplicationUser" />
+        <div class="col-md-9 mb-4">
+            <div class="card shadow">
+                <div class="flex">
+                    <a href="#">Hoạt động</a>
+                </div>
+                <div class="row">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

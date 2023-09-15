@@ -2,6 +2,6 @@
 
 namespace Waffle.Core.Interfaces.IRepository;
 
-public interface IOrderRepository : IAsyncRepository<Order>
+public interface IProductRepository : IAsyncRepository<Product>
 {
 }

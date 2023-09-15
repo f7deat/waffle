@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Waffle.Core.Foundations.PageModels
+namespace Waffle.Core.Foundations.PageModels;
+
+public class CheckoutPageModel : PageModel
 {
-    public class CheckoutPageModel : PageModel
-    {
-    }
 }

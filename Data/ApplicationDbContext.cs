@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 
 namespace Waffle.Data;
 

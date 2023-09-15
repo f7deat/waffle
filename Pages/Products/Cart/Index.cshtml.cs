@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 
 namespace Waffle.Pages.Products.Cart
 {

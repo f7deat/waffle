@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 
 namespace Waffle.Controllers;
