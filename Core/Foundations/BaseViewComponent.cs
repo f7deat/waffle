@@ -39,6 +39,7 @@ public abstract class BaseViewComponent<T> : ViewComponent where T : class
     }
 
     protected virtual Task<T> ExtendAsync(T work) => Task.FromResult(work);
+    protected virtual T Extend(T work) => work;
 
     protected virtual string ViewName { get; set; } = "Default";
 }

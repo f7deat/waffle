@@ -1,8 +1,7 @@
-﻿namespace Waffle.Core.Interfaces
+﻿namespace Waffle.Core.Interfaces;
+
+public interface IComponent
 {
-    public interface IComponent
-    {
-        Guid Id { get; set; }
-        string NormalizedName { get; set; }
-    }
+    Guid Id { get; set; }
+    string NormalizedName { get; set; }
 }

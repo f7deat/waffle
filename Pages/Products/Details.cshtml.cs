@@ -6,41 +6,46 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 
-namespace Waffle.Pages.Products
+namespace Waffle.Pages.Products;
+
+public class DetailsModel : DynamicPageModel
 {
-    public class DetailsModel : DynamicPageModel
+    private readonly ApplicationDbContext _context;
+
+    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context) : base(catalogService)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public DetailsModel(ICatalogService catalogService, ApplicationDbContext context) : base(catalogService)
+    public WorkListItem? Editor;
+    public IEnumerable<Catalog> Tags = new List<Catalog>();
+    public Guid ProductImage;
+
+    public async Task<IActionResult> OnGetAsync()
+    {
+        Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
+        var component = await GetComponentsAsync();
+        if (component.Any())
         {
-            _context = context;
+            Editor = component.FirstOrDefault(x => x.NormalizedName == nameof(Editor));
+            ProductImage = component.FirstOrDefault(x => x.NormalizedName == nameof(ProductImage))?.Id ?? Guid.Empty;
         }
+        return Page();
+    }
 
-        public List<WorkListItem> Works = new();
-        public IEnumerable<Catalog> Tags = new List<Catalog>();
-
-        public async Task<IActionResult> OnGetAsync()
-        {
-            Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
-            Works = await GetBlockEditorsAsync();
-            return Page();
-        }
-
-        private async Task<List<WorkListItem>> GetBlockEditorsAsync()
-        {
-            var query = from a in _context.WorkItems
-                        join b in _context.WorkContents on a.WorkId equals b.Id
-                        join c in _context.Components on b.ComponentId equals c.Id
-                        where a.CatalogId == PageData.Id && b.Active
-                        orderby a.SortOrder
-                        select new WorkListItem
-                        {
-                            Id = b.Id,
-                            Name = b.Name,
-                            NormalizedName = c.NormalizedName
-                        };
-            return await query.ToListAsync();
-        }
+    private async Task<List<WorkListItem>> GetComponentsAsync()
+    {
+        var query = from a in _context.WorkItems
+                    join b in _context.WorkContents on a.WorkId equals b.Id
+                    join c in _context.Components on b.ComponentId equals c.Id
+                    where a.CatalogId == PageData.Id && b.Active
+                    orderby a.SortOrder
+                    select new WorkListItem
+                    {
+                        Id = b.Id,
+                        Name = b.Name,
+                        NormalizedName = c.NormalizedName
+                    };
+        return await query.ToListAsync();
     }
 }

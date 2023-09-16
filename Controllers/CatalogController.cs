@@ -87,8 +87,14 @@ public class CatalogController : BaseController
             return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child catalog first!" }));
         }
 
-        var workItem = await _context.WorkItems.Where(x => x.CatalogId == id).ToListAsync();
-        _context.RemoveRange(workItem);
+        if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id))
+        {
+            return Ok(IdentityResult.Failed(new IdentityError
+            {
+                Code = "error.hasWork",
+                Description = "Please remove work first"
+            }));
+        }
 
         _context.Catalogs.Remove(catalog);
         await _context.SaveChangesAsync();

@@ -86,7 +86,7 @@ public class WorkController : BaseController
         foreach (var item in data)
         {
             var display = ComponentHelper.GetNormalizedName(item.NormalizedName);
-            item.NormalizedName = display?.Name ?? item.NormalizedName;
+            item.NormalizedName = display?.GetPrompt() ?? item.NormalizedName;
             item.AutoGenerateField = display?.GetAutoGenerateField() ?? true;
         }
         return Ok(new
