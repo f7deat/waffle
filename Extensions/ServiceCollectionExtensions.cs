@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAppLogService, AppLogService>();
         services.AddScoped<ICatalogRepository, CatalogRepository>();
         services.AddScoped<ICatalogService, CatalogService>();
+        services.AddScoped<IComponentRepository, ComponentRepository>();
         services.AddScoped<IComponentService, ComponentService>();
         services.AddScoped<IFileExplorerService, FileExplorerService>();
         services.AddScoped<ILocalizationService, LocalizationService>();

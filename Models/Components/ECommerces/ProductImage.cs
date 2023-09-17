@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Product Images", Prompt = "product-images")]
+[Display(Name = "Product Images", Prompt = "product-images", GroupName = GroupName.ECommerce, AutoGenerateFilter = true)]
 public class ProductImage : AbstractComponent
 {
     [JsonPropertyName("images")]
