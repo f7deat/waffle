@@ -8,12 +8,13 @@ namespace Waffle.ViewComponents.ECommerces;
 
 public class ProductImageViewComponent : ViewComponent
 {
-
+    private readonly ICatalogService _catalogService;
     private readonly IWorkService _workService;
 
-    public ProductImageViewComponent(IWorkService workService)
+    public ProductImageViewComponent(IWorkService workService, ICatalogService catalogService)
     {
         _workService = workService;
+        _catalogService = catalogService;
     }
 
     private Catalog PageData
@@ -27,8 +28,12 @@ public class ProductImageViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync(Guid workId)
     {
-        var work = await _workService.GetAsync<ProductImage>(workId) ?? new();
-        work.Images.Insert(0, PageData.Thumbnail ?? "/imgs/search-engines-amico.svg");
+        var work = await _catalogService.GetProductImageAsync(PageData.Id);
+        work ??= new ProductImage();
+        if (!work.Images.Any(x => x.Equals(PageData.Thumbnail)))
+        {
+            work.Images.Insert(0, PageData.Thumbnail ?? "/imgs/search-engines-amico.svg");
+        }
         return View(work);
     }
 }

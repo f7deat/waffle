@@ -30,4 +30,5 @@ public interface ICatalogService
     Task<IEnumerable<Catalog>> ListRandomTagAsync();
     Task<ListResult<TagListItem>> ListTagAsync(TagFilterOptions filterOptions);
     Task<object?> PieChartAsync();
+    Task<ProductImage?> GetProductImageAsync(Guid catalogId);
 }

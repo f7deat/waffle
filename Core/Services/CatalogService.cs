@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
@@ -17,12 +18,16 @@ public class CatalogService : ICatalogService
     private readonly ApplicationDbContext _context;
     private readonly ICatalogRepository _catalogRepository;
     private readonly ICurrentUser _currentUser;
+    private readonly IComponentRepository _componentRepository;
+    private readonly IWorkContentRepository _workContentRepository;
 
-    public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository)
+    public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository, IComponentRepository componentRepository, IWorkContentRepository workContentRepository)
     {
         _context = context;
         _currentUser = currentUser;
         _catalogRepository = catalogRepository;
+        _componentRepository = componentRepository;
+        _workContentRepository = workContentRepository;
     }
 
     public async Task<IdentityResult> ActiveAsync(Guid id)
@@ -38,7 +43,7 @@ public class CatalogService : ICatalogService
         }
         catalog.Active = !catalog.Active;
         catalog.ModifiedDate = DateTime.Now;
-        await _context.SaveChangesAsync();
+        await _catalogRepository.SaveChangesAsync();
         return IdentityResult.Success;
     }
 
@@ -63,13 +68,12 @@ public class CatalogService : ICatalogService
             var count = await _context.Catalogs.CountAsync(x => x.NormalizedName.Contains(catalog.NormalizedName));
             catalog.NormalizedName += $"-{count + 1}";
         }
+        catalog.Active = catalog.Type == CatalogType.Tag;
         catalog.CreatedDate = DateTime.Now;
         catalog.ModifiedDate = DateTime.Now;
         catalog.CreatedBy = _currentUser.GetId();
-        catalog.Active = false;
         catalog.ViewCount = 0;
-        await _context.Catalogs.AddAsync(catalog);
-        await _context.SaveChangesAsync();
+        await _catalogRepository.AddAsync(catalog);
         return IdentityResult.Success;
     }
 
@@ -91,19 +95,17 @@ public class CatalogService : ICatalogService
             await _context.Catalogs.AddAsync(catalog);
         }
         catalog.ViewCount++;
-        await _context.SaveChangesAsync();
+        await _catalogRepository.SaveChangesAsync();
         return catalog;
     }
 
     public async Task<Catalog?> GetByNameAsync(string? normalizedName)
     {
-        if (string.IsNullOrEmpty(normalizedName)) return default;
-
-        var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
+        var catalog = await _catalogRepository.FindByNameAsync(normalizedName);
         if (catalog is null) return default;
 
         catalog.ViewCount++;
-        await _context.SaveChangesAsync();
+        await _catalogRepository.SaveChangesAsync();
         return catalog;
     }
 
@@ -131,7 +133,7 @@ public class CatalogService : ICatalogService
         }
         catalog.Thumbnail = args.Thumbnail;
         catalog.ModifiedDate = DateTime.Now;
-        await _context.SaveChangesAsync();
+        await _catalogRepository.SaveChangesAsync();
         return IdentityResult.Success;
     }
 
@@ -168,7 +170,7 @@ public class CatalogService : ICatalogService
         catalog.ModifiedDate = DateTime.Now;
         catalog.Description = args.Description;
         catalog.Thumbnail = args.Thumbnail;
-        await _context.SaveChangesAsync();
+        await _catalogRepository.SaveChangesAsync();
         return IdentityResult.Success;
     }
 
@@ -257,7 +259,7 @@ public class CatalogService : ICatalogService
             });
         }
         await _context.WorkItems.AddAsync(args);
-        await _context.SaveChangesAsync();
+        await _catalogRepository.SaveChangesAsync();
         return IdentityResult.Success;
     }
 
@@ -320,5 +322,14 @@ public class CatalogService : ICatalogService
             label = x.Key.ToString(),
             value = x.Count()
         }).ToListAsync();
+    }
+
+    public async Task<ProductImage?> GetProductImageAsync(Guid catalogId)
+    {
+        var component = await _componentRepository.FindByNameAsync(nameof(ProductImage));
+        if (component is null) return default;
+        var work = await _workContentRepository.FindByCatalogAsync(catalogId, component.Id);
+        if (work is null || string.IsNullOrEmpty(work.Arguments)) return default;
+        return JsonSerializer.Deserialize<ProductImage?>(work.Arguments);
     }
 }

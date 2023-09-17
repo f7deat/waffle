@@ -7,6 +7,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.Params.Products;
 
 namespace Waffle.Core.Services;
 
@@ -14,12 +15,17 @@ public class WorkService : IWorkService
 {
     private readonly ApplicationDbContext _context;
     private readonly IComponentService _componentService;
+    private readonly IComponentRepository _componentRepository;
     private readonly IWorkContentRepository _workContentRepository;
-    public WorkService(ApplicationDbContext context, IComponentService componentService, IWorkContentRepository workContentRepository)
+    private readonly ILogger<WorkService> _logger;
+
+    public WorkService(ApplicationDbContext context, IComponentService componentService, IWorkContentRepository workContentRepository, IComponentRepository componentRepository, ILogger<WorkService> logger)
     {
         _context = context;
         _componentService = componentService;
         _workContentRepository = workContentRepository;
+        _componentRepository = componentRepository;
+        _logger = logger;
     }
 
     public async Task<IdentityResult> ActiveAsync(Guid id)
@@ -394,5 +400,39 @@ public class WorkService : IWorkService
         return new { 
             data = await query.ToListAsync()
         };
+    }
+
+    public async Task<IdentityResult> SaveProductImageAsync(SaveImageModel args)
+    {
+        var component = await _componentRepository.FindByNameAsync(nameof(ProductImage));
+        if (component is null)
+        {
+            _logger.LogError("Component {Name} not found", nameof(ProductImage));
+            return IdentityResult.Failed(new IdentityError
+            {
+                Code = "error.componentNotFound",
+                Description = "Component not found!"
+            });
+        }
+        var work = await _workContentRepository.FindByCatalogAsync(args.CatalogId, component.Id);
+        var productImage = new ProductImage
+        {
+            Images = args.Urls
+        };
+        if (work != null)
+        {
+            work.Arguments = JsonSerializer.Serialize(productImage);
+            await _workContentRepository.SaveChangesAsync();
+            return IdentityResult.Success;
+        }
+        work = new WorkContent
+        {
+            Active = true,
+            ComponentId = component.Id,
+            Name = string.Empty,
+            Arguments = JsonSerializer.Serialize(productImage)
+        };
+        await _workContentRepository.AddAsync(work);
+        return IdentityResult.Success;
     }
 }
