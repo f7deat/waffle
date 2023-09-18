@@ -5,7 +5,7 @@ using Waffle.Models.ViewModels.Comments;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Comment", ShortName = "COMMENT")]
+[Display(Name = "Comment", Prompt = "comment")]
 public class CommentComponent : AbstractComponent
 {
     [JsonIgnore]

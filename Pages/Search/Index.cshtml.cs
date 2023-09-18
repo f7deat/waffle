@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Extensions;
@@ -9,23 +9,16 @@ using Waffle.Models.Components.Lister;
 
 namespace Waffle.Pages.Search
 {
-    public class IndexModel : PageModel
+    public class IndexModel : EntryPageModel
     {
-        private readonly ICatalogService _catalogService;
         private readonly ILocalizationService _localizationService;
-        public IndexModel(ICatalogService catalogService, ILocalizationService localizationService)
+        public IndexModel(ICatalogService catalogService, ILocalizationService localizationService) : base(catalogService)
         {
-            _catalogService = catalogService;
             _localizationService = localizationService;
-            FilterOptions = new SearchFilterOptions
-            {
-                Current = 1,
-                PageSize = 10
-            };
         }
 
         [BindProperty(SupportsGet = true)]
-        public SearchFilterOptions FilterOptions { get; set; }
+        public SearchFilterOptions FilterOptions { get; set; } = new();
         public ListResult<Catalog> Articles = new();
         public List<PlaylistItem> PlaylistItems = new();
         public Feed ProductFeed = new();

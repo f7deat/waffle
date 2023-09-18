@@ -1,15 +1,16 @@
 ﻿@page
+@using Waffle.Core.Helpers;
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
 @using Waffle.Models.Components.Lister
 @model Waffle.Pages.Search.IndexModel
 
-<div class="container">
+<main class="container">
 
     @await Html.PartialAsync("~/Pages/Shared/Components/Breadcrumb/Default.cshtml", await Model.GetBreadcrumbs())
 
     <div class="row">
-        <div class="md:w-2/3">
+        <div class="col-md-8">
             <div class="mb-2 flex items-center justify-between">
                 <form class="mb-2" action="/search/index" method="get">
                     <div class="border rounded-full flex bg-white">
@@ -65,14 +66,14 @@
             @if (!string.IsNullOrWhiteSpace(Model.FilterOptions.SearchTerm))
             {
                 <div class="mb-4 quote">
-                    <u>Wiki</u> --> <a href="/wiki/@Waffle.Core.Helpers.SeoHelper.ToWikiFriendly(Model.FilterOptions.SearchTerm)">@Model.FilterOptions.SearchTerm</a>
+                    <u>Wiki</u> --> <a href="/wiki/@SeoHelper.ToWikiFriendly(Model.FilterOptions.SearchTerm)">@Model.FilterOptions.SearchTerm</a>
                 </div>
             }
         </div>
-        <div class="md:w-1/3">
+        <div class="col-md-3">
             @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))
             @await Component.InvokeAsync(nameof(Tag))
             @await Component.InvokeAsync(nameof(ArticleSpotlight))
         </div>
     </div>
-</div>
+</main>

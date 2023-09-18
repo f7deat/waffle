@@ -2,7 +2,14 @@
 @model Feed
 
 <div class="mb-4 feed">
-    <div class="title">@Model.Name</div>
+    <div class="title">
+        <span>
+            @Model.Name
+        </span>
+        <a href="/products/list" aria-label="Xem thêm">
+            <i class="fas fa-angle-double-right"></i>
+        </a>
+    </div>
     <div class="grid @Model.ItemPerRow gap-4">
         @foreach (var item in Model.Articles)
         {

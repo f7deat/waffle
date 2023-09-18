@@ -1,23 +1,18 @@
-﻿using System.Text.Json.Serialization;
-using Waffle.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-public class Footer : BaseEntity
+[Display(Name = "Footer", Prompt = "footer", AutoGenerateFilter = false)]
+public class Footer : AbstractComponent
 {
-    public Footer()
-    {
-        CompanyName = "Your Company";
-        Email = "Your Email";
-        PhoneNumber = "Your Phone number";
-        Social = new Social();
-    }
     [JsonPropertyName("companyName")]
-    public string CompanyName { get; set; }
+    public string? CompanyName { get; set; }
     [JsonPropertyName("email")]
-    public string Email { get; set; }
+    public string? Email { get; set; }
     [JsonPropertyName("phoneNumber")]
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
     [JsonPropertyName("social")]
-    public Social Social { get; set; }
+    public Social Social { get; set; } = new();
 }

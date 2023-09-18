@@ -21,6 +21,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public virtual DbSet<Localization> Localizations { get; set; } = default!;
     public virtual DbSet<Order> Orders { get; set; } = default!;
     public virtual DbSet<OrderDetail> OrderDetails { get; set; } = default!;
+    public virtual DbSet<Product> Products { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -4,7 +4,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "CSS", ShortName = nameof(Css))]
+[Display(Name = "CSS", Prompt = "css")]
 public class Css : AbstractComponent
 {
     [JsonPropertyName("url")]

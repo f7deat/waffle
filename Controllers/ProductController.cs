@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities.Ecommerces;
 using Waffle.Models.Params.Products;
 using Waffle.Models.ViewModels;
 
@@ -10,10 +12,15 @@ public class ProductController : BaseController
 {
     private readonly ICatalogService _catalogService;
     private readonly IWorkService _workService;
-    public ProductController(ICatalogService catalogService, IWorkService workService)
+    private readonly IProductService _productService;
+    private readonly IAppLogService _appLogService;
+
+    public ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, IAppLogService appLogService)
     {
         _catalogService = catalogService;
         _workService = workService;
+        _productService = productService;
+        _appLogService = appLogService;
     }
 
     private readonly List<ProductItem> Products = new();
@@ -27,10 +34,13 @@ public class ProductController : BaseController
         });
     }
 
-    [HttpPost("add")]
-    public IActionResult AddAsync([FromBody] ProductItem args)
+    [HttpPost("save")]
+    public async Task<IActionResult> SaveAsync([FromBody] Product args)
     {
-        return Ok(IdentityResult.Success);
+        var catalog  = await _catalogService.FindAsync(args.CatalogId);
+        if (catalog is null) return BadRequest("Catalog not found!");
+        await _appLogService.AddAsync($"Update product: {JsonSerializer.Serialize(args)}", args.CatalogId);
+        return Ok(await _productService.SaveAsync(args));
     }
 
     [HttpGet("image/{id}")]
