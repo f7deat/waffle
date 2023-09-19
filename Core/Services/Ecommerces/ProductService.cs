@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities.Ecommerces;
@@ -9,12 +8,10 @@ namespace Waffle.Core.Services.Ecommerces;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
-    private readonly ICurrentUser _currentUser;
 
-    public ProductService(IProductRepository productRepository, ICurrentUser currentUser)
+    public ProductService(IProductRepository productRepository)
     {
         _productRepository = productRepository;
-        _currentUser = currentUser;
     }
 
     public async Task<IdentityResult> SaveAsync(Product args)
@@ -27,7 +24,8 @@ public class ProductService : IProductService
                 CatalogId = args.CatalogId,
                 Price = args.Price,
                 SKU = args.SKU,
-                UnitInStock = args.UnitInStock
+                UnitInStock = args.UnitInStock,
+                SalePrice = args.SalePrice
             };
             await _productRepository.AddAsync(product);
 
@@ -37,6 +35,7 @@ public class ProductService : IProductService
             product.Price = args.Price;
             product.SKU = args.SKU;
             product.UnitInStock = args.UnitInStock;
+            product.SalePrice = args.SalePrice;
             await _productRepository.SaveChangesAsync();
         }
         return IdentityResult.Success;
