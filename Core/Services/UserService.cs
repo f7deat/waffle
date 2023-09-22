@@ -67,16 +67,17 @@ public class UserService : IUserService
         }, model.Password);
     }
 
-    public async Task<CurrentUserViewModel> GetCurrentUserAsync(Guid id)
+    public async Task<CurrentUserViewModel?> GetCurrentUserAsync(Guid id)
     {
         var user = await FindAsync(id);
-        if (user is null) return new CurrentUserViewModel();
+        if (user is null) return default;
         return new CurrentUserViewModel
         {
             Id = user.Id,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
             UserName = user.UserName,
+            Name = user.Name,
             Roles = await _userManager.GetRolesAsync(user)
         };
     }

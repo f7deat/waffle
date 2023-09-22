@@ -5,7 +5,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Button", ShortName = "BUTTON", GroupName = GroupName.General)]
+[Display(Name = "Button", Prompt = "button", GroupName = GroupName.General)]
 public class Button : AbstractComponent
 {
     public Button()

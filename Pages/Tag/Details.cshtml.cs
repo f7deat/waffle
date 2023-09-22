@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
@@ -72,7 +73,7 @@ public class DetailsModel : DynamicPageModel
                 Date = x.ModifiedDate.ToString("D"),
                 Name = x.Name,
                 Thumbnail = x.Thumbnail,
-                Url = $"{CatalogType.Video}/{x.NormalizedName}",
+                Url = x.GetUrl(),
                 ViewCount = x.ViewCount.ToString("N0")
             }).ToList() ?? new();
         }

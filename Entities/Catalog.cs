@@ -29,6 +29,7 @@ public class Catalog : BaseEntity
     public string? Thumbnail { get; set; }
     [JsonPropertyName("active")]
     public bool Active { get; set; }
+    [JsonPropertyName("createdBy")]
     public Guid? CreatedBy { get; set; }
 }
 
@@ -43,5 +44,6 @@ public enum CatalogType
     Album = 8,
     Tag = 9,
     Video = 10,
-    Game = 11
+    Game = 11,
+    WordPress = 12
 }

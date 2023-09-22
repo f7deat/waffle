@@ -24,6 +24,15 @@ public class BreadcrumbViewComponent : ViewComponent
         }
     }
 
+    private Catalog? Category
+    {
+        get
+        {
+            RouteData.Values.TryGetValue("Parent", out var values);
+            return values as Catalog;
+        }
+    }
+
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var breadcrumb = new List<Breadcrumb>
@@ -37,12 +46,12 @@ public class BreadcrumbViewComponent : ViewComponent
             }
         };
 
-        if (PageData.Type != CatalogType.Entry && PageData.Type != CatalogType.Default)
+        if (Category != null)
         {
             breadcrumb.Add(new Breadcrumb
             {
-                Url = GetMasterUrl(PageData.Type),
-                Name = await _localizationService.GetAsync(PageData.Type.ToString()),
+                Url = $"/leaf/{Category.NormalizedName}",
+                Name = Category.Name,
                 Position = breadcrumb.Count + 1
             });
         }

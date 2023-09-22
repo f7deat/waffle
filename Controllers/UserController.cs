@@ -46,9 +46,14 @@ public class UserController : BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> FindByIdAsync([FromRoute] Guid id) => Ok(await _userService.GetCurrentUserAsync(id));
+    public async Task<IActionResult> FindByIdAsync([FromRoute] Guid id)
+    {
+        var user = await _userService.GetCurrentUserAsync(id);
+        if (user is null) return BadRequest("User not found!");
+        return Ok(user);
+    }
 
-    [HttpGet("")]
+    [HttpGet]
     public async Task<IActionResult> GetCurrentUserAsync() => Ok(await _userService.GetCurrentUserAsync(User.GetId()));
 
     [HttpGet("users-in-role/{roleName}")]
@@ -72,6 +77,7 @@ public class UserController : BaseController
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String),
+                new Claim(ClaimTypes.Name, user.UserName, ClaimValueTypes.String),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
@@ -110,13 +116,7 @@ public class UserController : BaseController
     public async Task<IActionResult> DeleteAsync([FromRoute] string id)
     {
         var user = await _userManager.FindByIdAsync(id);
-        if (user is null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "User not found"
-            }));
-        }
+        if (user is null) return BadRequest("User not found!");
         return Ok(await _userManager.DeleteAsync(user));
     }
 

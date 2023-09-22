@@ -23,6 +23,8 @@ public class ComponentGenerator : BaseGenerator
         {
             var display = AttributeHelper.GetDisplay(cls);
             if (display is null) continue;
+            var filter = display.GetAutoGenerateFilter() ?? false;
+            if (filter) continue;
             yield return new Component
             {
                 Active = true,

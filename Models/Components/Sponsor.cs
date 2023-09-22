@@ -2,24 +2,23 @@
 using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 
-namespace Waffle.Models.Components
-{
-    [Display(Name = "Sponsor", ShortName = "Sponsor")]
-    public class Sponsor : AbstractComponent
-    {
-        [JsonPropertyName("brands")]
-        public List<SponsorBrand> Brands { get; set; } = new();
-    }
+namespace Waffle.Models.Components;
 
-    public class SponsorBrand
-    {
-        [JsonPropertyName("id")]
-        public Guid Id { get; set; } = new Guid();
-        [JsonPropertyName("logo")]
-        public string? Logo { get; set; }
-        [JsonPropertyName("url")]
-        public string? Url { get; set; }
-        [JsonPropertyName("name")]
-        public string? Name { get; set; }
-    }
+[Display(Name = "Sponsor", ShortName = "Sponsor")]
+public class Sponsor : AbstractComponent
+{
+    [JsonPropertyName("brands")]
+    public List<SponsorBrand> Brands { get; set; } = new();
+}
+
+public class SponsorBrand
+{
+    [JsonPropertyName("id")]
+    public Guid Id { get; set; } = new Guid();
+    [JsonPropertyName("logo")]
+    public string? Logo { get; set; }
+    [JsonPropertyName("url")]
+    public string? Url { get; set; }
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
 }

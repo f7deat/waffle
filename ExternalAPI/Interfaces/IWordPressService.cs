@@ -1,9 +1,10 @@
 ﻿using Waffle.ExternalAPI.Models;
+using Waffle.Models;
 
-namespace Waffle.ExternalAPI.Interfaces
+namespace Waffle.ExternalAPI.Interfaces;
+
+public interface IWordPressService
 {
-    public interface IWordPressService
-    {
-        Task<WordPressPost?> GetPostAsync(string domain, int id);
-    }
+    Task<WordPressPost?> GetPostAsync(string domain, string? postId);
+    Task<IEnumerable<WordPressPost>?> ListPostAsync(string domain, IFilterOptions filterOptions);
 }

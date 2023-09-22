@@ -1,6 +1,5 @@
 ﻿using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.ExternalAPI.GoogleAggregate;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models.Components.Specifications;
 
@@ -27,7 +26,7 @@ namespace Waffle.ViewComponents
                     ViewName = PostContentType.BlockEditor.ToString();
                     break;
                 case PostContentType.WordPress:
-                    var wordPress = await _wordPressService.GetPostAsync(work.WordPress.Domain, work.WordPress.Id);
+                    var wordPress = await _wordPressService.GetPostAsync(work.WordPress.Domain, work.WordPress.Id.ToString());
                     work.Content = wordPress?.Content.Rendered ?? string.Empty;
                     break;
                 case PostContentType.Blogspot:

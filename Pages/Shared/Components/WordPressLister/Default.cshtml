@@ -1,0 +1,31 @@
+﻿@using Waffle.Models.Components
+@model WordPressLister
+@{
+    var page = Context.Request.Query["current"];
+    var current = 1;
+    if (!string.IsNullOrEmpty(page))
+    {
+        current = int.Parse(page);
+    }
+}
+
+<div class="mb-4 list-group">
+    @foreach (var item in Model.Posts)
+    {
+        <div class="py-2 hover:bg-gray-100 bg-white border-b flex justify-between">
+            <div>
+                <i class="fab fa-staylinked"></i>
+                <a href="/leaf/@Model.Category/@item.Slug-@item.Id">@Html.Raw(item.Title.Rendered)</a>
+            </div>
+        </div>
+    }
+</div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @if (current > 1)
+        {
+            <li class="page-item"><a class="page-link" href="?current=@(current - 1)">Trang trước</a></li>
+        }
+        <li class="page-item"><a class="page-link" href="?current=@(current + 1)">Trang sau</a></li>
+    </ul>
+</nav>

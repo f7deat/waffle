@@ -13,23 +13,41 @@ namespace Waffle.Core.Foundations
             _catalogService = catalogService;
         }
 
-        public Catalog PageData { private set; get; } = new();
+        public Catalog PageData { protected set; get; } = new();
+        public Catalog? Category { private set; get; }
 
         public override async Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
         {
+            context.RouteData.Values.TryGetValue("category", out var category);
             context.RouteData.Values.TryGetValue("normalizedName", out var normalizedName);
-            var catalog = await _catalogService.GetByNameAsync(normalizedName?.ToString());
-            if (catalog is null)
+            if (!string.IsNullOrEmpty(category?.ToString()))
             {
-                context.HttpContext.Response.StatusCode = 404;
-                context.HttpContext.Response.Redirect("/exception/notfound");
-                return;
+                Category = await _catalogService.GetByNameAsync(category?.ToString());
+                RouteData.Values.TryAdd("Parent", Category);
+                if (Category != null && CatalogType.WordPress == Category.Type)
+                {
+                    PageData = new Catalog
+                    {
+                        NormalizedName = normalizedName?.ToString() ?? string.Empty
+                    };
+                }
             }
-            PageData = catalog;
-            ViewData["Title"] = catalog.Name;
-            ViewData["Description"] = catalog.Description;
-            ViewData["Image"] = catalog.Thumbnail;
-            RouteData.Values.TryAdd(nameof(Catalog), catalog);
+            else
+            {
+
+                var catalog = await _catalogService.GetByNameAsync(normalizedName?.ToString());
+                if (catalog is null)
+                {
+                    context.HttpContext.Response.StatusCode = 404;
+                    context.HttpContext.Response.Redirect("/exception/notfound");
+                    return;
+                }
+                PageData = catalog;
+                ViewData["Title"] = catalog.Name;
+                ViewData["Description"] = catalog.Description;
+                ViewData["Image"] = catalog.Thumbnail;
+            }
+            RouteData.Values.TryAdd(nameof(Catalog), PageData);
         }
     }
 }

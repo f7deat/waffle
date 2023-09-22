@@ -1,0 +1,75 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
+using Waffle.Core.Constants;
+using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces.IService;
+using Waffle.Data;
+using Waffle.Entities;
+using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Models;
+using Waffle.Models;
+using Waffle.Models.Components;
+
+namespace Waffle.Pages.Leaf.Categories;
+
+public class DetailModel : DynamicPageModel
+{
+    private readonly ApplicationDbContext _context;
+    private readonly IComponentService _componentService;
+    private readonly IWordPressService _wordPressService;
+
+    public DetailModel(ICatalogService catalogService, ApplicationDbContext context, IComponentService componentService, IWordPressService wordPressService) : base(catalogService)
+    {
+        _context = context;
+        _componentService = componentService;
+        _wordPressService = wordPressService;
+    }
+
+    public List<WorkListItem> Works = new();
+    [UIHint(UIHint.Tags)]
+    public List<Catalog> Tags = new();
+    public bool HasTag => Tags.Any();
+    public Feed ProductFeed = new();
+    public bool HasProduct = false;
+    public LandingPageLinkList ShopeeProducts = new();
+
+    public string Email = string.Empty;
+    public bool IsAuthenticated = false;
+    public string? PostContent;
+
+    public async Task<IActionResult> OnGetAsync()
+    {
+        if (Category != null)
+        {
+            if (Category.Type == CatalogType.WordPress)
+            {
+                var component = await _componentService.EnsureComponentAsync(nameof(WordPressLister));
+                var query = from a in _context.WorkItems
+                            join b in _context.WorkContents on a.WorkId equals b.Id
+                            where b.ComponentId == component.Id
+                            select b;
+                var work = await query.FirstOrDefaultAsync();
+                if (work is null || string.IsNullOrEmpty(work.Arguments))
+                {
+                    return NotFound();
+                }
+                var wordPressLister = JsonSerializer.Deserialize<WordPressLister>(work.Arguments);
+
+                if (wordPressLister is null)
+                {
+                    return NotFound();
+                }
+                var postId = PageData.NormalizedName.Split("-").LastOrDefault();
+
+                var post = await _wordPressService.GetPostAsync(wordPressLister.Domain, postId);
+                if (post is null) return NotFound();
+                PostContent = post.Content.Rendered;
+                PageData.Name = post.Title.Rendered ?? string.Empty;
+                ViewData["Title"] = PageData.Name;
+            }
+        }
+        return Page();
+    }
+}

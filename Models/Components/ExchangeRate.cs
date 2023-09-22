@@ -10,6 +10,7 @@ public class ExchangeRate : AbstractComponent
 {
     [JsonIgnore]
     public ExrateList ExrateList { get; set; } = new();
+    [JsonPropertyName("labels")]
     public ExchangeRateLabels Labels { get; set; } = new();
 }
 

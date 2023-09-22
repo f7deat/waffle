@@ -11,4 +11,5 @@ public class CurrentUserViewModel
     public string? EmailConfirmed { get; set; }
     public IList<string> Roles { get; set; } = new List<string>();
     public string? Avatar => string.IsNullOrEmpty(Email) ? string.Empty : $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(Email)}?s=520";
+    public string? Name { get; set; }
 }
