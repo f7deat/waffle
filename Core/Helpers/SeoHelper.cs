@@ -61,6 +61,8 @@ public class SeoHelper
                 return "locations";
             case CatalogType.Tag:
                 return "tag";
+            case CatalogType.Album:
+                return "leaf/album";
             default: return "leaf";
         }
     }

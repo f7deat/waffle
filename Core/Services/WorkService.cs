@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -140,7 +141,7 @@ public class WorkService : IWorkService
     {
         var query = from b in _context.WorkContents
                     join c in _context.Components on b.ComponentId equals c.Id
-                    where (filterOptions.ParentId == null || b.ParentId == filterOptions.ParentId) && 
+                    where (filterOptions.ParentId == null || b.ParentId == filterOptions.ParentId) &&
                     (filterOptions.Active == null || b.Active == filterOptions.Active)
                     select new WorkListItem
                     {
@@ -149,7 +150,14 @@ public class WorkService : IWorkService
                         NormalizedName = c.NormalizedName,
                         Active = b.Active
                     };
-        return await ListResult<WorkListItem>.Success(query, filterOptions);
+        var data = await query.ToListAsync();
+        foreach (var item in data)
+        {
+            var display = ComponentHelper.GetNormalizedName(item.NormalizedName);
+            item.NormalizedName = display?.GetPrompt() ?? item.NormalizedName;
+            item.AutoGenerateField = display?.GetAutoGenerateField() ?? true;
+        }
+        return ListResult<WorkListItem>.Success(data, filterOptions);
     }
 
     public async Task<IdentityResult> NavbarSettingSaveAsync(Navbar args)
@@ -164,10 +172,7 @@ public class WorkService : IWorkService
         }
         navbar.Layout = args.Layout;
         var work = await FindAsync(args.Id);
-        if (work == null)
-        {
-            return IdentityResult.Failed();
-        }
+        if (work == null) return IdentityResult.Failed();
         work.Arguments = JsonSerializer.Serialize(navbar);
         return IdentityResult.Success;
     }
@@ -271,9 +276,13 @@ public class WorkService : IWorkService
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddItemAsync(WorkItem workItem)
+    public async Task AddItemAsync(Guid workId, Guid catalogId)
     {
-        await _context.WorkItems.AddAsync(workItem);
+        await _context.WorkItems.AddAsync(new WorkItem
+        {
+            CatalogId = catalogId,
+            WorkId = workId
+        });
         await _context.SaveChangesAsync();
     }
 
@@ -397,7 +406,8 @@ public class WorkService : IWorkService
                     from g2 in g.DefaultIfEmpty()
                     where g2 == null && (a.ParentId == null || a.ParentId == Guid.Empty)
                     select a;
-        return new { 
+        return new
+        {
             data = await query.ToListAsync()
         };
     }
@@ -434,5 +444,20 @@ public class WorkService : IWorkService
         };
         await _workContentRepository.AddAsync(work);
         return IdentityResult.Success;
+    }
+
+    public async Task<IEnumerable<WorkListItem>> GetComponentsInColumnAsync(Guid workId)
+    {
+        var query = from b in _context.WorkContents
+                    join c in _context.Components on b.ComponentId equals c.Id
+                    where b.ParentId == workId
+                    select new WorkListItem
+                    {
+                        Id = b.Id,
+                        Name = b.Name,
+                        NormalizedName = c.NormalizedName,
+                        Active = b.Active
+                    };
+        return await query.ToListAsync();
     }
 }

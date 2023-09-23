@@ -1,42 +1,46 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 
-namespace Waffle.Core.Services
+namespace Waffle.Core.Services;
+
+public class FileExplorerService : IFileExplorerService
 {
-    public class FileExplorerService : IFileExplorerService
+    private readonly ApplicationDbContext _context;
+    private readonly IFileContentRepository _fileContentRepository;
+
+    public FileExplorerService(ApplicationDbContext context, IFileContentRepository fileContentRepository)
     {
-        private readonly ApplicationDbContext _context;
-        public FileExplorerService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        _context = context;
+        _fileContentRepository = fileContentRepository;
+    }
 
-        public async Task<int> CountAsync() => await _context.FileContents.CountAsync();
+    public async Task<int> CountAsync() => await _fileContentRepository.CountAsync();
 
-        public async Task<ListResult<FileContent>> ListAsync(FileFilterOptions filterOptions)
-        {
-            var query = _context.FileContents
-                .Where(x => (string.IsNullOrWhiteSpace(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower())) && (string.IsNullOrEmpty(filterOptions.Type) || filterOptions.Type.Contains(x.Type)))
-                .OrderByDescending(x => x.Id);
-            return await ListResult<FileContent>.Success(query, filterOptions);
-        }
+    public Task<FileContent?> FindAsync(Guid id) => _fileContentRepository.FindAsync(id);
 
-        public async Task<IdentityResult> UploadFromUrlAsync(string url)
+    public async Task<ListResult<FileContent>> ListAsync(FileFilterOptions filterOptions)
+    {
+        var query = _context.FileContents
+            .Where(x => (string.IsNullOrWhiteSpace(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower())) && (string.IsNullOrEmpty(filterOptions.Type) || filterOptions.Type.Contains(x.Type)))
+            .OrderByDescending(x => x.Id);
+        return await ListResult<FileContent>.Success(query, filterOptions);
+    }
+
+    public async Task<IdentityResult> UploadFromUrlAsync(string url)
+    {
+        var uri = new Uri(url);
+        await _context.FileContents.AddAsync(new FileContent
         {
-            var uri = new Uri(url);
-            await _context.FileContents.AddAsync(new FileContent
-            {
-                Name = Path.GetFileName(uri.LocalPath),
-                Url = url,
-                Size = 0,
-                Type = Path.GetExtension(uri.LocalPath).ToLower()
-            });
-            await _context.SaveChangesAsync();
-            return IdentityResult.Success;
-        }
+            Name = Path.GetFileName(uri.LocalPath),
+            Url = url,
+            Size = 0,
+            Type = Path.GetExtension(uri.LocalPath).ToLower()
+        });
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
     }
 }

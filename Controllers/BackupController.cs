@@ -67,7 +67,7 @@ public class BackupController : BaseController
         }
 
         ZipFile.CreateFromDirectory(path, Path.Combine(_webHostEnvironment.WebRootPath, "files", $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip"), CompressionLevel.SmallestSize, false);
-        
+
         return Redirect($"/files/{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip");
     }
 
@@ -82,54 +82,56 @@ public class BackupController : BaseController
     public async Task<IActionResult> ImportAsync([FromForm] IFormFile file)
     {
         if (file is null) return BadRequest("File not found!");
-        var stream = file.OpenReadStream();
-        var data = await JsonSerializer.DeserializeAsync<BackupListItem>(stream);
-        if (data is null)
+        var fileStream = file.OpenReadStream();
+        if (!file.FileName.EndsWith(".zip")) return BadRequest("File extension not support!");
+
+        using var archive = new ZipArchive(fileStream);
+        foreach (ZipArchiveEntry entry in archive.Entries)
         {
-            return Ok(IdentityResult.Failed(new IdentityError
+            var stream = entry.Open();
+            var data = await JsonSerializer.DeserializeAsync<BackupListItem>(stream);
+            if (data is null) return BadRequest("Data incorrect!");
+
+            if (data.WorkContents.Any())
             {
-                Description = "Import failed!"
-            }));
-        }
-        if (data.WorkContents.Any())
-        {
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkContents");
-            await _context.WorkContents.AddRangeAsync(data.WorkContents);
-        }
-        if (data.WorkItems.Any())
-        {
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkItems");
-            await _context.WorkItems.AddRangeAsync(data.WorkItems);
-        }
-        if (data.FileContents.Any())
-        {
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.FileContents");
-            await _context.FileContents.AddRangeAsync(data.FileContents);
-        }
-        if (data.Catalogs.Any())
-        {
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Catalogs");
-            await _context.Catalogs.AddRangeAsync(data.Catalogs);
-        }
-        if (data.AppSettings.Any())
-        {
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.AppSettings");
-            await _context.AppSettings.AddRangeAsync(data.AppSettings);
-        }
-        if (data.Components.Any())
-        {
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Components");
-            await _context.Components.AddRangeAsync(data.Components);
-        }
-        if (data.Localizations.Any())
-        {
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Localizations");
-            await _context.Localizations.AddRangeAsync(data.Localizations);
-        }
-        if (data.Comments.Any())
-        {
-            await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Comments");
-            await _context.Comments.AddRangeAsync(data.Comments);
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkContents");
+                await _context.WorkContents.AddRangeAsync(data.WorkContents);
+            }
+            if (data.WorkItems.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkItems");
+                await _context.WorkItems.AddRangeAsync(data.WorkItems);
+            }
+            if (data.FileContents.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.FileContents");
+                await _context.FileContents.AddRangeAsync(data.FileContents);
+            }
+            if (data.Catalogs.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Catalogs");
+                await _context.Catalogs.AddRangeAsync(data.Catalogs);
+            }
+            if (data.AppSettings.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.AppSettings");
+                await _context.AppSettings.AddRangeAsync(data.AppSettings);
+            }
+            if (data.Components.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Components");
+                await _context.Components.AddRangeAsync(data.Components);
+            }
+            if (data.Localizations.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Localizations");
+                await _context.Localizations.AddRangeAsync(data.Localizations);
+            }
+            if (data.Comments.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Comments");
+                await _context.Comments.AddRangeAsync(data.Comments);
+            }
         }
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);

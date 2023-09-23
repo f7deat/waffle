@@ -38,6 +38,7 @@ public class DetailModel : DynamicPageModel
     public string Email = string.Empty;
     public bool IsAuthenticated = false;
     public string? PostContent;
+    public IEnumerable<ComponentListItem>? Components;
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -48,19 +49,13 @@ public class DetailModel : DynamicPageModel
                 var component = await _componentService.EnsureComponentAsync(nameof(WordPressLister));
                 var query = from a in _context.WorkItems
                             join b in _context.WorkContents on a.WorkId equals b.Id
-                            where b.ComponentId == component.Id
+                            where b.ComponentId == component.Id && a.CatalogId == Category.Id
                             select b;
                 var work = await query.FirstOrDefaultAsync();
-                if (work is null || string.IsNullOrEmpty(work.Arguments))
-                {
-                    return NotFound();
-                }
+                if (work is null || string.IsNullOrEmpty(work.Arguments)) return NotFound();
                 var wordPressLister = JsonSerializer.Deserialize<WordPressLister>(work.Arguments);
 
-                if (wordPressLister is null)
-                {
-                    return NotFound();
-                }
+                if (wordPressLister is null) return NotFound();
                 var postId = PageData.NormalizedName.Split("-").LastOrDefault();
 
                 var post = await _wordPressService.GetPostAsync(wordPressLister.Domain, postId);
@@ -68,7 +63,9 @@ public class DetailModel : DynamicPageModel
                 PostContent = post.Content.Rendered;
                 PageData.Name = post.Title.Rendered ?? string.Empty;
                 ViewData["Title"] = PageData.Name;
+                return Page();
             }
+            Components = await _catalogService.ListComponentAsync(PageData.Id);
         }
         return Page();
     }

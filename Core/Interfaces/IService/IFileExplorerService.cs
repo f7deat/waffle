@@ -9,4 +9,5 @@ public interface IFileExplorerService
     Task<int> CountAsync();
     Task<ListResult<FileContent>> ListAsync(FileFilterOptions filterOptions);
     Task<IdentityResult> UploadFromUrlAsync(string url);
+    Task<FileContent?> FindAsync(Guid id);
 }

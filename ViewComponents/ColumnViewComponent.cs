@@ -3,32 +3,27 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.ViewComponents
+namespace Waffle.ViewComponents;
+
+public class ColumnViewComponent : ViewComponent
 {
-    public class ColumnViewComponent : ViewComponent
+    private readonly IWorkService _workService;
+    public ColumnViewComponent(IWorkService workService)
     {
-        private readonly IWorkService _workService;
-        public ColumnViewComponent(IWorkService workService)
+        _workService = workService;
+    }
+
+    public async Task<IViewComponentResult> InvokeAsync(Guid workId)
+    {
+        var column = await _workService.GetAsync<Column>(workId);
+        if (column is null)
         {
-            _workService = workService;
-        }
-        public async Task<IViewComponentResult> InvokeAsync(Guid workId)
-        {
-            var column = await _workService.GetAsync<Column>(workId);
-            if (column is null)
+            return View(Empty.DefaultView, new ErrorViewModel
             {
-                return View(Empty.DefaultView, new ErrorViewModel
-                {
-                    RequestId = workId.ToString()
-                });
-            }
-            var workListItems = await _workService.GetWorkListItemChildAsync(new WorkFilterOptions
-            {
-                Active = true,
-                ParentId = workId
+                RequestId = workId.ToString()
             });
-            column.WorkListItems = workListItems.Data ?? new List<WorkListItem>();
-            return View(column);
         }
+        column.WorkListItems = await _workService.GetComponentsInColumnAsync(workId);
+        return View(column);
     }
 }

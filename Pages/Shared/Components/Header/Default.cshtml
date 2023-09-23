@@ -40,26 +40,30 @@
                         </a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search" action="/search" method="get">
+                <form class="d-flex me-3" role="search" action="/search" method="get">
                     <div class="hidden md:flex items-center rounded-full px-3 gap-2 search-input">
                         <input class="h-full py-2 rounded-full w-64" type="text" placeholder="Nhập từ khóa" aria-label="Search" name="searchTerm" autocomplete="off">
                         <button class="flex items-center justify-center rounded-full" type="submit" aria-label="Tìm kiếm"><i class="fa fa-search"></i></button>
                     </div>
                 </form>
                 <div class="d-flex gap-2 items-center">
-                    <a href="/search" class="btn-icon d-md-none" aria-label="Search">
+                    <a href="/search" class="btn btn-sm d-md-none" aria-label="Search">
                         <i class="fas fa-search"></i>
                     </a>
-                    <button type="button" class="btn-icon" aria-label="Dark mode">
+                    <button type="button" class="btn btn-sm" aria-label="Dark mode">
                         <i class="fas fa-cloud-sun"></i>
                     </button>
+                    <a href="/products/cart" class="btn btn-sm position-relative">
+                        <i class="fas fa-cart-shopping"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            0
+                            <span class="visually-hidden">product in cart</span>
+                        </span>
+                    </a>
                     @if (Model.IsAuthenticated)
                     {
                         <a href="/users/@Model.UserId" class="btn-icon">
                             <i class="fas fa-user"></i>
-                        </a>
-                        <a href="/shop/cart" class="btn-icon">
-                            <i class="fas fa-cart-shopping"></i>
                         </a>
                     }
                 </div>

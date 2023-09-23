@@ -26,7 +26,7 @@ public interface IWorkService
     Task<IEnumerable<WorkContent>> GetWorkContentChildsAsync(Guid parentId);
     Task<IdentityResult> SaveAsync(WorkContent args);
     Task AddAsync(WorkContent workContent);
-    Task AddItemAsync(WorkItem workItem);
+    Task AddItemAsync(Guid workId, Guid catalogId);
     Task<IdentityResult> SaveArgumentsAsync(Guid id, object args);
     Task<WorkContent?> GetSummaryAsync(Guid id);
     Task<IdentityResult> UpdateSummaryAsync(WorkContent args);
@@ -36,4 +36,5 @@ public interface IWorkService
     Task<ListResult<WorkListItem>> ListBySettingIdAsync(Guid id);
     Task<object?> GetListUnuseAsync(BasicFilterOptions filterOptions);
     Task<IdentityResult> SaveProductImageAsync(SaveImageModel args);
+    Task<IEnumerable<WorkListItem>> GetComponentsInColumnAsync(Guid workId);
 }

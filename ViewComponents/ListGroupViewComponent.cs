@@ -1,30 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Waffle.Models.Components;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Models.Components;
-using Waffle.Models;
 
-namespace Waffle.ViewComponents
+namespace Waffle.ViewComponents;
+
+public class ListGroupViewComponent : BaseViewComponent<ListGroup>
 {
-    public class ListGroupViewComponent : ViewComponent
+    public ListGroupViewComponent(IWorkService workService) : base(workService)
     {
-        private readonly IWorkService _workService;
-        public ListGroupViewComponent(IWorkService workService)
-        {
-            _workService = workService;
-        }
-
-        public async Task<IViewComponentResult> InvokeAsync(Guid id)
-        {
-            var data = await _workService.GetAsync<ListGroup>(id);
-            if (data is null)
-            {
-                return View(Empty.DefaultView, new ErrorViewModel
-                {
-                    RequestId = id.ToString()
-                });
-            }
-            data.Items = await _workService.GetListChildAsync<ListGroupItem>(id);
-            return View(data);
-        }
     }
 }

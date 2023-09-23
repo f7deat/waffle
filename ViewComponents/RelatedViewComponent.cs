@@ -26,13 +26,20 @@ public class RelatedViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync(RelatedProps props)
     {
+        if (!props.TagIds.Any())
+        {
+            return View(Empty.DefaultView, new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            });
+        }
         var articles = await _catalogService.ArticleRelatedListAsync(new ArticleRelatedFilterOption
         {
             Current = 1,
             PageSize = 4,
             CatalogId = PageData.Id,
             TagIds = props.TagIds,
-            Type = props.Type
+            Type = PageData.Type
         });
         if (articles?.Data == null || !articles.Data.Any())
         {
@@ -48,5 +55,4 @@ public class RelatedViewComponent : ViewComponent
 public class RelatedProps
 {
     public IEnumerable<Guid> TagIds { get; set; } = null!;
-    public CatalogType Type { get; set; }
 }

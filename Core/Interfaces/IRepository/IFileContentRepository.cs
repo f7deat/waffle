@@ -1,5 +1,7 @@
-﻿namespace Waffle.Core.Interfaces.IRepository;
+﻿using Waffle.Entities;
 
-public interface IFileContentRepository
+namespace Waffle.Core.Interfaces.IRepository;
+
+public interface IFileContentRepository : IAsyncRepository<FileContent>
 {
 }

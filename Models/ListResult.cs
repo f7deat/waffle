@@ -30,4 +30,9 @@ public class ListResult<T> where T : class
         if (filterOptions.Current < 1) filterOptions.Current = 1;
         return new ListResult<T>(await query.AsNoTracking().Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(), await query.CountAsync(), filterOptions);
     }
+
+    public static ListResult<T> Success(IEnumerable<T> query, IFilterOptions filterOptions)
+    {
+        return new ListResult<T>(query, query.Count(), filterOptions);
+    }
 }

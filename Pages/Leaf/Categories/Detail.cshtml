@@ -15,7 +15,18 @@
 
                 <h1 class="title">@Html.Raw(Model.PageData.Name)</h1>
                 <div class="mb-4 bg-white">
-                    @Html.Raw(Model.PostContent)
+                    @if (Model.PageData.Type == CatalogType.WordPress)
+                    {
+                        @Html.Raw(Model.PostContent)
+                    }
+
+                    @if (Model.Components != null)
+                    {
+                        @foreach (var item in Model.Components)
+                        {
+                            @await Component.InvokeAsync(item.Name, item.Id)
+                        }
+                    }
 
                     @if (Model.HasTag)
                     {
@@ -84,8 +95,7 @@
         @if (Model.Tags.Any())
         {
             @await Component.InvokeAsync("Related", new RelatedProps {
-        TagIds = Model.Tags.Select(x => x.Id),
-        Type = CatalogType.Article
+        TagIds = Model.Tags.Select(x => x.Id)
         })
         }
     </div>

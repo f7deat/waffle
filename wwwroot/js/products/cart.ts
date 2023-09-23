@@ -1,0 +1,1 @@
+﻿const container = document.querySelector('#js-products') as HTMLElement;

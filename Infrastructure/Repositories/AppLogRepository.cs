@@ -25,7 +25,8 @@ public class AppLogRepository : EfRepository<AppLog>, IAppLogRepository
                         CreatedDate = log.CreatedDate,
                         Message = log.Message,
                         UserId = user.Id,
-                        UserName = user.UserName
+                        UserName = user.UserName,
+                        CatalogName = catalog.Name
                     };
         return await ListResult<AppLogListItem>.Success(query, filterOptions);
     }

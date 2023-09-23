@@ -28,25 +28,24 @@ namespace Waffle.Core.Foundations
                 {
                     PageData = new Catalog
                     {
-                        NormalizedName = normalizedName?.ToString() ?? string.Empty
+                        NormalizedName = normalizedName?.ToString() ?? string.Empty,
+                        Type = CatalogType.WordPress
                     };
-                }
-            }
-            else
-            {
-
-                var catalog = await _catalogService.GetByNameAsync(normalizedName?.ToString());
-                if (catalog is null)
-                {
-                    context.HttpContext.Response.StatusCode = 404;
-                    context.HttpContext.Response.Redirect("/exception/notfound");
+                    RouteData.Values.TryAdd(nameof(Catalog), PageData);
                     return;
                 }
-                PageData = catalog;
-                ViewData["Title"] = catalog.Name;
-                ViewData["Description"] = catalog.Description;
-                ViewData["Image"] = catalog.Thumbnail;
             }
+            var catalog = await _catalogService.GetByNameAsync(normalizedName?.ToString());
+            if (catalog is null)
+            {
+                context.HttpContext.Response.StatusCode = 404;
+                context.HttpContext.Response.Redirect("/exception/notfound");
+                return;
+            }
+            PageData = catalog;
+            ViewData["Title"] = catalog.Name;
+            ViewData["Description"] = catalog.Description;
+            ViewData["Image"] = catalog.Thumbnail;
             RouteData.Values.TryAdd(nameof(Catalog), PageData);
         }
     }

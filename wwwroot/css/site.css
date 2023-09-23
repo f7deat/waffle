@@ -246,6 +246,10 @@ table {
     --bs-btn-padding-x: 1rem;
 }
 
+.btn-sm {
+    --bs-btn-padding-x: 0.25rem;
+}
+
 .btn-primary {
     --bs-btn-bg: var(--primary);
 }

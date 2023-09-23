@@ -31,21 +31,16 @@ public class WorkController : BaseController
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] AddWorkContentModel model)
+    public async Task<IActionResult> AddAsync([FromBody] AddWorkContentModel args)
     {
         var workContent = new WorkContent
         {
-            Name = model.Name,
-            ComponentId = model.ComponentId,
+            Name = args.Name,
+            ComponentId = args.ComponentId,
             Active = true
         };
         await _workService.AddAsync(workContent);
-        var workItem = new WorkItem
-        {
-            CatalogId = model.CatalogId,
-            WorkId = workContent.Id
-        };
-        await _workService.AddItemAsync(workItem);
+        await _workService.AddItemAsync(workContent.Id, args.CatalogId);
         return Ok(IdentityResult.Success);
     }
 
@@ -89,11 +84,7 @@ public class WorkController : BaseController
             item.NormalizedName = display?.GetPrompt() ?? item.NormalizedName;
             item.AutoGenerateField = display?.GetAutoGenerateField() ?? true;
         }
-        return Ok(new
-        {
-            data,
-            total = data.Count
-        });
+        return Ok(ListResult<WorkListItem>.Success(data, new BasicFilterOptions()));
     }
 
     [HttpPost("item/add")]
@@ -105,13 +96,7 @@ public class WorkController : BaseController
     [HttpPost("child/add")]
     public async Task<IActionResult> AddChildAsync([FromBody] WorkContent workContent)
     {
-        if (!await _context.WorkContents.AnyAsync(x => x.Id == workContent.ParentId))
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "Parrent component not found!"
-            }));
-        }
+        if (!await _context.WorkContents.AnyAsync(x => x.Id == workContent.ParentId)) return BadRequest("Parent not found!");
         await _workService.AddAsync(workContent);
         return Ok(IdentityResult.Success);
     }
@@ -127,22 +112,6 @@ public class WorkController : BaseController
 
     [HttpPost("active/{id}")]
     public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _workService.ActiveAsync(id));
-
-    [HttpPost("sort-order")]
-    public async Task<IActionResult> SortOrderAsync([FromBody] WorkItem model)
-    {
-        var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkId == model.WorkId && x.CatalogId == model.CatalogId);
-        if (workItem is null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "Work item not found!"
-            }));
-        }
-        workItem.SortOrder = model.SortOrder;
-        await _context.SaveChangesAsync();
-        return Ok(IdentityResult.Success);
-    }
 
     [HttpPost("delete")]
     public async Task<IActionResult> DeleteAsync([FromBody] DeleteWorkContent model)
@@ -164,13 +133,7 @@ public class WorkController : BaseController
         if (await _context.WorkItems.CountAsync(x => x.WorkId == model.WorkContentId) == 1)
         {
             var workContent = await _workService.FindAsync(model.WorkContentId);
-            if (workContent is null)
-            {
-                return Ok(IdentityResult.Failed(new IdentityError
-                {
-                    Description = "No work content found!"
-                }));
-            }
+            if (workContent is null) return BadRequest("Work not found!");
             _context.WorkContents.Remove(workContent);
         }
         _context.WorkItems.Remove(workItem);
@@ -409,26 +372,6 @@ public class WorkController : BaseController
 
     [HttpPost("tag/save")]
     public async Task<IActionResult> SaveTagAsync([FromBody] Tag tag) => Ok(await _workService.SaveTagAsync(tag));
-
-    [HttpGet("list-group/{id}")]
-    public async Task<IActionResult> GetListGroupAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<ListGroup>(id));
-
-    [HttpPost("list-group/item/add/{id}")]
-    public async Task<IActionResult> AddListGroupItemAsync([FromRoute] Guid id, [FromBody] ListGroupItem args)
-    {
-        var component = await _componentService.EnsureComponentAsync(nameof(ListGroupItem));
-        var work = new WorkContent
-        {
-            Active = true,
-            Arguments = JsonSerializer.Serialize(args),
-            ParentId = id,
-            ComponentId = component.Id,
-            Name = args.Link.Name ?? args.Link.Href
-        };
-        await _context.WorkContents.AddAsync(work);
-        await _context.SaveChangesAsync();
-        return Ok(IdentityResult.Success);
-    }
 
     [HttpPost("link/save/{id}")]
     public async Task<IActionResult> SaveLinkAsync([FromRoute] Guid id, [FromBody] Link args) => Ok(await _workService.SaveArgumentsAsync(id, args));
