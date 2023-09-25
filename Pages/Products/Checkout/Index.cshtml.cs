@@ -1,23 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Waffle.Core.Foundations.PageModels;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
-using Waffle.Extensions;
 using Waffle.ExternalAPI.Interfaces;
 
 namespace Waffle.Pages.Products.Checkout;
 
-public class IndexModel : CheckoutPageModel
+public class IndexModel : EntryPageModel
 {
-    private readonly ICatalogService _catalogService;
     private readonly ITelegramService _telegramService;
     private readonly ILogger<IndexModel> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public IndexModel(ICatalogService catalogService, ITelegramService telegramService, ILogger<IndexModel> logger, UserManager<ApplicationUser> userManager)
+    public IndexModel(ITelegramService telegramService, ILogger<IndexModel> logger, UserManager<ApplicationUser> userManager, ICatalogService catalogService) : base(catalogService)
     {
-        _catalogService = catalogService;
         _telegramService = telegramService;
         _logger = logger;
         _userManager = userManager;
@@ -60,9 +57,7 @@ public class IndexModel : CheckoutPageModel
         }
         var message = $"Bạn có đơn hàng mới: {OrderId}";
         await _telegramService.SendMessageAsync(message);
-        var thankPage = await _catalogService.EnsureDataAsync("thank", CatalogType.Default);
-        var url = thankPage.GetUrl();
         _logger.LogInformation("Đặt hàng thành công!");
-        return Redirect(url);
+        return Redirect("/products/checkout/finish");
     }
 }

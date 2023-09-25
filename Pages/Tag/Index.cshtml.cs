@@ -58,7 +58,7 @@ public class IndexModel : EntryPageModel
                     Name = tag.Name,
                 },
                 Badge = tag.PostCount,
-                Suffix = $"<span class=\"text-gray-500 text-sm\"> - {tag.ViewCount} <i class=\"fas fa-eye\"></i></span>"
+                Suffix = $"<span class=\"text-muted text-sm\"> - {tag.ViewCount} <i class=\"fas fa-eye\"></i></span>"
             });
         }
         return returnValue;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
@@ -48,4 +49,14 @@ public class ProductController : BaseController
 
     [HttpPost("image/save")]
     public async Task<IActionResult> AddImageAsync([FromBody] SaveImageModel args) => Ok(await _workService.SaveProductImageAsync(args));
+
+    [HttpPost("cart-items"), AllowAnonymous]
+    public async Task<IActionResult> GetCartItemsAsync([FromBody] List<CartItem> args)
+    {
+        foreach (var item in args)
+        {
+            item.Product = await _catalogService.FindAsync(item.ProductId);
+        }
+        return View("/Pages/Products/Cart/_Products.cshtml", args);
+    }
 }

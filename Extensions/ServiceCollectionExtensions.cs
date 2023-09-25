@@ -4,6 +4,7 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Senders;
 using Waffle.Core.Services;
+using Waffle.Core.Services.Ecommerces;
 using Waffle.Data.ContentGenerators;
 using Waffle.Infrastructure.Repositories;
 
@@ -30,6 +31,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IFileContentRepository, FileContentRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderService, OrderSerivce>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IMigrationService, MigrationService>();

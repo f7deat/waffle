@@ -13,7 +13,7 @@
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
 </div>
-<div thumbsSlider="" class="swiper js-swiper-product-thumb">
+<div thumbsSlider="" class="swiper js-swiper-product-thumb" hidden>
     <div class="swiper-wrapper">
         @foreach (var item in Model.Images)
         {
@@ -25,20 +25,23 @@
 </div>
 
 <script>
-    var swiper = new Swiper(".js-swiper-product-thumb", {
-        spaceBetween: 10,
-        slidesPerView: 4,
-        freeMode: true,
-        watchSlidesProgress: true,
-    });
-    var swiper2 = new Swiper(".js-swiper-product-image", {
-        spaceBetween: 10,
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        thumbs: {
-            swiper: swiper,
-        },
-    });
+    window.onload = () => {
+        var swiper = new Swiper(".js-swiper-product-thumb", {
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesProgress: true,
+        });
+        var swiper2 = new Swiper(".js-swiper-product-image", {
+            spaceBetween: 10,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            thumbs: {
+                swiper: swiper,
+            },
+        });
+        document.querySelector('.js-swiper-product-thumb').removeAttribute('hidden');
+    }
 </script>

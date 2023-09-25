@@ -17,7 +17,7 @@
                     <img src="@Model.Articles[i].Thumbnail" alt="@Model.Articles[i].Name" loading="lazy" class="w-full object-cover" height="250" />
                     <div class="px-2 py-1">
                         <div class="mb-1 font-medium text-truncate"><a href="/article/@Model.Articles[i].NormalizedName">@Html.Raw(Model.Articles[i].Name)</a></div>
-                        <div class="text-gray-500 line-clampin">
+                        <div class="text-muted line-clampin">
                             @Model.Articles[i].Description
                         </div>
                     </div>
@@ -26,9 +26,9 @@
             }
             <div class="border-t px-2 py-1">
                 <div class="mb-1 font-medium text-truncate"><a href="/article/@Model.Articles[i].NormalizedName">@Html.Raw(Model.Articles[i].Name)</a></div>
-                <div class="text-gray-500 text-sm flex">
-                    <div class="mr-2"><i class="fa fa-calendar mr-2"></i>@Model.Articles[i].ModifiedDate</div>
-                    <div><i class="fas fa-eye mr-2"></i>@Model.Articles[i].ViewCount.ToString("N0")</div>
+                <div class="text-muted text-sm flex">
+                    <div class="me-2"><i class="fa fa-calendar me-2"></i>@Model.Articles[i].ModifiedDate</div>
+                    <div><i class="fas fa-eye me-2"></i>@Model.Articles[i].ViewCount.ToString("N0")</div>
                 </div>
             </div>
         }

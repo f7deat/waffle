@@ -56,7 +56,7 @@ public class SeoHelper
             case CatalogType.Article:
                 return "article";
             case CatalogType.Product:
-                return "products";
+                return "product";
             case CatalogType.Location:
                 return "locations";
             case CatalogType.Tag:

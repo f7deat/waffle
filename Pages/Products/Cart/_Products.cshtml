@@ -1,0 +1,49 @@
+﻿@using Waffle.Models.Params.Products;
+@using Waffle.Extensions;
+@model IEnumerable<CartItem>
+@{
+    Layout = null;
+}
+
+<div class="cart-items mb-4">
+    @foreach (var item in Model)
+    {
+        if (item.Product == null)
+        {
+            continue;
+        }
+        <div class="cart-item mb-2">
+            <div class="row">
+                <div style="max-width: 150px">
+                    <img src="@item.Product.Thumbnail" alt="@item.Product.Name" loading="lazy" />
+                </div>
+                <div class="col">
+                    <div class="d-flex gap-4 align-items-center">
+                        <div class="col">
+                            <div class="font-medium mb-2">
+                                <a href="@item.Product.GetUrl()">@item.Product.Name</a>
+                            </div>
+                            <div class="font-medium mb-2">Số lượng</div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm border btn-light px-2" type="button" disabled id="js-minus-quantity">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <div class="input-wrap" style="width: 40px">
+                                    <input type="text" value="@item.Quantity" class="form-control form-control-sm text-center" id="js-quantity-input">
+                                </div>
+                                <button class="btn btn-sm border btn-light px-2" type="button" id="js-plus-quantity">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-sm btn-outline-danger px-2">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

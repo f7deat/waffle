@@ -44,6 +44,18 @@
         border: 1px solid var(--gray-200);
     }
 
+.nav-link::after {
+    display: block;
+    content: '';
+    border-bottom: solid 2px var(--bs-gray);
+    transform: scaleX(0);
+    transition: transform 250ms ease-in-out;
+}
+
+.nav-link:hover::after {
+    transform: scaleX(1);
+}
+
 @media screen and (min-width: 768px) {
     .search-input {
         display: flex;

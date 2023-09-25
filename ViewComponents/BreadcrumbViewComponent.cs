@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.Extensions;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents;
@@ -63,7 +64,7 @@ public class BreadcrumbViewComponent : ViewComponent
             {
                 breadcrumb.Add(new Breadcrumb
                 {
-                    Url = GetUrl(parrent),
+                    Url = parrent.GetUrl(),
                     Name = parrent.Name,
                     Position = breadcrumb.Count + 1
                 });
@@ -71,38 +72,10 @@ public class BreadcrumbViewComponent : ViewComponent
         }
         breadcrumb.Add(new Breadcrumb
         {
-            Url = GetUrl(PageData),
+            Url = PageData.GetUrl(),
             Name = PageData.Name,
             Position = breadcrumb.Count + 1
         });
         return View(breadcrumb);
-    }
-
-    private static string GetUrl(Catalog catalog)
-    {
-        if (catalog.Type == CatalogType.Article)
-        {
-            return $"/article/{catalog.NormalizedName}";
-        }
-        return $"/page/{catalog.NormalizedName}";
-    }
-
-    private static string GetMasterUrl(CatalogType type)
-    {
-        switch (type)
-        {
-            case CatalogType.Default:
-                return "/page";
-            case CatalogType.Article:
-                return "/article";
-            case CatalogType.Product:
-                return "/products";
-            case CatalogType.Location:
-                return "/locations";
-            case CatalogType.Game:
-                return "/games";
-            default:
-                return $"/{type.ToString().ToLower()}";
-        }
     }
 }

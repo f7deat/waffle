@@ -4,9 +4,9 @@
 @model Waffle.Pages.Products.DetailsModel
 
 <main class="container">
+    @await Component.InvokeAsync(nameof(Breadcrumb))
     <div class="row">
         <div class="col-md-8">
-            @await Component.InvokeAsync(nameof(Breadcrumb))
             <div class="title">@Model.PageData.Name</div>
             <div class="bg-white rounded mb-4">
                 <div class="row">
@@ -22,18 +22,62 @@
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                         </div>
-                        <div class="text-gray-500 mb-2 border-dashed border-b">
+                        <div class="text-muted mb-2 border-dashed border-b">
                             @Model.PageData.Description
                         </div>
-                        <div class="text-gray-500 mb-2">
+                        <div class="text-muted mb-2">
                             Lượt xem: @Model.PageData.ViewCount.ToString("N0")
                         </div>
-                        <div class="md:flex mb-4 gap-4">
-                            <a href="/products/checkout?productIds=@Model.PageData.Id" class="btn btn-primary block mb-2">
-                                <i class="fas fa-cart-shopping mr-2"></i>
-                                <span>Mua ngay</span>
-                            </a>
+                        <div class="mb-4 quantity">
+                            <div class="fw-medium mb-2">Số lượng</div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm border btn-light px-2" type="button" disabled id="js-minus-quantity">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <div class="input-wrap" style="max-width: 40px">
+                                    <input type="text" value="1" class="form-control form-control-sm text-center" id="js-quantity-input" />
+                                </div>
+                                <button class="btn btn-sm border btn-light px-2" type="button" id="js-plus-quantity">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
                         </div>
+                        @if (Model.AffiliateLink != null)
+                        {
+                            <div class="md:flex mb-4 gap-2">
+                                <a href="@Model.AffiliateLink.Href" class="btn btn-outline-primary d-flex gap-2 items-center font-medium" target="@Model.AffiliateLink.Target" rel="nofollow">
+                                    @if (Model.AffiliateLink.Href.Contains("shope") == true)
+                                    {
+                                        <img src="https://shopee.vn/pcmall-assets/assets/icon_favicon_1_32.png" alt="icon" loading="lazy" style="width: 16px" />
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-cart-shopping me-2"></i>
+                                    }
+                                    @if (string.IsNullOrEmpty(Model.AffiliateLink.Name))
+                                    {
+                                        <span>Mua ngay</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.AffiliateLink.Name</span>
+                                    }
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="md:flex mb-4 gap-2">
+                                <button type="button" class="btn btn-outline-primary" id="js-addToCart">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                    <span>Thêm vào giỏ hàng</span>
+                                </button>
+                                <a href="/products/checkout?productIds=@Model.PageData.Id" class="btn btn-primary">
+                                    <i class="fas fa-cart-shopping me-2"></i>
+                                    <span>Mua ngay</span>
+                                </a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -85,3 +129,11 @@
         </div>
     </div>
 </main>
+<input type="hidden" value="@Model.PageData.Id" id="js-productId" />
+
+@section scripts {
+    <script src="~/js/products/product.js"></script>
+    <script>
+        Product.init();
+    </script>
+}
