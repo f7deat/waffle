@@ -5,7 +5,7 @@ using Waffle.Entities;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Card", ShortName = "CARD", GroupName = "")]
+[Display(Name = "Card", Prompt = "card")]
 public class Card : AbstractComponent
 {
     public Card()

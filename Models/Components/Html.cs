@@ -1,7 +1,10 @@
-﻿namespace Waffle.Models.Components
+﻿using System.ComponentModel.DataAnnotations;
+using Waffle.Core.Foundations;
+
+namespace Waffle.Models.Components;
+
+[Display(Name = "Html", Prompt = "html")]
+public class Html : AbstractComponent
 {
-    public class Html
-    {
-        public string? Value { get; set; }
-    }
+    public string? Value { get; set; }
 }

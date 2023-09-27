@@ -13,7 +13,7 @@ public class AppLogRepository : EfRepository<AppLog>, IAppLogRepository
     {
     }
 
-    public async Task<ListResult<AppLogListItem>> ListAsync(BasicFilterOptions filterOptions)
+    public async Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions)
     {
         var query = from log in _context.AppLogs
                     join catalog in _context.Catalogs on log.CatalogId equals catalog.Id
@@ -28,6 +28,10 @@ public class AppLogRepository : EfRepository<AppLog>, IAppLogRepository
                         UserName = user.UserName,
                         CatalogName = catalog.Name
                     };
+        if (!string.IsNullOrWhiteSpace(filterOptions.SearchTerm))
+        {
+            query = query.Where(x => x.Message.ToLower().Contains(filterOptions.SearchTerm.ToLower()));
+        }
         return await ListResult<AppLogListItem>.Success(query, filterOptions);
     }
 }

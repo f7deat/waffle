@@ -2,12 +2,11 @@
 using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 
-namespace Waffle.Models.Components
+namespace Waffle.Models.Components;
+
+[Display(Name = "Empty", Prompt = "empty", AutoGenerateField = true, AutoGenerateFilter = true)]
+public class Empty : AbstractComponent
 {
-    [Display(Name = "Empty")]
-    public class Empty : AbstractComponent
-    {
-        [JsonIgnore]
-        public const string DefaultView = "~/Pages/Shared/Components/Empty/Default.cshtml";
-    }
+    [JsonIgnore]
+    public const string DefaultView = "~/Pages/Shared/Components/Empty/Default.cshtml";
 }

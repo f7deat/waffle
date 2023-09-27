@@ -8,5 +8,5 @@ public interface IAppLogService
 {
     Task AddAsync(string message, Guid catalogId);
     Task<IdentityResult> DeleteAsync(Guid id);
-    Task<ListResult<AppLogListItem>> ListAsync(BasicFilterOptions filterOptions);
+    Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions);
 }

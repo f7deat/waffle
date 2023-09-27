@@ -1,7 +1,9 @@
-﻿using Waffle.Core.Foundations;
+﻿using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities.Ecommerces;
+using Waffle.Models;
 
 namespace Waffle.Infrastructure.Repositories;
 
@@ -9,5 +11,22 @@ public class OrderRepository : EfRepository<Order>, IOrderRepository
 {
     public OrderRepository(ApplicationDbContext context) : base(context)
     {
+    }
+
+    public async Task<ListResult<Order>> ListAsync(IFilterOptions filterOptions)
+    {
+        var query = _context.Orders.OrderByDescending(x => x.CreatedDate);
+        return await ListResult<Order>.Success(query, filterOptions);
+    }
+
+    public async Task<IEnumerable<OrderDetail>> ListOrderDetails(Guid id)
+    {
+        return await _context.OrderDetails.Where(x => x.OrderId == id).ToListAsync();
+    }
+
+    public async Task RemoveRange(IEnumerable<OrderDetail> orderDetails)
+    {
+        _context.OrderDetails.RemoveRange(orderDetails);
+        await _context.SaveChangesAsync();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 
@@ -8,6 +9,12 @@ namespace Waffle.Controllers;
 
 public class OrderController : BaseController
 {
+    private readonly IOrderService _orderService;
+    public OrderController(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+
     private readonly List<Order> Orders = new() { 
         new Order
         {
@@ -18,10 +25,7 @@ public class OrderController : BaseController
     };
 
     [HttpGet("list")]
-    public IActionResult ListAsync(BasicFilterOptions filterOptions) => Ok(new
-    {
-        data = Orders
-    });
+    public async Task<IActionResult> ListAsync(BasicFilterOptions filterOptions) => Ok(await _orderService.ListAsync(filterOptions));
 
     [HttpPost("add")]
     public IActionResult AddAsync([FromBody] Order args)
@@ -32,23 +36,14 @@ public class OrderController : BaseController
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetAsync([FromRoute] Guid id)
-    {
-        return Ok(Orders.FirstOrDefault(x => x.Id == id));
-    }
+    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _orderService.FindAsync(id));
 
     [HttpPost("delete/{id}")]
-    public IActionResult DeleteAsync([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        var order = Orders.FirstOrDefault(x => x.Id == id);
-        if (order == null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "Order not found"
-            }));
-        }
-        Orders.Remove(order);
+        var order = await _orderService.FindAsync(id);
+        if (order is null) return BadRequest("Order not found!");
+        await _orderService.DeleteAsync(order);
         return Ok(IdentityResult.Success);
     }
 }

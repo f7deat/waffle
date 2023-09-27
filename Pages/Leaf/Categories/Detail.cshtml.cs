@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
@@ -60,7 +61,8 @@ public class DetailModel : DynamicPageModel
 
                 var post = await _wordPressService.GetPostAsync(wordPressLister.Domain, postId);
                 if (post is null) return NotFound();
-                PostContent = post.Content.Rendered;
+                string re = @"<a [^>]+>(.*?)<\/a>";
+                PostContent = Regex.Replace(post.Content.Rendered ?? string.Empty, re, string.Empty);
                 PageData.Name = post.Title.Rendered ?? string.Empty;
                 ViewData["Title"] = PageData.Name;
                 return Page();

@@ -4,7 +4,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Google Map")]
+[Display(Name = "Google Map", Prompt = "google-map")]
 public class GoogleMap : AbstractComponent
 {
     [JsonPropertyName("height")]

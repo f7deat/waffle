@@ -8,4 +8,6 @@ public interface IOrderService
 {
     Task<ListResult<Order>> ListAsync(IFilterOptions filterOptions);
     Task<IdentityResult> AddAsync(Order order);
+    Task<Order?> FindAsync(Guid id);
+    Task DeleteAsync(Order order);
 }

@@ -13,7 +13,7 @@ public class LogController : BaseController
     }
 
     [HttpGet("list")]
-    public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _appLogService.ListAsync(filterOptions));
+    public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _appLogService.ListAsync(filterOptions));
 
     [HttpPost("delete/{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _appLogService.DeleteAsync(id));

@@ -48,5 +48,5 @@ public class AppLogService : IAppLogService
         return IdentityResult.Success;
     }
 
-    public Task<ListResult<AppLogListItem>> ListAsync(BasicFilterOptions filterOptions) => _appLogRepository.ListAsync(filterOptions);
+    public Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions) => _appLogRepository.ListAsync(filterOptions);
 }

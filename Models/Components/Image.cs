@@ -1,42 +1,43 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 using Waffle.Entities;
 
-namespace Waffle.Models.Components
+namespace Waffle.Models.Components;
+
+[Display(Name = "Image", Prompt = "image")]
+public class Image : AbstractComponent
 {
-    public class Image : AbstractComponent
+    public Image()
     {
-        public Image()
-        {
-            Alt = string.Empty;
-            Description = string.Empty;
-            Link = new Link();
-            File = new FileContent();
-            Wrapper = string.Empty;
-        }
-
-        [JsonPropertyName("alt")]
-        public string Alt { get; set; }
-        [JsonPropertyName("description")]
-        public string Description { get; set; }
-        [JsonPropertyName("width")]
-        public int? Width { get; set; }
-        [JsonPropertyName("height")]
-        public int? Height { get; set; }
-        [JsonPropertyName("link")]
-        public Link Link { get; set; }
-        [JsonPropertyName("file")]
-        public FileContent File { get; set; }
-        [JsonPropertyName("wrapper")]
-        public string Wrapper { get; set; }
-
-        [JsonIgnore]
-        public string Src => File.Url;
-
-        [JsonIgnore]
-        public bool HasImage => !string.IsNullOrEmpty(Src);
-
-        [JsonIgnore]
-        public bool HasLink => !string.IsNullOrEmpty(Link.Name);
+        Alt = string.Empty;
+        Description = string.Empty;
+        Link = new Link();
+        File = new FileContent();
+        Wrapper = string.Empty;
     }
+
+    [JsonPropertyName("alt")]
+    public string Alt { get; set; }
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
+    [JsonPropertyName("width")]
+    public int? Width { get; set; }
+    [JsonPropertyName("height")]
+    public int? Height { get; set; }
+    [JsonPropertyName("link")]
+    public Link Link { get; set; }
+    [JsonPropertyName("file")]
+    public FileContent File { get; set; }
+    [JsonPropertyName("wrapper")]
+    public string Wrapper { get; set; }
+
+    [JsonIgnore]
+    public string Src => File.Url;
+
+    [JsonIgnore]
+    public bool HasImage => !string.IsNullOrEmpty(Src);
+
+    [JsonIgnore]
+    public bool HasLink => !string.IsNullOrEmpty(Link.Name);
 }

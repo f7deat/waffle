@@ -20,14 +20,16 @@ public class WorkController : BaseController
     private readonly IWorkService _workService;
     private readonly IComponentService _componentService;
     private readonly ICatalogService _catalogService;
+    private readonly IAppLogService _logService;
 
-    public WorkController(ApplicationDbContext context, IFileExplorerService fileContentService, IWorkService workContentService, IComponentService componentService, ICatalogService catalogService)
+    public WorkController(ApplicationDbContext context, IFileExplorerService fileContentService, IWorkService workContentService, IComponentService componentService, ICatalogService catalogService, IAppLogService logService)
     {
         _context = context;
         _fileContentService = fileContentService;
         _workService = workContentService;
         _componentService = componentService;
         _catalogService = catalogService;
+        _logService = logService;
     }
 
     [HttpPost("add")]
@@ -91,7 +93,15 @@ public class WorkController : BaseController
     public async Task<IActionResult> ItemAddAsync([FromBody] WorkItem args) => Ok(await _workService.ItemAddAsync(args));
 
     [HttpPost("item/delete")]
-    public async Task<IActionResult> ItemDeleteAsync([FromBody] WorkItem args) => Ok(await _workService.ItemDeleteAsync(args));
+    public async Task<IActionResult> ItemDeleteAsync([FromBody] WorkItem args)
+    {
+        var result = await _workService.ItemDeleteAsync(args);
+        if (result.Succeeded)
+        {
+            await _logService.AddAsync("Delete work", args.CatalogId);
+        }
+        return Ok(result);
+    }
 
     [HttpPost("child/add")]
     public async Task<IActionResult> AddChildAsync([FromBody] WorkContent workContent)
@@ -117,13 +127,7 @@ public class WorkController : BaseController
     public async Task<IActionResult> DeleteAsync([FromBody] DeleteWorkContent model)
     {
         var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkId == model.WorkContentId && x.CatalogId == model.CatalogId);
-        if (workItem is null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "Work item not found!"
-            }));
-        }
+        if (workItem is null) return BadRequest("Work item not found!");
 
         if (await _context.WorkContents.AnyAsync(x => x.ParentId == model.WorkContentId))
         {
