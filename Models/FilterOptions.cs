@@ -29,6 +29,7 @@ namespace Waffle.Models
         public string? Name { get; set; }
         public bool? Active { get; set; }
         public CatalogType? Type { get; set; }
+        public Guid? ParentId { get; set; }
     }
 
     public class SearchFilterOptions : FilterOptions

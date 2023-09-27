@@ -20,7 +20,6 @@ public interface ICatalogService
     Task<IEnumerable<Catalog>> ArticlePickerListAsync(CatalogType type = CatalogType.Article);
     Task<IdentityResult> SaveAsync(Catalog args);
     IEnumerable<Option> GetTypes();
-    Task<WorkContent?> FirstWorkAsync(Guid id);
     Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions);
     Task<List<Catalog>> ListTagByIdAsync(Guid id);
     Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions);

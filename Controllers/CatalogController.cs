@@ -79,7 +79,7 @@ public class CatalogController : BaseController
     [HttpPost("delete/{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        var catalog = await _context.Catalogs.FindAsync(id);
+        var catalog = await _catalogService.FindAsync(id);
         if (catalog is null) return BadRequest("Catalog not found!");
 
         if (await _context.Catalogs.AnyAsync(x => x.ParentId == catalog.Id))
@@ -113,12 +113,12 @@ public class CatalogController : BaseController
     [HttpPost("tree-drop")]
     public async Task<IActionResult> DropAsync([FromBody] DropModel model)
     {
-        var drop = await _context.Catalogs.FindAsync(model.DragNodeKey);
+        var drop = await _catalogService.FindAsync(model.DragNodeKey);
         if (drop is null)
         {
             return Ok(IdentityResult.Failed());
         }
-        var node = await _context.Catalogs.FindAsync(model.Node);
+        var node = await _catalogService.FindAsync(model.Node);
         if (node is null)
         {
             return Ok(IdentityResult.Failed());

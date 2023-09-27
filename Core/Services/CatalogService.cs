@@ -69,6 +69,19 @@ public class CatalogService : ICatalogService
             catalog.NormalizedName += $"-{count + 1}";
         }
         catalog.Active = catalog.Type == CatalogType.Tag;
+        if (catalog.ParentId != null)
+        {
+            var parent = await _catalogRepository.FindAsync(catalog.ParentId);
+            if (parent is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "error.parantCatalogNotFound",
+                    Description = "Parent catalog not found!"
+                });
+            }
+            catalog.Type = parent.Type;
+        }
         catalog.CreatedDate = DateTime.Now;
         catalog.ModifiedDate = DateTime.Now;
         catalog.CreatedBy = _currentUser.GetId();
@@ -126,7 +139,7 @@ public class CatalogService : ICatalogService
 
     public async Task<IdentityResult> UpdateThumbnailAsync(Catalog args)
     {
-        var catalog = await _context.Catalogs.FindAsync(args.Id);
+        var catalog = await _catalogRepository.FindAsync(args.Id);
         if (catalog is null)
         {
             return IdentityResult.Failed();
@@ -145,7 +158,7 @@ public class CatalogService : ICatalogService
         return await ListResult<Catalog>.Success(query, filterOptions);
     }
 
-    public async Task<Catalog?> FindAsync(Guid id) => await _context.Catalogs.FindAsync(id);
+    public async Task<Catalog?> FindAsync(Guid id) => await _catalogRepository.FindAsync(id);
 
     public async Task<IEnumerable<Catalog>> ArticlePickerListAsync(CatalogType type = CatalogType.Article)
     {
@@ -154,7 +167,7 @@ public class CatalogService : ICatalogService
 
     public async Task<IdentityResult> SaveAsync(Catalog args)
     {
-        var catalog = await _context.Catalogs.FindAsync(args.Id);
+        var catalog = await _catalogRepository.FindAsync(args.Id);
         if (catalog is null)
         {
             return IdentityResult.Failed(new IdentityError
@@ -187,22 +200,10 @@ public class CatalogService : ICatalogService
         }
     }
 
-    public async Task<WorkContent?> FirstWorkAsync(Guid id)
+    public async Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions)
     {
-        var query = from a in _context.WorkItems
-                    join b in _context.WorkContents on a.WorkId equals b.Id
-                    where a.CatalogId == id
-                    select b;
-        return await query.FirstOrDefaultAsync();
-    }
-
-    public Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions)
-    {
-        var name = SeoHelper.ToSeoFriendly(filterOptions.Name);
-        var query = _context.Catalogs.Where(x => (filterOptions.Type == null || x.Type == filterOptions.Type) &&
-        (string.IsNullOrEmpty(name) || x.NormalizedName.Contains(name)) &&
-        (filterOptions.Active == null || x.Active == filterOptions.Active)).OrderByDescending(x => x.ModifiedDate);
-        return ListResult<Catalog>.Success(query, filterOptions);
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        return await _catalogRepository.ListAsync(filterOptions);
     }
 
     public async Task<ListResult<Catalog>?> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
@@ -242,7 +243,7 @@ public class CatalogService : ICatalogService
 
     public async Task<IdentityResult> TagAddToCatalogAsync(WorkItem args)
     {
-        var tag = await _context.Catalogs.FindAsync(args.CatalogId);
+        var tag = await _catalogRepository.FindAsync(args.CatalogId);
         if (tag is null)
         {
             return IdentityResult.Failed(new IdentityError
@@ -250,7 +251,7 @@ public class CatalogService : ICatalogService
                 Description = "Tag not found!"
             });
         }
-        var catalog = await _context.Catalogs.FindAsync(args.WorkId);
+        var catalog = await _catalogRepository.FindAsync(args.WorkId);
         if (catalog is null)
         {
             return IdentityResult.Failed(new IdentityError
