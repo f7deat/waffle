@@ -57,19 +57,6 @@ public class BreadcrumbViewComponent : ViewComponent
             });
         }
 
-        if (PageData.ParentId != null)
-        {
-            var parrent = await _catalogService.FindAsync(PageData.ParentId ?? Guid.Empty);
-            if (parrent != null)
-            {
-                breadcrumb.Add(new Breadcrumb
-                {
-                    Url = parrent.GetUrl(),
-                    Name = parrent.Name,
-                    Position = breadcrumb.Count + 1
-                });
-            }
-        }
         breadcrumb.Add(new Breadcrumb
         {
             Url = PageData.GetUrl(),

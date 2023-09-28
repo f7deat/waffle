@@ -5,7 +5,7 @@ namespace Waffle.Entities;
 
 public class Catalog : BaseEntity
 {
-    [JsonPropertyName("parrentId")]
+    [JsonPropertyName("parentId")]
     public Guid? ParentId { get; set; }
     [StringLength(200)]
     [JsonPropertyName("name")]

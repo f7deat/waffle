@@ -12,6 +12,8 @@ public class WordPressPost
     public WordPressTitle Title { get; set; } = new();
     [JsonPropertyName("content")]
     public WordPressContent Content { get; set; } = new();
+    [JsonPropertyName("date")]
+    public DateTime? Date { get; set; }
 }
 
 public class WordPressTitle

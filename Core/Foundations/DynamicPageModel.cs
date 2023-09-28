@@ -34,6 +34,7 @@ namespace Waffle.Core.Foundations
                     RouteData.Values.TryAdd(nameof(Catalog), PageData);
                     return;
                 }
+                normalizedName = $"{category}/{normalizedName}";
             }
             var catalog = await _catalogService.GetByNameAsync(normalizedName?.ToString());
             if (catalog is null)

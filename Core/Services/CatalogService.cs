@@ -80,7 +80,7 @@ public class CatalogService : ICatalogService
                     Description = "Parent catalog not found!"
                 });
             }
-            catalog.Type = parent.Type;
+            catalog.NormalizedName = $"{parent.NormalizedName}/{catalog.NormalizedName}";
         }
         catalog.CreatedDate = DateTime.Now;
         catalog.ModifiedDate = DateTime.Now;

@@ -64,6 +64,8 @@ public class DetailModel : DynamicPageModel
                 string re = @"<a [^>]+>(.*?)<\/a>";
                 PostContent = Regex.Replace(post.Content.Rendered ?? string.Empty, re, string.Empty);
                 PageData.Name = post.Title.Rendered ?? string.Empty;
+                PageData.ModifiedDate = post.Date ?? DateTime.Now;
+                PageData.ModifiedDate = post.Date ?? DateTime.Now;
                 ViewData["Title"] = PageData.Name;
                 return Page();
             }
