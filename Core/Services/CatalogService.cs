@@ -176,6 +176,19 @@ public class CatalogService : ICatalogService
                 Description = "Data not found!"
             });
         }
+        if (args.ParentId != null)
+        {
+            var parent = await _catalogRepository.FindAsync(args.ParentId);
+            if (parent is null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "error.parentCatalogNotFound",
+                    Description = "Parent catalog not found."
+                });
+            }
+            catalog.ParentId = parent.Id;
+        }
         catalog.Name = args.Name;
         catalog.NormalizedName = args.NormalizedName;
         catalog.Type = args.Type;
@@ -332,5 +345,12 @@ public class CatalogService : ICatalogService
         var work = await _workContentRepository.FindByCatalogAsync(catalogId, component.Id);
         if (work is null || string.IsNullOrEmpty(work.Arguments)) return default;
         return JsonSerializer.Deserialize<ProductImage?>(work.Arguments);
+    }
+
+    public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions)
+    {
+        var keyWords = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
+        if (string.IsNullOrEmpty(filterOptions.KeyWords)) return new List<Option>();
+        return await _catalogRepository.GetFormSelectAsync(keyWords);
     }
 }

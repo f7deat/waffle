@@ -14,10 +14,13 @@ public class CatalogController : BaseController
 {
     private readonly ApplicationDbContext _context;
     private readonly ICatalogService _catalogService;
-    public CatalogController(ApplicationDbContext context, ICatalogService catalogService)
+    private readonly IAppLogService _logService;
+
+    public CatalogController(ApplicationDbContext context, ICatalogService catalogService, IAppLogService logService)
     {
         _context = context;
         _catalogService = catalogService;
+        _logService = logService;
     }
 
     [HttpGet("view-count")]
@@ -100,7 +103,9 @@ public class CatalogController : BaseController
         _context.WorkItems.RemoveRange(tags);
 
         _context.Catalogs.Remove(catalog);
+        await _logService.AddAsync($"Delete catalog: {catalog.Name}", id);
         await _context.SaveChangesAsync();
+
         return Ok(IdentityResult.Success);
     }
 
@@ -158,4 +163,7 @@ public class CatalogController : BaseController
 
     [HttpGet("pie-chart")]
     public async Task<IActionResult> PieChartAsync() => Ok(await _catalogService.PieChartAsync());
+
+    [HttpGet("form-select")]
+    public async Task<IActionResult> GetFormSelectAsync([FromQuery] SelectFilterOptions filterOptions) => Ok(await _catalogService.GetFormSelectAsync(filterOptions));
 }

@@ -71,4 +71,9 @@ namespace Waffle.Models
     {
         public string? Key { get; set; }
     }
+
+    public class SelectFilterOptions
+    {
+        public string? KeyWords { get; set; }
+    }
 }

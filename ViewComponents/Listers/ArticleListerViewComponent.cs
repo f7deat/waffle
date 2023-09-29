@@ -1,17 +1,29 @@
 ﻿using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents.Listers;
 
 public class ArticleListerViewComponent : BaseViewComponent<ArticleLister>
 {
-    public ArticleListerViewComponent(IWorkService workService) : base(workService)
+    private readonly ICatalogService _catalogService;
+    
+    public ArticleListerViewComponent(IWorkService workService, ICatalogService catalogService) : base(workService)
     {
+        _catalogService = catalogService;
     }
 
-    protected override Task<ArticleLister> ExtendAsync(ArticleLister work)
+    protected override async Task<ArticleLister> ExtendAsync(ArticleLister work)
     {
-        return base.ExtendAsync(work);
+        var articles = await _catalogService.ListAsync(new CatalogFilterOptions
+        {
+            Active = true,
+            Current = 1,
+            PageSize = 10,
+            ParentId = ParentData?.ParentId
+        });
+        work.Articles = articles.Data;
+        return work;
     }
 }
