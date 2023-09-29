@@ -11,6 +11,10 @@ public static class CatalogExtensions
         {
             return $"/{SeoHelper.CatalogUrl(catalog.Type)}/{catalog.NormalizedName}";
         }
+        if (catalog.Type == CatalogType.Product)
+        {
+            return $"/product/{catalog.NormalizedName}";
+        }
         return $"/leaf/{catalog.NormalizedName}";
     }
 }

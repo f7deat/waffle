@@ -10,4 +10,6 @@ public interface IOrderService
     Task<IdentityResult> AddAsync(Order order);
     Task<Order?> FindAsync(Guid id);
     Task DeleteAsync(Order order);
+    Task<int> CountAsync();
+    Task AddOrderDetailsAsync(List<OrderDetail> orderDetails);
 }

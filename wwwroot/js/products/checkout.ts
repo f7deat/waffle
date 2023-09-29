@@ -1,8 +1,8 @@
-﻿class Cart {
+﻿class Checkout {
 
     private static getProducts() {
         const container = document.querySelector('#js-products') as HTMLElement;
-        fetch('/api/product/cart-items/view', {
+        fetch('/api/product/cart-items/checkout', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"

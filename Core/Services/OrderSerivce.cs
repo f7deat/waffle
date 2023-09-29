@@ -9,9 +9,14 @@ namespace Waffle.Core.Services;
 public class OrderSerivce : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
-    public OrderSerivce(IOrderRepository orderRepository)
+    private readonly IOrderDetailRepository _orderDetailRepository;
+    private readonly ILogger<OrderSerivce> _logger;
+
+    public OrderSerivce(IOrderRepository orderRepository, ILogger<OrderSerivce> logger, IOrderDetailRepository orderDetailRepository)
     {
         _orderRepository = orderRepository;
+        _orderDetailRepository = orderDetailRepository;
+        _logger = logger;
     }
 
     public async Task<IdentityResult> AddAsync(Order order)
@@ -21,6 +26,18 @@ public class OrderSerivce : IOrderService
         await _orderRepository.AddAsync(order);
         return IdentityResult.Success;
     }
+
+    public async Task AddOrderDetailsAsync(List<OrderDetail> orderDetails)
+    {
+        if (!orderDetails.Any())
+        {
+            _logger.LogError("No product was found!");
+            return;
+        }
+        await _orderDetailRepository.AddRangeAsync(orderDetails);
+    }
+
+    public Task<int> CountAsync() => _orderRepository.CountAsync();
 
     public async Task DeleteAsync(Order order)
     {

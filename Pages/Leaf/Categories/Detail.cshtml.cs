@@ -71,6 +71,8 @@ public class DetailModel : DynamicPageModel
             }
             Components = await _catalogService.ListComponentAsync(PageData.Id);
         }
+        Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
+        IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
         return Page();
     }
 }

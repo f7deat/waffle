@@ -3,37 +3,23 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities.Ecommerces;
+using Waffle.Extensions;
 using Waffle.Models;
+using Waffle.Models.Params.Products;
 
 namespace Waffle.Controllers;
 
 public class OrderController : BaseController
 {
     private readonly IOrderService _orderService;
+
     public OrderController(IOrderService orderService)
     {
         _orderService = orderService;
     }
 
-    private readonly List<Order> Orders = new() { 
-        new Order
-        {
-            Id = Guid.NewGuid(),
-            CreatedDate = DateTime.Now,
-            Status = OrderStatus.Open
-        }
-    };
-
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync(BasicFilterOptions filterOptions) => Ok(await _orderService.ListAsync(filterOptions));
-
-    [HttpPost("add")]
-    public IActionResult AddAsync([FromBody] Order args)
-    {
-        args.Id = Guid.NewGuid();
-        Orders.Add(args);
-        return Ok(IdentityResult.Success);
-    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _orderService.FindAsync(id));
@@ -44,6 +30,23 @@ public class OrderController : BaseController
         var order = await _orderService.FindAsync(id);
         if (order is null) return BadRequest("Order not found!");
         await _orderService.DeleteAsync(order);
+        return Ok(IdentityResult.Success);
+    }
+
+    [HttpPost("add"), AllowAnonymous]
+    public async Task<IActionResult> AddAsync([FromBody] AddOrderRequest args)
+    {
+        var count = await _orderService.CountAsync();
+        var order = new Order
+        {
+            UserId = User.GetId(),
+            CreatedDate = DateTime.Now,
+            Note = args.Note,
+            Status = OrderStatus.Open,
+            Number = $"{count + 1}"
+        };
+        await _orderService.AddAsync(order);
+        await _orderService.AddOrderDetailsAsync(args.OrderDetails);
         return Ok(IdentityResult.Success);
     }
 }

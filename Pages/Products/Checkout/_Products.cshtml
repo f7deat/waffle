@@ -1,0 +1,33 @@
+﻿@using Waffle.Models.Params.Products;
+@using Waffle.Extensions;
+@model IEnumerable<CartItem>
+@{
+    Layout = null;
+}
+
+<div class="cart-items mb-4">
+    @foreach (var item in Model)
+    {
+        if (item.Product == null)
+        {
+            continue;
+        }
+        <div class="cart-item mb-2">
+            <div class="row">
+                <div style="max-width: 150px">
+                    <img src="@item.Product.Thumbnail" alt="@item.Product.Name" loading="lazy" />
+                </div>
+                <div class="col">
+                    <div class="d-flex gap-4 align-items-center">
+                        <div class="col">
+                            <div class="font-medium mb-2">
+                                <a href="@item.Product.GetUrl()">@item.Product.Name</a>
+                            </div>
+                            <div class="mb-2">Số lượng: <b>@item.Quantity</b></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

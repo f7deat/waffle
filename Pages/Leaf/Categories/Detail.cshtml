@@ -95,8 +95,8 @@
         @if (Model.Tags.Any())
         {
             @await Component.InvokeAsync("Related", new RelatedProps {
-        TagIds = Model.Tags.Select(x => x.Id)
-        })
+                TagIds = Model.Tags.Select(x => x.Id)
+            })
         }
     </div>
 </main>

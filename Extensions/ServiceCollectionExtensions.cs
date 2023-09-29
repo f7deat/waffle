@@ -20,6 +20,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAppLogService, AppLogService>();
         services.AddScoped<ICatalogRepository, CatalogRepository>();
         services.AddScoped<ICatalogService, CatalogService>();
+        services.AddScoped<IContactRepository, ContactRepository>();
+        services.AddScoped<IContactService, ContactService>();
         services.AddScoped<IComponentRepository, ComponentRepository>();
         services.AddScoped<IComponentService, ComponentService>();
         services.AddScoped<IFileExplorerService, FileExplorerService>();
@@ -31,6 +33,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IFileContentRepository, FileContentRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderService, OrderSerivce>();
+        services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICommentRepository, CommentRepository>();
