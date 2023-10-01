@@ -5,25 +5,24 @@
 @{
     IEnumerable<ListGroupItem> GetItems()
     {
+        var items = new List<ListGroupItem>();
         foreach (var item in Model.Articles!)
         {
-            yield return new ListGroupItem
+            items.Add(new ListGroupItem
                     {
                         Link = new Link
                         {
                             Name = item.Name,
                             Href = item.GetUrl()
                         }
-                    };
+                    });
         }
+        return items;
     }
 }
 
-@if (Model.Articles != null)
-{
-    await Html.PartialAsync("/Pages/Shared/Components/ListGroup/Default.cshtml", new ListGroup
+@await Html.PartialAsync("/Pages/Shared/Components/ListGroup/Default.cshtml", new ListGroup
                 {
                     Name = Model.Name,
                     Items = GetItems()
-                });
-}
+                })

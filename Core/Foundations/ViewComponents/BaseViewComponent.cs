@@ -24,15 +24,6 @@ public abstract class BaseViewComponent<T> : ViewComponent where T : class
         }
     }
 
-    protected Catalog ParentData
-    {
-        get
-        {
-            RouteData.Values.TryGetValue("Parent", out var values);
-            return values as Catalog ?? new();
-        }
-    }
-
     public async Task<IViewComponentResult> InvokeAsync(Guid workId)
     {
         var work = await _workService.GetAsync<T>(workId);

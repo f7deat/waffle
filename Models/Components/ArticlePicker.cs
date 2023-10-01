@@ -5,7 +5,7 @@ using Waffle.Entities;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Article Picker", ShortName = "ARTICLE_PICKER")]
+[Display(Name = "Article Picker", Prompt = "article-picker")]
 public class ArticlePicker : AbstractComponent
 {
     [JsonPropertyName("tagId")]

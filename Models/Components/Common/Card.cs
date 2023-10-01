@@ -8,15 +8,10 @@ namespace Waffle.Models.Components;
 [Display(Name = "Card", Prompt = "card")]
 public class Card : AbstractComponent
 {
-    public Card()
-    {
-        Title = string.Empty;
-        Text = string.Empty;
-    }
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string? Text { get; set; }
     [JsonPropertyName("image")]
     public FileContent? Image { get; set; }
 }

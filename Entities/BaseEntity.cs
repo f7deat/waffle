@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Waffle.Entities
+namespace Waffle.Entities;
+
+public abstract class BaseEntity
 {
-    public abstract class BaseEntity
-    {
-        [Key, JsonPropertyName("id")]
-        public Guid Id { get; set; }
-    }
+    [Key, JsonPropertyName("id")]
+    public Guid Id { get; set; }
 }

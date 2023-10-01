@@ -4,7 +4,6 @@ using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models.Params.Products;
-using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers;
 
@@ -21,17 +20,6 @@ public class ProductController : BaseController
         _workService = workService;
         _productService = productService;
         _appLogService = appLogService;
-    }
-
-    private readonly List<ProductItem> Products = new();
-
-    [HttpGet("list")]
-    public IActionResult List()
-    {
-        return Ok(new
-        {
-            data = Products
-        });
     }
 
     [HttpPost("save")]

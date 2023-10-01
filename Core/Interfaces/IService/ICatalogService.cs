@@ -17,7 +17,6 @@ public interface ICatalogService
     Task<ListResult<Catalog>> ArticleListAsync(ArticleFilterOptions filterOptions);
     Task<ListResult<Catalog>?> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOptions);
     Task<Catalog?> FindAsync(Guid id);
-    Task<IEnumerable<Catalog>> ArticlePickerListAsync(CatalogType type = CatalogType.Article);
     Task<IdentityResult> SaveAsync(Catalog args);
     IEnumerable<Option> GetTypes();
     Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions);
@@ -31,4 +30,5 @@ public interface ICatalogService
     Task<object?> PieChartAsync();
     Task<ProductImage?> GetProductImageAsync(Guid catalogId);
     Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions);
+    Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize);
 }

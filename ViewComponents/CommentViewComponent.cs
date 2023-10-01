@@ -7,7 +7,6 @@ using Waffle.Models.Filters;
 
 namespace Waffle.ViewComponents;
 
-[ViewComponent( Name = "COMMENT")]
 public class CommentViewComponent : ViewComponent
 {
     private readonly ICommentService _commentService;

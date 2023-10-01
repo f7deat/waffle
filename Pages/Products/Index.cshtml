@@ -43,6 +43,7 @@
 
         </div>
         <div class="col-md-4">
+            @await Component.InvokeAsync(nameof(ProductSpotlight))
             @await Component.InvokeAsync(nameof(ArticleSpotlight))
             @await Component.InvokeAsync(nameof(Tag))
             @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))

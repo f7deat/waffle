@@ -160,11 +160,6 @@ public class CatalogService : ICatalogService
 
     public async Task<Catalog?> FindAsync(Guid id) => await _catalogRepository.FindAsync(id);
 
-    public async Task<IEnumerable<Catalog>> ArticlePickerListAsync(CatalogType type = CatalogType.Article)
-    {
-        return await _context.Catalogs.Where(x => x.Active && x.Type == type).OrderBy(x => Guid.NewGuid()).Take(5).ToListAsync();
-    }
-
     public async Task<IdentityResult> SaveAsync(Catalog args)
     {
         var catalog = await _catalogRepository.FindAsync(args.Id);
@@ -175,6 +170,11 @@ public class CatalogService : ICatalogService
                 Code = "catalog.notFound",
                 Description = "Data not found!"
             });
+        }
+        var normalizedName = args.NormalizedName;
+        if (string.IsNullOrWhiteSpace(args.NormalizedName))
+        {
+            normalizedName = SeoHelper.ToWikiFriendly(args.Name);
         }
         if (args.ParentId != null)
         {
@@ -188,9 +188,22 @@ public class CatalogService : ICatalogService
                 });
             }
             catalog.ParentId = parent.Id;
+            if (!normalizedName.Contains('/'))
+            {
+                normalizedName = $"{parent.NormalizedName}/{normalizedName}";
+            }
+            else
+            {
+                var nameDeserlizer = normalizedName.Split('/');
+                if (!nameDeserlizer.First().Equals(parent.NormalizedName))
+                {
+                    normalizedName = $"{parent.NormalizedName}/{nameDeserlizer.Last()}";
+                }
+            }
         }
+
         catalog.Name = args.Name;
-        catalog.NormalizedName = args.NormalizedName;
+        catalog.NormalizedName = normalizedName;
         catalog.Type = args.Type;
         catalog.Active = args.Active;
         catalog.ModifiedDate = DateTime.Now;
@@ -350,7 +363,8 @@ public class CatalogService : ICatalogService
     public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions)
     {
         var keyWords = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
-        if (string.IsNullOrEmpty(filterOptions.KeyWords)) return new List<Option>();
         return await _catalogRepository.GetFormSelectAsync(keyWords);
     }
+
+    public Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize) => _catalogRepository.ListSpotlightAsync(type, pageSize);
 }

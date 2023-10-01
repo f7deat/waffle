@@ -1,6 +1,5 @@
-﻿namespace Waffle.Models.Components
+﻿namespace Waffle.Models.Components;
+
+public class Masonry
 {
-    public class Masonry
-    {
-    }
 }

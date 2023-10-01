@@ -21,9 +21,13 @@ public class ArticleListerViewComponent : BaseViewComponent<ArticleLister>
             Active = true,
             Current = 1,
             PageSize = 10,
-            ParentId = ParentData?.ParentId
+            ParentId = PageData.Type == Entities.CatalogType.Entry ? null : PageData.Id
         });
         work.Articles = articles.Data;
+        if (string.IsNullOrEmpty(work.Name))
+        {
+            work.Name = PageData.Name;
+        }
         return work;
     }
 }

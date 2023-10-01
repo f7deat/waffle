@@ -23,7 +23,7 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
     public async Task<IEnumerable<Option>> GetFormSelectAsync(string keywords)
     {
         var query = _context.Catalogs
-            .Where(x => x.Active && x.Type != CatalogType.Tag && x.Type != CatalogType.Entry && x.NormalizedName.Contains(keywords))
+            .Where(x => x.Active && x.Type == CatalogType.Default && (string.IsNullOrEmpty(keywords) || x.NormalizedName.Contains(keywords)) && x.ParentId == null)
             .OrderByDescending(x => x.NormalizedName)
             .Select(x => new Option
             {
@@ -51,5 +51,13 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         }
 
         return await ListResult<Catalog>.Success(query.OrderByDescending(x => x.ModifiedDate), filterOptions);
+    }
+
+    public async Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize)
+    {
+        return await _context.Catalogs.Where(x => x.Active && x.Type == type)
+            .OrderBy(x => Guid.NewGuid()).Take(pageSize)
+            .AsNoTracking()
+            .ToListAsync();
     }
 }
