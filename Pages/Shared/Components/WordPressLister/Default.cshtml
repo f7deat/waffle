@@ -12,7 +12,7 @@
 <div class="mb-4 list-group">
     @foreach (var item in Model.Posts)
     {
-        <div class="py-2 hover:bg-gray-100 bg-white border-b flex justify-between">
+        <div class="py-2 hover:bg-gray-100 bg-white border-bottom flex justify-between">
             <div>
                 <i class="fab fa-staylinked"></i>
                 <a href="/leaf/@Model.Category/@item.Slug-@item.Id">@Html.Raw(item.Title.Rendered)</a>

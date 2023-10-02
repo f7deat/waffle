@@ -11,7 +11,7 @@
                 <textarea class="form-control" id="js-comment-message"></textarea>
             </div>
             <button type="button" class="btn btn-primary" onclick="addComment()">
-                <i class="fa-solid fa-paper-plane-top"></i>
+                <i class="fa-regular fa-paper-plane me-1"></i>
                 <span>Gửi bình luận</span>
             </button>
         </div>
@@ -58,6 +58,11 @@
             catalogId: '@Model.CatalogId',
             message: document.querySelector('#js-comment-message').value
         };
+
+        if (!data.message) {
+            Site.toast('Vui lòng nhập nội dung!');
+            return;
+        }
 
         fetch('/api/comment/add', {
             method: "POST",

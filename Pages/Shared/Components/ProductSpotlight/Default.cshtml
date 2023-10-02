@@ -9,8 +9,10 @@
             @foreach (var item in Model.Products)
             {
                 <div class="col-6">
-                    <div class="card-image">
-                        <img src="@item.Thumbnail" alt="@item.Name" class="object-cover" loading="lazy" />
+                    <div class="card-image bg-dark">
+                        <a href="@(item.GetUrl())">
+                            <img src="@item.Thumbnail" alt="@item.Name" class="object-cover thumbnail" loading="lazy" />
+                        </a>
                     </div>
                     <div class="py-2">
                         <a href="@(item.GetUrl())" class="line-clampin">

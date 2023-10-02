@@ -22,6 +22,7 @@ public class DetailsModel : DynamicPageModel
     public IEnumerable<Catalog> Tags = new List<Catalog>();
     public Guid ProductImage;
     public AffiliateLink? AffiliateLink;
+    public IEnumerable<Catalog> RelatedProducts = new List<Catalog>();
 
     public async Task<IActionResult> OnGetAsync()
     {

@@ -46,21 +46,14 @@ public class WorkService : IWorkService
 
     public async Task<IdentityResult> ColumnAddAsync(Column column)
     {
-        var row = await FindAsync(column.RowId);
-        if (row is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "Row not found!"
-            });
-        }
         var component = await _componentService.EnsureComponentAsync(nameof(Column));
         var workContent = new WorkContent
         {
             Active = true,
             Arguments = JsonSerializer.Serialize(column),
             ComponentId = component.Id,
-            ParentId = column.RowId
+            ParentId = column.RowId,
+            Name = column.Name ?? column.ClassName
         };
         await _context.WorkContents.AddAsync(workContent);
         await _context.SaveChangesAsync();
@@ -109,6 +102,16 @@ public class WorkService : IWorkService
             return default;
         }
         return JsonSerializer.Deserialize<T>(work.Arguments);
+    }
+
+    private T? Get<T>(string? arguments)
+    {
+        if (string.IsNullOrEmpty(arguments))
+        {
+            _logger.LogError("Arguments empty!");
+            return default;
+        }
+        return JsonSerializer.Deserialize<T>(arguments);
     }
 
     public async Task<IEnumerable<Option>> GetListAsync(BasicFilterOptions filterOptions)
@@ -459,5 +462,23 @@ public class WorkService : IWorkService
                         Active = b.Active
                     };
         return await query.ToListAsync();
+    }
+
+    public async IAsyncEnumerable<Column> ListColumnAsync(Guid rowId)
+    {
+        var works = await _workContentRepository.ListChildAsync(rowId);
+        foreach (var work in works)
+        {
+            if (string.IsNullOrEmpty(work.Arguments)) yield return new Column();
+            var column = Get<Column>(work.Arguments);
+            if (column is null) yield return new Column();
+            var items = await GetWorkListItemChildAsync(new WorkFilterOptions
+            {
+                ParentId = work.Id
+            });
+            column!.Id = work.Id;
+            column!.Items = items.Data;
+            yield return column;
+        }
     }
 }

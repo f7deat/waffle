@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities.Ecommerces;
+using Waffle.Models;
 using Waffle.Models.Params.Products;
 
 namespace Waffle.Controllers;
@@ -40,6 +42,13 @@ public class ProductController : BaseController
     [HttpPost("cart-items/{type}"), AllowAnonymous]
     public async Task<IActionResult> GetCartItemsAsync([FromRoute] string type, [FromBody] List<CartItem> args)
     {
+        if (!args.Any())
+        {
+            return View("/Pages/Shared/Components/Empty/Default.cshtml", new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            });
+        }
         foreach (var item in args)
         {
             item.Product = await _catalogService.FindAsync(item.ProductId);

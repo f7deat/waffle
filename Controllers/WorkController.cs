@@ -10,6 +10,7 @@ using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Specifications;
 using Waffle.Models.Params;
+using Column = Waffle.Models.Components.Column;
 
 namespace Waffle.Controllers;
 
@@ -262,13 +263,20 @@ public class WorkController : BaseController
     public async Task<IActionResult> GetContactFormAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<ContactForm>(id));
 
     [HttpPost("column/add")]
-    public async Task<IActionResult> ColumnAddAsync([FromBody] Column column) => Ok(await _workService.ColumnAddAsync(column));
+    public async Task<IActionResult> ColumnAddAsync([FromBody] Column column)
+    {
+        var row = await _workService.FindAsync(column.RowId);
+        if (row is null) return BadRequest("Row not found!");
+        return Ok(await _workService.ColumnAddAsync(column));
+    }
 
     [HttpGet("column/list/{id}")]
-    public async Task<IActionResult> GetColumnListAsync([FromRoute] Guid id) => Ok(await _workService.GetWorkListItemChildAsync(new WorkFilterOptions
+    public async Task<IActionResult> GetColumnListAsync([FromRoute] Guid id)
     {
-        ParentId = id
-    }));
+        var row = await _workService.FindAsync(id);
+        if (row is null) return BadRequest("Row not found!");
+        return Ok(_workService.ListColumnAsync(id));
+    }
 
     [HttpGet("column/{id}")]
     public async Task<IActionResult> GetColumnAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Column>(id));

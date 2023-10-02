@@ -10,7 +10,7 @@
 <div class="container">
     <div class="title">Danh sách trang</div>
     <div class="md:flex gap-4">
-        <div class="md:w-2/3">
+        <div class="col-md-8">
             @if (Model.Catalogs.Data != null)
             {
                 <div class="mb-4">
@@ -23,7 +23,7 @@
                 </div>
             }
         </div>
-        <div class="md:w-1/3">
+        <div class="col-md-4">
             @await Component.InvokeAsync(nameof(ArticleSpotlight))
             @await Component.InvokeAsync(nameof(Tag))
             @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))

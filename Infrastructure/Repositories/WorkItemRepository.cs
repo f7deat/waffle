@@ -20,4 +20,11 @@ public class WorkItemRepository : EfRepository<WorkContent>, IWorkContentReposit
                     select work;
         return await query.FirstOrDefaultAsync();
     }
+
+    public async Task<IEnumerable<WorkContent>> ListChildAsync(Guid parentId)
+    {
+        return await _context.WorkContents.Where(x => x.ParentId == parentId)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }

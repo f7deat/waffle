@@ -2,7 +2,7 @@
 @model Column
 
 <div class="@Model.ClassName">
-    @foreach (var item in Model.WorkListItems)
+    @foreach (var item in Model.Items)
     {
         @await Component.InvokeAsync(item.NormalizedName, item.Id)
     }

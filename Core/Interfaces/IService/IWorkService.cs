@@ -37,4 +37,5 @@ public interface IWorkService
     Task<object?> GetListUnuseAsync(BasicFilterOptions filterOptions);
     Task<IdentityResult> SaveProductImageAsync(SaveImageModel args);
     Task<IEnumerable<WorkListItem>> GetComponentsInColumnAsync(Guid workId);
+    IAsyncEnumerable<Column> ListColumnAsync(Guid rowId);
 }

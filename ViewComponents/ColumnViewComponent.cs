@@ -23,7 +23,7 @@ public class ColumnViewComponent : ViewComponent
                 RequestId = workId.ToString()
             });
         }
-        column.WorkListItems = await _workService.GetComponentsInColumnAsync(workId);
+        column.Items = await _workService.GetComponentsInColumnAsync(workId);
         return View(column);
     }
 }
