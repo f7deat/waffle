@@ -2,6 +2,7 @@
 @using Waffle.Core.Constants;
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
+@using Waffle.ViewComponents;
 @model Waffle.Pages.Products.DetailsModel
 
 <main class="container">
@@ -103,6 +104,11 @@
             </div>
 
             @await Component.InvokeAsync(ComponentName.Comment)
+
+            @if (Model.Tags.Any())
+            {
+                @await Component.InvokeAsync("Related", Model.Tags.Select(x => x.Id))
+            }
 
             <div class="mb-4">
                 <div class="title">

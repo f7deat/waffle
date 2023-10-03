@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
@@ -20,12 +19,15 @@ public class DetailModel : DynamicPageModel
     private readonly ApplicationDbContext _context;
     private readonly IComponentService _componentService;
     private readonly IWordPressService _wordPressService;
+    private readonly IWorkService _workService;
 
-    public DetailModel(ICatalogService catalogService, ApplicationDbContext context, IComponentService componentService, IWordPressService wordPressService) : base(catalogService)
+    public DetailModel(ICatalogService catalogService, ApplicationDbContext context, IComponentService componentService, IWordPressService wordPressService, IWorkService workService) : base(catalogService)
     {
         _context = context;
         _componentService = componentService;
         _wordPressService = wordPressService;
+        _workService = workService;
+
     }
 
     public List<WorkListItem> Works = new();
@@ -54,7 +56,7 @@ public class DetailModel : DynamicPageModel
                             select b;
                 var work = await query.FirstOrDefaultAsync();
                 if (work is null || string.IsNullOrEmpty(work.Arguments)) return NotFound();
-                var wordPressLister = JsonSerializer.Deserialize<WordPressLister>(work.Arguments);
+                var wordPressLister = _workService.Get<WordPressLister>(work.Arguments);
 
                 if (wordPressLister is null) return NotFound();
                 var postId = PageData.NormalizedName.Split("-").LastOrDefault();

@@ -5,7 +5,7 @@ using Waffle.Entities;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Article Spotlight", AutoGenerateField = true)]
+[Display(Name = "Article Spotlight", AutoGenerateField = true, Prompt = "article-spotlight", AutoGenerateFilter = true)]
 public class ArticleSpotlight : AbstractComponent
 {
     [JsonPropertyName("title")]
@@ -13,8 +13,6 @@ public class ArticleSpotlight : AbstractComponent
     [JsonPropertyName("pageSize")]
     public int PageSize { get; set; } = 5;
 
-    [JsonIgnore]
-    public Guid TagId { get; set; }
     [JsonIgnore]
     public List<Catalog> Articles { get; set; } = new();
 }

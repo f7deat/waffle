@@ -24,9 +24,9 @@ public class RelatedViewComponent : ViewComponent
         }
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(RelatedProps props)
+    public async Task<IViewComponentResult> InvokeAsync(IEnumerable<Guid> tagIds)
     {
-        if (!props.TagIds.Any())
+        if (!tagIds.Any())
         {
             return View(Empty.DefaultView, new ErrorViewModel
             {
@@ -38,7 +38,7 @@ public class RelatedViewComponent : ViewComponent
             Current = 1,
             PageSize = 4,
             CatalogId = PageData.Id,
-            TagIds = props.TagIds,
+            TagIds = tagIds,
             Type = PageData.Type
         });
         if (articles?.Data == null || !articles.Data.Any())
@@ -48,11 +48,7 @@ public class RelatedViewComponent : ViewComponent
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
         }
-        return View(articles.Data);
+        var view = PageData.Type == CatalogType.Product ? "Product" : "Default";
+        return View(view, articles.Data);
     }
-}
-
-public class RelatedProps
-{
-    public IEnumerable<Guid> TagIds { get; set; } = null!;
 }

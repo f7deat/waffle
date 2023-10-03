@@ -13,6 +13,7 @@ public interface IWorkService
     Task<IdentityResult> SaveTagAsync(Tag tag);
     Task<IdentityResult> SaveColumnAsync(Column item);
     Task<T?> GetAsync<T>(Guid id);
+    T? Get<T>(string? arguments);
     Task<IdentityResult> SaveContactFormAsync(ContactForm item);
     Task<IdentityResult> SaveRowAsync(Row row);
     Task<IdentityResult> ColumnAddAsync(Column column);

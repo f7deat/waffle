@@ -1,0 +1,22 @@
+﻿@using Waffle.Entities
+@using Waffle.Extensions;
+@model IEnumerable<Catalog>
+
+<div class="title">Sản phẩm liên Quan</div>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-6 col-md-3">
+            <div class="card-image bg-dark">
+                <a href="@(item.GetUrl())">
+                    <img src="@item.Thumbnail" alt="@item.Name" class="object-cover thumbnail" loading="lazy" />
+                </a>
+            </div>
+            <div class="py-2">
+                <a href="@(item.GetUrl())" class="line-clampin">
+                    @item.Name
+                </a>
+            </div>
+        </div>
+    }
+</div>

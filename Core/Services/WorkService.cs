@@ -104,7 +104,7 @@ public class WorkService : IWorkService
         return JsonSerializer.Deserialize<T>(work.Arguments);
     }
 
-    private T? Get<T>(string? arguments)
+    public T? Get<T>(string? arguments)
     {
         if (string.IsNullOrEmpty(arguments))
         {
