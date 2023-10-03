@@ -1,7 +1,9 @@
 ﻿@page
+@using Waffle.Extensions;
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
 @model Waffle.Pages.Locations.IndexModel
+
 
 <main class="wf-article__list">
     <div class="container">
@@ -14,11 +16,11 @@
                         @foreach (var item in Model.Catalogs.Data)
                         {
                             <div class="wf-article-item shadow">
-                                <a href="/locations/@item.NormalizedName" class="thumbnail">
+                                <a href="@item.GetUrl()" class="thumbnail">
                                     <img src="@item.Thumbnail" class="thumbnail" alt="@Html.Raw(item.Name)" height="200" loading="lazy" />
                                 </a>
                                 <div class="wf-article-item__body">
-                                    <a href="/locations/@item.NormalizedName" class="font-medium">@Html.Raw(item.Name)</a>
+                                    <a href="@item.GetUrl()" class="font-medium">@Html.Raw(item.Name)</a>
                                     <div class="wf-article-item__body-description">
                                         @Html.Raw(item.Description)
                                     </div>
@@ -49,6 +51,7 @@
             <div class="col-md-4">
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
+                @await Component.InvokeAsync(nameof(ProductSpotlight))
             </div>
         </div>
     </div>

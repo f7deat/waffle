@@ -68,7 +68,7 @@ namespace Waffle.Core.Services
                     await _localizationRepository.AddAsync(i18n);
                 }
                 cacheValue = i18n.Value ?? key;
-                var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromHours(1));
+                var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(1));
                 _memoryCache.Set(cacheKey, cacheValue, cacheEntryOptions);
             }
             return cacheValue;

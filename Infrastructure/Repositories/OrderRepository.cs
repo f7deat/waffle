@@ -13,16 +13,15 @@ public class OrderRepository : EfRepository<Order>, IOrderRepository
     {
     }
 
+    public async Task<int> CountAsync(OrderStatus status) => await _context.Orders.CountAsync(x => x.Status == status);
+
     public async Task<ListResult<Order>> ListAsync(IFilterOptions filterOptions)
     {
         var query = _context.Orders.OrderByDescending(x => x.CreatedDate);
         return await ListResult<Order>.Success(query, filterOptions);
     }
 
-    public async Task<IEnumerable<OrderDetail>> ListOrderDetails(Guid id)
-    {
-        return await _context.OrderDetails.Where(x => x.OrderId == id).ToListAsync();
-    }
+    public async Task<IEnumerable<OrderDetail>> ListOrderDetails(Guid id) => await _context.OrderDetails.Where(x => x.OrderId == id).ToListAsync();
 
     public async Task RemoveRange(IEnumerable<OrderDetail> orderDetails)
     {

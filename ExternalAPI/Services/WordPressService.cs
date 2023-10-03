@@ -36,15 +36,12 @@ public class WordPressService : IWordPressService
         }
     }
 
-    public async Task<IEnumerable<WordPressPost>?> ListPostAsync(string domain, IFilterOptions filterOptions)
+    public async Task<IEnumerable<WordPressPost>?> ListPostAsync(string domain, SearchFilterOptions filterOptions)
     {
         try
         {
-            var url = $"{domain}/wp-json/wp/v2/posts?page={filterOptions.Current}";
-            if (domain.EndsWith("/"))
-            {
-                url = $"{domain}wp-json/wp/v2/posts?page={filterOptions.Current}";
-            }
+            if (!domain.EndsWith("/")) domain += "/";
+            var url = $"{domain}wp-json/wp/v2/posts?page={filterOptions.Current}&search={filterOptions.SearchTerm}";
             var response = await _httpClient.GetStreamAsync(url);
             return await JsonSerializer.DeserializeAsync<List<WordPressPost>>(response);
         }

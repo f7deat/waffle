@@ -34,8 +34,6 @@ public class DetailModel : DynamicPageModel
     [UIHint(UIHint.Tags)]
     public List<Catalog> Tags = new();
     public bool HasTag => Tags.Any();
-    public Feed ProductFeed = new();
-    public bool HasProduct = false;
     public LandingPageLinkList ShopeeProducts = new();
 
     public string Email = string.Empty;

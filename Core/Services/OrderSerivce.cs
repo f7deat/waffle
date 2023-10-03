@@ -39,6 +39,8 @@ public class OrderSerivce : IOrderService
 
     public Task<int> CountAsync() => _orderRepository.CountAsync();
 
+    public Task<int> CountByStatusAsync(OrderStatus status) => _orderRepository.CountAsync(status);
+
     public async Task DeleteAsync(Order order)
     {
         await _orderRepository.DeleteAsync(order);

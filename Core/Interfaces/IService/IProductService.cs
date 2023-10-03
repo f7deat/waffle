@@ -6,4 +6,5 @@ namespace Waffle.Core.Interfaces.IService;
 public interface IProductService
 {
     Task<IdentityResult> SaveAsync(Product args);
+    Task<int> CountAsync();
 }

@@ -14,6 +14,8 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
     {
     }
 
+    public async Task<int> CountAsync(CatalogType type) => await _context.Catalogs.CountAsync(x => x.Type == type && x.Active);
+
     public async Task<Catalog?> FindByNameAsync(string? normalizedName)
     {
         if (string.IsNullOrEmpty(normalizedName)) return default;

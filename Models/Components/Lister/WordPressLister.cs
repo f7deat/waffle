@@ -18,5 +18,7 @@ public class WordPressLister : AbstractComponent
     public string Category { get; set; } = default!;
 
     [JsonIgnore]
+    public string? SearchTerm { get; set; }
+    [JsonIgnore]
     public IEnumerable<WordPressPost> Posts { get; set; } = new List<WordPressPost>();
 }

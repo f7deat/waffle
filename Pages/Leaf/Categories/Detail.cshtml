@@ -4,8 +4,6 @@
 @using Waffle.Models.Components;
 @using Waffle.ViewComponents;
 @model Waffle.Pages.Leaf.Categories.DetailModel
-@{
-}
 
 <main class="wf-article__detail">
     <div class="container">
@@ -61,11 +59,6 @@
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
 
-                @if (Model.HasProduct)
-                {
-                    @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
-                }
-
                 @if (Model.ShopeeProducts.LinkList.Any())
                 {
                     <div class="mb-4">
@@ -89,6 +82,7 @@
                 }
 
                 @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))
+                @await Component.InvokeAsync(nameof(ProductSpotlight))
             </div>
         </div>
 

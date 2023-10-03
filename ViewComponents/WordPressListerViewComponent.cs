@@ -39,9 +39,12 @@ public class WordPressListerViewComponent : ViewComponent
             });
         }
         work.Category = PageData.NormalizedName;
-
+        work.SearchTerm = Request.Query["searchTerm"];
         var current = Request.Query["current"];
-        var filterOptions = new BasicFilterOptions();
+        var filterOptions = new SearchFilterOptions
+        {
+            SearchTerm = work.SearchTerm
+        };
         if (string.IsNullOrEmpty(current))
         {
             filterOptions.Current = 1;

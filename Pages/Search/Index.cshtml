@@ -16,7 +16,7 @@
                     <div class="border rounded-full flex bg-white">
                         <input type="search" name="searchTerm" placeholder="Tìm kiếm..." class="flex-grow px-4 rounded-full" value="@Model.FilterOptions.SearchTerm" autocomplete="off">
                         <button type="submit" class="py-2 px-3">
-                            <i class="fas fa-search"></i>
+                            <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
                 </form>
@@ -72,8 +72,9 @@
         </div>
         <div class="col-md-3">
             @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))
-            @await Component.InvokeAsync(nameof(Tag))
             @await Component.InvokeAsync(nameof(ArticleSpotlight))
+            @await Component.InvokeAsync(nameof(Tag))
+            @await Component.InvokeAsync(nameof(ProductSpotlight))
         </div>
     </div>
 </main>

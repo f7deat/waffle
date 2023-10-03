@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 
 namespace Waffle.Core.Services.Ecommerces;
@@ -8,11 +9,15 @@ namespace Waffle.Core.Services.Ecommerces;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
+    private readonly ICatalogRepository _catalogRepository;
 
-    public ProductService(IProductRepository productRepository)
+    public ProductService(IProductRepository productRepository, ICatalogRepository catalogRepository)
     {
         _productRepository = productRepository;
+        _catalogRepository = catalogRepository;
     }
+
+    public Task<int> CountAsync() => _catalogRepository.CountAsync(CatalogType.Product);
 
     public async Task<IdentityResult> SaveAsync(Product args)
     {

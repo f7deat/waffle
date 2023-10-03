@@ -6,5 +6,5 @@ namespace Waffle.ExternalAPI.Interfaces;
 public interface IWordPressService
 {
     Task<WordPressPost?> GetPostAsync(string domain, string? postId);
-    Task<IEnumerable<WordPressPost>?> ListPostAsync(string domain, IFilterOptions filterOptions);
+    Task<IEnumerable<WordPressPost>?> ListPostAsync(string domain, SearchFilterOptions filterOptions);
 }
