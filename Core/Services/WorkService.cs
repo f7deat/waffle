@@ -17,14 +17,14 @@ public class WorkService : IWorkService
     private readonly ApplicationDbContext _context;
     private readonly IComponentService _componentService;
     private readonly IComponentRepository _componentRepository;
-    private readonly IWorkContentRepository _workContentRepository;
+    private readonly IWorkContentRepository _workRepository;
     private readonly ILogger<WorkService> _logger;
 
     public WorkService(ApplicationDbContext context, IComponentService componentService, IWorkContentRepository workContentRepository, IComponentRepository componentRepository, ILogger<WorkService> logger)
     {
         _context = context;
         _componentService = componentService;
-        _workContentRepository = workContentRepository;
+        _workRepository = workContentRepository;
         _componentRepository = componentRepository;
         _logger = logger;
     }
@@ -92,7 +92,7 @@ public class WorkService : IWorkService
         return await query.ToListAsync();
     }
 
-    public async Task<WorkContent?> FindAsync(Guid id) => await _workContentRepository.FindAsync(id);
+    public async Task<WorkContent?> FindAsync(Guid id) => await _workRepository.FindAsync(id);
 
     public async Task<T?> GetAsync<T>(Guid id)
     {
@@ -427,7 +427,7 @@ public class WorkService : IWorkService
                 Description = "Component not found!"
             });
         }
-        var work = await _workContentRepository.FindByCatalogAsync(args.CatalogId, component.Id);
+        var work = await _workRepository.FindByCatalogAsync(args.CatalogId, component.Id);
         var productImage = new ProductImage
         {
             Images = args.Urls
@@ -435,7 +435,7 @@ public class WorkService : IWorkService
         if (work != null)
         {
             work.Arguments = JsonSerializer.Serialize(productImage);
-            await _workContentRepository.SaveChangesAsync();
+            await _workRepository.SaveChangesAsync();
             return IdentityResult.Success;
         }
         work = new WorkContent
@@ -445,7 +445,7 @@ public class WorkService : IWorkService
             Name = string.Empty,
             Arguments = JsonSerializer.Serialize(productImage)
         };
-        await _workContentRepository.AddAsync(work);
+        await _workRepository.AddAsync(work);
         return IdentityResult.Success;
     }
 
@@ -466,7 +466,7 @@ public class WorkService : IWorkService
 
     public async IAsyncEnumerable<Column> ListColumnAsync(Guid rowId)
     {
-        var works = await _workContentRepository.ListChildAsync(rowId);
+        var works = await _workRepository.ListChildAsync(rowId);
         foreach (var work in works)
         {
             if (string.IsNullOrEmpty(work.Arguments)) yield return new Column();
@@ -481,4 +481,6 @@ public class WorkService : IWorkService
             yield return column;
         }
     }
+
+    public Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId) => _workRepository.ListChildIdAsync(parentId);
 }

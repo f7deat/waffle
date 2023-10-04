@@ -13,7 +13,7 @@ public class Row : AbstractComponent
         Columns = new List<Guid>();
     }
     [JsonIgnore]
-    public List<Guid> Columns { get; set; }
+    public IEnumerable<Guid> Columns { get; set; }
     [JsonPropertyName("layout")]
     public string? Layout { get; set; }
 }

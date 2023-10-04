@@ -10,7 +10,8 @@
     var avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(Model.Email)}?s=520";
     var isCurrentUser = Model.Id == User.GetId();
 }
-<div class="col-md-3 mb-4">
+
+<aside class="col-md-3 mb-4">
     <div class="card mb-2 shadow">
         <div class="flex justify-center mb-4 relative">
             <img src="@avatar" loading="lazy" alt="Avatar" class="rounded-full object-cover" width="200" height="200" />
@@ -27,11 +28,11 @@
         </div>
         <div class="flex items-center justify-center gap-4">
             <button class="btn btn-primary">
-                <i class="fa-solid fa-message mr-1"></i>
+                <i class="fa-solid fa-message me-1"></i>
                 <span>Nhắn tin</span>
             </button>
             <button class="btn btn-light">
-                <i class="fa-solid fa-user-plus mr-1"></i>
+                <i class="fa-solid fa-user-plus me-1"></i>
                 <span>Theo dõi</span>
             </button>
         </div>
@@ -39,13 +40,13 @@
     <div class="bg-white shadow">
         <div class="px-4 py-2 border-bottom flex justify-between">
             <div>
-                <i class="fas fa-globe mr-1"></i>Website:
+                <i class="fas fa-globe me-1"></i>Website:
             </div>
             <div class="text-muted text-right"></div>
         </div>
         <div class="px-4 py-2 border-bottom flex justify-between">
             <div>
-                <i class="fab fa-facebook mr-1"></i>Facebook:
+                <i class="fab fa-facebook me-1"></i>Facebook:
             </div>
             <div class="text-muted text-right"></div>
         </div>
@@ -53,16 +54,16 @@
         {
             <div class="px-4 py-2 border-bottom flex justify-center">
                 <a href="/users/changepassword">
-                    <i class="fa-solid fa-lock mr-1"></i>
+                    <i class="fa-solid fa-lock me-1"></i>
                     <span>Đổi mật khẩu</span>
                 </a>
             </div>
             <div class="px-4 py-2 border-bottom flex justify-center">
                 <a href="/users/logout" class="text-red-500">
-                    <i class="fa-solid fa-right-from-bracket mr-1"></i>
+                    <i class="fa-solid fa-right-from-bracket me-1"></i>
                     <span>Đăng xuất</span>
                 </a>
             </div>
         }
     </div>
-</div>
+</aside>

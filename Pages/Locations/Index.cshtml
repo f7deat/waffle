@@ -5,54 +5,56 @@
 @model Waffle.Pages.Locations.IndexModel
 
 
-<main class="wf-article__list">
-    <div class="container">
-        <div class="md:flex gap-4">
-            <div class="col-md-8">
-                <div class="title">@ViewData["Title"]</div>
-                @if (Model.Catalogs != null && Model.Catalogs.Data != null)
-                {
-                    <div class="locations grid">
-                        @foreach (var item in Model.Catalogs.Data)
-                        {
-                            <div class="wf-article-item shadow">
-                                <a href="@item.GetUrl()" class="thumbnail">
-                                    <img src="@item.Thumbnail" class="thumbnail" alt="@Html.Raw(item.Name)" height="200" loading="lazy" />
-                                </a>
-                                <div class="wf-article-item__body">
-                                    <a href="@item.GetUrl()" class="font-medium">@Html.Raw(item.Name)</a>
-                                    <div class="wf-article-item__body-description">
-                                        @Html.Raw(item.Description)
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div>
-                                        <small class="me-2">
-                                            <i class="fas fa-clock"></i>
-                                            @item.ModifiedDate
-                                        </small>
-                                        <small>
-                                            <i class="fa fa-eye"></i> @(item.ViewCount.ToString("N0"))
-                                        </small>
-                                    </div>
-                                    <div class="dropdown">
-                                        <a class="btn-share" href="https://www.google.com/maps/search/@item.Name" aria-label="Share" target="_blank" rel="nofollow">
-                                            <i class="fas fa-location-crosshairs"></i>
-                                        </a>
-                                    </div>
+<main class="container">
+    @foreach (var component in Model.Components)
+    {
+        @await Component.InvokeAsync(component.Name, component.Id)
+    }
+    <div class="row">
+        <div class="col-md-8">
+            <div class="title">@ViewData["Title"]</div>
+            @if (Model.Catalogs != null && Model.Catalogs.Data != null)
+            {
+                <div class="locations grid">
+                    @foreach (var item in Model.Catalogs.Data)
+                    {
+                        <div class="wf-article-item shadow">
+                            <a href="@item.GetUrl()" class="thumbnail">
+                                <img src="@item.Thumbnail" class="thumbnail" alt="@Html.Raw(item.Name)" height="200" loading="lazy" />
+                            </a>
+                            <div class="wf-article-item__body">
+                                <a href="@item.GetUrl()" class="font-medium">@Html.Raw(item.Name)</a>
+                                <div class="wf-article-item__body-description">
+                                    @Html.Raw(item.Description)
                                 </div>
                             </div>
-                        }
-                    </div>
+                            <div class="card-footer">
+                                <div>
+                                    <small class="me-2">
+                                        <i class="fas fa-clock"></i>
+                                        @item.ModifiedDate
+                                    </small>
+                                    <small>
+                                        <i class="fa fa-eye"></i> @(item.ViewCount.ToString("N0"))
+                                    </small>
+                                </div>
+                                <div class="dropdown">
+                                    <a class="btn-share" href="https://www.google.com/maps/search/@item.Name" aria-label="Share" target="_blank" rel="nofollow">
+                                        <i class="fas fa-location-crosshairs"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
 
-                    <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
-                }
-            </div>
-            <div class="col-md-4">
-                @await Component.InvokeAsync(nameof(ArticleSpotlight))
-                @await Component.InvokeAsync(nameof(Tag))
-                @await Component.InvokeAsync(nameof(ProductSpotlight))
-            </div>
+                <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+            }
+        </div>
+        <div class="col-md-4">
+            @await Component.InvokeAsync(nameof(ArticleSpotlight))
+            @await Component.InvokeAsync(nameof(Tag))
+            @await Component.InvokeAsync(nameof(ProductSpotlight))
         </div>
     </div>
 </main>

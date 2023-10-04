@@ -27,4 +27,9 @@ public class WorkItemRepository : EfRepository<WorkContent>, IWorkContentReposit
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId)
+    {
+        return await _context.WorkContents.Where(x => x.ParentId == parentId && x.Active).Select(x => x.Id).ToListAsync();
+    }
 }

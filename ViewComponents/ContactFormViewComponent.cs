@@ -2,10 +2,15 @@
 using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Components;
 
-namespace Waffle.ViewComponents
+namespace Waffle.ViewComponents;
+
+public class ContactFormViewComponent : BaseViewComponent<ContactForm>
 {
-    public class ContactFormViewComponent : BaseViewComponent<ContactForm>
+    public ContactFormViewComponent(IWorkService workService) : base(workService) { }
+
+    protected override Task<ContactForm> ExtendAsync(ContactForm work)
     {
-        public ContactFormViewComponent(IWorkService workService) : base(workService) { }
+        ViewName = work.Type;
+        return base.ExtendAsync(work);
     }
 }

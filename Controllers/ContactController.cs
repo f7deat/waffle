@@ -12,6 +12,7 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Core.Interfaces.IService;
 using SendGrid;
+using Waffle.Extensions;
 
 namespace Waffle.Controllers;
 
@@ -24,8 +25,10 @@ public class ContactController : BaseController
     private readonly IAppSettingService _appSettingService;
     private readonly IUserService _userService;
     private readonly IAppLogService _appLogService;
+    private readonly IWorkService _workService;
+    private readonly ICatalogService _catalogService;
 
-    public ContactController(IAppLogService appLogService, ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, IAppSettingService appSettingService, IUserService userService)
+    public ContactController(IAppLogService appLogService, ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, IAppSettingService appSettingService, IUserService userService, IWorkService workService, ICatalogService catalogService)
     {
         _context = context;
         _logger = logger;
@@ -33,6 +36,8 @@ public class ContactController : BaseController
         _appSettingService = appSettingService;
         _userService = userService;
         _appLogService = appLogService;
+        _workService = workService;
+        _catalogService = catalogService;
     }
 
     [HttpGet("list")]
@@ -47,7 +52,7 @@ public class ContactController : BaseController
         if (model is null) return BadRequest();
         var meta = new ContactMeta();
         var config = await _appSettingService.GetAsync<ExternalAPI.SendGrids.SendGrid>(nameof(SendGrid));
-        if (config is not null)
+        if (config != null)
         {
             var client = new SendGridClient(config.ApiKey);
             var from = new EmailAddress(config.From.Email, config.From.Name);
@@ -72,11 +77,8 @@ public class ContactController : BaseController
                 _logger.LogError("Email sending error!");
             }
         }
-        var workContent = await _context.WorkContents.FindAsync(model.WorkContentId);
-        if (workContent is null || string.IsNullOrEmpty(workContent.Arguments))
-        {
-            return Redirect("/");
-        }
+        var contactForm = await _workService.GetAsync<ContactForm>(model.WorkId);
+        if (contactForm is null) return BadRequest("Work not found!");
         var contact = new Contact
         {
             CreatedDate = DateTime.Now,
@@ -89,17 +91,19 @@ public class ContactController : BaseController
         };
         await _context.Contacts.AddAsync(contact);
         await _context.SaveChangesAsync();
-        var contactForm = JsonSerializer.Deserialize<ContactForm>(workContent.Arguments);
-        if (contactForm is null)
-        {
-            return NotFound("Missing configuration!");
-        }
         var telegram = await _appSettingService.GetAsync<Telegram>(nameof(Telegram));
         if (telegram != null)
         {
-            await _telegramService.SendMessageAsync(telegram.Token, contactForm.ChatId, $"You have new contact: {contact.Email}/{contact.PhoneNumber}/{contact.Address}/{contact.Note}");
+            var chatId = contactForm.ChatId ?? telegram.ChatId;
+            await _telegramService.SendMessageAsync(telegram.Token, chatId, $"{contactForm.Type}\nName: {contact.Name}\nEmail: {contact.Email}\nPhone: {contact.PhoneNumber}\nAddress: {contact.Address}\nNote: {contact.Note}");
         }
-        return Redirect(contactForm?.ResultUrl ?? "/");
+        var page = await _catalogService.FindAsync(contactForm.FinishPageId);
+        if (page is null)
+        {
+            await _appLogService.AddAsync("Finish page not found!", contactForm.FinishPageId);
+            return BadRequest("Finish page not found!");
+        }
+        return Redirect(page.GetUrl());
     }
 
     [HttpPost("delete/{id}")]

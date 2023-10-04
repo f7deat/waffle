@@ -1,9 +1,8 @@
 ﻿using Waffle.Entities;
 
-namespace Waffle.Core.Services.Contacts.Models
+namespace Waffle.Core.Services.Contacts.Models;
+
+public class SubmitFormModel : Contact
 {
-    public class SubmitFormModel : Contact
-    {
-        public Guid WorkContentId { get; set; }
-    }
+    public Guid WorkId { get; set; }
 }

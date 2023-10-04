@@ -6,4 +6,5 @@ public interface IWorkContentRepository : IAsyncRepository<WorkContent>
 {
     Task<WorkContent?> FindByCatalogAsync(Guid catalogId, Guid componentId);
     Task<IEnumerable<WorkContent>> ListChildAsync(Guid parentId);
+    Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId);
 }

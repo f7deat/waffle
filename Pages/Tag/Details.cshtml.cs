@@ -84,8 +84,8 @@ public class DetailsModel : DynamicPageModel
         {
             HasNextPage = catalogs.HasNextPage,
             HasPrevPage = catalogs.HasPreviousPage,
-            NextPageUrl = $"/tag/{normalizedName}?current={Current + 1}",
-            PrevPageUrl = $"/tag/{normalizedName}?current={Current - 1}",
+            NextPageUrl = $"/tag/{normalizedName}?current={Current + 1}&searchTerm={SearchTerm}",
+            PrevPageUrl = $"/tag/{normalizedName}?current={Current - 1}&searchTerm={SearchTerm}",
             Total = catalogs.Total
         };
         return Page();

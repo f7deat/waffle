@@ -39,4 +39,5 @@ public interface IWorkService
     Task<IdentityResult> SaveProductImageAsync(SaveImageModel args);
     Task<IEnumerable<WorkListItem>> GetComponentsInColumnAsync(Guid workId);
     IAsyncEnumerable<Column> ListColumnAsync(Guid rowId);
+    Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId);
 }

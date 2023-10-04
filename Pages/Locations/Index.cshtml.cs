@@ -5,36 +5,38 @@ using Waffle.Models.Components;
 using Waffle.Models;
 using Waffle.Core.Foundations;
 
-namespace Waffle.Pages.Locations
+namespace Waffle.Pages.Locations;
+
+public class IndexModel : EntryPageModel
 {
-    public class IndexModel : EntryPageModel
+    [BindProperty(SupportsGet = true)]
+    public int Current { get; set; } = 1;
+
+    public ListResult<Catalog>? Catalogs;
+
+    public IndexModel(ICatalogService catalogService) : base(catalogService)
     {
-        [BindProperty(SupportsGet = true)]
-        public int Current { get; set; } = 1;
+    }
 
-        public ListResult<Catalog>? Catalogs;
+    public IEnumerable<ComponentListItem> Components = new List<ComponentListItem>();
 
-        public IndexModel(ICatalogService catalogService) : base(catalogService)
+    public Pagination Pagination => new()
+    {
+        HasNextPage = Catalogs?.Total > Current * 12,
+        HasPrevPage = Current > 1,
+        NextPageUrl = $"/locations?current={Current + 1}",
+        PrevPageUrl = $"/locations?current={Current - 1}",
+    };
+
+    public async Task OnGetAsync()
+    {
+        Components = await _catalogService.ListComponentAsync(PageData.Id);
+        Catalogs = await _catalogService.ListAsync(new CatalogFilterOptions
         {
-        }
-
-        public Pagination Pagination => new()
-        {
-            HasNextPage = Catalogs?.Total > Current * 12,
-            HasPrevPage = Current > 1,
-            NextPageUrl = $"/locations?current={Current + 1}",
-            PrevPageUrl = $"/locations?current={Current - 1}",
-        };
-
-        public async Task OnGetAsync()
-        {
-            Catalogs = await _catalogService.ListAsync(new CatalogFilterOptions
-            {
-                Active = true,
-                PageSize = 12,
-                Current = Current,
-                Type = CatalogType.Location
-            });
-        }
+            Active = true,
+            PageSize = 12,
+            Current = Current,
+            Type = CatalogType.Location
+        });
     }
 }
