@@ -27,12 +27,11 @@
             <div class="row">
                 <div class="wf-col mb-3">
                     <label class="form-label">@Model.Labels.Category</label>
-                    <select class="form-control" name="JobType">
-                        <option value="decking">Decking</option>
-                        <option value="fencing">Fencing</option>
-                        <option value="gate">Gate</option>
-                        <option value="pergola">Pergola</option>
-                        <option value="other">Other</option>
+                    <select class="form-control" name="Category">
+                        @foreach (var item in Model.Categories)
+                        {
+                            <option value="@item.Value">@item.Label</option>
+                        }
                     </select>
                 </div>
                 <div class="wf-col mb-3">

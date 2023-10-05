@@ -10,4 +10,6 @@ public static class UserExtensions
         if (string.IsNullOrEmpty(id)) return Guid.Empty;
         return Guid.Parse(id);
     }
+
+    public static string? GetClaimId(this ClaimsPrincipal claimsPrincipal) => claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 }

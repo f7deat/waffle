@@ -1,7 +1,7 @@
 ﻿.copyright {
     display: flex;
     justify-content: space-between;
-    border-top: 1px solid var(--gray-600);
+    border-top: 1px solid var(--bs-gray-700);
     padding: .5rem 1rem;
     flex-direction: column-reverse;
     align-items: center;
@@ -10,12 +10,12 @@
 
 .footer {
     background-color: var(--bs-dark);
-    color: var(--gray-400);
+    color: var(--bs-gray-500);
     padding: 1rem;
 }
 
     .footer a {
-        color: var(--gray-400);
+        color: var(--bs-gray-500);
     }
 
     .footer a:hover {

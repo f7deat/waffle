@@ -157,7 +157,6 @@ public class BackupController : BaseController
         await _appSettingService.EnsureSettingAsync(nameof(Google));
         await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
         await _appSettingService.EnsureSettingAsync(nameof(Telegram));
-        await _appSettingService.EnsureSettingAsync(nameof(Social));
         await _appSettingService.EnsureSettingAsync(nameof(Sidebar));
         return Ok(IdentityResult.Success);
     }

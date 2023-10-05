@@ -2,14 +2,16 @@
 @using Waffle.Models.Components
 @model Waffle.Pages.Album.IndexModel
 
-<div class="container">
-    <div class="md:grid gap-4 mb-4 grid-cols-6 albums">
+<main class="container">
+    <div class="row">
         @foreach (var item in Model.Albums)
         {
-            <div class="flex flex-col album-item shadow">
-                <img src="@item.Picture?.Data?.Url" alt="@item.Name" class="object-cover w-full" />
-                <a href="/album/facebook/@item.Id" class="py-2 px-4 bg-white text-truncate" data-toggle="tooltip" title="@item.Name">@item.Name</a>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="flex flex-col album-item shadow mb-4">
+                    <img src="@item.Picture?.Data?.Url" alt="@item.Name" class="object-cover w-full" />
+                    <a href="/album/facebook/@item.Id" class="py-2 px-4 bg-white text-truncate" data-toggle="tooltip" title="@item.Name">@item.Name</a>
+                </div>
             </div>
         }
     </div>
-</div>
+</main>

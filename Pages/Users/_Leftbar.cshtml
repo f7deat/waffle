@@ -22,9 +22,9 @@
                 </a>
             }
         </div>
-        <div class="text-xl font-bold mb-3 text-center">@Model.UserName</div>
+        <div class="text-xl font-bold mb-3 text-center">@Model.Name</div>
         <div class="mb-4 text-center text-muted">
-            Phone: @Model.PhoneNumber
+            @Model.UserName
         </div>
         <div class="flex items-center justify-center gap-4">
             <button class="btn btn-primary">
@@ -38,6 +38,14 @@
         </div>
     </div>
     <div class="bg-white shadow">
+        <div class="px-4 py-2 border-bottom flex justify-between">
+            <div>
+                <i class="fas fa-globe me-1"></i>Số điện thoại:
+            </div>
+            <div class="text-muted text-right">
+                <a href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a>
+            </div>
+        </div>
         <div class="px-4 py-2 border-bottom flex justify-between">
             <div>
                 <i class="fas fa-globe me-1"></i>Website:

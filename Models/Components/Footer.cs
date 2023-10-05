@@ -13,6 +13,8 @@ public class Footer : AbstractComponent
     public string? Email { get; set; }
     [JsonPropertyName("phoneNumber")]
     public string? PhoneNumber { get; set; }
+    [JsonPropertyName("address")]
+    public string? Address { get; set; }
     [JsonPropertyName("social")]
     public Social Social { get; set; } = new();
 }

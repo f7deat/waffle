@@ -17,7 +17,7 @@ public class OrderController : BaseController
     private readonly ITelegramService _telegramService;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public OrderController(IOrderService orderService, ITelegramService telegramService, IUserService userService, UserManager<ApplicationUser> userManager)
+    public OrderController(IOrderService orderService, ITelegramService telegramService, UserManager<ApplicationUser> userManager)
     {
         _orderService = orderService;
         _telegramService = telegramService;
@@ -46,10 +46,10 @@ public class OrderController : BaseController
     public async Task<IActionResult> AddAsync([FromBody] AddOrderRequest args)
     {
         var count = await _orderService.CountAsync();
-        var userId = User.GetId();
-        if (User.GetId() != Guid.Empty)
+        var userId = User.GetClaimId();
+        if (!string.IsNullOrEmpty(userId))
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(userId);
             if (user is null) return BadRequest("User not found!");
             args.Name = user.Name;
             args.PhoneNumber = user.PhoneNumber;
@@ -65,7 +65,7 @@ public class OrderController : BaseController
         };
         await _orderService.AddAsync(order);
         await _orderService.AddOrderDetailsAsync(args.OrderDetails);
-        await _telegramService.SendMessageAsync($"New order recived: \nName: {args.Name}\nPhone: {args.PhoneNumber}\nAddress: {args.Address}\nNote: {args.Note}");
+        await _telegramService.SendMessageAsync($"New order recived #{order.Number}: \nName: {args.Name}\nPhone: {args.PhoneNumber}\nAddress: {args.Address}\nNote: {args.Note}");
         return Ok("/products/checkout/finish");
     }
 }

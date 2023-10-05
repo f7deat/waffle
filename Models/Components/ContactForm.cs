@@ -25,6 +25,8 @@ public class ContactForm : AbstractComponent
     public ContactFormLabels Labels { get; set; } = new();
     [JsonPropertyName("type")]
     public string Type { get; set; } = "Default";
+    [JsonPropertyName("categories")]
+    public List<Option> Categories { get; set; } = new();
 }
 
 public class ContactFormLabels : AbstractLabels

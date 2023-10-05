@@ -37,9 +37,9 @@
             @if (Model.Products.Data != null && Model.Products.HasData)
             {
                 @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", new Feed {
-            Name = "Sản phẩm",
-            Articles = Model.Products.Data.ToList()
-            })
+                    Name = "Sản phẩm",
+                    Articles = Model.Products.Data.ToList()
+                })
             }
 
             @if (Model.Albums.Data != null && Model.Albums.HasData)

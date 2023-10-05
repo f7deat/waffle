@@ -84,7 +84,7 @@ a {
             left: -100%;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--dark));
+            background: linear-gradient(90deg, transparent, var(--bs-dark));
             animation: btn-anim1 1s linear infinite;
         }
 
@@ -175,7 +175,7 @@ h4 {
     right: 0;
     width: 2px;
     height: 100%;
-    background: linear-gradient(180deg, transparent, var(--dark));
+    background: linear-gradient(180deg, transparent, var(--bs-dark));
     animation: btn-anim2 1s linear infinite;
     animation-delay: .25s
 }
@@ -195,7 +195,7 @@ h4 {
     right: -100%;
     width: 100%;
     height: 2px;
-    background: linear-gradient(270deg, transparent, var(--dark));
+    background: linear-gradient(270deg, transparent, var(--bs-dark));
     animation: btn-anim3 1s linear infinite;
     animation-delay: .5s
 }

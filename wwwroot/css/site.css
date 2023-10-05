@@ -1,12 +1,10 @@
 :root {
     --bs-gutter-x: -0.75rem;
-    --dark: #111827;
+    --bs-dark: #111827;
     --gray-100: #f1f5f9;
     --gray-200: #e5e7eb;
     --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
     --gray-500: #6B7280;
-    --gray-600: #4B5563;
     --gray-800: #1f2937;
     --gray-900: #111827;
     --red-500: #ef4444;
@@ -26,7 +24,6 @@ html {
 }
 
 *, ::before, ::after {
-    box-sizing: border-box;
     border: 0 solid #e5e7eb;
 }
 
@@ -101,10 +98,6 @@ h5, .h5 {
 
 th {
     text-align: inherit;
-}
-
-img {
-    max-width: 100%;
 }
 
 input, textarea, select {
@@ -411,10 +404,14 @@ table {
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%) !important;
 }
 
-.thumbnail:hover {
-    opacity: 0.75;
-    transition: all 0.5s ease-in-out;
+.thumbnail {
+    width: 100%;
 }
+
+    .thumbnail:hover, .product-thumbnail:hover {
+        opacity: 0.75;
+        transition: all 0.5s ease-in-out;
+    }
 
 .right-0 {
     right: 0;

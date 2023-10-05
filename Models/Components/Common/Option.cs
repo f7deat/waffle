@@ -1,8 +1,11 @@
-﻿namespace Waffle.Models.Components
+﻿using System.Text.Json.Serialization;
+
+namespace Waffle.Models.Components;
+
+public class Option
 {
-    public class Option
-    {
-        public string? Label { get; set; }
-        public object? Value { get; set; }
-    }
+    [JsonPropertyName("label")]
+    public string? Label { get; set; }
+    [JsonPropertyName ("value")]
+    public object? Value { get; set; }
 }

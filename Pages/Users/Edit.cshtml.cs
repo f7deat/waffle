@@ -16,6 +16,10 @@ public class EditModel : PageModel
     [BindProperty(SupportsGet = true)]
     public string? PhoneNumber { get; set; }
     [BindProperty(SupportsGet = true)]
+    public string? Name { get; set; }
+    [BindProperty(SupportsGet = true)]
+    public string? Address { get; set; }
+    [BindProperty(SupportsGet = true)]
     public string? UserId { get; set; }
 
     public ApplicationUser? CurrentUser;
@@ -25,24 +29,19 @@ public class EditModel : PageModel
     {
         CurrentUser = await _userManager.GetUserAsync(User);
         if (CurrentUser == null) return NotFound();
-
         ViewData["Title"] = CurrentUser.UserName;
-
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
         var user = await _userManager.FindByIdAsync(UserId);
-        if (user is null)
-        {
-            return NotFound();
-        }
-        var result = await _userManager.SetPhoneNumberAsync(user, PhoneNumber);
-        if (result.Succeeded)
-        {
-            return Redirect($"/users/{user.Id}");
-        }
+        if (user is null) return NotFound();
+        user.Name = Name;
+        user.Address = Address;
+        user.PhoneNumber = PhoneNumber;
+        var result = await _userManager.UpdateAsync(user);
+        if (result.Succeeded) return Redirect($"/users/{user.Id}");
         return Page();
     }
 }

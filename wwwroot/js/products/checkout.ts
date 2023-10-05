@@ -49,6 +49,7 @@
         if (!Checkout.isValid(body)) {
             return;
         }
+        (document.querySelector('#js-btnCheckout') as HTMLButtonElement).disabled = true;
         fetch('/api/order/place-order', {
             method: 'POST',
             headers: {

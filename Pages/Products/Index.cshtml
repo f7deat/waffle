@@ -21,9 +21,11 @@
                     @foreach (var item in Model.BaseInfoAndLinks.LandingPageLinkList.LinkList)
                     {
                         <div class="bg-white">
-                            <div class="card-image">
-                                <img src="@item.Image" alt="@item.LinkName" class="object-cover" loading="lazy" />
-                            </div>
+                            <a href="@item.Link">
+                                <div class="card-image bg-dark">
+                                    <img src="@item.Image" alt="@item.LinkName" class="object-cover product-thumbnail" loading="lazy" />
+                                </div>
+                            </a>
                             <div class="py-2">
                                 <a href="@item.Link" class="line-clampin">
                                     @item.LinkName
@@ -33,7 +35,7 @@
                     }
                 </div>
             </div>
-            
+
             <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
 
             @foreach (var item in Model.Components)

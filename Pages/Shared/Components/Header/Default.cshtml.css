@@ -35,7 +35,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--dark);
+    color: var(--bs-dark);
 }
 
 @media screen and (min-width: 768px) {
@@ -53,10 +53,10 @@
     }
 
     .navbar-menu a {
-        color: var(--gray-600);
+        color: var(--bs-gray-700);
     }
 
     .navbar-menu a:hover {
-        color: var(--dark);
+        color: var(--bs-dark);
     }
 }

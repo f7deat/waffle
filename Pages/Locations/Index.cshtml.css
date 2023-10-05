@@ -51,7 +51,7 @@
 }
 
 .thumbnail {
-    background-color: var(--dark);
+    background-color: var(--bs-dark);
 }
 
     .thumbnail img {

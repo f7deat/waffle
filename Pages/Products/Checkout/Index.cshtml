@@ -24,15 +24,15 @@
             }
             <div class="form-item">
                 <label class="form-label">Họ và Tên<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required name="name" @disabled id="js-name" />
+                <input type="text" class="form-control" required name="name" id="js-name" value="@Model.CurrentUser?.Name" @disabled />
             </div>
             <div class="form-item">
                 <label class="form-label">Số điện thoại<span class="text-danger">*</span></label>
-                <input type="tel" class="form-control" required name="phoneNumber" @disabled value="@Model.CurrentUser?.PhoneNumber" id="js-phoneNumber" />
+                <input type="tel" class="form-control" required name="phoneNumber" value="@Model.CurrentUser?.PhoneNumber" id="js-phoneNumber" @disabled />
             </div>
             <div class="form-item">
                 <label class="form-label">Địa chỉ<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" required name="address" @disabled id="js-address" />
+                <input type="text" class="form-control" required name="address" id="js-address" value="@Model.CurrentUser?.Address" @disabled />
             </div>
             <div class="form-item">
                 <label class="form-label">Ghi chú</label>
