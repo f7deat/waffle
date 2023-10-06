@@ -13,6 +13,7 @@ using Waffle.Models;
 using Waffle.Core.Interfaces.IService;
 using SendGrid;
 using Waffle.Extensions;
+using Waffle.Foundations;
 
 namespace Waffle.Controllers;
 

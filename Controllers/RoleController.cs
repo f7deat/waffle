@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Constants;
 using Waffle.Entities;
+using Waffle.Foundations;
 using Waffle.Models;
 
 namespace Waffle.Controllers;

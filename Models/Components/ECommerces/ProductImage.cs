@@ -5,7 +5,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Product Images", Prompt = "product-images", GroupName = GroupName.ECommerce, AutoGenerateFilter = true)]
+[Display(Name = "Product Images", Prompt = "product-images", GroupName = GroupName.ECommerce)]
 public class ProductImage : AbstractComponent
 {
     [JsonPropertyName("images")]

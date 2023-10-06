@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
-using Waffle.Entities;
+using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-public class BlockEditor : BaseEntity
+public class BlockEditor : AbstractComponent
 {
     [JsonPropertyName("blocks")]
     public List<BlockEditorBlock> Blocks { get; set; } = new();

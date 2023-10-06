@@ -68,7 +68,6 @@ public class CatalogService : ICatalogService
             var count = await _context.Catalogs.CountAsync(x => x.NormalizedName.Contains(catalog.NormalizedName));
             catalog.NormalizedName += $"-{count + 1}";
         }
-        catalog.Active = catalog.Type == CatalogType.Tag;
         if (catalog.ParentId != null)
         {
             var parent = await _catalogRepository.FindAsync(catalog.ParentId);

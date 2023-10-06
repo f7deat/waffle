@@ -5,7 +5,7 @@ using Waffle.Entities;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Article Spotlight", AutoGenerateField = true, Prompt = "article-spotlight", AutoGenerateFilter = true)]
+[Display(Name = "Article Spotlight", AutoGenerateField = true, Prompt = "article-spotlight")]
 public class ArticleSpotlight : AbstractComponent
 {
     [JsonPropertyName("title")]

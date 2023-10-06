@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Foundations;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
@@ -33,6 +34,7 @@ public class CatalogController : BaseController
     public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
     {
         if (string.IsNullOrWhiteSpace(catalog.Name)) return BadRequest("Please enter name!");
+        catalog.Active = catalog.Type == CatalogType.Tag;
         return Ok(await _catalogService.AddAsync(catalog));
     }
 

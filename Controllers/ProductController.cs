@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities.Ecommerces;
+using Waffle.Foundations;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
 

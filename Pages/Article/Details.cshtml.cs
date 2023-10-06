@@ -35,7 +35,6 @@ public class DetailsModel : DynamicPageModel
     public bool HasProduct = false;
     public LandingPageLinkList ShopeeProducts = new();
 
-    public string Email = string.Empty;
     public bool IsAuthenticated = false;
 
     public async Task<IActionResult> OnGetAsync()
@@ -44,11 +43,6 @@ public class DetailsModel : DynamicPageModel
         Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
 
         IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
-        if (IsAuthenticated)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            Email = user.Email;
-        }
 
         if (Tags.Any())
         {

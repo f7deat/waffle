@@ -6,6 +6,7 @@ using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Foundations;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Specifications;

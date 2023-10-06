@@ -446,6 +446,9 @@ public class WorkService : IWorkService
             Arguments = JsonSerializer.Serialize(productImage)
         };
         await _workRepository.AddAsync(work);
+
+        await _workRepository.AddItemAsync(args.CatalogId, work.Id);
+
         return IdentityResult.Success;
     }
 

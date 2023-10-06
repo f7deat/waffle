@@ -12,6 +12,16 @@ public class WorkItemRepository : EfRepository<WorkContent>, IWorkContentReposit
     {
     }
 
+    public async Task AddItemAsync(Guid catalogId, Guid id)
+    {
+        await _context.WorkItems.AddAsync(new WorkItem
+        {
+            CatalogId = catalogId,
+            WorkId = id
+        });
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<WorkContent?> FindByCatalogAsync(Guid catalogId,Guid componentId)
     {
         var query = from item in _context.WorkItems

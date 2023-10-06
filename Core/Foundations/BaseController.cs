@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Waffle.Controllers
+namespace Waffle.Foundations;
+
+[Authorize]
+[Route("api/[controller]")]
+public class BaseController : Controller
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    public class BaseController : Controller
-    {
-    }
 }

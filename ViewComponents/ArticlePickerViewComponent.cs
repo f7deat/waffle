@@ -4,27 +4,26 @@ using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.ViewComponents
+namespace Waffle.ViewComponents;
+
+public class ArticlePickerViewComponent : BaseViewComponent<ArticlePicker>
 {
-    public class ArticlePickerViewComponent : BaseViewComponent<ArticlePicker>
+    private readonly ICatalogService _catalogService;
+
+    public ArticlePickerViewComponent(IWorkService workService, ICatalogService catalogService) : base(workService)
     {
-        private readonly ICatalogService _catalogService;
+        _catalogService = catalogService;
+    }
 
-        public ArticlePickerViewComponent(IWorkService workService, ICatalogService catalogService) : base(workService)
+    protected override async Task<ArticlePicker> ExtendAsync(ArticlePicker work)
+    {
+        var articles = await _catalogService.ListByTagAsync(work.TagId, new CatalogFilterOptions
         {
-            _catalogService = catalogService;
-        }
-
-        protected override async Task<ArticlePicker> ExtendAsync(ArticlePicker work)
-        {
-            var articles = await _catalogService.ListByTagAsync(work.TagId, new CatalogFilterOptions
-            {
-                Type = CatalogType.Article,
-                Active = true,
-                PageSize = 5
-            });
-            work.Articles = articles.Data?.ToList() ?? new();
-            return work;
-        }
+            Type = CatalogType.Article,
+            Active = true,
+            PageSize = 5
+        });
+        work.Articles = articles.Data?.ToList() ?? new();
+        return work;
     }
 }

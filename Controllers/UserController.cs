@@ -12,6 +12,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Googles;
+using Waffle.Foundations;
 using Waffle.Models;
 
 namespace Waffle.Controllers;
@@ -72,6 +73,7 @@ public class UserController : BaseController
         if (result.Succeeded)
         {
             var user = await _userManager.FindByNameAsync(login.UserName);
+            if (user is null) return BadRequest($"User {login.UserName} not found!");
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>

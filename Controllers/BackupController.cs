@@ -5,9 +5,8 @@ using System.IO.Compression;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
-using Waffle.ExternalAPI.GoogleAggregate;
 using Waffle.ExternalAPI.Models;
-using Waffle.ExternalAPI.Models.GoogleAggregate;
+using Waffle.Foundations;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
@@ -188,7 +187,6 @@ public class BackupController : BaseController
         await _componentService.EnsureComponentAsync(nameof(Row));
         await _componentService.EnsureComponentAsync(nameof(Column));
         await _componentService.EnsureComponentAsync(nameof(Image));
-        await _componentService.EnsureComponentAsync(nameof(Trend));
         await _componentService.EnsureComponentAsync(nameof(Navbar));
         await _componentService.EnsureComponentAsync(nameof(Jumbotron));
         await _componentService.EnsureComponentAsync(nameof(PostContent));
