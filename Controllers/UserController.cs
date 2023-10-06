@@ -71,7 +71,7 @@ public class UserController : BaseController
         var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
         if (result.Succeeded)
         {
-            var user = await _userManager.FindByEmailAsync(login.UserName);
+            var user = await _userManager.FindByNameAsync(login.UserName);
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>

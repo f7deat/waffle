@@ -36,9 +36,6 @@ public class AppSettingController : BaseController
         _emailSender = emailSender;
     }
 
-    [HttpGet("by-name/{normalizedName}")]
-    public async Task<IActionResult> GetAsync([FromRoute] string normalizedName) => Ok(await _appSettingService.GetByNameAsync(normalizedName));
-
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<object>(id));
 
@@ -165,18 +162,6 @@ public class AppSettingController : BaseController
     [HttpPost("footer/save")]
     public async Task<IActionResult> SaveFooterAsync([FromBody] Footer args) => Ok(await _appSettingService.SaveFooterAsync(args));
 
-    [HttpGet("header/templates")]
-    public IActionResult HeaderTemplates() => Ok(Header.Templates);
-
-    [HttpGet("header/{id}")]
-    public async Task<IActionResult> HeaderGetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Header>(id));
-
-    [HttpPost("header/save")]
-    public async Task<IActionResult> HeaderSaveAsync([FromBody] Header args) => Ok(await _appSettingService.HeaderSaveAsync(args));
-
-    [HttpPost("header/logo")]
-    public async Task<IActionResult> HeaderLogoAsync([FromBody] Header args) => Ok(await _appSettingService.HeaderLogoAsync(args));
-
     [HttpGet("social/{id}")]
     public async Task<IActionResult> GetSocialLinkAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Social>(id));
 
@@ -196,12 +181,6 @@ public class AppSettingController : BaseController
         var components = await _workService.ListBySettingIdAsync(sidebar.Id);
         return Ok(components);
     }
-
-    [HttpPost("work/add")]
-    public async Task<IActionResult> AddWorkAsync([FromBody] WorkContent args) => Ok(await _appSettingService.AddWorkAsync(args));
-
-    [HttpPost("delete/work/{id}")]
-    public async Task<IActionResult> DeleteWorkAsync([FromRoute] Guid id) => Ok(await _appSettingService.DeleteWorkAsync(id));
 
     [HttpPost("test-send-mail")]
     public async Task<IActionResult> TestSendMailAsync([FromBody] EmailSenderMessageUnitTest args) => Ok(await _emailSender.SendEmailAsync(args.Email, args.Subject, args.Message));

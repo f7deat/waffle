@@ -30,25 +30,11 @@ public class HeaderViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var setting = await _settingService.EnsureSettingAsync(nameof(Header));
-        if (string.IsNullOrEmpty(setting.Value))
-        {
-            return View(Empty.DefaultView, new ErrorViewModel
-            {
-                RequestId = setting.Id.ToString()
-            });
-        }
-        var header = JsonSerializer.Deserialize<Header>(setting.Value);
-        if (header is null)
-        {
-            return View(Empty.DefaultView, new ErrorViewModel
-            {
-                RequestId = setting.Id.ToString()
-            });
-        }
+        var header = await _settingService.GetAsync<Header>(nameof(Header));
+        header ??= new Header();
         header.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
         header.UserId = UserClaimsPrincipal.GetId();
         header.Catalog = PageData;
-        return View(_configuration.GetValue<string>("Theme"), header);
+        return View(header.ViewName, header);
     }
 }

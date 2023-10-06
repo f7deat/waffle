@@ -1,22 +1,19 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 using Waffle.Entities;
 
 namespace Waffle.Models.Components;
 
+[Display(Name = "Header", Prompt = "header", AutoGenerateFilter = true)]
 public class Header : AbstractComponent
 {
+    [JsonPropertyName("brand")]
+    public string? Brand { get; set; }
     [JsonPropertyName("logo")]
-    public string Logo { get; set; } = string.Empty;
-    [JsonPropertyName("template")]
-    public string Template { get; set; } = "Default";
-
-    [JsonIgnore]
-    public static readonly List<Option> Templates = new()
-    {
-        new Option { Label = "Default", Value= "~/Pages/Shared/Components/Header/Default.cshtml" },
-        new Option { Label = "DLiTi", Value= "~/Pages/Shared/Components/Header/DLiTi.cshtml" }
-    };
+    public string? Logo { get; set; }
+    [JsonPropertyName("viewName")]
+    public string ViewName { get; set; } = "Default";
 
     [JsonIgnore]
     public bool IsAuthenticated { get; set; }

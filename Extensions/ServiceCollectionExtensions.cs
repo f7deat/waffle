@@ -22,6 +22,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICatalogService, CatalogService>();
         services.AddScoped<IContactRepository, ContactRepository>();
         services.AddScoped<IContactService, ContactService>();
+        services.AddScoped<ICommentRepository, CommentRepository>();
+        services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IComponentRepository, ComponentRepository>();
         services.AddScoped<IComponentService, ComponentService>();
         services.AddScoped<IFileExplorerService, FileExplorerService>();
@@ -36,8 +38,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductService, ProductService>();
-        services.AddScoped<ICommentRepository, CommentRepository>();
-        services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<ISettingRepository, SettingRepository>();
         services.AddScoped<IMigrationService, MigrationService>();
 
         services.AddScoped<ICurrentUser, CurrentUser>();

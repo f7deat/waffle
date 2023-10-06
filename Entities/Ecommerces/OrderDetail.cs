@@ -8,5 +8,5 @@ public class OrderDetail : BaseEntity
     public Guid ProductId { get; set; }
     [Column(TypeName = "money")]
     public decimal Price { get; set; }
-    public decimal Quantity { get; set; }
+    public int Quantity { get; set; }
 }

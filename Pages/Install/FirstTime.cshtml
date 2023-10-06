@@ -5,23 +5,40 @@
 }
 
 <main class="container">
+    @if (Model.Errors != null)
+    {
+        <div class="alert alert-info">
+            <ul>
+                @foreach (var item in Model.Errors)
+                {
+                    <li>@item.Description</li>
+                }
+            </ul>
+        </div>
+    }
     <div class="flex justify-center">
         <form method="post">
             <div class="form-item">
                 <label class="form-label">
+                    <localize key="name" />
+                </label>
+                <input type="text" name="Name" class="form-control" required />
+            </div>
+            <div class="form-item">
+                <label class="form-label">
                     <localize key="userName" />
                 </label>
-                <input type="text" name="userName" required />
+                <input type="text" name="userName" class="form-control" required />
             </div>
             <div class="form-item">
                 <label class="form-label">
                     <localize key="password" />
                 </label>
-                <input type="password" name="password" required />
+                <input type="password" name="password" class="form-control" required />
             </div>
             <div class="form-item">
                 <label class="form-label">Confirm password</label>
-                <input type="password" name="confirmPassword" required />
+                <input type="password" class="form-control" name="confirmPassword" required />
             </div>
             <div class="form-item">
                 <button type="submit" class="btn btn-primary">Submit</button>

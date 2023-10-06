@@ -10,7 +10,7 @@ public class Product : BaseEntity
     public decimal? Price { get; set; }
     [StringLength(50)]
     public string? SKU { get; set; }
-    public decimal? UnitInStock { get; set; }
+    public int? UnitInStock { get; set; }
     [Column(TypeName = "money")]
     public decimal? SalePrice { get; set; }
 }
