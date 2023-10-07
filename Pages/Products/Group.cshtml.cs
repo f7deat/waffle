@@ -35,7 +35,7 @@ namespace Waffle.Pages.Products
             }
             ViewData["Title"] = string.IsNullOrEmpty(SearchTerm) ? groupId : SearchTerm;
             GroupId = groupId;
-            Data = await _shopeeService.GetLinkListAsync(groupId, SearchTerm);
+            Data = await _shopeeService.GetLinkListAsync("banhque", groupId, SearchTerm);
             return Page();
         }
     }

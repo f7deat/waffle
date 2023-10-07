@@ -57,7 +57,7 @@ public class ToolController : BaseController
                     Active = true,
                     CreatedBy = User.GetId(),
                     CreatedDate = DateTime.Now,
-                    Description = post.Title.Rendered,
+                    Description = post.Excerpt.Rendered,
                     ModifiedDate = DateTime.Now,
                     Name = post.Title.Rendered ?? string.Empty,
                     NormalizedName = post.Slug ?? string.Empty,
@@ -70,7 +70,7 @@ public class ToolController : BaseController
                 var content = string.Empty;
                 if (!string.IsNullOrEmpty(post.Content.Rendered))
                 {
-                    content = post.Content.Rendered.Replace(args.Domain, "/");
+                    content = post.Content.Rendered.Replace("href=\"" + args.Domain, "href=\"" + "/");
                 }
                 var arguments = new Editor
                 {

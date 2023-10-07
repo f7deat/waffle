@@ -43,7 +43,7 @@ public class ProductController : BaseController
     [HttpPost("cart-items/{type}"), AllowAnonymous]
     public async Task<IActionResult> GetCartItemsAsync([FromRoute] string type, [FromBody] List<CartItem> args)
     {
-        if (!args.Any())
+        if (args is null || !args.Any())
         {
             return View("/Pages/Shared/Components/Empty/Default.cshtml", new ErrorViewModel
             {

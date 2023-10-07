@@ -66,7 +66,7 @@ public class OrderController : BaseController
         };
         await _orderService.AddAsync(order);
         await _orderService.AddOrderDetailsAsync(args.OrderDetails);
-        await _telegramService.SendMessageAsync($"New order recived #{order.Number}: \nName: {args.Name}\nPhone: {args.PhoneNumber}\nAddress: {args.Address}\nNote: {args.Note}");
+        await _telegramService.SendMessageAsync($"New order [{order.Number}]: \nName: {args.Name}\nPhone: {args.PhoneNumber}\nAddress: {args.Address}\nNote: {args.Note}");
         return Ok("/products/checkout/finish");
     }
 }

@@ -14,6 +14,8 @@ public class WordPressPost
     public WordPressContent Content { get; set; } = new();
     [JsonPropertyName("date")]
     public DateTime? Date { get; set; }
+    [JsonPropertyName("excerpt")]
+    public WordPressExcerpt Excerpt { get; set; } = new();
 }
 
 public class WordPressTitle
@@ -23,6 +25,12 @@ public class WordPressTitle
 }
 
 public class WordPressContent
+{
+    [JsonPropertyName("rendered")]
+    public string? Rendered { get; set; }
+}
+
+public class WordPressExcerpt
 {
     [JsonPropertyName("rendered")]
     public string? Rendered { get; set; }
