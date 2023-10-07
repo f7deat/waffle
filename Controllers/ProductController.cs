@@ -25,6 +25,12 @@ public class ProductController : BaseController
         _appLogService = appLogService;
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _productService.GetByCatalogIdAsync(id));
+
+    [HttpGet("count")]
+    public async Task<IActionResult> CountAsync() => Ok(await _productService.CountAsync());
+
     [HttpPost("save")]
     public async Task<IActionResult> SaveAsync([FromBody] Product args)
     {

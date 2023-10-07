@@ -103,10 +103,8 @@ public class CatalogController : BaseController
 
         var tags = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
         _context.WorkItems.RemoveRange(tags);
-
-        _context.Catalogs.Remove(catalog);
+        await _catalogService.DeleteAsync(catalog);
         await _logService.AddAsync($"Delete catalog: {catalog.Name}", id);
-        await _context.SaveChangesAsync();
 
         return Ok(IdentityResult.Success);
     }

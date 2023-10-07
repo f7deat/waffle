@@ -7,4 +7,5 @@ public interface IProductService
 {
     Task<IdentityResult> SaveAsync(Product args);
     Task<int> CountAsync();
+    Task<Product?> GetByCatalogIdAsync(Guid catalogId);
 }

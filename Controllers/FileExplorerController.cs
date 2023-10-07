@@ -38,10 +38,7 @@ public class FileExplorerController : BaseController
     [HttpPost("upload")]
     public async Task<IActionResult> UploadAsync([FromForm] IFormFile file)
     {
-        if (file is null)
-        {
-            return BadRequest();
-        }
+        if (file is null) return BadRequest();
         var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
 
         var filePath = Path.Combine(uploadPath, file.FileName);

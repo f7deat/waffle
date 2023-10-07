@@ -19,6 +19,8 @@ public class ProductService : IProductService
 
     public Task<int> CountAsync() => _catalogRepository.CountAsync(CatalogType.Product);
 
+    public async Task<Product?> GetByCatalogIdAsync(Guid catalogId) => await _productRepository.FindByCatalogAsync(catalogId);
+
     public async Task<IdentityResult> SaveAsync(Product args)
     {
         var product = await _productRepository.FindByCatalogAsync(args.CatalogId);

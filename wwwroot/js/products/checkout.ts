@@ -35,6 +35,10 @@
             Site.toast('Số điện thoại không hợp lệ!');
             return false;
         }
+        if (!body.orderDetails || body.orderDetails.length < 1) {
+            Site.toast('Không tìm thấy sản phẩm trong giỏ hàng!');
+            return false;
+        }
         return true;
     }
 

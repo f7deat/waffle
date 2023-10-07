@@ -13,7 +13,7 @@
             <div class="col-md-8">
 
                 <h1 class="title">@Model.PageData.Name</h1>
-                <div class="mb-4 bg-white">
+                <div class="mb-4 bg-white post-body">
                     @foreach (var item in Model.Works)
                     {
                         @await Component.InvokeAsync(item.NormalizedName, item.Id)
@@ -52,11 +52,6 @@
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
 
-                @if (Model.HasProduct)
-                {
-                    @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
-                }
-
                 @if (Model.ShopeeProducts.LinkList.Any())
                 {
                     <div class="mb-4">
@@ -65,8 +60,8 @@
                             @foreach (var item in Model.ShopeeProducts.LinkList)
                             {
                                 <div class="bg-white">
-                                    <div class="card-image">
-                                        <img src="@item.Image" alt="@item.LinkName" class="object-cover" loading="lazy" />
+                                    <div class="card-image bg-dark">
+                                        <img src="@item.Image" alt="@item.LinkName" class="object-cover product-thumbnail w-100" loading="lazy" />
                                     </div>
                                     <div class="p-2">
                                         <a href="@item.Link" class="line-clampin">

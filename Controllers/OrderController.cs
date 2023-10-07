@@ -46,6 +46,7 @@ public class OrderController : BaseController
     [HttpPost("place-order"), AllowAnonymous]
     public async Task<IActionResult> AddAsync([FromBody] AddOrderRequest args)
     {
+        if (!args.OrderDetails.Any()) return BadRequest("Không tìm thấy sản phẩm trong giỏ hàng!");
         var count = await _orderService.CountAsync();
         var userId = User.GetClaimId();
         if (!string.IsNullOrEmpty(userId))

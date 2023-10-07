@@ -31,8 +31,6 @@ public class DetailsModel : DynamicPageModel
     [UIHint(UIHint.Tags)]
     public List<Catalog> Tags = new();
     public bool HasTag => Tags.Any();
-    public Feed ProductFeed = new();
-    public bool HasProduct = false;
     public LandingPageLinkList ShopeeProducts = new();
 
     public bool IsAuthenticated = false;
@@ -46,21 +44,6 @@ public class DetailsModel : DynamicPageModel
 
         if (Tags.Any())
         {
-            var tagIds = Tags.Select(x => x.Id);
-            var product = await _catalogService.ListByTagsAsync(tagIds, new CatalogFilterOptions
-            {
-                Active = true,
-                PageSize = 4,
-                Type = CatalogType.Product
-            });
-            HasProduct = product.HasData;
-            ProductFeed = new Feed
-            {
-                Name = "Sản phẩm liên quan",
-                Articles = product.Data?.ToList() ?? new(),
-                ItemPerRow = "grid-cols-2"
-            };
-
             ShopeeProducts = await _shopeeService.GetLinkListsAsync(Tags.Last().Name, 4);
         }
 
