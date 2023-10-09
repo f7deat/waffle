@@ -16,70 +16,86 @@
                         @await Component.InvokeAsync(nameof(ProductImage))
                     </div>
                     <div class="col-md-8">
-                        <h1 class="text-xl font-bold mb-2">@Model.PageData.Name</h1>
-                        <div class="text-red-500 flex gap-2 text-sm mb-4">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="text-muted mb-2 border-dashed border-bottom">
-                            @Model.PageData.Description
-                        </div>
-                        <div class="text-muted mb-2">
-                            Lượt xem: @Model.PageData.ViewCount.ToString("N0")
-                        </div>
-                        <div class="mb-4 quantity">
-                            <div class="fw-medium mb-2">Số lượng</div>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-sm border btn-light px-2" type="button" id="js-minusQuantity">
-                                    <i class="fa-solid fa-minus"></i>
-                                </button>
-                                <div class="input-wrap" style="max-width: 40px">
-                                    <input type="text" value="1" class="form-control form-control-sm text-center" id="js-quantityInput" />
+                        <div class="position-relative">
+                            <h1 class="text-xl font-bold mb-2">@Model.PageData.Name</h1>
+                            <div class="text-warning flex gap-2 text-sm mb-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            @if (Model.Product != null)
+                            {
+                                <div class="text-muted">
+                                    @if (Model.Product.SalePrice != null && Model.Product.Price != null)
+                                    {
+                                        <s class="text-muted">@Model.Product.Price?.ToString("C0", Model.CultureInfo)</s>
+                                        <span class="text-danger fw-medium fs-4">@Model.Product.SalePrice?.ToString("C0", Model.CultureInfo)</span>
+                                        <span class="badge bg-danger">
+                                            <span>GIẢM</span>
+                                            @(100 - Math.Round((Model.Product.SalePrice / Model.Product.Price ?? 0) * 100))%
+                                        </span>
+                                    }
                                 </div>
-                                <button class="btn btn-sm border btn-light px-2" type="button" id="js-plusQuantity">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
+                            }
+                            <div class="text-muted mb-2 border-dashed border-bottom">
+                                @Model.PageData.Description
                             </div>
-                        </div>
-                        @if (Model.AffiliateLink != null)
-                        {
-                            <div class="md:flex mb-4 gap-2">
-                                <a href="@Model.AffiliateLink.Href" class="btn btn-outline-primary d-flex gap-2 items-center font-medium" target="@Model.AffiliateLink.Target" rel="nofollow">
-                                    @if (Model.AffiliateLink.Href.Contains("shope") == true)
-                                    {
-                                        <img src="https://shopee.vn/pcmall-assets/assets/icon_favicon_1_32.png" alt="icon" loading="lazy" style="width: 16px" />
-                                    }
-                                    else
-                                    {
+                            <div class="text-muted mb-2">
+                                Lượt xem: @Model.PageData.ViewCount.ToString("N0")
+                            </div>
+                            <div class="mb-4 quantity">
+                                <div class="fw-medium mb-2">Số lượng</div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm border btn-light px-2" type="button" id="js-minusQuantity">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <div class="input-wrap" style="max-width: 40px">
+                                        <input type="text" value="1" class="form-control form-control-sm text-center" id="js-quantityInput" />
+                                    </div>
+                                    <button class="btn btn-sm border btn-light px-2" type="button" id="js-plusQuantity">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            @if (Model.AffiliateLink != null)
+                            {
+                                <div class="md:flex mb-4 gap-2">
+                                    <a href="@Model.AffiliateLink.Href" class="btn btn-outline-primary d-flex gap-2 items-center fw-medium" target="@Model.AffiliateLink.Target" rel="nofollow">
+                                        @if (Model.AffiliateLink.Href.Contains("shope") == true)
+                                        {
+                                            <img src="https://shopee.vn/pcmall-assets/assets/icon_favicon_1_32.png" alt="icon" loading="lazy" style="width: 16px" />
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-cart-shopping me-2"></i>
+                                        }
+                                        @if (string.IsNullOrEmpty(Model.AffiliateLink.Name))
+                                        {
+                                            <span>Mua ngay</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@Model.AffiliateLink.Name</span>
+                                        }
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="md:flex mb-4 gap-2">
+                                    <button type="button" class="btn btn-outline-primary" id="js-addToCart">
+                                        <i class="fa-solid fa-cart-plus"></i>
+                                        <span>Thêm vào giỏ hàng</span>
+                                    </button>
+                                    <a href="/products/checkout?productIds=@Model.PageData.Id" class="btn btn-primary">
                                         <i class="fas fa-cart-shopping me-2"></i>
-                                    }
-                                    @if (string.IsNullOrEmpty(Model.AffiliateLink.Name))
-                                    {
                                         <span>Mua ngay</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@Model.AffiliateLink.Name</span>
-                                    }
-                                </a>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="md:flex mb-4 gap-2">
-                                <button type="button" class="btn btn-outline-primary" id="js-addToCart">
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                    <span>Thêm vào giỏ hàng</span>
-                                </button>
-                                <a href="/products/checkout?productIds=@Model.PageData.Id" class="btn btn-primary">
-                                    <i class="fas fa-cart-shopping me-2"></i>
-                                    <span>Mua ngay</span>
-                                </a>
-                            </div>
-                        }
+                                    </a>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
 
@@ -93,7 +109,7 @@
                 </div>
 
                 <div class="bg-white mb-4 rounded">
-                    <div class="mb-2 font-medium">Tags:</div>
+                    <div class="mb-2 fw-medium">Tags:</div>
                     <div class="d-flex gap-2 flex-wrap">
                         @foreach (var tag in Model.Tags)
                         {

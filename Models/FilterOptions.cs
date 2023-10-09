@@ -75,4 +75,5 @@ public class LocalizationFilterOptions: FilterOptions
 public class SelectFilterOptions
 {
     public string? KeyWords { get; set; }
+    public CatalogType Type { get; set; }
 }

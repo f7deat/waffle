@@ -22,10 +22,10 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         return await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
     }
 
-    public async Task<IEnumerable<Option>> GetFormSelectAsync(string keywords)
+    public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions)
     {
         var query = _context.Catalogs
-            .Where(x => x.Active && x.Type == CatalogType.Default && (string.IsNullOrEmpty(keywords) || x.NormalizedName.Contains(keywords)) && x.ParentId == null)
+            .Where(x => x.Active && x.Type == filterOptions.Type && (string.IsNullOrEmpty(filterOptions.KeyWords) || x.NormalizedName.Contains(filterOptions.KeyWords)) && x.ParentId == null)
             .OrderByDescending(x => x.NormalizedName)
             .Select(x => new Option
             {

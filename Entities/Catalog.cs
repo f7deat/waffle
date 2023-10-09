@@ -45,5 +45,6 @@ public enum CatalogType
     Tag = 9,
     Video = 10,
     Game = 11,
-    WordPress = 12
+    WordPress = 12,
+    Brand = 13
 }

@@ -16,13 +16,15 @@ public class ProductController : BaseController
     private readonly IWorkService _workService;
     private readonly IProductService _productService;
     private readonly IAppLogService _appLogService;
+    private readonly IConfiguration _configuration;
 
-    public ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, IAppLogService appLogService)
+    public ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, IAppLogService appLogService, IConfiguration configuration)
     {
         _catalogService = catalogService;
         _workService = workService;
         _productService = productService;
         _appLogService = appLogService;
+        _configuration = configuration;
     }
 
     [HttpGet("{id}")]
@@ -58,7 +60,8 @@ public class ProductController : BaseController
         }
         foreach (var item in args)
         {
-            item.Product = await _catalogService.FindAsync(item.ProductId);
+            item.Catalog = await _catalogService.FindAsync(item.ProductId);
+            item.Product = await _productService.GetByCatalogIdAsync(item.ProductId);
         }
         if ("checkout".Equals(type))
         {

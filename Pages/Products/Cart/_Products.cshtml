@@ -1,43 +1,47 @@
-﻿@using Waffle.Models.Params.Products;
+﻿@using System.Globalization;
+@using Waffle.Models.Params.Products;
 @using Waffle.Extensions;
+@inject IConfiguration Configuration
 @model IEnumerable<CartItem>
 @{
     Layout = null;
+    var language = Configuration.GetValue<string>("language") ?? "en-US";
+    var cul = new CultureInfo(language);
 }
 
 <div class="cart-items mb-4">
     @foreach (var item in Model)
     {
-        if (item.Product == null)
+        if (item.Catalog == null)
         {
             continue;
         }
         <div class="cart-item mb-2">
             <div class="row">
                 <div style="max-width: 150px">
-                    <img src="@item.Product.Thumbnail" alt="@item.Product.Name" loading="lazy" class="w-100" />
+                    <img src="@item.Catalog.Thumbnail" alt="@item.Catalog.Name" loading="lazy" class="w-100" />
                 </div>
                 <div class="col">
                     <div class="d-flex gap-4 align-items-center">
                         <div class="col">
-                            <div class="font-medium mb-2">
-                                <a href="@item.Product.GetUrl()">@item.Product.Name</a>
+                            <div class="fw-medium mb-2">
+                                <a href="@item.Catalog.GetUrl()">@item.Catalog.Name</a>
                             </div>
-                            <div class="font-medium mb-2">Số lượng</div>
+                            <div class="fw-medium mb-2">Số lượng</div>
                             <div class="d-flex gap-2">
-                                <button class="btn btn-sm border btn-light px-2 js-minusQuantity" type="button" data-productId="@item.Product.Id" @(item.Quantity < 2 ? "disabled" : "")>
+                                <button class="btn btn-sm border btn-light px-2 js-minusQuantity" type="button" data-productId="@item.Catalog.Id" @(item.Quantity < 2 ? "disabled" : "")>
                                     <i class="fa-solid fa-minus"></i>
                                 </button>
                                 <div class="input-wrap" style="width: 40px">
                                     <input type="text" value="@item.Quantity" class="form-control form-control-sm text-center">
                                 </div>
-                                <button class="btn btn-sm border btn-light px-2 js-plusQuantity" type="button" data-productId="@item.Product.Id">
+                                <button class="btn btn-sm border btn-light px-2 js-plusQuantity" type="button" data-productId="@item.Catalog.Id">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                             </div>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-sm btn-outline-danger px-2 js-remove" data-productId="@item.Product.Id">
+                            <button type="button" class="btn btn-sm btn-outline-danger px-2 js-remove" data-productId="@item.Catalog.Id">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </div>
@@ -46,6 +50,12 @@
             </div>
         </div>
     }
+</div>
+<div class="text-right mb-4">
+    <span>Tổng tiền:</span>
+    <span class="fs-4 text-danger fw-medium">
+        @Model.Where(x => x.Product != null && (x.Product.Price != null || x.Product.SalePrice != null)).Sum(x => (x.Product!.SalePrice ?? x.Product.Price) * x.Quantity)?.ToString("C0", cul)
+    </span>
 </div>
 
 <div class="text-right">

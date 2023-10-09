@@ -361,8 +361,8 @@ public class CatalogService : ICatalogService
 
     public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions)
     {
-        var keyWords = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
-        return await _catalogRepository.GetFormSelectAsync(keyWords);
+        filterOptions.KeyWords = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
+        return await _catalogRepository.GetFormSelectAsync(filterOptions);
     }
 
     public Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize) => _catalogRepository.ListSpotlightAsync(type, pageSize);

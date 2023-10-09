@@ -45,7 +45,7 @@
                         @if (Model.AffiliateLink != null)
                         {
                             <div class="md:flex mb-4 gap-2">
-                                <a href="@Model.AffiliateLink.Href" class="btn btn-outline-primary d-flex gap-2 items-center font-medium" target="@Model.AffiliateLink.Target" rel="nofollow">
+                                <a href="@Model.AffiliateLink.Href" class="btn btn-outline-primary d-flex gap-2 items-center fw-medium" target="@Model.AffiliateLink.Target" rel="nofollow">
                                     @if (Model.AffiliateLink.Href.Contains("shope") == true)
                                     {
                                         <img src="https://shopee.vn/pcmall-assets/assets/icon_favicon_1_32.png" alt="icon" loading="lazy" style="width: 16px" />
@@ -106,7 +106,7 @@
             </div>
 
             <div class="bg-white mb-4 rounded">
-                <div class="mb-2 font-medium">Tags:</div>
+                <div class="mb-2 fw-medium">Tags:</div>
                 <div class="d-flex gap-2 flex-wrap">
                     @foreach (var tag in Model.Tags)
                     {
