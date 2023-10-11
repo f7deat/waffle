@@ -368,4 +368,6 @@ public class CatalogService : ICatalogService
     public Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize) => _catalogRepository.ListSpotlightAsync(type, pageSize);
 
     public async Task DeleteAsync(Catalog catalog) => await _catalogRepository.DeleteAsync(catalog);
+
+    public Task<Catalog?> FindAsync(Guid catalogId, CatalogType type) => _catalogRepository.FindAsync(catalogId, type);
 }

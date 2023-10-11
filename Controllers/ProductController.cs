@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Foundations;
 using Waffle.Models;
@@ -69,4 +70,7 @@ public class ProductController : BaseController
         }
         return View("/Pages/Products/Cart/_Products.cshtml", args);
     }
+
+    [HttpPost("brand/save")]
+    public async Task<IActionResult> SaveBrandAsync([FromBody] SaveBrandModel args) => Ok(await _productService.SaveBrandAsync(args));
 }

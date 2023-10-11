@@ -97,11 +97,7 @@ public class WorkService : IWorkService
     public async Task<T?> GetAsync<T>(Guid id)
     {
         var work = await FindAsync(id);
-        if (string.IsNullOrEmpty(work?.Arguments))
-        {
-            return default;
-        }
-        return JsonSerializer.Deserialize<T>(work.Arguments);
+        return Get<T>(work?.Arguments);
     }
 
     public T? Get<T>(string? arguments)
@@ -367,7 +363,7 @@ public class WorkService : IWorkService
             {
                 continue;
             }
-            var w = JsonSerializer.Deserialize<T>(work.Arguments);
+            var w = Get<T>(work.Arguments);
             if (w != null)
             {
                 r.Add(w);

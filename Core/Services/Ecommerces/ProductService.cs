@@ -4,6 +4,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
+using Waffle.Models.Params.Products;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Services.Ecommerces;
@@ -54,4 +55,6 @@ public class ProductService : IProductService
         }
         return IdentityResult.Success;
     }
+
+    public Task<IdentityResult> SaveBrandAsync(SaveBrandModel args) => _productRepository.SaveBrandAsync(args);
 }

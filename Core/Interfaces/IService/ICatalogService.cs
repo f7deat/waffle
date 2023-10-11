@@ -32,4 +32,5 @@ public interface ICatalogService
     Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions);
     Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize);
     Task DeleteAsync(Catalog catalog);
+    Task<Catalog?> FindAsync(Guid brandId, CatalogType brand);
 }
