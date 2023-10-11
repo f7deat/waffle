@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
 using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 
 namespace Waffle.Models
 {
@@ -28,5 +29,11 @@ namespace Waffle.Models
         public List<IdentityUserRole<Guid>> UserRoles { get; set; } = new();
         [JsonPropertyName("comments")]
         public List<Comment> Comments { get; set; } = new();
+        [JsonPropertyName("products")]
+        public List<Product> Products { get; set; } = new();
+        [JsonPropertyName("orders")]
+        public List<Order> Orders { get; set; } = new();
+        [JsonPropertyName("orderDetails")]
+        public List<OrderDetail> OrderDetails { get; set; } = new();
     }
 }

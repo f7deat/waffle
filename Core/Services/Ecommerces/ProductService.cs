@@ -3,6 +3,8 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
+using Waffle.Models;
+using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Services.Ecommerces;
 
@@ -20,6 +22,11 @@ public class ProductService : IProductService
     public Task<int> CountAsync() => _catalogRepository.CountAsync(CatalogType.Product);
 
     public async Task<Product?> GetByCatalogIdAsync(Guid catalogId) => await _productRepository.FindByCatalogAsync(catalogId);
+
+    public Task<List<ProductListItem>> ListAsync(IFilterOptions filterOptions)
+    {
+        return _productRepository.ListAsync(filterOptions);
+    }
 
     public async Task<IdentityResult> SaveAsync(Product args)
     {

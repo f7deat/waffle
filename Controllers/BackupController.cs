@@ -8,10 +8,6 @@ using Waffle.Data;
 using Waffle.ExternalAPI.Models;
 using Waffle.Foundations;
 using Waffle.Models;
-using Waffle.Models.Components;
-using Waffle.Models.Components.Lister;
-using Waffle.Models.Components.Specifications;
-using Waffle.Models.Settings;
 
 namespace Waffle.Controllers;
 
@@ -49,6 +45,9 @@ public class BackupController : BaseController
             Roles = await _context.Roles.ToListAsync(),
             UserRoles = await _context.UserRoles.ToListAsync(),
             Comments = await _context.Comments.ToListAsync(),
+            Products = await _context.Products.ToListAsync(),
+            Orders = await _context.Orders.ToListAsync(),
+            OrderDetails = await _context.OrderDetails.ToListAsync()
         };
         var path = Path.Combine(_webHostEnvironment.WebRootPath, "backup");
         if (!Directory.Exists(path)) Directory.CreateDirectory(path);
@@ -131,6 +130,21 @@ public class BackupController : BaseController
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Comments");
                 await _context.Comments.AddRangeAsync(data.Comments);
             }
+            if (data.Products.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Products");
+                await _context.Products.AddRangeAsync(data.Products);
+            }
+            if (data.Orders.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Orders");
+                await _context.Orders.AddRangeAsync(data.Orders);
+            }
+            if (data.OrderDetails.Any())
+            {
+                await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.OrderDetails");
+                await _context.OrderDetails.AddRangeAsync(data.OrderDetails);
+            }
         }
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
@@ -150,47 +164,10 @@ public class BackupController : BaseController
     [HttpPost("upgrade")]
     public async Task<IActionResult> UpgradeAsync()
     {
-        await EnsureComponentsAsync();
-        await _context.SaveChangesAsync();
         await _appSettingService.EnsureSettingAsync(nameof(Facebook));
         await _appSettingService.EnsureSettingAsync(nameof(Google));
         await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
         await _appSettingService.EnsureSettingAsync(nameof(Telegram));
-        await _appSettingService.EnsureSettingAsync(nameof(Sidebar));
         return Ok(IdentityResult.Success);
-    }
-
-    [HttpPost("upgrade/components")]
-    public async Task<IActionResult> UpgradeComponentAsync()
-    {
-        await EnsureComponentsAsync();
-        return Ok(IdentityResult.Success);
-    }
-
-    private async Task EnsureComponentsAsync()
-    {
-        await _componentService.EnsureComponentAsync(nameof(ArticlePicker));
-        await _componentService.EnsureComponentAsync(nameof(ArticleSpotlight));
-        await _componentService.EnsureComponentAsync(nameof(BlockEditor));
-        await _componentService.EnsureComponentAsync(nameof(Card));
-        await _componentService.EnsureComponentAsync(nameof(ContactForm));
-        await _componentService.EnsureComponentAsync(nameof(Document));
-        await _componentService.EnsureComponentAsync(nameof(GoogleMap));
-        await _componentService.EnsureComponentAsync(nameof(Image));
-        await _componentService.EnsureComponentAsync(nameof(Swiper));
-        await _componentService.EnsureComponentAsync(nameof(Masonry));
-        await _componentService.EnsureComponentAsync(nameof(Link));
-        await _componentService.EnsureComponentAsync(nameof(ListGroup));
-        await _componentService.EnsureComponentAsync(nameof(Lookbook));
-        await _componentService.EnsureComponentAsync(nameof(Tag));
-        await _componentService.EnsureComponentAsync(nameof(Feed));
-        await _componentService.EnsureComponentAsync(nameof(Row));
-        await _componentService.EnsureComponentAsync(nameof(Column));
-        await _componentService.EnsureComponentAsync(nameof(Image));
-        await _componentService.EnsureComponentAsync(nameof(Navbar));
-        await _componentService.EnsureComponentAsync(nameof(Jumbotron));
-        await _componentService.EnsureComponentAsync(nameof(PostContent));
-        await _componentService.EnsureComponentAsync(nameof(VideoPlayer));
-        await _componentService.EnsureComponentAsync(nameof(VideoPlayList));
     }
 }

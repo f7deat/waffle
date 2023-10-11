@@ -9,23 +9,34 @@ namespace Waffle.ViewComponents;
 public class FeedViewComponent : BaseViewComponent<Feed>
 {
     private readonly ICatalogService _catalogService;
+    private readonly IProductService _productService;
 
-    public FeedViewComponent(ICatalogService catalogService, IWorkService workService) : base(workService)
+    public FeedViewComponent(ICatalogService catalogService, IWorkService workService, IProductService productService) : base(workService)
     {
         _catalogService = catalogService;
+        _productService = productService;
     }
 
     protected override async Task<Feed> ExtendAsync(Feed feed)
     {
         var type = feed.Type ?? CatalogType.Article;
-        var articles = await _catalogService.ListAsync(new CatalogFilterOptions
-        {
-            Active = true,
-            PageSize = feed.PageSize,
-            Type = type
-        });
         ViewName = type.ToString();
-        feed.Articles = articles.Data?.ToList() ?? new();
+        if (type == CatalogType.Article)
+        {
+            var articles = await _catalogService.ListAsync(new CatalogFilterOptions
+            {
+                Active = true,
+                PageSize = feed.PageSize,
+                Type = type
+            });
+            feed.Articles = articles.Data?.ToList() ?? new();
+            return feed;
+        }
+        feed.Products = await _productService.ListAsync(new BasicFilterOptions
+        {
+            Current = 1,
+            PageSize= feed.PageSize
+        });
         return feed;
     }
 }

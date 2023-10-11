@@ -146,6 +146,7 @@ public class WorkService : IWorkService
                     join c in _context.Components on b.ComponentId equals c.Id
                     where (filterOptions.ParentId == null || b.ParentId == filterOptions.ParentId) &&
                     (filterOptions.Active == null || b.Active == filterOptions.Active)
+                    orderby b.SortOrder ascending
                     select new WorkListItem
                     {
                         Id = b.Id,
@@ -158,7 +159,7 @@ public class WorkService : IWorkService
         {
             var display = ComponentHelper.GetNormalizedName(item.NormalizedName);
             item.NormalizedName = display?.GetPrompt() ?? item.NormalizedName;
-            item.AutoGenerateField = display?.GetAutoGenerateField() ?? true;
+            item.AutoGenerateField = display?.GetAutoGenerateField() ?? false;
         }
         return ListResult<WorkListItem>.Success(data, filterOptions);
     }
@@ -456,7 +457,8 @@ public class WorkService : IWorkService
     {
         var query = from b in _context.WorkContents
                     join c in _context.Components on b.ComponentId equals c.Id
-                    where b.ParentId == workId
+                    orderby b.SortOrder ascending
+                    where b.ParentId == workId && b.Active
                     select new WorkListItem
                     {
                         Id = b.Id,

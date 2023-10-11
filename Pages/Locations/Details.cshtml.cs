@@ -55,8 +55,7 @@ namespace Waffle.Pages.Locations
                 ProductFeed = new Feed
                 {
                     Name = "Sản phẩm liên quan",
-                    Articles = product.Data?.ToList() ?? new(),
-                    ItemPerRow = "grid-cols-2"
+                    Articles = product.Data?.ToList() ?? new()
                 };
             }
 

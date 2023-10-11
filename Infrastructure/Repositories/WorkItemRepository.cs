@@ -33,13 +33,13 @@ public class WorkItemRepository : EfRepository<WorkContent>, IWorkContentReposit
 
     public async Task<IEnumerable<WorkContent>> ListChildAsync(Guid parentId)
     {
-        return await _context.WorkContents.Where(x => x.ParentId == parentId)
+        return await _context.WorkContents.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder)
             .AsNoTracking()
             .ToListAsync();
     }
 
     public async Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId)
     {
-        return await _context.WorkContents.Where(x => x.ParentId == parentId && x.Active).Select(x => x.Id).ToListAsync();
+        return await _context.WorkContents.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder).Select(x => x.Id).ToListAsync();
     }
 }

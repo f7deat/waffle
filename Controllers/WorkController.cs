@@ -86,7 +86,7 @@ public class WorkController : BaseController
         {
             var display = ComponentHelper.GetNormalizedName(item.NormalizedName);
             item.NormalizedName = display?.GetPrompt() ?? item.NormalizedName;
-            item.AutoGenerateField = display?.GetAutoGenerateField() ?? true;
+            item.AutoGenerateField = display?.GetAutoGenerateField() ?? false;
         }
         return Ok(ListResult<WorkListItem>.Success(data, new BasicFilterOptions()));
     }
@@ -412,11 +412,25 @@ public class WorkController : BaseController
         foreach (var workId in workIds)
         {
             var work = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkId == workId);
-            if (work != null)
-            {
-                work.SortOrder = i;
-                i++;
-            }
+            if (work is null) return BadRequest($"Work {workId} not found!");
+            work.SortOrder = i;
+            i++;
+        }
+        await _context.SaveChangesAsync();
+        return Ok(IdentityResult.Success);
+    }
+
+    [HttpPost("child/sort")]
+    public async Task<IActionResult> SortChildAsync([FromBody] List<Guid> workIds)
+    {
+        if (!workIds.Any()) return BadRequest("No work was found!");
+        int i = 0;
+        foreach (var workId in workIds)
+        {
+            var work = await _context.WorkContents.FirstOrDefaultAsync(x => x.Id == workId);
+            if (work is null) return BadRequest($"Work {workId} not found!");
+            work.SortOrder = i;
+            i++;
         }
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
