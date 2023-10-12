@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
-using Waffle.Entities;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Models.Components;
 
@@ -9,5 +9,5 @@ namespace Waffle.Models.Components;
 public class ProductSpotlight : AbstractComponent
 {
     [JsonIgnore]
-    public IEnumerable<Catalog> Products { get; set; } = new List<Catalog>();
+    public IEnumerable<SpotlightListItem> Products { get; set; } = new List<SpotlightListItem>();
 }

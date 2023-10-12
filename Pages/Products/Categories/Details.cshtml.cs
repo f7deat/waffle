@@ -1,10 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Globalization;
 using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Ecommerces;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 using Waffle.Models.Components;
 
 namespace Waffle.Pages.Products.Categories;
@@ -12,20 +16,32 @@ namespace Waffle.Pages.Products.Categories;
 public class DetailsModel : DynamicPageModel
 {
     private readonly ApplicationDbContext _context;
+    private readonly IConfiguration _configuration;
+    private readonly IProductService _productService;
 
-    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context) : base(catalogService)
+    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, IConfiguration configuration, IProductService productService) : base(catalogService)
     {
         _context = context;
+        _configuration = configuration;
+        _productService = productService;
     }
 
     public ProductWorkItem? Editor;
     public IEnumerable<Catalog> Tags = new List<Catalog>();
     public Guid ProductImage;
     public AffiliateLink? AffiliateLink;
+    public Product? Product;
+    public CultureInfo CultureInfo = new("en-US");
 
     public async Task<IActionResult> OnGetAsync()
     {
+        var cul = _configuration.GetValue<string>("language");
+        if (!string.IsNullOrEmpty(cul))
+        {
+            CultureInfo = new CultureInfo(cul);
+        }
         Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
+        Product = await _productService.GetByCatalogIdAsync(PageData.Id);
         var component = await GetComponentsAsync();
         if (component.Any())
         {

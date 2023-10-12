@@ -41,7 +41,7 @@ public class ArticleSpotlightViewComponent : ViewComponent
         var model = new ArticleSpotlight
         {
             Title = title,
-            Articles = articles.ToList(),
+            Articles = articles,
             PageSize = pageSize
         };
         return View(model);

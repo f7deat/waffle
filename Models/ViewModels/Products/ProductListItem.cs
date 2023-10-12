@@ -7,4 +7,6 @@ public class ProductListItem : Catalog
     public string Url { get; set; } = default!;
     public decimal? Price { get; set; }
     public decimal? SalePrice { get; set; }
+
+    public decimal Discount => 100 - Math.Round((SalePrice / Price ?? 1) * 100);
 }

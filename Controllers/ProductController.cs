@@ -17,15 +17,13 @@ public class ProductController : BaseController
     private readonly IWorkService _workService;
     private readonly IProductService _productService;
     private readonly IAppLogService _appLogService;
-    private readonly IConfiguration _configuration;
 
-    public ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, IAppLogService appLogService, IConfiguration configuration)
+    public ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, IAppLogService appLogService)
     {
         _catalogService = catalogService;
         _workService = workService;
         _productService = productService;
         _appLogService = appLogService;
-        _configuration = configuration;
     }
 
     [HttpGet("{id}")]
@@ -39,6 +37,7 @@ public class ProductController : BaseController
     {
         var catalog  = await _catalogService.FindAsync(args.CatalogId);
         if (catalog is null) return BadRequest("Catalog not found!");
+        if (args.Price != null && args.Price < 1) return BadRequest("Price is not valid!");
         await _appLogService.AddAsync($"Update product: {JsonSerializer.Serialize(args)}", args.CatalogId);
         return Ok(await _productService.SaveAsync(args));
     }

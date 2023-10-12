@@ -3,8 +3,11 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.ViewModels;
+using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Infrastructure.Repositories;
 
@@ -57,11 +60,23 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         return await ListResult<Catalog>.Success(query.OrderByDescending(x => x.ModifiedDate), filterOptions);
     }
 
-    public async Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize)
+    public async Task<IEnumerable<SpotlightListItem>> ListSpotlightAsync(CatalogType type, int pageSize)
     {
-        return await _context.Catalogs.Where(x => x.Active && x.Type == type)
-            .OrderBy(x => Guid.NewGuid()).Take(pageSize)
-            .AsNoTracking()
-            .ToListAsync();
+        var query = from catalog in _context.Catalogs
+                    join product in _context.Products on catalog.Id equals product.CatalogId into catalogProduct
+                    from product in catalogProduct.DefaultIfEmpty()
+                    where catalog.Type == type && catalog.Active
+                    select new SpotlightListItem
+                    {
+                        Name = catalog.Name,
+                        Id = catalog.Id,
+                        Url = catalog.GetUrl(),
+                        Price = product.Price,
+                        SalePrice = product.SalePrice,
+                        Thumbnail = catalog.Thumbnail,
+                        ViewCount = catalog.ViewCount,
+                        ModifiedDate = catalog.ModifiedDate
+                    };
+        return await query.OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }
 }

@@ -203,7 +203,6 @@ public class CatalogService : ICatalogService
 
         catalog.Name = args.Name;
         catalog.NormalizedName = normalizedName;
-        catalog.Type = args.Type;
         catalog.Active = args.Active;
         catalog.ModifiedDate = DateTime.Now;
         catalog.Description = args.Description;
@@ -365,7 +364,7 @@ public class CatalogService : ICatalogService
         return await _catalogRepository.GetFormSelectAsync(filterOptions);
     }
 
-    public Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize) => _catalogRepository.ListSpotlightAsync(type, pageSize);
+    public Task<IEnumerable<SpotlightListItem>> ListSpotlightAsync(CatalogType type, int pageSize) => _catalogRepository.ListSpotlightAsync(type, pageSize);
 
     public async Task DeleteAsync(Catalog catalog) => await _catalogRepository.DeleteAsync(catalog);
 

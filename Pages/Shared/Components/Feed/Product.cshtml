@@ -1,12 +1,7 @@
 ﻿@using System.Globalization;
 @using Waffle.Extensions;
 @using Waffle.Models.Components
-@inject IConfiguration Configuration
 @model Feed
-@{
-    var language = Configuration.GetValue<string>("language") ?? "en-US";
-    var cul = new CultureInfo(language);
-}
 
 <div class="mb-4 feed">
     <div class="title">
@@ -28,7 +23,7 @@
                         {
                             <span class="badge bg-danger position-absolute top-0 end-0">
                                 <span>GIẢM</span>
-                                @(100 - Math.Round((item.SalePrice / item.Price ?? 0) * 100))%
+                                @item.Discount %
                             </span>
                         }
                     </div>
@@ -36,8 +31,8 @@
                 <div class="py-2">
                     <div class="mb-1 d-flex justify-between">
                         <div>
-                            <span class="text-danger fw-medium">@item.SalePrice?.ToString("C0", cul)</span>
-                            <s class="text-muted text-sm">@item.Price?.ToString("C0", cul)</s>
+                            <span class="text-danger fw-medium">@item.SalePrice.ToMoney()</span>
+                            <s class="text-muted text-sm">@item.Price.ToMoney()</s>
                         </div>
                         <div class="text-warning text-xs">
                             <i class="fa-solid fa-star"></i>

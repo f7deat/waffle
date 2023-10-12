@@ -3,6 +3,7 @@ using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
+using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Interfaces.IService;
 
@@ -30,7 +31,7 @@ public interface ICatalogService
     Task<object?> PieChartAsync();
     Task<ProductImage?> GetProductImageAsync(Guid catalogId);
     Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions);
-    Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize);
+    Task<IEnumerable<SpotlightListItem>> ListSpotlightAsync(CatalogType type, int pageSize);
     Task DeleteAsync(Catalog catalog);
     Task<Catalog?> FindAsync(Guid brandId, CatalogType brand);
 }
