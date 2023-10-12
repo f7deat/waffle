@@ -3,22 +3,25 @@ using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Logs;
 
 namespace Waffle.Core.Services;
 
-public class AppLogService : IAppLogService
+public class LogService : ILogService
 {
     private readonly ICurrentUser _currentUser;
     private readonly IAppLogRepository _appLogRepository;
-    private readonly ILogger<AppLogService> _logger;
+    private readonly ILogger<LogService> _logger;
+    private readonly ITelegramService _telegramService;
 
-    public AppLogService(ICurrentUser currentUser, IAppLogRepository appLogRepository, ILogger<AppLogService> logger)
+    public LogService(ICurrentUser currentUser, IAppLogRepository appLogRepository, ILogger<LogService> logger, ITelegramService telegramService)
     {
         _currentUser = currentUser;
         _appLogRepository = appLogRepository;
         _logger = logger;
+        _telegramService = telegramService;
     }
 
     public async Task AddAsync(string message, Guid catalogId)
@@ -49,4 +52,6 @@ public class AppLogService : IAppLogService
     }
 
     public Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions) => _appLogRepository.ListAsync(filterOptions);
+
+    public async Task MessageAsync(string text) => await _telegramService.SendMessageAsync(text);
 }

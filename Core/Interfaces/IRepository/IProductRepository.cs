@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
@@ -11,5 +10,7 @@ public interface IProductRepository : IAsyncRepository<Product>
 {
     Task<Product?> FindByCatalogAsync(Guid catalogId);
     Task<List<ProductListItem>> ListAsync(IFilterOptions filterOptions);
+    Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);
+    Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId);
     Task<IdentityResult> SaveBrandAsync(SaveBrandModel args);
 }

@@ -6,13 +6,16 @@ using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
+using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Pages.Tag;
 
 public class DetailsModel : DynamicPageModel
 {
-    public DetailsModel(ICatalogService catalogService) : base(catalogService)
+    private readonly IProductService _productService;
+    public DetailsModel(ICatalogService catalogService, IProductService productService) : base(catalogService)
     {
+        _productService = productService;
     }
 
     public IEnumerable<Catalog> Catalogs = new List<Catalog>();
@@ -22,7 +25,7 @@ public class DetailsModel : DynamicPageModel
     public string? SearchTerm { get; set; }
 
     public Pagination Pagination = new();
-    public ListResult<Catalog> Products = new();
+    public IEnumerable<ProductListItem> Products = new List<ProductListItem>();
     public ListResult<Catalog> Albums = new();
     public ListResult<Catalog> Locations = new();
     public VideoPlayList Videos = new();
@@ -36,7 +39,7 @@ public class DetailsModel : DynamicPageModel
             Type = CatalogType.Article
         });
 
-        Products = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
+        Products = await _productService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
         {
             Current = Current,
             Name = SearchTerm,

@@ -40,6 +40,45 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
         return await query.AsNoTracking().Take(filterOptions.PageSize).ToListAsync();
     }
 
+    public async Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions)
+    {
+        var query = from a in _context.WorkItems
+                    join b in _context.Catalogs on a.WorkId equals b.Id
+                    join product in _context.Products on b.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
+                    where a.CatalogId == tagId && b.Active &&
+                    (string.IsNullOrEmpty(filterOptions.Name) || b.NormalizedName.Contains(filterOptions.Name)) &&
+                    (filterOptions.Type == null || b.Type == filterOptions.Type)
+                    orderby b.ModifiedDate descending
+                    select new ProductListItem
+                    {
+                        Id = b.Id,
+                        Name = b.Name,
+                        Url = b.GetUrl(),
+                        Thumbnail = b.Thumbnail,
+                        Price= product.Price,
+                        SalePrice = product.SalePrice
+                    };
+        return await query.OrderBy(x => Guid.NewGuid()).Take(4).ToListAsync();
+    }
+
+    public async Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId)
+    {
+        var query = (from tag in _context.WorkItems
+                     join catalog in _context.Catalogs on tag.WorkId equals catalog.Id
+                     join product in _context.Products on catalog.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
+                     where catalog.Active && tagIds.Contains(tag.CatalogId) && catalog.Type == CatalogType.Product && catalog.Id != currentCatalogId
+                     select new ProductListItem
+                     {
+                         Id = catalog.Id,
+                         Name = catalog.Name,
+                         Url = catalog.GetUrl(),
+                         Thumbnail = catalog.Thumbnail,
+                         Price = product.Price,
+                         SalePrice = product.SalePrice
+                     }).Distinct().OrderByDescending(x => Guid.NewGuid());
+        return await query.Take(4).ToListAsync();
+    }
+
     public async Task<IdentityResult> SaveBrandAsync(SaveBrandModel args)
     {
         var product = await _context.Catalogs.FindAsync(args.ProductId);

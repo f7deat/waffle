@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
@@ -28,6 +29,14 @@ public class ProductService : IProductService
     {
         return _productRepository.ListAsync(filterOptions);
     }
+
+    public Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions)
+    {
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        return _productRepository.ListByTagAsync(tagId, filterOptions);
+    }
+
+    public Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId) => _productRepository.ListRelatedAsync(tagIds, currentCatalogId);
 
     public async Task<IdentityResult> SaveAsync(Product args)
     {

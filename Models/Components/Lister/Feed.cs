@@ -19,5 +19,5 @@ public class Feed : AbstractComponent
     [JsonIgnore]
     public List<Catalog> Articles { get; set; } = new();
     [JsonIgnore]
-    public List<ProductListItem> Products { get; set; } = new();
+    public IEnumerable<ProductListItem> Products { get; set; } = new List<ProductListItem>();
 }

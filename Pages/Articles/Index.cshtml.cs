@@ -5,7 +5,7 @@ using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.Pages.Article;
+namespace Waffle.Pages.Articles;
 
 public class IndexModel : EntryPageModel
 {
@@ -26,8 +26,8 @@ public class IndexModel : EntryPageModel
     {
         HasNextPage = Articles?.Total > Current * 12,
         HasPrevPage = Current > 1,
-        NextPageUrl = $"/article?current={Current + 1}",
-        PrevPageUrl = $"/article?current={Current - 1}",
+        NextPageUrl = $"/articles?current={Current + 1}",
+        PrevPageUrl = $"/articles?current={Current - 1}",
     };
 
     public async Task OnGetAsync()

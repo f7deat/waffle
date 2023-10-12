@@ -16,9 +16,9 @@ public class ProductController : BaseController
     private readonly ICatalogService _catalogService;
     private readonly IWorkService _workService;
     private readonly IProductService _productService;
-    private readonly IAppLogService _appLogService;
+    private readonly ILogService _appLogService;
 
-    public ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, IAppLogService appLogService)
+    public ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, ILogService appLogService)
     {
         _catalogService = catalogService;
         _workService = workService;

@@ -22,9 +22,9 @@ public class WorkController : BaseController
     private readonly IWorkService _workService;
     private readonly IComponentService _componentService;
     private readonly ICatalogService _catalogService;
-    private readonly IAppLogService _logService;
+    private readonly ILogService _logService;
 
-    public WorkController(ApplicationDbContext context, IFileExplorerService fileContentService, IWorkService workContentService, IComponentService componentService, ICatalogService catalogService, IAppLogService logService)
+    public WorkController(ApplicationDbContext context, IFileExplorerService fileContentService, IWorkService workContentService, IComponentService componentService, ICatalogService catalogService, ILogService logService)
     {
         _context = context;
         _fileContentService = fileContentService;

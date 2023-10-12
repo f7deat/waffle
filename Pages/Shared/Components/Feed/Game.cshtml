@@ -4,13 +4,13 @@
 <div class="wf-feed">
     <div class="title flex justify-between items-center">
         <div><i class="fas fa-blog me-2"></i>@Model.Name</div>
-        <a href="/article"><i class="fas fa-angle-double-right"></i></a>
+        <a href="/games"><i class="fas fa-angle-double-right"></i></a>
     </div>
 
     <div class="grid grid-cols-3 gap-4">
         @foreach (var article in Model.Articles)
         {
-            <partial name="~/Pages/Article/_ListItem.cshtml" model="article" />
+            <partial name="~/Pages/Articles/_ListItem.cshtml" model="article" />
         }
     </div>
 

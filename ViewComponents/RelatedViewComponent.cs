@@ -10,9 +10,12 @@ namespace Waffle.ViewComponents;
 public class RelatedViewComponent : ViewComponent
 {
     private readonly ICatalogService _catalogService;
-    public RelatedViewComponent(ICatalogService catalogService)
+    private readonly IProductService _productService;
+
+    public RelatedViewComponent(ICatalogService catalogService, IProductService productService)
     {
         _catalogService = catalogService;
+        _productService = productService;
     }
 
     private Catalog PageData
@@ -33,6 +36,11 @@ public class RelatedViewComponent : ViewComponent
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
         }
+        if (PageData.Type == CatalogType.Product)
+        {
+            var products = await _productService.ListRelatedAsync(tagIds, PageData.Id);
+            return View("Product", products);
+        }
         var articles = await _catalogService.ArticleRelatedListAsync(new ArticleRelatedFilterOption
         {
             Current = 1,
@@ -48,7 +56,6 @@ public class RelatedViewComponent : ViewComponent
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
         }
-        var view = PageData.Type == CatalogType.Product ? "Product" : "Default";
-        return View(view, articles.Data);
+        return View(articles.Data);
     }
 }

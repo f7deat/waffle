@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
+using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Foundations;
 using Waffle.Models;
@@ -19,7 +20,9 @@ public class BackupController : BaseController
     private readonly ICatalogService _catalogService;
     private readonly IWorkService _workService;
     private readonly IWebHostEnvironment _webHostEnvironment;
-    public BackupController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService, IWorkService workService)
+    private readonly ILogService _logService;
+
+    public BackupController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService, IWorkService workService, ILogService logService)
     {
         _context = context;
         _componentService = componentService;
@@ -27,46 +30,55 @@ public class BackupController : BaseController
         _catalogService = catalogService;
         _workService = workService;
         _webHostEnvironment = webHostEnvironment;
+        _logService = logService;
     }
 
     [HttpGet("export")]
     public async Task<IActionResult> ExportAsync()
     {
-        var json = new BackupListItem
+        try
         {
-            WorkContents = await _context.WorkContents.ToListAsync(),
-            WorkItems = await _context.WorkItems.ToListAsync(),
-            FileContents = await _context.FileContents.ToListAsync(),
-            AppSettings = await _context.AppSettings.ToListAsync(),
-            Components = await _context.Components.ToListAsync(),
-            Catalogs = await _context.Catalogs.ToListAsync(),
-            Localizations = await _context.Localizations.ToListAsync(),
-            Users = await _context.Users.ToListAsync(),
-            Roles = await _context.Roles.ToListAsync(),
-            UserRoles = await _context.UserRoles.ToListAsync(),
-            Comments = await _context.Comments.ToListAsync(),
-            Products = await _context.Products.ToListAsync(),
-            Orders = await _context.Orders.ToListAsync(),
-            OrderDetails = await _context.OrderDetails.ToListAsync()
-        };
-        var path = Path.Combine(_webHostEnvironment.WebRootPath, "backup");
-        if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-        var directoryInfo = new DirectoryInfo(path);
-        var files = directoryInfo.GetFiles();
-        foreach (var file in files) file.Delete();
-        var fileName = Path.Combine(path, $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.json");
-        using (var outputFile = new StreamWriter(fileName))
-        {
-            await outputFile.WriteAsync(JsonSerializer.Serialize(json));
-        }
-        if (System.IO.File.Exists(Path.Combine(_webHostEnvironment.WebRootPath, "files", $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip")))
-        {
+            var json = new BackupListItem
+            {
+                WorkContents = await _context.WorkContents.ToListAsync(),
+                WorkItems = await _context.WorkItems.ToListAsync(),
+                FileContents = await _context.FileContents.ToListAsync(),
+                AppSettings = await _context.AppSettings.ToListAsync(),
+                Components = await _context.Components.ToListAsync(),
+                Catalogs = await _context.Catalogs.ToListAsync(),
+                Localizations = await _context.Localizations.ToListAsync(),
+                Users = await _context.Users.ToListAsync(),
+                Roles = await _context.Roles.ToListAsync(),
+                UserRoles = await _context.UserRoles.ToListAsync(),
+                Comments = await _context.Comments.ToListAsync(),
+                Products = await _context.Products.ToListAsync(),
+                Orders = await _context.Orders.ToListAsync(),
+                OrderDetails = await _context.OrderDetails.ToListAsync()
+            };
+            var path = Path.Combine(_webHostEnvironment.WebRootPath, "backup");
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            var directoryInfo = new DirectoryInfo(path);
+            var files = directoryInfo.GetFiles();
+            foreach (var file in files) file.Delete();
+            var fileName = Path.Combine(path, $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.json");
+            using (var outputFile = new StreamWriter(fileName))
+            {
+                await outputFile.WriteAsync(JsonSerializer.Serialize(json));
+            }
+            if (System.IO.File.Exists(Path.Combine(_webHostEnvironment.WebRootPath, "files", $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip")))
+            {
+                return Redirect($"/files/{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip");
+            }
+
+            ZipFile.CreateFromDirectory(path, Path.Combine(_webHostEnvironment.WebRootPath, "files", $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip"), CompressionLevel.SmallestSize, false);
+
             return Redirect($"/files/{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip");
         }
-
-        ZipFile.CreateFromDirectory(path, Path.Combine(_webHostEnvironment.WebRootPath, "files", $"{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip"), CompressionLevel.SmallestSize, false);
-
-        return Redirect($"/files/{Request.Host.Host}-{DateTime.Now:ddMMyyyy}.zip");
+        catch (Exception ex)
+        {
+            await _logService.MessageAsync(ex.ToString());
+            return BadRequest();
+        }
     }
 
     [HttpPost("export/catalog/{id}")]

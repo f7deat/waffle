@@ -15,9 +15,9 @@ public class CatalogController : BaseController
 {
     private readonly ApplicationDbContext _context;
     private readonly ICatalogService _catalogService;
-    private readonly IAppLogService _logService;
+    private readonly ILogService _logService;
 
-    public CatalogController(ApplicationDbContext context, ICatalogService catalogService, IAppLogService logService)
+    public CatalogController(ApplicationDbContext context, ICatalogService catalogService, ILogService logService)
     {
         _context = context;
         _catalogService = catalogService;

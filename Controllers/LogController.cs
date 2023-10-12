@@ -7,8 +7,8 @@ namespace Waffle.Controllers;
 
 public class LogController : BaseController
 {
-    private readonly IAppLogService _appLogService;
-    public LogController(IAppLogService appLogService)
+    private readonly ILogService _appLogService;
+    public LogController(ILogService appLogService)
     {
         _appLogService = appLogService;
     }
