@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
-using Waffle.Models.ViewModels;
+using Waffle.Entities;
 
 namespace Waffle.Models.Components;
 
@@ -14,5 +14,5 @@ public class ArticleSpotlight : AbstractComponent
     public int PageSize { get; set; } = 5;
 
     [JsonIgnore]
-    public IEnumerable<SpotlightListItem> Articles { get; set; } = new List<SpotlightListItem>();
+    public IEnumerable<Catalog> Articles { get; set; } = new List<Catalog>();
 }

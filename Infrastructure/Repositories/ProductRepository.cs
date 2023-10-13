@@ -8,6 +8,7 @@ using Waffle.Entities.Ecommerces;
 using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
+using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Infrastructure.Repositories;
@@ -77,6 +78,26 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                          SalePrice = product.SalePrice
                      }).Distinct().OrderByDescending(x => Guid.NewGuid());
         return await query.Take(4).ToListAsync();
+    }
+
+    public async Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize)
+    {
+        var query = from catalog in _context.Catalogs
+                    join product in _context.Products on catalog.Id equals product.CatalogId into catalogProduct
+                    from product in catalogProduct.DefaultIfEmpty()
+                    where catalog.Type == CatalogType.Product && catalog.Active
+                    select new ProductListItem
+                    {
+                        Name = catalog.Name,
+                        Id = catalog.Id,
+                        Url = catalog.GetUrl(),
+                        Price = product.Price,
+                        SalePrice = product.SalePrice,
+                        Thumbnail = catalog.Thumbnail,
+                        ViewCount = catalog.ViewCount,
+                        ModifiedDate = catalog.ModifiedDate
+                    };
+        return await query.OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }
 
     public async Task<IdentityResult> SaveBrandAsync(SaveBrandModel args)

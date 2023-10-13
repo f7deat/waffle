@@ -6,6 +6,8 @@ using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
+using Waffle.Models.ViewModels;
+using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Pages.Wiki;
 
@@ -13,19 +15,18 @@ public class DetailModel : PageModel
 {
     private readonly IWikiService _wikiService;
     private readonly ICatalogService _catalogService;
-    private readonly IShopeeService _shopeeService;
-    public DetailModel(IWikiService wikiService, ICatalogService catalogService, IShopeeService shopeeService)
+    private readonly IProductService _productService;
+
+    public DetailModel(IWikiService wikiService, ICatalogService catalogService, IProductService productService)
     {
         _wikiService = wikiService;
         _catalogService = catalogService;
-        _shopeeService = shopeeService;
+        _productService = productService;
     }
 
     public Parse Data = new();
-    public List<Catalog> Catalogs = new();
-    public bool HasArticle = false;
-    public LandingPageLinkList ShopeeProducts = new();
-
+    public IEnumerable<Catalog> Articles = new List<Catalog>();
+    public IEnumerable<ProductListItem> Products = new List<ProductListItem>();
     public async Task<IActionResult> OnGetAsync(string id, string lang = "vi")
     {
         var response = await _wikiService.ParseAsync(id, lang);
@@ -36,19 +37,9 @@ public class DetailModel : PageModel
         Data = response;
         ViewData["Title"] = Data.Title;
         ViewData["Description"] = Data.Title;
-
-        var articles = await _catalogService.ListAsync(new CatalogFilterOptions
-        {
-            Active = true,
-            Name = Data.Title,
-            Type = CatalogType.Article,
-            PageSize = 4
-        });
-        HasArticle = articles.HasData;
-        Catalogs = articles.Data?.ToList() ?? new();
-
-        ShopeeProducts = await _shopeeService.GetLinkListsAsync(id.Replace("_", " "), 6);
-
+        Articles = await _catalogService.ListSpotlightAsync(CatalogType.Article, 4); ;
+        Products = await _productService.ListSpotlightAsync(6);
+        
         return Page();
     }
 }

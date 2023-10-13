@@ -38,6 +38,8 @@ public class ProductService : IProductService
 
     public Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId) => _productRepository.ListRelatedAsync(tagIds, currentCatalogId);
 
+    public Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize) => _productRepository.ListSpotlightAsync(pageSize);
+
     public async Task<IdentityResult> SaveAsync(Product args)
     {
         var product = await _productRepository.FindByCatalogAsync(args.CatalogId);

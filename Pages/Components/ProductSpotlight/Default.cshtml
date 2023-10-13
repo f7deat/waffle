@@ -9,7 +9,7 @@
         <div class="row">
             @foreach (var item in Model.Products)
             {
-                <div class="col-6">
+                <div class="@Model.ItemPerRow">
                     <a href="@item.Url">
                         <div class="card-image bg-dark relative">
                             <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />

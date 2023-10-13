@@ -9,6 +9,8 @@ namespace Waffle.Models.Components;
 [Display(Name = "Feed", ShortName = "Feed")]
 public class Feed : AbstractComponent
 {
+    [JsonPropertyName("itemPerRow")]
+    public string ItemPerRow { get; set; } = "col-md-6";
     [JsonPropertyName("name")]
     public string? Name { get; set; }
     [JsonPropertyName("pageSize")]

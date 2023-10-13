@@ -2,6 +2,7 @@
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
+using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Interfaces.IService;
@@ -15,4 +16,5 @@ public interface IProductService
     Task<IdentityResult> SaveBrandAsync(SaveBrandModel args);
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions catalogFilterOptions);
     Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId);
+    Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize);
 }
