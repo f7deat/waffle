@@ -1,10 +1,14 @@
 ﻿@using Waffle.Entities
 @model IEnumerable<Catalog>
 
-<div class="title">Bài viết liên quan</div>
-<div class="md:grid grid-cols-4 gap-4 mb-4">
-    @foreach (var item in Model)
-    {
-        <partial name="~/Pages/Articles/_ListItem.cshtml" model="item" />
-    }
+<div class="mb-4 article-related">
+    <div class="title">Bài viết liên quan</div>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 mb-2">
+                <partial name="~/Pages/Articles/_ListItem.cshtml" model="item" />
+            </div>
+        }
+    </div>
 </div>

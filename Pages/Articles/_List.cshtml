@@ -1,9 +1,11 @@
 ﻿@using Waffle.Entities
 @model IEnumerable<Catalog>
 
-<div class="wf-article md:grid">
+<div class="row">
     @foreach (var item in Model)
     {
-        <partial name="_ListItem.cshtml" model="item" />
+        <div class="col-md-6 col-lg-4 mb-2">
+            <partial name="_ListItem.cshtml" model="@item" />
+        </div>
     }
 </div>
