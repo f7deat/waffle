@@ -7,20 +7,22 @@ using Waffle.Models;
 
 namespace Waffle.Core.Services;
 
-public class FileExplorerService : IFileExplorerService
+public class FileExplorerService : IFileService
 {
     private readonly ApplicationDbContext _context;
-    private readonly IFileContentRepository _fileContentRepository;
+    private readonly IFileRepository _fileRepository;
 
-    public FileExplorerService(ApplicationDbContext context, IFileContentRepository fileContentRepository)
+    public FileExplorerService(ApplicationDbContext context, IFileRepository fileContentRepository)
     {
         _context = context;
-        _fileContentRepository = fileContentRepository;
+        _fileRepository = fileContentRepository;
     }
 
-    public async Task<int> CountAsync() => await _fileContentRepository.CountAsync();
+    public async Task<int> CountAsync() => await _fileRepository.CountAsync();
 
-    public Task<FileContent?> FindAsync(Guid id) => _fileContentRepository.FindAsync(id);
+    public Task<FileContent?> FindAsync(Guid id) => _fileRepository.FindAsync(id);
+
+    public Task<decimal> GetTotalSizeAsync() => _fileRepository.GetTotalSizeAsync();
 
     public async Task<ListResult<FileContent>> ListAsync(FileFilterOptions filterOptions)
     {

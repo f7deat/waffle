@@ -8,12 +8,12 @@ using Waffle.Models;
 
 namespace Waffle.Controllers;
 
-public class FileExplorerController : BaseController
+public class FileController : BaseController
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly ApplicationDbContext _context;
-    private readonly IFileExplorerService _fileService;
-    public FileExplorerController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IFileExplorerService fileExplorerService)
+    private readonly IFileService _fileService;
+    public FileController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IFileService fileExplorerService)
     {
         _webHostEnvironment = webHostEnvironment;
         _context = context;
@@ -66,4 +66,7 @@ public class FileExplorerController : BaseController
 
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync() => Ok(await _fileService.CountAsync());
+
+    [HttpGet("total-size")]
+    public async Task<IActionResult> GetTotalSizeAsync() => Ok(await _fileService.GetTotalSizeAsync());
 }

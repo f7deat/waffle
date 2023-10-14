@@ -207,6 +207,7 @@ public class CatalogService : ICatalogService
         catalog.ModifiedDate = DateTime.Now;
         catalog.Description = args.Description;
         catalog.Thumbnail = args.Thumbnail;
+        catalog.Type = args.Type;
         await _catalogRepository.SaveChangesAsync();
         return IdentityResult.Success;
     }

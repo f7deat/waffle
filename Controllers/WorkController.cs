@@ -18,13 +18,13 @@ namespace Waffle.Controllers;
 public class WorkController : BaseController
 {
     private readonly ApplicationDbContext _context;
-    private readonly IFileExplorerService _fileContentService;
+    private readonly IFileService _fileContentService;
     private readonly IWorkService _workService;
     private readonly IComponentService _componentService;
     private readonly ICatalogService _catalogService;
     private readonly ILogService _logService;
 
-    public WorkController(ApplicationDbContext context, IFileExplorerService fileContentService, IWorkService workContentService, IComponentService componentService, ICatalogService catalogService, ILogService logService)
+    public WorkController(ApplicationDbContext context, IFileService fileContentService, IWorkService workContentService, IComponentService componentService, ICatalogService catalogService, ILogService logService)
     {
         _context = context;
         _fileContentService = fileContentService;

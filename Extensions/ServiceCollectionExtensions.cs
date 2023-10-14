@@ -26,13 +26,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IComponentRepository, ComponentRepository>();
         services.AddScoped<IComponentService, ComponentService>();
-        services.AddScoped<IFileExplorerService, FileExplorerService>();
+        services.AddScoped<IFileService, FileExplorerService>();
         services.AddScoped<ILocalizationService, LocalizationService>();
         services.AddScoped<ILocalizationRepository, LocalizationRepository>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IWorkService, WorkService>();
         services.AddScoped<IWorkContentRepository, WorkItemRepository>();
-        services.AddScoped<IFileContentRepository, FileContentRepository>();
+        services.AddScoped<IFileRepository, FileRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderService, OrderSerivce>();
         services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();

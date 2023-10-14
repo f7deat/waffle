@@ -1,6 +1,7 @@
 ﻿namespace Waffle.Core.Constants;
 
-public class PartialName
+public class PartialViewName
 {
     public const string Pagination = "/Pages/Shared/Components/Pagination/Default.cshtml"; 
+    public const string Empty = "/Pages/Components/Empty/Default.cshtml"; 
 }

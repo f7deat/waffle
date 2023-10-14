@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
@@ -8,5 +9,5 @@ namespace Waffle.Models.Components;
 public class Empty : AbstractComponent
 {
     [JsonIgnore]
-    public const string DefaultView = "~/Pages/Shared/Components/Empty/Default.cshtml";
+    public const string DefaultView = PartialViewName.Empty;
 }

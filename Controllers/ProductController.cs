@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text.Json;
+using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
@@ -53,7 +54,7 @@ public class ProductController : BaseController
     {
         if (args is null || !args.Any())
         {
-            return View("/Pages/Shared/Components/Empty/Default.cshtml", new ErrorViewModel
+            return View(PartialViewName.Empty, new ErrorViewModel
             {
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });

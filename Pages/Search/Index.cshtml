@@ -1,4 +1,5 @@
 ﻿@page
+@using Waffle.Core.Constants;
 @using Waffle.Core.Helpers;
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
@@ -53,7 +54,7 @@
             }
             else
             {
-                <partial name="~/Pages/Shared/Components/Empty/Default.cshtml" model="new ErrorViewModel{ RequestId = Guid.Empty.ToString() }" />
+                @await Html.PartialAsync(PartialViewName.Empty, new ErrorViewModel{ RequestId = Guid.Empty.ToString() })
             }
 
             @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
