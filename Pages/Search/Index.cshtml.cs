@@ -12,9 +12,11 @@ namespace Waffle.Pages.Search;
 public class IndexModel : EntryPageModel
 {
     private readonly ILocalizationService _localizationService;
-    public IndexModel(ICatalogService catalogService, ILocalizationService localizationService) : base(catalogService)
+    private readonly IProductService _productService;
+    public IndexModel(ICatalogService catalogService, ILocalizationService localizationService, IProductService productService) : base(catalogService)
     {
         _localizationService = localizationService;
+        _productService = productService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -55,17 +57,16 @@ public class IndexModel : EntryPageModel
         }).ToList() ?? new();
 
 
-        var product = await _catalogService.ListAsync(new CatalogFilterOptions
+        var product = await _productService.ListAsync(new SearchFilterOptions
         {
-            Name = FilterOptions.SearchTerm,
-            Active = true,
+            SearchTerm = FilterOptions.SearchTerm,
             PageSize = 8,
-            Type = CatalogType.Product
         });
         ProductFeed = new Feed
         {
             Name = "Sản phẩm",
-            Articles = product.Data?.ToList() ?? new()
+            Products = product,
+            ItemPerRow = "col-6 col-md-3"
         };
 
         return Page();

@@ -21,11 +21,11 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
 
     public async Task<Product?> FindByCatalogAsync(Guid catalogId) => await _context.Products.FirstOrDefaultAsync(x => x.CatalogId == catalogId);
 
-    public async Task<List<ProductListItem>> ListAsync(IFilterOptions filterOptions)
+    public async Task<List<ProductListItem>> ListAsync(SearchFilterOptions filterOptions)
     {
         var query = from catalog in _context.Catalogs
                     join product in _context.Products on catalog.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
-                    where catalog.Active && catalog.Type == CatalogType.Product
+                    where catalog.Active && catalog.Type == CatalogType.Product && (string.IsNullOrEmpty(filterOptions.SearchTerm) || catalog.NormalizedName.Contains(filterOptions.SearchTerm))
                     orderby catalog.ModifiedDate descending
                     select new ProductListItem
                     {

@@ -32,7 +32,7 @@ public class FeedViewComponent : BaseViewComponent<Feed>
             feed.Articles = articles.Data?.ToList() ?? new();
             return feed;
         }
-        feed.Products = await _productService.ListAsync(new BasicFilterOptions
+        feed.Products = await _productService.ListAsync(new SearchFilterOptions
         {
             Current = 1,
             PageSize= feed.PageSize
