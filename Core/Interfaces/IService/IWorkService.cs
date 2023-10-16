@@ -12,7 +12,7 @@ public interface IWorkService
     Task<IdentityResult> ActiveAsync(Guid id);
     Task<IdentityResult> SaveTagAsync(Tag tag);
     Task<IdentityResult> SaveColumnAsync(Column item);
-    Task<T?> GetAsync<T>(Guid id);
+    Task<T?> GetAsync<T>(Guid? id);
     T? Get<T>(string? arguments);
     Task<IdentityResult> SaveContactFormAsync(ContactForm item);
     Task<IdentityResult> SaveRowAsync(Row row);
@@ -20,7 +20,7 @@ public interface IWorkService
     Task<IdentityResult> NavbarSettingSaveAsync(Navbar args);
     Task<IEnumerable<Option>> TagListAsync(WorkFilterOptions filterOptions);
     Task<IdentityResult> ItemAddAsync(WorkItem args);
-    Task<WorkContent?> FindAsync(Guid id);
+    Task<WorkContent?> FindAsync(Guid? id);
     Task<IEnumerable<Option>> GetListAsync(BasicFilterOptions filterOptions);
     Task<dynamic> ExportByCatalogAsync(Guid catalogId);
     Task<ListResult<WorkListItem>> GetWorkListItemChildAsync(WorkFilterOptions filterOptions);

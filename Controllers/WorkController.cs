@@ -392,9 +392,6 @@ public class WorkController : BaseController
     [HttpGet("link/{id}")]
     public async Task<IActionResult> GetLinkAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Link>(id));
 
-    [HttpGet("jumbotron/{id}")]
-    public async Task<IActionResult> GetJumbotronAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<Jumbotron>(id));
-
     [HttpGet("google-map/{id}")]
     public async Task<IActionResult> GetGoogleMapAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<GoogleMap>(id));
 

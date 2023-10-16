@@ -7,16 +7,25 @@ namespace Waffle.ViewComponents.ECommerces;
 public class ProductSpotlightViewComponent : ViewComponent
 {
     private readonly IProductService _productService;
-    public ProductSpotlightViewComponent(IProductService productService)
+    private readonly IWorkService _workService;
+    public ProductSpotlightViewComponent(IProductService productService, IWorkService workService)
     {
         _productService = productService;
+        _workService = workService;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync()
+    public async Task<IViewComponentResult> InvokeAsync(Guid? workId)
     {
-        return View(new ProductSpotlight
+        var work = await _workService.GetAsync<ProductSpotlight>(workId);
+        if (work is null)
         {
-            Products = await _productService.ListSpotlightAsync(2)
-        });
+            work ??= new ProductSpotlight();
+            work.Products = await _productService.ListSpotlightAsync(2);
+        }
+        else
+        {
+            work.Products = await _productService.ListSpotlightAsync(work.PageSize);
+        }
+        return View(work);
     }
 }

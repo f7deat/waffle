@@ -4,7 +4,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Sponsor", ShortName = "Sponsor")]
+[Display(Name = "Sponsor", Prompt = "sponsor")]
 public class Sponsor : AbstractComponent
 {
     [JsonPropertyName("brands")]

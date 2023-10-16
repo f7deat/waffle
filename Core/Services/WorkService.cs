@@ -92,9 +92,13 @@ public class WorkService : IWorkService
         return await query.ToListAsync();
     }
 
-    public async Task<WorkContent?> FindAsync(Guid id) => await _workRepository.FindAsync(id);
+    public async Task<WorkContent?> FindAsync(Guid? id)
+    {
+        if (id == null) return default;
+        return await _workRepository.FindAsync(id);
+    }
 
-    public async Task<T?> GetAsync<T>(Guid id)
+    public async Task<T?> GetAsync<T>(Guid? id)
     {
         var work = await FindAsync(id);
         return Get<T>(work?.Arguments);
@@ -272,6 +276,14 @@ public class WorkService : IWorkService
 
     public async Task AddAsync(WorkContent workContent)
     {
+        if (string.IsNullOrEmpty(workContent.Name))
+        {
+            var component = await _componentRepository.FindAsync(workContent.ComponentId);
+            if (component != null)
+            {
+                workContent.Name = component.Name;
+            }
+        }
         await _context.AddAsync(workContent);
         await _context.SaveChangesAsync();
     }

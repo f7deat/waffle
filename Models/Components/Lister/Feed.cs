@@ -6,7 +6,7 @@ using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Feed", ShortName = "Feed")]
+[Display(Name = "Feed", Prompt = "feed")]
 public class Feed : AbstractComponent
 {
     [JsonPropertyName("itemPerRow")]
