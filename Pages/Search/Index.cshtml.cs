@@ -57,15 +57,16 @@ public class IndexModel : EntryPageModel
         }).ToList() ?? new();
 
 
-        var product = await _productService.ListAsync(new SearchFilterOptions
+        var products = await _productService.ListAsync(new ProductFilterOptions
         {
-            SearchTerm = FilterOptions.SearchTerm,
+            Name = FilterOptions.SearchTerm,
             PageSize = 8,
+            Active = true
         });
         ProductFeed = new Feed
         {
             Name = "Sản phẩm",
-            Products = product,
+            Products = products,
             ItemPerRow = "col-6 col-md-3"
         };
 

@@ -32,6 +32,13 @@ public class CatalogFilterOptions : FilterOptions
     public Guid? ParentId { get; set; }
 }
 
+public class ProductFilterOptions : FilterOptions
+{
+    public string? Name { get; set; }
+    public bool? Active { get; set; }
+    public Guid? ParentId { get; set; }
+}
+
 public class SearchFilterOptions : FilterOptions
 {
     public string? SearchTerm { get; set; }

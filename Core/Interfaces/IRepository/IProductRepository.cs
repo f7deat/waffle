@@ -9,7 +9,7 @@ namespace Waffle.Core.Interfaces.IRepository;
 public interface IProductRepository : IAsyncRepository<Product>
 {
     Task<Product?> FindByCatalogAsync(Guid catalogId);
-    Task<List<ProductListItem>> ListAsync(SearchFilterOptions filterOptions);
+    Task<List<ProductListItem>> ListAsync(ProductFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId);
     Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize);
