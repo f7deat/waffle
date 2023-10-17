@@ -9,4 +9,6 @@ public static class FormatExtensions
         var cul = new CultureInfo("vi-VN");
         return input?.ToString("C0", cul);
     }
+
+    public static string ToNumber(this int input) => input.ToString("N0");
 }

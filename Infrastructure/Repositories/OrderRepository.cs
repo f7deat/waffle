@@ -21,11 +21,7 @@ public class OrderRepository : EfRepository<Order>, IOrderRepository
         return await ListResult<Order>.Success(query, filterOptions);
     }
 
-    public async Task<IEnumerable<OrderDetail>> ListOrderDetails(Guid id) => await _context.OrderDetails.Where(x => x.OrderId == id).ToListAsync();
+    public async Task<IEnumerable<OrderDetail>> ListOrderDetails(Guid orderId) => await _context.OrderDetails.Where(x => x.OrderId == orderId).ToListAsync();
 
-    public async Task RemoveRange(IEnumerable<OrderDetail> orderDetails)
-    {
-        _context.OrderDetails.RemoveRange(orderDetails);
-        await _context.SaveChangesAsync();
-    }
+    public void RemoveRange(IEnumerable<OrderDetail> orderDetails) => _context.OrderDetails.RemoveRange(orderDetails);
 }

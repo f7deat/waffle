@@ -29,7 +29,7 @@ public class OrderController : BaseController
     public async Task<IActionResult> ListAsync(BasicFilterOptions filterOptions) => Ok(await _orderService.ListAsync(filterOptions));
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _orderService.FindAsync(id));
+    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _orderService.GetDetailsAsync(id));
 
     [HttpGet("count")]
     public async Task<IActionResult> CountByStatusAsync([FromQuery] OrderStatus status) => Ok(await _orderService.CountByStatusAsync(status));
@@ -47,7 +47,6 @@ public class OrderController : BaseController
     public async Task<IActionResult> AddAsync([FromBody] AddOrderRequest args)
     {
         if (!args.OrderDetails.Any()) return BadRequest("Không tìm thấy sản phẩm trong giỏ hàng!");
-        var count = await _orderService.CountAsync();
         var userId = User.GetClaimId();
         if (!string.IsNullOrEmpty(userId))
         {
@@ -61,12 +60,10 @@ public class OrderController : BaseController
         {
             UserId = User.GetId(),
             CreatedDate = DateTime.Now,
-            Note = args.Note,
-            Status = OrderStatus.Open,
-            Number = $"{count + 1}"
+            Note = args.Note
         };
         await _orderService.AddAsync(order);
-        await _orderService.AddOrderDetailsAsync(args.OrderDetails);
+        await _orderService.AddOrderDetailsAsync(order.Id, args.OrderDetails);
         await _telegramService.SendMessageAsync($"New order [{order.Number}]: \nName: {args.Name}\nPhone: {args.PhoneNumber}\nAddress: {args.Address}\nNote: {args.Note}");
         return Ok("/products/checkout/finish");
     }

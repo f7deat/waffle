@@ -23,20 +23,33 @@ public class OrderSerivce : IOrderService
         _userManager = userManager;
     }
 
+    private static string GenerateOrderNumber()
+    {
+        var random = new Random();
+        int randomNumber = random.Next(1000, 10000);
+        DateTime currentDate = DateTime.Now;
+        return currentDate.ToString("yyyyMMdd") + "-" + randomNumber.ToString();
+    }
+
     public async Task<IdentityResult> AddAsync(Order order)
     {
+        order.Number = GenerateOrderNumber();
         order.Status = OrderStatus.Open;
         order.CreatedDate = DateTime.Now;
         await _orderRepository.AddAsync(order);
         return IdentityResult.Success;
     }
 
-    public async Task AddOrderDetailsAsync(List<OrderDetail> orderDetails)
+    public async Task AddOrderDetailsAsync(Guid orderId, List<OrderDetail> orderDetails)
     {
         if (!orderDetails.Any())
         {
             _logger.LogError("No product was found!");
             return;
+        }
+        foreach (var orderDetail in orderDetails)
+        {
+            orderDetail.OrderId = orderId;
         }
         await _orderDetailRepository.AddRangeAsync(orderDetails);
     }
@@ -47,12 +60,12 @@ public class OrderSerivce : IOrderService
 
     public async Task DeleteAsync(Order order)
     {
-        await _orderRepository.DeleteAsync(order);
         var orderDetails = await _orderRepository.ListOrderDetails(order.Id);
-        await _orderRepository.RemoveRange(orderDetails);
+        if (orderDetails.Any()) _orderRepository.RemoveRange(orderDetails);
+        await _orderRepository.DeleteAsync(order);
     }
 
-    public async Task<OrderDetailViewModel?> FindAsync(Guid id)
+    public async Task<OrderDetailViewModel?> GetDetailsAsync(Guid id)
     {
         var order = await _orderRepository.FindAsync(id);
         if (order is null) return default;
@@ -73,6 +86,8 @@ public class OrderSerivce : IOrderService
         returnValue.OrderDetails = _orderDetailRepository.ListByOrderAsync(order.Id);
         return returnValue;
     }
+
+    public Task<Order?> FindAsync(Guid id) => _orderRepository.FindAsync(id);
 
     public async Task<ListResult<Order>> ListAsync(IFilterOptions filterOptions) => await _orderRepository.ListAsync(filterOptions);
 }

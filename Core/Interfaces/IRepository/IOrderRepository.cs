@@ -8,5 +8,5 @@ public interface IOrderRepository : IAsyncRepository<Order>
     Task<int> CountAsync(OrderStatus status);
     Task<ListResult<Order>> ListAsync(IFilterOptions filterOptions);
     Task<IEnumerable<OrderDetail>> ListOrderDetails(Guid id);
-    Task RemoveRange(IEnumerable<OrderDetail> orderDetails);
+    void RemoveRange(IEnumerable<OrderDetail> orderDetails);
 }
