@@ -22,8 +22,6 @@ namespace Waffle.Pages.Products
         public string SearchTerm { get; set; } = string.Empty;
         public Pagination Pagination => new()
         {
-            HasNextPage = Data.TotalCount > Current * 12,
-            HasPrevPage = Current > 1,
             NextPageUrl = $"/shop/group/{GroupId}?current={Current + 1}",
             PrevPageUrl = $"/shop/group/{GroupId}?current={Current - 1}",
         };

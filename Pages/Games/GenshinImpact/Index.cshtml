@@ -27,8 +27,7 @@
                 @await Html.PartialAsync(PartialViewName.Pagination, new Pagination 
                     { 
                         Current = Model.FilterOptions.Current, 
-                        Total = Model.ContentList.Total, 
-                        HasPrevPage = Model.FilterOptions.Current > 1 
+                        Total = Model.ContentList.Total
                     }
                 )
             </div>

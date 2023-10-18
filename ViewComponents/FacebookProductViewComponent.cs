@@ -10,8 +10,8 @@ namespace Waffle.ViewComponents
     public class FacebookProductViewComponent : ViewComponent
     {
         private readonly IFacebookService _facebookService;
-        private readonly IAppSettingService _appService;
-        public FacebookProductViewComponent(IFacebookService facebookService, IAppSettingService appSettingService)
+        private readonly ISettingService _appService;
+        public FacebookProductViewComponent(IFacebookService facebookService, ISettingService appSettingService)
         {
             _facebookService = facebookService;
             _appService = appSettingService;

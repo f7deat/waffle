@@ -13,9 +13,9 @@ namespace Waffle.Pages.Contacts
     public class IndexModel<TUser> : EntryPageModel where TUser : class
     {
         private readonly UserManager<TUser> _userManager;
-        private readonly IAppSettingService _appSettingService;
+        private readonly ISettingService _appSettingService;
 
-        public IndexModel(ICatalogService catalogService, UserManager<TUser> userManager, IAppSettingService appSettingService) : base(catalogService)
+        public IndexModel(ICatalogService catalogService, UserManager<TUser> userManager, ISettingService appSettingService) : base(catalogService)
         {
             _userManager = userManager;
             _appSettingService = appSettingService;

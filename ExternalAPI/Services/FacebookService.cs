@@ -8,9 +8,9 @@ namespace Waffle.ExternalAPI.Services;
 public class FacebookService : IFacebookService
 {
     private readonly HttpClient _http;
-    private readonly IAppSettingService _appService;
+    private readonly ISettingService _appService;
 
-    public FacebookService(HttpClient http, IAppSettingService appSettingService)
+    public FacebookService(HttpClient http, ISettingService appSettingService)
     {
         http.BaseAddress = new Uri("https://graph.facebook.com");
         _http = http;

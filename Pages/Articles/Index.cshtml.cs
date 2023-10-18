@@ -22,14 +22,6 @@ public class IndexModel : EntryPageModel
     [BindProperty(SupportsGet = true)]
     public string? SearchTerm { get; set; }
 
-    public Pagination Pagination => new()
-    {
-        HasNextPage = Articles?.Total > Current * 12,
-        HasPrevPage = Current > 1,
-        NextPageUrl = $"/articles?current={Current + 1}",
-        PrevPageUrl = $"/articles?current={Current - 1}",
-    };
-
     public async Task OnGetAsync()
     {
         Articles = await _catalogService.ListAsync(new CatalogFilterOptions

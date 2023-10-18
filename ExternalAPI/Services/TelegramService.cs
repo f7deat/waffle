@@ -8,10 +8,10 @@ namespace Waffle.ExternalAPI.Services;
 public class TelegramService : ITelegramService
 {
     private readonly HttpClient _httpClient;
-    private readonly IAppSettingService _appService;
+    private readonly ISettingService _appService;
     private readonly ILogger<TelegramService> _logger;
 
-    public TelegramService(HttpClient httpClient, IAppSettingService appService, ILogger<TelegramService> logger)
+    public TelegramService(HttpClient httpClient, ISettingService appService, ILogger<TelegramService> logger)
     {
         _httpClient = httpClient;
         _appService = appService;
@@ -30,8 +30,9 @@ public class TelegramService : ITelegramService
             }
             return await SendMessageAsync(setting.Token, setting.ChatId, message);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError("Exception {Message}", ex.Message);
             return false;
         }
     }
@@ -54,8 +55,9 @@ public class TelegramService : ITelegramService
             }
             return data?.Ok ?? false;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError("Exception {Message}", ex.Message);
             return false;
         }
     }
@@ -72,8 +74,9 @@ public class TelegramService : ITelegramService
             }
             return await SendMessageAsync(setting.Token, setting.ChatId, message);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError("Exception {Message}", ex.Message);
             return false;
         }
     }

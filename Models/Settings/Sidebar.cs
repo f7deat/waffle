@@ -1,6 +1,7 @@
-﻿namespace Waffle.Models.Settings
+﻿using Waffle.Core.Foundations;
+
+namespace Waffle.Models.Settings;
+
+public class Sidebar : BaseSetting
 {
-    public class Sidebar
-    {
-    }
 }

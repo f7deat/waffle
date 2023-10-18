@@ -17,5 +17,5 @@ public class ProductLister : AbstractComponent
     public int PageSize { get; set; } = 10;
 
     [JsonIgnore]
-    public IEnumerable<ProductListItem> Products { get; set; } = new List<ProductListItem>();
+    public ListResult<ProductListItem>? Products { get; set; }
 }

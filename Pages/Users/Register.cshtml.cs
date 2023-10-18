@@ -15,9 +15,9 @@ public class RegisterModel : EntryPageModel
     private readonly IEmailSender _emailSender;
     private readonly IUserEmailStore<ApplicationUser> _emailStore;
     private readonly IUserStore<ApplicationUser> _userStore;
-    private readonly IAppSettingService _appSettingService;
+    private readonly ISettingService _appSettingService;
 
-    public RegisterModel(ICatalogService catalogService, UserManager<ApplicationUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender, IUserStore<ApplicationUser> userStore, IAppSettingService appSettingService) : base(catalogService)
+    public RegisterModel(ICatalogService catalogService, UserManager<ApplicationUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender, IUserStore<ApplicationUser> userStore, ISettingService appSettingService) : base(catalogService)
     {
         _userManager = userManager;
         _logger = logger;

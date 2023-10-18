@@ -37,8 +37,6 @@ public class IndexModel : EntryPageModel
         };
         Pagination = new Pagination
         {
-            HasNextPage = tags.HasNextPage,
-            HasPrevPage = tags.HasPreviousPage,
             Total = tags.Total,
             NextPageUrl = $"/tag?current={Current + 1}",
             PrevPageUrl = $"/tag?current={Current - 1}"

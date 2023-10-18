@@ -26,8 +26,6 @@ namespace Waffle.Pages.Products
         public int Current { get; set; } = 1;
         public Pagination Pagination => new()
         {
-            HasNextPage = BaseInfoAndLinks.LandingPageLinkList.TotalCount > Current * 20,
-            HasPrevPage = Current > 1,
             NextPageUrl = $"/shop?current={Current + 1}",
             PrevPageUrl = $"/shop?current={Current - 1}",
         };

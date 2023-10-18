@@ -32,7 +32,7 @@
             {
                 <partial name="_List.cshtml" model="Model.Articles.Data" />
 
-                <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+                @Html.DisplayFor(x => Model.Articles.Pagination)
             }
         </div>
         <div class="col-md-4">

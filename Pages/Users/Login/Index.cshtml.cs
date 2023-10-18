@@ -17,7 +17,7 @@ public class IndexModel : EntryPageModel
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _configuration;
-    private readonly IAppSettingService _appSettingService;
+    private readonly ISettingService _appSettingService;
 
     [BindProperty(SupportsGet = true)]
     public string? UserName { get; set; }
@@ -26,7 +26,7 @@ public class IndexModel : EntryPageModel
 
     public Microsoft.AspNetCore.Identity.SignInResult? SignInResult;
 
-    public IndexModel(IAppSettingService appSettingService, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IConfiguration configuration, ICatalogService catalogService) : base(catalogService)
+    public IndexModel(ISettingService appSettingService, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IConfiguration configuration, ICatalogService catalogService) : base(catalogService)
     {
         _signInManager = signInManager;
         _userManager = userManager;

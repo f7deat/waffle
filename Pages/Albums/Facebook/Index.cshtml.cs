@@ -10,8 +10,8 @@ namespace Waffle.Pages.Album.Facebook
     public class IndexModel : PageModel
     {
         private readonly IFacebookService _facebookService;
-        private readonly IAppSettingService _appService;
-        public IndexModel(IFacebookService facebookService, IAppSettingService appSettingService)
+        private readonly ISettingService _appService;
+        public IndexModel(IFacebookService facebookService, ISettingService appSettingService)
         {
             _facebookService = facebookService;
             _appService = appSettingService;
@@ -30,10 +30,11 @@ namespace Waffle.Pages.Album.Facebook
 
         public Pagination Pagination => new()
         { 
-            HasNextPage = !string.IsNullOrEmpty(Photos?.Paging?.Next),
-            HasPrevPage = !string.IsNullOrEmpty(Photos?.Paging?.Previous),
+            NextToken = Photos?.Paging?.Cursors?.After,
+            PrevToken = Photos?.Paging?.Cursors?.Before,
             NextPageUrl = $"/album/facebook/{Id}?after={Photos?.Paging?.Cursors?.After}",
-            PrevPageUrl = $"/album/facebook/{Id}?before={Photos?.Paging?.Cursors?.Before}"
+            PrevPageUrl = $"/album/facebook/{Id}?before={Photos?.Paging?.Cursors?.Before}",
+            Type = PaginationType.Token
         };
 
         public async Task<IActionResult> OnGetAsync(string id)

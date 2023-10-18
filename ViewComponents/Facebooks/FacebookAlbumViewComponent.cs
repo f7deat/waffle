@@ -9,9 +9,9 @@ namespace Waffle.ViewComponents.Facebooks;
 public class FacebookAlbumViewComponent : BaseViewComponent<FacebookAlbum>
 {
     private readonly IFacebookService _facebookService;
-    private readonly IAppSettingService _appSettingService;
+    private readonly ISettingService _appSettingService;
 
-    public FacebookAlbumViewComponent(IWorkService workService, IFacebookService facebookService, IAppSettingService appSettingService) : base(workService)
+    public FacebookAlbumViewComponent(IWorkService workService, IFacebookService facebookService, ISettingService appSettingService) : base(workService)
     {
         _facebookService = facebookService;
         _appSettingService = appSettingService;

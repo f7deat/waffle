@@ -2,12 +2,8 @@
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
 @model Waffle.Pages.Leaf.IndexModel
-@{
-    ViewData["Title"] = "Trang";
-    ViewData["Description"] = "Danh sách trang";
-}
 
-<div class="container">
+<main class="container">
     <div class="title">Danh sách trang</div>
     <div class="md:flex gap-4">
         <div class="col-md-8">
@@ -21,6 +17,7 @@
                         </div>
                     }
                 </div>
+                @Html.DisplayFor(x => x.Catalogs.Pagination)
             }
         </div>
         <div class="col-md-4">
@@ -28,4 +25,4 @@
             @await Component.InvokeAsync(nameof(Tag))
         </div>
     </div>
-</div>
+</main>

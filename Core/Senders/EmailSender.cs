@@ -9,9 +9,9 @@ namespace Waffle.Core.Senders
     public class EmailSender : IEmailSender
     {
         private readonly ILogger _logger;
-        private readonly IAppSettingService _appService;
+        private readonly ISettingService _appService;
 
-        public EmailSender(ILogger<EmailSender> logger, IAppSettingService appService)
+        public EmailSender(ILogger<EmailSender> logger, ISettingService appService)
         {
             _appService = appService;
             _logger = logger;

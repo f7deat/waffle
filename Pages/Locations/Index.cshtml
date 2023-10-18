@@ -4,7 +4,6 @@
 @using Waffle.Models.Components.Specifications
 @model Waffle.Pages.Locations.IndexModel
 
-
 <main class="container">
     @foreach (var component in Model.Components)
     {
@@ -47,8 +46,7 @@
                         </div>
                     }
                 </div>
-
-                <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+                @Html.DisplayFor(x => Model.Catalogs.Pagination)
             }
         </div>
         <div class="col-md-4">

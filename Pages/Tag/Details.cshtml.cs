@@ -77,7 +77,7 @@ public class DetailsModel : DynamicPageModel
                 Name = x.Name,
                 Thumbnail = x.Thumbnail,
                 Url = x.GetUrl(),
-                ViewCount = x.ViewCount.ToString("N0")
+                ViewCount = x.ViewCount.ToNumber()
             }).ToList() ?? new();
         }
 
@@ -85,8 +85,6 @@ public class DetailsModel : DynamicPageModel
 
         Pagination = new Pagination
         {
-            HasNextPage = catalogs.HasNextPage,
-            HasPrevPage = catalogs.HasPreviousPage,
             NextPageUrl = $"/tag/{normalizedName}?current={Current + 1}&searchTerm={SearchTerm}",
             PrevPageUrl = $"/tag/{normalizedName}?current={Current - 1}&searchTerm={SearchTerm}",
             Total = catalogs.Total

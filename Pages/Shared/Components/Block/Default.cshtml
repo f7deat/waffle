@@ -91,7 +91,7 @@
             </div>
             break;
         case BlockEditorType.YOUTUBE:
-            <div class="video-player">
+            <div class="video-player mb-4">
             <iframe class="w-full h-full" src="@item.Data.Url" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
             break;
@@ -99,7 +99,7 @@
             @await Component.InvokeAsync(nameof(Blogger), item.Data.Blogger)
             break;
         case BlockEditorType.EMBED:
-            <div class="video-player">
+            <div class="video-player mb-4">
                 @if (item.Data.Service == "youtube")
                 {
                     <iframe class="w-full h-full" src="@item.Data.Embed" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>

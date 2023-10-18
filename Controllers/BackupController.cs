@@ -16,13 +16,13 @@ public class BackupController : BaseController
 {
     private readonly ApplicationDbContext _context;
     private readonly IComponentService _componentService;
-    private readonly IAppSettingService _appSettingService;
+    private readonly ISettingService _appSettingService;
     private readonly ICatalogService _catalogService;
     private readonly IWorkService _workService;
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly ILogService _logService;
 
-    public BackupController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IComponentService componentService, IAppSettingService appSettingService, ICatalogService catalogService, IWorkService workService, ILogService logService)
+    public BackupController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IComponentService componentService, ISettingService appSettingService, ICatalogService catalogService, IWorkService workService, ILogService logService)
     {
         _context = context;
         _componentService = componentService;

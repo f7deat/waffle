@@ -1,30 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
 
-namespace Waffle.Pages.Leaf
+namespace Waffle.Pages.Leaf;
+
+public class IndexModel : EntryPageModel
 {
-    public class IndexModel : PageModel
+
+    public ListResult<Catalog> Catalogs = new();
+
+    public IndexModel(ICatalogService catalogService) : base(catalogService)
     {
-        private readonly ICatalogService _catalogService;
-        public IndexModel(ICatalogService catalogService)
-        {
-            _catalogService = catalogService;
-        }
+    }
 
-        public ListResult<Catalog> Catalogs = new();
-
-        public async Task<IActionResult> OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
+    {
+        Catalogs = await _catalogService.ListAsync(new()
         {
-            Catalogs = await _catalogService.ListAsync(new()
-            {
-                Type = CatalogType.Default,
-                Active = true,
-                PageSize = 20
-            });
-            return Page();
-        }
+            Type = CatalogType.Default,
+            Active = true,
+            PageSize = 20
+        });
+        return Page();
     }
 }

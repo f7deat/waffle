@@ -9,8 +9,8 @@ namespace Waffle.Pages.Album
     public class IndexModel : EntryPageModel
     {
         private readonly IFacebookService _facebookService;
-        private readonly IAppSettingService _appService;
-        public IndexModel(ICatalogService catalogService, IFacebookService facebookService, IAppSettingService appService) : base(catalogService)
+        private readonly ISettingService _appService;
+        public IndexModel(ICatalogService catalogService, IFacebookService facebookService, ISettingService appService) : base(catalogService)
         {
             _facebookService = facebookService;
             _appService = appService;

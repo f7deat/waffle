@@ -12,7 +12,7 @@ using Waffle.Models.Components;
 
 namespace Waffle.Core.Services;
 
-public class AppSettingService : IAppSettingService
+public class AppSettingService : ISettingService
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<AppSettingService> _logger;

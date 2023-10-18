@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using Waffle.Core.Constants;
+using Waffle.Models.Components;
 
 namespace Waffle.Models;
 
@@ -12,6 +15,9 @@ public class ListResult<T> where T : class
     public bool HasPreviousPage => FilterOptions.Current > 1;
     public bool HasData => Data.Any();
 
+    [UIHint(UIHint.Pagination)]
+    public Pagination Pagination { get; set; } = new();
+
     public ListResult()
     {
         FilterOptions = new BasicFilterOptions();
@@ -23,6 +29,12 @@ public class ListResult<T> where T : class
         Succeeded = true;
         Total = total;
         FilterOptions = filterOptions;
+        Pagination = new Pagination
+        {
+            Current = filterOptions.Current,
+            PageSize = filterOptions.PageSize,
+            Total = total,
+        };
     }
 
     public static async Task<ListResult<T>> Success(IQueryable<T> query, IFilterOptions filterOptions)

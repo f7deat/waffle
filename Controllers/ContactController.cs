@@ -23,13 +23,13 @@ public class ContactController : BaseController
     private readonly ApplicationDbContext _context;
     private readonly ITelegramService _telegramService;
     private readonly ILogger<ContactController> _logger;
-    private readonly IAppSettingService _appSettingService;
+    private readonly ISettingService _appSettingService;
     private readonly IUserService _userService;
     private readonly ILogService _appLogService;
     private readonly IWorkService _workService;
     private readonly ICatalogService _catalogService;
 
-    public ContactController(ILogService appLogService, ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, IAppSettingService appSettingService, IUserService userService, IWorkService workService, ICatalogService catalogService)
+    public ContactController(ILogService appLogService, ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, ISettingService appSettingService, IUserService userService, IWorkService workService, ICatalogService catalogService)
     {
         _context = context;
         _logger = logger;

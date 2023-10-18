@@ -18,14 +18,14 @@ namespace Waffle.Controllers;
 public class AppSettingController : BaseController
 {
     private readonly ApplicationDbContext _context;
-    private readonly IAppSettingService _appSettingService;
+    private readonly ISettingService _appSettingService;
     private readonly IConfiguration _configuration;
     private readonly IFacebookService _facebookService;
     private readonly ITelegramService _telegramService;
     private readonly IWorkService _workService;
     private readonly IEmailSender _emailSender;
 
-    public AppSettingController(IEmailSender emailSender, ApplicationDbContext context, IAppSettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService, IWorkService workService)
+    public AppSettingController(IEmailSender emailSender, ApplicationDbContext context, ISettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService, IWorkService workService)
     {
         _context = context;
         _appSettingService = appSettingService;

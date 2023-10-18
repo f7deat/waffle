@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
@@ -55,6 +56,24 @@ public class OrderController : BaseController
             args.Name = user.Name;
             args.PhoneNumber = user.PhoneNumber;
             args.Address = user.Address;
+        }
+        else
+        {
+            var customer = await _userManager.FindByNameAsync(args.PhoneNumber);
+            if (customer is null)
+            {
+                customer = new ApplicationUser
+                {
+                    UserName = args.PhoneNumber,
+                    Address = args.Address,
+                    PhoneNumber = args.PhoneNumber
+                };
+                var result = await _userManager.CreateAsync(customer);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(customer, RoleName.Customer);
+                }
+            }
         }
         var order = new Order
         {

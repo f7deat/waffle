@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,8 +11,10 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Googles;
+using Waffle.ExternalAPI.Interfaces;
 using Waffle.Foundations;
 using Waffle.Models;
+using Waffle.Models.Params;
 
 namespace Waffle.Controllers;
 
@@ -26,8 +27,10 @@ public class UserController : BaseController
     private readonly IConfiguration _configuration;
     private readonly IUserService _userService;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly ITelegramService _telegramService;
+    private readonly ICatalogService _catalogService;
 
-    public UserController(IWebHostEnvironment webHostEnvironment, IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<ApplicationRole> roleManager)
+    public UserController(IWebHostEnvironment webHostEnvironment, IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<ApplicationRole> roleManager, ITelegramService telegramService, ICatalogService catalogService)
     {
         _userService = userService;
         _userManager = userManager;
@@ -36,6 +39,8 @@ public class UserController : BaseController
         _configuration = configuration;
         _roleManager = roleManager;
         _webHostEnvironment = webHostEnvironment;
+        _telegramService = telegramService;
+        _catalogService = catalogService;
     }
 
     [HttpGet("list")]
@@ -122,42 +127,12 @@ public class UserController : BaseController
         return Ok(await _userManager.DeleteAsync(user));
     }
 
-    [HttpGet("initial"), AllowAnonymous]
-    public async Task<IActionResult> InitialAsync()
-    {
-        if (await _userManager.Users.AnyAsync())
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "Initialized"
-            }));
-        }
-
-        await _roleManager.CreateAsync(new ApplicationRole
-        {
-            Name = "admin"
-        });
-        var user = new ApplicationUser
-        {
-            Email = "f7deat@gmail.com",
-            UserName = "f7deat@gmail.com",
-            EmailConfirmed = true,
-        };
-        var result = await _userManager.CreateAsync(user, "Password@123");
-        if (!result.Succeeded)
-        {
-            return Ok(result);
-        }
-        await _userManager.AddToRoleAsync(user, "admin");
-        return Ok(IdentityResult.Success);
-    }
-
-
     [HttpPost("google-signin"), AllowAnonymous]
     public async Task<IActionResult> GoogleSignUpAsync([FromForm] string? credential)
     {
         var userCredential = await GoogleApiHelper.GetUserCredential(credential);
-        if (userCredential is null) return Redirect("/leaf/signin-failed");
+        var signinFailedPage = await _catalogService.EnsureDataAsync("/leaf/signin-failed");
+        if (userCredential is null) return Redirect(signinFailedPage.GetUrl());
 
         var user = await _userManager.FindByNameAsync(userCredential.Email);
         if (user is null)
@@ -173,7 +148,7 @@ public class UserController : BaseController
             if (!result.Succeeded)
             {
                 _logger.LogTrace("Create user {Email} failed!", user.Email);
-                return Redirect("/leaf/signin-failed");
+                return Redirect(signinFailedPage.GetUrl());
             }
         }
 
@@ -217,5 +192,24 @@ public class UserController : BaseController
         await _signInManager.SignInAsync(user, props);
         
         return Redirect("/");
+    }
+
+    [HttpPost("subscribe")]
+    public async Task<IActionResult> SubscribeAsync(SubscribeArgs args)
+    {
+        if (string.IsNullOrWhiteSpace(args.Email)) return BadRequest();
+        var user = await _userManager.FindByNameAsync(args.Email);
+        if (user is null)
+        {
+            user = new ApplicationUser
+            {
+                UserName = args.Email,
+                Email = args.Email
+            };
+            await _userManager.CreateAsync(user);
+        }
+        await _telegramService.SendMessageAsync($"{args.Email} started following website!");
+        var catalog = await _catalogService.EnsureDataAsync("thank-to-subscribe");
+        return Redirect(catalog.GetUrl());
     }
 }

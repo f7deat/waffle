@@ -10,10 +10,10 @@ namespace Waffle.ViewComponents;
 
 public class HeaderViewComponent : ViewComponent
 {
-    private readonly IAppSettingService _settingService;
+    private readonly ISettingService _settingService;
     private readonly IConfiguration _configuration;
 
-    public HeaderViewComponent(IAppSettingService settingService, IConfiguration configuration)
+    public HeaderViewComponent(ISettingService settingService, IConfiguration configuration)
     {
         _settingService = settingService;
         _configuration = configuration;

@@ -6,7 +6,7 @@ using Waffle.Models.Components;
 
 namespace Waffle.Core.Interfaces.IService;
 
-public interface IAppSettingService
+public interface ISettingService
 {
     Task<AppSetting> EnsureSettingAsync(string name);
     Task<AppSetting?> FindAsync(Guid catalogId);

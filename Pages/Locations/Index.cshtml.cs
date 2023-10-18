@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
-using Waffle.Models.Components;
 using Waffle.Models;
 using Waffle.Core.Foundations;
 
@@ -19,14 +18,6 @@ public class IndexModel : EntryPageModel
     }
 
     public IEnumerable<ComponentListItem> Components = new List<ComponentListItem>();
-
-    public Pagination Pagination => new()
-    {
-        HasNextPage = Catalogs?.Total > Current * 12,
-        HasPrevPage = Current > 1,
-        NextPageUrl = $"/locations?current={Current + 1}",
-        PrevPageUrl = $"/locations?current={Current - 1}",
-    };
 
     public async Task OnGetAsync()
     {

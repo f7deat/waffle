@@ -17,15 +17,14 @@ public class ProductListerViewComponent : BaseViewComponent<ProductLister>
     protected override async Task<ProductLister> ExtendAsync(ProductLister work)
     {
         var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"]);
-        
-        var products = await _productService.ListAsync(new ProductFilterOptions
+
+        work.Products = await _productService.ListAsync(new ProductFilterOptions
         {
             Active = true,
             Current = current,
             PageSize = work.PageSize,
             ParentId = PageData.Type == CatalogType.Entry ? null : PageData.Id
         });
-        work.Products = products.Data;
         if (string.IsNullOrEmpty(work.Title))
         {
             work.Title = PageData.Name;

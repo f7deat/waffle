@@ -9,9 +9,9 @@ namespace Waffle.ViewComponents
     {
         private readonly IWordPressService _wordPressService;
         private readonly IGoogleService _googleService;
-        private readonly IAppSettingService _appService;
+        private readonly ISettingService _appService;
 
-        public PostContentViewComponent(IWorkService workService, IWordPressService wordPressService, IGoogleService googleService, IAppSettingService appService) : base(workService)
+        public PostContentViewComponent(IWorkService workService, IWordPressService wordPressService, IGoogleService googleService, ISettingService appService) : base(workService)
         {
             _wordPressService = wordPressService;
             _googleService = googleService;

@@ -8,9 +8,9 @@ namespace Waffle.ViewComponents;
 
 public class BloggerViewComponent : ViewComponent
 {
-    private readonly IAppSettingService _appService;
+    private readonly ISettingService _appService;
     private readonly IGoogleService _googleService;
-    public BloggerViewComponent(IAppSettingService appService, IGoogleService googleService)
+    public BloggerViewComponent(ISettingService appService, IGoogleService googleService)
     {
         _appService = appService;
         _googleService = googleService;
@@ -19,17 +19,17 @@ public class BloggerViewComponent : ViewComponent
     public async Task<IViewComponentResult> InvokeAsync(Blogger args)
     {
         var blogger = await _appService.GetAsync<ExternalAPI.GoogleAggregate.Google>(nameof(Google));
-        if (blogger != null)
+        if (blogger is null)
         {
-            var post = await _googleService.BloggerGetAsync(args.BlogId, args.PostId, blogger.BloggerApiKey);
-            return View("~/Pages/Shared/Components/Html/Default.cshtml", new Html
+            return View(Empty.DefaultView, new ErrorViewModel
             {
-                Value = post?.Content
+                RequestId = $"{nameof(Blogger)}: {args.BlogId}/{args.PostId}"
             });
         }
-        return View(Empty.DefaultView, new ErrorViewModel
+        var post = await _googleService.BloggerGetAsync(args.BlogId, args.PostId, blogger.BloggerApiKey);
+        return View("~/Pages/Shared/Components/Html/Default.cshtml", new Html
         {
-            RequestId = $"{nameof(Blogger)}: {args.BlogId}/{args.PostId}"
+            Value = post?.Content
         });
     }
 }

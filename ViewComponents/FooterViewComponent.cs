@@ -6,8 +6,8 @@ namespace Waffle.ViewComponents;
 
 public class FooterViewComponent : ViewComponent
 {
-    private readonly IAppSettingService _settingService;
-    public FooterViewComponent(IAppSettingService settingService)
+    private readonly ISettingService _settingService;
+    public FooterViewComponent(ISettingService settingService)
     {
         _settingService = settingService;
     }
