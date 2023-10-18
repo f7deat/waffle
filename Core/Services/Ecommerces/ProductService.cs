@@ -25,7 +25,7 @@ public class ProductService : IProductService
 
     public async Task<Product?> GetByCatalogIdAsync(Guid catalogId) => await _productRepository.FindByCatalogAsync(catalogId);
 
-    public Task<List<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
+    public Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
     {
         filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
         return _productRepository.ListAsync(filterOptions);

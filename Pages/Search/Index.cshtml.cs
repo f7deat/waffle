@@ -66,7 +66,7 @@ public class IndexModel : EntryPageModel
         ProductFeed = new Feed
         {
             Name = "Sản phẩm",
-            Products = products,
+            Products = products.Data,
             ItemPerRow = "col-6 col-md-3"
         };
 

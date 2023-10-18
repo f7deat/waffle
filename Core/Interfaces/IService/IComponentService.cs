@@ -10,7 +10,7 @@ namespace Waffle.Core.Interfaces.IService
         Task<Component> EnsureComponentAsync(string normalizedName);
         Task<Component?> GetByNameAsync(string name);
         Task<Component?> FindAsync(Guid id);
-        Task<ListResult<Component>> ListAsync(IFilterOptions filterOptions);
+        Task<ListResult<Component>> ListAsync(ComponentFilterOptions filterOptions);
         Task<bool> HasWorkContentAsync(Guid id);
         Task<IdentityResult> ActiveAsync(Guid id);
         Task<IdentityResult> DeleteAsync(Guid id);

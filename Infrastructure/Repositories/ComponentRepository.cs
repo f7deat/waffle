@@ -22,4 +22,11 @@ public class ComponentRepository : EfRepository<Component>, IComponentRepository
     {
         return await _context.Components.Where(x => (string.IsNullOrEmpty(filterOptions.SearchTerm) || x.NormalizedName.Contains(filterOptions.SearchTerm)) && x.Active).ToListAsync();
     }
+
+    public async Task<ListResult<Component>> ListAsync(ComponentFilterOptions filterOptions)
+    {
+        var query = _context.Components.Where(x => string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower()))
+            .OrderBy(x => x.NormalizedName);
+        return await ListResult<Component>.Success(query, filterOptions);
+    }
 }

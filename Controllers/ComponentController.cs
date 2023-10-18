@@ -20,7 +20,7 @@ public class ComponentController : BaseController
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _componentService.FindAsync(id));
 
     [HttpGet("list")]
-    public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _componentService.ListAsync(filterOptions));
+    public async Task<IActionResult> ListAsync([FromQuery] ComponentFilterOptions filterOptions) => Ok(await _componentService.ListAsync(filterOptions));
 
     [HttpGet("list-work/{id}")]
     public async Task<IActionResult> ListWorkAsync([FromRoute] Guid id, [FromQuery] WorkFilterOptions filterOptions) => Ok(await _componentService.ListWorkAsync(id, filterOptions));

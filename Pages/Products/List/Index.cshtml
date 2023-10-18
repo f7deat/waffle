@@ -1,13 +1,7 @@
 ﻿@page
 @model Waffle.Pages.Products.List.IndexModel
-@{
+
+@foreach (var component in Model.Components)
+{
+    @await Component.InvokeAsync(component.Name, component.Id)
 }
-
-<main class="container">
-    <div class="col-md-3">
-
-    </div>
-    <div class="col-md-9">
-
-    </div>
-</main>

@@ -7,4 +7,5 @@ public interface IComponentRepository : IAsyncRepository<Component>
 {
     Task<Component?> FindByNameAsync(string normalizedName);
     Task<List<Component>> ListAsync(SearchFilterOptions filterOptions);
+    Task<ListResult<Component>> ListAsync(ComponentFilterOptions filterOptions);
 }

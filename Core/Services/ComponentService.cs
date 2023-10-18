@@ -128,11 +128,7 @@ public class ComponentService : IComponentService
 
     public async Task<IEnumerable<Component>> ListAllAsync() => await _context.Components.Where(x => x.Active).OrderBy(x => x.NormalizedName).ToListAsync();
 
-    public async Task<ListResult<Component>> ListAsync(IFilterOptions filterOptions)
-    {
-        var query = _context.Components.OrderBy(x => x.NormalizedName);
-        return await ListResult<Component>.Success(query, filterOptions);
-    }
+    public Task<ListResult<Component>> ListAsync(ComponentFilterOptions filterOptions) => _componentRepository.ListAsync(filterOptions);
 
     public async Task<ListResult<WorkListItem>> ListWorkAsync(Guid id, WorkFilterOptions filterOptions)
     {

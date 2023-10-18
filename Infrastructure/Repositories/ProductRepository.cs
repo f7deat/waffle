@@ -8,7 +8,6 @@ using Waffle.Entities.Ecommerces;
 using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
-using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Infrastructure.Repositories;
@@ -21,7 +20,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
 
     public async Task<Product?> FindByCatalogAsync(Guid catalogId) => await _context.Products.FirstOrDefaultAsync(x => x.CatalogId == catalogId);
 
-    public async Task<List<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
+    public async Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
     {
         var query = from catalog in _context.Catalogs
                     join product in _context.Products on catalog.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
@@ -41,7 +40,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                         Price = product.Price,
                         SalePrice = product.SalePrice
                     };
-        return await query.AsNoTracking().Take(filterOptions.PageSize).ToListAsync();
+        return await ListResult<ProductListItem>.Success(query, filterOptions);
     }
 
     public async Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions)

@@ -32,12 +32,13 @@ public class FeedViewComponent : BaseViewComponent<Feed>
             feed.Articles = articles.Data?.ToList() ?? new();
             return feed;
         }
-        feed.Products = await _productService.ListAsync(new ProductFilterOptions
+        var products = await _productService.ListAsync(new ProductFilterOptions
         {
             Current = 1,
-            PageSize= feed.PageSize,
+            PageSize = feed.PageSize,
             Active = true
         });
+        feed.Products = products.Data;
         return feed;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
 
@@ -22,9 +23,9 @@ public class ProductListerViewComponent : BaseViewComponent<ProductLister>
             Active = true,
             Current = current,
             PageSize = work.PageSize,
-            ParentId = PageData.Type == Entities.CatalogType.Entry ? null : PageData.Id
+            ParentId = PageData.Type == CatalogType.Entry ? null : PageData.Id
         });
-        work.Products = products;
+        work.Products = products.Data;
         if (string.IsNullOrEmpty(work.Title))
         {
             work.Title = PageData.Name;

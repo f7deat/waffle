@@ -1,39 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
-using Waffle.Entities;
 
 namespace Waffle.Models.Components;
 
 [Display(Name = "Image", Prompt = "image")]
 public class Image : AbstractComponent
 {
-    public Image()
-    {
-        Alt = string.Empty;
-        Description = string.Empty;
-        Link = new Link();
-        File = new FileContent();
-        Wrapper = string.Empty;
-    }
-
     [JsonPropertyName("alt")]
-    public string Alt { get; set; }
+    public string Alt { get; set; } = "IMG";
     [JsonPropertyName("description")]
-    public string Description { get; set; }
-    [JsonPropertyName("width")]
-    public int? Width { get; set; }
-    [JsonPropertyName("height")]
-    public int? Height { get; set; }
+    public string? Description { get; set; }
     [JsonPropertyName("link")]
-    public Link Link { get; set; }
-    [JsonPropertyName("file")]
-    public FileContent File { get; set; }
+    public Link Link { get; set; } = new();
     [JsonPropertyName("wrapper")]
-    public string Wrapper { get; set; }
-
-    [JsonIgnore]
-    public string Src => File.Url;
+    public string Wrapper { get; set; } = "wf-image";
+    [JsonPropertyName("src")]
+    public string? Src { get; set; }
 
     [JsonIgnore]
     public bool HasImage => !string.IsNullOrEmpty(Src);
