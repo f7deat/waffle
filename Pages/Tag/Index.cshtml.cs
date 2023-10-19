@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Models;
@@ -17,7 +19,9 @@ public class IndexModel : EntryPageModel
     public int Current { get; set; } = 1;
 
     [BindProperty(SupportsGet = true)]
+    [UIHint(UIHint.SearchBox)]
     public string? SearchTerm { get; set; }
+    [UIHint(UIHint.Pagination)]
 
     public Pagination Pagination = new();
 
@@ -35,12 +39,7 @@ public class IndexModel : EntryPageModel
             Items = GetItems(tags.Data ?? new List<TagListItem>()),
             HasBadge = true
         };
-        Pagination = new Pagination
-        {
-            Total = tags.Total,
-            NextPageUrl = $"/tag?current={Current + 1}",
-            PrevPageUrl = $"/tag?current={Current - 1}"
-        };
+        Pagination = tags.Pagination;
     }
 
     private static List<ListGroupItem> GetItems(IEnumerable<TagListItem> tags)

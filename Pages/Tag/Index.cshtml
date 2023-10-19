@@ -7,14 +7,9 @@
     <div class="row">
         <div class="col-md-8">
             <div class="mb-4 flex justify-between items-center">
-                <form class="mb-2" method="get">
-                    <div class="border rounded-full flex bg-white">
-                        <input type="search" name="searchTerm" placeholder="Tìm kiếm..." class="flex-grow px-4 rounded-full" autocomplete="off">
-                        <button type="submit" class="py-2 px-3">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    </div>
-                </form>
+
+                @Html.DisplayFor(x => Model.SearchTerm)
+
                 <div class="dropdown">
                     <button class="py-2 fw-medium" data-bs-toggle="dropdown" aria-expanded="false" id="drp-sort">
                         <i class="fas fa-sort-amount-up"></i> Sắp xếp
@@ -26,7 +21,7 @@
                 </div>
             </div>
             <partial name="~/Pages/Shared/Components/ListGroup/Default.cshtml" model="Model.Tags" />
-            <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+            @Html.DisplayFor(x => Model.Pagination)
         </div>
         <div class="col-md-4">
             @await Component.InvokeAsync(nameof(ArticleSpotlight))

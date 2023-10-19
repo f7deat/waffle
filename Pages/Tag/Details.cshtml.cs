@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
@@ -22,6 +24,7 @@ public class DetailsModel : DynamicPageModel
     [BindProperty(SupportsGet = true)]
     public int Current { get; set; } = 1;
     [BindProperty(SupportsGet = true)]
+    [UIHint(UIHint.SearchBox)]
     public string? SearchTerm { get; set; }
 
     public Pagination Pagination = new();

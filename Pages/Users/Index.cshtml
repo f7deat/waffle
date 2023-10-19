@@ -1,4 +1,5 @@
 ﻿@page "/users/{id}"
+@using Waffle.Extensions;
 @model Waffle.Pages.Users.IndexModel
 @{
     ViewData["Title"] = Model.ApplicationUser.UserName;
@@ -8,20 +9,36 @@
     <div class="row">
         <partial name="_Leftbar" model="Model.ApplicationUser" />
         <div class="col-md-9 mb-4">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Hoạt động</a>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Hoạt động</button>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Bài viết</a>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="artice-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Bài viết</button>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" role="presentation">
                     <a class="nav-link" href="#">Bình luận</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" role="presentation">
                     <a class="nav-link disabled" aria-disabled="true">Người theo dõi</a>
                 </li>
             </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="activity-tab-pane" role="tabpanel" aria-labelledby="activity-tab" tabindex="0"></div>
+                <div class="tab-pane fade" id="artice-tab-pane" role="tabpanel" aria-labelledby="artice-tab" tabindex="0">
+                    @if (Model.Articles != null)
+                    {
+                        @foreach (var article in Model.Articles.Data)
+                        {
+                            <div class="list-group-item">
+                                <a href="@article.GetUrl()">@article.Name</a>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">...</div>
+                <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
+            </div>
         </div>
     </div>
 </main>

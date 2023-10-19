@@ -23,6 +23,7 @@ public class ProductListerViewComponent : BaseViewComponent<ProductLister>
             Active = true,
             Current = current,
             PageSize = work.PageSize,
+            Name = Request.Query["searchTerm"],
             ParentId = PageData.Type == CatalogType.Entry ? null : PageData.Id
         });
         if (string.IsNullOrEmpty(work.Title))

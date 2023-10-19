@@ -10,14 +10,15 @@
 
             @await Component.InvokeAsync(nameof(Breadcrumb))
 
-            <form class="mb-2" method="get">
+            @Html.DisplayFor(x => x.SearchTerm)
+            @* <form class="mb-2" method="get">
                 <div class="border rounded-full flex bg-white">
                     <input type="search" name="searchTerm" placeholder="Tìm kiếm..." class="flex-grow px-4 rounded-full" value="@Model.SearchTerm" autocomplete="off">
                     <button type="submit" class="py-2 px-3">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
-            </form>
+            </form> *@
 
             <div class="title flex justify-between mb-0">
                 <h1 class="text-base">
@@ -74,11 +75,11 @@
                     @foreach (var item in Model.Locations.Data)
                     {
                         <div class="bg-white shadow rounded">
-                            <div class="card-image">
-                                <img src="@item.Thumbnail" alt="@item.Name" class="object-cover" loading="lazy" />
+                            <div class="card-image bg-dark">
+                                <img src="@item.Thumbnail" alt="@item.Name" class="object-cover w-100 product-thumbnail" loading="lazy" />
                             </div>
                             <div class="p-2">
-                                <a href="/locations/@item.NormalizedName">
+                                <a href="@item.GetUrl()">
                                     @item.Name
                                 </a>
                             </div>

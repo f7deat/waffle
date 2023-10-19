@@ -30,6 +30,7 @@ public class CatalogFilterOptions : FilterOptions
     public bool? Active { get; set; }
     public CatalogType? Type { get; set; }
     public Guid? ParentId { get; set; }
+    public Guid? CreatedBy { get; set; }
 }
 
 public class ProductFilterOptions : FilterOptions

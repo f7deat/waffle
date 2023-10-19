@@ -1,7 +1,6 @@
 ﻿@page
 @model Waffle.Pages.Users.Login.IndexModel
 @{
-    ViewData["Title"] = "Đăng nhập";
     var loginUri = $"{Request.Scheme}://{Request.Host.Value}/api/user/google-signin";
 }
 <script src="https://accounts.google.com/gsi/client" async></script>
@@ -14,7 +13,7 @@
      data-itp_support="true">
 </div>
 <main class="container">
-    <div class="flex justify-center">
+    <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="mb-4">
                 <div class="title">Đăng nhập</div>

@@ -56,6 +56,10 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         {
             query = query.Where(x => x.Type == filterOptions.Type);
         }
+        if (filterOptions.CreatedBy != null)
+        {
+            query = query.Where(x => x.CreatedBy == filterOptions.CreatedBy);
+        }
 
         return await ListResult<Catalog>.Success(query.OrderByDescending(x => x.ModifiedDate), filterOptions);
     }
