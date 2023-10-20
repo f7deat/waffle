@@ -1,5 +1,6 @@
 ﻿@page "/article/{normalizedName}"
 @using Waffle.Core.Constants;
+@using Waffle.Extensions;
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
 @using Waffle.ViewComponents
@@ -36,7 +37,7 @@
                         <div class="flex gap-4">
                             <span>
                                 <i class="fas fa-eye me-1"></i>
-                                <span>@Model.PageData.ViewCount.ToString("N0")</span>
+                                <span>@Model.PageData.ViewCount.ToNumber()</span>
                             </span>
                             <span>|</span>
                             <span>

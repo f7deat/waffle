@@ -20,7 +20,7 @@ public class ProductSpotlightViewComponent : ViewComponent
         if (work is null)
         {
             work ??= new ProductSpotlight();
-            work.Products = await _productService.ListSpotlightAsync(2);
+            work.Products = await _productService.ListSpotlightAsync(4);
         }
         else
         {

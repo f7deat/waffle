@@ -11,5 +11,5 @@ public class ArticleLister : AbstractComponent
     [JsonPropertyName("name")]
     public string? Name { get; set; }
     [JsonIgnore]
-    public IEnumerable<Catalog>? Articles { get; set; }
+    public ListResult<Catalog>? Articles { get; set; }
 }

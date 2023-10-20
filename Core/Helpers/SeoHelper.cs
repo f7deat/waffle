@@ -63,6 +63,8 @@ public class SeoHelper
                 return "tag";
             case CatalogType.Album:
                 return "leaf/album";
+            case CatalogType.Video:
+                return "video";
             default: return "leaf";
         }
     }

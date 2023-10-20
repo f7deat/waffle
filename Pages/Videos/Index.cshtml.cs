@@ -6,7 +6,7 @@ using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components.Lister;
 
-namespace Waffle.Pages.Video;
+namespace Waffle.Pages.Videos;
 
 public class IndexModel : EntryPageModel
 {
@@ -27,7 +27,7 @@ public class IndexModel : EntryPageModel
             Name = x.Name,
             Date = x.ModifiedDate.ToString("D"),
             Thumbnail = x.Thumbnail,
-            ViewCount = x.ViewCount.ToString("N0"),
+            ViewCount = x.ViewCount.ToNumber(),
             Url = x.GetUrl()
         }).ToList() ?? new();
 

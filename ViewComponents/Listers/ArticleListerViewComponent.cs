@@ -23,7 +23,7 @@ public class ArticleListerViewComponent : BaseViewComponent<ArticleLister>
             PageSize = 10,
             ParentId = PageData.Type == Entities.CatalogType.Entry ? null : PageData.Id
         });
-        work.Articles = articles.Data;
+        work.Articles = articles;
         if (string.IsNullOrEmpty(work.Name))
         {
             work.Name = PageData.Name;

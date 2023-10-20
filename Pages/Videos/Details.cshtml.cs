@@ -4,7 +4,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
 
-namespace Waffle.Pages.Video;
+namespace Waffle.Pages.Videos;
 
 public class DetailsModel : DynamicPageModel
 {

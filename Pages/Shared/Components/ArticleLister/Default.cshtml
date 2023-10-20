@@ -6,7 +6,11 @@
     IEnumerable<ListGroupItem> GetItems()
     {
         var items = new List<ListGroupItem>();
-        foreach (var item in Model.Articles!)
+        if (Model.Articles == null)
+        {
+            return items;
+        }
+        foreach (var item in Model.Articles.Data)
         {
             items.Add(new ListGroupItem
                     {
@@ -26,3 +30,8 @@
                     Name = Model.Name,
                     Items = GetItems()
                 })
+
+@if (Model.Articles != null)
+{
+    @Html.DisplayFor(x => Model.Articles.Pagination)
+}

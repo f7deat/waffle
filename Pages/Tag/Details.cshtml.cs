@@ -20,14 +20,13 @@ public class DetailsModel : DynamicPageModel
         _productService = productService;
     }
 
-    public IEnumerable<Catalog> Catalogs = new List<Catalog>();
+    public ListResult<Catalog>? Articles;
     [BindProperty(SupportsGet = true)]
     public int Current { get; set; } = 1;
     [BindProperty(SupportsGet = true)]
     [UIHint(UIHint.SearchBox)]
     public string? SearchTerm { get; set; }
 
-    public Pagination Pagination = new();
     public IEnumerable<ProductListItem> Products = new List<ProductListItem>();
     public ListResult<Catalog> Albums = new();
     public ListResult<Catalog> Locations = new();
@@ -35,11 +34,12 @@ public class DetailsModel : DynamicPageModel
 
     public async Task<IActionResult> OnGetAsync(string normalizedName)
     {
-        var catalogs = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
+        Articles = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
         {
             Current = Current,
             Name = SearchTerm,
-            Type = CatalogType.Article
+            Type = CatalogType.Article,
+            PageSize = 12
         });
 
         Products = await _productService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
@@ -83,15 +83,6 @@ public class DetailsModel : DynamicPageModel
                 ViewCount = x.ViewCount.ToNumber()
             }).ToList() ?? new();
         }
-
-        Catalogs = catalogs.Data ?? new List<Catalog>();
-
-        Pagination = new Pagination
-        {
-            NextPageUrl = $"/tag/{normalizedName}?current={Current + 1}&searchTerm={SearchTerm}",
-            PrevPageUrl = $"/tag/{normalizedName}?current={Current - 1}&searchTerm={SearchTerm}",
-            Total = catalogs.Total
-        };
         return Page();
     }
 }
