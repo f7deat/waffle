@@ -1,6 +1,7 @@
 ﻿@page "/leaf/{category}/{normalizedName}"
 @using Waffle.Core.Constants;
 @using Waffle.Entities;
+@using Waffle.Extensions;
 @using Waffle.Models.Components;
 @using Waffle.ViewComponents;
 @model Waffle.Pages.Leaf.Categories.DetailModel
@@ -42,7 +43,7 @@
                     <div class="flex gap-4">
                         <span>
                             <i class="fas fa-eye me-1"></i>
-                            <span>@Model.PageData.ViewCount.ToString("N0")</span>
+                            <span>@Model.PageData.ViewCount.ToNumber()</span>
                         </span>
                         <span>|</span>
                         <span>
@@ -52,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            @await Component.InvokeAsync(ComponentName.Comment)
+            @await Component.InvokeAsync(nameof(Comment))
         </div>
         <div class="col-md-4">
             @await Component.InvokeAsync(nameof(ArticleSpotlight))

@@ -52,7 +52,7 @@ public class IndexModel : EntryPageModel
             Name = x.Name,
             Date = x.ModifiedDate.ToString("D"),
             Thumbnail = x.Thumbnail,
-            ViewCount = x.ViewCount.ToString("N0"),
+            ViewCount = x.ViewCount.ToNumber(),
             Url = x.GetUrl()
         }).ToList() ?? new();
 

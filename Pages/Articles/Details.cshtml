@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                @await Component.InvokeAsync(ComponentName.Comment)
+                @await Component.InvokeAsync(nameof(Comment))
             </div>
             <div class="col-md-4">
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
@@ -81,7 +81,7 @@
 
         @if (Model.Tags.Any())
         {
-            @await Component.InvokeAsync("Related", Model.Tags.Select(x => x.Id))
+            @await Component.InvokeAsync(ComponentName.Related, Model.Tags.Select(x => x.Id))
         }
     </div>
 </main>

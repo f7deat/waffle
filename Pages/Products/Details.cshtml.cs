@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
@@ -15,13 +14,11 @@ public class DetailsModel : DynamicPageModel
 {
     private readonly ApplicationDbContext _context;
     private readonly IProductService _productService;
-    private readonly IConfiguration _configuration;
 
-    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, IProductService productService, IConfiguration configuration) : base(catalogService)
+    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, IProductService productService) : base(catalogService)
     {
         _context = context;
         _productService = productService;
-        _configuration = configuration;
     }
 
     public ProductWorkItem? Editor;
@@ -30,15 +27,9 @@ public class DetailsModel : DynamicPageModel
     public AffiliateLink? AffiliateLink;
     public IEnumerable<Catalog> RelatedProducts = new List<Catalog>();
     public Product? Product;
-    public CultureInfo CultureInfo = new("en-US");
 
     public async Task<IActionResult> OnGetAsync()
     {
-        var cul = _configuration.GetValue<string>("language");
-        if (!string.IsNullOrEmpty(cul))
-        {
-            CultureInfo = new CultureInfo(cul);
-        }
         Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
         Product = await _productService.GetByCatalogIdAsync(PageData.Id);
         var component = await GetComponentsAsync();
