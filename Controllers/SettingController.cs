@@ -15,20 +15,20 @@ using WFSendGrid = Waffle.ExternalAPI.SendGrids.SendGrid;
 
 namespace Waffle.Controllers;
 
-public class AppSettingController : BaseController
+public class SettingController : BaseController
 {
     private readonly ApplicationDbContext _context;
-    private readonly ISettingService _appSettingService;
+    private readonly ISettingService _settingService;
     private readonly IConfiguration _configuration;
     private readonly IFacebookService _facebookService;
     private readonly ITelegramService _telegramService;
     private readonly IWorkService _workService;
     private readonly IEmailSender _emailSender;
 
-    public AppSettingController(IEmailSender emailSender, ApplicationDbContext context, ISettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService, IWorkService workService)
+    public SettingController(IEmailSender emailSender, ApplicationDbContext context, ISettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService, IWorkService workService)
     {
         _context = context;
-        _appSettingService = appSettingService;
+        _settingService = appSettingService;
         _configuration = configuration;
         _facebookService = facebookService;
         _telegramService = telegramService;
@@ -37,13 +37,19 @@ public class AppSettingController : BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<object>(id));
+    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync<object>(id));
+
+    [HttpGet("header/{id}")]
+    public async Task<IActionResult> GetHeaderAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync<Header>(id) ?? new Header());
+
+    [HttpGet("footer/{id}")]
+    public async Task<IActionResult> GetFooterAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync<Footer>(id) ?? new Footer());
 
     [HttpGet("list")]
-    public async Task<IActionResult> ListAsync() => Ok(await _appSettingService.ListAsync());
+    public async Task<IActionResult> ListAsync() => Ok(await _settingService.ListAsync());
 
     [HttpPost("save/{id}")]
-    public async Task<IActionResult> SaveAsync([FromRoute] Guid id, [FromBody] object args) => Ok(await _appSettingService.SaveAsync(id, args));
+    public async Task<IActionResult> SaveAsync([FromRoute] Guid id, [FromBody] object args) => Ok(await _settingService.SaveAsync(id, args));
 
     [HttpGet("info")]
     public IActionResult GetInfo()
@@ -58,14 +64,14 @@ public class AppSettingController : BaseController
     [HttpGet("sendgrid")]
     public async Task<IActionResult> GetSendGridAsync()
     {
-        var app = await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
-        return base.Ok(await _appSettingService.GetAsync<WFSendGrid>(app.Id));
+        var app = await _settingService.EnsureSettingAsync(nameof(SendGrid));
+        return base.Ok(await _settingService.GetAsync<WFSendGrid>(app.Id));
     }
 
     [HttpPost("sendgrid/save")]
     public async Task<IActionResult> SaveSendGridAsync([FromBody] WFSendGrid args)
     {
-        var app = await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
+        var app = await _settingService.EnsureSettingAsync(nameof(SendGrid));
         app.Value = JsonSerializer.Serialize(args);
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
@@ -92,13 +98,13 @@ public class AppSettingController : BaseController
     }
 
     [HttpGet("facebook/{id}")]
-    public async Task<IActionResult> FacebookGetAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Facebook>(id));
+    public async Task<IActionResult> FacebookGetAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync<Facebook>(id));
 
     [HttpPost("facebook/save")]
     public async Task<IActionResult> SaveFacebookAsync([FromBody] Facebook model)
     {
-        var app = await _appSettingService.EnsureSettingAsync(nameof(Facebook));
-        var facebook = await _appSettingService.GetAsync<Facebook>(app.Id);
+        var app = await _settingService.EnsureSettingAsync(nameof(Facebook));
+        var facebook = await _settingService.GetAsync<Facebook>(app.Id);
         if (facebook != null)
         {
             var userToken = await _facebookService.GetLongLivedUserAccessTokenAsync(facebook.AppId, facebook.AppSecret, model.ShortLiveToken);
@@ -127,7 +133,7 @@ public class AppSettingController : BaseController
     [HttpGet("long-lived-user-access-token")]
     public async Task<IActionResult> GetLongLivedUserAccessTokenAsync([FromQuery] string shortLiveToken)
     {
-        var app = await _appSettingService.GetAsync<Facebook>(nameof(Facebook));
+        var app = await _settingService.GetAsync<Facebook>(nameof(Facebook));
         if (app is null)
         {
             return NotFound();
@@ -136,15 +142,15 @@ public class AppSettingController : BaseController
     }
 
     [HttpPost("telegram/save/{id}")]
-    public async Task<IActionResult> SaveTelegramAsync([FromRoute] Guid id, [FromBody] Telegram args) => Ok(await _appSettingService.SaveTelegramAsync(id, args));
+    public async Task<IActionResult> SaveTelegramAsync([FromRoute] Guid id, [FromBody] Telegram args) => Ok(await _settingService.SaveTelegramAsync(id, args));
 
     [HttpGet("telegram/{id}")]
-    public async Task<IActionResult> GetTelegramAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Telegram>(id));
+    public async Task<IActionResult> GetTelegramAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync<Telegram>(id));
 
     [HttpPost("telegram/test")]
     public async Task<IActionResult> TestTelegramAsync([FromBody] TelegramMessage message)
     {
-        var telegram = await _appSettingService.GetAsync<Telegram>(nameof(Telegram));
+        var telegram = await _settingService.GetAsync<Telegram>(nameof(Telegram));
         if (telegram is null)
         {
             return Ok(IdentityResult.Failed(new IdentityError
@@ -156,19 +162,13 @@ public class AppSettingController : BaseController
         return Ok(IdentityResult.Success);
     }
 
-    [HttpGet("footer/{id}")]
-    public async Task<IActionResult> GetFooterAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Footer>(id));
-
-    [HttpPost("footer/save")]
-    public async Task<IActionResult> SaveFooterAsync([FromBody] Footer args) => Ok(await _appSettingService.SaveFooterAsync(args));
-
     [HttpGet("social/{id}")]
-    public async Task<IActionResult> GetSocialLinkAsync([FromRoute] Guid id) => Ok(await _appSettingService.GetAsync<Social>(id));
+    public async Task<IActionResult> GetSocialLinkAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync<Social>(id));
 
     [HttpPost("social/save")]
     public async Task<IActionResult> SaveSocialLinkAsync([FromBody] Social args)
     {
-        var setting = await _appSettingService.EnsureSettingAsync(nameof(Social));
+        var setting = await _settingService.EnsureSettingAsync(nameof(Social));
         setting.Value = JsonSerializer.Serialize(args);
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
@@ -177,7 +177,7 @@ public class AppSettingController : BaseController
     [HttpGet("sidebar")]
     public async Task<IActionResult> GetSidebarAsync()
     {
-        var sidebar = await _appSettingService.EnsureSettingAsync(nameof(Sidebar));
+        var sidebar = await _settingService.EnsureSettingAsync(nameof(Sidebar));
         var components = await _workService.ListBySettingIdAsync(sidebar.Id);
         return Ok(components);
     }

@@ -8,19 +8,19 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
-using Waffle.Models.Components;
+using Waffle.Models.Settings;
 
 namespace Waffle.Core.Services;
 
-public class AppSettingService : ISettingService
+public class SettingService : ISettingService
 {
     private readonly ApplicationDbContext _context;
-    private readonly ILogger<AppSettingService> _logger;
+    private readonly ILogger<SettingService> _logger;
     private readonly ILookupNormalizer _lookupNormalizer;
     private readonly IMemoryCache _memoryCache;
     private readonly ISettingRepository _settingRepository;
 
-    public AppSettingService(ApplicationDbContext context, ILogger<AppSettingService> logger, ILookupNormalizer lookupNormalizer, IMemoryCache memoryCache, ISettingRepository settingRepository)
+    public SettingService(ApplicationDbContext context, ILogger<SettingService> logger, ILookupNormalizer lookupNormalizer, IMemoryCache memoryCache, ISettingRepository settingRepository)
     {
         _context = context;
         _logger = logger;
@@ -67,8 +67,7 @@ public class AppSettingService : ISettingService
             if (setting is null)
             {
                 setting = new AppSetting { Name = normalizedName, NormalizedName = normalizedName };
-                await _context.AppSettings.AddAsync(setting);
-                await _context.SaveChangesAsync();
+                await _settingRepository.AddAsync(setting);
             }
             if (string.IsNullOrEmpty(setting.Value)) return default;
 

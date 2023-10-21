@@ -2,11 +2,12 @@
 using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 using Waffle.Entities;
+using Waffle.Models.Components;
 
-namespace Waffle.Models.Components;
+namespace Waffle.Models.Settings;
 
 [Display(Name = "Header", Prompt = "header", AutoGenerateFilter = true)]
-public class Header : AbstractComponent
+public class Header : BaseSetting
 {
     [JsonPropertyName("brand")]
     public string? Brand { get; set; }
@@ -23,4 +24,12 @@ public class Header : AbstractComponent
 
     [JsonIgnore]
     public Catalog Catalog { get; set; } = new();
+
+    public IEnumerable<Option> Templates { get; set; }
+     = new List<Option>
+    {
+        new Option { Label = "Blank", Value = "blank" },
+        new Option { Label = "Default", Value = "default" },
+        new Option { Label = "Dliti", Value = "dliti" }
+    };
 }

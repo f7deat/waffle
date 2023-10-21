@@ -2,4 +2,5 @@
 
 public class BaseSetting
 {
+    public Guid Id { get; set; }
 }

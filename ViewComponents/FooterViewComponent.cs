@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Models.Components;
+using Waffle.Models.Settings;
 
 namespace Waffle.ViewComponents;
 
@@ -16,6 +16,6 @@ public class FooterViewComponent : ViewComponent
     {
         var footer = await _settingService.GetAsync<Footer>(nameof(Footer));
         footer ??= new Footer();
-        return View(footer);
+        return View(footer.ViewName, footer);
     }
 }

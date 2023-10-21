@@ -2,7 +2,7 @@
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
-using Waffle.Models.Components;
+using Waffle.Models.Settings;
 
 namespace Waffle.Core.Interfaces.IService;
 

@@ -3,8 +3,8 @@ using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Components;
 using Waffle.Extensions;
+using Waffle.Models.Settings;
 
 namespace Waffle.ViewComponents;
 
