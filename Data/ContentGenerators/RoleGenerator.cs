@@ -20,7 +20,15 @@ public class RoleGenerator : BaseGenerator
             new ApplicationRole
             {
                 Name = RoleName.Admin
-            }
+            },
+            new ApplicationRole
+            {
+                Name= RoleName.Member
+            },
+            new ApplicationRole
+            {
+                Name= RoleName.Customer
+            },
         };
         return roles;
     }

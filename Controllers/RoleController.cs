@@ -28,13 +28,4 @@ public class RoleController : BaseController
 
     [HttpPost("create"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> CreateAsync([FromBody] ApplicationRole role) => Ok(await _roleManager.CreateAsync(role));
-
-    [HttpPost("update")]
-    public async Task<IActionResult> UpdateAsync([FromBody] ApplicationRole args)
-    {
-        var role = await _roleManager.FindByIdAsync(args.Id.ToString());
-        if (role is null) return BadRequest("Role not found!");
-        role.Name = args.Name;
-        return Ok(await _roleManager.UpdateAsync(role));
-    }
 }

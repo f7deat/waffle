@@ -10,6 +10,8 @@ public class ArticleLister : AbstractComponent
 {
     [JsonPropertyName("name")]
     public string? Name { get; set; }
+    [JsonPropertyName("pageSize")]
+    public int PageSize { get; set; } = 10;
     [JsonIgnore]
     public ListResult<Catalog>? Articles { get; set; }
 }

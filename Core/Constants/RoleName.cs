@@ -1,9 +1,9 @@
-namespace Waffle.Core.Constants
+namespace Waffle.Core.Constants;
+
+public class RoleName
 {
-    public class RoleName
-    {
-        public const string Admin = "admin";
-        public const string Customer = "customer";
-        public const string Contact = "contact";
-    }
+    public const string Admin = "admin";
+    public const string Customer = "customer";
+    public const string Contact = "contact";
+    public const string Member = "member";
 }

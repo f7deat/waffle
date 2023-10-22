@@ -116,6 +116,19 @@ public class UserController : BaseController
     [HttpPost("create")]
     public async Task<IActionResult> CreateAsync([FromBody] CreateUserModel model) => Ok(await _userService.CreateAsync(model));
 
+    [HttpPost("create-member")]
+    public async Task<IActionResult> CreateMemberAsync([FromBody] CreateUserModel args)
+    {
+        var user = new ApplicationUser
+        {
+            UserName = args.UserName
+        };
+        var result = await _userManager.CreateAsync(user);
+        if (!result.Succeeded) return Ok(result);
+        result = await _userManager.AddToRoleAsync(user, RoleName.Member);
+        return Ok(result);
+    }
+
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model) => Ok(await _userService.ChangePasswordAsync(model));
 
