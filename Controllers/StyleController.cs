@@ -15,7 +15,7 @@ public class StyleController : Controller
         _configuration = configuration;
     }
 
-    [HttpGet("")]
+    [HttpGet]
     public async Task<IActionResult> GetAsync()
     {
         var path = GetPath();

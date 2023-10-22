@@ -17,10 +17,10 @@ public class CommentService : ICommentService
     private readonly ICurrentUser _currentUser;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<CommentService> _logger;
-    private readonly IAppLogRepository _appLogRepository;
+    private readonly ILogRepository _appLogRepository;
     private readonly ICatalogRepository _catalogRepository;
 
-    public CommentService(ICatalogRepository catalogRepository, ILogger<CommentService> logger, IAppLogRepository appLogRepository, ICurrentUser currentUser, ICommentRepository commentRepository, UserManager<ApplicationUser> userManager)
+    public CommentService(ICatalogRepository catalogRepository, ILogger<CommentService> logger, ILogRepository appLogRepository, ICurrentUser currentUser, ICommentRepository commentRepository, UserManager<ApplicationUser> userManager)
     {
         _commentRepository = commentRepository;
         _userManager = userManager;

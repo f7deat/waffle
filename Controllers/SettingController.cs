@@ -65,7 +65,7 @@ public class SettingController : BaseController
     public async Task<IActionResult> GetSendGridAsync()
     {
         var app = await _settingService.EnsureSettingAsync(nameof(SendGrid));
-        return base.Ok(await _settingService.GetAsync<WFSendGrid>(app.Id));
+        return Ok(await _settingService.GetAsync<WFSendGrid>(app.Id));
     }
 
     [HttpPost("sendgrid/save")]
