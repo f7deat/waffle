@@ -164,6 +164,9 @@ public class CatalogController : BaseController
     [HttpGet("pie-chart")]
     public async Task<IActionResult> PieChartAsync() => Ok(await _catalogService.PieChartAsync());
 
+    [HttpGet("top-view")]
+    public async Task<IActionResult> GetTopViewAsync([FromQuery] CatalogType type) => Ok(await _catalogService.GetTopViewAsync(type));
+
     [HttpGet("form-select")]
     public async Task<IActionResult> GetFormSelectAsync([FromQuery] SelectFilterOptions filterOptions) => Ok(await _catalogService.GetFormSelectAsync(filterOptions));
 }

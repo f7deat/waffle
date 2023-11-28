@@ -370,4 +370,6 @@ public class CatalogService : ICatalogService
     public async Task DeleteAsync(Catalog catalog) => await _catalogRepository.DeleteAsync(catalog);
 
     public Task<Catalog?> FindAsync(Guid catalogId, CatalogType type) => _catalogRepository.FindAsync(catalogId, type);
+
+    public Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type) => _catalogRepository.GetTopViewAsync(type);
 }

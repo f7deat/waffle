@@ -13,6 +13,7 @@ public class FileController : BaseController
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly ApplicationDbContext _context;
     private readonly IFileService _fileService;
+
     public FileController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IFileService fileExplorerService)
     {
         _webHostEnvironment = webHostEnvironment;
@@ -38,7 +39,11 @@ public class FileController : BaseController
     [HttpPost("upload")]
     public async Task<IActionResult> UploadAsync([FromForm] IFormFile file)
     {
-        if (file is null) return BadRequest();
+        if (file is null) return BadRequest("File not found!");
+        if (!_webHostEnvironment.IsDevelopment())
+        {
+            return BadRequest("Production not supported!");
+        }
         var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
 
         var filePath = Path.Combine(uploadPath, file.FileName);
@@ -60,9 +65,6 @@ public class FileController : BaseController
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.FileContents.FindAsync(id));
-
-    [HttpPost("upload-from-url")]
-    public async Task<IActionResult> UploadFromUrlAsync([FromBody] FileContent file) => Ok(await _fileService.UploadFromUrlAsync(file.Url));
 
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync() => Ok(await _fileService.CountAsync());

@@ -34,4 +34,5 @@ public interface ICatalogService
     Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize);
     Task DeleteAsync(Catalog catalog);
     Task<Catalog?> FindAsync(Guid brandId, CatalogType brand);
+    Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type);
 }

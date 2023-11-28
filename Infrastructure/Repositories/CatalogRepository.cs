@@ -40,6 +40,14 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         return await query.ToListAsync();
     }
 
+    public async Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type)
+    {
+        return await _context.Catalogs.Where(x => x.Type == type && x.Active)
+            .OrderByDescending(x => x.ViewCount)
+            .Take(5)
+            .ToListAsync();
+    }
+
     public async Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions)
     {
         var query = _context.Catalogs.Where(x => filterOptions.ParentId == null || x.ParentId == filterOptions.ParentId);
