@@ -225,4 +225,13 @@ public class UserController : BaseController
         var catalog = await _catalogService.EnsureDataAsync("thank-to-subscribe");
         return Redirect(catalog.GetUrl());
     }
+
+    [HttpPost("confirm-email/{id}"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> ConfirmEmailAsync([FromRoute] string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null) return BadRequest("User not found!");
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        return Ok(await _userManager.ConfirmEmailAsync(user, token));
+    }
 }

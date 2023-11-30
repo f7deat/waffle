@@ -83,6 +83,7 @@ public class TagFilterOptions : FilterOptions
 public class LocalizationFilterOptions: FilterOptions
 {
     public string? Key { get; set; }
+    public string Locale { get; set; } = default!;
 }
 
 public class SelectFilterOptions
