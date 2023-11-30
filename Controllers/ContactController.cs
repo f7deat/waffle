@@ -65,7 +65,7 @@ public class ContactController : BaseController
             var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError("Email sending error!", model.Email);
+                _logger.LogError("Sending to {Email} error!", model.Email);
             }
             subject = "[DLiTi.Com.Au] You have a new contact";
             to = new EmailAddress("dlititimberbuild@gmail.com", "Taan");

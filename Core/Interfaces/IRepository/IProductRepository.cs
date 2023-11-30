@@ -12,6 +12,6 @@ public interface IProductRepository : IAsyncRepository<Product>
     Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId);
-    Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize);
+    Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds);
     Task<IdentityResult> SaveBrandAsync(SaveBrandModel args);
 }

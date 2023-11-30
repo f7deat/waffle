@@ -19,7 +19,7 @@ public class CatalogService : ICatalogService
     private readonly ICatalogRepository _catalogRepository;
     private readonly ICurrentUser _currentUser;
     private readonly IComponentRepository _componentRepository;
-    private readonly IWorkContentRepository _workContentRepository;
+    private readonly IWorkContentRepository _workRepository;
 
     public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository, IComponentRepository componentRepository, IWorkContentRepository workContentRepository)
     {
@@ -27,7 +27,7 @@ public class CatalogService : ICatalogService
         _currentUser = currentUser;
         _catalogRepository = catalogRepository;
         _componentRepository = componentRepository;
-        _workContentRepository = workContentRepository;
+        _workRepository = workContentRepository;
     }
 
     public async Task<IdentityResult> ActiveAsync(Guid id)
@@ -354,7 +354,7 @@ public class CatalogService : ICatalogService
     {
         var component = await _componentRepository.FindByNameAsync(nameof(ProductImage));
         if (component is null) return default;
-        var work = await _workContentRepository.FindByCatalogAsync(catalogId, component.Id);
+        var work = await _workRepository.FindByCatalogAsync(catalogId, component.Id);
         if (work is null || string.IsNullOrEmpty(work.Arguments)) return default;
         return JsonSerializer.Deserialize<ProductImage?>(work.Arguments);
     }
@@ -372,4 +372,6 @@ public class CatalogService : ICatalogService
     public Task<Catalog?> FindAsync(Guid catalogId, CatalogType type) => _catalogRepository.FindAsync(catalogId, type);
 
     public Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type) => _catalogRepository.GetTopViewAsync(type);
+
+    public Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id) => _workRepository.ListTagIdsAsync(id);
 }

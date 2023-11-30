@@ -15,5 +15,5 @@ public interface IProductService
     Task<IdentityResult> SaveBrandAsync(SaveBrandModel args);
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions catalogFilterOptions);
     Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId);
-    Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize);
+    Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds);
 }

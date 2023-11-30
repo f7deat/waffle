@@ -5,8 +5,6 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
-using Waffle.Models;
-using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Pages.Wiki;
@@ -37,8 +35,8 @@ public class DetailModel : PageModel
         Data = response;
         ViewData["Title"] = Data.Title;
         ViewData["Description"] = Data.Title;
-        Articles = await _catalogService.ListSpotlightAsync(CatalogType.Article, 4); ;
-        Products = await _productService.ListSpotlightAsync(6);
+        Articles = await _catalogService.ListSpotlightAsync(CatalogType.Article, 4);
+        Products = await _productService.ListSpotlightAsync(6, new List<Guid>());
         
         return Page();
     }

@@ -82,12 +82,14 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
         return await query.Take(4).ToListAsync();
     }
 
-    public async Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize)
+    public async Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds)
     {
         var query = from catalog in _context.Catalogs
                     join product in _context.Products on catalog.Id equals product.CatalogId into catalogProduct
                     from product in catalogProduct.DefaultIfEmpty()
+                    join tag in _context.WorkItems on catalog.Id equals tag.WorkId
                     where catalog.Type == CatalogType.Product && catalog.Active
+                    && (!tagIds.Any() || tagIds.Contains(tag.CatalogId))
                     select new ProductListItem
                     {
                         Name = catalog.Name,
@@ -99,7 +101,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                         ViewCount = catalog.ViewCount,
                         ModifiedDate = catalog.ModifiedDate
                     };
-        return await query.OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
+        return await query.Distinct().OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }
 
     public async Task<IdentityResult> SaveBrandAsync(SaveBrandModel args)

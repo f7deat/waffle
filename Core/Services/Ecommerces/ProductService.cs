@@ -39,7 +39,7 @@ public class ProductService : IProductService
 
     public Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId) => _productRepository.ListRelatedAsync(tagIds, currentCatalogId);
 
-    public Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize) => _productRepository.ListSpotlightAsync(pageSize);
+    public Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds) => _productRepository.ListSpotlightAsync(pageSize, tagIds);
 
     public async Task<IdentityResult> SaveAsync(Product args)
     {

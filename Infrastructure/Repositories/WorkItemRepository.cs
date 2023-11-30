@@ -31,15 +31,9 @@ public class WorkItemRepository : EfRepository<WorkContent>, IWorkContentReposit
         return await query.FirstOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<WorkContent>> ListChildAsync(Guid parentId)
-    {
-        return await _context.WorkContents.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder)
-            .AsNoTracking()
-            .ToListAsync();
-    }
+    public async Task<IEnumerable<WorkContent>> ListChildAsync(Guid parentId) => await _context.WorkContents.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder).AsNoTracking().ToListAsync();
 
-    public async Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId)
-    {
-        return await _context.WorkContents.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder).Select(x => x.Id).ToListAsync();
-    }
+    public async Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId) => await _context.WorkContents.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder).Select(x => x.Id).ToListAsync();
+
+    public async Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id) => await _context.WorkItems.Where(x => x.WorkId == id).Select(x => x.CatalogId).ToListAsync();
 }
