@@ -60,6 +60,9 @@ public class WorkController : BaseController
     [HttpGet("list-unuse")]
     public async Task<IActionResult> GetListUnuseAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListUnuseAsync(filterOptions));
 
+    [HttpGet("unuse-works")]
+    public async Task<IActionResult> GetUnuseWorksAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetUnuseWorksAsync(filterOptions));
+
     [HttpGet("list")]
     public async Task<IActionResult> GetListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListAsync(filterOptions));
 

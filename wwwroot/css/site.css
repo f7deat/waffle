@@ -257,11 +257,6 @@ table {
     background-color: var(--breadcrumb-bg);
 }
 
-.container {
-    margin: auto;
-    padding: 0.5rem;
-}
-
 .dropdown {
     position: relative;
 }

@@ -40,4 +40,5 @@ public interface IWorkService
     Task<IEnumerable<WorkListItem>> GetComponentsInColumnAsync(Guid workId);
     IAsyncEnumerable<Column> ListColumnAsync(Guid rowId);
     Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId);
+    Task<object?> GetUnuseWorksAsync(BasicFilterOptions filterOptions);
 }
