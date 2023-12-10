@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
@@ -20,14 +22,16 @@ public class CatalogService : ICatalogService
     private readonly ICurrentUser _currentUser;
     private readonly IComponentRepository _componentRepository;
     private readonly IWorkContentRepository _workRepository;
+    private readonly SettingOptions _options;
 
-    public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository, IComponentRepository componentRepository, IWorkContentRepository workContentRepository)
+    public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository, IComponentRepository componentRepository, IWorkContentRepository workContentRepository, IOptions<SettingOptions> options)
     {
         _context = context;
         _currentUser = currentUser;
         _catalogRepository = catalogRepository;
         _componentRepository = componentRepository;
         _workRepository = workContentRepository;
+        _options = options.Value;
     }
 
     public async Task<IdentityResult> ActiveAsync(Guid id)
@@ -85,6 +89,10 @@ public class CatalogService : ICatalogService
         catalog.ModifiedDate = DateTime.Now;
         catalog.CreatedBy = _currentUser.GetId();
         catalog.ViewCount = 0;
+        if (string.IsNullOrEmpty(catalog.Language))
+        {
+            catalog.Language = _options.DefaultLanguage;
+        }
         await _catalogRepository.AddAsync(catalog);
         return IdentityResult.Success;
     }
@@ -374,4 +382,8 @@ public class CatalogService : ICatalogService
     public Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type) => _catalogRepository.GetTopViewAsync(type);
 
     public Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id) => _workRepository.ListTagIdsAsync(id);
+
+    public Task<object?> GetStructureAsync(Guid id) => _catalogRepository.GetStructureAsync(id);
+
+    public Task<int> GetViewCountAsync() => _catalogRepository.GetViewCountAsync();
 }

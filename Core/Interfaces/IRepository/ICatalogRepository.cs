@@ -11,7 +11,9 @@ public interface ICatalogRepository : IAsyncRepository<Catalog>
     Task<Catalog?> FindAsync(Guid catalogId, CatalogType type);
     Task<Catalog?> FindByNameAsync(string? normalizedName);
     Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions);
+    Task<object?> GetStructureAsync(Guid id);
     Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type);
+    Task<int> GetViewCountAsync();
     Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions);
     Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize);
 }

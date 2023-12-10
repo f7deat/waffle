@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
@@ -40,6 +41,21 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         return await query.ToListAsync();
     }
 
+    public async Task<object?> GetStructureAsync(Guid id)
+    {
+        var works = await (from i in _context.WorkItems
+                           join w in _context.WorkContents on i.WorkId equals w.Id
+                           where i.CatalogId == id
+                           orderby i.SortOrder ascending
+                           select w.Arguments).ToListAsync();
+        var data = new
+        {
+            id,
+            works
+        };
+       return data;
+    }
+
     public async Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type)
     {
         return await _context.Catalogs.Where(x => x.Type == type && x.Active)
@@ -47,6 +63,8 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
             .Take(5)
             .ToListAsync();
     }
+
+    public async Task<int> GetViewCountAsync() => await _context.Catalogs.SumAsync(x => x.ViewCount);
 
     public async Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions)
     {
@@ -68,8 +86,32 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         {
             query = query.Where(x => x.CreatedBy == filterOptions.CreatedBy);
         }
+        if (string.IsNullOrEmpty(filterOptions.Language))
+        {
+            query = query.Where(x => x.Language == filterOptions.Language);
+        }
+        if (SortOrder.Ascending == filterOptions.ModifiedDate)
+        {
+            query = query.OrderBy(x => x.ModifiedDate);
+        }
+        else
+        {
+            query = query.OrderByDescending(x => x.ModifiedDate);
+        }
 
-        return await ListResult<Catalog>.Success(query.OrderByDescending(x => x.ModifiedDate), filterOptions);
+        if (filterOptions.ViewCount != null)
+        {
+            if (SortOrder.Ascending == filterOptions.ViewCount)
+            {
+                query = query.OrderBy(x => x.ViewCount);
+            }
+            else if(SortOrder.Descending == filterOptions.ViewCount)
+            {
+                query = query.OrderByDescending(x => x.ViewCount);
+            }
+        }
+
+        return await ListResult<Catalog>.Success(query, filterOptions);
     }
 
     public async Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize)

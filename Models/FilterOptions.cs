@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.Data.SqlClient;
+using System.Text.Json.Serialization;
 using Waffle.Core.Constants;
 using Waffle.Entities;
 
@@ -26,11 +27,19 @@ public class FileFilterOptions : FilterOptions
 
 public class CatalogFilterOptions : FilterOptions
 {
+    #region Search
     public string? Name { get; set; }
     public bool? Active { get; set; }
     public CatalogType? Type { get; set; }
     public Guid? ParentId { get; set; }
     public Guid? CreatedBy { get; set; }
+    public string? Language { get; set; }
+    #endregion
+
+    #region Sort order
+    public SortOrder? ViewCount { get; set; }
+    public SortOrder? ModifiedDate { get; set; }
+    #endregion
 }
 
 public class ProductFilterOptions : FilterOptions

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Waffle.Core.Constants;
+using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Extensions;
@@ -28,6 +29,8 @@ builder.Services.AddHttpClients();
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+
+builder.Services.Configure<SettingOptions>(builder.Configuration.GetSection(SettingOptions.Settings));
 
 builder.Services.AddCors(options =>
 {

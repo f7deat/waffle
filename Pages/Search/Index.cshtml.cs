@@ -35,7 +35,8 @@ public class IndexModel : EntryPageModel
         Articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
         {
             Current = FilterOptions.Current,
-            Name = FilterOptions.SearchTerm
+            Name = FilterOptions.SearchTerm,
+            PageSize = 12
         });
 
         var videos = await _catalogService.ListAsync(new CatalogFilterOptions

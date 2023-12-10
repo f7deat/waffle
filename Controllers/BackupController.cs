@@ -172,14 +172,4 @@ public class BackupController : BaseController
         fileContent = await _context.FileContents.CountAsync(),
         localization = await _context.Localizations.CountAsync()
     });
-
-    [HttpPost("upgrade")]
-    public async Task<IActionResult> UpgradeAsync()
-    {
-        await _appSettingService.EnsureSettingAsync(nameof(Facebook));
-        await _appSettingService.EnsureSettingAsync(nameof(Google));
-        await _appSettingService.EnsureSettingAsync(nameof(SendGrid));
-        await _appSettingService.EnsureSettingAsync(nameof(Telegram));
-        return Ok(IdentityResult.Success);
-    }
 }

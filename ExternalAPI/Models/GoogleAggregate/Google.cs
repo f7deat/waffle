@@ -10,6 +10,8 @@ public class Google
     public string ClientId { get; set; } = default!;
     [JsonPropertyName("firebase")]
     public Firebase Firebase { get; set; } = new();
+    [JsonPropertyName("gTagId")]
+    public string GTagId { get; set; } = default!;
 }
 
 public class Firebase

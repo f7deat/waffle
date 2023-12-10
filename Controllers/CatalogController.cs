@@ -25,7 +25,7 @@ public class CatalogController : BaseController
     }
 
     [HttpGet("view-count")]
-    public async Task<IActionResult> GetViewCountAsync() => Ok(await _context.Catalogs.SumAsync(x => x.ViewCount));
+    public async Task<IActionResult> GetViewCountAsync() => Ok(await _catalogService.GetViewCountAsync());
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _catalogService.FindAsync(id));
@@ -169,4 +169,7 @@ public class CatalogController : BaseController
 
     [HttpGet("form-select")]
     public async Task<IActionResult> GetFormSelectAsync([FromQuery] SelectFilterOptions filterOptions) => Ok(await _catalogService.GetFormSelectAsync(filterOptions));
+
+    [HttpGet("structure/{id}")]
+    public async Task<IActionResult> GetStructureAsync([FromRoute] Guid id) => Ok(await _catalogService.GetStructureAsync(id));
 }
