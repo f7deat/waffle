@@ -1,5 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
+using Waffle.Entities;
 
 namespace Waffle.Models.Components.Lister;
 
@@ -16,9 +19,11 @@ public class VideoPlayList : AbstractComponent
     public List<PlaylistItem> PlaylistItems { get; set; } = new();
     [JsonIgnore]
     public bool HasData { get; set; }
+    [JsonIgnore, UIHint(UIHint.Pagination)]
+    public Pagination Pagination { get; set; } = default!;
 }
 
-public class PlaylistItem
+public class PlaylistItem : Pagination
 {
     public string? Name { get; set; }
     public string? Thumbnail { get; set; }

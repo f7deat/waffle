@@ -17,19 +17,22 @@ public class VideoPlayListViewComponent : BaseViewComponent<VideoPlayList>
 
     protected override async Task<VideoPlayList> ExtendAsync(VideoPlayList work)
     {
+        var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"]);
         var videos = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Active = true,
             Type = CatalogType.Video,
-            PageSize = work.PageSize
+            PageSize = work.PageSize,
+            Current = current
         });
+        work.Pagination = videos.Pagination;
         work.PlaylistItems = videos?.Data?.Select(x => new PlaylistItem
         {
             Name = x.Name,
             Thumbnail = x.Thumbnail,
             Url = $"/video/{x.NormalizedName}",
             Date = x.ModifiedDate.ToString("f"),
-            ViewCount = x.ViewCount.ToNumber()
+            ViewCount = x.ViewCount.ToNumber(),
         }).ToList() ?? new();
         return work;
     }

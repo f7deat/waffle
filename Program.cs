@@ -9,8 +9,6 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Extensions;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -32,19 +30,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.Configure<SettingOptions>(builder.Configuration.GetSection(SettingOptions.Settings));
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins(
-                              "http://localhost:8000",
-                              "https://cms.defzone.net",
-                              "https://crm.defzone.net"
-                              ).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-                      });
-});
-
+builder.Services.AddCors();
 builder.Services
     .AddAuthentication(options =>
     {
@@ -91,6 +77,8 @@ else
     app.UseHsts();
 }
 
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials());
+
 app.UseHttpsRedirection();
 
 app.UseSession();
@@ -98,8 +86,6 @@ app.UseSession();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 app.UseAuthorization();

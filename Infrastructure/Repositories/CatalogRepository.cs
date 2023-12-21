@@ -47,13 +47,8 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
                            join w in _context.WorkContents on i.WorkId equals w.Id
                            where i.CatalogId == id
                            orderby i.SortOrder ascending
-                           select w.Arguments).ToListAsync();
-        var data = new
-        {
-            id,
-            works
-        };
-       return data;
+                           select w).ToListAsync();
+       return works;
     }
 
     public async Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type)
@@ -86,7 +81,7 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         {
             query = query.Where(x => x.CreatedBy == filterOptions.CreatedBy);
         }
-        if (string.IsNullOrEmpty(filterOptions.Language))
+        if (!string.IsNullOrEmpty(filterOptions.Language))
         {
             query = query.Where(x => x.Language == filterOptions.Language);
         }
