@@ -21,11 +21,9 @@ public class WordPressService : IWordPressService
         if (string.IsNullOrEmpty(id)) return default;
         try
         {
-            var url = $"{domain}/wp-json/wp/v2/posts/{id}";
-            if (domain.EndsWith("/"))
-            {
-                url = $"{domain}wp-json/wp/v2/posts/{id}";
-            }
+            var uri = new Uri(domain);
+            _httpClient.BaseAddress = uri;
+            var url = $"wp-json/wp/v2/posts/{id}";
             var response = await _httpClient.GetStreamAsync(url);
             return await JsonSerializer.DeserializeAsync<WordPressPost>(response);
         }
@@ -40,8 +38,9 @@ public class WordPressService : IWordPressService
     {
         try
         {
-            if (!domain.EndsWith("/")) domain += "/";
-            var url = $"{domain}wp-json/wp/v2/posts?page={filterOptions.Current}&search={filterOptions.SearchTerm}";
+            var uri = new Uri(domain);
+            _httpClient.BaseAddress = uri;
+            var url = $"wp-json/wp/v2/posts?page={filterOptions.Current}&search={filterOptions.SearchTerm}";
             var response = await _httpClient.GetStreamAsync(url);
             return await JsonSerializer.DeserializeAsync<List<WordPressPost>>(response);
         }

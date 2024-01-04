@@ -165,7 +165,15 @@ public class CatalogService : ICatalogService
         return await ListResult<Catalog>.Success(query, filterOptions);
     }
 
-    public async Task<Catalog?> FindAsync(Guid id) => await _catalogRepository.FindAsync(id);
+    public async Task<Catalog?> FindAsync(Guid id)
+    {
+        var catalog = await _catalogRepository.FindAsync(id);
+        if (catalog is null) return default;
+        catalog.ViewCount++;
+        await _catalogRepository.UpdateAsync(catalog);
+        await _catalogRepository.SaveChangesAsync();
+        return catalog;
+    }
 
     public async Task<IdentityResult> SaveAsync(Catalog args)
     {
