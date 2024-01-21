@@ -80,6 +80,13 @@ public class SettingService : ISettingService
         return cacheValue;
     }
 
+    private void RemoveCache(string normalizedName)
+    {
+        if (string.IsNullOrEmpty(normalizedName)) return;
+        var cacheKey = $"{nameof(AppSetting)}-{normalizedName}";
+        _memoryCache.Remove(cacheKey);
+    }
+
     public async Task<ListResult<AppSetting>> ListAsync()
     {
         return await ListResult<AppSetting>.Success(_context.AppSettings.Select(x => new AppSetting
@@ -107,6 +114,7 @@ public class SettingService : ISettingService
         }
         data.Value = JsonSerializer.Serialize(args);
         await _context.SaveChangesAsync();
+        RemoveCache(data.NormalizedName);
         return IdentityResult.Success;
     }
 
@@ -135,6 +143,20 @@ public class SettingService : ISettingService
         }
         setting.Value = JsonSerializer.Serialize(args);
         await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
+
+    public async Task<IdentityResult> SaveAsync(string normalizedName, object args)
+    {
+        var setting = await _settingRepository.FindByNameAsync(normalizedName);
+        if (setting is null) return IdentityResult.Failed(new IdentityError
+        {
+            Code = "dataNotFound",
+            Description = "Data not found!"
+        });
+        setting.Value = JsonSerializer.Serialize(args);
+        await _settingRepository.UpdateAsync(setting);
+        RemoveCache(setting.NormalizedName);
         return IdentityResult.Success;
     }
 }

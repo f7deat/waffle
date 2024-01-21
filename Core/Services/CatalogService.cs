@@ -89,9 +89,9 @@ public class CatalogService : ICatalogService
         catalog.ModifiedDate = DateTime.Now;
         catalog.CreatedBy = _currentUser.GetId();
         catalog.ViewCount = 0;
-        if (string.IsNullOrEmpty(catalog.Language))
+        if (string.IsNullOrEmpty(catalog.Locale))
         {
-            catalog.Language = _options.DefaultLanguage;
+            catalog.Locale = _options.DefaultLanguage;
         }
         await _catalogRepository.AddAsync(catalog);
         return IdentityResult.Success;

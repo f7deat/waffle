@@ -31,9 +31,9 @@ public class Catalog : BaseEntity
     public bool Active { get; set; }
     [JsonPropertyName("createdBy")]
     public Guid? CreatedBy { get; set; }
-    [JsonPropertyName("language")]
-    [StringLength(2)]
-    public string? Language { get; set; }
+    [JsonPropertyName("locale")]
+    [StringLength(10)]
+    public string? Locale { get; set; }
 }
 
 public enum CatalogType

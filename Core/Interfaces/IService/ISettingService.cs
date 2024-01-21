@@ -14,6 +14,7 @@ public interface ISettingService
     Task<T?> GetAsync<T>(string normalizedName);
     Task<ListResult<AppSetting>> ListAsync();
     Task<IdentityResult> SaveAsync(Guid id, object args);
+    Task<IdentityResult> SaveAsync(string normalizedName, object args);
     Task<IdentityResult> SaveFooterAsync(Footer args);
     Task<IdentityResult> SaveTelegramAsync(Guid id, Telegram model);
 }

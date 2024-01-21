@@ -4,11 +4,8 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components;
-using Waffle.Models.ViewModels;
-using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Infrastructure.Repositories;
 
@@ -32,6 +29,7 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
     {
         var query = _context.Catalogs
             .Where(x => x.Active && x.Type == filterOptions.Type && (string.IsNullOrEmpty(filterOptions.KeyWords) || x.NormalizedName.Contains(filterOptions.KeyWords)) && x.ParentId == null)
+            .Where(x => x.Locale == filterOptions.Locale)
             .OrderByDescending(x => x.NormalizedName)
             .Select(x => new Option
             {
@@ -81,9 +79,9 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         {
             query = query.Where(x => x.CreatedBy == filterOptions.CreatedBy);
         }
-        if (!string.IsNullOrEmpty(filterOptions.Language))
+        if (!string.IsNullOrEmpty(filterOptions.Locale))
         {
-            query = query.Where(x => x.Language == filterOptions.Language);
+            query = query.Where(x => x.Locale == filterOptions.Locale);
         }
         if (SortOrder.Ascending == filterOptions.ModifiedDate)
         {

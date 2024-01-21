@@ -246,12 +246,6 @@ table {
     --bs-btn-bg: var(--primary);
 }
 
-    .btn-primary:hover {
-        --primary-color-hover: white;
-        background-color: var(--primary-hover);
-        color: var(--primary-color-hover);
-    }
-
 .breadcrumb {
     --breadcrumb-bg: #FFF;
     background-color: var(--breadcrumb-bg);

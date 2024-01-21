@@ -1,26 +1,31 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.Foundations;
+using Waffle.Models.Settings;
 
 namespace Waffle.Controllers;
 
-[Route("api/[controller]")]
-public class StyleController : Controller
+public class StyleController : BaseController
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly IConfiguration _configuration;
-    public StyleController(IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+    private readonly ISettingService _settingService;
+
+    public StyleController(IWebHostEnvironment webHostEnvironment, IConfiguration configuration, ISettingService settingService)
     {
         _webHostEnvironment = webHostEnvironment;
         _configuration = configuration;
+        _settingService = settingService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAsync()
     {
-        var path = GetPath();
+        var path = await GetPathAsync();
         CreateFile(path);
-        return Ok(await System.IO.File.ReadAllTextAsync(GetPath()));
+        return Ok(await System.IO.File.ReadAllTextAsync(await GetPathAsync()));
     }
 
     [HttpGet("{id}")]
@@ -38,8 +43,8 @@ public class StyleController : Controller
     [HttpPost("save")]
     public async Task<IActionResult> SaveAsync([FromBody] WorkContent workItem)
     {
-        CreateFile(GetPath());
-        await System.IO.File.WriteAllTextAsync(GetPath(), workItem.Arguments);
+        CreateFile(await GetPathAsync());
+        await System.IO.File.WriteAllTextAsync(await GetPathAsync(), workItem.Arguments);
         return Ok(IdentityResult.Success);
     }
 
@@ -52,5 +57,13 @@ public class StyleController : Controller
         }
     }
 
-    private string GetPath() => Path.Combine(_webHostEnvironment.WebRootPath, "css", $"{_configuration.GetValue<string>("theme").ToLower()}.css");
+    private async Task<string> GetPathAsync()
+    {
+        var setting = await _settingService.GetAsync<Theme>(nameof(Theme));
+        setting ??= new Theme
+            {
+                Name = "default"
+            };
+        return Path.Combine(_webHostEnvironment.WebRootPath, "css", $"{setting.Name}.css");
+    }
 }

@@ -33,7 +33,7 @@ public class CatalogFilterOptions : FilterOptions
     public CatalogType? Type { get; set; }
     public Guid? ParentId { get; set; }
     public Guid? CreatedBy { get; set; }
-    public string? Language { get; set; }
+    public string? Locale { get; set; }
     #endregion
 
     #region Sort order
@@ -92,11 +92,12 @@ public class TagFilterOptions : FilterOptions
 public class LocalizationFilterOptions: FilterOptions
 {
     public string? Key { get; set; }
-    public string Locale { get; set; } = default!;
+    public string Locale { get; set; } = "vi-VN";
 }
 
 public class SelectFilterOptions
 {
     public string? KeyWords { get; set; }
     public CatalogType Type { get; set; }
+    public string Locale { get; set; } = "vi-VN";
 }

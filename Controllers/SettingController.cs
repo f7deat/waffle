@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Constants;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -39,6 +40,9 @@ public class SettingController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync<object>(id));
 
+    [HttpGet("unix/{normalizedName}")]
+    public async Task<IActionResult> GetAsync([FromRoute] string normalizedName) => Ok(await _settingService.GetAsync<object>(normalizedName));
+
     [HttpGet("header/{id}")]
     public async Task<IActionResult> GetHeaderAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync<Header>(id) ?? new Header());
 
@@ -51,12 +55,14 @@ public class SettingController : BaseController
     [HttpPost("save/{id}")]
     public async Task<IActionResult> SaveAsync([FromRoute] Guid id, [FromBody] object args) => Ok(await _settingService.SaveAsync(id, args));
 
+    [HttpPost("unix/save/{normalizedName}")]
+    public async Task<IActionResult> SaveAsync([FromRoute] string normalizedName, [FromBody] object args) => Ok(await _settingService.SaveAsync(normalizedName, args));
+
     [HttpGet("info")]
     public IActionResult GetInfo()
     {
         return Ok(new
         {
-            theme = _configuration.GetValue<string>("theme"),
             language = _configuration.GetValue<string>("language")
         });
     }
@@ -190,4 +196,7 @@ public class SettingController : BaseController
     {
         return Ok(await _facebookService.GraphAPIExplorerAsync(query));
     }
+
+    [HttpGet("themes/options")]
+    public IActionResult GetThemeOptionsAsync() => Ok(Themes.All);
 }

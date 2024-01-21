@@ -1,0 +1,13 @@
+﻿:root {
+    --bs-primary: #017840;
+
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-border-color: #034927;
+    --bs-btn-hover-bg: #034927;
+    --bs-btn-active-bg: #034927;
+    --bs-btn-active-border-color: #034927;
+}
