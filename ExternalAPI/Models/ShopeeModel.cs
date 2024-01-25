@@ -86,6 +86,8 @@ namespace Waffle.ExternalAPI.Models
         public int TotalCount { get; set; }
         [JsonPropertyName("linkList")]
         public List<LinkList> LinkList { get; set; } = new();
+
+        public string? KeyWord { get; set; }
     }
 
     public class LinkList

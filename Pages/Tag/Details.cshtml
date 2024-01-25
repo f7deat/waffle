@@ -30,11 +30,16 @@
                 <partial name="~/Pages/Articles/_List.cshtml" model="Model.Articles.Data" />
                 @Html.DisplayFor(x => Model.Articles.Pagination)
             }
+            
+            @if (Model.Products.Any())
+            {
+                @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", new Feed {
+                    Name = "Sản phẩm",
+                    Products = Model.Products
+                })
+            }
 
-            @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", new Feed {
-                Name = "Sản phẩm",
-                Products = Model.Products
-            })
+            @await Component.InvokeAsync("ShopeeSpotlight")
 
             @if (Model.Albums.Data != null && Model.Albums.HasData)
             {

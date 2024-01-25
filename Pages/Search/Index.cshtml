@@ -43,12 +43,18 @@
                 @await Html.PartialAsync(PartialViewName.Empty, new ErrorViewModel{ RequestId = Guid.Empty.ToString() })
             }
 
-            @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
+            @if (Model.ProductFeed.Products.Any())
+            {
+                @await Html.PartialAsync("~/Pages/Shared/Components/Feed/Product.cshtml", Model.ProductFeed)
+            }
 
-            @await Html.PartialAsync("/Pages/Shared/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
-                Title = "Playlist",
-                PlaylistItems = Model.PlaylistItems
-            })
+            @if (Model.PlaylistItems.Any())
+            {
+                @await Html.PartialAsync("/Pages/Shared/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
+                    Title = "Playlist",
+                    PlaylistItems = Model.PlaylistItems
+                })
+            }
 
             @if (!string.IsNullOrWhiteSpace(Model.FilterOptions.SearchTerm))
             {
@@ -56,6 +62,8 @@
                     <u>Wiki</u> --> <a href="/wiki/@SeoHelper.ToWikiFriendly(Model.FilterOptions.SearchTerm)">@Model.FilterOptions.SearchTerm</a>
                 </div>
             }
+
+            @await Component.InvokeAsync("ShopeeSpotlight")
         </div>
         <div class="col-md-4">
             @await Component.InvokeAsync(nameof(Waffle.ExternalAPI.Models.GoogleAggregate.Trend))

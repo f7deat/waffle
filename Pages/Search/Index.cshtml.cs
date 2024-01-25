@@ -31,7 +31,8 @@ public class IndexModel : EntryPageModel
         {
             return NotFound();
         }
-        ViewData["Title"] = FilterOptions.SearchTerm ?? await _localizationService.GetAsync("search");
+        PageData.Name = FilterOptions.SearchTerm ?? await _localizationService.GetAsync("search");
+        ViewData["Title"] = PageData.Name;
         Articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
         {
             Current = FilterOptions.Current,
