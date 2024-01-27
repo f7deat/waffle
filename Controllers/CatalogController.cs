@@ -6,6 +6,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Foundations;
 using Waffle.Models;
+using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
 
@@ -172,4 +173,11 @@ public class CatalogController : BaseController
 
     [HttpGet("structure/{id}")]
     public async Task<IActionResult> GetStructureAsync([FromRoute] Guid id) => Ok(await _catalogService.GetStructureAsync(id));
+
+    [HttpGet("components")]
+    public async Task<IActionResult> GetComponentsAsync([FromQuery] GetComponentsArgs args)
+    {
+        if (args is null || string.IsNullOrWhiteSpace(args.NormalizedName) || string.IsNullOrWhiteSpace(args.Locale)) return BadRequest();
+        return Ok(await _catalogService.GetComponentsAsync(args));
+    }
 }

@@ -10,6 +10,7 @@ using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
 
@@ -223,6 +224,10 @@ public class CatalogService : ICatalogService
         catalog.ModifiedDate = DateTime.Now;
         catalog.Description = args.Description;
         catalog.Thumbnail = args.Thumbnail;
+        if (!string.IsNullOrWhiteSpace(args.Locale))
+        {
+            catalog.Locale = args.Locale;
+        }
         catalog.Type = args.Type;
         await _catalogRepository.SaveChangesAsync();
         return IdentityResult.Success;
@@ -394,4 +399,11 @@ public class CatalogService : ICatalogService
     public Task<object?> GetStructureAsync(Guid id) => _catalogRepository.GetStructureAsync(id);
 
     public Task<int> GetViewCountAsync() => _catalogRepository.GetViewCountAsync();
+
+    public async Task<object?> GetComponentsAsync(GetComponentsArgs args)
+    {
+        var catalog = await _catalogRepository.FindByNameAsync(args.NormalizedName);
+        if (catalog is null) return default;
+        return await _catalogRepository.GetComponentsAsync(catalog.Id);
+    }
 }

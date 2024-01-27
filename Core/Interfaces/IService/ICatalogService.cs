@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
@@ -38,4 +39,5 @@ public interface ICatalogService
     Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id);
     Task<object?> GetStructureAsync(Guid id);
     Task<int> GetViewCountAsync();
+    Task<object?> GetComponentsAsync(GetComponentsArgs args);
 }
