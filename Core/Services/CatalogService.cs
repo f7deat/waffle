@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Waffle.Core.Constants;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
@@ -98,11 +99,15 @@ public class CatalogService : ICatalogService
         return IdentityResult.Success;
     }
 
-    public async Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default)
+    public async Task<Catalog> EnsureDataAsync(string name, string locale, CatalogType type = CatalogType.Default)
     {
-        var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name.ToLower()));
+        var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name.ToLower()) && x.Locale == locale);
         if (catalog is null)
         {
+            if (!Languages.Codes.Contains(locale))
+            {
+                locale = "vi-VN";  
+            }
             catalog = new Catalog
             {
                 Name = name,
@@ -111,7 +116,8 @@ public class CatalogService : ICatalogService
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
                 Type = type,
-                ViewCount = 0
+                ViewCount = 0,
+                Locale = locale
             };
             await _context.Catalogs.AddAsync(catalog);
         }

@@ -25,7 +25,8 @@ public class ArticleListerViewComponent : BaseViewComponent<ArticleLister>
             PageSize = work.PageSize,
             ParentId = PageData.Type == CatalogType.Entry ? null : PageData.Id,
             Type = CatalogType.Article,
-            Name = Request.Query["searchTerm"]
+            Name = Request.Query["searchTerm"],
+            Locale = PageData.Locale
         });
         work.Articles = articles;
         if (string.IsNullOrEmpty(work.Name))

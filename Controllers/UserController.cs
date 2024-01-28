@@ -144,7 +144,7 @@ public class UserController : BaseController
     public async Task<IActionResult> GoogleSignUpAsync([FromForm] string? credential)
     {
         var userCredential = await GoogleApiHelper.GetUserCredential(credential);
-        var signinFailedPage = await _catalogService.EnsureDataAsync("/leaf/signin-failed");
+        var signinFailedPage = await _catalogService.EnsureDataAsync("/leaf/signin-failed", "vi-VN");
         if (userCredential is null) return Redirect(signinFailedPage.GetUrl());
 
         var user = await _userManager.FindByNameAsync(userCredential.Email);
@@ -222,7 +222,7 @@ public class UserController : BaseController
             await _userManager.CreateAsync(user);
         }
         await _telegramService.SendMessageAsync($"{args.Email} started following website!");
-        var catalog = await _catalogService.EnsureDataAsync("thank-to-subscribe");
+        var catalog = await _catalogService.EnsureDataAsync("thank-to-subscribe", "vi-VN");
         return Redirect(catalog.GetUrl());
     }
 

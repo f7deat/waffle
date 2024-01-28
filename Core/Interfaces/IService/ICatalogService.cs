@@ -12,7 +12,7 @@ public interface ICatalogService
 {
     Task<IdentityResult> ActiveAsync(Guid id);
     Task<IdentityResult> AddAsync(Catalog catalog);
-    Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default);
+    Task<Catalog> EnsureDataAsync(string name, string locale, CatalogType type = CatalogType.Default);
     Task<Catalog?> GetByNameAsync(string? normalizedName);
     Task<List<ComponentListItem>> ListComponentAsync(Guid catalogId);
     Task<IdentityResult> UpdateThumbnailAsync(Catalog args);

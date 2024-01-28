@@ -27,7 +27,8 @@ public class FeedViewComponent : BaseViewComponent<Feed>
             {
                 Active = true,
                 PageSize = feed.PageSize,
-                Type = type
+                Type = type,
+                Locale = PageData.Locale
             });
             feed.Articles = articles.Data?.ToList() ?? new();
             return feed;

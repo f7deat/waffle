@@ -102,7 +102,7 @@ public class ShopeeService : IShopeeService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning("ex", ex.ToString());
+            _logger.LogWarning(message: ex.ToString());
         }
         return new LandingPageLinkList();
     }
