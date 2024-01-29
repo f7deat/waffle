@@ -21,7 +21,8 @@ public class ArticlePickerViewComponent : BaseViewComponent<ArticlePicker>
         {
             Type = CatalogType.Article,
             Active = true,
-            PageSize = 5
+            PageSize = 5,
+            Locale = PageData.Locale
         });
         work.Articles = articles.Data?.ToList() ?? new();
         return work;

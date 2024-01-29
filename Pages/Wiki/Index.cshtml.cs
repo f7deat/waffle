@@ -1,22 +1,16 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 
 namespace Waffle.Pages.Wiki
 {
-    public class IndexModel : PageModel
+    public class IndexModel : EntryPageModel
     {
-        private readonly ICatalogService _catalogService;
-        public IndexModel(ICatalogService catalogService)
+        public IndexModel(ICatalogService catalogService) : base(catalogService)
         {
-            _catalogService = catalogService;
         }
 
-        public Catalog Catalog = new();
-
-        public async Task OnGetAsync()
+        public void OnGet()
         {
-            Catalog = await _catalogService.EnsureDataAsync(nameof(Wiki), CatalogType.Entry);
         }
     }
 }

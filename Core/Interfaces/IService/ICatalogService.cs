@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
@@ -11,7 +12,7 @@ public interface ICatalogService
 {
     Task<IdentityResult> ActiveAsync(Guid id);
     Task<IdentityResult> AddAsync(Catalog catalog);
-    Task<Catalog> EnsureDataAsync(string name, CatalogType type = CatalogType.Default);
+    Task<Catalog> EnsureDataAsync(string name, string locale, CatalogType type = CatalogType.Default);
     Task<Catalog?> GetByNameAsync(string? normalizedName);
     Task<List<ComponentListItem>> ListComponentAsync(Guid catalogId);
     Task<IdentityResult> UpdateThumbnailAsync(Catalog args);
@@ -38,4 +39,5 @@ public interface ICatalogService
     Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id);
     Task<object?> GetStructureAsync(Guid id);
     Task<int> GetViewCountAsync();
+    Task<object?> GetComponentsAsync(GetComponentsArgs args);
 }

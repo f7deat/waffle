@@ -25,6 +25,21 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         return await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
     }
 
+    public async Task<dynamic> GetComponentsAsync(Guid id)
+    {
+        var works = from a in _context.WorkItems
+                    join b in _context.WorkContents on a.WorkId equals b.Id
+                    join c in _context.Components on b.ComponentId equals c.Id
+                    where a.CatalogId == id && b.Active && c.Active
+                    select new
+                    {
+                        c.NormalizedName,
+                        b.Name,
+                        b.Arguments
+                    };
+        return await works.ToListAsync();
+    }
+
     public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions)
     {
         var query = _context.Catalogs

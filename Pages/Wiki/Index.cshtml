@@ -1,9 +1,9 @@
 ﻿@page
 @model Waffle.Pages.Wiki.IndexModel
 @{
-    ViewData["Title"] = Model.Catalog.Name;
-    ViewData["Description"] = Model.Catalog.Description;
-    ViewData["Image"] = Model.Catalog.Thumbnail;
+    ViewData["Title"] = Model.PageData.Name;
+    ViewData["Description"] = Model.PageData.Description;
+    ViewData["Image"] = Model.PageData.Thumbnail;
 }
 
 <div class="p-4 shadow bg-white rounded">

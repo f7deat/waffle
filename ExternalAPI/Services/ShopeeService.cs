@@ -76,7 +76,7 @@ public class ShopeeService : IShopeeService
         return new LandingPageLinkList();
     }
 
-    public async Task<LandingPageLinkList> GetLinkListsAsync(string tag, int pageSize)
+    public async Task<LandingPageLinkList> GetLinkListsAsync(string tag, int pageNum , int pageSize)
     {
         try
         {
@@ -87,7 +87,7 @@ public class ShopeeService : IShopeeService
                 Query = "query getLinkLists($urlSuffix: String!, $pageSize: String, $pageNum: String, $groupId: String, $linkNameKeyword: String) {\r\n  landingPageLinkList(\r\n    urlSuffix: $urlSuffix\r\n    pageSize: $pageSize\r\n    pageNum: $pageNum\r\n    groupId: $groupId\r\n    linkNameKeyword: $linkNameKeyword\r\n  ) {\r\n    totalCount\r\n    linkList {\r\n      linkId\r\n      link\r\n      linkName\r\n      image\r\n      linkType\r\n      groupIds\r\n    }\r\n  }\r\n}\r\n",
                 Variables = new Variables3
                 {
-                    PageNum = "1",
+                    PageNum = pageNum.ToString(),
                     PageSize = pageSize.ToString(),
                     UrlSuffix = "banhque",
                     LinkNameKeyWord = tag
@@ -102,7 +102,7 @@ public class ShopeeService : IShopeeService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning("ex", ex.ToString());
+            _logger.LogWarning(message: ex.ToString());
         }
         return new LandingPageLinkList();
     }
