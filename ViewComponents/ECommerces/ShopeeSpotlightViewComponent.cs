@@ -25,7 +25,7 @@ public class ShopeeSpotlightViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var shopee = await _shopeeService.GetLinkListsAsync(PageData.Name, 4);
+        var shopee = await _shopeeService.GetLinkListsAsync(PageData.Name, 1, 4);
         shopee.KeyWord = PageData.Name;
         return View("/Pages/Components/Products/ShopeeSpotlight/Default.cshtml", shopee);
     }

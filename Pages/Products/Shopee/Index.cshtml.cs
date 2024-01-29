@@ -4,23 +4,25 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 
-namespace Waffle.Pages.Products.Shopee
+namespace Waffle.Pages.Products.Shopee;
+
+public class IndexModel : EntryPageModel
 {
-    public class IndexModel : EntryPageModel
+    private readonly IShopeeService _shopeeService;
+    public IndexModel(ICatalogService catalogService, IShopeeService shopeeService) : base(catalogService)
     {
-        private readonly IShopeeService _shopeeService;
-        public IndexModel(ICatalogService catalogService, IShopeeService shopeeService) : base(catalogService)
-        {
-            _shopeeService = shopeeService;
-        }
+        _shopeeService = shopeeService;
+    }
 
-        [BindProperty(SupportsGet = true)]
-        public string SearchTerm { get; set; } = string.Empty;
-        public LandingPageLinkList Product = new();
+    [BindProperty(SupportsGet = true)]
+    public string SearchTerm { get; set; } = string.Empty;
+    [BindProperty(SupportsGet = true)]
+    public int PageNum { get; set; } = 1;
 
-        public async Task OnGetAsync()
-        {
-            Product = await _shopeeService.GetLinkListsAsync(SearchTerm, 12);
-        }
+    public LandingPageLinkList Product = new();
+
+    public async Task OnGetAsync()
+    {
+        Product = await _shopeeService.GetLinkListsAsync(SearchTerm, PageNum, 12);
     }
 }

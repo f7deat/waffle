@@ -44,7 +44,7 @@ public class DetailsModel : DynamicPageModel
 
         if (Tags.Any())
         {
-            ShopeeProducts = await _shopeeService.GetLinkListsAsync(Tags.Last().Name, 4);
+            ShopeeProducts = await _shopeeService.GetLinkListsAsync(Tags.Last().Name, 1, 4);
         }
 
         return Page();
