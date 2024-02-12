@@ -230,10 +230,11 @@ public class CatalogService : ICatalogService
         catalog.ModifiedDate = DateTime.Now;
         catalog.Description = args.Description;
         catalog.Thumbnail = args.Thumbnail;
-        if (!string.IsNullOrWhiteSpace(args.Locale))
+        if (string.IsNullOrWhiteSpace(args.Locale))
         {
-            catalog.Locale = args.Locale;
+            catalog.Locale = Locale.VI_VN;
         }
+        catalog.Locale = args.Locale;
         catalog.Type = args.Type;
         await _catalogRepository.SaveChangesAsync();
         return IdentityResult.Success;
