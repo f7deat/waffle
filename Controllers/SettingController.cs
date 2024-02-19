@@ -6,6 +6,7 @@ using Waffle.Core.Constants;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
+using Waffle.ExternalAPI.GoogleAggregate;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Foundations;
@@ -199,4 +200,12 @@ public class SettingController : BaseController
 
     [HttpGet("themes/options")]
     public IActionResult GetThemeOptionsAsync() => Ok(Themes.All);
+
+    [HttpGet("blogger/blog-list")]
+    public async Task<IActionResult> GetBloggerListAsync()
+    {
+        var google = await _settingService.GetAsync<ExternalAPI.GoogleAggregate.Google>(nameof(Google));
+        if (google is null) return BadRequest();
+        return Ok(google.Bloggers);
+    }
 }

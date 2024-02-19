@@ -497,19 +497,30 @@ public class WorkService : IWorkService
 
     public Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId) => _workRepository.ListChildIdAsync(parentId);
 
-    public async Task<object?> GetUnuseWorksAsync(BasicFilterOptions filterOptions)
+    public async Task<object?> GetUnuseWorksAsync(SearchFilterOptions filterOptions)
     {
+        var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.SearchTerm);
         var query = from i in _context.WorkItems
                     join c in _context.Catalogs on i.CatalogId equals c.Id
                     join w in _context.WorkContents on i.WorkId equals w.Id
                     into iw
                     from w in iw.DefaultIfEmpty()
+                    join b in _context.Components on w.ComponentId equals b.Id
+                    into bw
+                    from b in bw.DefaultIfEmpty()
+                    where w == null && c.Type != CatalogType.Tag && (string.IsNullOrEmpty(filterOptions.SearchTerm) || c.NormalizedName.Contains(searchTerm))
                     select new
                     {
                         i.WorkId,
                         i.CatalogId,
-                        c.Name
+                        catalogName = c.Name,
+                        workName = w.Name,
+                        componentName = b.Name
                     };
-        return await query.OrderBy(x => x.WorkId).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
+        return new
+        {
+            total = await query.CountAsync(),
+            data = await query.OrderBy(x => x.WorkId).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync()
+        };
     }
 }

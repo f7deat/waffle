@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -31,7 +33,7 @@ public class CatalogController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _catalogService.FindAsync(id));
 
-    [HttpPost("add")]
+    [HttpPost("add"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
     {
         if (string.IsNullOrWhiteSpace(catalog.Name)) return BadRequest("Please enter name!");
@@ -113,7 +115,7 @@ public class CatalogController : BaseController
     [HttpPost("active/{id}")]
     public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _catalogService.ActiveAsync(id));
 
-    [HttpPost("save")]
+    [HttpPost("save"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> SaveAsync([FromBody] Catalog args) => Ok(await _catalogService.SaveAsync(args));
 
     [HttpPost("tree-drop")]

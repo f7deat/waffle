@@ -20,8 +20,6 @@ public class BloggerItem
     }
     [JsonPropertyName("id")]
     public string? Id { get; set; }
-    [JsonPropertyName("blog")]
-    public Blog? Blog { get; set; }
     [JsonPropertyName("title")]
     public string? Title { get; set; }
     [JsonPropertyName("content")]
@@ -60,12 +58,6 @@ public class BloggerReplies
 {
     [JsonPropertyName("totalItems")]
     public string? TotalItems { get; set; }
-}
-
-public class Blog
-{
-    [JsonPropertyName("id")]
-    public string? Id { get; set; }
 }
 
 public class BloggerComment

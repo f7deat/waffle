@@ -12,6 +12,16 @@ public class Google
     public Firebase Firebase { get; set; } = new();
     [JsonPropertyName("gTagId")]
     public string GTagId { get; set; } = default!;
+    [JsonPropertyName("bloggers")]
+    public List<Blogger> Bloggers { get; set; } = new();
+}
+
+public class Blogger
+{
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
 }
 
 public class Firebase

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Constants;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -61,7 +63,7 @@ public class WorkController : BaseController
     public async Task<IActionResult> GetListUnuseAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListUnuseAsync(filterOptions));
 
     [HttpGet("unuse-works")]
-    public async Task<IActionResult> GetUnuseWorksAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetUnuseWorksAsync(filterOptions));
+    public async Task<IActionResult> GetUnuseWorksAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _workService.GetUnuseWorksAsync(filterOptions));
 
     [HttpGet("list")]
     public async Task<IActionResult> GetListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListAsync(filterOptions));
@@ -116,7 +118,7 @@ public class WorkController : BaseController
         return Ok(IdentityResult.Success);
     }
 
-    [HttpPost("save")]
+    [HttpPost("save"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> SaveAsync([FromBody] WorkContent args) => Ok(await _workService.SaveAsync(args));
 
     [HttpPost("save/{id}")]
@@ -128,7 +130,7 @@ public class WorkController : BaseController
     [HttpPost("active/{id}")]
     public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _workService.ActiveAsync(id));
 
-    [HttpPost("delete")]
+    [HttpPost("delete"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> DeleteAsync([FromBody] DeleteWorkContent model)
     {
         var workItem = await _context.WorkItems.FirstOrDefaultAsync(x => x.WorkId == model.WorkContentId && x.CatalogId == model.CatalogId);
