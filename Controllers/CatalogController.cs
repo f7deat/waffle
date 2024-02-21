@@ -173,8 +173,11 @@ public class CatalogController : BaseController
     [HttpGet("form-select")]
     public async Task<IActionResult> GetFormSelectAsync([FromQuery] SelectFilterOptions filterOptions) => Ok(await _catalogService.GetFormSelectAsync(filterOptions));
 
-    [HttpGet("structure/{id}")]
-    public async Task<IActionResult> GetStructureAsync([FromRoute] Guid id) => Ok(await _catalogService.GetStructureAsync(id));
+    [HttpGet("structure-by-id/{id}")]
+    public async Task<IActionResult> GetStructureByIdAsync([FromRoute] Guid id) => Ok(await _catalogService.GetStructureByIdAsync(id));
+
+    [HttpGet("structure/{normalizedName}")]
+    public async Task<IActionResult> GetStructureAsync([FromRoute] string normalizedName) => Ok(await _catalogService.GetStructureAsync(normalizedName));
 
     [HttpGet("components")]
     public async Task<IActionResult> GetComponentsAsync([FromQuery] GetComponentsArgs args)

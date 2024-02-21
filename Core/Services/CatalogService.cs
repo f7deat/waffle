@@ -230,11 +230,10 @@ public class CatalogService : ICatalogService
         catalog.ModifiedDate = DateTime.Now;
         catalog.Description = args.Description;
         catalog.Thumbnail = args.Thumbnail;
-        if (string.IsNullOrWhiteSpace(args.Locale))
+        if (!string.IsNullOrWhiteSpace(args.Locale))
         {
-            catalog.Locale = Locale.VI_VN;
+            catalog.Locale = args.Locale;
         }
-        catalog.Locale = args.Locale;
         catalog.Type = args.Type;
         await _catalogRepository.SaveChangesAsync();
         return IdentityResult.Success;
@@ -403,7 +402,7 @@ public class CatalogService : ICatalogService
 
     public Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id) => _workRepository.ListTagIdsAsync(id);
 
-    public Task<object?> GetStructureAsync(Guid id) => _catalogRepository.GetStructureAsync(id);
+    public Task<object?> GetStructureByIdAsync(Guid id) => _catalogRepository.GetStructureAsync(id);
 
     public Task<int> GetViewCountAsync() => _catalogRepository.GetViewCountAsync();
 
@@ -413,4 +412,6 @@ public class CatalogService : ICatalogService
         if (catalog is null) return default;
         return await _catalogRepository.GetComponentsAsync(catalog.Id);
     }
+
+    public Task<object?> GetStructureAsync(string normalizedName) => _catalogRepository.GetStructureAsync(normalizedName);
 }

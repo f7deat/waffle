@@ -64,6 +64,17 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
        return works;
     }
 
+    public async Task<object?> GetStructureAsync(string normalizedName)
+    {
+        var works = await(from i in _context.WorkItems
+                          join c in _context.Catalogs on i.CatalogId equals c.Id
+                          join w in _context.WorkContents on i.WorkId equals w.Id
+                          where c.NormalizedName == normalizedName
+                          orderby i.SortOrder ascending
+                          select w).ToListAsync();
+        return works;
+    }
+
     public async Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type)
     {
         return await _context.Catalogs.Where(x => x.Type == type && x.Active)

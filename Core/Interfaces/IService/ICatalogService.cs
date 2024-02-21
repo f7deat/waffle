@@ -37,7 +37,8 @@ public interface ICatalogService
     Task<Catalog?> FindAsync(Guid brandId, CatalogType brand);
     Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type);
     Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id);
-    Task<object?> GetStructureAsync(Guid id);
+    Task<object?> GetStructureByIdAsync(Guid id);
     Task<int> GetViewCountAsync();
     Task<object?> GetComponentsAsync(GetComponentsArgs args);
+    Task<object?> GetStructureAsync(string normalizedName);
 }
