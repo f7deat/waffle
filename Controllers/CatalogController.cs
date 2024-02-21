@@ -33,6 +33,9 @@ public class CatalogController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _catalogService.FindAsync(id));
 
+    [HttpGet("name/{normalizedName}")]
+    public async Task<IActionResult> GetByNameAsync([FromRoute] string normalizedName) => Ok(await _catalogService.GetByNameAsync(normalizedName));
+
     [HttpPost("add"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
     {
