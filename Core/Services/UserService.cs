@@ -92,20 +92,10 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<ListResult<UserViewModel>> ListContactAsync(SearchFilterOptions filterOptions)
+    public async Task<ListResult<Contact>> ListContactAsync(SearchFilterOptions filterOptions)
     {
-        var query = from a in _context.Users
-                    join b in _context.UserRoles on a.Id equals b.UserId
-                    join c in _context.Roles on b.RoleId equals c.Id
-                    where c.NormalizedName == _roleManager.NormalizeKey(RoleName.Contact)
-                    orderby a.Id descending
-                    select new UserViewModel
-                    {
-                        Id = a.Id,
-                        UserName = a.UserName,
-                        Email = a.Email
-                    };
-        return await ListResult<UserViewModel>.Success(query, filterOptions);
+        var query = _context.Contacts.OrderByDescending(x => x.CreatedDate);
+        return await ListResult<Contact>.Success(query, filterOptions);
     }
 
     public async Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args)

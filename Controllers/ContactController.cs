@@ -123,4 +123,13 @@ public class ContactController : BaseController
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
     }
+
+    [HttpPost("add")]
+    public async Task<IActionResult> AddAsync([FromBody] Contact args)
+    {
+        args.CreatedDate = DateTime.Now;
+        await _context.Contacts.AddAsync(args);
+        await _context.SaveChangesAsync();
+        return Ok(args);
+    }
 }
