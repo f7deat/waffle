@@ -36,6 +36,13 @@ public class CatalogController : BaseController
     [HttpGet("name/{normalizedName}")]
     public async Task<IActionResult> GetByNameAsync([FromRoute] string normalizedName) => Ok(await _catalogService.GetByNameAsync(normalizedName));
 
+    [HttpGet("name/{parent}/{normalizedName}")]
+    public async Task<IActionResult> GetByNameAsync([FromRoute] string parent, [FromRoute] string normalizedName)
+    {
+        normalizedName = parent + "/" + normalizedName;
+        return Ok(await _catalogService.GetByNameAsync(normalizedName));
+    }
+
     [HttpPost("add"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
     {

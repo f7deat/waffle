@@ -16,6 +16,6 @@ public class FooterViewComponent : ViewComponent
     {
         var footer = await _settingService.GetAsync<Footer>(nameof(Footer));
         footer ??= new Footer();
-        return View(footer.ViewName, footer);
+        return View("Shinec", footer);
     }
 }

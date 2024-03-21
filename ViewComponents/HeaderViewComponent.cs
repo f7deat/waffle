@@ -35,6 +35,6 @@ public class HeaderViewComponent : ViewComponent
         header.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
         header.UserId = UserClaimsPrincipal.GetId();
         header.Catalog = PageData;
-        return View(header.ViewName, header);
+        return View("Shinec", header);
     }
 }
