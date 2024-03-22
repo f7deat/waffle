@@ -1000,6 +1000,10 @@ ul.nav.wp-menu > li > ul.sub-menu.mega-menu > li.mega-menu-col > ul.sub-menu {
     box-shadow: none
 }
 
+.header-topbar a {
+    color: #ffffff;
+}
+
 .header-topbar ul.nav.social-icons > li > a, .header-logobar ul.nav.social-icons > li > a, .header-navbar ul.nav.social-icons > li > a {
     height: 35px;
     line-height: 0;
@@ -1152,14 +1156,6 @@ ul.nav.wp-menu > li.menu-item-has-children > a {
     position: relative
 }
 
-    ul.nav.wp-menu > li.menu-item-has-children > a:after {
-        content: "\e64b";
-        position: absolute;
-        right: 0;
-        font-family: themify;
-        font-size: 10px
-    }
-
 ul.mobile-menu li.menu-item-has-children > span.down-arrow:after, ul.mobile-menu li.menu-item-has-children > span.up-arrow:after {
     content: "";
     width: 0;
@@ -1227,21 +1223,6 @@ ul.nav.wp-menu > li.menu-item-has-children li.menu-item-has-children > a {
     position: relative
 }
 
-    ul.nav.wp-menu > li.menu-item-has-children li.menu-item-has-children > a:after {
-        content: "\e649";
-        font-family: 'themify';
-        position: absolute;
-        top: 50%;
-        right: 0;
-        transform: translateY(-50%);
-        font-size: 10px;
-        transition: all 0.3s ease-in-out 0s;
-        -moz-transition: all 0.3s ease-in-out 0s;
-        -webkit-transition: all 0.3s ease-in-out 0s;
-        -o-transition: all 0.3s ease-in-out 0s;
-        -ms-transition: all 0.3s ease-in-out 0s
-    }
-
     ul.nav.wp-menu > li.menu-item-has-children li.menu-item-has-children > a:hover:after {
         transform: rotate(180deg) translateY(50%)
     }
@@ -1273,9 +1254,9 @@ ul.nav.wp-menu > li.menu-item-has-children > a {
 }
 
 .header-topbar {
-    background: #00152f;
-    font-size: 13px;
-    line-height: 50px;
+    background: rgb(42,125,46);
+    font-size: 15px;
+    line-height: 40px;
     padding: 0;
     color: #fff
 }
@@ -1308,7 +1289,9 @@ ul.nav.wp-menu > li.menu-item-has-children > a {
 }
 
 .header-navbar {
-    line-height: 60px
+    line-height: 97px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .header-mobilebar {
@@ -2692,7 +2675,8 @@ aside.footer-widget-2 h5 {
         padding: 15px 25px 15px 25px;
         display: inline-block;
         transition: all 0.8s,color 0.3s 0.3s;
-        width: auto
+        width: auto;
+        background-color: #2a7d2e;
     }
 
     .footer-insta-widget .widget-content .footer-hero-btn:hover a {
@@ -3849,10 +3833,6 @@ a.garland-toggle > span {
 
 .overlay-search-form .overlay-search-trigger span {
     color: #fff
-}
-
-.btn, button, .btn.bordered:hover {
-    background: #000
 }
 
     .btn:not(:disabled):not(.disabled) {
@@ -6248,7 +6228,9 @@ body.dark-mode-activated .dar-light-inner .round-ball-switch::before {
     --bg-ext: rgba(255,255,255,.05);
     --dark-overlay-color: rgba(0,0,0, 0.05)
 }
-
+.primary-menu .menu-item-has-children ul.sub-menu {
+    background-color: white;
+}
 body.dark-mode-activated, body.dark-mode-activated section.elementor-section.elementor-top-section.elementor-section-stretched.elementor-section-boxed.elementor-section-height-default, body.dark-mode-activated #site-content, body.dark-mode-activated .site-footer, body.dark-mode-activated .cea-accordion-header > a, body.dark-mode-activated .elementor-widget-text-editor span.sub-title, body.single.dark-mode-activated ul.portfolio-meta-list, body.dark-mode-activated .content-widgets-wrapper .widget_block, body.dark-mode-activated .popover-content, body.dark-mode-activated header.site-header:not(.header-absolute), body.dark-mode-activated .cea-vertical-tab .cea-tabs .nav-item.nav-link *.cea-tab-icon, body.dark-mode-activated .tab-style-2.cea-vertical-tab .nav.nav-tabs.cea-tabs, body.dark-mode-activated ul.nav.wp-menu > li.menu-item-has-children:not(.menu-item-has-mega-children) > .sub-menu, body.dark-mode-activated .header-navbar.navbar .wp-menu li > ul.sub-menu li, body.dark-mode-activated header ul.nav.wp-menu ul.sub-menu.mega-menu, body.dark-mode-activated .portfolio-style-default .portfolio-inner .post-overlay-items .post-icons a {
     background-color: var(--dark-bg) !important;
     color: var(--light-color) !important
