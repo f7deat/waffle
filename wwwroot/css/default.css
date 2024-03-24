@@ -17,6 +17,10 @@
             width: 20rem;
         }
 
+li {
+    padding: 0.25rem 0;
+}
+
 .title {
     padding: 0.5rem 0;
     font-weight: 500;

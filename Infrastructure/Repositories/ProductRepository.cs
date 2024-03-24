@@ -28,6 +28,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                     && (string.IsNullOrEmpty(filterOptions.Name) || catalog.NormalizedName.Contains(filterOptions.Name))
                     && (filterOptions.ParentId == null || catalog.ParentId == filterOptions.ParentId)
                     && (filterOptions.Active == null || catalog.Active == filterOptions.Active)
+                    && catalog.Locale == filterOptions.Locale
                     orderby catalog.ModifiedDate descending
                     select new ProductListItem
                     {

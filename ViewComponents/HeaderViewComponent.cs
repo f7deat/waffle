@@ -5,6 +5,8 @@ using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Extensions;
 using Waffle.Models.Settings;
+using Waffle.Core.Options;
+using Microsoft.Extensions.Options;
 
 namespace Waffle.ViewComponents;
 
@@ -12,11 +14,13 @@ public class HeaderViewComponent : ViewComponent
 {
     private readonly ISettingService _settingService;
     private readonly IConfiguration _configuration;
+    private readonly SettingOptions Options;
 
-    public HeaderViewComponent(ISettingService settingService, IConfiguration configuration)
+    public HeaderViewComponent(ISettingService settingService, IConfiguration configuration, IOptions<SettingOptions> options)
     {
         _settingService = settingService;
         _configuration = configuration;
+        Options = options.Value;
     }
 
     protected Catalog PageData
@@ -35,6 +39,6 @@ public class HeaderViewComponent : ViewComponent
         header.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
         header.UserId = UserClaimsPrincipal.GetId();
         header.Catalog = PageData;
-        return View("Shinec", header);
+        return View(Options.Theme, header);
     }
 }

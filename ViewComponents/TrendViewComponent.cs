@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Waffle.Core.Options;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models.GoogleAggregate;
 using Waffle.Models;
@@ -9,9 +11,18 @@ namespace Waffle.ViewComponents;
 public class TrendViewComponent : ViewComponent
 {
     private readonly IGoogleService _googleService;
-    public TrendViewComponent(IGoogleService googleService) => _googleService = googleService;
+    private readonly SettingOptions Options;
+    public TrendViewComponent(IGoogleService googleService, IOptions<SettingOptions> options)
+    {
+        _googleService = googleService;
+        Options = options.Value;
+    }
 
     public async Task<IViewComponentResult> InvokeAsync(Guid id) {
+        if (Options.Theme != "Default")
+        {
+            return View("~/Pages/Components/Empty/NoContent.cshtml");
+        }
         var trend = await _googleService.GetDailyTrendingAsync();
         if (trend is null || trend.Channel is null || trend.Channel.Item is null)
         {

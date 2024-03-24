@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Options;
 using Waffle.Entities;
 using Waffle.Extensions;
 using Waffle.Models.Components;
@@ -10,10 +12,12 @@ public class BreadcrumbViewComponent : ViewComponent
 {
     private readonly ILocalizationService _localizationService;
     private readonly ICatalogService _catalogService;
-    public BreadcrumbViewComponent(ICatalogService catalogService, ILocalizationService localizationService)
+    private readonly SettingOptions Options;
+    public BreadcrumbViewComponent(ICatalogService catalogService, ILocalizationService localizationService, IOptions<SettingOptions> options)
     {
         _catalogService = catalogService;
         _localizationService = localizationService;
+        Options = options.Value;
     }
 
     private Catalog PageData
@@ -63,6 +67,6 @@ public class BreadcrumbViewComponent : ViewComponent
             Name = PageData.Name,
             Position = breadcrumb.Count + 1
         });
-        return View(breadcrumb);
+        return View(Options.Theme, breadcrumb);
     }
 }

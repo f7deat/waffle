@@ -63,7 +63,8 @@ public class IndexModel : EntryPageModel
         {
             Name = FilterOptions.SearchTerm,
             PageSize = 8,
-            Active = true
+            Active = true,
+            Locale = PageData.Locale
         });
         ProductFeed = new Feed
         {

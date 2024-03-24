@@ -2,9 +2,9 @@
 @using Waffle.Models.Components
 @model Waffle.Pages.Leaf.DetailsModel
 
-<main class="container">
+@await Component.InvokeAsync(nameof(Breadcrumb))
 
-    @await Component.InvokeAsync(nameof(Breadcrumb))
+<main class="container">
 
     @if (Model.Components != null)
     {

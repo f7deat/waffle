@@ -141,7 +141,7 @@ public class CatalogService : ICatalogService
         var query = from a in _context.WorkContents
                     join b in _context.WorkItems on a.Id equals b.WorkId
                     join c in _context.Components on a.ComponentId equals c.Id
-                    where b.CatalogId == catalogId
+                    where b.CatalogId == catalogId && a.Active
                     orderby b.SortOrder ascending
                     select new ComponentListItem
                     {

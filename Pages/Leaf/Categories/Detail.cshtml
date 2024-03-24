@@ -6,10 +6,10 @@
 @using Waffle.ViewComponents;
 @model Waffle.Pages.Leaf.Categories.DetailModel
 
+@await Component.InvokeAsync(nameof(Breadcrumb))
 <main class="container">
     <div class="row">
         <div class="col-md-8">
-            @await Component.InvokeAsync(nameof(Breadcrumb))
 
             <h1 class="title">@Html.Raw(Model.PageData.Name)</h1>
             <div class="mb-4 bg-white post-body">

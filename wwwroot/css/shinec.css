@@ -1,4 +1,85 @@
-﻿html {
+﻿:root {
+    --primary: #2a7d2e;
+}
+
+.title {
+    background-color: var(--primary);
+    padding: 0.5rem 1rem;
+    color: white;
+    border-start-start-radius: 0.5rem;
+    border-start-end-radius: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.title a {
+    color: white;
+}
+
+    .title::before {
+        background-image: url(https://wordpress.zozothemes.com/garland/wp-content/themes/garland/assets/images/pot-leaf-sidebar.png);
+        content: "";
+        height: 70px;
+        width: 60px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+.jumbotron {
+    background-image: url(https://shinecgialai.com.vn/imgs/cover-min.jpg);
+    height: 600px;
+    background-position: left;
+    background-size: contain;
+    background-repeat: round;
+}
+
+    .jumbotron-title {
+        font-size: 3rem;
+    }
+
+    .jumbotron-description {
+        max-width: 800px;
+        margin-bottom: 2rem;
+        font-weight: 400;
+        font-size: 1.25rem;
+    }
+
+    .jumbotron .btn {
+        font-size: 1.25rem;
+        border: 2px solid;
+        padding: .75rem 2rem;
+    }
+
+        .jumbotron .btn:hover {
+            background-color: var(--primary);
+            transition: all ease-in-out 500ms;
+        }
+
+    .jumbotron .btn-contact {
+        color: white;
+    }
+
+    .jumbotron .btn-vr360 {
+        color: white;
+    }
+
+.btn-primary {
+    --bs-btn-border-color: var(--primary);
+    --bs-btn-hover-bg: #3e8f50;
+    --bs-btn-hover-border-color: #3e8f50;
+}
+
+.breadcrumb {
+    --bs-breadcrumb-divider-color: #fff;
+}
+
+html {
     height: 100%;
     box-sizing: border-box
 }
@@ -8,7 +89,6 @@
 }
 
 html {
-    font-family: sans-serif;
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
@@ -26,7 +106,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
     margin: 0;
-    font-family: DM Sans, sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -160,8 +240,6 @@ figure {
 img {
     vertical-align: middle;
     border-style: none;
-    height: auto;
-    max-width: 100%
 }
 
 svg {
@@ -299,7 +377,7 @@ template {
     margin-bottom: .5rem;
     font-family: inherit;
     font-weight: 500;
-    line-height: 1.2;
+    line-height: 1.5;
     color: inherit
 }
 
@@ -651,11 +729,6 @@ ul, ol {
         display: inline-block
     }
 
-img, video {
-    max-width: 100%;
-    height: auto
-}
-
 img {
     display: block;
     margin: 0 auto
@@ -708,8 +781,6 @@ table td, table th {
 
 input, .wp-block-search__input {
     min-height: 52px;
-    border-radius: 6px;
-    border: 1px solid #133a161f;
     padding: 0 12px
 }
 
@@ -741,7 +812,6 @@ ul {
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
-    color: #252525
 }
 
 .bypostauthor {
@@ -750,7 +820,6 @@ h1, h2, h3, h4, h5, h6 {
 
 figure.alignnone, figure.aligncenter {
     max-width: fit-content;
-    max-width: -webkit-fill-available
 }
 
 .section-title-wrapper .title-wrap > *.sub-title .subtitle-dots:before {
@@ -765,7 +834,7 @@ figure.alignnone, figure.aligncenter {
 }
 
 .page-title-wrap a, .logged-in-as a, .footer-widgets-wrap a:hover {
-    color: #000
+    color: white;
 }
 
 .theme-color {
@@ -1543,7 +1612,9 @@ header.garland-page-header {
     background: #f1f1f1;
     position: relative;
     z-index: 0;
-    overflow: hidden
+    overflow: hidden;
+    background-color: saddlebrown;
+    background-image: url(https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/2023/12/page-titke-2.png);
 }
 
     header.garland-page-header:after {
@@ -1609,7 +1680,8 @@ header.garland-page-header {
 
 ul.page-title-elements.page-title-center.pull-center h1.page-title {
     display: block;
-    word-break: break-word
+    word-break: break-word;
+    color: white;
 }
 
 .page-title-wrap > ul.page-title-elements.pull-center > .breadcrumbs-wrap li.breadcrumb-wrap {
@@ -3835,13 +3907,13 @@ a.garland-toggle > span {
     color: #fff
 }
 
-    .btn:not(:disabled):not(.disabled) {
-        cursor: pointer
-    }
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer
+}
 
-    .btn:hover {
-        color: #fff
-    }
+.btn:hover {
+    color: #fff
+}
 
 ::selection {
     background: #000
@@ -4670,12 +4742,13 @@ a.read-more:hover, a.read-more:active, a.read-more:focus {
     font-size: 16px;
     letter-spacing: 0;
     text-align: center;
-    border: 1px solid;
+    border: 1px solid #2a7d2e;
     border-radius: 6px;
     transition: all 0.8s,color 0.3s 0.3s;
     color: #fff;
     text-transform: capitalize;
-    font-weight: 500
+    font-weight: 500;
+    background-color: #2a7d2e;
 }
 
     .header-navbar .h-phone i {
@@ -6228,9 +6301,11 @@ body.dark-mode-activated .dar-light-inner .round-ball-switch::before {
     --bg-ext: rgba(255,255,255,.05);
     --dark-overlay-color: rgba(0,0,0, 0.05)
 }
+
 .primary-menu .menu-item-has-children ul.sub-menu {
     background-color: white;
 }
+
 body.dark-mode-activated, body.dark-mode-activated section.elementor-section.elementor-top-section.elementor-section-stretched.elementor-section-boxed.elementor-section-height-default, body.dark-mode-activated #site-content, body.dark-mode-activated .site-footer, body.dark-mode-activated .cea-accordion-header > a, body.dark-mode-activated .elementor-widget-text-editor span.sub-title, body.single.dark-mode-activated ul.portfolio-meta-list, body.dark-mode-activated .content-widgets-wrapper .widget_block, body.dark-mode-activated .popover-content, body.dark-mode-activated header.site-header:not(.header-absolute), body.dark-mode-activated .cea-vertical-tab .cea-tabs .nav-item.nav-link *.cea-tab-icon, body.dark-mode-activated .tab-style-2.cea-vertical-tab .nav.nav-tabs.cea-tabs, body.dark-mode-activated ul.nav.wp-menu > li.menu-item-has-children:not(.menu-item-has-mega-children) > .sub-menu, body.dark-mode-activated .header-navbar.navbar .wp-menu li > ul.sub-menu li, body.dark-mode-activated header ul.nav.wp-menu ul.sub-menu.mega-menu, body.dark-mode-activated .portfolio-style-default .portfolio-inner .post-overlay-items .post-icons a {
     background-color: var(--dark-bg) !important;
     color: var(--light-color) !important
@@ -7897,4 +7972,26 @@ ul.nav.wp-menu.primary-menu, nav.primary-menu-wrapper, header .navbar > div > ul
     background-repeat: no-repeat;
     background-position: right top;
     background-size: cover;
+}
+
+.sticky-outer {
+    height: 98px;
+}
+
+img.mobile-logo {
+    max-width: 135px;
+}
+
+@media only screen and (max-width: 1200px) {
+    .header-mobilebar {
+        display: flex;
+    }
+
+    .sticky-outer {
+        height: 60px;
+    }
+
+    .jumbotron-title {
+        font-size: 2rem;
+    }
 }
