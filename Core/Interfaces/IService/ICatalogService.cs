@@ -41,4 +41,5 @@ public interface ICatalogService
     Task<int> GetViewCountAsync();
     Task<object?> GetComponentsAsync(GetComponentsArgs args);
     Task<object?> GetStructureAsync(string normalizedName);
+    Task<IdentityResult> DeleteRangeAsync(List<Guid> ids);
 }

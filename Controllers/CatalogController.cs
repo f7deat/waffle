@@ -195,4 +195,7 @@ public class CatalogController : BaseController
         if (args is null || string.IsNullOrWhiteSpace(args.NormalizedName) || string.IsNullOrWhiteSpace(args.Locale)) return BadRequest();
         return Ok(await _catalogService.GetComponentsAsync(args));
     }
+
+    [HttpPost("delete-range")]
+    public async Task<IActionResult> DeleteRangeAsync([FromBody] List<Guid> ids) => Ok(await _catalogService.DeleteRangeAsync(ids));
 }

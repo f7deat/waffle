@@ -414,4 +414,26 @@ public class CatalogService : ICatalogService
     }
 
     public Task<object?> GetStructureAsync(string normalizedName) => _catalogRepository.GetStructureAsync(normalizedName);
+
+    public async Task<IdentityResult> DeleteRangeAsync(List<Guid> ids)
+    {
+        if (ids.Count > 10) return IdentityResult.Failed(new IdentityError
+        {
+            Code = "max.record",
+            Description = "Not allowed"
+        });
+        if (!ids.Any()) return IdentityResult.Failed(new IdentityError
+        {
+            Code = "data.notFound",
+            Description = "Data not found!"
+        });
+        foreach (var id in ids)
+        {
+            var catalog = await _catalogRepository.FindAsync(id);
+            if (catalog is null) continue;
+            await _catalogRepository.DeleteAsync(catalog);
+        }
+        await _context.SaveChangesAsync();
+        return IdentityResult.Success;
+    }
 }
