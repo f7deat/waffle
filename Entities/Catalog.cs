@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Waffle.Entities;
@@ -38,16 +39,28 @@ public class Catalog : BaseEntity
 
 public enum CatalogType
 {
+    [Description("Trang")]
     Default = 0,
+    [Description("Tin tức")]
     Article = 1,
+    [Description("Sản phẩm")]
     Product = 2,
+    [Description("Cài đặt")]
     Setting = 3,
+    [Description("Entry")]
     Entry = 4,
+    [Description("Địa điểm")]
     Location = 5,
+    [Description("Album ảnh")]
     Album = 8,
+    [Description("Tag")]
     Tag = 9,
+    [Description("Video")]
     Video = 10,
+    [Description("Game")]
     Game = 11,
+    [Description("WordPress")]
     WordPress = 12,
+    [Description("Thương hiệu")]
     Brand = 13
 }

@@ -25,8 +25,9 @@ public class CatalogService : ICatalogService
     private readonly IComponentRepository _componentRepository;
     private readonly IWorkContentRepository _workRepository;
     private readonly SettingOptions _options;
+    private readonly ILogService _logService;
 
-    public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository, IComponentRepository componentRepository, IWorkContentRepository workContentRepository, IOptions<SettingOptions> options)
+    public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository, IComponentRepository componentRepository, IWorkContentRepository workContentRepository, IOptions<SettingOptions> options, ILogService logService)
     {
         _context = context;
         _currentUser = currentUser;
@@ -34,6 +35,7 @@ public class CatalogService : ICatalogService
         _componentRepository = componentRepository;
         _workRepository = workContentRepository;
         _options = options.Value;
+        _logService = logService;
     }
 
     public async Task<IdentityResult> ActiveAsync(Guid id)
@@ -419,19 +421,15 @@ public class CatalogService : ICatalogService
     {
         if (ids.Count > 10) return IdentityResult.Failed(new IdentityError
         {
-            Code = "max.record",
-            Description = "Not allowed"
-        });
-        if (!ids.Any()) return IdentityResult.Failed(new IdentityError
-        {
-            Code = "data.notFound",
-            Description = "Data not found!"
+            Code = "error.limit",
+            Description = "Limit 10 record!"
         });
         foreach (var id in ids)
         {
             var catalog = await _catalogRepository.FindAsync(id);
             if (catalog is null) continue;
             await _catalogRepository.DeleteAsync(catalog);
+            await _logService.AddAsync($"Delete {catalog.Name}", catalog.Id);
         }
         await _context.SaveChangesAsync();
         return IdentityResult.Success;

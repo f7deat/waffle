@@ -197,5 +197,9 @@ public class CatalogController : BaseController
     }
 
     [HttpPost("delete-range")]
-    public async Task<IActionResult> DeleteRangeAsync([FromBody] List<Guid> ids) => Ok(await _catalogService.DeleteRangeAsync(ids));
+    public async Task<IActionResult> DeleteRangeAsync([FromBody] List<Guid> ids)
+    {
+        if (ids is null || !ids.Any()) return BadRequest("No catalog selected!");
+        return Ok(await _catalogService.DeleteRangeAsync(ids));
+    }
 }

@@ -42,14 +42,23 @@ public class BreadcrumbViewComponent : ViewComponent
     {
         var breadcrumb = new List<Breadcrumb>
         {
-            new Breadcrumb
-            {
+            new() {
                 Url = "/",
                 Name = await _localizationService.GetAsync("home"),
                 Position = 1,
                 Icon = "fas fa-home"
             }
         };
+
+        if (PageData.Type == CatalogType.Tag)
+        {
+            breadcrumb.Add(new Breadcrumb
+            {
+                Url = $"/tag",
+                Name = CatalogType.Tag.GetDescription(),
+                Position = breadcrumb.Count + 1
+            });
+        }
 
         if (Category != null)
         {
