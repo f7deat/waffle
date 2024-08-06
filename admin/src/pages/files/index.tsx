@@ -44,6 +44,8 @@ const FilePage: React.FC = () => {
     {
       title: '#',
       valueType: 'indexBorder',
+      width: 40,
+      align: 'center'
     },
     {
       title: 'Name',
@@ -58,12 +60,13 @@ const FilePage: React.FC = () => {
       dataIndex: 'size',
       search: false,
       render: (dom, entity) => `${(entity.size / 1024).toFixed(2)} KB`,
+      width: 80
     },
     {
       title: '',
       valueType: 'option',
       render: (dom, entity) => [
-        <Button
+        <Button size='small'
           type="primary"
           icon={<EyeOutlined />}
           key={1}
@@ -71,7 +74,7 @@ const FilePage: React.FC = () => {
             history.push(`/files/center/${entity.id}`);
           }}
         />,
-        <Button
+        <Button size='small'
           key={2}
           icon={<DownloadOutlined />}
           onClick={() => (window.location.href = entity.url)}
@@ -81,9 +84,10 @@ const FilePage: React.FC = () => {
           onConfirm={() => handleDelete(entity.id)}
           key={3}
         >
-          <Button type="primary" icon={<DeleteOutlined />} danger />
+          <Button type="primary" icon={<DeleteOutlined />} danger size='small' />
         </Popconfirm>,
       ],
+      width: 100
     },
   ];
   return (

@@ -434,4 +434,29 @@ public class CatalogService : ICatalogService
         await _context.SaveChangesAsync();
         return IdentityResult.Success;
     }
+
+    public async Task<object?> GetActivityAsync()
+    {
+        var query = await _context.Catalogs.Where(x => x.CreatedDate.Year == DateTime.Now.Year)
+            .Select(x => new
+            {
+                x.Id,
+                x.CreatedDate.Month
+            }).GroupBy(x => x.Month)
+            .Select(x => new
+            {
+                x.Key,
+                Count = x.Count()
+            }).ToListAsync();
+        var result = new List<dynamic>();
+        for (var i = 1; i < 13; i++)
+        {
+            result.Add(new
+            {
+                month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMM"),
+                value = query.FirstOrDefault(x => x.Key == i)?.Count ?? 0
+            });
+        }
+        return result;
+    }
 }

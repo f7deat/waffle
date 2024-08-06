@@ -17,6 +17,11 @@ const Page: React.FC = () => {
           },
           items: [
             {
+              label: 'Entry',
+              key: `${CatalogType.Entry}`,
+              children: <CatalogList type={CatalogType.Entry} />
+            },
+            {
               label: 'Trang',
               key: `${CatalogType.Default}`,
               children: <CatalogList type={CatalogType.Default} />

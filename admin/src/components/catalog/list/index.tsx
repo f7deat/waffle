@@ -167,7 +167,6 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
   return (
     <div>
       <ProTable
-        ghost
         rowSelection={{
           onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys)
         }}

@@ -53,6 +53,19 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     waterMarkProps: {
       content: initialState?.currentUser?.userName
     },
+    token: {
+        sider: {
+          colorMenuBackground: '#020617',
+          colorBgMenuItemHover: '#1677ff',
+          colorTextMenu: '#FFFFFF',
+          colorTextMenuSelected: '#FFFFFF',
+          colorTextMenuItemHover: '#FFFFFF',
+          colorTextMenuActive: '#FFFFFF',
+          colorBgMenuItemSelected: '#1677ff',
+          colorTextMenuSecondary: '#FFFFFF',
+          colorTextMenuTitle: '#FFFFFF',
+        },
+    },
     footerRender: () => (
       <DefaultFooter copyright="Produced by Waffle Financial Experience Department" links={[
         {

@@ -1,15 +1,15 @@
-import CatalogList from '@/components/catalog/list';
-import { CatalogType } from '@/constants';
 import { dataPieChart, queryViewCount } from '@/services/catalog';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
-import { Col, Divider, Row, Statistic } from 'antd';
-import { PieChart } from 'bizcharts';
+import { Col, Row, Statistic } from 'antd';
+import { ColumnChart, PieChart } from 'bizcharts';
 import { useEffect, useState } from 'react';
 import TopView from './components/top-view';
+import { apiGetReportActivity } from '@/services/report';
 
 const HomePage: React.FC = () => {
   const [viewCount, setViewCount] = useState<number>(0);
-  const [dataPie, setDataPie] = useState<any>([])
+  const [dataPie, setDataPie] = useState<any>([]);
+  const [dataActivities, setDataActivities] = useState<any[]>([]);
 
   useEffect(() => {
     queryViewCount().then((response) => {
@@ -17,19 +17,24 @@ const HomePage: React.FC = () => {
     });
     dataPieChart().then(response => {
       setDataPie(response);
-    })
+    });
+    apiGetReportActivity().then(response => setDataActivities(response));
   }, []);
 
   return (
     <PageContainer>
       <Row gutter={16}>
         <Col span={16}>
-          <ProCard>
-            <CatalogList type={CatalogType.Entry} />
+          <ProCard title="Hoạt động" headerBordered>
+            <ColumnChart 
+            xField="month"
+            yField='value'
+            data={dataActivities}
+            />
           </ProCard>
         </Col>
         <Col span={8}>
-          <Row gutter={16}>
+          <Row gutter={16} className='mb-4'>
             <Col span={12}>
               <ProCard>
                 <Statistic title="Lượt xem" value={viewCount} />
@@ -41,7 +46,6 @@ const HomePage: React.FC = () => {
               </ProCard>
             </Col>
           </Row>
-          <Divider />
           <ProCard title="Catalogs" headerBordered className='mb-4'>
             <PieChart
               angleField='value'
