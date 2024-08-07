@@ -18,11 +18,8 @@ public class TrendViewComponent : ViewComponent
         Options = options.Value;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(Guid id) {
-        if (Options.Theme != "Default")
-        {
-            return View("~/Pages/Components/Empty/NoContent.cshtml");
-        }
+    public async Task<IViewComponentResult> InvokeAsync(Guid id) 
+    {
         var trend = await _googleService.GetDailyTrendingAsync();
         if (trend is null || trend.Channel is null || trend.Channel.Item is null)
         {
