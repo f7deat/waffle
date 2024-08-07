@@ -20,7 +20,7 @@ public class IndexModel : EntryPageModel
     {
         Catalogs = await _catalogService.ListAsync(new()
         {
-            Type = CatalogType.Default,
+            Type = CatalogType.Leaf,
             Active = true,
             PageSize = 20
         });

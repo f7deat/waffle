@@ -1,7 +1,6 @@
 ﻿using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
-using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components;
 
@@ -29,7 +28,7 @@ public class SwiperViewComponent : BaseViewComponent<Swiper>
                 Title = x.Name,
                 Image = x.Thumbnail,
                 Description = x.Description,
-                Url = x.GetUrl()
+                Url = x.Url
             }).ToList();
         }
         return work;

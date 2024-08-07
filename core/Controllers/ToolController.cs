@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Interfaces;
@@ -18,13 +21,15 @@ public class ToolController : BaseController
     private readonly IWordPressService _wordPressService;
     private readonly IComponentService _componentService;
     private readonly IWorkService _workService;
+    private readonly ApplicationDbContext _context;
 
-    public ToolController(ICatalogService catalogService, IWordPressService wordPressService, IComponentService componentService, IWorkService workService)
+    public ToolController(ICatalogService catalogService, IWordPressService wordPressService, IComponentService componentService, IWorkService workService, ApplicationDbContext context)
     {
         _catalogService = catalogService;
         _wordPressService = wordPressService;
         _componentService = componentService;
         _workService = workService;
+        _context = context;
     }
 
     [HttpPost("fetch-wordpress")]

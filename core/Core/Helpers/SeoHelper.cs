@@ -51,7 +51,7 @@ public class SeoHelper
     {
         switch (type)
         {
-            case CatalogType.Default:
+            case CatalogType.Leaf:
                 return "leaf";
             case CatalogType.Article:
                 return "article";

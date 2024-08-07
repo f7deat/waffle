@@ -33,7 +33,7 @@ public class IndexModel : EntryPageModel
             Date = x.ModifiedDate.ToString("D"),
             Thumbnail = x.Thumbnail,
             ViewCount = x.ViewCount.ToNumber(),
-            Url = x.GetUrl()
+            Url = x.Url
         }).ToList() ?? new();
 
         return Page();

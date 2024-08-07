@@ -168,7 +168,8 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
                         Description = catalog.Description,
                         ModifiedDate = catalog.ModifiedDate,
                         Thumbnail = catalog.Thumbnail,
-                        ViewCount = catalog.ViewCount
+                        ViewCount = catalog.ViewCount,
+                        Type = catalog.Type
                     };
         return await query.OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }

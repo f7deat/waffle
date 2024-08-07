@@ -90,7 +90,7 @@ public class CatalogService : ICatalogService
         return IdentityResult.Success;
     }
 
-    public async Task<Catalog> EnsureDataAsync(string name, string locale, CatalogType type = CatalogType.Default)
+    public async Task<Catalog> EnsureDataAsync(string name, string locale, CatalogType type = CatalogType.Leaf)
     {
         var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name.ToLower()) && x.Locale == locale);
         if (catalog is null)

@@ -33,7 +33,7 @@ public class LeafGenerator : BaseGenerator
                 Active = true,
                 NormalizedName = normalizedName,
                 Name = "Thank to subscribe",
-                Type = CatalogType.Default
+                Type = CatalogType.Leaf
             };
 
             await _context.Catalogs.AddAsync(catalog);

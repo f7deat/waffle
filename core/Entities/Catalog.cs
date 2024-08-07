@@ -40,7 +40,7 @@ public class Catalog : BaseEntity
 public enum CatalogType
 {
     [Description("Trang")]
-    Default = 0,
+    Leaf = 0,
     [Description("Tin tức")]
     Article = 1,
     [Description("Sản phẩm")]
