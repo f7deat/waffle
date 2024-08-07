@@ -3,13 +3,14 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Pages.Leaf;
 
 public class IndexModel : EntryPageModel
 {
 
-    public ListResult<Catalog> Catalogs = new();
+    public ListResult<CatalogListItem> Catalogs = new();
 
     public IndexModel(ICatalogService catalogService) : base(catalogService)
     {

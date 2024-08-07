@@ -6,6 +6,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Infrastructure.Repositories;
 
@@ -85,9 +86,28 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
 
     public async Task<int> GetViewCountAsync() => await _context.Catalogs.SumAsync(x => x.ViewCount);
 
-    public async Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions)
+    public async Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions)
     {
-        var query = _context.Catalogs.Where(x => filterOptions.ParentId == null || x.ParentId == filterOptions.ParentId);
+        var query = from catalog in _context.Catalogs
+                    join category in _context.Catalogs on catalog.ParentId equals category.Id into catalogCategory
+                    from category in catalogCategory.DefaultIfEmpty()
+                    select new CatalogListItem
+                    {
+                        Id = catalog.Id,
+                        ParentId = catalog.ParentId,
+                        Active = catalog.Active,
+                        Category = category.NormalizedName,
+                        Description = catalog.Description,
+                        NormalizedName = catalog.NormalizedName,
+                        CreatedBy = catalog.CreatedBy,
+                        CreatedDate = catalog.CreatedDate,
+                        Locale = catalog.Locale,
+                        ModifiedDate = catalog.ModifiedDate,
+                        Name = catalog.Name,
+                        Thumbnail = catalog.Thumbnail,
+                        Type = catalog.Type,
+                        ViewCount = catalog.ViewCount
+                    };
 
         if (!string.IsNullOrEmpty(filterOptions.Name))
         {
@@ -130,14 +150,26 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
             }
         }
 
-        return await ListResult<Catalog>.Success(query, filterOptions);
+        return await ListResult<CatalogListItem>.Success(query, filterOptions);
     }
 
-    public async Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize)
+    public async Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(CatalogType type, int pageSize)
     {
         var query = from catalog in _context.Catalogs
+                    join category in _context.Catalogs on catalog.ParentId equals category.Id into catalogCategory from category in catalogCategory.DefaultIfEmpty()
                     where catalog.Type == type && catalog.Active
-                    select catalog;
+                    select new CatalogListItem
+                    {
+                        Id = catalog.Id,
+                        Category = category.NormalizedName,
+                        NormalizedName = catalog.NormalizedName,
+                        Name = catalog.Name,
+                        CreatedDate = catalog.CreatedDate,
+                        Description = catalog.Description,
+                        ModifiedDate = catalog.ModifiedDate,
+                        Thumbnail = catalog.Thumbnail,
+                        ViewCount = catalog.ViewCount
+                    };
         return await query.OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }
 }

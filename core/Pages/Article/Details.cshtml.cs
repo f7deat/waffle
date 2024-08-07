@@ -10,9 +10,8 @@ using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
-using Waffle.Models.Components;
 
-namespace Waffle.Pages.Articles;
+namespace Waffle.Pages.Article;
 
 public class DetailsModel : DynamicPageModel
 {

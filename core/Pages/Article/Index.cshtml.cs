@@ -3,9 +3,9 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Components;
+using Waffle.Models.ViewModels;
 
-namespace Waffle.Pages.Articles;
+namespace Waffle.Pages.Article;
 
 public class IndexModel : EntryPageModel
 {
@@ -13,7 +13,7 @@ public class IndexModel : EntryPageModel
     [BindProperty(SupportsGet = true)]
     public int Current { get; set; } = 1;
 
-    public ListResult<Catalog>? Articles;
+    public ListResult<CatalogListItem>? Articles;
 
     public IndexModel(ICatalogService catalogService) : base(catalogService)
     {

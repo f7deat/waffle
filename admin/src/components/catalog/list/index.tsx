@@ -1,4 +1,3 @@
-import FormCatalogType from '@/components/form/catalog-type';
 import { CatalogType } from '@/constants';
 import { activeCatalog, addCatalog, apiCatalogDeleteRange, deleteCatalog, listCatalog } from '@/services/catalog';
 import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined, SendOutlined } from '@ant-design/icons';
@@ -111,18 +110,9 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
       width: 100
     },
     {
-      title: '',
+      title: 'Option',
       valueType: 'option',
       render: (dom, entity) => [
-        <Popconfirm
-          title="Are you sure?"
-          key={2}
-          onConfirm={() => onConfirm(entity.id)}
-        >
-          <Button
-            size='small'
-            type="dashed" icon={<DeleteOutlined />} danger />
-        </Popconfirm>,
         <Dropdown key="more" menu={{
           items: [
             {
@@ -138,7 +128,16 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
           ], onClick: (event) => onMoreClick(event, entity)
         }}>
           <Button type='dashed' size='small' icon={<MoreOutlined />} />
-        </Dropdown>
+        </Dropdown>,
+        <Popconfirm
+          title="Are you sure?"
+          key={2}
+          onConfirm={() => onConfirm(entity.id)}
+        >
+          <Button
+            size='small'
+            type="primary" icon={<DeleteOutlined />} danger />
+        </Popconfirm>
       ],
       width: 100
     },
@@ -167,6 +166,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
   return (
     <div>
       <ProTable
+        ghost
         rowSelection={{
           onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys)
         }}
@@ -215,8 +215,12 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
             },
           ]}
         />
-        <FormCatalogType label='Type' name='type' initialValue={`${props.type}`} />
-        <ProFormTextArea label="Description" name="description" />
+        <ProFormText name='type' initialValue={props.type} hidden />
+        <ProFormTextArea label="Description" name="description" rules={[
+          {
+            required: true
+          }
+        ]} />
         <ProFormText name="locale" initialValue={intl.locale} hidden />
       </ModalForm>
     </div>

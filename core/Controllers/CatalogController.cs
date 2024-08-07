@@ -157,7 +157,7 @@ public class CatalogController : BaseController
     public async Task<IActionResult> UpdateThumbnailAsync([FromBody] Catalog args) => Ok(await _catalogService.UpdateThumbnailAsync(args));
 
     [HttpGet("types")]
-    public IActionResult GetTypes() => Ok(_catalogService.GetTypes());
+    public IActionResult GetTypes() => Ok(_catalogService.GetTypesAsync());
 
     [HttpGet("list-tag/{id}")]
     public async Task<IActionResult> ListTagByIdAsync([FromRoute] Guid id) => Ok(await _catalogService.ListTagByIdAsync(id));

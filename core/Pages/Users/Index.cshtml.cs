@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Pages.Users;
 
@@ -19,7 +20,7 @@ public class IndexModel : PageModel
     }
 
     public ApplicationUser ApplicationUser = new();
-    public ListResult<Catalog>? Articles;
+    public ListResult<CatalogListItem>? Articles;
 
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {

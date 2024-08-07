@@ -5,15 +5,17 @@ import { PlusOutlined } from '@ant-design/icons';
 import {
   ModalForm,
   ProFormDigit,
+  ProFormInstance,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useParams } from '@umijs/max';
 import { Tag, Button, message, Space } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const TagList: React.FC = () => {
   const { id } = useParams();
   const [tags, setTags] = useState<API.Catalog[]>();
   const [open, setOpen] = useState<boolean>(false);
+  const formRef = useRef<ProFormInstance>();
 
   const fetchTag = () => {
     listTagById(id).then((response) => {
@@ -33,6 +35,7 @@ const TagList: React.FC = () => {
     });
     if (response.succeeded) {
       message.success('Saved!');
+      formRef.current?.resetFields();
       setOpen(false);
       fetchTag();
     } else {
@@ -72,7 +75,7 @@ const TagList: React.FC = () => {
           <FormattedMessage id="general.new" />
         </Space>
       </Button>
-      <ModalForm open={open} onOpenChange={setOpen} onFinish={onFinish} title="Thêm mới">
+      <ModalForm open={open} onOpenChange={setOpen} onFinish={onFinish} title="Thêm mới" formRef={formRef}>
         <FormTag label='Tag' name='id' />
         <ProFormDigit label="Sort order" name="sortOrder" />
       </ModalForm>

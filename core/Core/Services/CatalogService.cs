@@ -26,8 +26,9 @@ public class CatalogService : ICatalogService
     private readonly IWorkContentRepository _workRepository;
     private readonly SettingOptions _options;
     private readonly ILogService _logService;
+    private readonly ILocalizationService _localizationService;
 
-    public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository, IComponentRepository componentRepository, IWorkContentRepository workContentRepository, IOptions<SettingOptions> options, ILogService logService)
+    public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository, IComponentRepository componentRepository, IWorkContentRepository workContentRepository, IOptions<SettingOptions> options, ILogService logService, ILocalizationService localizationService)
     {
         _context = context;
         _currentUser = currentUser;
@@ -36,6 +37,7 @@ public class CatalogService : ICatalogService
         _workRepository = workContentRepository;
         _options = options.Value;
         _logService = logService;
+        _localizationService = localizationService;
     }
 
     public async Task<IdentityResult> ActiveAsync(Guid id)
@@ -76,19 +78,6 @@ public class CatalogService : ICatalogService
             var count = await _context.Catalogs.CountAsync(x => x.NormalizedName.Contains(catalog.NormalizedName));
             catalog.NormalizedName += $"-{count + 1}";
         }
-        if (catalog.ParentId != null)
-        {
-            var parent = await _catalogRepository.FindAsync(catalog.ParentId);
-            if (parent is null)
-            {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Code = "error.parantCatalogNotFound",
-                    Description = "Parent catalog not found!"
-                });
-            }
-            catalog.NormalizedName = $"{parent.NormalizedName}/{catalog.NormalizedName}";
-        }
         catalog.CreatedDate = DateTime.Now;
         catalog.ModifiedDate = DateTime.Now;
         catalog.CreatedBy = _currentUser.GetId();
@@ -108,7 +97,7 @@ public class CatalogService : ICatalogService
         {
             if (!Languages.Codes.Contains(locale))
             {
-                locale = "vi-VN";  
+                locale = "vi-VN";
             }
             catalog = new Catalog
             {
@@ -187,47 +176,21 @@ public class CatalogService : ICatalogService
     public async Task<IdentityResult> SaveAsync(Catalog args)
     {
         var catalog = await _catalogRepository.FindAsync(args.Id);
-        if (catalog is null)
+        if (catalog is null) return IdentityResult.Failed(new IdentityError
         {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = "catalog.notFound",
-                Description = "Data not found!"
-            });
-        }
-        var normalizedName = args.NormalizedName;
-        if (string.IsNullOrWhiteSpace(args.NormalizedName))
+            Code = "catalog.notFound",
+            Description = "Data not found!"
+        });
+        if (string.IsNullOrWhiteSpace(catalog.Name)) return IdentityResult.Failed(new IdentityError
         {
-            normalizedName = SeoHelper.ToWikiFriendly(args.Name);
-        }
-        if (args.ParentId != null)
-        {
-            var parent = await _catalogRepository.FindAsync(args.ParentId);
-            if (parent is null)
-            {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Code = "error.parentCatalogNotFound",
-                    Description = "Parent catalog not found."
-                });
-            }
-            catalog.ParentId = parent.Id;
-            if (!normalizedName.Contains('/'))
-            {
-                normalizedName = $"{parent.NormalizedName}/{normalizedName}";
-            }
-            else
-            {
-                var nameDeserlizer = normalizedName.Split('/');
-                if (!nameDeserlizer.First().Equals(parent.NormalizedName))
-                {
-                    normalizedName = $"{parent.NormalizedName}/{nameDeserlizer.Last()}";
-                }
-            }
-        }
-
+            Code = "field.required",
+            Description = "Name is required!"
+        });
         catalog.Name = args.Name;
-        catalog.NormalizedName = normalizedName;
+        if (catalog.Type != CatalogType.Entry)
+        {
+            catalog.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
+        }
         catalog.Active = args.Active;
         catalog.ModifiedDate = DateTime.Now;
         catalog.Description = args.Description;
@@ -241,33 +204,52 @@ public class CatalogService : ICatalogService
         return IdentityResult.Success;
     }
 
-    public IEnumerable<Option> GetTypes()
+    public async IAsyncEnumerable<Option> GetTypesAsync()
     {
         var values = Enum.GetValues(typeof(CatalogType));
         foreach (var item in values)
         {
+            var key = item.ToString();
+            if (string.IsNullOrEmpty(key)) continue;
             yield return new Option
             {
                 Value = item.GetHashCode().ToString(),
-                Label = item.ToString()
+                Label = await _localizationService.GetAsync(key)
             };
         }
     }
 
-    public async Task<ListResult<Catalog>> ListAsync(CatalogFilterOptions filterOptions)
+    public async Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions)
     {
         filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
         return await _catalogRepository.ListAsync(filterOptions);
     }
 
-    public async Task<ListResult<Catalog>?> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
+    public async Task<ListResult<CatalogListItem>?> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
     {
         if (!filterOption.TagIds.Any()) return default;
         var query = (from tag in _context.WorkItems
                      join catalog in _context.Catalogs on tag.WorkId equals catalog.Id
+                     join category in _context.Catalogs on catalog.ParentId equals category.Id into catalogCategory
+                     from category in catalogCategory.DefaultIfEmpty()
                      where catalog.Active && filterOption.TagIds.Contains(tag.CatalogId) && catalog.Type == filterOption.Type && catalog.Id != filterOption.CatalogId
-                     select catalog).Distinct().OrderByDescending(x => x.ModifiedDate);
-        return await ListResult<Catalog>.Success(query, filterOption);
+                     select new CatalogListItem
+                     {
+                         Name = catalog.Name,
+                         Description = catalog.Description,
+                         Type = catalog.Type,
+                         ViewCount = catalog.ViewCount,
+                         ModifiedDate = catalog.ModifiedDate,
+                         Locale = catalog.Locale,
+                         Active = catalog.Active,
+                         Thumbnail = catalog.Thumbnail,
+                         CreatedDate = catalog.CreatedDate,
+                         NormalizedName = catalog.NormalizedName,
+                         ParentId = catalog.ParentId,
+                         Id = catalog.Id,
+                         Category = category.NormalizedName
+                     }).Distinct().OrderByDescending(x => x.ModifiedDate);
+        return await ListResult<CatalogListItem>.Success(query, filterOption);
     }
 
     public async Task<List<Catalog>> ListTagByIdAsync(Guid catalogId)
@@ -331,17 +313,31 @@ public class CatalogService : ICatalogService
         return await ListResult<Catalog>.Success(query, filterOptions);
     }
 
-    public async Task<ListResult<Catalog>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions)
+    public async Task<ListResult<CatalogListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions)
     {
         var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.Name);
         var query = from a in _context.WorkItems
                     join b in _context.Catalogs on a.WorkId equals b.Id
+                    join c in _context.Catalogs on b.ParentId equals c.Id into bc from c in bc.DefaultIfEmpty()
                     where a.CatalogId == tagId && b.Active &&
                     (string.IsNullOrEmpty(searchTerm) || b.NormalizedName.Contains(searchTerm)) &&
                     (filterOptions.Type == null || b.Type == filterOptions.Type)
-                    orderby b.ModifiedDate descending
-                    select b;
-        return await ListResult<Catalog>.Success(query, filterOptions);
+                    select new CatalogListItem
+                    {
+                        Id = b.Id,
+                        Type = b.Type,
+                        Active = b.Active,
+                        Description = b.Description,
+                        CreatedDate = b.CreatedDate,
+                        ModifiedDate = b.ModifiedDate,
+                        NormalizedName = b.NormalizedName,
+                        ParentId = b.ParentId,
+                        ViewCount = b.ViewCount,
+                        Thumbnail = b.Thumbnail,
+                        Category = c.NormalizedName,
+                        Name = b.Name
+                    };
+        return await ListResult<CatalogListItem>.Success(query, filterOptions);
     }
 
     public async Task<IEnumerable<Catalog>> ListRandomTagAsync() => await _context.Catalogs.Where(x => x.Type == CatalogType.Tag && x.Active).OrderBy(x => Guid.NewGuid()).Take(10).ToListAsync();
@@ -394,7 +390,7 @@ public class CatalogService : ICatalogService
         return await _catalogRepository.GetFormSelectAsync(filterOptions);
     }
 
-    public Task<IEnumerable<Catalog>> ListSpotlightAsync(CatalogType type, int pageSize) => _catalogRepository.ListSpotlightAsync(type, pageSize);
+    public Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(CatalogType type, int pageSize) => _catalogRepository.ListSpotlightAsync(type, pageSize);
 
     public async Task DeleteAsync(Catalog catalog) => await _catalogRepository.DeleteAsync(catalog);
 

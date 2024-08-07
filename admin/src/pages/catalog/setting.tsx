@@ -94,18 +94,22 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
             required: true
           }
         ]} />
-        <ProFormText name="normalizedName" label="Normalized name" rules={[
+        <ProFormTextArea name="description" label="Description" rules={[
           {
             required: true
           }
         ]} />
-        <ProFormTextArea name="description" label="Description" />
         <Row gutter={16}>
           <Col span={12}>
             <FormCatalogType name="type" label="Type" />
           </Col>
           <Col span={12}>
             <ProFormSelect
+              rules={[
+                {
+                  required: true
+                }
+              ]}
               options={getAllLocales().map(value => ({ label: value, value: value }))}
               name="locale" label="Locale" />
           </Col>

@@ -50,15 +50,12 @@ public class BreadcrumbViewComponent : ViewComponent
             }
         };
 
-        if (PageData.Type == CatalogType.Tag)
+        breadcrumb.Add(new Breadcrumb
         {
-            breadcrumb.Add(new Breadcrumb
-            {
-                Url = $"/tag",
-                Name = CatalogType.Tag.GetDescription(),
-                Position = breadcrumb.Count + 1
-            });
-        }
+            Url = $"/{PageData.Type.ToString().ToLower()}",
+            Name = await _localizationService.GetAsync(PageData.Type.ToString()),
+            Position = breadcrumb.Count + 1
+        });
 
         if (Category != null)
         {

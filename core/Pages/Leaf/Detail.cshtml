@@ -1,10 +1,10 @@
-﻿@page "/leaf/{category}/{normalizedName}"
+﻿@page "/leaf/{category}/{normalizedName?}"
 @using Waffle.Core.Constants;
 @using Waffle.Entities;
 @using Waffle.Extensions;
 @using Waffle.Models.Components;
 @using Waffle.ViewComponents;
-@model Waffle.Pages.Leaf.Categories.DetailModel
+@model Waffle.Pages.Leaf.DetailModel
 
 @await Component.InvokeAsync(nameof(Breadcrumb))
 <main class="container">

@@ -72,7 +72,7 @@ export async function updateThumbnail(data: API.Catalog) {
   });
 }
 
-export async function listTypes() {
+export async function apiGetCatalogTypes() {
   return request(`catalog/types`);
 }
 

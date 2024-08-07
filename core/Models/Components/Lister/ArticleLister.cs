@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 using Waffle.Entities;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Models.Components;
 
@@ -13,5 +14,5 @@ public class ArticleLister : AbstractComponent
     [JsonPropertyName("pageSize")]
     public int PageSize { get; set; } = 10;
     [JsonIgnore]
-    public ListResult<Catalog>? Articles { get; set; }
+    public ListResult<CatalogListItem>? Articles { get; set; }
 }

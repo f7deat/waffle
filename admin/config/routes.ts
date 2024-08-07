@@ -227,34 +227,18 @@ export default [
       name: 'catalog',
       path: '/catalog',
       icon: 'SlackOutlined',
-      routes: [
-        {
-          path: '/catalog/:id',
-          component: './catalog',
-          hideInMenu: true,
-        },
-        {
-          name: 'article',
-          path: '/catalog/article',
-          component: './catalog/article',
-        },
-        {
-          name: 'tag',
-          path: '/catalog/tag',
-          component: './tag',
-        },
-        {
-          name: 'tagCenter',
-          path: '/catalog/tag/:id',
-          component: './tag/center',
-          hideInMenu: true,
-        },
-        {
-          name: 'page',
-          path: '/catalog/page',
-          component: './catalog/page',
-        }
-      ],
+      component: './catalog/page'
+    },
+    {
+      path: '/catalog/:id',
+      component: './catalog',
+      hideInMenu: true
+    },
+    {
+      name: 'tagCenter',
+      path: '/catalog/tag/:id',
+      component: './tag/center',
+      hideInMenu: true,
     },
     {
       icon: 'ShoppingCartOutlined',
@@ -277,11 +261,6 @@ export default [
           path: '/ecommerce/order/center/:id',
           component: './order/center',
           hideInMenu: true
-        },
-        {
-          path: '/ecommerce/product',
-          name: 'product',
-          component: './shop'
         }
       ],
     },

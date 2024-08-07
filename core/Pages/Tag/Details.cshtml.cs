@@ -6,8 +6,8 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Extensions;
 using Waffle.Models;
-using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
+using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Pages.Tag;
@@ -20,7 +20,7 @@ public class DetailsModel : DynamicPageModel
         _productService = productService;
     }
 
-    public ListResult<Catalog>? Articles;
+    public ListResult<CatalogListItem>? Articles;
     [BindProperty(SupportsGet = true)]
     public int Current { get; set; } = 1;
     [BindProperty(SupportsGet = true)]
@@ -28,8 +28,8 @@ public class DetailsModel : DynamicPageModel
     public string? SearchTerm { get; set; }
 
     public IEnumerable<ProductListItem> Products = new List<ProductListItem>();
-    public ListResult<Catalog> Albums = new();
-    public ListResult<Catalog> Locations = new();
+    public ListResult<CatalogListItem> Albums = new();
+    public ListResult<CatalogListItem> Locations = new();
     public VideoPlayList Videos = new();
 
     public async Task<IActionResult> OnGetAsync(string normalizedName)

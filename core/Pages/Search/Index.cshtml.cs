@@ -6,6 +6,7 @@ using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Pages.Search;
 
@@ -21,7 +22,7 @@ public class IndexModel : EntryPageModel
 
     [BindProperty(SupportsGet = true)]
     public SearchFilterOptions FilterOptions { get; set; } = new();
-    public ListResult<Catalog> Articles = new();
+    public ListResult<CatalogListItem> Articles = new();
     public List<PlaylistItem> PlaylistItems = new();
     public Feed ProductFeed = new();
 
@@ -33,11 +34,13 @@ public class IndexModel : EntryPageModel
         }
         PageData.Name = FilterOptions.SearchTerm ?? await _localizationService.GetAsync("search");
         ViewData["Title"] = PageData.Name;
-        Articles = await _catalogService.ArticleListAsync(new ArticleFilterOptions
+        Articles = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Current = FilterOptions.Current,
             Name = FilterOptions.SearchTerm,
-            PageSize = 12
+            PageSize = 12,
+            Active = true,
+            Type = CatalogType.Article
         });
 
         var videos = await _catalogService.ListAsync(new CatalogFilterOptions

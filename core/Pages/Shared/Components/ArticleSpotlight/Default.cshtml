@@ -10,7 +10,7 @@
         @foreach (var item in Model.Articles)
         {
             <div class="flex mt-1 gap-2">
-                <a href="@item.GetUrl()" class="bg-dark">
+                <a href="@item." class="bg-dark">
                     <img class="thumbnail object-cover" loading="lazy" width="80" height="64" src="@item.Thumbnail" alt="@Html.Raw(item.Name)">
                 </a>
                 <div>

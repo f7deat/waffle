@@ -1,16 +1,31 @@
 ﻿using Waffle.Entities;
 
-namespace Waffle.Models.ViewModels
-{
-    public class DropModel
-    {
-        public Guid DragNodeKey { get; set; }
-        public Guid Node { get; set; }
-        public bool DropToGap { get; set; }
-    }
+namespace Waffle.Models.ViewModels;
 
-    public class TagListItem : Catalog
+public class DropModel
+{
+    public Guid DragNodeKey { get; set; }
+    public Guid Node { get; set; }
+    public bool DropToGap { get; set; }
+}
+
+public class TagListItem : Catalog
+{
+    public int PostCount { get; set; }
+}
+
+public class CatalogListItem : Catalog
+{
+    public string? Category { get; set; }
+    public string Url
     {
-        public int PostCount { get; set; }
+        get
+        {
+            if (string.IsNullOrEmpty(Category))
+            {
+                return $"/{Type.ToString().ToLower()}/{NormalizedName}";
+            }
+            return $"/{Type.ToString().ToLower()}/{Category}/{NormalizedName}";
+        }
     }
 }

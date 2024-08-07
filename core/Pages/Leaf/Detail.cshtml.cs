@@ -12,7 +12,7 @@ using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.Pages.Leaf.Categories;
+namespace Waffle.Pages.Leaf;
 
 public class DetailModel : DynamicPageModel
 {

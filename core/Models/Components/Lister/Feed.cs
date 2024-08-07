@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 using Waffle.Entities;
+using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Models.Components;
@@ -19,7 +20,9 @@ public class Feed : AbstractComponent
     public CatalogType? Type { get; set; }
 
     [JsonIgnore]
-    public List<Catalog> Articles { get; set; } = new();
+    public List<CatalogListItem> Articles { get; set; } = new();
+    [JsonIgnore]
+    public List<Catalog> Catalogs { get; set; } = new();
     [JsonIgnore]
     public IEnumerable<ProductListItem> Products { get; set; } = new List<ProductListItem>();
 }

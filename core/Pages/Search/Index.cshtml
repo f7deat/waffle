@@ -33,7 +33,7 @@
             <div class="title">@Model.Articles.Total kết quả tìm kiếm cho: @Model.FilterOptions.SearchTerm</div>
             @if (Model.Articles.HasData)
             {
-                <partial name="~/Pages/Articles/_List.cshtml" model="Model.Articles.Data" />
+                <partial name="~/Pages/Article/_List.cshtml" model="Model.Articles.Data" />
 
                 @Html.DisplayFor(x => Model.Articles.Pagination)
             }
