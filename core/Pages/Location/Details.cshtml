@@ -1,9 +1,9 @@
-﻿@page "/locations/{normalizedName}"
+﻿@page "/location/{category}/{normalizedName?}"
 @using Waffle.Extensions;
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
 @using Waffle.ViewComponents
-@model Waffle.Pages.Locations.DetailsModel
+@model Waffle.Pages.Location.DetailsModel
 
 <main class="wf-locations">
     <div class="container">
@@ -12,7 +12,7 @@
                 @await Component.InvokeAsync(nameof(Breadcrumb))
 
                 <h1 class="title">@Model.PageData.Name</h1>
-                <div class="mb-4 bg-white">
+                <div class="mb-4 bg-white post-body">
                     @foreach (var item in Model.Works)
                     {
                         @await Component.InvokeAsync(item.NormalizedName, item.Id)

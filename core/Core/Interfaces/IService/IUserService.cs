@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Users;
 
 namespace Waffle.Core.Interfaces.IService;
@@ -15,4 +14,5 @@ public interface IUserService
     Task<dynamic> GetUsersInRoleAsync(string roleName);
     Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args);
     Task<ListResult<Contact>> ListContactAsync(SearchFilterOptions filterOptions);
+    Task<IdentityResult> UpdateAsync(ApplicationUser user, ApplicationUser args);
 }

@@ -5,7 +5,7 @@ using Waffle.Models;
 using Waffle.Core.Foundations;
 using Waffle.Models.ViewModels;
 
-namespace Waffle.Pages.Locations;
+namespace Waffle.Pages.Location;
 
 public class IndexModel : EntryPageModel
 {

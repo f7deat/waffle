@@ -7,7 +7,7 @@ using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
 
-namespace Waffle.Pages.Videos;
+namespace Waffle.Pages.Video;
 
 public class IndexModel : EntryPageModel
 {

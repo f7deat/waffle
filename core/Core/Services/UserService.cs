@@ -14,6 +14,7 @@ public class UserService : IUserService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ApplicationDbContext _context;
+
     public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext context)
     {
         _userManager = userManager;
@@ -109,5 +110,15 @@ public class UserService : IUserService
             });
         }
         return await _userManager.RemoveFromRoleAsync(user, args.RoleName);
+    }
+
+    public async Task<IdentityResult> UpdateAsync(ApplicationUser user, ApplicationUser args)
+    {
+        user.Name = args.Name;
+        user.Gender = args.Gender;
+        user.Address = args.Address;
+        user.DateOfBirth = args.DateOfBirth;
+        await _userManager.UpdateAsync(user);
+        return IdentityResult.Success;
     }
 }

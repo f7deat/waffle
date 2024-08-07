@@ -73,6 +73,6 @@ export default {
   'menu.users.center': 'Thông tin cá nhân',
   'menu.users.role': 'Quyền',
   'menu.users.list': 'Danh sách',
-  'menu.users.userCenter': 'Chi tiết người dùng',
+  'menu.users.userCenter': 'Cài đặt',
   'menu.users.roleCenter': 'Chi tiết quyền',
 };

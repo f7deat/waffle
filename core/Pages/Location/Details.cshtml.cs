@@ -8,7 +8,7 @@ using Waffle.Models.Components;
 using Waffle.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Waffle.Pages.Locations
+namespace Waffle.Pages.Location
 {
     public class DetailsModel : DynamicPageModel
     {

@@ -1,4 +1,4 @@
-import { apiConfirmEmail, getUser } from '@/services/user';
+import { apiConfirmEmail, apiGetUser } from '@/services/user';
 import { InboxOutlined, MessageOutlined, UserAddOutlined } from '@ant-design/icons';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
 import { useParams } from '@umijs/max';
@@ -23,8 +23,8 @@ const Profile: React.FC = () => {
   const [activeKey, setActiveKey] = useState<string>('activity');
 
   useEffect(() => {
-    getUser(id).then((response) => {
-      setUser(response);
+    apiGetUser(id).then((response) => {
+      setUser(response.data);
     });
   }, [id]);
 

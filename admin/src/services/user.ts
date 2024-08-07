@@ -11,9 +11,7 @@ export async function queryCurrentUser() {
   return request(`user`);
 }
 
-export async function getUser(id: string | undefined) {
-  return request(`user/${id}`);
-}
+export const apiGetUser = (id: string | undefined) => request(`user/${id}`);
 
 export async function createUser(data: any) {
   return request(`user/create`, {
@@ -55,3 +53,8 @@ export async function apiConfirmEmail(id?: string | string[]) {
     method: 'POST'
   });
 }
+
+export const apiUpdateUser = (data: any) => request(`user/update`, {
+  method: 'POST',
+  data
+})

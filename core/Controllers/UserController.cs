@@ -54,9 +54,9 @@ public class UserController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> FindByIdAsync([FromRoute] Guid id)
     {
-        var user = await _userService.GetCurrentUserAsync(id);
-        if (user is null) return BadRequest("User not found!");
-        return Ok(user);
+        var data = await _userService.GetCurrentUserAsync(id);
+        if (data is null) return BadRequest("User not found!");
+        return Ok(new { data });
     }
 
     [HttpGet]
@@ -233,5 +233,14 @@ public class UserController : BaseController
         if (user is null) return BadRequest("User not found!");
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         return Ok(await _userManager.ConfirmEmailAsync(user, token));
+    }
+
+    [HttpPost("update")]
+    public async Task<IActionResult> UpdateAsync([FromBody] ApplicationUser args)
+    {
+        if (args.DateOfBirth > DateTime.Now) return BadRequest("Date of birth invalid!");
+        var user = await _userManager.FindByIdAsync(args.Id.ToString());
+        if (await _userManager.IsInRoleAsync(user, RoleName.Admin) && user.Id != User.GetId()) return Unauthorized();
+        return Ok(await _userService.UpdateAsync(user, args));
     }
 }
