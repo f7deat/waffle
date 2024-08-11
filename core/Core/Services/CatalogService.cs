@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Globalization;
 using System.Text.Json;
 using Waffle.Core.Constants;
 using Waffle.Core.Helpers;
@@ -195,8 +196,17 @@ public class CatalogService : ICatalogService
         catalog.ModifiedDate = DateTime.Now;
         catalog.Description = args.Description;
         catalog.Thumbnail = args.Thumbnail;
+        catalog.ParentId = args.ParentId;
         if (!string.IsNullOrWhiteSpace(args.Locale))
         {
+            if (!CultureInfo.GetCultures(CultureTypes.AllCultures).Any(x => x.Name == args.Locale))
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "locale.culturesError",
+                    Description = "Culture not valid!"
+                });
+            }
             catalog.Locale = args.Locale;
         }
         catalog.Type = args.Type;
