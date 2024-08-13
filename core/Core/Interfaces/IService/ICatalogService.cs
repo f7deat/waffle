@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Core.Foundations;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
@@ -43,4 +44,5 @@ public interface ICatalogService
     Task<object?> GetStructureAsync(string normalizedName);
     Task<IdentityResult> DeleteRangeAsync(List<Guid> ids);
     Task<object?> GetActivityAsync();
+    Task<PageData> GetEntryPageDataAsync(string normalizedName, string locale);
 }

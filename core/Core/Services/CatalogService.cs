@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Text.Json;
 using Waffle.Core.Constants;
+using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
@@ -464,5 +465,36 @@ public class CatalogService : ICatalogService
             });
         }
         return result;
+    }
+
+    public async Task<PageData> GetEntryPageDataAsync(string normalizedName, string locale)
+    {
+        var pageData = await _catalogRepository.GetByNameAsync(normalizedName, locale);
+        if (pageData is null)
+        {
+            pageData = new Catalog
+            {
+                NormalizedName = normalizedName,
+                Name = normalizedName,
+                Locale = locale,
+                Active = true,
+                Type = CatalogType.Entry,
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now,
+            };
+            await _catalogRepository.AddAsync(pageData);
+        }
+        return new PageData
+        {
+            Name = pageData.Name,
+            Description = pageData.Description,
+            NormalizedName = pageData.NormalizedName,
+            Type = pageData.Type,
+            SettingString = pageData.Setting,
+            Locale = pageData.Locale,
+            ViewCount = pageData.ViewCount,
+            ModifiedDate = pageData.ModifiedDate,
+            Id = pageData.Id
+        };
     }
 }

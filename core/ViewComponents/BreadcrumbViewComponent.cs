@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
 using Waffle.Entities;
@@ -20,21 +21,21 @@ public class BreadcrumbViewComponent : ViewComponent
         Options = options.Value;
     }
 
-    private Catalog PageData
+    private PageData PageData
     {
         get
         {
-            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
-            return values as Catalog ?? new();
+            RouteData.Values.TryGetValue(nameof(PageData), out var values);
+            return values as PageData ?? new();
         }
     }
 
-    private Catalog? Category
+    private PageData? Category
     {
         get
         {
             RouteData.Values.TryGetValue("Parent", out var values);
-            return values as Catalog;
+            return values as PageData;
         }
     }
 
@@ -72,7 +73,7 @@ public class BreadcrumbViewComponent : ViewComponent
 
         breadcrumb.Add(new Breadcrumb
         {
-            Url = PageData.GetUrl(),
+            Url = PageData.Url,
             Name = PageData.Name,
             Position = breadcrumb.Count + 1
         });

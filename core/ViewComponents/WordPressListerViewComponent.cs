@@ -5,6 +5,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
+using Waffle.Core.Foundations;
 
 namespace Waffle.ViewComponents;
 
@@ -19,12 +20,12 @@ public class WordPressListerViewComponent : ViewComponent
         _wordPressService = wordPressService;
     }
 
-    private Catalog PageData
+    private PageData PageData
     {
         get
         {
-            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
-            return values as Catalog ?? new();
+            RouteData.Values.TryGetValue(nameof(PageData), out var values);
+            return values as PageData ?? new();
         }
     }
 

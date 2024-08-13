@@ -13,7 +13,7 @@ public abstract class DynamicPageModel : PageModel
         _catalogService = catalogService;
     }
 
-    public Catalog PageData { protected set; get; } = new();
+    public PageData PageData { protected set; get; } = new();
     public Catalog? Category { private set; get; }
 
     public override async Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
@@ -34,12 +34,12 @@ public abstract class DynamicPageModel : PageModel
                 RouteData.Values.TryAdd("Parent", Category);
                 if (Category != null && CatalogType.WordPress == Category.Type)
                 {
-                    PageData = new Catalog
+                    PageData = new PageData
                     {
                         NormalizedName = nornamlizedName,
                         Type = CatalogType.WordPress
                     };
-                    RouteData.Values.TryAdd(nameof(Catalog), PageData);
+                    RouteData.Values.TryAdd(nameof(PageData), PageData);
                     return;
                 }
             }
@@ -51,10 +51,21 @@ public abstract class DynamicPageModel : PageModel
             context.HttpContext.Response.Redirect("/exception/notfound");
             return;
         }
-        PageData = catalog;
+        PageData = new PageData
+        {
+            Name = catalog.Name,
+            Description = catalog.Description,
+            NormalizedName = catalog.NormalizedName,
+            Type = catalog.Type,
+            SettingString = catalog.Setting,
+            Locale = catalog.Locale,
+            ModifiedDate = catalog.ModifiedDate,
+            ViewCount = catalog.ViewCount,
+            Id = catalog.Id
+        };
         ViewData["Title"] = catalog.Name;
         ViewData["Description"] = catalog.Description;
         ViewData["Image"] = catalog.Thumbnail;
-        RouteData.Values.TryAdd(nameof(Catalog), PageData);
+        RouteData.Values.TryAdd(nameof(PageData), PageData);
     }
 }

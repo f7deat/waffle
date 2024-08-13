@@ -35,6 +35,7 @@ public class Catalog : BaseEntity
     [JsonPropertyName("locale")]
     [StringLength(10)]
     public string? Locale { get; set; }
+    public string? Setting { get; set; }
 }
 
 public enum CatalogType
@@ -63,4 +64,9 @@ public enum CatalogType
     WordPress = 12,
     [Description("Thương hiệu")]
     Brand = 13
+}
+
+public class CatalogSetting
+{
+    public string Layout { get; set; } = "container";
 }

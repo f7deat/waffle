@@ -15,12 +15,12 @@ public abstract class BaseViewComponent<T> : ViewComponent where T : class
         _workService = workService;
     }
 
-    protected Catalog PageData
+    protected PageData PageData
     {
         get
         {
-            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
-            return values as Catalog ?? new();
+            RouteData.Values.TryGetValue(nameof(PageData), out var values);
+            return values as PageData ?? new();
         }
     }
 
