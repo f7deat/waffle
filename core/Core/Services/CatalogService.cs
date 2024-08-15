@@ -497,4 +497,10 @@ public class CatalogService : ICatalogService
             Id = pageData.Id
         };
     }
+
+    public async Task<IdentityResult> SaveSettingAsync(Catalog catalog)
+    {
+        await _catalogRepository.UpdateAsync(catalog);
+        return IdentityResult.Success;
+    }
 }

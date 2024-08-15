@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -201,5 +202,14 @@ public class CatalogController : BaseController
     {
         if (ids is null || !ids.Any()) return BadRequest("No catalog selected!");
         return Ok(await _catalogService.DeleteRangeAsync(ids));
+    }
+
+    [HttpPost("setting/save/{id}")]
+    public async Task<IActionResult> SaveSettingAsync([FromRoute] Guid id, [FromBody] CatalogSetting args)
+    {
+        var catalog = await _catalogService.FindAsync(id);
+        if (catalog is null) return BadRequest("Catalog not found");
+        catalog.Setting = JsonConvert.SerializeObject(args);
+        return Ok(await _catalogService.SaveSettingAsync(catalog));
     }
 }

@@ -45,4 +45,5 @@ public interface ICatalogService
     Task<IdentityResult> DeleteRangeAsync(List<Guid> ids);
     Task<object?> GetActivityAsync();
     Task<PageData> GetEntryPageDataAsync(string normalizedName, string locale);
+    Task<IdentityResult> SaveSettingAsync(Catalog catalog);
 }
