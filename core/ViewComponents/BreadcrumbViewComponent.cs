@@ -51,7 +51,7 @@ public class BreadcrumbViewComponent : ViewComponent
             }
         };
 
-        if (PageData.Type != CatalogType.Entry)
+        if (PageData.Type != CatalogType.Entry && PageData.Type != CatalogType.Leaf)
         {
             breadcrumb.Add(new Breadcrumb
             {

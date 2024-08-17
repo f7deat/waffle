@@ -12,6 +12,7 @@ public class DetailModel : DynamicPageModel
     {
     }
 
+
     public IEnumerable<ComponentListItem>? Components;
 
     public async Task<IActionResult> OnGetAsync()
