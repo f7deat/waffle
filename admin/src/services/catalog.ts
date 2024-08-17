@@ -151,4 +151,11 @@ export async function apiTopView(type: string) {
 export const apiCatalogDeleteRange = (data: React.Key[]) => request(`catalog/delete-range`, {
   method: 'POST',
   data
+});
+
+export const apiGetCatalogSetting = (id: string) => request(`catalog/setting/${id}`);
+
+export const apiSaveCatalogSetting = (data: any, id?: string) => request(`catalog/setting/save/${id}`, {
+  method: 'POST',
+  data
 })

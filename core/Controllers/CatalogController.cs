@@ -212,4 +212,13 @@ public class CatalogController : BaseController
         catalog.Setting = JsonConvert.SerializeObject(args);
         return Ok(await _catalogService.SaveSettingAsync(catalog));
     }
+
+    [HttpGet("setting/{id}")]
+    public async Task<IActionResult> GetSettingAsync([FromRoute] Guid id)
+    {
+        var catalog = await _catalogService.FindAsync(id);
+        if (catalog is null) return BadRequest("Catalog not found");
+        if (string.IsNullOrEmpty(catalog.Setting)) return Ok(new CatalogSetting());
+        return Ok(JsonConvert.DeserializeObject<CatalogSetting>(catalog.Setting));
+    }
 }

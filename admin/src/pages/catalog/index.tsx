@@ -15,6 +15,7 @@ import { CatalogType } from '@/constants';
 import ChildCatalog from './child';
 import ProductDetail from './products/detail';
 import { LeftOutlined } from '@ant-design/icons';
+import CatalogInfoComponent from './components/setting';
 
 const CatalogPage: React.FC = () => {
   const { id } = useParams();
@@ -62,9 +63,14 @@ const CatalogPage: React.FC = () => {
                   children: <WorkContentComponent />,
                 },
                 {
+                  label: 'Information',
+                  key: 'info',
+                  children: <CatalogSetting catalog={catalog} reload={reload} />,
+                },
+                {
                   label: <FormattedMessage id='menu.settings' />,
                   key: 'setting',
-                  children: <CatalogSetting catalog={catalog} reload={reload} />,
+                  children: <CatalogInfoComponent />,
                 },
                 {
                   label: <FormattedMessage id='pages.catalog.productDetail' />,
