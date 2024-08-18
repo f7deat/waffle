@@ -134,6 +134,7 @@ declare namespace API {
     roles: string[];
     emailConfirmed: boolean;
     phoneNumberConfirmed: boolean;
+    gender?: boolean;
   };
 
   type UpgradeListItem = {

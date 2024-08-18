@@ -149,6 +149,9 @@ const WorkContentComponent: React.FC = () => {
       title: 'Action',
       valueType: 'option',
       render: (dom, entity) => [
+        <Dropdown menu={{ items, onClick: (event) => onMoreClick(event, entity) }} key="more">
+          <Button icon={<MoreOutlined />} type='dashed' size='small' />
+        </Dropdown>,
         <Popconfirm
           title="Are you sure?"
           key={4}
@@ -160,10 +163,7 @@ const WorkContentComponent: React.FC = () => {
             danger
             type="primary"
           ></Button>
-        </Popconfirm>,
-        <Dropdown menu={{ items, onClick: (event) => onMoreClick(event, entity) }} key="more">
-          <Button icon={<MoreOutlined />} type='dashed' size='small' />
-        </Dropdown>
+        </Popconfirm>
       ],
       width: 100
     }

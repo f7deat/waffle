@@ -5,7 +5,6 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
-using Waffle.Extensions;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
 using Waffle.Models.ViewModels.Products;
@@ -24,23 +23,34 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
     {
         var query = from catalog in _context.Catalogs
                     join product in _context.Products on catalog.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
+                    join parent in _context.Catalogs on catalog.ParentId equals parent.Id into cp from parent in cp.DefaultIfEmpty()
                     where catalog.Active && catalog.Type == CatalogType.Product 
-                    && (string.IsNullOrEmpty(filterOptions.Name) || catalog.NormalizedName.Contains(filterOptions.Name))
                     && (filterOptions.ParentId == null || catalog.ParentId == filterOptions.ParentId)
                     && (filterOptions.Active == null || catalog.Active == filterOptions.Active)
-                    && catalog.Locale == filterOptions.Locale
-                    orderby catalog.ModifiedDate descending
                     select new ProductListItem
                     {
                         Id = catalog.Id,
                         Name = catalog.Name,
                         NormalizedName = catalog.NormalizedName,
-                        Url = catalog.GetUrl(),
                         Thumbnail = catalog.Thumbnail,
                         ViewCount = catalog.ViewCount,
                         Price = product.Price,
-                        SalePrice = product.SalePrice
+                        SalePrice = product.SalePrice,
+                        Category = parent.NormalizedName,
+                        Description = catalog.Description,
+                        Type = catalog.Type,
+                        ModifiedDate = catalog.ModifiedDate,
+                        Locale = catalog.Locale
                     };
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        {
+            query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
+        }
+        if (!string.IsNullOrEmpty(filterOptions.Locale))
+        {
+            query = query.Where(x => x.Locale == filterOptions.Locale);
+        }
+        query = query.OrderByDescending(x => x.ModifiedDate);
         return await ListResult<ProductListItem>.Success(query, filterOptions);
     }
 
@@ -49,6 +59,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
         var query = from a in _context.WorkItems
                     join b in _context.Catalogs on a.WorkId equals b.Id
                     join product in _context.Products on b.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
+                    join c in _context.Catalogs on b.ParentId equals c.Id into bc from c in bc.DefaultIfEmpty()
                     where a.CatalogId == tagId && b.Active &&
                     (string.IsNullOrEmpty(filterOptions.Name) || b.NormalizedName.Contains(filterOptions.Name)) &&
                     (filterOptions.Type == null || b.Type == filterOptions.Type)
@@ -57,10 +68,10 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                     {
                         Id = b.Id,
                         Name = b.Name,
-                        Url = b.GetUrl(),
                         Thumbnail = b.Thumbnail,
                         Price= product.Price,
-                        SalePrice = product.SalePrice
+                        SalePrice = product.SalePrice,
+                        Category = c.NormalizedName
                     };
         return await query.OrderBy(x => Guid.NewGuid()).Take(4).ToListAsync();
     }
@@ -70,12 +81,13 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
         var query = (from tag in _context.WorkItems
                      join catalog in _context.Catalogs on tag.WorkId equals catalog.Id
                      join product in _context.Products on catalog.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
+                     join parent in _context.Catalogs on catalog.ParentId equals parent.Id into pc from parent in pc.DefaultIfEmpty()
                      where catalog.Active && tagIds.Contains(tag.CatalogId) && catalog.Type == CatalogType.Product && catalog.Id != currentCatalogId
                      select new ProductListItem
                      {
                          Id = catalog.Id,
                          Name = catalog.Name,
-                         Url = catalog.GetUrl(),
+                         Category = parent.NormalizedName,
                          Thumbnail = catalog.Thumbnail,
                          Price = product.Price,
                          SalePrice = product.SalePrice
@@ -89,13 +101,14 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                     join product in _context.Products on catalog.Id equals product.CatalogId into catalogProduct
                     from product in catalogProduct.DefaultIfEmpty()
                     join tag in _context.WorkItems on catalog.Id equals tag.WorkId
+                    join p in _context.Catalogs on catalog.ParentId equals p.Id into pc from p in pc.DefaultIfEmpty()
                     where catalog.Type == CatalogType.Product && catalog.Active
                     && (!tagIds.Any() || tagIds.Contains(tag.CatalogId))
                     select new ProductListItem
                     {
                         Name = catalog.Name,
                         Id = catalog.Id,
-                        Url = catalog.GetUrl(),
+                        NormalizedName = p.NormalizedName,
                         Price = product.Price,
                         SalePrice = product.SalePrice,
                         Thumbnail = catalog.Thumbnail,

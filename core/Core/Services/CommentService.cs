@@ -81,7 +81,7 @@ public class CommentService : ICommentService
             Status = CommentStatus.Active,
             CatalogId = addComment.CatalogId,
             Content = addComment.Message,
-            ParrentId = addComment.ParrentId
+            ParentId = addComment.ParrentId
         };
         await _commentRepository.AddAsync(comment);
         return IdentityResult.Success;
@@ -128,7 +128,7 @@ public class CommentService : ICommentService
                         CreatedDate = comment.CreatedDate,
                         Id = comment.Id,
                         ModifiedDate = comment.ModifiedDate,
-                        ParrentId = comment.ParrentId,
+                        ParentId = comment.ParentId,
                         Status = comment.Status,
                         UserName = user.UserName,
                         CatalogName = catalog.Name

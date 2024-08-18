@@ -1,5 +1,6 @@
 import { uploadFromUrl } from "@/services/file-service";
 import { CloudUploadOutlined, InboxOutlined } from "@ant-design/icons";
+import { FormattedMessage } from "@umijs/max";
 import { Button, Divider, Input, Modal, Upload, message } from "antd";
 import { useState } from "react";
 
@@ -63,7 +64,9 @@ const WfUpload: React.FC<WfUploadProps> = (props) => {
                 <Button icon={<CloudUploadOutlined />} type="link" size="large">
                     <b>Choose from your computer</b></Button>
             </div>
-            <Divider>or</Divider>
+            <Divider>
+                <FormattedMessage id='general.or' />
+            </Divider>
             <Input placeholder="Paste image or URL" onChange={(e) => setUrl(e.currentTarget.value)} />
         </Modal>
     )

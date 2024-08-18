@@ -19,7 +19,8 @@ public class SwiperViewComponent : BaseViewComponent<Swiper>
         var albums = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Active = true,
-            Type = CatalogType.Album
+            Type = CatalogType.Album,
+            Locale = PageData.Locale
         });
         if (albums.Data != null)
         {

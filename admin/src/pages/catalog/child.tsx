@@ -6,7 +6,7 @@ import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from "@ant-d
 import { ActionType, ModalForm, ProFormSelect, ProFormText, ProFormTextArea, ProList } from "@ant-design/pro-components";
 import { FormattedMessage, useParams, history, useIntl } from "@umijs/max";
 import { Button, Col, Popconfirm, Row, message } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type ChildCatalogProps = {
     parent?: API.Catalog;
@@ -19,6 +19,12 @@ const ChildCatalog: React.FC<ChildCatalogProps> = ({ parent }) => {
 
     const [open, setOpen] = useState<boolean>(false);
     const actionRef = useRef<ActionType>();
+
+    useEffect(() => {
+        if (parent && actionRef) {
+            actionRef.current?.reload();
+        }
+    }, [parent]);
 
     const onFinish = async (values: API.Catalog) => {
         values.parentId = id;
@@ -66,21 +72,24 @@ const ChildCatalog: React.FC<ChildCatalogProps> = ({ parent }) => {
                     description: {
                         dataIndex: 'description'
                     },
+                    avatar: {
+                        valueType: 'indexBorder'
+                    },
                     actions: {
                         render: (dom, entity) => [
-                            <Button icon={<MoreOutlined />} type="dashed"></Button>,
+                            <Button icon={<MoreOutlined />} type="dashed" size="small" key="more" />,
                             <Button
                                 icon={<EditOutlined />}
                                 key={1}
                                 type="primary"
-                                onClick={() => onEdit(entity.id)}
+                                onClick={() => onEdit(entity.id)} size="small"
                             ></Button>,
                             <Popconfirm
                                 title="Are you sure?"
                                 key={2}
                                 onConfirm={() => onConfirm(entity.id)}
                             >
-                                <Button icon={<DeleteOutlined />} type="primary" danger />
+                                <Button icon={<DeleteOutlined />} type="primary" danger size="small" />
                             </Popconfirm>,
                         ]
                     }
@@ -89,12 +98,11 @@ const ChildCatalog: React.FC<ChildCatalogProps> = ({ parent }) => {
                     listCatalog({
                         ...params,
                         parentId: id,
-                        locale: intl.locale,
-                        type: parent?.type
+                        locale: intl.locale
                     }, {})
                 }
                 pagination={{
-
+                    pageSize: 10
                 }}
             />
 

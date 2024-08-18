@@ -37,7 +37,8 @@ public class FeedViewComponent : BaseViewComponent<Feed>
         {
             Current = 1,
             PageSize = feed.PageSize,
-            Active = true
+            Active = true,
+            Locale = PageData.Locale
         });
         feed.Products = products.Data;
         return feed;

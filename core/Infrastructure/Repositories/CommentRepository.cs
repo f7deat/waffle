@@ -28,7 +28,7 @@ public class CommentRepository : EfRepository<Comment>, ICommentRepository
                         CreatedDate = comment.CreatedDate,
                         Id = comment.Id,
                         ModifiedDate = comment.ModifiedDate,
-                        ParrentId = comment.ParrentId,
+                        ParentId = comment.ParentId,
                         Status = comment.Status,
                         UserName = user.UserName
                     };

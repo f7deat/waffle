@@ -9,4 +9,5 @@ export default {
   'general.status': 'Status',
   'general.phoneNumber': 'Phone number',
   'general.preview': 'Preview',
+  'general.or': 'or',
 };

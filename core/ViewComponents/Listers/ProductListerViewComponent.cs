@@ -24,7 +24,8 @@ public class ProductListerViewComponent : BaseViewComponent<ProductLister>
             Current = current,
             PageSize = work.PageSize,
             Name = Request.Query["searchTerm"],
-            ParentId = PageData.Type == CatalogType.Entry ? null : PageData.Id
+            ParentId = PageData.Type == CatalogType.Entry ? null : PageData.Id,
+            Locale = PageData.Locale
         });
         if (string.IsNullOrEmpty(work.Title))
         {

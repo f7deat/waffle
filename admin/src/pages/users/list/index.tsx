@@ -1,5 +1,5 @@
 import { createUser, deleteUser, listUser } from '@/services/user';
-import { DeleteOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined, ManOutlined, PlusOutlined, WomanOutlined } from '@ant-design/icons';
 import {
   ActionType,
   ModalForm,
@@ -53,10 +53,22 @@ const UserList: React.FC = () => {
     {
       title: 'User name',
       dataIndex: 'userName',
+      width: 200
     },
     {
       title: 'Name',
       dataIndex: 'name',
+      render: (dom, entity) => (
+        <Space>
+          {
+            entity.gender === true && <WomanOutlined className='text-red-500' />
+          }
+          {
+            entity.gender === false && <ManOutlined className='text-blue-500' />
+          }
+          {dom}
+        </Space>
+      )
     },
     {
       title: 'Email',
@@ -65,7 +77,8 @@ const UserList: React.FC = () => {
         <Space>
           <Badge color={entity.emailConfirmed ? 'green' : 'red'} /> {dom}
         </Space>
-      )
+      ),
+      width: 200
     },
     {
       title: <FormattedMessage id='general.phoneNumber' />,
@@ -77,11 +90,29 @@ const UserList: React.FC = () => {
       )
     },
     {
-      title: '',
+      title: 'Ngày sinh',
+      dataIndex: 'dateOfBirth',
+      valueType: 'date',
+      search: false,
+      width: 120
+    },
+    {
+      title: 'Địa chỉ',
+      dataIndex: 'address'
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      valueType: 'money',
+      width: 100,
+      search: false
+    },
+    {
+      title: 'Tác vụ',
       valueType: 'option',
       render: (dom, entity) => [
         <Button
-          type="text"
+          type="primary"
           icon={<EyeOutlined />}
           key={1}
           size='small'
@@ -90,7 +121,7 @@ const UserList: React.FC = () => {
           }}
         />,
         <Popconfirm title="Are you sure?" key={2} onConfirm={() => onConfirm(entity.id)}>
-          <Button type="text" icon={<DeleteOutlined />} size='small' danger />
+          <Button type="primary" icon={<DeleteOutlined />} size='small' danger />
         </Popconfirm>,
       ],
       width: 80

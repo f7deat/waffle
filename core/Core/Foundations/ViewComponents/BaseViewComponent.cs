@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 using Waffle.Models.Components;
 using Waffle.Models;
 
@@ -27,11 +26,6 @@ public abstract class BaseViewComponent<T> : ViewComponent where T : class
     public async Task<IViewComponentResult> InvokeAsync(Guid workId)
     {
         var work = await _workService.GetAsync<T>(workId);
-        if (typeof(T) == typeof(Jumbotron))
-        {
-            work = await ExtendAsync(work);
-            return View("Shinec", work);
-        }
         if (work is null)
         {
             return View(Empty.DefaultView, new ErrorViewModel

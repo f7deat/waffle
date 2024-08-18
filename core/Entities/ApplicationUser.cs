@@ -8,4 +8,6 @@ public class ApplicationUser : IdentityUser<Guid>
     public string? Address { get; set; }
     public DateTime? DateOfBirth { get; set; }
     public bool? Gender { get; set; }
+    public decimal Amount { get; set; }
+    public DateTime CreatedDate { get; set; }
 }

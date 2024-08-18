@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Encodings.Web;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
@@ -60,8 +61,16 @@ public class RegisterModel : EntryPageModel
             });
             return Page();
         }
+        if (await _userManager.Users.AnyAsync(x => x.Email == Email))
+        {
+            Result = IdentityResult.Failed(new IdentityError
+            {
+                Description = "Email existed!"
+            });
+            return Page();
+        }
         var user = CreateUser();
-
+        user.CreatedDate = DateTime.Now;
         await _userStore.SetUserNameAsync(user, UserName, CancellationToken.None);
         await _emailStore.SetEmailAsync(user, Email, CancellationToken.None);
 

@@ -131,6 +131,10 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         {
             query = query.Where(x => x.Locale == filterOptions.Locale);
         }
+        if (filterOptions.ParentId != null)
+        {
+            query = query.Where(x => x.ParentId == filterOptions.ParentId);
+        }
         if (SortOrder.Ascending == filterOptions.ModifiedDate)
         {
             query = query.OrderBy(x => x.ModifiedDate);

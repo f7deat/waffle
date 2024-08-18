@@ -21,11 +21,16 @@ public class CatalogListItem : Catalog
     {
         get
         {
+            var type = Type.ToString().ToLower();
+            if (Type == CatalogType.Album)
+            {
+                type = CatalogType.Leaf.ToString();
+            }
             if (string.IsNullOrEmpty(Category))
             {
-                return $"/{Type.ToString().ToLower()}/{NormalizedName}";
+                return $"/{type}/{NormalizedName}";
             }
-            return $"/{Type.ToString().ToLower()}/{Category}/{NormalizedName}";
+            return $"/{type}/{Category}/{NormalizedName}";
         }
     }
 }

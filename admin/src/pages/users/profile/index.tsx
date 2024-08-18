@@ -1,7 +1,7 @@
 import { apiConfirmEmail, apiGetUser } from '@/services/user';
-import { InboxOutlined, MessageOutlined, UserAddOutlined } from '@ant-design/icons';
+import { EditOutlined, InboxOutlined, MessageOutlined, UserAddOutlined } from '@ant-design/icons';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
-import { useParams } from '@umijs/max';
+import { Link, useParams } from '@umijs/max';
 import {
   Image,
   Button,
@@ -36,7 +36,11 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <PageContainer>
+    <PageContainer extra={
+      <Link to={`/users/center/${id}`}>
+        <Button type='primary' icon={<EditOutlined />}>Chỉnh sửa</Button>
+      </Link>
+    }>
       <Row gutter={16}>
         <Col span={6}>
           <ProCard
@@ -73,23 +77,23 @@ const Profile: React.FC = () => {
         </Col>
         <Col span={18}>
           <ProCard tabs={{
-             tabPosition: 'top',
-             activeKey: activeKey,
-             items: [
-               {
-                 label: 'Activity',
-                 key: 'activity',
-                 children: <Empty />,
-               },
-               {
-                 label: 'Follower',
-                 key: 'follower',
-                 children: <Empty />,
-               },
-             ],
-             onChange: (key) => {
-               setActiveKey(key);
-             },
+            tabPosition: 'top',
+            activeKey: activeKey,
+            items: [
+              {
+                label: 'Activity',
+                key: 'activity',
+                children: <Empty />,
+              },
+              {
+                label: 'Follower',
+                key: 'follower',
+                children: <Empty />,
+              },
+            ],
+            onChange: (key) => {
+              setActiveKey(key);
+            },
           }}>
             <Empty />
           </ProCard>

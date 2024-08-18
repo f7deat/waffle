@@ -88,7 +88,9 @@ const RowContent: React.FC = () => {
     {
       title: '#',
       dataIndex: 'sort',
-      className: 'drag-visible'
+      className: 'drag-visible',
+      width: 20,
+      align: 'center'
     },
     {
       title: 'Name',
@@ -115,6 +117,7 @@ const RowContent: React.FC = () => {
         <Button
           key={1}
           type="primary"
+          size='small'
           icon={<EditOutlined />}
           onClick={() => {
             history.push(
@@ -131,10 +134,12 @@ const RowContent: React.FC = () => {
           <Button
             icon={<DeleteOutlined />}
             danger
+            size='small'
             type="primary"
           ></Button>
         </Popconfirm>
-      ]
+      ],
+      width: 70
     }
   ]
 
@@ -164,18 +169,18 @@ const RowContent: React.FC = () => {
           data.map((col, idx) => (
             <Col key={idx} span={getSpan(col.className)}>
               <ProCard title={col.name} bordered headerBordered extra={
-                <>
-                  <Button type='link' icon={<PlusOutlined />} onClick={() => {
+                <Space>
+                  <Button type='primary' icon={<PlusOutlined />} onClick={() => {
                     setParentId(col.id || '');
                     setOpenAddItem(true);
-                  }} />
+                  }} size='small' />
                   <Popconfirm
                     title="Are you sure?"
                     onConfirm={() => onConfirm(col.id)}
                   >
-                    <Button type="link" danger icon={<DeleteOutlined />} />
+                    <Button type="primary" danger icon={<DeleteOutlined />} size='small' />
                   </Popconfirm>
-                </>
+                </Space>
               }>
                 {
                   col.items && col.items.length > 0 ? (
