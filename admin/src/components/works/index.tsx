@@ -108,8 +108,15 @@ const WorkContentComponent: React.FC = () => {
   }
 
   const onGoToBlock = (entity: any) => {
-    console.log(entity)
+    if (entity.normalizedName === 'sponsor') {
+      history.push(`/works/${entity.id}`);
+      return;
+    }
     if (entity.normalizedName === "jumbotron") {
+      history.push(`/works/${entity.id}`);
+      return;
+    }
+    if (entity.normalizedName === "VideoPlayList") {
       history.push(`/works/${entity.id}`);
       return;
     }
@@ -169,7 +176,7 @@ const WorkContentComponent: React.FC = () => {
     }
   ];
 
-  const handleDragSortEnd = (newDataSource: API.WorkItem[]) => {
+  const handleDragSortEnd = (beforeIndex: number, afterIndex: number, newDataSource: API.WorkItem[]) => {
     const workIds = newDataSource.map(x => (x.id || ''));
     sortWork(workIds).then(response => {
       if (response.succeeded) {

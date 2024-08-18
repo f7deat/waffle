@@ -472,6 +472,8 @@ public class CatalogService : ICatalogService
         var pageData = await _catalogRepository.GetByNameAsync(normalizedName, locale);
         if (pageData is null)
         {
+            if (!CultureInfo.GetCultures(CultureTypes.AllCultures).Any(x => x.Name == locale)) throw new Exception("Locale not support!");
+
             pageData = new Catalog
             {
                 NormalizedName = normalizedName,

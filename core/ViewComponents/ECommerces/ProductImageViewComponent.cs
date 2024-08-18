@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents.ECommerces;
@@ -8,20 +8,18 @@ namespace Waffle.ViewComponents.ECommerces;
 public class ProductImageViewComponent : ViewComponent
 {
     private readonly ICatalogService _catalogService;
-    private readonly IWorkService _workService;
 
-    public ProductImageViewComponent(IWorkService workService, ICatalogService catalogService)
+    public ProductImageViewComponent(ICatalogService catalogService)
     {
-        _workService = workService;
         _catalogService = catalogService;
     }
 
-    private Catalog PageData
+    private PageData PageData
     {
         get
         {
-            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
-            return values as Catalog ?? new();
+            RouteData.Values.TryGetValue(nameof(PageData), out var values);
+            return values as PageData ?? new();
         }
     }
 

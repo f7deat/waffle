@@ -192,12 +192,6 @@ export default [
           hideInMenu: true,
         },
         {
-          name: 'sponsor',
-          path: '/works/sponsor/:id',
-          component: './works/sponsor',
-          hideInMenu: true,
-        },
-        {
           name: 'trend',
           path: '/works/trend/:id',
           component: './works/trend',

@@ -41,4 +41,5 @@ public interface IWorkService
     IAsyncEnumerable<Column> ListColumnAsync(Guid rowId);
     Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId);
     Task<object?> GetUnuseWorksAsync(SearchFilterOptions filterOptions);
+    Task<object?> GetArgumentsAsync(Guid id);
 }

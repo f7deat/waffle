@@ -1,27 +1,27 @@
-import WorkSummary from "@/components/works/summary";
-import { getArguments, saveArguments } from "@/services/work-content";
+import { saveArguments } from "@/services/work-content";
 import { uuidv4 } from "@/utils/common";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { DragSortTable, ModalForm, PageContainer, ProColumns, ProFormText } from "@ant-design/pro-components"
+import { DragSortTable, ModalForm, ProColumns, ProFormInstance, ProFormText } from "@ant-design/pro-components"
 import { FormattedMessage, useParams } from "@umijs/max";
-import { Avatar, Button, Col, Popconfirm, Row, Space, message } from "antd";
-import { useEffect, useState } from "react"
+import { Avatar, Button, Popconfirm, Space, message } from "antd";
+import { useEffect, useRef, useState } from "react"
 
-const Sponsor: React.FC = () => {
+type Props = {
+    data: any;
+}
+
+const Sponsor: React.FC<Props> = ({ data }) => {
 
     const { id } = useParams();
     const [brands, setBrands] = useState<CPN.Brand[]>([]);
     const [open, setOpen] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true);
+    const formRef = useRef<ProFormInstance>();
 
     useEffect(() => {
-        if (id) {
-            getArguments(id).then(response => {
-                setBrands(response.brands || []);
-                setLoading(false);
-            })
+        if (data) {
+            setBrands(data.brands || []);
         }
-    }, [id]);
+    }, [data]);
 
     const onFinish = async (values: CPN.Brand) => {
         let newBrands: CPN.Brand[] = brands;
@@ -45,6 +45,7 @@ const Sponsor: React.FC = () => {
             setBrands(newBrands);
             message.success('Saved!');
             setOpen(false);
+            formRef.current?.resetFields();
         }
     }
 
@@ -65,7 +66,9 @@ const Sponsor: React.FC = () => {
             title: '#',
             dataIndex: 'sort',
             className: 'drag-visible',
-            search: false
+            search: false,
+            width: 50,
+            align: 'center'
         },
         {
             title: 'Name',
@@ -79,28 +82,31 @@ const Sponsor: React.FC = () => {
         },
         {
             title: 'Url',
-            dataIndex: 'url'
+            dataIndex: 'url',
+            search: false
         },
         {
             title: 'Action',
             valueType: 'option',
             render: (dom, entity) => [
+                <Button type="primary" icon={<EditOutlined />} size="small" key="edit" />,
                 <Popconfirm
                     title="Are you sure?"
                     key={4}
                     onConfirm={() => remove(entity)}
                 >
                     <Button
-                        icon={<DeleteOutlined />}
+                        icon={<DeleteOutlined />} size="small"
                         danger
                         type="primary"
                     ></Button>
                 </Popconfirm>
-            ]
+            ],
+            width: 80
         }
     ];
 
-    const handleDragSortEnd = async (newDataSource: CPN.Brand[]) => {
+    const handleDragSortEnd = async (beforeIndex: number, afterIndex: number, newDataSource: CPN.Brand[]) => {
         const body = {
             brands: newDataSource
         }
@@ -112,36 +118,28 @@ const Sponsor: React.FC = () => {
     };
 
     return (
-        <PageContainer>
-            <Row gutter={16}>
-                <Col span={16}>
-                    <DragSortTable
-                        toolBarRender={() => [
-                            <Button icon={<PlusOutlined />} key="add" type="link" onClick={() => setOpen(true)} />
-                        ]}
-                        dataSource={brands}
-                        columns={columns}
-                        search={{
-                            layout: "vertical"
-                        }}
-                        rowKey="id"
-                        dragSortKey="sort"
-                        loading={loading}
-                        onDragSortEnd={handleDragSortEnd}
-                    />
-                </Col>
-                <Col span={8}>
-                    <WorkSummary />
-                </Col>
-            </Row>
-            <ModalForm onFinish={onFinish} open={open} onOpenChange={setOpen} title={<FormattedMessage id="menu.component.sponsor" />}>
+        <>
+            <DragSortTable
+                toolBarRender={() => [
+                    <Button icon={<PlusOutlined />} key="add" type="link" onClick={() => setOpen(true)} />
+                ]}
+                dataSource={brands}
+                columns={columns}
+                search={{
+                    layout: "vertical"
+                }}
+                rowKey="id"
+                dragSortKey="sort"
+                onDragSortEnd={handleDragSortEnd}
+            />
+            <ModalForm onFinish={onFinish} open={open} formRef={formRef} onOpenChange={setOpen} title={<FormattedMessage id="menu.component.sponsor" />}>
                 <ProFormText name="id" label="Id" disabled />
                 <ProFormText name="name" label="Name" />
                 <ProFormText name="logo" label="Logo" />
                 <ProFormText name="url" label="Url" />
             </ModalForm>
 
-        </PageContainer>
+        </>
     )
 }
 

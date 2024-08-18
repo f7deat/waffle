@@ -181,6 +181,11 @@ declare namespace API {
     quantity: number;
     productId: string;
   }
+  type WorkComponent = {
+      name: string;
+      componentName: string;
+      data: any
+  }
 }
 
 declare namespace Entity {

@@ -47,7 +47,7 @@ export async function saveArguments(id: string | undefined, data: any) {
 }
 
 export async function getArguments(id?: string | string[]) {
-  return request(`work/arguments/${id}`);
+  return request<API.WorkComponent>(`work/arguments/${id}`);
 }
 
 export async function addColumn(data: any) {
@@ -287,3 +287,5 @@ export async function apiUnuseWorks(params: any) {
     params
   })
 }
+
+export const apiGetWorkObject = (id?: string) => request(`component/object/${id}`);

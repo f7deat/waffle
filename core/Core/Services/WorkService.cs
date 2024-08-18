@@ -523,4 +523,22 @@ public class WorkService : IWorkService
             data = await query.OrderBy(x => x.WorkId).Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync()
         };
     }
+
+    public async Task<object?> GetArgumentsAsync(Guid id)
+    {
+        var workContent = await _context.WorkContents.FindAsync(id);
+        if (workContent is null) return IdentityResult.Failed();
+        var component = await _componentRepository.FindAsync(workContent.ComponentId);
+        if (component is null) return IdentityResult.Failed();
+        var data = new WorkComponent<object>
+        {
+            Name = workContent.Name,
+            ComponentName = component.Name
+        };
+        if (!string.IsNullOrEmpty(workContent.Arguments))
+        {
+            data.Data = JsonSerializer.Deserialize<object>(workContent.Arguments);
+        }
+        return new { data };
+    }
 }

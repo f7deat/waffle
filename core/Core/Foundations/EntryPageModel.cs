@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 
 namespace Waffle.Core.Foundations;
 

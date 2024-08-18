@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using System.Text.Json;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
@@ -8,7 +8,6 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Waffle.Core.Services;
 

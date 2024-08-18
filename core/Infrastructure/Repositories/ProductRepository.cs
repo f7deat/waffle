@@ -108,12 +108,14 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                     {
                         Name = catalog.Name,
                         Id = catalog.Id,
-                        NormalizedName = p.NormalizedName,
+                        NormalizedName = catalog.NormalizedName,
                         Price = product.Price,
                         SalePrice = product.SalePrice,
                         Thumbnail = catalog.Thumbnail,
                         ViewCount = catalog.ViewCount,
-                        ModifiedDate = catalog.ModifiedDate
+                        ModifiedDate = catalog.ModifiedDate,
+                        Category = p.NormalizedName,
+                        Type = catalog.Type
                     };
         return await query.Distinct().OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }
