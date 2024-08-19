@@ -47,28 +47,6 @@ public class SeoHelper
         return page.Replace(" ", "_");
     }
 
-    public static string CatalogUrl(CatalogType type)
-    {
-        switch (type)
-        {
-            case CatalogType.Leaf:
-                return "leaf";
-            case CatalogType.Article:
-                return "article";
-            case CatalogType.Product:
-                return "product";
-            case CatalogType.Location:
-                return "locations";
-            case CatalogType.Tag:
-                return "tag";
-            case CatalogType.Album:
-                return "leaf/album";
-            case CatalogType.Video:
-                return "video";
-            default: return "leaf";
-        }
-    }
-
     private static readonly string[] VietnameseSigns = new string[]
     {
 

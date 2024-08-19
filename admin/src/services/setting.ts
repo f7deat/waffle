@@ -18,19 +18,11 @@ export async function saveTelegram(id: string | undefined, data: API.Telegam) {
   });
 }
 
-export async function getTelegram(id: string | undefined) {
-  return request(`setting/telegram/${id}`);
-}
-
 export async function testTelegram(data: any) {
   return request(`setting/telegram/test`, {
     method: 'POST',
     data,
   });
-}
-
-export async function getFooter(id: string | undefined) {
-  return request(`setting/footer/${id}`);
 }
 
 export async function saveSocial(data: any) {
@@ -40,14 +32,7 @@ export async function saveSocial(data: any) {
   });
 }
 
-export async function getSocial(id: string | undefined) {
-  return request(`setting/social/${id}`);
-}
-
 //#region Facebook
-export async function facebookGet(id: string | undefined) {
-  return request(`setting/facebook/${id}`);
-}
 export async function facebookSave(data: API.Facebook) {
   return request(`setting/facebook/save`, {
     method: 'POST',
@@ -57,10 +42,6 @@ export async function facebookSave(data: API.Facebook) {
 //#endregion
 
 //#region SendGrid
-
-export async function getSendGrid() {
-  return request(`setting/sendgrid`);
-}
 
 export async function saveSendGrid(data: any) {
   return request(`setting/sendgrid/save`, {
@@ -90,10 +71,6 @@ export async function getSetting(id: string | undefined) {
 
 export async function querySetting(normalizedName: string) {
   return request(`setting/unix/${normalizedName}`);
-}
-
-export async function getHeader(id: string | undefined) {
-  return request(`setting/header/${id}`);
 }
 
 export async function saveSetting(id: string | undefined, data: any) {

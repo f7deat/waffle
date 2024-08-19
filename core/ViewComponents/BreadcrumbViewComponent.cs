@@ -4,7 +4,6 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
 using Waffle.Entities;
-using Waffle.Extensions;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents;
@@ -30,11 +29,11 @@ public class BreadcrumbViewComponent : ViewComponent
         }
     }
 
-    private PageData? Category
+    private PageData? CategoryData
     {
         get
         {
-            RouteData.Values.TryGetValue("Parent", out var values);
+            RouteData.Values.TryGetValue(nameof(CategoryData), out var values);
             return values as PageData;
         }
     }
@@ -61,12 +60,12 @@ public class BreadcrumbViewComponent : ViewComponent
             });
         }
 
-        if (Category != null)
+        if (CategoryData != null)
         {
             breadcrumb.Add(new Breadcrumb
             {
-                Url = $"/leaf/{Category.NormalizedName}",
-                Name = Category.Name,
+                Url = $"/leaf/{CategoryData.NormalizedName}",
+                Name = CategoryData.Name,
                 Position = breadcrumb.Count + 1
             });
         }

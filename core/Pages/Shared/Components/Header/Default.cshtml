@@ -16,25 +16,25 @@
             <div class="offcanvas-body align-items-center">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a href="/articles" class="@(Model.Catalog.Type == CatalogType.Article ? "nav-link active" : "nav-link")">
+                        <a href="/article" class="@(Model.Catalog.Type == CatalogType.Article ? "nav-link active" : "nav-link")">
                             <i class="fa-solid fa-rss me-1"></i>
                             Feed
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/products" class="@(Model.Catalog.Type == CatalogType.Product ? "nav-link active" : "nav-link")">
+                        <a href="/product" class="@(Model.Catalog.Type == CatalogType.Product ? "nav-link active" : "nav-link")">
                             <i class="fas fa-cart-shopping me-1"></i>
                             <localize key="shop" />
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/locations" class="@(Model.Catalog.Type == CatalogType.Location ? "nav-link active" : "nav-link")">
+                        <a href="/location" class="@(Model.Catalog.Type == CatalogType.Location ? "nav-link active" : "nav-link")">
                             <i class="fa-solid fa-puzzle-piece me-1"></i>
                             @CatalogType.Location.ToString()
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a href="/videos" class="@(Model.Catalog.Type == CatalogType.Video ? "nav-link active" : "nav-link")">
+                        <a href="/video" class="@(Model.Catalog.Type == CatalogType.Video ? "nav-link active" : "nav-link")">
                             <i class="fa-solid fa-play me-1"></i>
                             @CatalogType.Video.ToString()
                         </a>

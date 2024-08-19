@@ -48,11 +48,13 @@ public class SettingService : ISettingService
 
     public async Task<AppSetting?> FindAsync(Guid id) => await _settingRepository.FindAsync(id);
 
-    public async Task<T?> GetAsync<T>(Guid id)
+    public async Task<object> GetAsync(Guid id)
     {
+        var data = new WorkComponent<object>();
         var setting = await _settingRepository.FindAsync(id);
-        if (string.IsNullOrEmpty(setting?.Value)) return default;
-        return JsonSerializer.Deserialize<T>(setting.Value);
+        if (string.IsNullOrEmpty(setting?.Value)) return new { data };
+        data.Data = JsonSerializer.Deserialize<object>(setting.Value);
+        return new { data };
     }
 
     public async Task<T?> GetAsync<T>(string normalizedName)

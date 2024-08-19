@@ -407,12 +407,7 @@ table {
 
 .pagination {
     margin-bottom: 1rem;
-    text-align: right;
 }
-
-    .pagination a {
-        display: inline-block;
-    }
 
 .overflow-auto {
     overflow: auto;

@@ -5,13 +5,11 @@ using System.Globalization;
 using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Core.Services.Ecommerces;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Entities.Ecommerces;
 using Waffle.Models.Components;
 
-namespace Waffle.Pages.Products.Categories;
+namespace Waffle.Pages.Product.Categories;
 
 public class DetailsModel : DynamicPageModel
 {
@@ -30,7 +28,7 @@ public class DetailsModel : DynamicPageModel
     public IEnumerable<Catalog> Tags = new List<Catalog>();
     public Guid ProductImage;
     public AffiliateLink? AffiliateLink;
-    public Product? Product;
+    public Entities.Ecommerces.Product? Product;
     public CultureInfo CultureInfo = new("en-US");
 
     public async Task<IActionResult> OnGetAsync()

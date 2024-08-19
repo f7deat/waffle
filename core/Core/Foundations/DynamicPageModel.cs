@@ -14,7 +14,7 @@ public abstract class DynamicPageModel : PageModel
     }
 
     public PageData PageData { protected set; get; } = new();
-    public Catalog? Category { private set; get; }
+    public PageData? CategoryData { private set; get; }
 
     public override async Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
     {
@@ -30,9 +30,9 @@ public abstract class DynamicPageModel : PageModel
         {
             if (!string.IsNullOrEmpty(category?.ToString()))
             {
-                Category = await _catalogService.GetByNameAsync(category?.ToString());
-                RouteData.Values.TryAdd("Parent", Category);
-                if (Category != null && CatalogType.WordPress == Category.Type)
+                CategoryData = await _catalogService.GetPageDataAsync(category?.ToString());
+                RouteData.Values.TryAdd(nameof(CategoryData), CategoryData);
+                if (CategoryData != null && CatalogType.WordPress == CategoryData.Type)
                 {
                     PageData = new PageData
                     {
@@ -44,28 +44,17 @@ public abstract class DynamicPageModel : PageModel
                 }
             }
         }
-        var catalog = await _catalogService.GetByNameAsync(nornamlizedName);
-        if (catalog is null)
+        var pageData = await _catalogService.GetPageDataAsync(nornamlizedName);
+        if (pageData is null)
         {
             context.HttpContext.Response.StatusCode = 404;
             context.HttpContext.Response.Redirect("/exception/notfound");
             return;
         }
-        PageData = new PageData
-        {
-            Name = catalog.Name,
-            Description = catalog.Description,
-            NormalizedName = catalog.NormalizedName,
-            Type = catalog.Type,
-            SettingString = catalog.Setting,
-            Locale = catalog.Locale,
-            ModifiedDate = catalog.ModifiedDate,
-            ViewCount = catalog.ViewCount,
-            Id = catalog.Id
-        };
-        ViewData["Title"] = catalog.Name;
-        ViewData["Description"] = catalog.Description;
-        ViewData["Image"] = catalog.Thumbnail;
+        PageData = pageData;
+        ViewData["Title"] = PageData.Name;
+        ViewData["Description"] = PageData.Description;
+        ViewData["Image"] = PageData.Thumbnail;
         RouteData.Values.TryAdd(nameof(PageData), PageData);
     }
 }

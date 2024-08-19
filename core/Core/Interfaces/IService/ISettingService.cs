@@ -10,7 +10,7 @@ public interface ISettingService
 {
     Task<AppSetting> EnsureSettingAsync(string name);
     Task<AppSetting?> FindAsync(Guid catalogId);
-    Task<T?> GetAsync<T>(Guid id);
+    Task<object> GetAsync(Guid id);
     Task<T?> GetAsync<T>(string normalizedName);
     Task<ListResult<AppSetting>> ListAsync();
     Task<IdentityResult> SaveAsync(Guid id, object args);

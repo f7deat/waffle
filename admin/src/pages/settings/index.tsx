@@ -39,7 +39,7 @@ const SettingPage: React.FC = () => {
           key={1}
           onClick={() =>
             history.push(
-              `/settings/${entity.normalizedName.toLocaleLowerCase()}/${entity.id
+              `/settings/general/center/${entity.id
               }`,
             )
           }

@@ -326,13 +326,15 @@ export default [
       path: '/settings',
       routes: [
         {
-          path: '/settings',
-          redirect: '/settings/list',
-        },
-        {
           name: 'general',
           path: '/settings/general',
           component: './settings',
+        },
+        {
+          name: 'center',
+          path: '/settings/general/center/:id',
+          component: './settings/center',
+          hideInMenu: true
         },
         {
           name: 'component',
@@ -346,51 +348,9 @@ export default [
           hideInMenu: true,
         },
         {
-          name: 'google',
-          path: '/settings/google/:id',
-          component: './settings/google',
-          hideInMenu: true,
-        },
-        {
-          name: 'footer',
-          path: '/settings/footer/:id',
-          component: './settings/footer',
-          hideInMenu: true,
-        },
-        {
-          name: 'header',
-          path: '/settings/header/:id',
-          component: './settings/header',
-          hideInMenu: true,
-        },
-        {
           name: 'style',
           path: '/settings/css',
           component: './settings/css',
-        },
-        {
-          name: 'telegram',
-          path: '/settings/telegram/:id',
-          component: './settings/telegram',
-          hideInMenu: true,
-        },
-        {
-          name: 'sendGrid',
-          path: '/settings/sendgrid/:id',
-          component: './settings/sendgrid',
-          hideInMenu: true,
-        },
-        {
-          name: 'facebook',
-          path: '/settings/facebook/:id',
-          component: './settings/facebook',
-          hideInMenu: true,
-        },
-        {
-          name: 'social',
-          path: '/settings/social/:id',
-          component: './settings/social',
-          hideInMenu: true,
         },
         {
           name: 'localization',

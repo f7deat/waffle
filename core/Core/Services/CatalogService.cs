@@ -505,4 +505,23 @@ public class CatalogService : ICatalogService
         await _catalogRepository.UpdateAsync(catalog);
         return IdentityResult.Success;
     }
+
+    public async Task<PageData?> GetPageDataAsync(string? normalizedName)
+    {
+        var catalog = await GetByNameAsync(normalizedName);
+        if (catalog == null) return default;
+        return new PageData
+        {
+            Name = catalog.Name,
+            Description = catalog.Description,
+            Locale = catalog.Locale,
+            Type = catalog.Type,
+            NormalizedName = catalog.NormalizedName,
+            SettingString = catalog.Setting,
+            Thumbnail = catalog.Thumbnail,
+            ViewCount = catalog.ViewCount,
+            Id = catalog.Id,
+            ModifiedDate = catalog.ModifiedDate
+        };
+    }
 }

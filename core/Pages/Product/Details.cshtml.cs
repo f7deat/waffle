@@ -5,10 +5,9 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Entities.Ecommerces;
 using Waffle.Models.Components;
 
-namespace Waffle.Pages.Products;
+namespace Waffle.Pages.Product;
 
 public class DetailsModel : DynamicPageModel
 {
@@ -26,7 +25,7 @@ public class DetailsModel : DynamicPageModel
     public Guid ProductImage;
     public AffiliateLink? AffiliateLink;
     public IEnumerable<Catalog> RelatedProducts = new List<Catalog>();
-    public Product? Product;
+    public Entities.Ecommerces.Product? Product;
 
     public async Task<IActionResult> OnGetAsync()
     {

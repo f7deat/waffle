@@ -1,7 +1,7 @@
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 
-namespace Waffle.Pages.Products.Cart;
+namespace Waffle.Pages.Product.Cart;
 
 public class IndexModel : EntryPageModel
 {
