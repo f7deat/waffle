@@ -62,12 +62,6 @@ export default [
           hideInMenu: true,
         },
         {
-          name: 'editor',
-          path: '/works/editor/:id',
-          component: './works/editor',
-          hideInMenu: true,
-        },
-        {
           name: 'facebookAlbum',
           path: '/works/facebook-album/:id',
           component: './works/facebook/album',
@@ -129,12 +123,6 @@ export default [
           name: 'googleMap',
           path: '/works/googlemap/:id',
           component: './works/google-map',
-          hideInMenu: true,
-        },
-        {
-          name: 'jumbotron',
-          path: '/works/jumbotron/:id',
-          component: './works/jumbotron',
           hideInMenu: true,
         },
         {

@@ -27,6 +27,7 @@ const Block: React.FC = () => {
     {
       title: '#',
       valueType: 'indexBorder',
+      width: 50
     },
     {
       title: 'Name',
@@ -44,6 +45,7 @@ const Block: React.FC = () => {
     {
       title: 'Normalized name',
       dataIndex: 'normalizedName',
+      search: false
     },
     {
       title: 'Status',
@@ -58,9 +60,10 @@ const Block: React.FC = () => {
           status: 'Processing',
         },
       },
+      width: 100
     },
     {
-      title: '',
+      title: 'Option',
       valueType: 'option',
       render: (dom, entity) => [
         <Button key="view" icon={<FolderOutlined />} size='small' onClick={() => history.push(`/settings/component/center/${entity.id}`)} />,
@@ -72,6 +75,7 @@ const Block: React.FC = () => {
           <Button icon={<DeleteOutlined />} type="primary" danger size='small' />
         </Popconfirm>,
       ],
+      width: 80
     },
   ];
 

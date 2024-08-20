@@ -1,4 +1,4 @@
-import { listFile, uploadFromUrl, uploadRcFile } from '@/services/file-service';
+import { listFile } from '@/services/file-service';
 import {
     BarsOutlined,
     DeleteOutlined,
@@ -10,22 +10,19 @@ import {
     UploadOutlined,
 } from '@ant-design/icons';
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
-import { FormattedMessage, history, useIntl } from '@umijs/max';
+import { FormattedMessage, history } from '@umijs/max';
 import {
     Breadcrumb,
     Button,
     Col,
     Dropdown,
-    Input,
-    message,
     Modal,
     Popconfirm,
     Row,
-    Space,
-    Upload,
-    UploadProps,
+    Space
 } from 'antd';
 import { useRef, useState } from 'react';
+import WfUpload from './upload';
 
 type ExplorerProps = {
     open: boolean;
@@ -36,25 +33,8 @@ type ExplorerProps = {
 };
 
 const FileExplorer: React.FC<ExplorerProps> = (props) => {
-    const intl = useIntl();
     const actionRef = useRef<ActionType>();
-    const [url, setUrl] = useState<string>();
-
-    const uploadProps: UploadProps = {
-        name: 'file',
-        action: uploadRcFile,
-        onChange(info: any) {
-            if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
-            if (info.file.status === 'done') {
-                message.success(`${info.file.name} file uploaded successfully`);
-                actionRef.current?.reload();
-            } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} file upload failed.`);
-            }
-        },
-    };
+    const [open, setOpen] = useState<boolean>(false);
 
     const categories = [
         {
@@ -85,7 +65,8 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
         },
         {
             title: 'Date modified',
-            dataIndex: 'modifiedDate'
+            dataIndex: 'modifiedDate',
+            search: false
         },
         {
             title: 'Type',
@@ -93,10 +74,12 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
         },
         {
             title: 'Size',
-            dataIndex: 'size'
+            dataIndex: 'size',
+            search: false
         },
         {
             title: 'Action',
+            valueType: 'option',
             render: (_, row) => (
                 <Dropdown
                     menu={{
@@ -144,29 +127,19 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
             width={1100}
             footer={false}
         >
-            <div className="mb-4">
-                <Row gutter={16}>
-                    <Col span={4}>
-                    </Col>
-                    <Col span={20}>
-                        <div className='flex items-center justify-between'>
-                            <Breadcrumb>
-                                <Breadcrumb.Item href="">
-                                    <HomeOutlined />
-                                </Breadcrumb.Item>
-                                <Breadcrumb.Item href="">Home</Breadcrumb.Item>
-                            </Breadcrumb>
-                            <div>
-                                <Input.Search placeholder='Search' />
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
+            <div className='flex items-center justify-between'>
+                <Breadcrumb>
+                    <Breadcrumb.Item href="">
+                        <HomeOutlined />
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item href="">Home</Breadcrumb.Item>
+                </Breadcrumb>
+                <div>
+                    <Button icon={<UploadOutlined />} type='primary' onClick={() => setOpen(true)}>Upload</Button>
+                </div>
             </div>
             <Row gutter={16}>
-                <Col span={4} style={{
-                    borderRight: '1px solid #d1d1d1'
-                }}>
+                <Col md={4}>
                     {
                         categories.map(category => (
                             <div key={category.key} className='hover-light'>
@@ -175,20 +148,14 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
                         ))
                     }
                 </Col>
-                <Col span={20}>
+                <Col md={20}>
                     <ProTable<API.FileContent>
                         rowSelection={{}}
-                        toolBarRender={() => {
-                            return [
-                                <Upload {...uploadProps} key={0}>
-                                    <Button icon={<UploadOutlined />} type="primary">
-                                        Upload
-                                    </Button>
-                                </Upload>,
-                            ];
-                        }}
-                        search={false}
+                        size='small'
                         columns={columns}
+                        search={{
+                            layout: 'vertical'
+                        }}
                         request={(params) =>
                             listFile(
                                 {
@@ -198,12 +165,17 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
                             )
                         }
                         pagination={{
-                          defaultPageSize: 8
+                            defaultPageSize: 8
                         }}
                         actionRef={actionRef}
+                        ghost
                     />
                 </Col>
             </Row>
+            <WfUpload open={open} onCancel={() => setOpen(false)} onFinish={() => {
+                actionRef.current?.reload();
+                setOpen(false);
+            }} />
         </Modal>
     );
 };

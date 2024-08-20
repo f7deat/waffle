@@ -108,7 +108,7 @@ const WorkContentComponent: React.FC = () => {
   }
 
   const onGoToBlock = (entity: any) => {
-    if (entity.normalizedName === 'sponsor') {
+    if (entity.normalizedName === 'sponsor' || entity.normalizedName === 'editor') {
       history.push(`/works/${entity.id}`);
       return;
     }

@@ -50,7 +50,7 @@ const ComponentCenter: React.FC = () => {
     });
   }, []);
 
-  const onConfirm = async (id: string) => {
+  const onConfirm = async (id?: string) => {
     const response = await deleteWork(id);
     if (response.succeeded) {
       message.success('Deleted!');
@@ -62,6 +62,7 @@ const ComponentCenter: React.FC = () => {
     {
       title: '#',
       valueType: 'indexBorder',
+      width: 50
     },
     {
       title: 'Name',
@@ -80,6 +81,7 @@ const ComponentCenter: React.FC = () => {
           status: 'Processing',
         },
       },
+      width: 100
     },
     {
       title: '',
@@ -87,7 +89,7 @@ const ComponentCenter: React.FC = () => {
       render: (dom, entity) => [
         <Button
           icon={<EditOutlined />}
-          key={1}
+          key={1} size='small'
           type="primary"
           onClick={() =>
             history.push(`/works/${entity.normalizedName}/${entity.id}`)
@@ -98,9 +100,10 @@ const ComponentCenter: React.FC = () => {
           key={3}
           onConfirm={() => onConfirm(entity.id)}
         >
-          <Button icon={<DeleteOutlined />} type="primary" danger />
+          <Button icon={<DeleteOutlined />} type="primary" danger size='small' />
         </Popconfirm>,
       ],
+      width: 80
     },
   ];
 
@@ -116,6 +119,9 @@ const ComponentCenter: React.FC = () => {
       <Row gutter={16}>
         <Col span={16}>
           <ProTable
+            search={{
+              layout: 'vertical'
+            }}
             actionRef={actionRef}
             columns={columns}
             rowKey="id"

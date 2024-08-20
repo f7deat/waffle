@@ -68,6 +68,7 @@ const Localization: React.FC = () => {
     {
       title: '#',
       valueType: 'indexBorder',
+      width: 50
     },
     {
       title: 'Key',

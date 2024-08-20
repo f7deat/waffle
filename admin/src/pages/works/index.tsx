@@ -8,6 +8,7 @@ import Jumbotron from "./jumbotron";
 import Sponsor from "./sponsor";
 import { LeftOutlined } from "@ant-design/icons";
 import VideoPlaylist from "./video-playlist";
+import { EditorComponent } from "./components";
 
 const WorkPage: React.FC = () => {
     const { id } = useParams();
@@ -22,12 +23,9 @@ const WorkPage: React.FC = () => {
     };
 
     const getChildren = () => {
-        if (data?.componentName === 'Sponsor') {
-            return <Sponsor data={data.data} />;
-        }
-        if (data?.componentName === 'VideoPlayList') {
-            return <VideoPlaylist data={data.data} />
-        }
+        if (data?.componentName === 'Sponsor') return <Sponsor data={data.data} />;
+        if (data?.componentName === 'VideoPlayList') return <VideoPlaylist data={data.data} />;
+        if (data?.componentName === 'Editor') return <EditorComponent data={data.data} />;
         return (
             <Row gutter={16}>
                 <Col md={16}>
