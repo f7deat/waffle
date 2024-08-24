@@ -1,7 +1,7 @@
 import FormCatalogList from '@/components/form/catalog-list';
 import ProFormLink from '@/components/link';
 import { saveSetting } from '@/services/setting';
-import { FacebookOutlined, InstagramOutlined, PlusOutlined, XOutlined, YoutubeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FacebookOutlined, InstagramOutlined, PlusOutlined, XOutlined, YoutubeOutlined } from '@ant-design/icons';
 import {
   ModalForm,
   ProForm,
@@ -10,7 +10,7 @@ import {
   ProList,
 } from '@ant-design/pro-components';
 import { useParams } from '@umijs/max';
-import { Button, Col, Divider, message, Row } from 'antd';
+import { Button, Col, Divider, message, Popconfirm, Row } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 
 type Props = {
@@ -40,8 +40,8 @@ const Footer: React.FC<Props> = ({ data, onFinish }) => {
           value: data.phoneNumber,
         },
         {
-          name: 'viewName',
-          value: data.viewName,
+          name: 'address',
+          value: data.address,
         },
         {
           name: 'facebookUrl',
@@ -60,6 +60,9 @@ const Footer: React.FC<Props> = ({ data, onFinish }) => {
           value: data.social?.xUrl
         }
       ]);
+      if (data.links) {
+        setLinks(data.links);
+      }
     }
   }, []);
 
@@ -74,56 +77,93 @@ const Footer: React.FC<Props> = ({ data, onFinish }) => {
           instagramUrl: values.instagramUrl,
           youtubeUrl: values.youtubeUrl,
           xUrl: values.xUrl
-        }
+        },
+        links
       }
       await onFinish(body);
     }}>
       <ProFormText name="id" initialValue={id} hidden />
-      <Row gutter={16}>
+      <Row gutter={16} className='mb-4'>
         <Col md={18}>
-          <Row gutter={16}>
-            <Col md={8}>
-              <ProFormText name="companyName" label="Your company" />
-            </Col>
-            <Col md={8}>
-              <ProFormText name="email" label="Email" />
-            </Col>
-            <Col md={8}>
-              <ProFormText name="phoneNumber" label="Phone number" />
-            </Col>
-            <Divider>Socials</Divider>
-            <Col md={6}>
-              <ProFormText name="facebookUrl" label="Facebook" fieldProps={{
-                suffix: <FacebookOutlined />
-              }} />
-            </Col>
-            <Col md={6}>
-              <ProFormText name="instagramUrl" label="Instagram" fieldProps={{
-                suffix: <InstagramOutlined />
-              }} />
-            </Col>
-            <Col md={6}>
-              <ProFormText name="youtubeUrl" label="Youtube" fieldProps={{
-                suffix: <YoutubeOutlined />
-              }} />
-            </Col>
-            <Col md={6}>
-              <ProFormText name="xUrl" label="X" fieldProps={{
-                suffix: <XOutlined />
-              }} />
-            </Col>
-          </Row>
+          <div className='border rounded p-4 h-full'>
+            <Row gutter={16}>
+              <Col md={8}>
+                <ProFormText name="companyName" label="Your company" />
+              </Col>
+              <Col md={8}>
+                <ProFormText name="email" label="Email" />
+              </Col>
+              <Col md={8}>
+                <ProFormText name="phoneNumber" label="Phone number" />
+              </Col>
+              <Col md={24}>
+                <ProFormText name="address" label="Địa chỉ" />
+              </Col>
+              <Divider>Socials</Divider>
+              <Col md={6}>
+                <ProFormText name="facebookUrl" label="Facebook" fieldProps={{
+                  suffix: <FacebookOutlined />
+                }} />
+              </Col>
+              <Col md={6}>
+                <ProFormText name="instagramUrl" label="Instagram" fieldProps={{
+                  suffix: <InstagramOutlined />
+                }} />
+              </Col>
+              <Col md={6}>
+                <ProFormText name="youtubeUrl" label="Youtube" fieldProps={{
+                  suffix: <YoutubeOutlined />
+                }} />
+              </Col>
+              <Col md={6}>
+                <ProFormText name="xUrl" label="X" tooltip="https://x.com" fieldProps={{
+                  suffix: <XOutlined />
+                }} />
+              </Col>
+            </Row>
+          </div>
         </Col>
         <Col md={6}>
-          <ProList
-            dataSource={links}
-            ghost headerTitle="Liên kết" toolBarRender={() => [<Button type='dashed' key="new" icon={<PlusOutlined />} onClick={() => setOpen(true)}>Thêm</Button>]} />
+          <div className='border rounded'>
+            <div className='flex justify-between items-center p-2 border-b'>
+              <div className='font-medium text-base'>Liên kết</div>
+              <Button type='dashed' key="new" icon={<PlusOutlined />} onClick={() => setOpen(true)}>Thêm</Button>
+            </div>
+            <ProList
+              size='small'
+              metas={{
+                title: {
+                  dataIndex: 'name'
+                },
+                actions: {
+                  dataIndex: 'href',
+                  render: (_, entity) => [
+                    <Popconfirm key="delete" title="Are you sure?" onConfirm={() => {
+                      setLinks(links.filter((x: any) => x.href !== entity.href));
+                      message.success('Xóa thành công!');
+                    }}>
+                      <Button type='primary' size='small' danger icon={<DeleteOutlined />} />
+                    </Popconfirm>
+                  ]
+                }
+              }}
+              dataSource={links}
+              ghost />
+          </div>
         </Col>
       </Row>
       <ModalForm open={open} onOpenChange={setOpen} title="Thêm liên kết" onFinish={async (values: any) => {
-        console.log(values);
+        if (links.find((x: any) => x.href === values.href)) {
+          message.warning('URL đã tồn tại!');
+          return;
+        }
+        setLinks([
+          ...links,
+          values
+        ]);
+        setOpen(false);
       }}>
-        <ProFormLink name="url" label="URL" />
+        <ProFormLink name="href" label="URL" />
       </ModalForm>
     </ProForm>
   );

@@ -1,94 +1,104 @@
+import { apiGetUrlOption } from '@/services/catalog';
 import {
   ProForm,
-  ProFormInstance,
   ProFormItemProps,
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
 import { Col, Radio, Row } from 'antd';
-import { useEffect, useRef, useState } from 'react';
-import FormCatalogList from '../form/catalog-list';
+import { useState } from 'react';
 
 const ProFormLink: React.FC<ProFormItemProps> = (props) => {
   const formRef = ProForm.useFormInstance();
-  const formChildRef = useRef<ProFormInstance>();
 
   const [value, setValue] = useState('internal');
 
-  useEffect(() => {
-    const link: CPN.Link = formRef?.getFieldValue('link');
-    if (link) {
-      formChildRef.current?.setFields([
-        {
-          name: 'name',
-          value: link.name
-        },
-        {
-          name: 'href',
-          value: link.href
-        },
-        {
-          name: 'target',
-          value: link.target
-        }
-      ])
-    }
-  }, []);
-
   return (
-    <>
-      <ProForm.Item {...props}>
-        <Radio.Group options={[
-          {
-            label: 'Liên kết nội bộ',
-            value: 'internal'
-          },
-          {
-            label: 'Liên kết ngoài',
-            value: 'external'
-          }
-        ]} value={value} onChange={(e) => setValue(e.target.value)} className='mb-2' />
+    <ProForm.Item {...props}>
+      <Radio.Group options={[
         {
-          value === 'internal' && (
-            <FormCatalogList label="Chọn" name='url' />
-          )
-        }
+          label: 'Liên kết nội bộ',
+          value: 'internal'
+        },
         {
-          value === 'external' && (
-            <>
-              <ProFormText name="name" label="Name" />
-              <Row gutter={16}>
-                <Col md={18}>
-                  <ProFormText
-                    name="href"
-                    placeholder="https://"
-                    label="URL"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                    ]}
-                  />
-                </Col>
-                <Col md={6}>
-                  <ProFormSelect
-                    name="target"
-                    label="Target"
-                    allowClear
-                    options={[
-                      {
-                        value: '_blank',
-                        label: 'Open in new tab',
-                      },
-                    ]}
-                  />
-                </Col>
-              </Row>
-            </>
-          )
+          label: 'Liên kết ngoài',
+          value: 'external'
         }
-      </ProForm.Item>
-    </>
+      ]} value={value} onChange={(e) => setValue(e.target.value)} className='mb-2' />
+      {
+        value === 'internal' && (
+          <>
+            <ProFormText name="name" hidden />
+            <Row gutter={16}>
+              <Col md={18}>
+                <ProFormSelect
+                  allowClear={false}
+                  rules={[
+                    {
+                      required: true
+                    }
+                  ]}
+                  showSearch
+                  request={apiGetUrlOption} label="Chọn liên kết" name='href' onChange={(_, option) => {
+                    formRef.setFieldValue('name', option.title);
+                  }} />
+              </Col>
+              <Col md={6}>
+                <ProFormSelect
+                  name="target"
+                  label="Target"
+                  allowClear
+                  options={[
+                    {
+                      value: '_blank',
+                      label: 'Open in new tab',
+                    },
+                  ]}
+                />
+              </Col>
+            </Row>
+          </>
+        )
+      }
+      {
+        value === 'external' && (
+          <>
+            <ProFormText name="name" label="Name" rules={[
+              {
+                required: true
+              }
+            ]} />
+            <Row gutter={16}>
+              <Col md={18}>
+                <ProFormText
+                  name="href"
+                  placeholder="https://"
+                  label="URL"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                />
+              </Col>
+              <Col md={6}>
+                <ProFormSelect
+                  name="target"
+                  label="Target"
+                  allowClear
+                  options={[
+                    {
+                      value: '_blank',
+                      label: 'Open in new tab',
+                    },
+                  ]}
+                />
+              </Col>
+            </Row>
+          </>
+        )
+      }
+    </ProForm.Item>
   );
 };
 

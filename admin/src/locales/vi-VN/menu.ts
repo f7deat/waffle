@@ -26,7 +26,6 @@ export default {
   'menu.settings.center': 'Chi tiết',
   'menu.settings.header': 'Header',
   'menu.settings.facebook': 'Facebook',
-  'menu.settings.footer': 'Footer',
   'menu.settings.telegram': 'Telegram',
   'menu.settings.componentCenter': 'Component center',
   'menu.settings.localization': 'Ngôn ngữ',

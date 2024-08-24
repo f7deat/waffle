@@ -6,9 +6,7 @@ const FormCatalogList: React.FC<ProFormSelectProps> = (props) => {
         <ProFormSelect
             {...props}
             showSearch
-            request={(params) => queryCatalogSelect({
-                ...params
-            })}
+            request={queryCatalogSelect}
         />
     );
 };

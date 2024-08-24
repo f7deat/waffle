@@ -18,14 +18,6 @@ public class Footer : BaseSetting
     public string? Address { get; set; }
     [JsonPropertyName("social")]
     public Social Social { get; set; } = new();
-    [JsonPropertyName("viewName")]
-    public string ViewName { get; set; } = "Default";
-
-    public IEnumerable<Option> Templates { get; set; } = new List<Option>
-    {
-        new Option { Label = "Blank", Value = "blank" },
-        new Option { Label = "Default", Value = "default" }
-    };
 
     [JsonPropertyName("links")]
     public IEnumerable<Link>? Links { get; set; }

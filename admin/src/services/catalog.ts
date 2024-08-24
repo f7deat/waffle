@@ -158,4 +158,6 @@ export const apiGetCatalogSetting = (id: string) => request(`catalog/setting/${i
 export const apiSaveCatalogSetting = (data: any, id?: string) => request(`catalog/setting/save/${id}`, {
   method: 'POST',
   data
-})
+});
+
+export const apiGetUrlOption = (params: any) => request(`catalog/url-options`, { params });

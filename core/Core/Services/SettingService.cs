@@ -133,18 +133,6 @@ public class SettingService : ISettingService
         return IdentityResult.Success;
     }
 
-    public async Task<IdentityResult> SaveFooterAsync(Footer args)
-    {
-        var setting = await _settingRepository.FindAsync(args.Id);
-        if (setting is null)
-        {
-            return IdentityResult.Failed();
-        }
-        setting.Value = JsonSerializer.Serialize(args);
-        await _context.SaveChangesAsync();
-        return IdentityResult.Success;
-    }
-
     public async Task<IdentityResult> SaveTelegramAsync(Guid id, Telegram args)
     {
         var setting = await _settingRepository.FindAsync(id);

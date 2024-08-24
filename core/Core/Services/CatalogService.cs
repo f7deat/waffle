@@ -538,13 +538,10 @@ public class CatalogService : ICatalogService
                         NormalizedName = a.NormalizedName
                     };
         var data = await query.ToListAsync();
-        return new
+        return data.Select(x => new
         {
-            data = data.Select(x => new
-            {
-                label = x.Name,
-                value = x.Url
-            })
-        };
+            label = x.Name,
+            value = x.Url
+        });
     }
 }

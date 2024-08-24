@@ -2,7 +2,6 @@
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
-using Waffle.Models.Settings;
 
 namespace Waffle.Core.Interfaces.IService;
 
@@ -14,6 +13,5 @@ public interface ISettingService
     Task<ListResult<AppSetting>> ListAsync();
     Task<IdentityResult> SaveAsync(Guid id, object args);
     Task<IdentityResult> SaveAsync(string normalizedName, object args);
-    Task<IdentityResult> SaveFooterAsync(Footer args);
     Task<IdentityResult> SaveTelegramAsync(Guid id, Telegram model);
 }

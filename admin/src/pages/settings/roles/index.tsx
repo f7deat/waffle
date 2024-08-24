@@ -1,6 +1,6 @@
 import { listRole } from "@/services/role"
-import { DeleteOutlined, EditOutlined, FolderOutlined, PlusOutlined } from "@ant-design/icons";
-import { ModalForm, PageContainer, ProColumns, ProFormText, ProTable } from "@ant-design/pro-components"
+import { DeleteOutlined, EditOutlined, FolderOutlined, UserAddOutlined } from "@ant-design/icons";
+import { ModalForm, PageContainer, ProColumns, ProFormText, ProList } from "@ant-design/pro-components"
 import { Button, Popconfirm } from "antd";
 import { useState } from "react";
 
@@ -14,6 +14,7 @@ const Roles: React.FC = () => {
         {
             title: 'id',
             dataIndex: 'id',
+            search: false
         },
         {
             title: 'name',
@@ -47,10 +48,24 @@ const Roles: React.FC = () => {
         },
     ];
     return (
-        <PageContainer extra={<Button type="primary" icon={<PlusOutlined />} onClick={() => setOpen(true)}>Create new</Button>}>
-            <ProTable request={listRole} columns={columns} search={{
-                layout: 'vertical'
-            }} />
+        <PageContainer>
+            <ProList request={listRole}
+                metas={{
+                    title: {
+                        dataIndex: 'name'
+                    },
+                    actions: {
+                        render: () => [
+                            <Button key="view" type="link" icon={<UserAddOutlined />} />,
+                        ],
+                        cardActionProps: 'extra'
+                    }
+                }}
+                ghost
+                grid={{
+                    gutter: 16,
+                    column: 4
+                }} />
             <ModalForm open={open} onOpenChange={setOpen} title="Roles">
                 <ProFormText name="name" label="Name" rules={[
                     {

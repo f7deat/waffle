@@ -5,6 +5,7 @@ import {
   ActionType,
   ModalForm,
   ProColumns,
+  ProFormInstance,
   ProFormText,
   ProFormTextArea,
   ProTable,
@@ -21,6 +22,7 @@ type CatalogListProps = {
 const CatalogList: React.FC<CatalogListProps> = (props) => {
   const intl = useIntl();
   const actionRef = useRef<ActionType>();
+  const formRef = useRef<ProFormInstance>();
   const [open, setOpen] = useState<boolean>(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
@@ -146,6 +148,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
     values.type = Number(values.type);
     const response = await addCatalog(values);
     if (response.succeeded) {
+      formRef.current?.resetFields();
       message.success('Added!');
       actionRef.current?.reload();
       setOpen(false);
@@ -197,6 +200,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
         ]}
       />
       <ModalForm
+        formRef={formRef}
         open={open}
         onOpenChange={setOpen}
         onFinish={onFinish}

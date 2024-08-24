@@ -56,7 +56,6 @@ export default {
   'menu.settings.general': 'Basic',
   'menu.settings.google': 'Google',
   'menu.settings.header': 'Header',
-  'menu.settings.footer': 'Footer',
   'menu.settings.telegram': 'Telegram',
   'menu.settings.facebook': 'Facebook',
   'menu.settings.componentCenter': 'Component center',
