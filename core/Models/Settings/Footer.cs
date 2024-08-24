@@ -26,4 +26,7 @@ public class Footer : BaseSetting
         new Option { Label = "Blank", Value = "blank" },
         new Option { Label = "Default", Value = "default" }
     };
+
+    [JsonPropertyName("links")]
+    public IEnumerable<Link>? Links { get; set; }
 }

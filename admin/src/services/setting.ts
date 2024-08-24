@@ -4,13 +4,6 @@ export async function listSetting() {
   return request(`setting/list`);
 }
 
-export async function saveLayoutHead(data: any) {
-  return request(`setting/layout/head/save`, {
-    method: 'POST',
-    data,
-  });
-}
-
 export async function saveTelegram(id: string | undefined, data: API.Telegam) {
   return request(`setting/telegram/save/${id}`, {
     method: 'POST',
@@ -65,7 +58,7 @@ export async function workAddSetting(data: any) {
   });
 }
 
-export async function getSetting(id: string | undefined) {
+export async function apiGetSetting(id: string | undefined) {
   return request(`setting/${id}`);
 }
 

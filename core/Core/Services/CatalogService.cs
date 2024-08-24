@@ -524,4 +524,27 @@ public class CatalogService : ICatalogService
             ModifiedDate = catalog.ModifiedDate
         };
     }
+
+    public async Task<object?> GetUrlOptionsAsync(OptionFilterOptions filterOptions)
+    {
+        var query = from a in _context.Catalogs
+                    join b in _context.Catalogs on a.ParentId equals b.Id into ab from b in ab.DefaultIfEmpty()
+                    where a.Active && a.Locale == filterOptions.Locale
+                    select new UrlOption
+                    {
+                        Category = b.NormalizedName,
+                        Name = a.Name,
+                        Type = a.Type,
+                        NormalizedName = a.NormalizedName
+                    };
+        var data = await query.ToListAsync();
+        return new
+        {
+            data = data.Select(x => new
+            {
+                label = x.Name,
+                value = x.Url
+            })
+        };
+    }
 }

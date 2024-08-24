@@ -14,7 +14,6 @@ import {
   ProFormText,
   ProTable,
 } from '@ant-design/pro-components';
-import { getLocale } from '@umijs/max';
 import { FormattedMessage } from '@umijs/max';
 import { Button, message, Popconfirm } from 'antd';
 import { useEffect, useRef, useState } from 'react';
@@ -130,10 +129,7 @@ const Localization: React.FC = () => {
         rowSelection={{}}
         actionRef={actionRef}
         columns={columns}
-        request={(params) => {
-          const locale = getLocale();
-          return listLocalization({locale, ...params});
-        }}
+        request={listLocalization}
         rowKey="id"
         search={{
           layout: "vertical"

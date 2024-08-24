@@ -9,7 +9,6 @@ import {
   ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
-import { getLocale } from '@umijs/max';
 import { useIntl } from '@umijs/max';
 import { history } from '@umijs/max';
 import { message, Button, Popconfirm, Tooltip, Dropdown } from 'antd';
@@ -175,8 +174,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
         request={(params, sort) =>
           listCatalog({
             ...params,
-            type: props.type,
-            locale: getLocale()
+            type: props.type
           }, sort)
         }
         pagination={{

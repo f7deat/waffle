@@ -1,27 +1,24 @@
-import { listSetting, saveLayoutHead } from '@/services/setting';
+import { listSetting } from '@/services/setting';
 import { EditOutlined } from '@ant-design/icons';
 import {
   PageContainer,
-  ProCard,
   ProColumns,
-  ProForm,
-  ProFormText,
   ProTable,
 } from '@ant-design/pro-components';
 import { history, useIntl } from '@umijs/max';
 import { Button, Col, message, Row } from 'antd';
 
 const SettingPage: React.FC = () => {
-  const intl = useIntl();
 
   const columns: ProColumns<API.AppSetting>[] = [
     {
       title: '#',
       valueType: 'indexBorder',
-      width: 30
+      width: 40,
+      align: 'center'
     },
     {
-      title: 'name',
+      title: 'Name',
       dataIndex: 'name',
     },
     {
@@ -37,6 +34,7 @@ const SettingPage: React.FC = () => {
           size='small'
           icon={<EditOutlined />}
           key={1}
+          type='primary'
           onClick={() =>
             history.push(
               `/settings/general/center/${entity.id
@@ -49,37 +47,13 @@ const SettingPage: React.FC = () => {
     },
   ];
 
-  const onFinish = async (values: any) => {
-    const response = await saveLayoutHead(values);
-    if (response.succeeded) {
-      message.success('Saved!');
-    }
-  };
-
   return (
-    <PageContainer
-      title={intl.formatMessage({
-        id: 'menu.settings',
-      })}
-    >
-      <Row gutter={16}>
-        <Col span={12}>
-          <ProTable
-            search={{
-              layout: 'vertical'
-            }}
-            request={listSetting} rowKey="id" columns={columns} />
-        </Col>
-        <Col span={12}>
-          <ProCard>
-            <ProForm onFinish={onFinish}>
-              <ProFormText name="address" label="Address" />
-              <ProFormText name="phoneNumber" label="PhoneNumber" />
-              <ProFormText name="email" label="Email" />
-            </ProForm>
-          </ProCard>
-        </Col>
-      </Row>
+    <PageContainer>
+      <ProTable
+        search={{
+          layout: 'vertical'
+        }}
+        request={listSetting} rowKey="id" columns={columns} />
     </PageContainer>
   );
 };

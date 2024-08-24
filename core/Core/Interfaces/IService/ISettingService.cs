@@ -9,7 +9,6 @@ namespace Waffle.Core.Interfaces.IService;
 public interface ISettingService
 {
     Task<AppSetting> EnsureSettingAsync(string name);
-    Task<AppSetting?> FindAsync(Guid catalogId);
     Task<object> GetAsync(Guid id);
     Task<T?> GetAsync<T>(string normalizedName);
     Task<ListResult<AppSetting>> ListAsync();

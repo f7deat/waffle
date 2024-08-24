@@ -121,7 +121,7 @@ const RowContent: React.FC = () => {
           icon={<EditOutlined />}
           onClick={() => {
             history.push(
-              `/works/${entity.normalizedName.toLocaleLowerCase()}/${entity.id
+              `/works/${entity.normalizedName.toLowerCase()}/${entity.id
               }`,
             );
           }}
@@ -143,7 +143,7 @@ const RowContent: React.FC = () => {
     }
   ]
 
-  const handleDragSortEnd = (newDataSource: API.WorkItem[]) => {
+  const handleDragSortEnd = (beforeIndex: number, afterIndex: number, newDataSource: API.WorkItem[]) => {
     const workIds = newDataSource.map(x => (x.id || ''));
     sortChild(workIds).then(response => {
       if (response.succeeded) {

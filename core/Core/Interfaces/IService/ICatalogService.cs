@@ -47,4 +47,5 @@ public interface ICatalogService
     Task<PageData> GetEntryPageDataAsync(string normalizedName, string locale);
     Task<IdentityResult> SaveSettingAsync(Catalog catalog);
     Task<PageData?> GetPageDataAsync(string? normalizedName);
+    Task<object?> GetUrlOptionsAsync(OptionFilterOptions filterOptions);
 }

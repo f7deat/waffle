@@ -5,15 +5,15 @@ import {
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
-import { Button, message } from 'antd';
+import { Col, Radio, Row } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import FormCatalogList from '../form/catalog-list';
 
 const ProFormLink: React.FC<ProFormItemProps> = (props) => {
   const formRef = ProForm.useFormInstance();
   const formChildRef = useRef<ProFormInstance>();
 
-  const [hidden, setHidden] = useState<boolean>(true);
-  const [link, setLink] = useState<CPN.Link>();
+  const [value, setValue] = useState('internal');
 
   useEffect(() => {
     const link: CPN.Link = formRef?.getFieldValue('link');
@@ -35,77 +35,60 @@ const ProFormLink: React.FC<ProFormItemProps> = (props) => {
     }
   }, []);
 
-  const onFinish = async (values: CPN.Link) => {
-    if (!props.name) {
-      return message.warning('Name missing');
-    }
-    setLink(values);
-    formRef?.setFields([
-      {
-        name: props.name,
-        value: values,
-      },
-    ]);
-    setHidden(true);
-  };
-
   return (
-    <ProForm.Item {...props}>
-      <div
-        style={{
-          display: 'flex',
-          gap: 16,
-        }}
-      >
-        <div
-          style={{
-            height: 32,
-            border: '1px dashed #d1d1d1',
-            flex: 1,
-            padding: '4px 11px',
-            borderRadius: 4,
-          }}
-        >
-          {link?.name}
-        </div>
-        <Button key="primary" type="primary" onClick={() => setHidden(!hidden)}>
-          Add link
-        </Button>
-      </div>
-      <div
-        style={{
-          backgroundColor: '#eee',
-          padding: 16,
-          borderRadius: 4,
-          marginTop: 16,
-        }}
-        hidden={hidden}
-      >
-        <ProForm onFinish={onFinish} formRef={formChildRef}>
-          <ProFormText name="name" label="Name" />
-          <ProFormText
-            name="href"
-            label="URL"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          />
-          <ProFormSelect
-            name="target"
-            label="Target"
-            allowClear
-            options={[
-              {
-                value: '_blank',
-                label: 'Open in new tab',
-              },
-            ]}
-          />
-        </ProForm>
-      </div>
-    </ProForm.Item>
+    <>
+      <ProForm.Item {...props}>
+        <Radio.Group options={[
+          {
+            label: 'Liên kết nội bộ',
+            value: 'internal'
+          },
+          {
+            label: 'Liên kết ngoài',
+            value: 'external'
+          }
+        ]} value={value} onChange={(e) => setValue(e.target.value)} className='mb-2' />
+        {
+          value === 'internal' && (
+            <FormCatalogList label="Chọn" name='url' />
+          )
+        }
+        {
+          value === 'external' && (
+            <>
+              <ProFormText name="name" label="Name" />
+              <Row gutter={16}>
+                <Col md={18}>
+                  <ProFormText
+                    name="href"
+                    placeholder="https://"
+                    label="URL"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  />
+                </Col>
+                <Col md={6}>
+                  <ProFormSelect
+                    name="target"
+                    label="Target"
+                    allowClear
+                    options={[
+                      {
+                        value: '_blank',
+                        label: 'Open in new tab',
+                      },
+                    ]}
+                  />
+                </Col>
+              </Row>
+            </>
+          )
+        }
+      </ProForm.Item>
+    </>
   );
 };
 

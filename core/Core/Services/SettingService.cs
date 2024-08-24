@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -46,15 +47,26 @@ public class SettingService : ISettingService
         return appSetting;
     }
 
-    public async Task<AppSetting?> FindAsync(Guid id) => await _settingRepository.FindAsync(id);
-
     public async Task<object> GetAsync(Guid id)
     {
-        var data = new WorkComponent<object>();
-        var setting = await _settingRepository.FindAsync(id);
-        if (string.IsNullOrEmpty(setting?.Value)) return new { data };
-        data.Data = JsonSerializer.Deserialize<object>(setting.Value);
-        return new { data };
+        try
+        {
+            var data = new SettingModel<object>();
+            var setting = await _settingRepository.FindAsync(id);
+            if (string.IsNullOrEmpty(setting?.Value)) return new { data };
+            data.Data = JsonSerializer.Deserialize<object>(setting.Value);
+            data.Name = setting.Name;
+            data.NormalizedName = setting.NormalizedName;
+            return new { data };
+        }
+        catch (Exception ex)
+        {
+            return IdentityResult.Failed(new IdentityError
+            {
+                Code = nameof(Exception),
+                Description = ex.ToString()
+            });
+        }
     }
 
     public async Task<T?> GetAsync<T>(string normalizedName)
@@ -111,6 +123,7 @@ public class SettingService : ISettingService
         {
             return IdentityResult.Failed(new IdentityError
             {
+                Code = "dataNotFound",
                 Description = "Data not found"
             });
         }

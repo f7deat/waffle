@@ -10,6 +10,7 @@ import { GithubOutlined, LinkOutlined } from '@ant-design/icons';
 import { SelectLang } from '@umijs/max';
 import { AvatarDropdown, Question } from './components';
 import { Space, message } from 'antd';
+import { errorConfig } from './requestErrorConfig';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/accounts/login';
@@ -107,17 +108,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 };
 
 export const request: RequestConfig = {
-  requestInterceptors: [
-    (config: RequestOptions) => {
-      const token = localStorage.getItem('wf_token');
-      const baseURL = localStorage.getItem('wf_URL');
-      config.baseURL = new URL(`api/`, baseURL || '').href;
-      config.headers = {
-        authorization: `Bearer ${token}`,
-      };
-      return config;
-    },
-  ],
+  baseURL: new URL(`api/`, localStorage.getItem('wf_URL') || '').href,
+  ...errorConfig,
+  headers: {
+    authorization: `Bearer ${localStorage.getItem('wf_token')}`,
+  },
   responseInterceptors: [
     (response: any) => {
       return response;
@@ -127,5 +122,5 @@ export const request: RequestConfig = {
     errorHandler: error => {
       message.error(error.message)
     }
-  },
+  }
 };

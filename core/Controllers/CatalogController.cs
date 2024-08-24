@@ -221,4 +221,7 @@ public class CatalogController : BaseController
         if (string.IsNullOrEmpty(catalog.Setting)) return Ok(new CatalogSetting());
         return Ok(JsonConvert.DeserializeObject<CatalogSetting>(catalog.Setting));
     }
+
+    [HttpGet("url-options")]
+    public async Task<IActionResult> GetUrlOptionsAsync([FromQuery] OptionFilterOptions filterOptions) => Ok(await _catalogService.GetUrlOptionsAsync(filterOptions));
 }

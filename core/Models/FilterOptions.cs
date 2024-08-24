@@ -102,3 +102,8 @@ public class SelectFilterOptions
     public CatalogType Type { get; set; }
     public string Locale { get; set; } = "vi-VN";
 }
+
+public class OptionFilterOptions
+{
+    public string? Locale { get; set; }
+}
