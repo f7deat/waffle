@@ -66,9 +66,9 @@ public class ProductController : BaseController
         }
         if ("checkout".Equals(type))
         {
-            return View("/Pages/Products/Checkout/_Products.cshtml", args);
+            return View($"/Pages/{CatalogType.Product}/Checkout/_Products.cshtml", args);
         }
-        return View("/Pages/Products/Cart/_Products.cshtml", args);
+        return View($"/Pages/{CatalogType.Product}/Cart/_Products.cshtml", args);
     }
 
     [HttpPost("brand/save")]

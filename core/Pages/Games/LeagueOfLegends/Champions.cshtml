@@ -10,11 +10,11 @@
         @foreach (var item in Model.Champions)
         {
             <div class="shadow bg-white p-2">
-                <div class="flex gap-2">
+                <div class="d-flex gap-2">
                     <div style="width: 100px">
                         <img src="@($"http://ddragon.leagueoflegends.com/cdn/{item.Value.Version}/img/champion/{item.Value.Image.Full}")" loading="lazy" width="100" height="100" />
                     </div>
-                    <div style="flex: 1">
+                    <div style="d-flex: 1">
                         <h3>@item.Value.Name - @item.Value.Title</h3>
                         <div class="flex gap-2 justify-end mt-1 mb-1 text-sm">
                             @foreach (var tag in item.Value.Tags)

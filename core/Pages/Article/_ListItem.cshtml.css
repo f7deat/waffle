@@ -42,13 +42,3 @@
     align-items: center;
     padding: .25rem;
 }
-
-.thumbnail {
-    background-color: var(--bs-dark);
-}
-
-    .thumbnail img {
-        width: 100%;
-        object-fit: cover;
-        transition: opacity 0.5s ease-in-out;
-    }

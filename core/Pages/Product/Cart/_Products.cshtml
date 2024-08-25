@@ -1,5 +1,6 @@
 ﻿@using System.Globalization;
 @using Waffle.Core.Constants;
+@using Waffle.Entities
 @using Waffle.Models.Params.Products;
 @using Waffle.Extensions;
 @model IEnumerable<CartItem>
@@ -59,7 +60,7 @@
     </div>
 
     <div class="text-right">
-        <a href="/products/checkout" class="btn btn-primary @(Model.Any() ? "" : "disabled")">
+        <a href="/@CatalogType.Product.ToString()/checkout" class="btn btn-primary @(Model.Any() ? "" : "disabled")">
             <i class="fas fa-cart-shopping me-1"></i>
             <span>Thanh toán</span>
         </a>

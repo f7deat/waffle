@@ -17,6 +17,10 @@ public class DetailModel : DynamicPageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
+        if (PageData.Type == Entities.CatalogType.Product)
+        {
+            return RedirectPermanent(PageData.Url);
+        }
         Components = await _catalogService.ListComponentAsync(PageData.Id);
         return Page();
     }

@@ -9,9 +9,9 @@
     <div class="bg-white">
         @foreach (var item in Model.Articles)
         {
-            <div class="flex mt-1 gap-2">
-                <a href="@item.Url" class="bg-dark">
-                    <img class="thumbnail object-cover" loading="lazy" width="80" height="64" src="@item.Thumbnail" alt="@Html.Raw(item.Name)">
+            <div class="d-flex mt-1 gap-2">
+                <a href="@item.Url" class="thumbnail">
+                    <img class="object-cover" loading="lazy" width="80" height="64" src="@item.Thumbnail" alt="@Html.Raw(item.Name)">
                 </a>
                 <div>
                     <div class="mb-1 fw-medium">

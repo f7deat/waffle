@@ -15,7 +15,9 @@
             if (i == 0)
             {
                 <div>
-                    <img src="@Model.Articles[i].Thumbnail" alt="@Model.Articles[i].Name" loading="lazy" class="w-full object-cover" height="250" />
+                    <a href="@Model.Articles[i].Url" class="thumbnail">
+                        <img src="@Model.Articles[i].Thumbnail" alt="@Model.Articles[i].Name" loading="lazy" class="w-full object-cover" height="250" />
+                    </a>
                     <div class="px-2 py-1">
                         <div class="mb-1 fw-medium text-truncate"><a href="@Model.Articles[i].Url">@Html.Raw(Model.Articles[i].Name)</a></div>
                         <div class="text-muted line-clampin">

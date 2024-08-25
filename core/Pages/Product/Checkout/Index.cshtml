@@ -19,7 +19,7 @@
             @if (!Model.IsAuthenticated)
             {
                 <div class="mb-2 text-center border-bottom pb-2">
-                    Đã có tài khoản? <a href="/users/login?returnUrl=/products/checkout">Đăng nhập</a>
+                    Đã có tài khoản? <a href="/users/login?returnUrl=/@CatalogType.Product.ToString()/checkout">Đăng nhập</a>
                 </div>
             }
             <div class="form-item">
