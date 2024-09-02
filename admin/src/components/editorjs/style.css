@@ -27,3 +27,20 @@ input {
     background-color: #1677ff;
     opacity: 0.75;
 }
+
+.ce-header {
+    font-weight: 600;
+    font-size: 1.11rem;
+}
+
+h1.ce-header {
+    font-size: 1.125rem;
+}
+
+h2.ce-header {
+    font-size: 1.12rem;
+}
+
+h3.ce-header {
+    font-size: 1.115rem;
+}

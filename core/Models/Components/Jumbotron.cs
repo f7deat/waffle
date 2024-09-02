@@ -8,7 +8,11 @@ namespace Waffle.Models.Components;
 public class Jumbotron : AbstractComponent
 {
     [JsonPropertyName("backgroundImage")]
-    public string BackgroundImage { get; set; } = string.Empty;
+    public string? BackgroundImage { get; set; }
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
 
     [JsonPropertyName("links")]
     public List<Link> Links { get; set; } = new();

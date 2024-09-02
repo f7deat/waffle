@@ -28,7 +28,7 @@ const WorkPage: React.FC = () => {
         if (data?.componentName === 'Editor') return <EditorComponent data={data.data} />;
         return (
             <ProForm onFinish={onFinish} formRef={formRef}>
-                <Jumbotron data={data.data} />
+                <Jumbotron data={data?.data} />
             </ProForm>
         )
     }

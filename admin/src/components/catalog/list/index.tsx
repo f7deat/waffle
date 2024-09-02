@@ -140,7 +140,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
             type="primary" icon={<DeleteOutlined />} danger />
         </Popconfirm>
       ],
-      width: 100
+      width: 80
     },
   ];
 
@@ -168,6 +168,9 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
   return (
     <div>
       <ProTable
+        headerTitle={(
+          <Button type="primary" onClick={() => setOpen(true)} icon={<PlusOutlined />}>Thêm mới</Button>
+        )}
         ghost
         rowSelection={{
           onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys)
@@ -189,9 +192,6 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
         columns={columns}
         actionRef={actionRef}
         toolBarRender={() => [
-          <Tooltip key="new" title="Thêm mới">
-            <Button type="text" onClick={() => setOpen(true)} icon={<PlusOutlined />} />
-          </Tooltip>,
           <Popconfirm key="delete" title="Xác nhận xóa?" onConfirm={onRemoveRange}>
             <Tooltip title="Xóa">
               <Button type="text" danger icon={<DeleteOutlined />} />

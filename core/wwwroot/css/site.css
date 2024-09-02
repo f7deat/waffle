@@ -397,6 +397,7 @@ table {
     .thumbnail img {
         object-fit: cover;
         transition: opacity 0.5s ease-in-out;
+        width: 100%;
     }
 
         .thumbnail img:hover {

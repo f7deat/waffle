@@ -53,7 +53,8 @@ const Profile: React.FC = () => {
             ]}
           >
             <div className="flex items-center justify-center flex-col">
-              <div className='mb-4'>
+              <div className='mb-4 relative'>
+                <Button icon={<EditOutlined />} size='small' type='text' className='absolute right-0 z-10' />
                 <Image src={user?.avatar} width={200} height={200} alt='Avatar' className='rounded-full' />
               </div>
               <div className='mb-2'><Typography.Title level={4}>{user?.userName}</Typography.Title></div>
