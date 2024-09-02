@@ -1,10 +1,21 @@
 import { ArrowUpOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, message, UploadFile } from "antd";
 import WfUpload from "./upload";
 import { useState } from "react";
+import { apiMultiUpload } from "@/services/file-service";
 
 const ButtonUpload: React.FC = () => {
     const [open, setOpen] = useState<boolean>(false);
+
+    const onFinish = async (files: UploadFile[]) => {
+        const formData = new FormData();
+        files.map(file => {
+            formData.append('files', file as any)
+        });
+        await apiMultiUpload(formData);
+        message.success('Tải lên thành công!');
+    }
+
     return (
         <>
             <Button
@@ -14,7 +25,7 @@ const ButtonUpload: React.FC = () => {
             >
                 Upload
             </Button>
-            <WfUpload open={open} onCancel={() => setOpen(false)} onFinish={() => setOpen(true)} />
+            <WfUpload open={open} onCancel={() => setOpen(false)} onFinish={onFinish} />
         </>
     )
 }

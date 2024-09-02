@@ -1,7 +1,7 @@
 import { uploadFromUrl } from "@/services/file-service";
 import { CloudUploadOutlined, InboxOutlined } from "@ant-design/icons";
 import { FormattedMessage } from "@umijs/max";
-import { Button, Divider, Input, Modal, Upload, message } from "antd";
+import { Button, Divider, Input, Modal, Upload, UploadFile, message } from "antd";
 import { useState } from "react";
 
 type WfUploadProps = {
@@ -15,6 +15,7 @@ const { Dragger } = Upload;
 const WfUpload: React.FC<WfUploadProps> = (props) => {
 
     const [url, setUrl] = useState<string>('');
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
 
     function isValidHttpsUrl(input: string) {
         let url;
@@ -38,18 +39,29 @@ const WfUpload: React.FC<WfUploadProps> = (props) => {
     };
 
     const onOk = async () => {
-        if (!isValidHttpsUrl(url)) {
-            message.error('Sorry, URL failed to upload.')
+        if (!fileList || fileList.length === 0) {
+            message.warning('Please choose file.')
             return;
         }
-        props.onFinish(url);
+        props.onFinish(fileList);
         props.onCancel();
     }
 
     return (
         <Modal open={props.open} onCancel={() => props.onCancel()} centered title="Upload" onOk={onOk}>
             <div className="mb-4">
-                <Dragger>
+                <Dragger
+                    fileList={fileList}
+                    onRemove={(file) => {
+                        const index = fileList.indexOf(file);
+                        const newFileList = fileList.slice();
+                        newFileList.splice(index, 1);
+                        setFileList(newFileList);
+                    }}
+                    beforeUpload={(file) => {
+                        setFileList([...fileList, file]);
+                        return false
+                    }}>
                     <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                     </p>

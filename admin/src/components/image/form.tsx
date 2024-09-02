@@ -40,11 +40,10 @@ const ProFormImage: React.FC<ProFormImageProps> = (props) => {
       <div className='relative'>
         {
           src ? (
-
-            <Image src={src} height={150} className='w-full border' />
+            <Image src={src} height={150} className='w-full object-cover' wrapperClassName='w-full' rootClassName='w-full' />
           ) : <EmptyImage />
         }
-        <Button icon={<EditOutlined />} onClick={() => setOpen(true)} type='text' className='absolute top-0 right-0' />
+        <Button icon={<EditOutlined />} onClick={() => setOpen(true)} type='dashed' className='absolute top-0 right-0' size='small' />
       </div>
       <Gallery open={open} onOpenChange={setOpen} onSelect={onFinish} />
     </ProForm.Item>

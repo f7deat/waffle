@@ -395,7 +395,6 @@ table {
 }
 
     .thumbnail img {
-        width: 100%;
         object-fit: cover;
         transition: opacity 0.5s ease-in-out;
     }
@@ -404,7 +403,7 @@ table {
             opacity: 0.5;
         }
 
-.article-spotlight .thumbnail {
+.article-spotlight .thumbnail, .article-spotlight img {
     width: 5rem;
     height: 4rem;
 }

@@ -72,3 +72,8 @@ export async function countFile() {
 export async function totalFileSize() {
   return request(`file/total-size`);
 }
+
+export const apiMultiUpload = (data: any) => request(`file/muti-upload`, {
+  method: 'POST',
+  data
+})

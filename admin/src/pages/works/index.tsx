@@ -2,7 +2,7 @@ import WorkSummary from "@/components/works/summary";
 import { getArguments, saveArguments } from "@/services/work-content";
 import { PageContainer, ProCard, ProForm, ProFormInstance } from "@ant-design/pro-components";
 import { history, useParams, useRequest } from "@umijs/max";
-import { Button, Col, Row, message } from "antd";
+import { Button, message } from "antd";
 import { useRef } from "react";
 import Jumbotron from "./jumbotron";
 import Sponsor from "./sponsor";
@@ -27,18 +27,9 @@ const WorkPage: React.FC = () => {
         if (data?.componentName === 'VideoPlayList') return <VideoPlaylist data={data.data} />;
         if (data?.componentName === 'Editor') return <EditorComponent data={data.data} />;
         return (
-            <Row gutter={16}>
-                <Col md={16}>
-                    <ProCard>
-                        <ProForm onFinish={onFinish} formRef={formRef}>
-                            <Jumbotron />
-                        </ProForm>
-                    </ProCard>
-                </Col>
-                <Col md={8}>
-                    <WorkSummary />
-                </Col>
-            </Row>
+            <ProForm onFinish={onFinish} formRef={formRef}>
+                <Jumbotron data={data.data} />
+            </ProForm>
         )
     }
 

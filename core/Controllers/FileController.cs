@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Extensions;
 using Waffle.Foundations;
 using Waffle.Models;
 
@@ -37,30 +38,92 @@ public class FileController : BaseController
     }
 
     [HttpPost("upload")]
-    public async Task<IActionResult> UploadAsync([FromForm] IFormFile file)
+    public async Task<IActionResult> UploadAsync([FromForm] IFormFile? file)
     {
-        if (file is null) return BadRequest("File not found!");
-        if (!_webHostEnvironment.IsDevelopment())
+        try
         {
-            return BadRequest("Production not supported!");
-        }
-        var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
+            if (file is null) return BadRequest("File not found!");
+            var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
+            var folder = Guid.NewGuid().ToString();
+            var folderPath = Path.Combine(uploadPath, folder);
+            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
-        var filePath = Path.Combine(uploadPath, file.FileName);
+            var filePath = Path.Combine(uploadPath, folder, file.FileName);
 
-        using (var stream = System.IO.File.Create(filePath))
-        {
-            await file.CopyToAsync(stream);
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await file.CopyToAsync(stream);
+            }
+            var url = $"https://{Request.Host.Value}/files/{folder}/{file.FileName}";
+            await _context.FileContents.AddAsync(new FileContent
+            {
+                Name = file.FileName,
+                Size = file.Length,
+                Type = file.ContentType,
+                Url = url,
+                UploadBy = User.GetId(),
+                UploadDate = DateTime.Now
+            });
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
-        await _context.FileContents.AddAsync(new FileContent
+        catch (Exception ex)
         {
-            Name = file.FileName,
-            Size = file.Length,
-            Type = file.ContentType,
-            Url = $"/files/{file.FileName}"
-        });
-        await _context.SaveChangesAsync();
-        return Ok(IdentityResult.Success);
+            return BadRequest(ex.ToString());
+        }
+    }
+
+    [HttpPost("muti-upload")]
+    public async Task<IActionResult> MultiUploadAsync([FromForm] List<IFormFile>? files)
+    {
+        try
+        {
+            if (files is null || !files.Any()) return BadRequest("Files not found!");
+            var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
+            var folder = Guid.NewGuid().ToString();
+            var folderPath = Path.Combine(uploadPath, folder);
+            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+            var fileContents = new List<FileContent>();
+
+            foreach (var file in files)
+            {
+                var filePath = Path.Combine(uploadPath, folder, file.FileName);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                var url = $"https://{Request.Host.Value}/files/{folder}/{file.FileName}";
+                fileContents.Add(new FileContent
+                {
+                    Name = file.FileName,
+                    Size = file.Length,
+                    Type = file.ContentType,
+                    Url = url,
+                    UploadBy = User.GetId(),
+                    UploadDate = DateTime.Now
+                });
+            }
+            await _context.FileContents.AddRangeAsync(fileContents);
+            await _context.SaveChangesAsync();
+            return Ok(new
+            {
+                succecced = true,
+                data = fileContents.Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                    x.UploadDate,
+                    x.Url,
+                    x.Type,
+                    x.Size,
+                    x.UploadBy
+                })
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.ToString());
+        }
     }
 
     [HttpGet("{id}")]

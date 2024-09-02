@@ -5,19 +5,15 @@ namespace Waffle.Entities;
 
 public class FileContent : BaseEntity
 {
-    public FileContent()
-    {
-        Name = string.Empty;
-        Type = string.Empty;
-        Url = string.Empty;
-    }
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     [JsonPropertyName("size")]
     [Column(TypeName = "decimal(18, 2)")]
     public decimal Size { get; set; }
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
+    public DateTime UploadDate { get; set; }
+    public Guid UploadBy { get; set; }
 }

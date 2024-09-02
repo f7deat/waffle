@@ -1,37 +1,43 @@
 import ProFormImage from '@/components/image/form';
-import { getArguments } from '@/services/work-content';
+import { AbstractBlock } from '@/typings/work';
 import {
   ProForm,
   ProFormInstance,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { useParams } from '@umijs/max';
 import { Col, Row } from 'antd';
 import { useEffect } from 'react';
 
-const Jumbotron: React.FC = () => {
-  const { id } = useParams();
+const Jumbotron: React.FC<AbstractBlock> = ({ data }) => {
 
   const formRef = ProForm.useFormInstance<ProFormInstance>();
 
   useEffect(() => {
-    getArguments(id).then((response) => {
+    if (data) {
       formRef?.setFields([
         {
           name: 'backgroundImage',
-          value: response.backgroundImage,
+          value: data.backgroundImage,
+        },
+        {
+          name: 'title',
+          value: data.title,
+        },
+        {
+          name: 'description',
+          value: data.description,
         },
       ]);
-    });
-  }, [id]);
+    }
+  }, [data]);
 
   return (
     <Row gutter={16}>
-      <Col md={16}>
+      <Col md={8}>
         <ProFormImage name="backgroundImage" label="Background image" />
       </Col>
-      <Col md={8}>
+      <Col md={16}>
         <ProFormText name="title" label="Title" />
         <ProFormTextArea name="description" label="Description" />
       </Col>
