@@ -108,22 +108,7 @@ const WorkContentComponent: React.FC = () => {
   }
 
   const onGoToBlock = (entity: any) => {
-    if (entity.normalizedName === 'sponsor' || entity.normalizedName === 'editor') {
-      history.push(`/works/${entity.id}`);
-      return;
-    }
-    if (entity.normalizedName === "jumbotron") {
-      history.push(`/works/${entity.id}`);
-      return;
-    }
-    if (entity.normalizedName === "VideoPlayList") {
-      history.push(`/works/${entity.id}`);
-      return;
-    }
-    history.push(
-      `/works/${entity.normalizedName.toLocaleLowerCase()}/${entity.id
-      }`,
-    );
+    history.push(`/works/${entity.id}`);
   }
 
   const columns: ProColumns<API.WorkItem>[] = [

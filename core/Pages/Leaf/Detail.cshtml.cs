@@ -7,7 +7,6 @@ namespace Waffle.Pages.Leaf;
 
 public class DetailModel : DynamicPageModel
 {
-
     public DetailModel(ICatalogService catalogService) : base(catalogService)
     {
     }

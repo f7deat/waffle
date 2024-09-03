@@ -1,7 +1,4 @@
-import { useParams } from "@umijs/max";
-import { saveArguments } from "@/services/work-content";
 import { ProForm, ProFormInstance } from "@ant-design/pro-components";
-import { message } from "antd";
 import { useEffect, useRef } from "react";
 import EditorJS from "@editorjs/editorjs";
 import { EDITOR_JS_TOOLS } from "@/components/editorjs/tool";
@@ -11,8 +8,7 @@ type Props = {
 }
 
 const EditorComponent: React.FC<Props> = ({ data }) => {
-  const { id } = useParams();
-  const formRef = useRef<ProFormInstance>();
+  const formRef = ProForm.useFormInstance<ProFormInstance>();
   const ejInstance = useRef<any>();
 
   const initEditor = () => {
@@ -24,7 +20,10 @@ const EditorComponent: React.FC<Props> = ({ data }) => {
       },
       onChange: (api) => {
         api.saver.save().then((outputData) => {
-          formRef.current?.setFieldValue('blockEditor', outputData);
+          console.log(outputData);
+          formRef.setFieldValue('blocks', outputData.blocks);
+          formRef.setFieldValue('time', outputData.time);
+          formRef.setFieldValue('version', outputData.version);
         });
       },
       autofocus: true,
@@ -42,19 +41,14 @@ const EditorComponent: React.FC<Props> = ({ data }) => {
     };
   }, []);
 
-  const onFinish = async (values: any) => {
-    const response = await saveArguments(id, values.blockEditor);
-    if (response.succeeded) {
-      message.success('Saved');
-    }
-  };
-
   return (
-    <ProForm onFinish={onFinish} formRef={formRef}>
-      <ProForm.Item name="blockEditor">
+    <>
+      <ProForm.Item name="blocks">
         <div id="editorjs"> </div>
       </ProForm.Item>
-    </ProForm>
+      <ProForm.Item name="time" hidden />
+      <ProForm.Item name="version" hidden />
+    </>
   );
 };
 

@@ -10,12 +10,11 @@ import { Col, Row } from 'antd';
 import { useEffect } from 'react';
 
 const Jumbotron: React.FC<AbstractBlock> = ({ data }) => {
-
   const formRef = ProForm.useFormInstance<ProFormInstance>();
 
   useEffect(() => {
     if (data) {
-      formRef?.setFields([
+      formRef.setFields([
         {
           name: 'backgroundImage',
           value: data.backgroundImage,

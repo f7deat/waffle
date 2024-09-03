@@ -29,20 +29,18 @@ public class ComponentGenerator : BaseGenerator
             {
                 Active = true,
                 Name = display.Name ?? cls.Name,
-                NormalizedName = cls.Name
+                NormalizedName = display.Prompt ?? cls.Name
             };
         }
     }
 
     private async Task EnsureComponentsAsync()
     {
-        var components = GetData();
-        foreach (var component in components)
+        var newComponents = GetData();
+        var compoents = await _context.Components.ToListAsync();
+        foreach (var component in newComponents)
         {
-            if (await _context.Components.AnyAsync(x => x.NormalizedName.Equals(component.NormalizedName)))
-            {
-                continue;
-            }
+            if (compoents.Any(x => x.NormalizedName.Equals(component.NormalizedName, StringComparison.OrdinalIgnoreCase))) continue;
             await _context.Components.AddAsync(component);
         }
         await _context.SaveChangesAsync();

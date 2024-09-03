@@ -5,7 +5,6 @@ import { queryCurrentUser } from './services/user';
 import { history } from '@umijs/max';
 import { RunTimeLayoutConfig } from '@umijs/max';
 import { DefaultFooter } from '@ant-design/pro-components';
-import { RequestOptions } from './.umi/plugin-request/request';
 import { GithubOutlined, LinkOutlined } from '@ant-design/icons';
 import { SelectLang } from '@umijs/max';
 import { AvatarDropdown, Question } from './components';
@@ -108,7 +107,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 };
 
 export const request: RequestConfig = {
-  baseURL: new URL(`api/`, localStorage.getItem('wf_URL') || '').href,
+  baseURL: new URL(`api/`, localStorage.getItem('wf_URL') || 'https://defzone.net/api/').href,
   ...errorConfig,
   headers: {
     authorization: `Bearer ${localStorage.getItem('wf_token')}`,

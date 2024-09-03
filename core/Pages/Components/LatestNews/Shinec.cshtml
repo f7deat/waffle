@@ -1,0 +1,24 @@
+﻿@using Waffle.Models.Components
+@model LatestNews
+
+<div class="latest-news">
+    <div class="header">
+        <div class="sub-title">@Model.SubTitle</div>
+        <div class="title">
+            <div>@Model.Title</div>
+        </div>
+    </div>
+
+    <div class="items">
+        @foreach (var news in Model.Data)
+        {
+            <div class="item">
+                <div class="item-thumbnail">
+                    <img src="@news.Thumbnail" alt="@news.Name" />
+                </div>
+                <div class="item-name">@news.Name</div>
+                <div class="item-description">@news.Description</div>
+            </div>
+        }
+    </div>
+</div>

@@ -3,23 +3,21 @@ import {
   FacebookFilled,
   GithubFilled,
   GoogleCircleFilled,
+  LinkOutlined,
   LockOutlined,
   MobileOutlined,
-  PlusOutlined,
-  SelectOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import {
   LoginForm,
   ProFormCaptcha,
   ProFormCheckbox,
-  ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
 import { FormattedHTMLMessage, Link, SelectLang, useIntl } from '@umijs/max';
 import { history, useModel } from '@umijs/max';
-import { Button, Divider, Input, InputRef, message, Space, Tabs } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Button, message, Space, Tabs } from 'antd';
+import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
 import logo from '../../../assets/logo.png';
 import '../index.css';
@@ -30,32 +28,6 @@ import '../../../../style.css';
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
-  const [endPoints, setEndPoints] = useState<string[]>(localStorage.getItem('wfEndPoints') ? localStorage.getItem('wfEndPoints')?.split(',') || [] : []);
-  const [endPoint, setEndPoint] = useState('');
-  const inputRef = useRef<InputRef>(null);
-
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEndPoint(event.target.value);
-  };
-
-  const addItem = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-    e.preventDefault();
-    if (!endPoint) {
-      message.warning('URL is required!');
-      return;
-    }
-    if (endPoints.includes(endPoint)) {
-      message.warning('URL existed!');
-      return;
-    }
-    const newEndPoints = [...endPoints, endPoint];
-    setEndPoints(newEndPoints);
-    localStorage.setItem('wfEndPoints', newEndPoints.join(','));
-    setEndPoint('');
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  };
 
   const intl = useIntl();
 
@@ -142,31 +114,13 @@ const Login: React.FC = () => {
           />
           {type === 'account' && (
             <>
-              <ProFormSelect
+              <ProFormText
                 name="baseURL"
                 fieldProps={{
                   size: 'large',
-                  suffixIcon: <SelectOutlined />,
-                  options: endPoints.map((item) => ({ label: item, value: item })),
-                  dropdownRender: (menu) => (
-                    <>
-                      {menu}
-                      <Divider style={{ margin: '8px 0' }} />
-                      <div className='flex gap-2'>
-                        <Input
-                          placeholder="Please enter item"
-                          ref={inputRef}
-                          onChange={onNameChange}
-                          onKeyDown={(e) => e.stopPropagation()}
-                          className='w-full'
-                          value={endPoint}
-                        />
-                        <Button type="text" icon={<PlusOutlined />} onClick={addItem} />
-                      </div>
-                    </>
-                  )
+                  prefix: <LinkOutlined />,
                 }}
-                placeholder="Website url"
+                placeholder="https://"
               />
               <ProFormText
                 name="username"
