@@ -1,8 +1,8 @@
 import WorkSummary from "@/components/works/summary";
 import { getArguments, saveArguments } from "@/services/work-content";
-import { PageContainer, ProCard, ProForm, ProFormInstance } from "@ant-design/pro-components";
+import { PageContainer, ProCard, ProForm, ProFormInstance, ProFormText } from "@ant-design/pro-components";
 import { history, useParams, useRequest } from "@umijs/max";
-import { Button, Empty, message } from "antd";
+import { Button, Col, Empty, message, Row } from "antd";
 import Jumbotron from "./jumbotron";
 import Sponsor from "./sponsor";
 import { LeftOutlined } from "@ant-design/icons";
@@ -44,7 +44,14 @@ const WorkPage: React.FC = () => {
                             label: 'Content',
                             children: (
                                 <ProForm formRef={formRef} onFinish={onFinish}>
-                                    {getChildren()}
+                                    <Row gutter={16}>
+                                        <Col md={18}>
+                                            {getChildren()}
+                                        </Col>
+                                        <Col md={6}>
+                                            <ProFormText name="className" label="Class Name" initialValue={data?.data?.className} />
+                                        </Col>
+                                    </Row>
                                 </ProForm>
                             )
                         },

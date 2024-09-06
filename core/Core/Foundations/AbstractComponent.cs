@@ -8,4 +8,6 @@ public abstract class AbstractComponent : BaseEntity, IComponent
 {
     [JsonIgnore]
     public string NormalizedName { get; set; } = default!;
+    [JsonPropertyName("className")]
+    public string? ClassName { get; set; }
 }

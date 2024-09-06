@@ -24,3 +24,29 @@
     </div>
 </div>
 
+<script>
+
+    window.onload = () => {
+        function sponsorMode() {
+            if (!document.querySelector('.js-swiper-sponsor')) return;
+            console.log('js-swiper-sponsor')
+            new Swiper(".js-swiper-sponsor", {
+                spaceBetween: 30,
+                loop: true,
+                autoplay: true,
+                breakpoints: {
+                    0: {
+                        slidesPerView: 2,
+                    },
+                    768: {
+                        slidesPerView: 6
+                    },
+                    1024: {
+                        slidesPerView: 8
+                    }
+                }
+            });
+        }
+        sponsorMode();
+    }
+</script>

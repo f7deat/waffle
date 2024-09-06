@@ -3,9 +3,8 @@
 }
 
 .title {
-    background-color: var(--primary);
-    padding: 0.5rem 1rem;
-    color: white;
+    padding: 1rem 0;
+    color: var(--bs-dark);
     border-start-start-radius: 0.5rem;
     border-start-end-radius: 0.5rem;
     font-size: 1.15rem;
@@ -13,6 +12,7 @@
     position: relative;
     display: flex;
     justify-content: space-between;
+    font-size: 2rem;
 }
 
 .title a {
@@ -7980,6 +7980,33 @@ ul.nav.wp-menu.primary-menu, nav.primary-menu-wrapper, header .navbar > div > ul
 
 img.mobile-logo {
     max-width: 135px;
+}
+
+.latest-news .items {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.latest-news .item {
+    box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+}
+
+.latest-news .item-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 2rem;
+    padding: 1rem 1rem 0 1rem;
+}
+
+    .latest-news .item-name a {
+        color: var(--primary);
+    }
+
+.latest-news .item-description {
+    color: var(--bs-gray);
+    padding: 0.5rem 1rem 1rem 1rem;
 }
 
 @media only screen and (max-width: 1200px) {

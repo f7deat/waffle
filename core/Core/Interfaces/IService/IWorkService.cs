@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Args;
 using Waffle.Models.Components;
 using Waffle.Models.Params.Products;
 
@@ -30,7 +31,7 @@ public interface IWorkService
     Task AddItemAsync(Guid workId, Guid catalogId);
     Task<IdentityResult> SaveArgumentsAsync(Guid id, object args);
     Task<WorkContent?> GetSummaryAsync(Guid id);
-    Task<IdentityResult> UpdateSummaryAsync(WorkContent args);
+    Task<IdentityResult> UpdateSummaryAsync(WorkUpdateArgs args);
     Task<IdentityResult> ItemDeleteAsync(WorkItem args);
     Task<List<T>> GetListChildAsync<T>(Guid parentId);
     IEnumerable<T?> ListAsync<T>(List<string> list);

@@ -10,6 +10,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Foundations;
 using Waffle.Models;
+using Waffle.Models.Args;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Specifications;
 using Waffle.Models.Params;
@@ -57,7 +58,7 @@ public class WorkController : BaseController
     public async Task<IActionResult> GetSummaryAsync([FromRoute] Guid id) => Ok(await _workService.GetSummaryAsync(id));
 
     [HttpPost("summary/update")]
-    public async Task<IActionResult> UpdateSummaryAsync([FromBody] WorkContent args) => Ok(await _workService.UpdateSummaryAsync(args));
+    public async Task<IActionResult> UpdateSummaryAsync([FromBody] WorkUpdateArgs args) => Ok(await _workService.UpdateSummaryAsync(args));
 
     [HttpGet("list-unuse")]
     public async Task<IActionResult> GetListUnuseAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _workService.GetListUnuseAsync(filterOptions));

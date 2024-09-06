@@ -7,6 +7,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Args;
 using Waffle.Models.Components;
 using Waffle.Models.Params.Products;
 
@@ -325,7 +326,7 @@ public class WorkService : IWorkService
         }).FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<IdentityResult> UpdateSummaryAsync(WorkContent args)
+    public async Task<IdentityResult> UpdateSummaryAsync(WorkUpdateArgs args)
     {
         var work = await FindAsync(args.Id);
         if (work == null)

@@ -1,6 +1,5 @@
 import { getWorkSummary, updateWorkSummary } from '@/services/work-content';
 import {
-  ProCard,
   ProForm,
   ProFormCheckbox,
   ProFormInstance,
@@ -38,13 +37,11 @@ const WorkSummary: React.FC = () => {
   };
 
   return (
-    <ProCard title="Info">
-      <ProForm formRef={formRef} onFinish={onFinish}>
-        <ProFormText hidden name="id" initialValue={id} />
-        <ProFormText name="name" label="Name" />
-        <ProFormCheckbox name="active" label="Active" />
-      </ProForm>
-    </ProCard>
+    <ProForm formRef={formRef} onFinish={onFinish}>
+      <ProFormText hidden name="id" initialValue={id} />
+      <ProFormText name="name" label="Name" />
+      <ProFormCheckbox name="active" label="Active" />
+    </ProForm>
   );
 };
 
