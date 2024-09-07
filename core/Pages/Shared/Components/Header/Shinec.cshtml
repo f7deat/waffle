@@ -1,4 +1,5 @@
-﻿@using Waffle.Models.Settings
+﻿@using Waffle.Entities
+@using Waffle.Models.Settings
 @model Header
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,7 +50,7 @@
                                         <a href="/leaf/gioi-thieu" aria-current="page">Về chúng tôi</a>
                                     </li>
                                     <li id="menu-item-63093" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-63093">
-                                        <a href="#">Về CCN số 2 Đak Đoa</a>
+                                        <a href="/leaf/ve-ccn-so-2-dak-doa">Về CCN số 2 Đak Đoa</a>
                                         <ul class="sub-menu">
                                             <li id="menu-item-64983" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-64983">
                                                 <a href="#">Tổng quan về CCN</a>
@@ -75,37 +76,37 @@
                                                 <a href="/leaf/san-pham-dich-vu/thue-van-phong">Cho thuê văn phòng</a>
                                             </li>
                                             <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                                                <a href="#">Ngành mục tiêu</a>
+                                                <a href="/leaf/nganh-muc-tieu">Ngành mục tiêu</a>
                                             </li>
                                             <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                                                <a href="#">Bản đồ địa điểm</a>
+                                                <a href="/leaf/ban-do-dia-diem">Bản đồ địa điểm</a>
                                             </li>
                                             <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                                                <a href="#">Khách hàng hiện tại</a>
+                                                <a href="/leaf/khach-hang-hien-tai">Khách hàng hiện tại</a>
                                             </li>
                                             <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                                                <a href="#">Phòng trưng bày</a>
+                                                <a href="/leaf/phong-trung-bay">Phòng trưng bày</a>
                                             </li>
                                             <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                                                <a href="#">Dịch vụ CSKH</a>
+                                                <a href="/leaf/dich-vu-cskh">Dịch vụ CSKH</a>
                                             </li>
                                         </ul>
                                     </li>
                                     <li id="menu-item-26315" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-26315">
                                         <a href="#">Lợi ích của nhà đầu tư</a>
                                         <ul class="sub-menu">
-                                            <li class="menu-item menu-item-type-post_type menu-item-object-cea-service"><a href="#">Tiện ích nội khu</a></li>
-                                            <li class="menu-item menu-item-type-post_type menu-item-object-cea-service"><a href="#">Tiện ích ngoại khu</a></li>
-                                            <li class="menu-item menu-item-type-post_type menu-item-object-cea-service"><a href="#">Khác biệt lợi thế</a></li>
+                                            <li class="menu-item menu-item-type-post_type menu-item-object-cea-service"><a href="/article/tien-ich-noi-khu">Tiện ích nội khu</a></li>
+                                            <li class="menu-item menu-item-type-post_type menu-item-object-cea-service"><a href="/leaf/tien-ich-ngoai-khu">Tiện ích ngoại khu</a></li>
+                                            <li class="menu-item menu-item-type-post_type menu-item-object-cea-service"><a href="/leaf/khac-biet-loi-the">Khác biệt lợi thế</a></li>
                                         </ul>
                                     </li>
                                     <li id="menu-item-26490" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children">
-                                        <a href="/articles">
+                                        <a href="/@CatalogType.Article.ToString().ToLower()">
                                             Sự kiện và hoạt động
                                         </a>
                                     </li>
                                     <li id="menu-item-65918" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-65918 menu-item-has-mega-children">
-                                        <a href="#">Liên hệ</a>
+                                        <a href="/leaf/lien-he">Liên hệ</a>
                                     </li>
                                 </ul>
                             </nav><!-- .primary-menu-wrapper -->
@@ -116,23 +117,27 @@
                     </ul><ul class="nav navbar-ul pull-right justify-content-end right-element-exist"><li><a href="/" class="h-phone">VR 360<i class="fa-solid fa-vr-cardboard ms-2"></i></a></li></ul>
                 </div><!-- .container -->
             </div><!-- .header-navbar -->
-       
-        
-        <div class="header-mobilebar navbar">
-			<div class="container">
-				<ul class="nav mobilebar element-left right-element-exist">									<li class="header-mobile-toggle-wrapper">
-										<a href="/" class="mobile-menu-toggle"><i class="bi bi-list"></i></a>
-																			</li><!-- .header-navigation-wrapper -->
-								</ul><ul class="nav mobilebar pull-center justify-content-center right-element-exist">									<li class="header-titles-wrapper">
-										<div class="header-titles">
-															<a class="site-link" href="/"><img class="img-fluid mobile-logo" src="https://shinecgialai.com.vn/imgs/logo-shinec.svg" alt="LOGO"></a>
-														</div><!-- .header-titles -->
-									</li><!-- .header-titles-wrapper -->
-								</ul><ul class="nav mobilebar pull-right justify-content-end right-element-exist">									<li class="header-search-wrapper">
-														<a class="full-search-toggle" href="#"><i class="bi bi-search"></i></a>
-												</li>
-								</ul>			</div><!-- .container -->
-		</div>
+
+
+            <div class="header-mobilebar navbar">
+                <div class="container">
+                    <ul class="nav mobilebar element-left right-element-exist">
+                        <li class="header-mobile-toggle-wrapper">
+                            <a href="/" class="mobile-menu-toggle"><i class="bi bi-list"></i></a>
+                        </li><!-- .header-navigation-wrapper -->
+                    </ul><ul class="nav mobilebar pull-center justify-content-center right-element-exist">
+                        <li class="header-titles-wrapper">
+                            <div class="header-titles">
+                                <a class="site-link" href="/"><img class="img-fluid mobile-logo" src="https://shinecgialai.com.vn/imgs/logo-shinec.svg" alt="LOGO"></a>
+                            </div><!-- .header-titles -->
+                        </li><!-- .header-titles-wrapper -->
+                    </ul><ul class="nav mobilebar pull-right justify-content-end right-element-exist">
+                        <li class="header-search-wrapper">
+                            <a class="full-search-toggle" href="#"><i class="bi bi-search"></i></a>
+                        </li>
+                    </ul>
+                </div><!-- .container -->
+            </div>
         </div> <!-- .sticky-head -->
     </div> <!-- .sticky-outer -->
 

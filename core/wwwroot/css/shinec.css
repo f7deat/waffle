@@ -19,18 +19,6 @@
     color: white;
 }
 
-    .title::before {
-        background-image: url(https://wordpress.zozothemes.com/garland/wp-content/themes/garland/assets/images/pot-leaf-sidebar.png);
-        content: "";
-        height: 70px;
-        width: 60px;
-        position: absolute;
-        right: 0;
-        top: 0;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-
 .jumbotron {
     background-image: url(https://shinecgialai.com.vn/imgs/cover-min.jpg);
     height: 600px;
@@ -8007,6 +7995,11 @@ img.mobile-logo {
 .latest-news .item-description {
     color: var(--bs-gray);
     padding: 0.5rem 1rem 1rem 1rem;
+}
+
+.pagination {
+    --bs-pagination-active-bg: var(--primary);
+    --bs-pagination-active-border-color: var(--primary);
 }
 
 @media only screen and (max-width: 1200px) {
