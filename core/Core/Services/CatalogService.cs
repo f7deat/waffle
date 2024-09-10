@@ -157,21 +157,12 @@ public class CatalogService : ICatalogService
         return IdentityResult.Success;
     }
 
-    public async Task<ListResult<Catalog>> ArticleListAsync(ArticleFilterOptions filterOptions)
-    {
-        var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.Name);
-        var query = _context.Catalogs.Where(x => (string.IsNullOrEmpty(searchTerm) || x.NormalizedName.Contains(searchTerm))
-        && x.Type == CatalogType.Article && x.Active).OrderByDescending(x => x.ModifiedDate);
-        return await ListResult<Catalog>.Success(query, filterOptions);
-    }
-
     public async Task<Catalog?> FindAsync(Guid id)
     {
         var catalog = await _catalogRepository.FindAsync(id);
         if (catalog is null) return default;
         catalog.ViewCount++;
         await _catalogRepository.UpdateAsync(catalog);
-        await _catalogRepository.SaveChangesAsync();
         return catalog;
     }
 

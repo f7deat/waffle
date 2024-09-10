@@ -17,7 +17,6 @@ public interface ICatalogService
     Task<Catalog?> GetByNameAsync(string? normalizedName);
     Task<List<ComponentListItem>> ListComponentAsync(Guid catalogId);
     Task<IdentityResult> UpdateThumbnailAsync(Catalog args);
-    Task<ListResult<Catalog>> ArticleListAsync(ArticleFilterOptions filterOptions);
     Task<ListResult<CatalogListItem>?> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOptions);
     Task<Catalog?> FindAsync(Guid id);
     Task<IdentityResult> SaveAsync(Catalog args);

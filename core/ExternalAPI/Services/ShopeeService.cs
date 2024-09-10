@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using Waffle.Data;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 
@@ -8,10 +10,12 @@ public class ShopeeService : IShopeeService
 {
     private readonly HttpClient _http;
     private readonly ILogger<ShopeeService> _logger;
-    public ShopeeService(HttpClient http, ILogger<ShopeeService> logger)
+    private readonly ApplicationDbContext _context;
+    public ShopeeService(HttpClient http, ILogger<ShopeeService> logger, ApplicationDbContext context)
     {
         _http = http;
         _logger = logger;
+        _context = context;
     }
 
     public async Task<BaseInfoAndLinks> GetBaseInfoAndLinksAsync(int pageNum)
@@ -75,6 +79,8 @@ public class ShopeeService : IShopeeService
         }
         return new LandingPageLinkList();
     }
+
+    private async Task<bool> CanShow(string name) => await _context.Components.AnyAsync(x => x.NormalizedName == name && x.Active);
 
     public async Task<LandingPageLinkList> GetLinkListsAsync(string tag, int pageNum , int pageSize)
     {

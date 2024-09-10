@@ -10,6 +10,7 @@ public class ProductSpotlightViewComponent : ViewComponent
     private readonly IProductService _productService;
     private readonly IWorkService _workService;
     private readonly ICatalogService _catalogService;
+    private readonly ILocalizationService _localizationService;
 
     protected Catalog PageData
     {
@@ -20,11 +21,12 @@ public class ProductSpotlightViewComponent : ViewComponent
         }
     }
 
-    public ProductSpotlightViewComponent(IProductService productService, IWorkService workService, ICatalogService catalogService)
+    public ProductSpotlightViewComponent(IProductService productService, IWorkService workService, ICatalogService catalogService, ILocalizationService localizationService)
     {
         _productService = productService;
         _workService = workService;
         _catalogService = catalogService;
+        _localizationService = localizationService;
     }
 
     public async Task<IViewComponentResult> InvokeAsync(Guid? workId)
@@ -40,6 +42,7 @@ public class ProductSpotlightViewComponent : ViewComponent
         {
             work.Products = await _productService.ListSpotlightAsync(work.PageSize, tagIds);
         }
+        work.Title = await _localizationService.GetAsync("product.spotlight.title");
         return View(work);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Waffle.Entities;
@@ -36,6 +37,7 @@ public class Catalog : BaseEntity
     [StringLength(10)]
     public string? Locale { get; set; }
     public string? Setting { get; set; }
+    public string? Url { get; set; }
 }
 
 public enum CatalogType
