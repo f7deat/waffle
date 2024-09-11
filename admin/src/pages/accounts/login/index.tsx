@@ -115,14 +115,6 @@ const Login: React.FC = () => {
           {type === 'account' && (
             <>
               <ProFormText
-                name="baseURL"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LinkOutlined />,
-                }}
-                placeholder="https://"
-              />
-              <ProFormText
                 name="username"
                 fieldProps={{
                   size: 'large',
