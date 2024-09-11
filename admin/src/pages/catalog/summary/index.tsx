@@ -6,12 +6,11 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 import { ModalForm, ProCard, ProFormDigit, ProFormText } from '@ant-design/pro-components';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { CatalogType } from '@/constants';
-import { useParams } from '@umijs/max';
 import { addCatalog } from '@/services/catalog';
 import { message, Image, Empty, Divider, Descriptions, Typography, Button, Space, Tooltip } from 'antd';
-import { absolutePath, formatDate } from '@/utils/format';
+import { formatDate } from '@/utils/format';
 import TagList from './tag';
 import { BASE_URL } from '@/utils/setting';
 
@@ -60,7 +59,7 @@ const CatalogSummary: React.FC<Props> = ({ catalog }) => {
           <Empty />
         ) : (
           <Image
-            src={absolutePath(catalog?.thumbnail)}
+            src={catalog?.thumbnail}
             height={200}
             className="object-cover"
             wrapperClassName='w-full'

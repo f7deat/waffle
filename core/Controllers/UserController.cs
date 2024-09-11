@@ -74,43 +74,50 @@ public class UserController : BaseController
     [HttpPost("password-sign-in"), AllowAnonymous]
     public async Task<IActionResult> PasswordSignInAsync([FromBody] LoginModel login)
     {
-        var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
-        if (result.Succeeded)
+        try
         {
-            var user = await _userManager.FindByNameAsync(login.UserName);
-            if (user is null) return BadRequest($"User {login.UserName} not found!");
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync(login.UserName);
+                if (user is null) return BadRequest($"User {login.UserName} not found!");
+                var userRoles = await _userManager.GetRolesAsync(user);
 
-            var authClaims = new List<Claim>
+                var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String),
                 new Claim(ClaimTypes.Name, user.UserName, ClaimValueTypes.String),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
-            foreach (var userRole in userRoles)
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole, ClaimValueTypes.String));
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole, ClaimValueTypes.String));
+                }
+
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+                var token = new JwtSecurityToken(
+                    expires: DateTime.Now.AddDays(7),
+                    claims: authClaims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                    );
+
+                var generatedToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+                return Ok(new
+                {
+                    token = generatedToken,
+                    expiration = token.ValidTo,
+                    succeeded = true
+                });
             }
-
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-            var token = new JwtSecurityToken(
-                expires: DateTime.Now.AddDays(7),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                );
-
-            var generatedToken = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return Ok(new
-            {
-                token = generatedToken,
-                expiration = token.ValidTo,
-                succeeded = true
-            });
+            return Ok(result);
         }
-        return Ok(result);
+        catch (Exception ex)
+        {
+            return BadRequest(ex.ToString());
+        }
     }
 
     [HttpPost("create")]

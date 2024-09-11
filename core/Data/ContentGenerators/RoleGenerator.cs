@@ -8,27 +8,25 @@ namespace Waffle.Data.ContentGenerators;
 public class RoleGenerator : BaseGenerator
 {
     private readonly RoleManager<ApplicationRole> _roleManager;
-    public RoleGenerator(ApplicationDbContext context , RoleManager<ApplicationRole> roleManager) : base(context)
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public RoleGenerator(ApplicationDbContext context , RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager) : base(context)
     {
         _roleManager = roleManager;
+        _userManager = userManager;
     }
 
     public static IEnumerable<ApplicationRole> GetData()
     {
         var roles = new List<ApplicationRole>
         {
-            new ApplicationRole
-            {
+            new() {
                 Name = RoleName.Admin
             },
-            new ApplicationRole
+            new()
             {
                 Name= RoleName.Member
-            },
-            new ApplicationRole
-            {
-                Name= RoleName.Customer
-            },
+            }
         };
         return roles;
     }
@@ -43,6 +41,11 @@ public class RoleGenerator : BaseGenerator
                 continue;
             }
             await _roleManager.CreateAsync(role);
+        }
+        var admin = await _userManager.FindByNameAsync("admin");
+        if (admin != null && !await _userManager.IsInRoleAsync(admin, RoleName.Admin))
+        {
+            await _userManager.AddToRoleAsync(admin, RoleName.Admin);
         }
     }
 }

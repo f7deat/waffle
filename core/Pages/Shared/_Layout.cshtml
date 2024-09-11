@@ -13,8 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Waffle.styles.css" asp-append-version="true" />
-
-    @await Component.InvokeAsync(nameof(Theme))
+    <link rel="stylesheet" href="~/css/@(Configuration.GetValue<string>("Settings:Theme").ToLower()).css" asp-append-version="true" />
 
     @if (Configuration.GetValue<bool>("Settings:PWA"))
     {

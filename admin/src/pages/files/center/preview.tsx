@@ -1,4 +1,3 @@
-import { absolutePath } from '@/utils/format';
 import { DownloadOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
 import { useIntl } from '@umijs/max';
@@ -39,7 +38,7 @@ const FilePreview: React.FC<FilePreviewProps> = (props) => {
             minHeight: 130,
           }}
         >
-          <Image src={absolutePath(file?.url)} />
+          <Image src={file?.url} />
         </div>
       );
     }
@@ -55,7 +54,7 @@ const FilePreview: React.FC<FilePreviewProps> = (props) => {
         id: 'general.preview',
       })}
       actions={[
-        <Button key="download" type='link' onClick={() => (window.location.href = absolutePath(file?.url))} icon={<DownloadOutlined />}>
+        <Button key="download" type='link' onClick={() => (window.location.href = file?.url || '')} icon={<DownloadOutlined />}>
           Download
         </Button>
       ]}

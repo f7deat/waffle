@@ -1,6 +1,7 @@
 import { defineConfig } from "@umijs/max";
 import defaultSettings from "./config/defaultSetting";
 import routes from "./config/routes";
+import config from "./config/config";
 
 export default defineConfig({
   antd: {},
@@ -22,5 +23,6 @@ export default defineConfig({
   routes,
   npmClient: "yarn",
   esbuildMinifyIIFE: true,
-  tailwindcss: {}
+  tailwindcss: {},
+  ...config
 });

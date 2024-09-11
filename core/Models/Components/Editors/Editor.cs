@@ -2,7 +2,7 @@
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Editor", Prompt = "editor")]
+[Display(Name = "Editor", Prompt = nameof(Editor))]
 public class Editor : BlockEditor
 {
 

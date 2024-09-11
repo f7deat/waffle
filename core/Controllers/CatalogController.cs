@@ -47,9 +47,16 @@ public class CatalogController : BaseController
     [HttpPost("add"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
     {
-        if (string.IsNullOrWhiteSpace(catalog.Name)) return BadRequest("Please enter name!");
-        catalog.Active = catalog.Type == CatalogType.Tag;
-        return Ok(await _catalogService.AddAsync(catalog));
+        try
+        {
+            if (string.IsNullOrWhiteSpace(catalog.Name)) return BadRequest("Please enter name!");
+            catalog.Active = catalog.Type == CatalogType.Tag;
+            return Ok(await _catalogService.AddAsync(catalog));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.ToString());
+        }
     }
 
     [HttpGet("list")]

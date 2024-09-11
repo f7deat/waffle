@@ -45,7 +45,6 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: any) => {
     try {
-      localStorage.setItem('wf_URL', values.baseURL);
       const msg = await login({ ...values, type });
       if (!msg.succeeded) {
         return message.error('Login failed!');

@@ -19,3 +19,4 @@
 /core/appsettings.Development.json
 /core/bin
 /.vs
+/core/wwwroot/admin

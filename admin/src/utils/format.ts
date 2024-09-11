@@ -4,10 +4,6 @@ export function trim(str: string) {
   return str.trim();
 }
 
-export function absolutePath(str?: string) {
-  return new URL(str || '', localStorage.getItem('wf_URL') || '').href;
-}
-
 export function formatDate(str?: Date) {
   if (!str) {
     return '-';

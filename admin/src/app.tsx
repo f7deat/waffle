@@ -107,6 +107,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 };
 
 export const request: RequestConfig = {
+  baseURL: 'https://defzone.net/api/',
   ...errorConfig,
   headers: {
     authorization: `Bearer ${localStorage.getItem('wf_token')}`,
