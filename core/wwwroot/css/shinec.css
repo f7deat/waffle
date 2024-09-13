@@ -7963,7 +7963,6 @@ img.mobile-logo {
     display: grid;
     gap: 1rem;
     margin-bottom: 1rem;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .latest-news .item {
@@ -7989,6 +7988,12 @@ img.mobile-logo {
 .pagination {
     --bs-pagination-active-bg: var(--primary);
     --bs-pagination-active-border-color: var(--primary);
+}
+
+@media only screen and (min-width: 1024px) {
+    .latest-news .items {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 @media only screen and (max-width: 1200px) {
