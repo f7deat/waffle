@@ -38,4 +38,5 @@ public class PageData : BaseEntity
             return JsonConvert.DeserializeObject<CatalogSetting>(SettingString) ?? new();
         }
     }
+    public Guid? ParentId { get; set; }
 }

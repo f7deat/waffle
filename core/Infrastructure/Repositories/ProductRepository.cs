@@ -76,18 +76,15 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
         return await query.OrderBy(x => Guid.NewGuid()).Take(4).ToListAsync();
     }
 
-    public async Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId)
+    public async Task<IEnumerable<ProductListItem>> ListRelatedAsync(PageData pageData)
     {
-        var query = (from tag in _context.WorkItems
-                     join catalog in _context.Catalogs on tag.WorkId equals catalog.Id
+        var query = (from catalog in _context.Catalogs
                      join product in _context.Products on catalog.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
-                     join parent in _context.Catalogs on catalog.ParentId equals parent.Id into pc from parent in pc.DefaultIfEmpty()
-                     where catalog.Active && tagIds.Contains(tag.CatalogId) && catalog.Type == CatalogType.Product && catalog.Id != currentCatalogId
+                     where catalog.Active && catalog.ParentId == pageData.ParentId && catalog.Type == CatalogType.Product && catalog.Id != pageData.Id
                      select new ProductListItem
                      {
                          Id = catalog.Id,
                          Name = catalog.Name,
-                         Category = parent.NormalizedName,
                          Thumbnail = catalog.Thumbnail,
                          Price = product.Price,
                          SalePrice = product.SalePrice

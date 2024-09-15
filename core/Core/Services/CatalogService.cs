@@ -183,6 +183,26 @@ public class CatalogService : ICatalogService
         if (catalog.Type != CatalogType.Entry)
         {
             catalog.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
+            catalog.Url = args.Url;
+            if (catalog.ParentId != null)
+            {
+                var parent = await _catalogRepository.FindAsync(catalog.ParentId);
+                if (parent is null) return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "B",
+                    Description = "Parent category not found"
+                });
+                catalog.Url = $"/{catalog.Type}/{parent.NormalizedName}/{catalog.NormalizedName}".ToLower();
+            }
+            var childs = await _context.Catalogs.Where(x => x.ParentId == catalog.Id).ToListAsync();
+            if (childs.Any())
+            {
+                foreach (var child in childs)
+                {
+                    child.Url = $"/{child.Type}/{catalog.NormalizedName}/{child.NormalizedName}".ToLower();
+                    _context.Catalogs.Update(child);
+                }
+            }
         }
         catalog.Active = args.Active;
         catalog.ModifiedDate = DateTime.Now;
@@ -229,12 +249,9 @@ public class CatalogService : ICatalogService
 
     public async Task<ListResult<CatalogListItem>?> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOption)
     {
-        if (!filterOption.TagIds.Any()) return default;
-        var query = (from tag in _context.WorkItems
-                     join catalog in _context.Catalogs on tag.WorkId equals catalog.Id
-                     join category in _context.Catalogs on catalog.ParentId equals category.Id into catalogCategory
-                     from category in catalogCategory.DefaultIfEmpty()
-                     where catalog.Active && filterOption.TagIds.Contains(tag.CatalogId) && catalog.Type == filterOption.Type && catalog.Id != filterOption.CatalogId
+        if (filterOption.ParentId is null) return default;
+        var query = (from catalog in _context.Catalogs
+                     where catalog.Active && filterOption.ParentId == catalog.ParentId && catalog.Type == filterOption.Type && catalog.Id != filterOption.CatalogId
                      select new CatalogListItem
                      {
                          Name = catalog.Name,
@@ -242,15 +259,12 @@ public class CatalogService : ICatalogService
                          Type = catalog.Type,
                          ViewCount = catalog.ViewCount,
                          ModifiedDate = catalog.ModifiedDate,
-                         Locale = catalog.Locale,
-                         Active = catalog.Active,
                          Thumbnail = catalog.Thumbnail,
                          CreatedDate = catalog.CreatedDate,
                          NormalizedName = catalog.NormalizedName,
-                         ParentId = catalog.ParentId,
                          Id = catalog.Id,
-                         Category = category.NormalizedName
-                     }).Distinct().OrderByDescending(x => x.ModifiedDate);
+                         Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
+                     }).OrderByDescending(x => Guid.NewGuid());
         return await ListResult<CatalogListItem>.Success(query, filterOption);
     }
 
@@ -320,7 +334,6 @@ public class CatalogService : ICatalogService
         var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.Name);
         var query = from a in _context.WorkItems
                     join b in _context.Catalogs on a.WorkId equals b.Id
-                    join c in _context.Catalogs on b.ParentId equals c.Id into bc from c in bc.DefaultIfEmpty()
                     where a.CatalogId == tagId && b.Active &&
                     (string.IsNullOrEmpty(searchTerm) || b.NormalizedName.Contains(searchTerm)) &&
                     (filterOptions.Type == null || b.Type == filterOptions.Type)
@@ -336,8 +349,8 @@ public class CatalogService : ICatalogService
                         ParentId = b.ParentId,
                         ViewCount = b.ViewCount,
                         Thumbnail = b.Thumbnail,
-                        Category = c.NormalizedName,
-                        Name = b.Name
+                        Name = b.Name,
+                        Url = b.Url ?? $"/{b.Type}/{b.NormalizedName}".ToLower()
                     };
         return await ListResult<CatalogListItem>.Success(query, filterOptions);
     }
@@ -360,7 +373,7 @@ public class CatalogService : ICatalogService
             }).OrderByDescending(x => x.Id);
         if (filterOptions.OrderBy != null)
         {
-            if (filterOptions.OrderBy == Constants.OrderBy.View)
+            if (filterOptions.OrderBy == OrderBy.View)
             {
                 query = query.OrderByDescending(x => x.ViewCount);
             }
@@ -512,7 +525,8 @@ public class CatalogService : ICatalogService
             Thumbnail = catalog.Thumbnail,
             ViewCount = catalog.ViewCount,
             Id = catalog.Id,
-            ModifiedDate = catalog.ModifiedDate
+            ModifiedDate = catalog.ModifiedDate,
+            ParentId = catalog.ParentId
         };
     }
 

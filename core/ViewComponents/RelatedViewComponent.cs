@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
@@ -18,27 +19,20 @@ public class RelatedViewComponent : ViewComponent
         _productService = productService;
     }
 
-    private Catalog PageData
+    private PageData PageData
     {
         get
         {
-            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
-            return values as Catalog ?? new();
+            RouteData.Values.TryGetValue(nameof(PageData), out var values);
+            return values as PageData ?? new();
         }
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(IEnumerable<Guid> tagIds)
+    public async Task<IViewComponentResult> InvokeAsync()
     {
-        if (!tagIds.Any())
-        {
-            return View(Empty.DefaultView, new ErrorViewModel
-            {
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
-            });
-        }
         if (PageData.Type == CatalogType.Product)
         {
-            var products = await _productService.ListRelatedAsync(tagIds, PageData.Id);
+            var products = await _productService.ListRelatedAsync(PageData);
             return View("Product", products);
         }
         var articles = await _catalogService.ArticleRelatedListAsync(new ArticleRelatedFilterOption
@@ -46,8 +40,8 @@ public class RelatedViewComponent : ViewComponent
             Current = 1,
             PageSize = 4,
             CatalogId = PageData.Id,
-            TagIds = tagIds,
-            Type = PageData.Type
+            Type = PageData.Type,
+            ParentId = PageData.ParentId
         });
         if (articles?.Data == null || !articles.Data.Any())
         {

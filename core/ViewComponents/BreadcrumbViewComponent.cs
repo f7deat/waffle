@@ -60,14 +60,18 @@ public class BreadcrumbViewComponent : ViewComponent
             });
         }
 
-        if (CategoryData != null)
+        if (PageData.ParentId != null)
         {
-            breadcrumb.Add(new Breadcrumb
+            var parent = await _catalogService.FindAsync(PageData.ParentId.Value);
+            if (parent != null)
             {
-                Url = $"/leaf/{CategoryData.NormalizedName}",
-                Name = CategoryData.Name,
-                Position = breadcrumb.Count + 1
-            });
+                breadcrumb.Add(new Breadcrumb
+                {
+                    Url = parent.Url ?? $"/{parent.Type}/{parent.NormalizedName}".ToLower(),
+                    Name = parent.Name,
+                    Position = breadcrumb.Count + 1
+                });
+            }
         }
 
         breadcrumb.Add(new Breadcrumb

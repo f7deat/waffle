@@ -79,9 +79,6 @@
             </div>
         </div>
 
-        @if (Model.Tags.Any())
-        {
-            @await Component.InvokeAsync(ComponentName.Related, Model.Tags.Select(x => x.Id))
-        }
+        @await Component.InvokeAsync(ComponentName.Related)
     </div>
 </main>

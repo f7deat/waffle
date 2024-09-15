@@ -82,6 +82,7 @@ public class ArticleRelatedFilterOption : FilterOptions
     public IEnumerable<Guid> TagIds { get; set; } = null!;
     public Guid CatalogId { get; set; }
     public CatalogType Type { get; set; }
+    public Guid? ParentId { get; set; }
 }
 
 public class TagFilterOptions : FilterOptions

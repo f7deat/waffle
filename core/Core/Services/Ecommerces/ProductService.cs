@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
@@ -37,7 +38,7 @@ public class ProductService : IProductService
         return _productRepository.ListByTagAsync(tagId, filterOptions);
     }
 
-    public Task<IEnumerable<ProductListItem>> ListRelatedAsync(IEnumerable<Guid> tagIds, Guid currentCatalogId) => _productRepository.ListRelatedAsync(tagIds, currentCatalogId);
+    public Task<IEnumerable<ProductListItem>> ListRelatedAsync(PageData pageData) => _productRepository.ListRelatedAsync(pageData);
 
     public Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds) => _productRepository.ListSpotlightAsync(pageSize, tagIds);
 

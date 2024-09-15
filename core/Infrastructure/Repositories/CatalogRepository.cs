@@ -91,14 +91,11 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
     public async Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions)
     {
         var query = from catalog in _context.Catalogs
-                    join category in _context.Catalogs on catalog.ParentId equals category.Id into catalogCategory
-                    from category in catalogCategory.DefaultIfEmpty()
                     select new CatalogListItem
                     {
                         Id = catalog.Id,
                         ParentId = catalog.ParentId,
                         Active = catalog.Active,
-                        Category = category.NormalizedName,
                         Description = catalog.Description,
                         NormalizedName = catalog.NormalizedName,
                         CreatedBy = catalog.CreatedBy,
@@ -108,7 +105,8 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
                         Name = catalog.Name,
                         Thumbnail = catalog.Thumbnail,
                         Type = catalog.Type,
-                        ViewCount = catalog.ViewCount
+                        ViewCount = catalog.ViewCount,
+                        Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
                     };
 
         if (!string.IsNullOrEmpty(filterOptions.Name))
@@ -162,12 +160,10 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
     public async Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(CatalogType type, int pageSize)
     {
         var query = from catalog in _context.Catalogs
-                    join category in _context.Catalogs on catalog.ParentId equals category.Id into catalogCategory from category in catalogCategory.DefaultIfEmpty()
                     where catalog.Type == type && catalog.Active
                     select new CatalogListItem
                     {
                         Id = catalog.Id,
-                        Category = category.NormalizedName,
                         NormalizedName = catalog.NormalizedName,
                         Name = catalog.Name,
                         CreatedDate = catalog.CreatedDate,
@@ -175,7 +171,8 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
                         ModifiedDate = catalog.ModifiedDate,
                         Thumbnail = catalog.Thumbnail,
                         ViewCount = catalog.ViewCount,
-                        Type = catalog.Type
+                        Type = catalog.Type,
+                        Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
                     };
         return await query.OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }

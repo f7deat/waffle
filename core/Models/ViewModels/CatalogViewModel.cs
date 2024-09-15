@@ -16,23 +16,6 @@ public class TagListItem : Catalog
 
 public class CatalogListItem : Catalog
 {
-    public string? Category { get; set; }
-    public string Url
-    {
-        get
-        {
-            var type = Type.ToString().ToLower();
-            if (Type == CatalogType.Album)
-            {
-                type = CatalogType.Leaf.ToString();
-            }
-            if (string.IsNullOrEmpty(Category))
-            {
-                return $"/{type}/{NormalizedName}";
-            }
-            return $"/{type}/{Category}/{NormalizedName}";
-        }
-    }
 }
 
 public class UrlOption
