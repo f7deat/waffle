@@ -107,11 +107,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 };
 
 export const request: RequestConfig = {
-  baseURL: 'https://defzone.net/api/',
+  baseURL: 'https://shinecgialai.com.vn/api/',
   ...errorConfig,
-  headers: {
-    authorization: `Bearer ${localStorage.getItem('wf_token')}`,
-  },
   responseInterceptors: [
     (response: any) => {
       return response;

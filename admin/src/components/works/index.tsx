@@ -173,22 +173,25 @@ const WorkContentComponent: React.FC = () => {
 
   return (
     <>
-      <div className='mb-2 flex justify-end gap-2'>
-        <Button
-          key={0}
-          onClick={() => setVisible(true)}
-          type="primary"
-          icon={<PlusOutlined />}
-        >
-          <span>
-            <FormattedMessage id="general.new" />
-          </span>
-        </Button>
-        <Button key={1} onClick={onSelect} icon={<PlusOutlined />}>
-          Chọn
-        </Button>
-      </div>
       <DragSortTable<API.WorkItem>
+        ghost
+        headerTitle={(
+          <div className='mb-2 flex justify-end gap-2'>
+            <Button
+              key={0}
+              onClick={() => setVisible(true)}
+              type="primary"
+              icon={<PlusOutlined />}
+            >
+              <span>
+                <FormattedMessage id="general.new" />
+              </span>
+            </Button>
+            <Button key={1} onClick={onSelect} icon={<PlusOutlined />}>
+              Chọn
+            </Button>
+          </div>
+        )}
         search={false}
         rowKey="id"
         columns={columns}

@@ -16,7 +16,7 @@ public class ComponentGenerator : BaseGenerator
 
     private static IEnumerable<Component> GetData()
     {
-        var classes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "Waffle.Models.Components" && t.IsClass && typeof(IComponent).IsAssignableFrom(t)).ToList();
+        var classes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsClass && typeof(IComponent).IsAssignableFrom(t)).ToList();
         if (!classes.Any()) throw new NullReferenceException();
 
         foreach (var cls in classes)
