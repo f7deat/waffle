@@ -534,7 +534,8 @@ public class WorkService : IWorkService
         var data = new WorkComponent<object>
         {
             Name = workContent.Name,
-            ComponentName = component.Name
+            ComponentName = component.Name,
+            NormalizedName = component.NormalizedName
         };
         if (!string.IsNullOrEmpty(workContent.Arguments))
         {

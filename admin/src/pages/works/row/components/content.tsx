@@ -11,6 +11,7 @@ import {
   ModalForm,
   ProCard,
   ProColumns,
+  ProFormInstance,
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
@@ -25,6 +26,7 @@ const RowContent: React.FC = () => {
   const [data, setData] = useState<API.Column[]>([]);
   const [openAddItem, setOpenAddItem] = useState<boolean>(false);
   const [parentId, setParentId] = useState<string>('');
+  const formRef = useRef<ProFormInstance>();
 
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -46,6 +48,7 @@ const RowContent: React.FC = () => {
     if (response.succeeded) {
       message.success('Added!');
       setVisible(false);
+      formRef.current?.resetFields();
       fetchData();
     } else {
       message.error(response.errors[0].description);
@@ -121,7 +124,7 @@ const RowContent: React.FC = () => {
           icon={<EditOutlined />}
           onClick={() => {
             history.push(
-              `/works/${entity.normalizedName.toLowerCase()}/${entity.id
+              `/works/${entity.id
               }`,
             );
           }}
@@ -201,7 +204,7 @@ const RowContent: React.FC = () => {
         }
       </Row>
       <AddComponent open={openAddItem} onOpenChange={setOpenAddItem} onFinish={onAddComponent} />
-      <ModalForm open={visible} onOpenChange={setVisible} onFinish={onFinish}>
+      <ModalForm open={visible} onOpenChange={setVisible} onFinish={onFinish} formRef={formRef}>
         <ProFormText
           name="name"
           label="Name"

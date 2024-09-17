@@ -2,26 +2,33 @@ import WorkSummary from "@/components/works/summary";
 import { getArguments, saveArguments } from "@/services/work-content";
 import { PageContainer, ProCard, ProForm, ProFormInstance, ProFormText } from "@ant-design/pro-components";
 import { history, useParams, useRequest } from "@umijs/max";
-import { Button, Col, Empty, message, Row } from "antd";
+import { Button, Collapse, Empty, message } from "antd";
 import Jumbotron from "./jumbotron";
 import Sponsor from "./sponsor";
-import { LeftOutlined } from "@ant-design/icons";
+import { FormOutlined, LeftOutlined, SettingOutlined } from "@ant-design/icons";
 import VideoPlaylist from "./video-playlist";
 import { EditorComponent } from "./components";
 import LatestNews from "./latest-news";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import RowComponent from "./row";
 
 const WorkPage: React.FC = () => {
     const { id } = useParams();
-    const { data, loading } = useRequest(() => getArguments(id));
+    const { data, loading, refresh } = useRequest(() => getArguments(id));
     const formRef = useRef<ProFormInstance>();
+    useEffect(() => {
+        if (id) {
+            refresh()
+        }
+    }, [id]);
 
     const getChildren = () => {
-        if (data?.componentName === 'Sponsor') return <Sponsor data={data.data} />;
-        if (data?.componentName === 'VideoPlayList') return <VideoPlaylist data={data.data} />;
-        if (data?.componentName === 'Editor') return <EditorComponent data={data.data} />;
-        if (data?.componentName === 'Jumbotron') return <Jumbotron data={data?.data} />;
-        if (data?.componentName === 'LatestNews') return <LatestNews data={data?.data} />;
+        if (data?.normalizedName === 'Sponsor') return <Sponsor data={data.data} />;
+        if (data?.normalizedName === 'VideoPlayList') return <VideoPlaylist data={data.data} />;
+        if (data?.normalizedName === 'Editor') return <EditorComponent data={data.data} />;
+        if (data?.normalizedName === 'Jumbotron') return <Jumbotron data={data?.data} />;
+        if (data?.normalizedName === 'LatestNews') return <LatestNews data={data?.data} />;
+        if (data?.normalizedName === 'Row') return <RowComponent data={data?.data} />;
         return <Empty />
     }
 
@@ -36,28 +43,35 @@ const WorkPage: React.FC = () => {
         <PageContainer subTitle={data?.componentName} title={data?.name} loading={loading} extra={<Button icon={<LeftOutlined />} onClick={() => history.back()}>Quay lại</Button>}>
             <ProCard
                 tabs={{
-                    tabPosition: 'top',
+                    tabPosition: 'left',
                     items: [
                         {
                             key: 'content',
                             tabKey: 'content',
+                            icon: <FormOutlined />,
                             label: 'Content',
                             children: (
                                 <ProForm formRef={formRef} onFinish={onFinish}>
-                                    <Row gutter={16}>
-                                        <Col md={18}>
-                                            {getChildren()}
-                                        </Col>
-                                        <Col md={6}>
-                                            <ProFormText name="className" label="Class Name" initialValue={data?.data?.className} />
-                                        </Col>
-                                    </Row>
+                                    <Collapse items={[
+                                        {
+                                            key: 'setting',
+                                            label: 'Nội dung',
+                                            children: (
+                                                <div className="bg-white p-4 rounded">
+                                                    <ProFormText name="className" label="Class Name" initialValue={data?.data?.className} />
+                                                </div>
+                                            ),
+                                            className: 'p-0'
+                                        }
+                                    ]} bordered={false} expandIconPosition="end" className="mb-2" expandIcon={() => <SettingOutlined />} />
+                                    {getChildren()}
                                 </ProForm>
                             )
                         },
                         {
                             key: 'setting',
                             tabKey: 'setting',
+                            icon: <SettingOutlined />,
                             label: 'Setting',
                             children: <WorkSummary />
                         }
