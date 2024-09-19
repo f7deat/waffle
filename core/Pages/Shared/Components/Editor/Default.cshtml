@@ -13,15 +13,27 @@
         case BlockEditorType.HEADER:
             if (item.Data.Level == 1)
             {
-                <h1 class="wf-h1">@item.Data.Text</h1>
+                <h1>@item.Data.Text</h1>
             }
             else if (item.Data.Level == 2)
             {
-                <h2 class="wf-h2">@item.Data.Text</h2>
+                <h2>@item.Data.Text</h2>
             }
             else if (item.Data.Level == 3)
             {
-                <h3 class="wf-h3">@item.Data.Text</h3>
+                <h3>@item.Data.Text</h3>
+            }
+            else if (item.Data.Level == 4)
+            {
+                <h4>@item.Data.Text</h4>
+            }
+            else if (item.Data.Level == 5)
+            {
+                <h5>@item.Data.Text</h5>
+            }
+            else if (item.Data.Level == 6)
+            {
+                <h6>@item.Data.Text</h6>
             }
             break;
         case BlockEditorType.DELIMITER:
