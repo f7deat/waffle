@@ -19,6 +19,17 @@
     color: white;
 }
 
+.product-images .swiper-slide img {
+    object-fit: cover;
+}
+.product-images .swiper-slide-active img {
+    height: 300px;
+}
+
+.product-images .swiper-slide-thumb-active img {
+    height: 4rem;
+}
+
 .jumbotron {
     background-image: url(https://shinecgialai.com.vn/imgs/cover-min.jpg);
     height: 600px;
