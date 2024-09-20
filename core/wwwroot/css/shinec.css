@@ -683,12 +683,8 @@ p {
 }
 
 ul, ol {
-    padding-left: 15px
+    padding-left: 1rem;
 }
-
-    ul:last-child, ol li:last-child {
-        margin-bottom: 0
-    }
 
     ol li {
         margin-bottom: 8px
