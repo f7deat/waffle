@@ -7,36 +7,39 @@
     <div class="row">
         <div class="col-md-8">
 
-            <div class="title">Danh mục</div>
-            <div class="bg-white rounded mb-4 flex gap-2 flex-wrap">
-                @foreach (var group in Model.BaseInfoAndLinks.LandingPageBaseInfo.GroupList)
-                {
-                    <a href="/shop/group/@group.GroupId" class="px-4 py-1 rounded bg-gray-100 rounded">@group.GroupName</a>
-                }
-            </div>
-
-            <div class="mb-2">
-                <div class="title">Bộ sưu tập (@Model.BaseInfoAndLinks.LandingPageLinkList.TotalCount)</div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    @foreach (var item in Model.BaseInfoAndLinks.LandingPageLinkList.LinkList)
+            @if (Model.IsPremium)
+            {
+                <div class="title">Danh mục</div>
+                <div class="bg-white rounded mb-4 flex gap-2 flex-wrap">
+                    @foreach (var group in Model.BaseInfoAndLinks.LandingPageBaseInfo.GroupList)
                     {
-                        <div class="bg-white">
-                            <a href="@item.Link">
-                                <div class="card-image bg-dark">
-                                    <img src="@item.Image" alt="@item.LinkName" class="object-cover product-thumbnail" loading="lazy" />
-                                </div>
-                            </a>
-                            <div class="py-2">
-                                <a href="@item.Link" class="line-clampin">
-                                    @item.LinkName
-                                </a>
-                            </div>
-                        </div>
+                        <a href="/shop/group/@group.GroupId" class="px-4 py-1 rounded bg-gray-100 rounded">@group.GroupName</a>
                     }
                 </div>
-            </div>
 
-            <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+                <div class="mb-2">
+                    <div class="title">Bộ sưu tập (@Model.BaseInfoAndLinks.LandingPageLinkList.TotalCount)</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        @foreach (var item in Model.BaseInfoAndLinks.LandingPageLinkList.LinkList)
+                        {
+                            <div class="bg-white">
+                                <a href="@item.Link">
+                                    <div class="card-image bg-dark">
+                                        <img src="@item.Image" alt="@item.LinkName" class="object-cover product-thumbnail" loading="lazy" />
+                                    </div>
+                                </a>
+                                <div class="py-2">
+                                    <a href="@item.Link" class="line-clampin">
+                                        @item.LinkName
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+            }
 
             @foreach (var item in Model.Components)
             {
