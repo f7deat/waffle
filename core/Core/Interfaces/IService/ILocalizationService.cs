@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Primitives;
 using Waffle.Entities;
 using Waffle.Models;
 
@@ -8,6 +9,7 @@ public interface ILocalizationService
 {
     Task<IdentityResult> AddAsync(Localization args);
     Task<IdentityResult> DeleteAsync(Guid id);
+    Task<List<string>> GetAllCacheAsync();
     Task<string> GetAsync(string key);
     Task<Localization?> GetAsync(Guid id);
     Task<ListResult<Localization>> GetListAsync(LocalizationFilterOptions filterOptions);

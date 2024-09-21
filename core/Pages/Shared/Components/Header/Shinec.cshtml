@@ -13,9 +13,53 @@
                 <li>
                     <div class="menu-top-menu-container">
                         <ul id="menu-top-menu" class="nav top-menu">
-                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#">Ngôn ngữ</a></li>
-                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/leaf/viec-lam">Việc làm</a></li>
-                            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="/search">Tìm kiếm</a></li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom dropdown">
+                                <button type="button" class="dropdown-toggle btn btn-sm text-white" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <localize key="language" />
+                                </button>
+                                <ul class="dropdown-menu shadow">
+                                    <li>
+                                        <a class="dropdown-item" href="/?locale=en-US">
+                                            <span role="img" aria-label="English" style="margin-right: 8px;">🇺🇸</span>
+                                            English
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/?locale=zh-CN">
+                                            <span role="img" aria-label="简体中文" style="margin-right: 8px;">🇨🇳</span>
+                                            简体中文
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/?locale=ja-JP">
+                                            <span role="img" aria-label="日本語" style="margin-right: 8px;">🇯🇵</span>
+                                            日本語
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/?locale=ko-KR">
+                                            <span role="img" aria-label="한국어" style="margin-right: 8px;">🇰🇷</span>
+                                            한국어
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/?locale=vi-VN">
+                                            <span role="img" aria-label="Tiếng Việt" style="margin-right: 8px;">🇻🇳</span>
+                                            Tiếng Việt
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom">
+                                <a href="/leaf/viec-lam" class="text-white">
+                                    <localize key="career" />
+                                </a>
+                            </li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom">
+                                <a href="/search" class="text-white">
+                                    <localize key="search" />
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -37,7 +81,7 @@
                     <ul class="nav navbar-ul element-left right-element-exist">
                         <li class="header-titles-wrapper">
                             <div class="header-titles">
-                                <a class="site-link" href="/"><img class="img-fluid site-logo" src="https://shinecgialai.com.vn/imgs/logo.png" alt="Garland"></a>
+                                <a class="site-link" href="/"><img class="img-fluid site-logo" src="https://shinecgialai.com.vn/imgs/logo.png" alt="LOGO"></a>
                             </div>
                         </li>
                     </ul><ul class="nav navbar-ul pull-center justify-content-center right-element-exist">
@@ -45,7 +89,9 @@
                             <nav class="primary-menu-wrapper" aria-label="Horizontal">
                                 <ul class="nav wp-menu primary-menu">
                                     <li class="cus-img-menu menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item current_page_item current-menu-ancestor current_page_ancestor menu-item-has-children menu-item-26494 menu-item-has-mega-children">
-                                        <a href="/leaf/gioi-thieu" aria-current="page">Về chúng tôi</a>
+                                        <a href="/leaf/gioi-thieu" aria-current="page">
+                                            <localize key="aboutUs" />
+                                        </a>
                                     </li>
                                     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children">
                                         <a href="/leaf/ve-ccn-so-2-dak-doa">Về CCN số 2 Đak Đoa</a>
@@ -100,11 +146,13 @@
                                     </li>
                                     <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children">
                                         <a href="/@CatalogType.Article.ToString().ToLower()">
-                                            Sự kiện và hoạt động
+                                            <localize key="Article" />
                                         </a>
                                     </li>
                                     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-has-mega-children">
-                                        <a href="/leaf/lien-he">Liên hệ</a>
+                                        <a href="/leaf/lien-he">
+                                            <localize key="contact" />
+                                        </a>
                                     </li>
                                 </ul>
                             </nav>

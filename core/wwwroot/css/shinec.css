@@ -15,13 +15,14 @@
     font-size: 2rem;
 }
 
-.title a {
-    color: white;
-}
+    .title a {
+        color: white;
+    }
 
 .product-images .swiper-slide img {
     object-fit: cover;
 }
+
 .product-images .swiper-slide-active img {
     height: 300px;
 }
@@ -38,35 +39,35 @@
     background-repeat: round;
 }
 
-    .jumbotron-title {
-        font-size: 3rem;
+.jumbotron-title {
+    font-size: 3rem;
+}
+
+.jumbotron-description {
+    max-width: 800px;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    font-size: 1.25rem;
+}
+
+.jumbotron .btn {
+    font-size: 1.25rem;
+    border: 2px solid;
+    padding: .75rem 2rem;
+}
+
+    .jumbotron .btn:hover {
+        background-color: var(--primary);
+        transition: all ease-in-out 500ms;
     }
 
-    .jumbotron-description {
-        max-width: 800px;
-        margin-bottom: 2rem;
-        font-weight: 400;
-        font-size: 1.25rem;
-    }
+.jumbotron .btn-contact {
+    color: white;
+}
 
-    .jumbotron .btn {
-        font-size: 1.25rem;
-        border: 2px solid;
-        padding: .75rem 2rem;
-    }
-
-        .jumbotron .btn:hover {
-            background-color: var(--primary);
-            transition: all ease-in-out 500ms;
-        }
-
-    .jumbotron .btn-contact {
-        color: white;
-    }
-
-    .jumbotron .btn-vr360 {
-        color: white;
-    }
+.jumbotron .btn-vr360 {
+    color: white;
+}
 
 .btn-primary {
     --bs-btn-border-color: var(--primary);
@@ -1031,8 +1032,21 @@ ul.nav.wp-menu > li > ul.sub-menu.mega-menu > li.mega-menu-col > ul.sub-menu {
     box-shadow: none
 }
 
-.header-topbar a {
-    color: #ffffff;
+.header-topbar .dropdown-menu {
+    --bs-dropdown-font-size: 0.85rem;
+    --bs-dropdown-min-width: 5rem;
+}
+
+.header-topbar .dropdown-item {
+    --bs-dropdown-item-padding-x: 0.5rem;
+    --bs-dropdown-item-padding-y: 0;
+    --bs-dropdown-font-size: 0.85rem;
+    line-height: 2rem;
+}
+
+.header-topbar .dropdown-item:hover {
+    background-color: var(--primary);
+    color: white;
 }
 
 .header-topbar ul.nav.social-icons > li > a, .header-logobar ul.nav.social-icons > li > a, .header-navbar ul.nav.social-icons > li > a {
@@ -1286,7 +1300,7 @@ ul.nav.wp-menu > li.menu-item-has-children > a {
 
 .header-topbar {
     background: rgb(42,125,46);
-    font-size: 15px;
+    font-size: 14px;
     line-height: 40px;
     padding: 0;
     color: #fff
@@ -7961,6 +7975,10 @@ img.mobile-logo {
     font-weight: 600;
     line-height: 2rem;
     padding: 1rem 1rem 0 1rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
     .latest-news .item-name a {
@@ -7969,7 +7987,11 @@ img.mobile-logo {
 
 .latest-news .item-description {
     color: var(--bs-gray);
-    padding: 0.5rem 1rem 1rem 1rem;
+    margin: 0.5rem 1rem 1rem 1rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
 }
 
 .pagination {

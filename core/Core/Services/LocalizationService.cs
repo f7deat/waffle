@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Options;
 using Waffle.Entities;
 using Waffle.Models;
 
@@ -9,15 +11,17 @@ namespace Waffle.Core.Services;
 
 public class LocalizationService : ILocalizationService
 {
-    private readonly IConfiguration _configuration;
     private readonly ILocalizationRepository _localizationRepository;
     private readonly IMemoryCache _memoryCache;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly SettingOptions Options;
 
-    public LocalizationService(IConfiguration configuration, ILocalizationRepository localizationRepository, IMemoryCache memoryCache)
+    public LocalizationService(ILocalizationRepository localizationRepository, IMemoryCache memoryCache, IHttpContextAccessor httpContextAccessor, IOptions<SettingOptions> options)
     {
-        _configuration = configuration;
         _localizationRepository = localizationRepository;
         _memoryCache = memoryCache;
+        _httpContextAccessor = httpContextAccessor;
+        Options = options.Value;
     }
 
     public async Task<IdentityResult> AddAsync(Localization args)
@@ -44,19 +48,25 @@ public class LocalizationService : ILocalizationService
         return IdentityResult.Success;
     }
 
+    public Task<List<string>> GetAllCacheAsync() => _localizationRepository.GetAllCacheAsync();
+
     public async Task<string> GetAsync(string key)
     {
         var cacheKey = $"{nameof(Localization)}-{key}";
         if (!_memoryCache.TryGetValue($"{cacheKey}", out string cacheValue))
         {
-            var lang = _configuration.GetValue<string>("language");
-            var i18n = await _localizationRepository.FindAsync(key, lang);
+            var locale = _httpContextAccessor.HttpContext?.Request.Query["locale"].ToString();
+            if (string.IsNullOrEmpty(locale))
+            {
+                locale = Options.DefaultLanguage;
+            }
+            var i18n = await _localizationRepository.FindAsync(key, locale);
             if (i18n is null)
             {
                 i18n = new Localization
                 {
                     Key = key,
-                    Language = lang,
+                    Language = locale,
                 };
                 await _localizationRepository.AddAsync(i18n);
             }
