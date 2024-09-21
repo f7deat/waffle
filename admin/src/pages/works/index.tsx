@@ -11,6 +11,8 @@ import { EditorComponent } from "./components";
 import LatestNews from "./latest-news";
 import { useEffect, useRef } from "react";
 import RowComponent from "./row";
+import ArticlePicker from "./article-picker";
+import ArticleLister from "./article-lister";
 
 const WorkPage: React.FC = () => {
     const { id } = useParams();
@@ -29,6 +31,8 @@ const WorkPage: React.FC = () => {
         if (data?.normalizedName === 'Jumbotron') return <Jumbotron data={data?.data} />;
         if (data?.normalizedName === 'LatestNews') return <LatestNews data={data?.data} />;
         if (data?.normalizedName === 'Row') return <RowComponent data={data?.data} />;
+        if (data?.normalizedName === 'ArticlePicker') return <ArticlePicker data={data?.data} />;
+        if (data?.normalizedName === 'ArticleLister') return <ArticleLister data={data?.data} />;
         return <Empty />
     }
 

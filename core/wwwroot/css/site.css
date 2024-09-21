@@ -571,8 +571,8 @@ table {
     color: var(--primary);
 }
 
-.text-red-500 {
-    color: var(--red-500);
+.simple-image__picture img {
+    max-width: 100%;
 }
 
 .text-gray-700 {

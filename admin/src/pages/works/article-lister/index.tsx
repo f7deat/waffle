@@ -1,41 +1,29 @@
-import { getArguments, saveArguments } from "@/services/work-content";
-import { PageContainer, ProCard, ProForm, ProFormInstance, ProFormText } from "@ant-design/pro-components"
-import { useParams } from "@umijs/max";
-import { message } from "antd";
-import { useRef, useEffect } from "react";
+import { AbstractBlock } from "@/typings/work";
+import { ProForm, ProFormInstance, ProFormText } from "@ant-design/pro-components"
+import { useEffect } from "react";
 
-const ArticleLister: React.FC = () => {
-    const { id } = useParams();
-    const formRef = useRef<ProFormInstance>();
+const ArticleLister: React.FC<AbstractBlock> = ({ data }) => {
+    const formRef = ProForm.useFormInstance<ProFormInstance>();
 
     useEffect(() => {
-        getArguments(id).then((response) => {
-            formRef.current?.setFields([
+        if (data) {
+            formRef?.setFields([
                 {
                     name: 'name',
-                    value: response.name,
+                    value: data.name,
                 }
             ]);
-        });
-    }, [id]);
-
-    const onFinish = async (values: any) => {
-        const response = await saveArguments(id, values);
-        if (response.succeeded) {
-            message.success('Saved!');
-        } else {
-            message.error(response.errors[0].description);
         }
-    };
+    }, [data]);
 
     return (
-        <PageContainer>
-            <ProCard>
-                <ProForm onFinish={onFinish} formRef={formRef}>
-                    <ProFormText name="name" label="Name" />
-                </ProForm>
-            </ProCard>
-        </PageContainer>
+        <>
+            <ProFormText name="name" label="Name" rules={[
+                {
+                    required: true
+                }
+            ]} />
+        </>
     )
 }
 

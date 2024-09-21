@@ -45,10 +45,11 @@ public class CatalogController : BaseController
     }
 
     [HttpPost("add"), Authorize(Roles = RoleName.Admin)]
-    public async Task<IActionResult> AddAsync([FromBody] Catalog catalog)
+    public async Task<IActionResult> AddAsync([FromBody] Catalog catalog, [FromQuery] string locale)
     {
         try
         {
+            catalog.Locale = locale;
             if (string.IsNullOrWhiteSpace(catalog.Name)) return BadRequest("Please enter name!");
             catalog.Active = catalog.Type == CatalogType.Tag;
             return Ok(await _catalogService.AddAsync(catalog));

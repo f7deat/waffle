@@ -1,65 +1,40 @@
 import { FormTag } from '@/components/form';
-import WorkSummary from '@/components/works/summary';
-import { getArguments, saveArguments } from '@/services/work-content';
+import { AbstractBlock } from '@/typings/work';
 import {
-  PageContainer,
-  ProCard,
-  ProForm,
   ProFormDigit,
   ProFormInstance,
   ProFormText,
 } from '@ant-design/pro-components';
-import { useParams } from '@umijs/max';
-import { Col, Row, message } from 'antd';
 import { useEffect, useRef } from 'react';
 
-const ArticlePicker: React.FC = () => {
+const ArticlePicker: React.FC<AbstractBlock> = ({ data }) => {
   const formRef = useRef<ProFormInstance>();
-  const { id } = useParams();
 
   useEffect(() => {
-    getArguments(id).then((response) => {
+    if (data) {
       formRef.current?.setFields([
         {
           name: 'title',
-          value: response.title,
+          value: data.title,
         },
         {
           name: 'pageSize',
-          value: response.pageSize,
+          value: data.pageSize,
         },
         {
           name: 'tagId',
-          value: response.tagId,
+          value: data.tagId,
         },
       ]);
-    });
-  }, [id]);
-
-  const onFinish = async (values: any) => {
-    const response = await saveArguments(id, values);
-    if (response.succeeded) {
-      message.success('Saved');
     }
-  };
+  }, [data]);
 
   return (
-    <PageContainer>
-      <Row gutter={16}>
-        <Col md={16}>
-          <ProCard>
-            <ProForm onFinish={onFinish} formRef={formRef}>
-              <ProFormText label="Title" name="title" />
-              <ProFormDigit label="Page size" name="pageSize" />
-              <FormTag name="tagId" label="Tag" />
-            </ProForm>
-          </ProCard>
-        </Col>
-        <Col md={8}>
-          <WorkSummary />
-        </Col>
-      </Row>
-    </PageContainer>
+    <>
+      <ProFormText label="Title" name="title" />
+      <ProFormDigit label="Page size" name="pageSize" />
+      <FormTag name="tagId" label="Tag" />
+    </>
   );
 };
 
