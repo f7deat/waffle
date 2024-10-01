@@ -1,58 +1,62 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
+using Waffle.Core.Options;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models.Components;
 
-namespace Waffle.Pages.Wiki
+namespace Waffle.Pages.Wiki;
+
+public class TryAnotherLanguageModel : PageModel
 {
-    public class TryAnotherLanguageModel : PageModel
+    private readonly IWikiService _wikiService;
+    private readonly SettingOptions Options;
+    public TryAnotherLanguageModel(IWikiService wikiService, IOptions<SettingOptions> options)
     {
-        private readonly IWikiService _wikiService;
-        public TryAnotherLanguageModel(IWikiService wikiService)
+        _wikiService = wikiService;
+        Options = options.Value;
+    }
+
+    public List<ListGroup> ListGroups = new();
+
+    public async Task<IActionResult> OnGetAsync(string id)
+    {
+        if (Options.Theme != "Default") return NotFound();
+        var response = await _wikiService.GetLangLinksAsync(id);
+        if (!response.Pages.Any())
         {
-            _wikiService = wikiService;
+            return NotFound();
+        }
+        ViewData["Title"] = response.Pages.First().Title;
+        ViewData["Description"] = response.Pages.First().Title;
+
+        foreach (var page in response.Pages)
+        {
+            ListGroups.Add(new ListGroup
+            {
+                Name = page.Title,
+                Items = GetItems(page.LangLinks)
+            });
         }
 
-        public List<ListGroup> ListGroups = new();
+        return Page();
+    }
 
-        public async Task<IActionResult> OnGetAsync(string id)
+    private static List<ListGroupItem> GetItems(List<WikiLangLink> langLinks)
+    {
+        var returnValue = new List<ListGroupItem>();
+        foreach (var langLink in langLinks)
         {
-            var response = await _wikiService.GetLangLinksAsync(id);
-            if (!response.Pages.Any())
+            returnValue.Add(new ListGroupItem
             {
-                return NotFound();
-            }
-            ViewData["Title"] = response.Pages.First().Title;
-            ViewData["Description"] = response.Pages.First().Title;
-
-            foreach (var page in response.Pages)
-            {
-                ListGroups.Add(new ListGroup
+                Link = new Link
                 {
-                    Name = page.Title,
-                    Items = GetItems(page.LangLinks)
-                });
-            }
-
-            return Page();
+                    Href = langLink.Url,
+                    Name = langLink.Title ?? string.Empty
+                },
+            });
         }
-
-        private static List<ListGroupItem> GetItems(List<WikiLangLink> langLinks)
-        {
-            var returnValue = new List<ListGroupItem>();
-            foreach (var langLink in langLinks)
-            {
-                returnValue.Add(new ListGroupItem
-                {
-                    Link = new Link
-                    {
-                        Href = langLink.Url,
-                        Name = langLink.Title ?? string.Empty
-                    },
-                });
-            }
-            return returnValue;
-        }
+        return returnValue;
     }
 }
