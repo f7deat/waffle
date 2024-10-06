@@ -34,13 +34,15 @@
 .jumbotron {
     background-image: url(https://shinecgialai.com.vn/imgs/cover-min.jpg);
     height: 600px;
-    background-position: left;
-    background-size: contain;
-    background-repeat: round;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .jumbotron-title {
     font-size: 3rem;
+    color: #000000;
+    font-weight: 900;
 }
 
 .jumbotron-description {
