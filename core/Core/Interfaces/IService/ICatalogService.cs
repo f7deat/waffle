@@ -32,7 +32,7 @@ public interface ICatalogService
     Task<object?> PieChartAsync();
     Task<ProductImage?> GetProductImageAsync(Guid catalogId);
     Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions);
-    Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(CatalogType type, int pageSize);
+    Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize);
     Task DeleteAsync(Catalog catalog);
     Task<Catalog?> FindAsync(Guid brandId, CatalogType brand);
     Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type);

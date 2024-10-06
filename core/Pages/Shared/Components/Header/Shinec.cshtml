@@ -94,7 +94,7 @@
                                         </a>
                                     </li>
                                     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children">
-                                        <a href="/@CatalogType.Product.ToString().ToLower()">
+                                        <a href="/@CatalogType.Product.ToString().ToLower()?locale=@Model.PageData.Locale">
                                             <localize key="Product" />    
                                         </a>
                                         <ul class="sub-menu">
@@ -147,7 +147,7 @@
                                         </ul>
                                     </li>
                                     <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children">
-                                        <a href="/@CatalogType.Article.ToString().ToLower()">
+                                        <a href="/@CatalogType.Article.ToString().ToLower()?locale=@Model.PageData.Locale">
                                             <localize key="Article" />
                                         </a>
                                     </li>

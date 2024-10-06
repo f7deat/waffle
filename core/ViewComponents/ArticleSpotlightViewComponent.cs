@@ -3,6 +3,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Components;
 using Waffle.Models;
 using Waffle.Entities;
+using Waffle.Core.Foundations;
 
 namespace Waffle.ViewComponents;
 
@@ -17,9 +18,18 @@ public class ArticleSpotlightViewComponent : ViewComponent
         _workService = workService;
     }
 
+    protected PageData PageData
+    {
+        get
+        {
+            RouteData.Values.TryGetValue(nameof(PageData), out var values);
+            return values as PageData ?? new();
+        }
+    }
+
     public async Task<IViewComponentResult> InvokeAsync(Guid? workId)
     {
-        var articles = await _catalogService.ListSpotlightAsync(CatalogType.Article, 5);
+        var articles = await _catalogService.ListSpotlightAsync(PageData, 5);
         if (!articles.Any())
         {
             return View(Empty.DefaultView, new ErrorViewModel

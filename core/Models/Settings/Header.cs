@@ -23,7 +23,7 @@ public class Header : BaseSetting
     public Guid UserId { get; set; }
 
     [JsonIgnore]
-    public Catalog Catalog { get; set; } = new();
+    public PageData PageData { get; set; } = new();
 
     public IEnumerable<Option> Templates { get; set; }
      = new List<Option>

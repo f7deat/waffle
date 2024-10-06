@@ -30,7 +30,8 @@ public class IndexModel : EntryPageModel
             PageSize = 12,
             Current = Current,
             Type = CatalogType.Article,
-            Name = SearchTerm
+            Name = SearchTerm,
+            Locale = PageData.Locale
         });
     }
 }

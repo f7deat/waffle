@@ -157,10 +157,10 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         return await ListResult<CatalogListItem>.Success(query, filterOptions);
     }
 
-    public async Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(CatalogType type, int pageSize)
+    public async Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize)
     {
         var query = from catalog in _context.Catalogs
-                    where catalog.Type == type && catalog.Active
+                    where catalog.Type == CatalogType.Article && catalog.Active && catalog.Locale == pageData.Locale
                     select new CatalogListItem
                     {
                         Id = catalog.Id,

@@ -405,7 +405,7 @@ public class CatalogService : ICatalogService
         return await _catalogRepository.GetFormSelectAsync(filterOptions);
     }
 
-    public Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(CatalogType type, int pageSize) => _catalogRepository.ListSpotlightAsync(type, pageSize);
+    public Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize) => _catalogRepository.ListSpotlightAsync(pageData, pageSize);
 
     public async Task DeleteAsync(Catalog catalog) => await _catalogRepository.DeleteAsync(catalog);
 
@@ -476,7 +476,7 @@ public class CatalogService : ICatalogService
         var pageData = await _catalogRepository.GetByNameAsync(normalizedName, locale);
         if (pageData is null)
         {
-            if (!CultureInfo.GetCultures(CultureTypes.AllCultures).Any(x => x.Name == locale)) throw new Exception("Locale not support!");
+            if (!LocaleHelper.IsAvailable(locale)) throw new Exception("Locale not support!");
 
             pageData = new Catalog
             {

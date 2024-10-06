@@ -43,13 +43,28 @@
     font-size: 3rem;
     color: #000000;
     font-weight: 900;
+    padding: 0 1rem;
 }
 
 .jumbotron-description {
     max-width: 800px;
     margin-bottom: 2rem;
     font-weight: 400;
-    font-size: 1.25rem;
+    padding: 0 1rem;
+    font-size: 0.95rem;
+}
+
+.jumbotron-contact {
+    margin: 1rem;
+    align-items: center;
+}
+
+.jumbotron-contact-item {
+    flex: 1;
+}
+
+.jumbotron-contact-name {
+    font-size: 0.85rem;
 }
 
 .jumbotron .btn {
@@ -8004,6 +8019,18 @@ img.mobile-logo {
 @media only screen and (min-width: 1024px) {
     .latest-news .items {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .jumbotron-description {
+        font-size: 1.25rem;
+    }
+
+    .jumbotron-contact-name {
+        font-size: 1.25rem;
+    }
+
+    .jumbotron-contact-value {
+        font-size: 2rem;
     }
 }
 

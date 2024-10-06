@@ -41,7 +41,10 @@ public class DetailModel : PageModel
         Data = response;
         ViewData["Title"] = Data.Title;
         ViewData["Description"] = Data.Title;
-        Articles = await _catalogService.ListSpotlightAsync(CatalogType.Article, 4);
+        Articles = await _catalogService.ListSpotlightAsync(new Core.Foundations.PageData
+        {
+            Type = CatalogType.Article
+        }, 4);
         Products = await _productService.ListSpotlightAsync(6, new List<Guid>());
         
         return Page();

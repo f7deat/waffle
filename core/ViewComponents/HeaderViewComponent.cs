@@ -7,6 +7,7 @@ using Waffle.Extensions;
 using Waffle.Models.Settings;
 using Waffle.Core.Options;
 using Microsoft.Extensions.Options;
+using Waffle.Core.Foundations;
 
 namespace Waffle.ViewComponents;
 
@@ -23,12 +24,12 @@ public class HeaderViewComponent : ViewComponent
         Options = options.Value;
     }
 
-    protected Catalog PageData
+    protected PageData PageData
     {
         get
         {
-            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
-            return values as Catalog ?? new();
+            RouteData.Values.TryGetValue(nameof(PageData), out var values);
+            return values as PageData ?? new();
         }
     }
 
@@ -38,7 +39,7 @@ public class HeaderViewComponent : ViewComponent
         header ??= new Header();
         header.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
         header.UserId = UserClaimsPrincipal.GetId();
-        header.Catalog = PageData;
+        header.PageData = PageData;
         return View(Options.Theme, header);
     }
 }

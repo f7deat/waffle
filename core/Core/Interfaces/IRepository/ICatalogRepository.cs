@@ -1,4 +1,5 @@
-﻿using Waffle.Entities;
+﻿using Waffle.Core.Foundations;
+using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
@@ -18,5 +19,5 @@ public interface ICatalogRepository : IAsyncRepository<Catalog>
     Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type);
     Task<int> GetViewCountAsync();
     Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions);
-    Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(CatalogType type, int pageSize);
+    Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize);
 }
