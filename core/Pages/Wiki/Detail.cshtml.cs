@@ -45,7 +45,7 @@ public class DetailModel : PageModel
         {
             Type = CatalogType.Article
         }, 4);
-        Products = await _productService.ListSpotlightAsync(6, new List<Guid>());
+        Products = await _productService.ListSpotlightAsync(6, new List<Guid>(), "vi-VN");
         
         return Page();
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
@@ -92,7 +93,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
         return await query.Take(4).ToListAsync();
     }
 
-    public async Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds)
+    public async Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds, string locale)
     {
         var query = from catalog in _context.Catalogs
                     join product in _context.Products on catalog.Id equals product.CatalogId into catalogProduct
@@ -101,6 +102,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                     join p in _context.Catalogs on catalog.ParentId equals p.Id into pc from p in pc.DefaultIfEmpty()
                     where catalog.Type == CatalogType.Product && catalog.Active
                     && (!tagIds.Any() || tagIds.Contains(tag.CatalogId))
+                    && catalog.Locale == locale
                     select new ProductListItem
                     {
                         Name = catalog.Name,
@@ -124,7 +126,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
         {
             return IdentityResult.Failed(new IdentityError
             {
-                Code = "error.dataNotFound",
+                Code = HttpStatusCode.NoContent.ToString(),
                 Description = "Product not found!"
             });
         }
@@ -133,7 +135,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
         {
             return IdentityResult.Failed(new IdentityError
             {
-                Code = "error.dataNotFound",
+                Code = HttpStatusCode.NoContent.ToString(),
                 Description = "Brand not found!"
             });
         }

@@ -61,7 +61,6 @@ export default {
   'menu.settings.componentCenter': 'Component center',
   'menu.settings.localization': 'Localization',
   'menu.settings.sendGrid': 'SendGrid',
-  'menu.settings.roles': 'Roles',
   'menu.users': 'Users',
   'menu.users.list': 'Users List',
   'menu.users.profile': 'Profile',

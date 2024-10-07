@@ -40,7 +40,8 @@ public class IndexModel : EntryPageModel
             Name = FilterOptions.SearchTerm,
             PageSize = 12,
             Active = true,
-            Type = CatalogType.Article
+            Type = CatalogType.Article,
+            Locale = PageData.Locale
         });
 
         var videos = await _catalogService.ListAsync(new CatalogFilterOptions
@@ -49,7 +50,8 @@ public class IndexModel : EntryPageModel
             Current = FilterOptions.Current,
             Active = true,
             Type = CatalogType.Video,
-            PageSize = 4
+            PageSize = 4,
+            Locale = PageData.Locale
         });
 
         PlaylistItems = videos.Data?.Select(x => new PlaylistItem
@@ -71,7 +73,7 @@ public class IndexModel : EntryPageModel
         });
         ProductFeed = new Feed
         {
-            Name = "Sản phẩm",
+            Name = await _localizationService.GetAsync(nameof(Product), PageData.Locale),
             Products = products.Data,
             ItemPerRow = "col-6 col-md-3"
         };
@@ -83,16 +85,14 @@ public class IndexModel : EntryPageModel
     {
         var breadcrumb = new List<Breadcrumb>
         {
-            new Breadcrumb
-            {
-                Url = "/",
+            new() {
+                Url = $"/?locale={PageData.Locale}",
                 Name = await _localizationService.GetAsync("home"),
                 Position = 1,
                 Icon = "fas fa-home"
             },
-            new Breadcrumb
-            {
-                Url = "/search",
+            new() {
+                Url = $"/search?locale={PageData.Locale}",
                 Name = await _localizationService.GetAsync("search"),
                 Position = 2,
                 Icon = "fa-solid fa-magnifying-glass"

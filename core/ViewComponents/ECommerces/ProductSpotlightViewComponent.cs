@@ -36,11 +36,11 @@ public class ProductSpotlightViewComponent : ViewComponent
         if (work is null)
         {
             work ??= new ProductSpotlight();
-            work.Products = await _productService.ListSpotlightAsync(4, tagIds);
+            work.Products = await _productService.ListSpotlightAsync(4, tagIds, PageData.Locale ?? "vi-VN");
         }
         else
         {
-            work.Products = await _productService.ListSpotlightAsync(work.PageSize, tagIds);
+            work.Products = await _productService.ListSpotlightAsync(work.PageSize, tagIds, PageData.Locale ?? "vi-VN");
         }
         work.Title = await _localizationService.GetAsync("ProductSpotlightTitle", PageData.Locale);
         work.PageData = PageData;

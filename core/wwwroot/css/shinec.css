@@ -33,7 +33,7 @@
 
 .jumbotron {
     background-image: url(https://shinecgialai.com.vn/imgs/cover-min.jpg);
-    height: 600px;
+    height: 400px;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -61,6 +61,7 @@
 
 .jumbotron-contact-item {
     flex: 1;
+    padding: 1rem;
 }
 
 .jumbotron-contact-name {
@@ -8014,6 +8015,16 @@ img.mobile-logo {
 .pagination {
     --bs-pagination-active-bg: var(--primary);
     --bs-pagination-active-border-color: var(--primary);
+}
+
+@media only screen and (min-width: 768px) {
+    .jumbotron {
+        height: 600px;
+    }
+
+    .jumbotron-contact-item {
+        padding: 0 0.5rem;
+    }
 }
 
 @media only screen and (min-width: 1024px) {

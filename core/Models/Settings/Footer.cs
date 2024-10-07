@@ -19,6 +19,9 @@ public class Footer : BaseSetting
     [JsonPropertyName("social")]
     public Social Social { get; set; } = new();
 
+    [JsonIgnore]
+    public PageData? PageData { get; set; }
+
     [JsonPropertyName("links")]
     public IEnumerable<Link>? Links { get; set; }
 }

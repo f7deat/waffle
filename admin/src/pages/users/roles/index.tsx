@@ -9,17 +9,19 @@ const RolePage: React.FC = () => {
         {
             title: '#',
             valueType: 'indexBorder',
+            width: 30
         },
         {
             title: 'Name',
             dataIndex: 'name'
         },
         {
-            title: '',
+            title: 'Option',
             valueType: 'option',
             render: (dom, entity) => [
-                <Button type="primary" icon={<FolderOutlined />} onClick={() => history.push(`/users/roles/${entity.name}`)} />
-            ]
+                <Button type="primary" icon={<FolderOutlined />} size="small" key="detail" onClick={() => history.push(`/users/roles/${entity.name}`)} />
+            ],
+            width: 50
         }
     ]
     return (

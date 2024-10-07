@@ -16,7 +16,7 @@ export default [
     },
     {
       icon: 'HomeOutlined',
-      name: 'home',
+      name: 'dashboard',
       path: '/home',
       component: './Home',
     },
@@ -349,12 +349,7 @@ export default [
           name: 'localization',
           path: '/settings/localization',
           component: './localization',
-        },
-        {
-          name: 'roles',
-          path: '/settings/roles',
-          component: './settings/roles',
-        },
+        }
       ],
     },
     {

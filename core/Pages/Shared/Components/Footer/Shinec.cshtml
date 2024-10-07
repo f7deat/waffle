@@ -1,5 +1,7 @@
-﻿@using Waffle.Models.Settings
+﻿@using Waffle.Core.Interfaces.IService
+@using Waffle.Models.Settings
 @model Footer
+@inject ILocalizationService localizationService;
 
 <footer id="site-footer" class="site-footer">
     <div class="site-footer-wrap container-fluid p-0">
@@ -64,20 +66,17 @@
                                 <div class="mailchimp-wrapper">
                                     <form class="zozo-mc-form" id="zozo-mc-form" method="post">
                                         <div class="input-group mb-4">
-                                            <input type="text" class="form-control zozo-mc-email" required="required" placeholder="Họ và tên" name="fullName">
-                                            <button class="input-group-addon zozo-mc btn btn-default"><span class="bi bi-send"></span></button>
+                                            <input type="text" class="form-control zozo-mc-email" required="required" placeholder="@await localizationService.GetAsync("FullName", Model.PageData?.Locale ?? "vi-VN")" name="fullName">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-4">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control zozo-mc-email" required="required" placeholder="Email" name="email">
-                                                    <button class="input-group-addon zozo-mc btn btn-default"><span class="bi bi-send"></span></button>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 mb-4">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control zozo-mc-email" required="required" placeholder="Số điện thoại" name="phoneNumber">
-                                                    <button class="input-group-addon zozo-mc btn btn-default"><span class="bi bi-send"></span></button>
+                                                    <input type="text" class="form-control zozo-mc-email" required="required" placeholder="@await localizationService.GetAsync("phoneNumber", Model.PageData?.Locale ?? "vi-VN")" name="phoneNumber">
                                                 </div>
                                             </div>
                                         </div>
