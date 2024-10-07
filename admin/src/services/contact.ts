@@ -1,7 +1,7 @@
 import { request } from '@umijs/max';
 
-export async function listContact() {
-  return request(`contact/list`);
+export async function listContact(params: any) {
+  return request(`contact/list`, { params});
 }
 
 export async function deleteContact(id: string) {

@@ -68,7 +68,8 @@ export default {
   'menu.users.profile': 'Hồ sơ',
   'menu.users.center': 'Thông tin cá nhân',
   'menu.users.role': 'Quyền',
-  'menu.users.list': 'Danh sách',
+  'menu.users.member': 'Thành viên',
+  'menu.users.contact': 'Liên hệ',
   'menu.users.userCenter': 'Cài đặt',
   'menu.users.roleCenter': 'Chi tiết quyền',
 };

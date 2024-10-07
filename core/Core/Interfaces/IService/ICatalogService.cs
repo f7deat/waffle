@@ -27,7 +27,7 @@ public interface ICatalogService
     Task<IdentityResult> TagAddToCatalogAsync(WorkItem args);
     Task<ListResult<Catalog>> ListByTagsAsync(IEnumerable<Guid> tagIds, CatalogFilterOptions filterOptions);
     Task<ListResult<CatalogListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);
-    Task<IEnumerable<Catalog>> ListRandomTagAsync();
+    Task<IEnumerable<Catalog>> ListRandomTagAsync(string locale);
     Task<ListResult<TagListItem>> ListTagAsync(TagFilterOptions filterOptions);
     Task<object?> PieChartAsync();
     Task<ProductImage?> GetProductImageAsync(Guid catalogId);

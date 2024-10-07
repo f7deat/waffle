@@ -4,7 +4,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Link", Prompt = "link")]
+[Display(Name = "Link", Prompt = nameof(Link))]
 public class Link : AbstractComponent
 {
     [JsonPropertyName("href")]

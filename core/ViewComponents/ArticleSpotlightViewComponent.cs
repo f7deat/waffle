@@ -2,7 +2,6 @@
 using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Components;
 using Waffle.Models;
-using Waffle.Entities;
 using Waffle.Core.Foundations;
 
 namespace Waffle.ViewComponents;
@@ -11,11 +10,13 @@ public class ArticleSpotlightViewComponent : ViewComponent
 {
     private readonly ICatalogService _catalogService;
     private readonly IWorkService _workService;
+    private readonly ILocalizationService _localizationService;
 
-    public ArticleSpotlightViewComponent(ICatalogService catalogService, IWorkService workService)
+    public ArticleSpotlightViewComponent(ICatalogService catalogService, IWorkService workService, ILocalizationService localizationService)
     {
         _catalogService = catalogService;
         _workService = workService;
+        _localizationService = localizationService;
     }
 
     protected PageData PageData
@@ -37,7 +38,7 @@ public class ArticleSpotlightViewComponent : ViewComponent
                 RequestId = Guid.Empty.ToString()
             });
         }
-        string title = "Có thể bạn thích";
+        string title = await _localizationService.GetAsync("ArticleSpotlightTitle", PageData.Locale);
         int pageSize = 5;
         if (workId != null)
         {

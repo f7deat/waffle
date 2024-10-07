@@ -4,7 +4,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Image", Prompt = "image")]
+[Display(Name = "Image", Prompt = nameof(Image))]
 public class Image : AbstractComponent
 {
     [JsonPropertyName("alt")]

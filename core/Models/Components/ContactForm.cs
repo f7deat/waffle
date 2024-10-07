@@ -4,7 +4,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Contact form", Prompt = "contact-form")]
+[Display(Name = "Contact form", Prompt = nameof(ContactForm))]
 public class ContactForm : AbstractComponent
 {
     [JsonPropertyName("name")]

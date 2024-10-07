@@ -355,7 +355,9 @@ public class CatalogService : ICatalogService
         return await ListResult<CatalogListItem>.Success(query, filterOptions);
     }
 
-    public async Task<IEnumerable<Catalog>> ListRandomTagAsync() => await _context.Catalogs.Where(x => x.Type == CatalogType.Tag && x.Active).OrderBy(x => Guid.NewGuid()).Take(10).ToListAsync();
+    public async Task<IEnumerable<Catalog>> ListRandomTagAsync(string locale) => await _context.Catalogs
+        .Where(x => x.Locale == locale)
+        .Where(x => x.Type == CatalogType.Tag && x.Active).OrderBy(x => Guid.NewGuid()).Take(10).ToListAsync();
 
     public async Task<ListResult<TagListItem>> ListTagAsync(TagFilterOptions filterOptions)
     {

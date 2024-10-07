@@ -5,7 +5,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Empty", Prompt = "empty", AutoGenerateField = true, AutoGenerateFilter = true)]
+[Display(Name = "Empty", Prompt = nameof(Empty), AutoGenerateField = true, AutoGenerateFilter = true)]
 public class Empty : AbstractComponent
 {
     [JsonIgnore]

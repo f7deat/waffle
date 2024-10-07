@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Waffle.Core.Constants;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -44,11 +45,13 @@ public class CatalogController : BaseController
         return Ok(await _catalogService.GetByNameAsync(normalizedName));
     }
 
-    [HttpPost("add"), Authorize(Roles = RoleName.Admin)]
+    [HttpPost("add"), Authorize]
     public async Task<IActionResult> AddAsync([FromBody] Catalog catalog, [FromQuery] string locale)
     {
         try
         {
+            if (!User.IsInRole(RoleName.Admin)) return Unauthorized();
+            if (!LocaleHelper.IsAvailable(locale)) return BadRequest("Locale not avaiable!");
             catalog.Locale = locale;
             if (string.IsNullOrWhiteSpace(catalog.Name)) return BadRequest("Please enter name!");
             catalog.Active = catalog.Type == CatalogType.Tag;

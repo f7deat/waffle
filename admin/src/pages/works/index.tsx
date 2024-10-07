@@ -7,7 +7,7 @@ import Jumbotron from "./jumbotron";
 import Sponsor from "./sponsor";
 import { FormOutlined, LeftOutlined, SettingOutlined } from "@ant-design/icons";
 import VideoPlaylist from "./video-playlist";
-import { EditorComponent } from "./components";
+import { EditorComponent, HtmlBlock } from "./components";
 import LatestNews from "./latest-news";
 import { useEffect, useRef } from "react";
 import RowComponent from "./row";
@@ -33,6 +33,7 @@ const WorkPage: React.FC = () => {
         if (data?.normalizedName === 'Row') return <RowComponent data={data?.data} />;
         if (data?.normalizedName === 'ArticlePicker') return <ArticlePicker data={data?.data} />;
         if (data?.normalizedName === 'ArticleLister') return <ArticleLister data={data?.data} />;
+        if (data?.normalizedName === 'Html') return <HtmlBlock data={data?.data} />;
         return <Empty />
     }
 

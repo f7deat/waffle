@@ -4,7 +4,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "List Group", Prompt = "list-group")]
+[Display(Name = "List Group", Prompt = nameof(ListGroup))]
 public class ListGroup : AbstractComponent
 {
     [JsonPropertyName("name")]

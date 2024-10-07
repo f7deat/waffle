@@ -11,6 +11,7 @@ public interface ILocalizationService
     Task<IdentityResult> DeleteAsync(Guid id);
     Task<List<string>> GetAllCacheAsync();
     Task<string> GetAsync(string key);
+    Task<string> GetAsync(string key, string? locale);
     Task<Localization?> GetAsync(Guid id);
     Task<ListResult<Localization>> GetListAsync(LocalizationFilterOptions filterOptions);
     Task<IdentityResult> SaveAsync(Localization args);

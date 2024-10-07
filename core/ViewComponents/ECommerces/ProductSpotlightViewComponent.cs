@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents.ECommerces;
@@ -12,12 +12,12 @@ public class ProductSpotlightViewComponent : ViewComponent
     private readonly ICatalogService _catalogService;
     private readonly ILocalizationService _localizationService;
 
-    protected Catalog PageData
+    protected PageData PageData
     {
         get
         {
-            RouteData.Values.TryGetValue(nameof(Catalog), out var values);
-            return values as Catalog ?? new();
+            RouteData.Values.TryGetValue(nameof(PageData), out var values);
+            return values as PageData ?? new();
         }
     }
 
@@ -42,7 +42,8 @@ public class ProductSpotlightViewComponent : ViewComponent
         {
             work.Products = await _productService.ListSpotlightAsync(work.PageSize, tagIds);
         }
-        work.Title = await _localizationService.GetAsync("product.spotlight.title");
+        work.Title = await _localizationService.GetAsync("ProductSpotlightTitle", PageData.Locale);
+        work.PageData = PageData;
         return View(work);
     }
 }

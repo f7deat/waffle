@@ -15,11 +15,9 @@ public class ComponentHelper
         return nameof(T);
     }
 
-    public static DisplayAttribute? GetNormalizedName(string name)
+    public static DisplayAttribute? GetNormalizedName(string normalizedName)
     {
-        var component = Assembly.GetExecutingAssembly()
-            .GetTypes()
-            .FirstOrDefault(t => t.Namespace == "Waffle.Models.Components" && t.IsClass && t.Name == name);
+        var component = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.IsClass && t.Name == normalizedName);
         if (component is null) return default;
         return AttributeHelper.GetDisplay(component);
     }

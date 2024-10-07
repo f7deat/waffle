@@ -2,7 +2,7 @@
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Breadcrumb")]
+[Display(Name = "Breadcrumb", Prompt = nameof(Breadcrumb), AutoGenerateField = true)]
 public class Breadcrumb
 {
     public string? Url { get; set; }

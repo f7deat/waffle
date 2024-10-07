@@ -15,5 +15,7 @@ public class ProductSpotlight : AbstractComponent
     [JsonPropertyName("pageSize")]
     public int PageSize { get; set; }
     [JsonIgnore]
+    public PageData? PageData { get; set; }
+    [JsonIgnore]
     public IEnumerable<ProductListItem> Products { get; set; } = new List<ProductListItem>();
 }

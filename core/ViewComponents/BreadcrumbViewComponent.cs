@@ -43,7 +43,7 @@ public class BreadcrumbViewComponent : ViewComponent
         var breadcrumb = new List<Breadcrumb>
         {
             new() {
-                Url = "/",
+                Url = $"/?locale={PageData.Locale}",
                 Name = await _localizationService.GetAsync("home"),
                 Position = 1,
                 Icon = "fas fa-home"

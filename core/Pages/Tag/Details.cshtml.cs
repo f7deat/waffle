@@ -39,28 +39,32 @@ public class DetailsModel : DynamicPageModel
             Current = Current,
             Name = SearchTerm,
             Type = CatalogType.Article,
-            PageSize = 12
+            PageSize = 12,
+            Locale = PageData.Locale
         });
 
         Products = await _productService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
         {
             Current = Current,
             Name = SearchTerm,
-            Type = CatalogType.Product
+            Type = CatalogType.Product,
+            Locale = PageData.Locale
         });
 
         Albums = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
         {
             Active = true,
             Name = SearchTerm,
-            Type = CatalogType.Album
+            Type = CatalogType.Album,
+            Locale = PageData.Locale
         });
 
         Locations = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
         {
             Active = true,
             Name = SearchTerm,
-            Type = CatalogType.Location
+            Type = CatalogType.Location,
+            Locale = PageData.Locale
         });
 
 
@@ -68,7 +72,8 @@ public class DetailsModel : DynamicPageModel
         {
             Active = true,
             Name = SearchTerm,
-            Type = CatalogType.Video
+            Type = CatalogType.Video,
+            Locale = PageData.Locale
         });
         Videos.HasData = videos.HasData;
         if (videos.HasData)

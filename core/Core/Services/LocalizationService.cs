@@ -77,6 +77,32 @@ public class LocalizationService : ILocalizationService
         return cacheValue;
     }
 
+    public async Task<string> GetAsync(string key, string? locale)
+    {
+        var cacheKey = $"{nameof(Localization)}-{key}";
+        if (!_memoryCache.TryGetValue($"{cacheKey}", out string cacheValue))
+        {
+            if (string.IsNullOrEmpty(locale))
+            {
+                locale = Options.DefaultLanguage;
+            }
+            var i18n = await _localizationRepository.FindAsync(key, locale);
+            if (i18n is null)
+            {
+                i18n = new Localization
+                {
+                    Key = key,
+                    Language = locale,
+                };
+                await _localizationRepository.AddAsync(i18n);
+            }
+            cacheValue = i18n.Value ?? key;
+            var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(1));
+            _memoryCache.Set(cacheKey, cacheValue, cacheEntryOptions);
+        }
+        return cacheValue;
+    }
+
     public async Task<Localization?> GetAsync(Guid id) => await _localizationRepository.FindAsync(id);
 
     public async Task<ListResult<Localization>> GetListAsync(LocalizationFilterOptions filterOptions)

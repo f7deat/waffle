@@ -252,8 +252,8 @@ export default [
       path: '/users',
       routes: [
         {
-          name: 'list',
-          path: '/users/list',
+          name: 'member',
+          path: '/users/member',
           component: './users/list',
         },
         {
@@ -278,6 +278,11 @@ export default [
           path: '/users/roles/:id',
           component: './users/roles/center',
           hideInMenu: true
+        },
+        {
+          name: 'contact',
+          path: '/users/contact',
+          component: './users/contact'
         }
       ],
     },

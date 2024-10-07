@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Text.Json;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
@@ -306,9 +307,19 @@ public class WorkService : IWorkService
         {
             return IdentityResult.Failed(new IdentityError
             {
+                Code = HttpStatusCode.NoContent.ToString(),
                 Description = "Data not found"
             });
         }
+        var workItem = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
+        foreach (var item in workItem)
+        {
+            var catalog = await _context.Catalogs.FindAsync(item.CatalogId);
+            if (catalog is null) continue;
+            catalog.ModifiedDate = DateTime.Now;
+            _context.Catalogs.Update(catalog);
+        }
+
         work.Arguments = JsonSerializer.Serialize(args);
         await _context.SaveChangesAsync();
         return IdentityResult.Success;
@@ -333,6 +344,7 @@ public class WorkService : IWorkService
         {
             return IdentityResult.Failed(new IdentityError
             {
+                Code = HttpStatusCode.NoContent.ToString(),
                 Description = "Data not found!"
             });
         }
@@ -349,6 +361,7 @@ public class WorkService : IWorkService
         {
             return IdentityResult.Failed(new IdentityError
             {
+                Code = HttpStatusCode.NoContent.ToString(),
                 Description = $"Data not found: WorkId ({args.WorkId}) / CatalogId ({args.CatalogId})"
             });
         }
@@ -433,7 +446,7 @@ public class WorkService : IWorkService
             _logger.LogError("Component {Name} not found", nameof(ProductImage));
             return IdentityResult.Failed(new IdentityError
             {
-                Code = "error.componentNotFound",
+                Code = HttpStatusCode.NoContent.ToString(),
                 Description = "Component not found!"
             });
         }

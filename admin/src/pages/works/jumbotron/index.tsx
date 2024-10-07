@@ -24,6 +24,10 @@ const Jumbotron: React.FC<AbstractBlock> = ({ data }) => {
           value: data.title,
         },
         {
+          name: 'subTitle',
+          value: data.subTitle,
+        },
+        {
           name: 'description',
           value: data.description,
         },
@@ -38,6 +42,7 @@ const Jumbotron: React.FC<AbstractBlock> = ({ data }) => {
       </Col>
       <Col md={16}>
         <ProFormText name="title" label="Title" />
+        <ProFormText name="subTitle" label="Sub Title" />
         <ProFormTextArea name="description" label="Description" />
       </Col>
     </Row>
