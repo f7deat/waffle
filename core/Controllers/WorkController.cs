@@ -196,64 +196,6 @@ public class WorkController : BaseController
         return Ok(IdentityResult.Success);
     }
 
-    [HttpPost("navbar/item/add")]
-    public async Task<IActionResult> AddNavbarItemAsync([FromBody] WorkContent args)
-    {
-        var parrent = await _workService.FindAsync(args.ParentId ?? Guid.Empty);
-        if (parrent is null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "Navbar not found"
-            }));
-        }
-        var component = await _componentService.EnsureComponentAsync(nameof(NavItem));
-        args.ComponentId = component.Id;
-        await _workService.AddAsync(args);
-        return Ok(IdentityResult.Success);
-    }
-
-    [HttpGet("navbar/item/list/{id}")]
-    public async Task<IActionResult> ListNavItemAsync([FromRoute] Guid id)
-    {
-        var works = await _workService.GetAsync<NavItem>(id) ?? new NavItem();
-        return Ok(new
-        {
-            data = works.Links
-        });
-    }
-
-    [HttpPost("navbar/item/save/{id}")]
-    public async Task<IActionResult> SaveNavbarItemAsync([FromRoute] Guid id, [FromBody] Link args)
-    {
-        args.Id = Guid.NewGuid();
-        var navItem = await _workService.GetAsync<NavItem>(id) ?? new NavItem();
-        if (navItem.Links.Any(x => x.Href.Equals(args.Href)))
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = $"{nameof(Link)} exist"
-            }));
-        }
-        navItem.Links.Add(args);
-        return Ok(await _workService.SaveArgumentsAsync(id, navItem));
-    }
-
-    [HttpPost("navbar/item/delete")]
-    public async Task<IActionResult> DeleteNavItemAsync([FromBody] DeleteNavItemModel args)
-    {
-        var work = await _workService.GetAsync<NavItem>(args.WorkId);
-        if (work is null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = $"{nameof(NavItem)} not found"
-            }));
-        }
-        work.Links = work.Links.Where(x => x.Id != args.LinkId).ToList();
-        return Ok(await _workService.SaveArgumentsAsync(args.WorkId, work));
-    }
-
     [HttpPost("navbar/setting/save")]
     public async Task<IActionResult> NavbarSettingSaveAsync([FromBody] Navbar args) => Ok(await _workService.NavbarSettingSaveAsync(args));
 

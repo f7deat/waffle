@@ -13,14 +13,10 @@ namespace Waffle.Models.Components
         public List<NavItem> NavItems { get; set; } = new List<NavItem>();
     }
 
-    public class NavItem : BaseEntity
+    public class NavItem : Link
     {
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
-        [JsonPropertyName("links")]
-        public List<Link> Links { get; set; } = new List<Link>();
-        [JsonIgnore]
-        public bool HasSubItem => Links.Count > 1;
+        [JsonPropertyName("childs")]
+        public List<NavItem>? NavItems { get; set; }
     }
 
     public enum Layout

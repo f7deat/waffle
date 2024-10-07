@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
-using System.Globalization;
+using Waffle.Core.Constants;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 
 namespace Waffle.Core.Foundations;
@@ -24,15 +25,17 @@ public class EntryPageModel : PageModel
         context.HttpContext.Request.Query.TryGetValue("locale", out var locale);
         if (!string.IsNullOrWhiteSpace(locale))
         {
-            if (!CultureInfo.GetCultures(CultureTypes.AllCultures).Any(x => x.Name == locale) && locale != "zh-CN")
+            if (!LocaleHelper.IsAvailable(locale))
             {
                 locale = "vi-VN";
             }
             await RemoveCacheAsync();
+            Response.Cookies.Append(CookieKey.Locale, locale);
         }
         else
         {
-            locale = "vi-VN";
+            Request.Cookies.TryGetValue(CookieKey.Locale, out string? cookieValue);
+            locale = cookieValue ?? "vi-VN";
         }
         PageData = await _catalogService.GetEntryPageDataAsync(page.ToLower(), locale);
         ViewData["Title"] = PageData.Name;
