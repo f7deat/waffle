@@ -1,7 +1,6 @@
-﻿namespace Waffle.Core.Interfaces
+﻿namespace Waffle.Core.Interfaces;
+
+public interface ICurrentUser
 {
-    public interface ICurrentUser
-    {
-        Guid GetId();
-    }
+    Guid GetId();
 }

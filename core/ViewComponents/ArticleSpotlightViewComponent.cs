@@ -38,7 +38,7 @@ public class ArticleSpotlightViewComponent : ViewComponent
                 RequestId = Guid.Empty.ToString()
             });
         }
-        string title = await _localizationService.GetAsync("ArticleSpotlightTitle", PageData.Locale);
+        string title = await _localizationService.GetAsync("ArticleSpotlightTitle");
         int pageSize = 5;
         if (workId != null)
         {

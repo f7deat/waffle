@@ -73,7 +73,7 @@ public class IndexModel : EntryPageModel
         });
         ProductFeed = new Feed
         {
-            Name = await _localizationService.GetAsync(nameof(Product), PageData.Locale),
+            Name = await _localizationService.GetAsync(nameof(Product)),
             Products = products.Data,
             ItemPerRow = "col-6 col-md-3"
         };
@@ -86,13 +86,13 @@ public class IndexModel : EntryPageModel
         var breadcrumb = new List<Breadcrumb>
         {
             new() {
-                Url = $"/?locale={PageData.Locale}",
+                Url = "/",
                 Name = await _localizationService.GetAsync("home"),
                 Position = 1,
                 Icon = "fas fa-home"
             },
             new() {
-                Url = $"/search?locale={PageData.Locale}",
+                Url = "/search",
                 Name = await _localizationService.GetAsync("search"),
                 Position = 2,
                 Icon = "fa-solid fa-magnifying-glass"

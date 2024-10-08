@@ -42,7 +42,7 @@ public class ProductSpotlightViewComponent : ViewComponent
         {
             work.Products = await _productService.ListSpotlightAsync(work.PageSize, tagIds, PageData.Locale ?? "vi-VN");
         }
-        work.Title = await _localizationService.GetAsync("ProductSpotlightTitle", PageData.Locale);
+        work.Title = await _localizationService.GetAsync("ProductSpotlightTitle");
         work.PageData = PageData;
         return View(work);
     }

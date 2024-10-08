@@ -31,13 +31,15 @@ public class EntryPageModel : PageModel
             }
             await RemoveCacheAsync();
             Response.Cookies.Append(CookieKey.Locale, locale);
+            Response.Redirect("/");
+            return;
         }
         else
         {
             Request.Cookies.TryGetValue(CookieKey.Locale, out string? cookieValue);
             locale = cookieValue ?? "vi-VN";
         }
-        PageData = await _catalogService.GetEntryPageDataAsync(page.ToLower(), locale);
+        PageData = await _catalogService.GetEntryPageDataAsync(page.ToLower());
         ViewData["Title"] = PageData.Name;
         ViewData["Description"] = PageData.Description;
         ViewData["Image"] = PageData.Thumbnail;
