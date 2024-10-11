@@ -9,9 +9,9 @@ public class ComponentHelper
     public static string GetDisplayName<T>()
     {
         if (typeof(T)
-          .GetCustomAttributes(typeof(DisplayNameAttribute), true)
-          .FirstOrDefault() is DisplayNameAttribute displayName)
-            return displayName.DisplayName;
+          .GetCustomAttributes(typeof(DisplayAttribute), true)
+          .FirstOrDefault() is DisplayAttribute displayName)
+            return displayName.Name ?? "Unknow";
         return nameof(T);
     }
 

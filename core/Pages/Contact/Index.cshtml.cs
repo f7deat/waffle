@@ -5,10 +5,8 @@ using SendGrid.Helpers.Mail;
 using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
-using Waffle.ExternalAPI.SendGrids;
 
-namespace Waffle.Pages.Contacts
+namespace Waffle.Pages.Contact
 {
     public class IndexModel<TUser> : EntryPageModel where TUser : class
     {
@@ -22,7 +20,7 @@ namespace Waffle.Pages.Contacts
         }
 
         [BindProperty]
-        public Contact Input { get; set; } = default!;
+        public Entities.Contact Input { get; set; } = default!;
 
         public IdentityResult IdentityResult { get; set; } = IdentityResult.Success;
 

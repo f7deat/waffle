@@ -10,8 +10,6 @@ public class Column : AbstractComponent
 {
     [JsonPropertyName("name")]
     public string? Name { get; set; }
-    [JsonPropertyName("className")]
-    public string ClassName { get; set; } = "col";
     [JsonPropertyName("rowId")]
     public Guid RowId { get; set; }
 
