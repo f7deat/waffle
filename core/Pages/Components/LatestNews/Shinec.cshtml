@@ -2,11 +2,22 @@
 @model LatestNews
 
 <div class="latest-news @Model.ClassName">
-    <div class="header">
-        <div class="sub-title">@Model.SubTitle</div>
-        <div class="title">
-            <div>@Model.Title</div>
+
+    <div class="section-title-wrapper">
+        <div class="title-wrap">
+            <h6 class="sub-title">
+                <span class="subtitle-dots">
+                    Thông tin
+                </span>
+            </h6>
+            <h2 class="section-title">
+                @Model.Title
+                <span class="title-suffix">
+                    
+                </span>
+            </h2>
         </div>
+        <div class="section-description"></div>
     </div>
 
     <div class="items">
