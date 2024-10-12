@@ -4,7 +4,7 @@
 }
 <script src="https://cdn.tailwindcss.com"></script>
 <div class="about-us">
-    <div class="container-sm">
+    <div class="container">
         <div class="row">
             <div class="col-md-6" data-aos="fade-up">
                 <div class="section-title-wrapper">
@@ -24,7 +24,7 @@
                     <div class="section-description"></div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-md-6 mb-4">
                         <div class="elementor-column elementor-col-50 elementor-inner-column elementor-element">
                             <div class="elementor-widget-wrap elementor-element-populated position-relative d-flex justify-content-center align-items-center">
                                 <div class="elementor-element elementor-widget elementor-widget-image">
@@ -36,20 +36,22 @@
 
                                     <div class="elementor-widget-container popup-anything-wrapper">
 
-                                        <a class="cea-popup-anything popup-trigger-icon" href="https://www.youtube.com"><i aria-hidden="true" class=" bi-play-fill"></i></a>
+                                        <a class="cea-popup-anything popup-trigger-icon"
+                                           data-bs-toggle="modal" data-bs-target="#ytModal"
+                                           href="https://youtu.be/iIp6b4KaHM4"><i aria-hidden="true" class=" bi-play-fill"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <ul class="nav flex-column cea-icon-list">
                             <li class="cea-icon-list-item">
                                 <a href="#">
                                     <span class="cea-icon-list-icon">
                                         <i aria-hidden="true" class=" bi-check2-circle"></i>
                                     </span>
-                                    <span class="icon-list-text"><localize key="TongDienTich" />: <b>50,96 Ha</b></span>
+                                    <span class="icon-list-text"><localize key="TongDienTich" />: <b>75 Ha</b></span>
                                 </a>
                             </li>
                             <li class="cea-icon-list-item">
@@ -57,31 +59,56 @@
                                     <span class="cea-icon-list-icon">
                                         <i aria-hidden="true" class=" bi-check2-circle"></i>
                                     </span>
-                                    <span class="icon-list-text"><localize key="ThoiHan" /> <b>2025-2075</b></span>
+                                    <span class="icon-list-text">Thời hạn dự án: <b>2026-2076</b></span>
                                 </a>
                             </li>
+
                             <li class="cea-icon-list-item">
                                 <a href="#">
                                     <span class="cea-icon-list-icon">
                                         <i aria-hidden="true" class=" bi-check2-circle"></i>
                                     </span>
-                                    <span class="icon-list-text"><localize key="ThoiHanGiaoDat" />: <b><localize key="Quarter" /> IV/2025</b></span>
+                                    <span class="icon-list-text">Thành lập: <b>10.08.2023</b></span>
                                 </a>
                             </li>
                         </ul>
                     </div>
+                    <div class="mb-4">
+                        <div class="text-muted mt-2 text-sm">
+                            * Quyết định số 442/QĐ-UBND ngày 25/07/2023 của UBND Tỉnh Gia Lai.<br />
+                            <span class="mr-2"></span>Quyết định chấp thuận chủ trương đầu tư đồng thời chấp thuận nhà đầu tư.
+                        </div>
+                        <div class="text-muted mt-1 text-sm">
+                            * Quyết định số 481/QĐ-UBND ngày 10/08/2023 của UBND Tỉnh Gia Lai.<br />
+                            <span class="mr-2"></span>Quyết định thành lập cụm công nghiệp số 02 huyện Đak Đoa.
+                        </div>
+                        <div class="text-muted mt-1 text-sm">
+                            * Quyết định số 2178/QĐ-UBND ngày 25/06/2024 của UBND Huyện Đak Đoa.<br />
+                            <span class="mr-2"></span>Quyết định phê duyệt đồ án Quy hoạch chi tiết xây dựng tỷ lệ 1/500 cụm công nghiệp số 02 huyện Đak Đoa, tỉnh Gia Lai.
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="d-flex justify-content-center p-4 align-items-center">
                     <div class="flex flex-col items-center justify-center gap-4 mb-6">
-                        <div class="text-2xl mb-4 text-green-800 font-bold 2xl:text-3xl aos-init aos-animate" data-aos="fade-up">Cơ cấu sử dụng đất</div><div class="flex md:flex-col"><div class="flex justify-center mb-4 w-1/2 md:w-full"><img src="https://shinecgialai.com.vn/imgs/pie-chart.png" alt="chart" data-aos="zoom-in" class="aos-init aos-animate"></div><div class="grid md:grid-cols-2 md:text-base text-xs flex-1"><div class="py-1 flex items-center gap-1 md:gap-2 aos-init aos-animate" data-aos="fade-up"><div class="md:w-4 md:h-4 w-2 h-2 bg-blue-500 rounded-full"></div><div>Đất kho xưởng: <span class="text-blue-500 font-bold">50,96 Ha</span></div></div><div class="py-1 flex items-center gap-1 md:gap-2 aos-init aos-animate" data-aos="fade-up"><div class="md:w-4 md:h-4 w-2 h-2 bg-orange-500 rounded-full"></div><div>Đất giao thông nội bộ: <span class="text-blue-500 font-bold">8,78 Ha</span></div></div><div class="py-1 flex items-center gap-1 md:gap-2 aos-init" data-aos="fade-up"><div class="md:w-4 md:h-4 w-2 h-2 bg-sky-500 rounded-full"></div><div>Đất cây xanh:</div><span class="text-blue-500 font-bold">9,74 Ha</span></div><div class="py-1 flex items-center gap-1 md:gap-2 aos-init" data-aos="fade-up"><div class="md:w-4 md:h-4 w-2 h-2 bg-green-500 rounded-full"></div><div>Đất kỹ thuật:</div><span class="text-blue-500 font-bold">1,67 Ha</span></div><div class="py-1 flex items-center gap-1 md:gap-2 aos-init" data-aos="fade-up"><div class="md:w-4 md:h-4 w-2 h-2 bg-green-700 rounded-full"></div>
-                    <div>Đất dịch vụ:</div><span class="text-blue-500 font-bold">3,65 Ha</span></div></div></div></div>
+                        <div class="flex justify-center mb-4 col-md-6 md:w-full"><img src="https://shinecgialai.com.vn/imgs/pie-chart.png" alt="chart" data-aos="zoom-in" class="aos-init aos-animate"></div>
+                        <div class="grid md:grid-cols-2 md:text-base flex-1">
+                            <div class="py-1 flex items-center gap-1 md:gap-2" data-aos="fade-up">
+                                <div class="md:w-4 md:h-4 w-2 h-2 bg-blue-500 rounded-full"></div><div>Đất kho xưởng: <span class="text-blue-500 font-bold">50,96 Ha</span></div>
+                            </div><div class="py-1 flex items-center gap-1 md:gap-2 aos-init aos-animate" data-aos="fade-up"><div class="md:w-4 md:h-4 w-2 h-2 bg-orange-500 rounded-full"></div><div>Đất giao thông nội bộ: <span class="text-blue-500 font-bold">8,78 Ha</span></div></div><div class="py-1 flex items-center gap-1 md:gap-2 aos-init" data-aos="fade-up"><div class="md:w-4 md:h-4 w-2 h-2 bg-sky-500 rounded-full"></div><div>Đất cây xanh:</div><span class="text-blue-500 font-bold">9,74 Ha</span></div><div class="py-1 flex items-center gap-1 md:gap-2 aos-init" data-aos="fade-up"><div class="md:w-4 md:h-4 w-2 h-2 bg-green-500 rounded-full"></div><div>Đất kỹ thuật:</div><span class="text-blue-500 font-bold">1,67 Ha</span></div><div class="py-1 flex items-center gap-1 md:gap-2 aos-init" data-aos="fade-up">
+                                <div class="md:w-4 md:h-4 w-2 h-2 bg-green-700 rounded-full"></div>
+                                <div>Đất dịch vụ:</div><span class="text-blue-500 font-bold">3,65 Ha</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <div class="bg-cover bg-no-repeat bg-fixed bg-center bg-green-800 relative" id="benefits" style="background-image: url(&quot;https://shinecgialai.com.vn/imgs/bg-cover-2.png&quot;);"><div class="h-full flex items-center justify-center bg-repeat-x" style="background-image: url(&quot;https://shinecgialai.com.vn/imgs/bg-2.png&quot;); background-position: right bottom;"><div class="container mx-auto px-2 md:px-0"><div class="py-6 md:py-10"><h1 data-aos="fade-up" class="text-center text-2xl md:text-4xl 2xl:text-4xl uppercase font-bold py-4 text-white mb-0 2xl:mb-4 aos-init aos-animate" style="text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;">Lợi thế đầu tư tại cụm công nghiệp Số 2 Đak Đoa</h1><div class="grid md:grid-cols-6 grid-cols-3 gap-4 py-6 md:py-10"><div class="flex flex-col gap-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500"><div class="flex justify-center"><img src="https://shinecgialai.com.vn/imgs/i1.png"></div><div class="font-bold text-center md:text-xl text-white line-clamp-1 md:line-clamp-2" style="text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;">Tối ưu chi phí đầu tư xây dựng</div></div><div class="flex flex-col gap-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="600"><div class="flex justify-center"><img src="https://shinecgialai.com.vn/imgs/i2.png"></div><div class="font-bold text-center md:text-xl text-white line-clamp-1 md:line-clamp-2" style="text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;">Thủ tục pháp lý đầu tư minh bạch</div></div><div class="flex flex-col gap-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="700"><div class="flex justify-center"><img src="https://shinecgialai.com.vn/imgs/i3.png"></div><div class="font-bold text-center md:text-xl text-white line-clamp-1 md:line-clamp-2" style="text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;">Tuyển dụng hiệu quả</div></div><div class="flex flex-col gap-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="800"><div class="flex justify-center"><img src="https://shinecgialai.com.vn/imgs/i4.png"></div><div class="font-bold text-center md:text-xl text-white line-clamp-1 md:line-clamp-2" style="text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;">Mô hình cụm công nghiệp sinh thái - Môi trường đầu tư bền vững</div></div><div class="flex flex-col gap-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="900"><div class="flex justify-center"><img src="https://shinecgialai.com.vn/imgs/i5.png"></div><div class="font-bold text-center md:text-xl text-white line-clamp-1 md:line-clamp-2" style="text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;">Linh hoạt trong thu hút đầu tư</div></div><div class="flex flex-col gap-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="1000"><div class="flex justify-center"><img src="https://shinecgialai.com.vn/imgs/i6.png"></div><div class="font-bold text-center md:text-xl text-white line-clamp-1 md:line-clamp-2" style="text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;">Đội ngũ nhân viên tận tâm, hỗ trợ và kết nối các dịch vụ</div></div></div></div></div></div></div>
 <div class="bg-cover bg-no-repeat bg-fixed bg-center relative">
     <div class="h-full flex flex-col justify-between w-full">
@@ -108,7 +135,8 @@
                                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAlCAMAAAAdgrsPAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB+UExURQAAAABVlQBQnwBZmQBVnwBSnABYlwBVnABXnABTmwBVmgBVmQBUmwBWmgBWmQBVmgBVmQBUmwBUmgBUmwBVmwBWmwBVnABVmwBVnABUmwBVnABWnABVnABUnABVmwBVmwBVmwBVmwBVmgBVmwBVmwBVmwBVnABVnABVmwBVm+NAIvIAAAApdFJOUwAMEBQYHyAkLC4wPEBEUGBscHR/h4+Tlp+jpaevtLe7vb/Dx87P29/vj5E8gAAAAAlwSFlzAAAXEQAAFxEByibzPwAAAdJJREFUOE9tlAF71CAMhjPUurEKIuKYVjc2K/D//6AfhKbt3b3P3ZHQjyTkCnRGaWOtmYd3C+3XUis+taYwjckzc6o5zFrBnIzPNV3HUwGzTbBhYo1HH8x5NcMUdC6nYHNJF6s6Sz2sNCXc0hCFKrF0CcMixQyPKFbNhkqrzPrYkUWUMo++NDWHeHr4BB5+dqc9VNX3ofTBLS3E67/OW7NTn7eltdWXvsRd9U53EeXYfti2y/vfE+/R9QehQC/1/27l7KAunkcb3NpNsIxxIC5SLS1lB8bjI773RJ+/dJcJC2XpCbpuLIrDDtooIl8ow2e8pvkbi6yhSRabQkVEeNp23URf2WRMpcIbBcgx/WCRv6d5X1xpFZF2dIdCmuj71DIOXKYkW1VI8IdF8Y7caB+c1BvKKMh/segZGeUkpICyxEOuEQla6YDC66n2yjE/IsGSDrj2Auz5kO5F0kmkXrSq22Yxj2o/fiDCP7OJDL/mcQt1Og1DpFY2VB5d8MEJftQU+JXEqdsSzgd4z24/eU7KusDthw2J+Exc4upBg33X9equmZa9hYzO9XwlqVCu7xD82XWxYyvKxFLcsSOCTbjj1iXhvivptqRjrA8huNN1RvQf0C4mQ8WEmHsAAAAASUVORK5CYII=">
                             </div>
                             <div class="flex-1">
-                                <div class="font-bold text-xl mb-1 text-blue-800">Chất thải rắn phát sinh</div><ul class="text-sm md:text-base list-disc text-blue-900"><li class="ml-4">&gt;0,3 tấn/ha</li><li class="ml-4">Tỷ lệ thu gom xử lý chất thải rắn: 100%</li></ul>
+                                <div class="font-bold text-xl mb-1 text-blue-800">Chất thải rắn phát sinh</div>
+                                <ul class="text-sm md:text-base list-disc text-blue-900"><li class="ml-4">&gt;0,3 tấn/ha</li><li class="ml-4">Tỷ lệ thu gom xử lý chất thải rắn: 100%</li></ul>
                             </div>
                         </div>
                         <div class="md:px-4 flex gap-4 mb-4 aos-init" data-aos="fade-up" data-aos-delay="450">
@@ -118,7 +146,10 @@
                         </div><div class="md:px-4 flex gap-4 mb-4 aos-init" data-aos="fade-up" data-aos-delay="500">
                             <div>
                                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAArCAMAAADFVMEGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAH4UExURQAAAAAAAABVqgBAgABVqgBJkgBgnwBVqgBVlQBVmQBQnwBalgBVnABRlABZmQBRlwBVnwBSmwBYngBYlwBXmQBVnABTmABVnQBTmQBXmwBVmABXnABXmABXnQBVmgBXmQBVmwBTnQBVnABTmQBTngBXmwBWnABVmQBVnQBUmwBWnABUmwBWmQBWnQBWmgBVmwBUmQBUnQBVnABWmwBVnABUmwBWmQBWnABVmgBWmgBVmwBWmgBUmgBWmwBVnABWmwBUmwBWnABVmgBWmgBVmwBUnABWmgBTmgBWmwBVmQBVnABUmwBVmgBUmgBVmwBUmQBUnABVmwBVmwBUmgBWmwBUmwBUmwBWmgBWnABVmwBWmgBVmwBWmgBUnABWmwBWmwBUmwBVmgBVnABWnABVmwBUmwBUnABWmwBVmwBWmwBVnABVmgBVnABUmwBWmwBUmwBWnABUmwBWmwBVmwBVmwBVnABVmwBVmwBVmgBVnABVmwBVmwBVnABVmgBVmwBVmwBVmwBVmgBVnABVmwBVmwBVmgBVnABVmwBVmwBVnABVmwBUmwBVmwBVmwBVmwBVmwBVmwBVmwBVmwBVnABVmwBVmwBVmwBVmwBVmwBVmwBVmgBVnABVmwBVmwBVmgBUmwBVmwBVmwBVmwBVmwBVmwBVmgBVmwBVm116AjwAAACndFJOUwABAwQGBwgJDA8QERITFBYYHB0gIyQlJygpKiwvLzAyMzQ2Nzc4Ozw8PT5AQUFERUZGSEpLT1BQUVNUVlhZWlxeX2BiY2RlaGtsb3BydHV2dnh7fH1/goODhIaHiYuMj5GTk5WWl5qbnJ6foqKjpKanqaqtrq+ws7a2t7u8vr/BwsPDxsfIyMnKy8zOzs/R1Nfb3d/g4uPl5+jp6uvv8fLz9/j5+/3+tqDAdQAAAAlwSFlzAAAXEQAAFxEByibzPwAAAqlJREFUOE+FlPlfTGEUxg/DyIgmxNiyZhsGgyyTECMh24hIZso+pCyFQskaSmOZiom5uXr+Ted933NHUx/j+8t7znOee++7nPfSv3DLmANXWIIcREslmEieL1BRwmPQzjPCOKZuqu0EkD5I5E11i5jFpL2P2cCcJ8q/g7Mij6WowzgSTS6iGsBPFPFKTVgzzHWrJaBXHLBhucltJdXMMpTZbLnqMcnyF0AbkR+wx2xAkC39zkOeW+w/TeQb5LFMRAr08YMrJaEzXMIWDtY/Aj5uMKK7H+jNbMee72xJzFChpwfo4SUwx4G+jTpi1GSAZpPMSQO1KvDwd/9uvNmCKsmO8Dzn8hgBnhmF4USxWlL1SCUPT4FyIxCFhrTlnZkEUw60T6alI3jpSMVd2oLLknOLJIESOgxcEoFajQXDnw0dLqoDqikOBMRyUiwOX7cT7QQaqA2Ybyyl/N4sTrC4TJ3La4zO1JaFT6TkcGMaqwUWPlAStra4rkjJoWuJ1gdh0Vv8KlDxUSk5DIW0hYbwhe4DxRxu/SQ1h4ix5P/GK4oC27gN26XkcFuaycebqL5RTRSTksObFcZCYSBKQT5/PmGh3lhsZ8uoGdhF059jdLMIRA+M55yk5LWQ5h4/pd4mzB7Qlrt6pQqebQsPi5MY2GEU9WEmVSgpFVpm1dTEvSmtelFZ0gdMwpvMs7mmo1l8TnEdqV4CLpiY4UO3i0wY+gbE1KVcwP2Le871nFIzAhyTRHfozXlE+3h8v1ZEVyNn8n4FNxGCRA3AzwqRAnyj0DH2b1Zlqx9OAqjTqWu3Ppvrmb7W+Ft5s4FuVkvrH6aUw+IzyoaLh9C7jmj/D2VAKrZKKlnE1V0s1O9I1Mqax5NUZ1IZb4xULDLCRHy9//8nh30S5CBzktkQ/QEkIlj62jE5+AAAAABJRU5ErkJggg==">
-                            </div><div class="flex-1"><div class="font-bold text-xl mb-1 text-blue-800">Hệ thống cấp điện</div><ul class="text-sm md:text-base list-disc text-blue-900"><li class="ml-4">16 máy biến áp hạ áp cho các nhà đầu tư thứ cấp</li><li class="ml-4">3 trạm biến áp cho khu vực dịch vụ, khu chiếu sáng và khu kỹ thuật</li></ul></div>
+                            </div><div class="flex-1">
+                                <div class="font-bold text-xl mb-1 text-blue-800">Hệ thống cấp điện</div>
+                                <ul class="text-sm md:text-base list-disc text-blue-900"><li class="ml-4">16 máy biến áp hạ áp cho các nhà đầu tư thứ cấp</li><li class="ml-4">3 trạm biến áp cho khu vực dịch vụ, khu chiếu sáng và khu kỹ thuật</li></ul>
+                            </div>
                         </div>
                         <div class="md:px-4 flex gap-4 mb-4 aos-init" data-aos="fade-up" data-aos-delay="550">
                             <div>
@@ -126,12 +157,54 @@
                             </div>
                             <div class="flex-1">
                                 <div class="font-bold text-xl mb-1 text-blue-800">Viễn thông liên lạc</div>
-                                <ul class="text-sm md:text-base list-disc text-blue-900"><li class="ml-4">5 trạm BTS phủ song toàn bộ khu vực</li><li class="ml-4">Áp dụng công nghệ truy cập mạng quang thụ động theo tiêu chuẩn GPON – mạng quang thụ động tốc độ Gigabit</li></ul>
+                                <ul class="text-sm md:text-base list-disc text-blue-900">
+                                    <li class="ml-4">5 trạm BTS phủ song toàn bộ khu vực</li>
+                                    <li class="ml-4">Áp dụng công nghệ truy cập mạng quang thụ động theo tiêu chuẩn GPON – mạng quang thụ động tốc độ Gigabit</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="bg-gradient-to-r from-sky-500 from-10% via-sky-200 via-30% to-green-600 to-90% h-1"></div>
+<div class="container-fluid">
+    <div class="row py-4 items-center">
+        <div class="col-md-4 px-4">
+            <div class="text-muted mb-4" data-aos="fade-up">
+                <div class="mb-2">
+                    <div class="fw-bold">ĐƯỜNG BIỂN:</div>
+                    Cảng Quy Nhơn: cách 150km (Cảng lớn nhất khu vực miền Trung) thời gian khoảng 1h50 phút
+                    <div class="fw-bold">ĐƯỜNG BỘ:</div>
+                    Cửa khẩu Lệ Thanh giáp với Campuchia: cách 90km thời gian khoảng 1h30 phút.<br />
+                    Của khẩu bờ Y giáp với Lào: cách 180km thời gian khoảng 2h30 phút.<br />
+                    Giáp với các tuyến đường quốc lộ liên tỉnh và liên quốc gia:<br />
+                    + Quốc lộ 14 (nối các tỉnh Tây nguyên với nhau và miền Đông Nam bộ là Chơn Thành Bình Phước)<br />
+                    + Quốc lộ 19 nối từ tỉnh Gia Lai đến Bình Định<br />
+                    + Quốc lộ 25 nối từ tỉnh Gia Lai đi Phú Yên<br />
+                    <div class="fw-bold">ĐƯỜNG HÀNG KHÔNG:</div>
+                    + Sân bay Pleiku: cách 23km thời gian khoảng 30 phút<br />
+                    + Sân bay Tân Sơn Nhất: 500km thời gian khoảng 9h<br />
+                    <div class="fw-bold">CÁC KHU CÔNG NGHIỆP:</div>
+                    + KCN Trà Đa: cách .... km, thời gian khoảng ...<br />
+                    + KCN Nam Pleiku:<br />
+                    + KKT Cửa khẩu quốc tế Lệ Thanh: cách 90km thời gian khoảng 1h30 phút.<br />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <img src="https://shinecgialai.com.vn/imgs/map.png" data-aos="fade-up" class="w-full">
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ytModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <iframe class="w-100" height="600" src="https://www.youtube.com/embed/iIp6b4KaHM4?si=1pyaz6-VDUJDY5F4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
     </div>
 </div>

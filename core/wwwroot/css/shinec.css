@@ -421,6 +421,7 @@ summary {
 
 .cea-icon-list-item {
     padding-bottom: calc(10px/2);
+    font-size: 1.25rem;
 }
 
 ul.nav.flex-column.cea-icon-list {
@@ -7649,7 +7650,7 @@ img.mobile-logo {
     }
 
     .jumbotron-contact-item {
-        padding: 0 0.5rem;
+        padding: 0 1rem;
     }
 
     .about-us {
