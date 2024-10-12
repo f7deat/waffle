@@ -82,6 +82,7 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
         var query = (from catalog in _context.Catalogs
                      join product in _context.Products on catalog.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
                      where catalog.Active && catalog.ParentId == pageData.ParentId && catalog.Type == CatalogType.Product && catalog.Id != pageData.Id
+                     && catalog.Locale == pageData.Locale
                      select new ProductListItem
                      {
                          Id = catalog.Id,

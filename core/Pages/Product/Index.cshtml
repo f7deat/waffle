@@ -1,4 +1,5 @@
 ﻿@page
+@using Waffle.Extensions
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
 @model Waffle.Pages.Products.IndexModel
@@ -7,6 +8,64 @@
     <div class="row">
         <div class="col-md-8">
 
+            <div class="mb-2 d-flex justify-between items-center">
+                <form class="mb-2" method="get">
+                    <div class="border rounded-full flex bg-white">
+                        <input type="search" name="searchTerm" placeholder="Tìm kiếm..." class="flex-grow px-4 rounded-full" autocomplete="off">
+                        <button type="submit" class="py-2 px-3">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="dropdown">
+                    <button class="py-2 fw-medium" data-bs-toggle="dropdown" aria-expanded="false" id="drp-sort">
+                        <i class="fas fa-sort-amount-up"></i> Sắp xếp
+                    </button>
+                    <div class="dropdown-menu bg-white shadow dropdown-menu-end shadow-lg rounded" aria-labelledby="drp-sort" style="">
+                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">Lượt xem</a>
+                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">Thời gian</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="title">@ViewData["Title"]</div>
+            <div class="row">
+                @foreach (var item in Model.Products)
+                {
+                    <div class="col-6 col-md-3">
+                        <a href="@item.Url">
+                            <div class="card-image bg-dark relative">
+                                <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
+                                @if (item.Price != null && item.SalePrice != null)
+                                {
+                                    <span class="badge bg-danger position-absolute top-0 end-0">
+                                        <span>GIẢM</span>
+                                        @item.Discount %
+                                    </span>
+                                }
+                            </div>
+                        </a>
+                        <div class="py-2">
+                            <div class="mb-1 d-flex justify-between">
+                                <div>
+                                    <span class="text-danger fw-medium">@item.SalePrice.ToMoney()</span>
+                                    <s class="text-muted text-sm">@item.Price.ToMoney()</s>
+                                </div>
+                                <div class="text-warning text-xs">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <a href="@item.Url" class="line-clampin">
+                                @item.Name
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
             @if (Model.IsPremium)
             {
                 <div class="title">Danh mục</div>

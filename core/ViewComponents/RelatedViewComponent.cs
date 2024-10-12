@@ -12,11 +12,13 @@ public class RelatedViewComponent : ViewComponent
 {
     private readonly ICatalogService _catalogService;
     private readonly IProductService _productService;
+    private readonly ILocalizationService _localizationService;
 
-    public RelatedViewComponent(ICatalogService catalogService, IProductService productService)
+    public RelatedViewComponent(ICatalogService catalogService, IProductService productService, ILocalizationService localizationService)
     {
         _catalogService = catalogService;
         _productService = productService;
+        _localizationService = localizationService;
     }
 
     private PageData PageData
@@ -32,8 +34,11 @@ public class RelatedViewComponent : ViewComponent
     {
         if (PageData.Type == CatalogType.Product)
         {
-            var products = await _productService.ListRelatedAsync(PageData);
-            return View("Product", products);
+            return View("Product", new Feed
+            {
+                Name = await _localizationService.GetAsync("RelatedProducts"),
+                Products = await _productService.ListRelatedAsync(PageData)
+            });
         }
         var articles = await _catalogService.ArticleRelatedListAsync(new ArticleRelatedFilterOption
         {

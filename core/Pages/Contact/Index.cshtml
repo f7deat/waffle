@@ -8,8 +8,8 @@
     @await Component.InvokeAsync(nameof(Breadcrumb))
 
     <div class="row">
-        <div class="col-md-8">
-
+        <div class="col-md-8 mb-4">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15486.038331836062!2d108.10330145956281!3d13.987771454376812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x316ea1bcbdbe3dcd%3A0x399c4960798249b4!2zxJDEg2sgxJBvYSwgVHAuIFBsZWlrdSwgR2lhIExhaSwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1728702908354!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="col-md-4">
             <div class="card shadow rounded p-4 bg-white">
@@ -33,42 +33,16 @@
                             </label>
                             <input class="form-control" type="text" name="name" id="contact-input-name" required />
                         </div>
-                        <div class="row gap-4">
-                            <div class="wf-col mb-3">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Email</label>
                                 <input class="form-control" type="email" name="email" id="contact-input-email" required />
                             </div>
-                            <div class="wf-col mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">
                                     <localize key="phoneNumber" />
                                 </label>
                                 <input class="form-control" type="tel" name="phoneNumber" id="contact-input-phoneNumber" required />
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <localize key="address" />
-                            </label>
-                            <input class="form-control" type="text" name="address" />
-                        </div>
-                        <div class="row gap-4">
-                            <div class="wf-col mb-3">
-                                <label class="form-label">
-                                    <localize key="jobType" />
-                                </label>
-                                <select class="form-control" name="JobType">
-                                    <option value="decking">Decking</option>
-                                    <option value="fencing">Fencing</option>
-                                    <option value="gate">Gate</option>
-                                    <option value="pergola">Pergola</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                            <div class="wf-col mb-3">
-                                <label class="form-label">
-                                    <localize key="appointment" />
-                                </label>
-                                <input type="text" class="form-control" id="datetimepicker" name="appointment">
                             </div>
                         </div>
                         <div class="mb-3">

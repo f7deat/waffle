@@ -48,10 +48,10 @@
 
 .jumbotron-description {
     max-width: 800px;
-    margin-bottom: 2rem;
-    font-weight: 400;
-    padding: 0 1rem;
-    font-size: 0.95rem;
+    margin-bottom: 2rem !important;
+    font-weight: 400 !important;
+    padding: 0 1rem !important;
+    font-size: 0.95rem !important;
 }
 
 .jumbotron-contact {
@@ -145,7 +145,7 @@ hr {
 
 h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
-    margin-bottom: .5rem
+    margin-bottom: .5rem !important
 }
 
 p {
@@ -383,27 +383,27 @@ summary {
 }
 
 .h1, h1 {
-    font-size: 2.5rem
+    font-size: 2.5rem !important;
 }
 
 .h2, h2 {
-    font-size: 2rem
+    font-size: 2rem !important;
 }
 
 .h3, h3 {
-    font-size: 1.75rem
+    font-size: 1.75rem !important;
 }
 
 .h4, h4 {
-    font-size: 1.5rem
+    font-size: 1.5rem !important;
 }
 
 .h5, h5 {
-    font-size: 1.25rem
+    font-size: 1.25rem !important;
 }
 
 .h6, h6 {
-    font-size: 1rem
+    font-size: 1rem !important;
 }
 
 .lead {
@@ -729,11 +729,11 @@ p:last-child {
 
 p {
     margin-top: 0;
-    margin-bottom: 1rem
+    margin-bottom: 1rem !important;
 }
 
 ul, ol {
-    padding-left: 1rem;
+    padding-left: 1rem !important;
 }
 
     ol li {
@@ -794,11 +794,6 @@ table td, table th {
     padding: 5px 10px
 }
 
-input, .wp-block-search__input {
-    min-height: 52px;
-    padding: 0 12px
-}
-
 form.post-password-form input {
     height: 54px
 }
@@ -822,7 +817,7 @@ ul {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
+    font-weight: 700 !important;
 }
 
 figure.alignnone, figure.aligncenter {
@@ -834,8 +829,8 @@ figure.alignnone, figure.aligncenter {
 }
 
 .section-title-wrapper .section-title {
-    margin-bottom: 1.25rem;
-    font-size: 1.5rem;
+    margin-bottom: 1.25rem !important;
+    font-size: 1.5rem !important;
 }
 
 .attachment-full {
@@ -3044,7 +3039,7 @@ aside.footer-widget-2 {
 }
 
 .widget .widget-title {
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
     padding-bottom: 0;
     color: #252525
 }
@@ -3068,11 +3063,15 @@ aside.footer-widget-2 {
     margin-bottom: 0
 }
 
+.text-2xl {
+    font-size: 1.5rem !important;
+}
+
 .widget-title {
-    margin-bottom: 30px;
+    margin-bottom: 30px !important;
     position: relative;
     padding-top: 0;
-    font-size: 21px;
+    font-size: 21px !important;
     line-height: 30px
 }
 
@@ -7654,11 +7653,11 @@ img.mobile-logo {
     }
 
     .about-us {
-        padding: 4rem 0;
+        padding: 3rem 0 0 0;
     }
 
     .section-title-wrapper .section-title {
-        font-size: 3rem;
+        font-size: 3rem !important;
     }
 }
 
@@ -7668,15 +7667,15 @@ img.mobile-logo {
     }
 
     .jumbotron-description {
-        font-size: 1.25rem;
+        font-size: 1.25rem !important;
     }
 
     .jumbotron-contact-name {
-        font-size: 1.25rem;
+        font-size: 1.25rem !important;
     }
 
     .jumbotron-contact-value {
-        font-size: 2rem;
+        font-size: 2rem !important;
     }
 }
 
@@ -7691,5 +7690,10 @@ img.mobile-logo {
 
     .jumbotron-title {
         font-size: 2rem;
+    }
+}
+@media screen and (min-width: 1536px) {
+    .\32xl\:text-4xl {
+        font-size: 2.25rem !important;
     }
 }

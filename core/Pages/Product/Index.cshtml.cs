@@ -3,29 +3,34 @@ using Microsoft.Extensions.Options;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
+using Waffle.Core.Services.Ecommerces;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Pages.Products
 {
     public class IndexModel : EntryPageModel
     {
         private readonly IShopeeService _shopeeService;
+        private readonly IProductService _productService;
         private readonly SettingOptions Options;
 
-        public IndexModel(ICatalogService catalogService, IShopeeService shopeeService, IOptions<SettingOptions> options) : base(catalogService)
+        public IndexModel(ICatalogService catalogService, IShopeeService shopeeService, IOptions<SettingOptions> options, IProductService productService) : base(catalogService)
         {
             _shopeeService = shopeeService;
             Options = options.Value;
+            _productService = productService;
         }
 
         public ListResult<Catalog>? Categories;
         public BaseInfoAndLinks BaseInfoAndLinks = new();
         public List<ComponentListItem> Components = new();
         public bool IsPremium = false;
+        public IEnumerable<ProductListItem> Products { get; set; } = new List<ProductListItem>();
 
         [BindProperty(SupportsGet = true)]
         public int Current { get; set; } = 1;
@@ -41,6 +46,14 @@ namespace Waffle.Pages.Products
 
             Components = await _catalogService.ListComponentAsync(PageData.Id);
             IsPremium = Options.Theme == "Default";
+            var products = await _productService.ListAsync(new ProductFilterOptions
+            {
+                Current = 1,
+                PageSize = 12,
+                Active = true,
+                Locale = PageData.Locale
+            });
+            Products = products.Data;
 
             return Page();
         }
