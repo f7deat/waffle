@@ -57,12 +57,25 @@
 .jumbotron-contact {
     margin: 1rem;
     align-items: center;
+    display: flex;
 }
 
 .jumbotron-contact-item {
-    flex: 1;
     padding: 1rem;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 1rem;
 }
+
+    .jumbotron-contact-item:last-child {
+        flex: none;
+        padding: 0rem;
+    }
+
+    .jumbotron-contact-item img {
+        max-height: 8rem;
+    }
 
 .jumbotron-contact-name {
     font-size: 0.85rem;

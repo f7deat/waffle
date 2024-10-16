@@ -551,7 +551,7 @@ table {
 }
 
 .text-primary {
-    color: var(--primary);
+    color: var(--primary) !important;
 }
 
 .simple-image__picture img {
