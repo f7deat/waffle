@@ -25,6 +25,7 @@ public class IndexModel : EntryPageModel
     public ListResult<CatalogListItem> Articles = new();
     public List<PlaylistItem> PlaylistItems = new();
     public Feed ProductFeed = new();
+    public string? SearchPlaceHolder { get; set; }
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -77,7 +78,7 @@ public class IndexModel : EntryPageModel
             Products = products.Data,
             ItemPerRow = "col-6 col-md-3"
         };
-
+        SearchPlaceHolder = await _localizationService.GetAsync(nameof(SearchPlaceHolder));
         return Page();
     }
 

@@ -9,18 +9,21 @@ namespace Waffle.Pages.Article;
 
 public class IndexModel : EntryPageModel
 {
+    private readonly ILocalizationService _localizationService;
 
     [BindProperty(SupportsGet = true)]
     public int Current { get; set; } = 1;
 
     public ListResult<CatalogListItem>? Articles;
 
-    public IndexModel(ICatalogService catalogService) : base(catalogService)
+    public IndexModel(ICatalogService catalogService, ILocalizationService localizationService) : base(catalogService)
     {
+        _localizationService = localizationService;
     }
 
     [BindProperty(SupportsGet = true)]
     public string? SearchTerm { get; set; }
+    public string? SearchPlaceHolder {  get; set; }
 
     public async Task OnGetAsync()
     {
@@ -33,5 +36,6 @@ public class IndexModel : EntryPageModel
             Name = SearchTerm,
             Locale = PageData.Locale
         });
+        SearchPlaceHolder = await _localizationService.GetAsync(nameof(SearchPlaceHolder));
     }
 }

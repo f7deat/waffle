@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
-using Waffle.Core.Services.Ecommerces;
+using Waffle.Core.Services;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
@@ -18,18 +18,21 @@ namespace Waffle.Pages.Products
         private readonly IShopeeService _shopeeService;
         private readonly IProductService _productService;
         private readonly SettingOptions Options;
+        private readonly ILocalizationService _localizationService;
 
-        public IndexModel(ICatalogService catalogService, IShopeeService shopeeService, IOptions<SettingOptions> options, IProductService productService) : base(catalogService)
+        public IndexModel(ICatalogService catalogService, IShopeeService shopeeService, IOptions<SettingOptions> options, IProductService productService, ILocalizationService localizationService) : base(catalogService)
         {
             _shopeeService = shopeeService;
             Options = options.Value;
             _productService = productService;
+            _localizationService = localizationService;
         }
 
         public ListResult<Catalog>? Categories;
         public BaseInfoAndLinks BaseInfoAndLinks = new();
         public List<ComponentListItem> Components = new();
         public bool IsPremium = false;
+        public string? SearchPlaceHolder { get; set; }
         public IEnumerable<ProductListItem> Products { get; set; } = new List<ProductListItem>();
 
         [BindProperty(SupportsGet = true)]
@@ -54,6 +57,7 @@ namespace Waffle.Pages.Products
                 Locale = PageData.Locale
             });
             Products = products.Data;
+            SearchPlaceHolder = await _localizationService.GetAsync(nameof(SearchPlaceHolder));
 
             return Page();
         }

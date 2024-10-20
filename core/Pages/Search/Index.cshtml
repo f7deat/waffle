@@ -15,7 +15,7 @@
             <div class="mb-2 flex items-center justify-between">
                 <form class="mb-2" action="/search" method="get">
                     <div class="border rounded-full flex bg-white">
-                        <input type="search" name="searchTerm" placeholder="Tìm kiếm..." class="flex-grow px-4 rounded-full" value="@Model.FilterOptions.SearchTerm" autocomplete="off">
+                        <input type="search" name="searchTerm" placeholder="@Model.SearchPlaceHolder" class="flex-grow px-4 rounded-full" value="@Model.FilterOptions.SearchTerm" autocomplete="off">
                         <button type="submit" class="py-2 px-3">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
@@ -23,15 +23,15 @@
                 </form>
                 <div class="dropdown">
                     <button class="py-2 fw-medium" data-bs-toggle="dropdown" aria-expanded="false" id="drp-sort">
-                        <i class="fas fa-sort-amount-up"></i> Sắp xếp
+                        <i class="fas fa-sort-amount-up"></i> <localize key="Arrange" />
                     </button>
                     <div class="dropdown-menu bg-white shadow dropdown-menu-end shadow-lg rounded" aria-labelledby="drp-sort">
-                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="/search?searchTerm=@Model.FilterOptions.SearchTerm&orderBy=VIEW&amp;sortBy=ASCENDING&amp;current=1">Lượt xem</a>
-                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="/search?searchTerm=@Model.FilterOptions.SearchTerm&orderBy=MODIFIED&amp;sortBy=ASCENDING&amp;current=1">Thời gian</a>
+                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="/search?searchTerm=@Model.FilterOptions.SearchTerm&orderBy=VIEW&amp;sortBy=ASCENDING&amp;current=1"><localize key="View" /></a>
+                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="/search?searchTerm=@Model.FilterOptions.SearchTerm&orderBy=MODIFIED&amp;sortBy=ASCENDING&amp;current=1"><localize key="Time" /></a>
                     </div>
                 </div>
             </div>
-            <div class="title">@Model.Articles.Total kết quả tìm kiếm cho: @Model.FilterOptions.SearchTerm</div>
+            <div class="title">@Model.Articles.Total <localize key="SearchResultsFor" /> : @Model.FilterOptions.SearchTerm</div>
             @if (Model.Articles.HasData)
             {
                 <partial name="~/Pages/Article/_List.cshtml" model="Model.Articles.Data" />

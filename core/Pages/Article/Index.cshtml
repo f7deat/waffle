@@ -10,7 +10,7 @@
             <div class="mb-2 d-flex justify-between items-center">
                 <form class="mb-2" method="get">
                     <div class="border rounded-full flex bg-white">
-                        <input type="search" name="searchTerm" placeholder="Tìm kiếm..." class="flex-grow px-4 rounded-full" autocomplete="off">
+                        <input type="search" name="searchTerm" placeholder="@Model.SearchPlaceHolder" class="flex-grow px-4 rounded-full" autocomplete="off">
                         <button type="submit" class="py-2 px-3">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
@@ -18,11 +18,15 @@
                 </form>
                 <div class="dropdown">
                     <button class="py-2 fw-medium" data-bs-toggle="dropdown" aria-expanded="false" id="drp-sort">
-                        <i class="fas fa-sort-amount-up"></i> Sắp xếp
+                        <i class="fas fa-sort-amount-up"></i> <localize key="Arrange" />
                     </button>
                     <div class="dropdown-menu bg-white shadow dropdown-menu-end shadow-lg rounded" aria-labelledby="drp-sort" style="">
-                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=@Model.SearchTerm&orderby=VIEW">Lượt xem</a>
-                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=@Model.SearchTerm&orderby=DATE">Thời gian</a>
+                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">
+                            <localize key="View" />
+                        </a>
+                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">
+                            <localize key="Time" />
+                        </a>
                     </div>
                 </div>
             </div>
