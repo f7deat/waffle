@@ -6943,9 +6943,6 @@ li.breadcrumb-wrap {
 }
 
 @media only screen and (min-width:912px) {
-    .elements-3 > div > ul {
-        width: 20%
-    }
 
         .elements-3 > div > ul.pull-center.justify-content-center {
             width: 60%
