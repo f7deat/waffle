@@ -3,6 +3,7 @@
 @using Waffle.Models.Components.Specifications
 @model Waffle.Pages.Article.IndexModel
 
+@await Component.InvokeAsync(nameof(Breadcrumb))
 <main class="container">
     <div class="row">
         <div class="col-md-8">

@@ -5,7 +5,7 @@ using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Product spotlight", Prompt = "product-spotlight", AutoGenerateField = true)]
+[Display(Name = "Product spotlight", Prompt = nameof(ProductSpotlight), AutoGenerateField = true)]
 public class ProductSpotlight : AbstractComponent
 {
     [JsonPropertyName("title")]

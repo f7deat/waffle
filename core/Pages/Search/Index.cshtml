@@ -6,9 +6,8 @@
 @using Waffle.Models.Components.Lister
 @model Waffle.Pages.Search.IndexModel
 
+@await Component.InvokeAsync(nameof(Breadcrumb))
 <main class="container">
-
-    @await Component.InvokeAsync(nameof(Breadcrumb))
 
     <div class="row">
         <div class="col-md-8">

@@ -6,6 +6,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Extensions;
 using Waffle.Models;
+using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
 using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
@@ -15,9 +16,11 @@ namespace Waffle.Pages.Tag;
 public class DetailsModel : DynamicPageModel
 {
     private readonly IProductService _productService;
-    public DetailsModel(ICatalogService catalogService, IProductService productService) : base(catalogService)
+    private readonly ILocalizationService _localizationService;
+    public DetailsModel(ICatalogService catalogService, IProductService productService, ILocalizationService localizationService) : base(catalogService)
     {
         _productService = productService;
+        _localizationService = localizationService;
     }
 
     public ListResult<CatalogListItem>? Articles;
@@ -27,7 +30,7 @@ public class DetailsModel : DynamicPageModel
     [UIHint(UIHint.SearchBox)]
     public string? SearchTerm { get; set; }
 
-    public IEnumerable<ProductListItem> Products = new List<ProductListItem>();
+    public Feed Products = new();
     public ListResult<CatalogListItem> Albums = new();
     public ListResult<CatalogListItem> Locations = new();
     public VideoPlayList Videos = new();
@@ -43,13 +46,17 @@ public class DetailsModel : DynamicPageModel
             Locale = PageData.Locale
         });
 
-        Products = await _productService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
+        Products = new Feed
         {
-            Current = Current,
-            Name = SearchTerm,
-            Type = CatalogType.Product,
-            Locale = PageData.Locale
-        });
+            Products = await _productService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
+            {
+                Current = Current,
+                Name = SearchTerm,
+                Type = CatalogType.Product,
+                Locale = PageData.Locale
+            }),
+            Name = await _localizationService.GetAsync(nameof(Product))
+        };
 
         Albums = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
         {

@@ -7,8 +7,8 @@
 @using Waffle.ViewComponents;
 @model Waffle.Pages.Product.DetailsModel
 
+@await Component.InvokeAsync(nameof(Breadcrumb))
 <main class="container">
-    @await Component.InvokeAsync(nameof(Breadcrumb))
     <div class="row">
         <div class="col-md-8">
             <div class="title">@Model.PageData.Name</div>

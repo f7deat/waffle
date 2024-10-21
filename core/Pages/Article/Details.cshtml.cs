@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
@@ -18,12 +20,14 @@ public class DetailsModel : DynamicPageModel
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IShopeeService _shopeeService;
+    private readonly SettingOptions Options;
 
-    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, IShopeeService shopeeService) : base(catalogService)
+    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, IShopeeService shopeeService, IOptions<SettingOptions> options) : base(catalogService)
     {
         _context = context;
         _userManager = userManager;
         _shopeeService = shopeeService;
+        Options = options.Value;
     }
 
     public List<WorkListItem> Works = new();
@@ -41,7 +45,7 @@ public class DetailsModel : DynamicPageModel
 
         IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
 
-        if (Tags.Any())
+        if (Tags.Any() && Options.Theme == "Default")
         {
             ShopeeProducts = await _shopeeService.GetLinkListsAsync(Tags.Last().Name, 1, 4);
         }

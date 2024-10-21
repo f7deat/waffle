@@ -7,9 +7,9 @@
 @using Waffle.Entities
 @model Waffle.Pages.Article.DetailsModel
 
+@await Component.InvokeAsync(nameof(Breadcrumb))
 <main class="wf-article__detail">
     <div class="container">
-        @await Component.InvokeAsync(nameof(Breadcrumb))
         <div class="row">
             <div class="col-md-8">
 

@@ -746,7 +746,7 @@ p {
     margin-bottom: 1rem !important;
 }
 
-ul, ol {
+.post-body ul, .post-body ol {
     padding-left: 1rem !important;
 }
 

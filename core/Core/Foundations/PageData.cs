@@ -14,17 +14,7 @@ public class PageData : BaseEntity
     public CatalogType Type { get; set; }
     public int ViewCount { get; set; }
     public DateTime ModifiedDate { get; set; }
-    public string Url
-    {
-        get
-        {
-            if (string.IsNullOrEmpty(Category))
-            {
-                return $"/{Type.ToString().ToLower()}/{NormalizedName}";
-            }
-            return $"/{Type.ToString().ToLower()}/{Category}/{NormalizedName}";
-        }
-    }
+    public string Url { get; set; } = default!;
     public string? SettingString { get; set; }
 
     public CatalogSetting Setting

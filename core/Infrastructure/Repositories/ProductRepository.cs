@@ -24,7 +24,6 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
     {
         var query = from catalog in _context.Catalogs
                     join product in _context.Products on catalog.Id equals product.CatalogId into productCatalog from product in productCatalog.DefaultIfEmpty()
-                    join parent in _context.Catalogs on catalog.ParentId equals parent.Id into cp from parent in cp.DefaultIfEmpty()
                     where catalog.Active && catalog.Type == CatalogType.Product 
                     && (filterOptions.ParentId == null || catalog.ParentId == filterOptions.ParentId)
                     && (filterOptions.Active == null || catalog.Active == filterOptions.Active)
@@ -37,11 +36,11 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                         ViewCount = catalog.ViewCount,
                         Price = product.Price,
                         SalePrice = product.SalePrice,
-                        Category = parent.NormalizedName,
                         Description = catalog.Description,
                         Type = catalog.Type,
                         ModifiedDate = catalog.ModifiedDate,
-                        Locale = catalog.Locale
+                        Locale = catalog.Locale,
+                        Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
                     };
         if (!string.IsNullOrWhiteSpace(filterOptions.Name))
         {
@@ -72,7 +71,8 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                         Thumbnail = b.Thumbnail,
                         Price= product.Price,
                         SalePrice = product.SalePrice,
-                        Category = c.NormalizedName
+                        Category = c.NormalizedName,
+                        Url = b.Url ?? $"/{b.Type}/{b.NormalizedName}".ToLower()
                     };
         return await query.OrderBy(x => Guid.NewGuid()).Take(4).ToListAsync();
     }
@@ -100,7 +100,6 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                     join product in _context.Products on catalog.Id equals product.CatalogId into catalogProduct
                     from product in catalogProduct.DefaultIfEmpty()
                     join tag in _context.WorkItems on catalog.Id equals tag.WorkId
-                    join p in _context.Catalogs on catalog.ParentId equals p.Id into pc from p in pc.DefaultIfEmpty()
                     where catalog.Type == CatalogType.Product && catalog.Active
                     && (!tagIds.Any() || tagIds.Contains(tag.CatalogId))
                     && catalog.Locale == locale
@@ -114,8 +113,8 @@ public class ProductRepository : EfRepository<Product>, IProductRepository
                         Thumbnail = catalog.Thumbnail,
                         ViewCount = catalog.ViewCount,
                         ModifiedDate = catalog.ModifiedDate,
-                        Category = p.NormalizedName,
-                        Type = catalog.Type
+                        Type = catalog.Type,
+                        Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
                     };
         return await query.Distinct().OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }

@@ -3,7 +3,9 @@
 @model Waffle.Models.Components.CommentComponent
 
 <div class="comment mb-4" id="@Model.Id">
-    <div class="title">Bình luận</div>
+    <div class="title">
+        <localize key="Comment" />
+    </div>
     @if (Model.IsAuthenticated)
     {
         <div class="comment-message mb-2">
@@ -47,9 +49,11 @@
     else
     {
         <div class="px-2 text-center">
-            Để lại bình luận <a href="/users/login?returnUrl=@Model.CurrentUrl">
+            <localize key="LeaveComment" /> <a href="/users/login?returnUrl=@Model.CurrentUrl">
                 <localize key="login" />
-            </a> / <a href="/users/register">Đăng ký</a>
+            </a> / <a href="/users/register">
+                <localize key="Register" />    
+            </a>
         </div>
     }
 </div>
