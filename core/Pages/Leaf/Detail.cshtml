@@ -6,9 +6,9 @@
 @using Waffle.ViewComponents;
 @model Waffle.Pages.Leaf.DetailModel
 
-<div class="@Model.PageData.Setting.Layout">
+@await Component.InvokeAsync(nameof(Breadcrumb))
 
-    @await Component.InvokeAsync(nameof(Breadcrumb))
+<div class="@Model.PageData.Setting.Layout">
 
     @if (Model.Components != null)
     {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 
@@ -23,6 +22,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public virtual DbSet<Order> Orders { get; set; } = default!;
     public virtual DbSet<OrderDetail> OrderDetails { get; set; } = default!;
     public virtual DbSet<Product> Products { get; set; } = default!;
+    public virtual DbSet<Menu> Menus { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

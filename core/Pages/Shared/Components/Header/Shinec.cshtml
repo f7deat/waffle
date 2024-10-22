@@ -88,26 +88,17 @@
                         <li class="header-navigation-wrapper">
                             <nav class="primary-menu-wrapper" aria-label="Horizontal">
                                 <ul class="nav wp-menu primary-menu">
-                                    <li class="cus-img-menu menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item current_page_item current-menu-ancestor current_page_ancestor menu-item-has-children menu-item-26494 menu-item-has-mega-children">
-                                        <a href="/" aria-current="page">
-                                            <localize key="aboutUs" />
-                                        </a>
-                                    </li>
-                                    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children">
-                                        <a href="/@CatalogType.Product.ToString().ToLower()">
-                                            <localize key="Product" />    
-                                        </a>
-                                    </li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children">
-                                        <a href="/@CatalogType.Article.ToString().ToLower()">
-                                            <localize key="Article" />
-                                        </a>
-                                    </li>
-                                    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-has-mega-children">
-                                        <a href="/contact">
-                                            <localize key="contact" />
-                                        </a>
-                                    </li>
+                                    @if (Model.NavItems != null)
+                                    {
+                                        @foreach (var navItem in Model.NavItems)
+                                        {
+                                            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children">
+                                                <a href="@navItem.Href">
+                                                    @navItem.Name
+                                                </a>
+                                            </li>
+                                        }
+                                    }
                                 </ul>
                             </nav>
                         </li>

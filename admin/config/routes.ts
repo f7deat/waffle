@@ -349,6 +349,11 @@ export default [
           name: 'localization',
           path: '/settings/localization',
           component: './localization',
+        },
+        {
+          name: 'menu',
+          path: '/settings/menu',
+          component: './settings/menu',
         }
       ],
     },

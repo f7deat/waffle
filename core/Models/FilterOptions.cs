@@ -17,6 +17,7 @@ public abstract class FilterOptions : IFilterOptions
     public int Current { get; set; } = 1;
     [JsonPropertyName("pageSize")]
     public int PageSize { get; set; } = 10;
+    public string Locale { get; set; } = "vi-VN";
 }
 
 public class FileFilterOptions : FilterOptions

@@ -60,6 +60,7 @@ export default {
   'menu.settings.facebook': 'Facebook',
   'menu.settings.componentCenter': 'Component center',
   'menu.settings.localization': 'Localization',
+  'menu.settings.menu': 'Menu',
   'menu.settings.sendGrid': 'SendGrid',
   'menu.users': 'Users',
   'menu.users.list': 'Users List',

@@ -31,6 +31,7 @@ export default {
   'menu.settings.localization': 'Ngôn ngữ',
   'menu.settings.sendGrid': 'SendGrid',
   'menu.settings.google': 'Google',
+  'menu.settings.menu': 'Menu',
   'menu.component': 'Component',
   'menu.component.articleLister': 'Article Lister',
   'menu.component.affiliateLink': 'Affiliate Link',
