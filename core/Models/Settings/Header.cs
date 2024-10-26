@@ -19,6 +19,8 @@ public class Header : BaseSetting
     [JsonPropertyName("navBar")]
     public IEnumerable<NavItem>? NavItems { get; set; }
 
+    public string? SearchPlaceHolder { get; set; }
+
     [JsonIgnore]
     public bool IsAuthenticated { get; set; }
 

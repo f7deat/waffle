@@ -4,116 +4,235 @@
 @using Waffle.Models.Components.Specifications
 @model Waffle.Pages.Products.IndexModel
 
+@await Component.InvokeAsync(nameof(Breadcrumb))
 <main class="container">
-    <div class="row">
-        <div class="col-md-8">
+    
+    @if (Model.Theme != "Default")
+    {
+        <div class="row">
+            <div class="col-md-8">
 
-            <div class="mb-2 d-flex justify-between items-center">
-                <form class="mb-2" method="get">
-                    <div class="border rounded-full flex bg-white">
-                        <input type="search" name="searchTerm" placeholder="@Model.SearchPlaceHolder" class="flex-grow px-4 rounded-full" autocomplete="off">
-                        <button type="submit" class="py-2 px-3">
-                            <i class="fa-solid fa-magnifying-glass"></i>
+                <div class="mb-2 d-flex justify-between items-center">
+                    <form class="mb-2" method="get">
+                        <div class="border rounded-full flex bg-white">
+                            <input type="search" name="searchTerm" placeholder="@Model.SearchPlaceHolder" class="flex-grow px-4 rounded-full" autocomplete="off">
+                            <button type="submit" class="py-2 px-3">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="dropdown">
+                        <button class="py-2 fw-medium" data-bs-toggle="dropdown" aria-expanded="false" id="drp-sort">
+                            <i class="fas fa-sort-amount-up"></i> <localize key="Arrange" />
                         </button>
-                    </div>
-                </form>
-                <div class="dropdown">
-                    <button class="py-2 fw-medium" data-bs-toggle="dropdown" aria-expanded="false" id="drp-sort">
-                        <i class="fas fa-sort-amount-up"></i> <localize key="Arrange" />
-                    </button>
-                    <div class="dropdown-menu bg-white shadow dropdown-menu-end shadow-lg rounded" aria-labelledby="drp-sort" style="">
-                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">
-                            <localize key="View" />
-                        </a>
-                        <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">
-                            <localize key="Time" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="title">@ViewData["Title"]</div>
-            <div class="row">
-                @foreach (var item in Model.Products)
-                {
-                    <div class="col-6 col-md-3">
-                        <a href="@item.Url">
-                            <div class="card-image bg-dark relative">
-                                <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
-                                @if (item.Price != null && item.SalePrice != null)
-                                {
-                                    <span class="badge bg-danger position-absolute top-0 end-0">
-                                        <span>GIẢM</span>
-                                        @item.Discount %
-                                    </span>
-                                }
-                            </div>
-                        </a>
-                        <div class="py-2">
-                            <div class="mb-1 d-flex justify-between">
-                                <div>
-                                    <span class="text-danger fw-medium">@item.SalePrice.ToMoney()</span>
-                                    <s class="text-muted text-sm">@item.Price.ToMoney()</s>
-                                </div>
-                                <div class="text-warning text-xs">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                </div>
-                            </div>
-                            <a href="@item.Url" class="line-clampin">
-                                @item.Name
+                        <div class="dropdown-menu bg-white shadow dropdown-menu-end shadow-lg rounded" aria-labelledby="drp-sort" style="">
+                            <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">
+                                <localize key="View" />
+                            </a>
+                            <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">
+                                <localize key="Time" />
                             </a>
                         </div>
                     </div>
-                }
-            </div>
-            @if (Model.IsPremium)
-            {
-                <div class="title">Danh mục</div>
-                <div class="bg-white rounded mb-4 flex gap-2 flex-wrap">
-                    @foreach (var group in Model.BaseInfoAndLinks.LandingPageBaseInfo.GroupList)
-                    {
-                        <a href="/shop/group/@group.GroupId" class="px-4 py-1 rounded bg-gray-100 rounded">@group.GroupName</a>
-                    }
                 </div>
 
-                <div class="mb-2">
-                    <div class="title">Bộ sưu tập (@Model.BaseInfoAndLinks.LandingPageLinkList.TotalCount)</div>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        @foreach (var item in Model.BaseInfoAndLinks.LandingPageLinkList.LinkList)
-                        {
-                            <div class="bg-white">
-                                <a href="@item.Link">
-                                    <div class="card-image bg-dark">
-                                        <img src="@item.Image" alt="@item.LinkName" class="object-cover product-thumbnail" loading="lazy" />
-                                    </div>
-                                </a>
-                                <div class="py-2">
-                                    <a href="@item.Link" class="line-clampin">
-                                        @item.LinkName
-                                    </a>
+                <div class="title">@ViewData["Title"]</div>
+                <div class="row">
+                    @foreach (var item in Model.Products)
+                    {
+                        <div class="col-6 col-md-3">
+                            <a href="@item.Url">
+                                <div class="card-image bg-dark relative">
+                                    <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
+                                    @if (item.Price != null && item.SalePrice != null)
+                                    {
+                                        <span class="badge bg-danger position-absolute top-0 end-0">
+                                            <span>GIẢM</span>
+                                            @item.Discount %
+                                        </span>
+                                    }
                                 </div>
+                            </a>
+                            <div class="py-2">
+                                <div class="mb-1 d-flex justify-between">
+                                    <div>
+                                        <span class="text-danger fw-medium">@item.SalePrice.ToMoney()</span>
+                                        <s class="text-muted text-sm">@item.Price.ToMoney()</s>
+                                    </div>
+                                    <div class="text-warning text-xs">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                </div>
+                                <a href="@item.Url" class="line-clampin">
+                                    @item.Name
+                                </a>
                             </div>
+                        </div>
+                    }
+                </div>
+                @if (Model.IsPremium)
+                {
+                    <div class="title">Danh mục</div>
+                    <div class="bg-white rounded mb-4 flex gap-2 flex-wrap">
+                        @foreach (var group in Model.BaseInfoAndLinks.LandingPageBaseInfo.GroupList)
+                        {
+                            <a href="/shop/group/@group.GroupId" class="px-4 py-1 rounded bg-gray-100 rounded">@group.GroupName</a>
                         }
+                    </div>
+
+                    <div class="mb-2">
+                        <div class="title">Bộ sưu tập (@Model.BaseInfoAndLinks.LandingPageLinkList.TotalCount)</div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            @foreach (var item in Model.BaseInfoAndLinks.LandingPageLinkList.LinkList)
+                            {
+                                <div class="bg-white">
+                                    <a href="@item.Link">
+                                        <div class="card-image bg-dark">
+                                            <img src="@item.Image" alt="@item.LinkName" class="object-cover product-thumbnail" loading="lazy" />
+                                        </div>
+                                    </a>
+                                    <div class="py-2">
+                                        <a href="@item.Link" class="line-clampin">
+                                            @item.LinkName
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+                }
+
+                @foreach (var item in Model.Components)
+                {
+                    @await Component.InvokeAsync(item.Name, item.Id)
+                }
+
+            </div>
+            <div class="col-md-4">
+                @await Component.InvokeAsync(nameof(ArticleSpotlight))
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+
+                <div class="mb-2 d-flex justify-between items-center">
+                    <form class="mb-2" method="get">
+                        <div class="border rounded-full flex bg-white">
+                            <input type="search" name="searchTerm" placeholder="@Model.SearchPlaceHolder" class="flex-grow px-4 rounded-full" autocomplete="off">
+                            <button type="submit" class="py-2 px-3">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="dropdown">
+                        <button class="py-2 fw-medium" data-bs-toggle="dropdown" aria-expanded="false" id="drp-sort">
+                            <i class="fas fa-sort-amount-up"></i> <localize key="Arrange" />
+                        </button>
+                        <div class="dropdown-menu bg-white shadow dropdown-menu-end shadow-lg rounded" aria-labelledby="drp-sort" style="">
+                            <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">
+                                <localize key="View" />
+                            </a>
+                            <a class="py-2 px-4 flex items-center hover:bg-gray-100 w-full rounded-b" href="?searchTerm=">
+                                <localize key="Time" />
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
-            }
+                <div class="title">@ViewData["Title"]</div>
+                <div class="row">
+                    @foreach (var item in Model.Products)
+                    {
+                        <div class="col-6 col-md-3">
+                            <a href="@item.Url">
+                                <div class="card-image bg-dark relative">
+                                    <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
+                                    @if (item.Price != null && item.SalePrice != null)
+                                    {
+                                        <span class="badge bg-danger position-absolute top-0 end-0">
+                                            <span>GIẢM</span>
+                                            @item.Discount %
+                                        </span>
+                                    }
+                                </div>
+                            </a>
+                            <div class="py-2">
+                                <div class="mb-1 d-flex justify-between">
+                                    <div>
+                                        <span class="text-danger fw-medium">@item.SalePrice.ToMoney()</span>
+                                        <s class="text-muted text-sm">@item.Price.ToMoney()</s>
+                                    </div>
+                                    <div class="text-warning text-xs">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                </div>
+                                <a href="@item.Url" class="line-clampin">
+                                    @item.Name
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (Model.IsPremium)
+                {
+                    <div class="title">Danh mục</div>
+                    <div class="bg-white rounded mb-4 flex gap-2 flex-wrap">
+                        @foreach (var group in Model.BaseInfoAndLinks.LandingPageBaseInfo.GroupList)
+                        {
+                            <a href="/shop/group/@group.GroupId" class="px-4 py-1 rounded bg-gray-100 rounded">@group.GroupName</a>
+                        }
+                    </div>
 
-            @foreach (var item in Model.Components)
-            {
-                @await Component.InvokeAsync(item.Name, item.Id)
-            }
+                    <div class="mb-2">
+                        <div class="title">Bộ sưu tập (@Model.BaseInfoAndLinks.LandingPageLinkList.TotalCount)</div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            @foreach (var item in Model.BaseInfoAndLinks.LandingPageLinkList.LinkList)
+                            {
+                                <div class="bg-white">
+                                    <a href="@item.Link">
+                                        <div class="card-image bg-dark">
+                                            <img src="@item.Image" alt="@item.LinkName" class="object-cover product-thumbnail" loading="lazy" />
+                                        </div>
+                                    </a>
+                                    <div class="py-2">
+                                        <a href="@item.Link" class="line-clampin">
+                                            @item.LinkName
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
 
+                    <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
+                }
+
+                @foreach (var item in Model.Components)
+                {
+                    @await Component.InvokeAsync(item.Name, item.Id)
+                }
+
+            </div>
+            <div class="col-md-4">
+                @await Component.InvokeAsync(nameof(ProductSpotlight))
+                @await Component.InvokeAsync(nameof(ArticleSpotlight))
+                @await Component.InvokeAsync(nameof(Tag))
+            </div>
         </div>
-        <div class="col-md-4">
-            @await Component.InvokeAsync(nameof(ProductSpotlight))
-            @await Component.InvokeAsync(nameof(ArticleSpotlight))
-            @await Component.InvokeAsync(nameof(Tag))
-        </div>
-    </div>
+    }
+
+    
 </main>

@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models.Components;
@@ -13,11 +15,13 @@ public class DetailsModel : DynamicPageModel
 {
     private readonly ApplicationDbContext _context;
     private readonly IProductService _productService;
+    private readonly SettingOptions Options;
 
-    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, IProductService productService) : base(catalogService)
+    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, IProductService productService, IOptions<SettingOptions> options) : base(catalogService)
     {
         _context = context;
         _productService = productService;
+        Options = options.Value;
     }
 
     public ProductWorkItem? Editor;
@@ -26,6 +30,7 @@ public class DetailsModel : DynamicPageModel
     public AffiliateLink? AffiliateLink;
     public IEnumerable<Catalog> RelatedProducts = new List<Catalog>();
     public Entities.Ecommerces.Product? Product;
+    public string Theme = "Default";
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -42,6 +47,7 @@ public class DetailsModel : DynamicPageModel
                 AffiliateLink = JsonSerializer.Deserialize<AffiliateLink>(affiliateLink.Arguments);
             }
         }
+        Theme = Options.Theme;
         return Page();
     }
 

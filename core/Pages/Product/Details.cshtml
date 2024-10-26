@@ -8,158 +8,167 @@
 @model Waffle.Pages.Product.DetailsModel
 
 @await Component.InvokeAsync(nameof(Breadcrumb))
+
 <main class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="title">@Model.PageData.Name</div>
-            <div class="bg-white rounded mb-4 post-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        @await Component.InvokeAsync(nameof(ProductImage))
-                    </div>
-                    <div class="col-md-8">
-                        <div class="position-relative">
-                            <h1 class="text-xl font-bold mb-2">@Model.PageData.Name</h1>
-                            <div class="text-warning flex gap-2 text-sm mb-2">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            @if (Model.Product != null)
-                            {
-                                <div class="text-muted">
-                                    @if (Model.Product.SalePrice != null && Model.Product.Price != null)
-                                    {
-                                        <s class="text-muted">@Model.Product.Price.ToMoney()</s>
-                                        <span class="text-danger fw-medium fs-4">@Model.Product.SalePrice.ToMoney()</span>
-                                        <span class="badge bg-danger">
-                                            <span>GIẢM</span>
-                                            @(100 - Math.Round((Model.Product.SalePrice / Model.Product.Price ?? 0) * 100))%
-                                        </span>
-                                    }
+
+    @if (Model.Theme != "Default")
+    {
+        await Html.RenderPartialAsync($"PartialView/{Model.Theme}", Model);
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="title">@Model.PageData.Name</div>
+                <div class="bg-white rounded mb-4 post-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            @await Component.InvokeAsync(nameof(ProductImage))
+                        </div>
+                        <div class="col-md-8">
+                            <div class="position-relative">
+                                <h1 class="text-xl font-bold mb-2">@Model.PageData.Name</h1>
+                                <div class="text-warning flex gap-2 text-sm mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
                                 </div>
-                            }
-                            <div class="text-muted mb-2 border-dashed border-bottom">
-                                @Model.PageData.Description
-                            </div>
-                            <div class="text-muted mb-2">
-                                Lượt xem: @Model.PageData.ViewCount.ToNumber()
-                            </div>
-                            @if (Model.Product?.Price != null)
-                            {
-                                <div class="mb-4 quantity">
-                                    <div class="fw-medium mb-2">Số lượng</div>
-                                    <div class="d-flex gap-2">
-                                        <button class="btn btn-sm border btn-light px-2" type="button" id="js-minusQuantity">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </button>
-                                        <div class="input-wrap" style="max-width: 40px">
-                                            <input type="text" value="1" class="form-control form-control-sm text-center" id="js-quantityInput" />
-                                        </div>
-                                        <button class="btn btn-sm border btn-light px-2" type="button" id="js-plusQuantity">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            }
-                            @if (Model.AffiliateLink != null)
-                            {
-                                <div class="md:flex mb-4 gap-2">
-                                    <a href="@Model.AffiliateLink.Href" class="btn btn-outline-primary d-flex gap-2 items-center fw-medium" target="@Model.AffiliateLink.Target" rel="nofollow">
-                                        @if (Model.AffiliateLink.Href.Contains("shope") == true)
-                                        {
-                                            <img src="https://shopee.vn/pcmall-assets/assets/icon_favicon_1_32.png" alt="icon" loading="lazy" style="width: 16px" />
-                                        }
-                                        else
-                                        {
-                                            <i class="fas fa-cart-shopping me-2"></i>
-                                        }
-                                        @if (string.IsNullOrEmpty(Model.AffiliateLink.Name))
-                                        {
-                                            <span>Mua ngay</span>
-                                        }
-                                        else
-                                        {
-                                            <span>@Model.AffiliateLink.Name</span>
-                                        }
-                                    </a>
-                                </div>
-                            }
-                            else
-                            {
-                                if (Model.Product?.Price == null)
+                                @if (Model.Product != null)
                                 {
-                                    <button type="button" class="btn btn-primary">
-                                        <i class="fa-solid fa-phone me-2"></i>
-                                        <span>
-                                            <localize key="contactUs" />
-                                        </span>
-                                    </button>
+                                    <div class="text-muted">
+                                        @if (Model.Product.SalePrice != null && Model.Product.Price != null)
+                                        {
+                                            <s class="text-muted">@Model.Product.Price.ToMoney()</s>
+                                            <span class="text-danger fw-medium fs-4">@Model.Product.SalePrice.ToMoney()</span>
+                                            <span class="badge bg-danger">
+                                                <span>GIẢM</span>
+                                                @(100 - Math.Round((Model.Product.SalePrice / Model.Product.Price ?? 0) * 100))%
+                                            </span>
+                                        }
+                                    </div>
                                 }
-                                else
+                                <div class="text-muted mb-2 border-dashed border-bottom">
+                                    @Model.PageData.Description
+                                </div>
+                                <div class="text-muted mb-2">
+                                    Lượt xem: @Model.PageData.ViewCount.ToNumber()
+                                </div>
+                                @if (Model.Product?.Price != null)
+                                {
+                                    <div class="mb-4 quantity">
+                                        <div class="fw-medium mb-2">Số lượng</div>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm border btn-light px-2" type="button" id="js-minusQuantity">
+                                                <i class="fa-solid fa-minus"></i>
+                                            </button>
+                                            <div class="input-wrap" style="max-width: 40px">
+                                                <input type="text" value="1" class="form-control form-control-sm text-center" id="js-quantityInput" />
+                                            </div>
+                                            <button class="btn btn-sm border btn-light px-2" type="button" id="js-plusQuantity">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.AffiliateLink != null)
                                 {
                                     <div class="md:flex mb-4 gap-2">
-                                        <button type="button" class="btn btn-outline-primary" id="js-addToCart">
-                                            <i class="fa-solid fa-cart-plus"></i>
-                                            <span>Thêm vào giỏ hàng</span>
-                                        </button>
-                                        <a href="/@CatalogType.Product.ToString()/checkout?productIds=@Model.PageData.Id" class="btn btn-primary">
-                                            <i class="fas fa-cart-shopping me-2"></i>
-                                            <span>Mua ngay</span>
+                                        <a href="@Model.AffiliateLink.Href" class="btn btn-outline-primary d-flex gap-2 items-center fw-medium" target="@Model.AffiliateLink.Target" rel="nofollow">
+                                            @if (Model.AffiliateLink.Href.Contains("shope") == true)
+                                            {
+                                                <img src="https://shopee.vn/pcmall-assets/assets/icon_favicon_1_32.png" alt="icon" loading="lazy" style="width: 16px" />
+                                            }
+                                            else
+                                            {
+                                                <i class="fas fa-cart-shopping me-2"></i>
+                                            }
+                                            @if (string.IsNullOrEmpty(Model.AffiliateLink.Name))
+                                            {
+                                                <span>Mua ngay</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@Model.AffiliateLink.Name</span>
+                                            }
                                         </a>
                                     </div>
                                 }
+                                else
+                                {
+                                    if (Model.Product?.Price == null)
+                                    {
+                                        <button type="button" class="btn btn-primary">
+                                            <i class="fa-solid fa-phone me-2"></i>
+                                            <span>
+                                                <localize key="contactUs" />
+                                            </span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <div class="md:flex mb-4 gap-2">
+                                            <button type="button" class="btn btn-outline-primary" id="js-addToCart">
+                                                <i class="fa-solid fa-cart-plus"></i>
+                                                <span>Thêm vào giỏ hàng</span>
+                                            </button>
+                                            <a href="/@CatalogType.Product.ToString()/checkout?productIds=@Model.PageData.Id" class="btn btn-primary">
+                                                <i class="fas fa-cart-shopping me-2"></i>
+                                                <span>Mua ngay</span>
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wf-delimiter"></div>
+
+                    <div class="mb-4">
+                        @if (Model.Editor != null)
+                        {
+                            @await Component.InvokeAsync(Model.Editor.NormalizedName, Model.Editor.Id)
+                        }
+                    </div>
+
+                    <div class="bg-white mb-4 rounded">
+                        <div class="mb-2 fw-medium">Tags:</div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            @foreach (var tag in Model.Tags)
+                            {
+                                <a href="/tag/@tag.NormalizedName" class="tag-item">@tag.Name</a>
                             }
+                        </div>
+                    </div>
+
+                    @await Component.InvokeAsync(ComponentName.Related)
+
+                    <div class="bg-gray-100 px-4 py-2 flex justify-between items-center text-muted text-sm">
+                        <div class="d-flex gap-4">
+                            <span>
+                                <i class="fas fa-eye me-1"></i>
+                                <span>@Model.PageData.ViewCount.ToNumber()</span>
+                            </span>
+                            <span>|</span>
+                            <span>
+                                <i class="fas fa-calendar me-1"></i>
+                                <span>@Model.PageData.ModifiedDate</span>
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                <div class="wf-delimiter"></div>
+                @await Component.InvokeAsync(nameof(Comment))
 
-                <div class="mb-4">
-                    @if (Model.Editor != null)
-                    {
-                        @await Component.InvokeAsync(Model.Editor.NormalizedName, Model.Editor.Id)
-                    }
-                </div>
-
-                <div class="bg-white mb-4 rounded">
-                    <div class="mb-2 fw-medium">Tags:</div>
-                    <div class="d-flex gap-2 flex-wrap">
-                        @foreach (var tag in Model.Tags)
-                        {
-                            <a href="/tag/@tag.NormalizedName" class="tag-item">@tag.Name</a>
-                        }
-                    </div>
-                </div>
-
-                @await Component.InvokeAsync(ComponentName.Related)
-
-                <div class="bg-gray-100 px-4 py-2 flex justify-between items-center text-muted text-sm">
-                    <div class="d-flex gap-4">
-                        <span>
-                            <i class="fas fa-eye me-1"></i>
-                            <span>@Model.PageData.ViewCount.ToNumber()</span>
-                        </span>
-                        <span>|</span>
-                        <span>
-                            <i class="fas fa-calendar me-1"></i>
-                            <span>@Model.PageData.ModifiedDate</span>
-                        </span>
-                    </div>
-                </div>
             </div>
-
-            @await Component.InvokeAsync(nameof(Comment))
+            <div class="col-md-4">
+                @await Component.InvokeAsync(nameof(ProductSpotlight))
+                @await Component.InvokeAsync(nameof(ArticleSpotlight))
+                @await Component.InvokeAsync(nameof(Tag))
+            </div>
         </div>
-        <div class="col-md-4">
-            @await Component.InvokeAsync(nameof(ProductSpotlight))
-            @await Component.InvokeAsync(nameof(ArticleSpotlight))
-            @await Component.InvokeAsync(nameof(Tag))
-        </div>
-    </div>
+    }
 </main>
 <input type="hidden" value="@Model.PageData.Id" id="js-productId" />
 

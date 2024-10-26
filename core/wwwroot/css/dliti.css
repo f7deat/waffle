@@ -37,10 +37,6 @@ a {
         list-style: none;
     }
 
-.bg-primary {
-    background-color: var(--primary);
-}
-
 .form-control {
     border-color: #dee2e6;
 }

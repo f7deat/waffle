@@ -18,13 +18,15 @@ public class HeaderViewComponent : ViewComponent
     private readonly IConfiguration _configuration;
     private readonly SettingOptions Options;
     private readonly ApplicationDbContext _context;
+    private readonly ILocalizationService _localizationService;
 
-    public HeaderViewComponent(ISettingService settingService, IConfiguration configuration, IOptions<SettingOptions> options, ApplicationDbContext context)
+    public HeaderViewComponent(ISettingService settingService, IConfiguration configuration, IOptions<SettingOptions> options, ApplicationDbContext context, ILocalizationService localizationService)
     {
         _settingService = settingService;
         _configuration = configuration;
         Options = options.Value;
         _context = context;
+        _localizationService = localizationService;
     }
 
     protected PageData PageData
@@ -43,6 +45,8 @@ public class HeaderViewComponent : ViewComponent
         header.IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
         header.UserId = UserClaimsPrincipal.GetId();
         header.PageData = PageData;
+        header.SearchPlaceHolder = await _localizationService.GetAsync(nameof(header.SearchPlaceHolder));
+
         var query = from a in _context.Menus
                     where a.Locale == PageData.Locale
                     select a;

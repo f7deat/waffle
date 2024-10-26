@@ -9,6 +9,7 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.Settings;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Pages.Products
@@ -32,6 +33,8 @@ namespace Waffle.Pages.Products
         public BaseInfoAndLinks BaseInfoAndLinks = new();
         public List<ComponentListItem> Components = new();
         public bool IsPremium = false;
+        public string Theme = "Default";
+
         public string? SearchPlaceHolder { get; set; }
         public IEnumerable<ProductListItem> Products { get; set; } = new List<ProductListItem>();
 
@@ -49,6 +52,7 @@ namespace Waffle.Pages.Products
 
             Components = await _catalogService.ListComponentAsync(PageData.Id);
             IsPremium = Options.Theme == "Default";
+            Theme = Options.Theme;
             var products = await _productService.ListAsync(new ProductFilterOptions
             {
                 Current = 1,

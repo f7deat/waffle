@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.Globalization;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models.Components;
@@ -16,12 +16,14 @@ public class DetailsModel : DynamicPageModel
     private readonly ApplicationDbContext _context;
     private readonly IConfiguration _configuration;
     private readonly IProductService _productService;
+    private readonly SettingOptions Options;
 
-    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, IConfiguration configuration, IProductService productService) : base(catalogService)
+    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, IConfiguration configuration, IProductService productService, IOptions<SettingOptions> options) : base(catalogService)
     {
         _context = context;
         _configuration = configuration;
         _productService = productService;
+        Options = options.Value;
     }
 
     public ProductWorkItem? Editor;
@@ -29,15 +31,10 @@ public class DetailsModel : DynamicPageModel
     public Guid ProductImage;
     public AffiliateLink? AffiliateLink;
     public Entities.Ecommerces.Product? Product;
-    public CultureInfo CultureInfo = new("en-US");
+    public string Theme = "Default";
 
     public async Task<IActionResult> OnGetAsync()
     {
-        var cul = _configuration.GetValue<string>("language");
-        if (!string.IsNullOrEmpty(cul))
-        {
-            CultureInfo = new CultureInfo(cul);
-        }
         Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
         Product = await _productService.GetByCatalogIdAsync(PageData.Id);
         var component = await GetComponentsAsync();
@@ -51,6 +48,7 @@ public class DetailsModel : DynamicPageModel
                 AffiliateLink = JsonSerializer.Deserialize<AffiliateLink>(affiliateLink.Arguments);
             }
         }
+        Theme = Options.Theme;
         return Page();
     }
 

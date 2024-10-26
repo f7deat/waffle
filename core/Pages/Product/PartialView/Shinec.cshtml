@@ -1,0 +1,32 @@
+﻿@using Waffle.Extensions
+@using Waffle.Models.Components
+@{
+    Layout = null;
+}
+@model Waffle.Pages.Product.DetailsModel
+
+<div class="title">@Model.PageData.Name</div>
+<div class="bg-white rounded mb-4 post-body">
+    <div class="mb-4">
+        @if (Model.Editor != null)
+        {
+            @await Component.InvokeAsync(Model.Editor.NormalizedName, Model.Editor.Id)
+        }
+    </div>
+
+    @await Component.InvokeAsync("Related")
+
+    <div class="bg-gray-100 px-4 py-2 flex justify-between items-center text-muted text-sm">
+        <div class="d-flex gap-4">
+            <span>
+                <i class="fas fa-eye me-1"></i>
+                <span>@Model.PageData.ViewCount.ToNumber()</span>
+            </span>
+            <span>|</span>
+            <span>
+                <i class="fas fa-calendar me-1"></i>
+                <span>@Model.PageData.ModifiedDate</span>
+            </span>
+        </div>
+    </div>
+</div>

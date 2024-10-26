@@ -1,0 +1,41 @@
+﻿@using Waffle.Extensions
+@using Waffle.Models.Components
+@{
+    Layout = null;
+}
+
+@model Waffle.Pages.Product.Categories.DetailsModel
+
+<div class="product-info">
+    <div class="row">
+        <div class="col-md-4">
+            @await Component.InvokeAsync(nameof(ProductImage))
+        </div>
+        <div class="col-md-8">
+            <div class="position-relative">
+                <h1 class="text-xl font-bold mb-4">@Model.PageData.Name</h1>
+                <div class="text-muted mb-2 border-dashed border-bottom">
+                    @Model.PageData.Description
+                </div>
+                <div class="text-muted mb-2">
+                    Lượt xem: @Model.PageData.ViewCount.ToNumber()
+                </div>
+                <div class="mb-4 quantity">
+                    CÔNG TY CỔ PHẦN LONG HẬU
+                    Địa chỉ: Ấp 3, Xã Long Hậu, Huyện Cần Giuộc, Tỉnh Long An
+                    Hotline: 0906 938 599 - (028) 3937 5599
+                    Email: sales@longhau.com.vn
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" value="@Model.PageData.Id" id="js-productId" />
+
+@section scripts {
+    <script src="~/js/products/product.js"></script>
+    <script>
+        Product.init();
+    </script>
+}

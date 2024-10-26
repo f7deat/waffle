@@ -4,6 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <header id="site-header" class="site-header">
 
@@ -50,20 +51,25 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="menu-item menu-item-type-custom menu-item-object-custom">
-                                <a href="/career" class="text-white">
-                                    <localize key="career" />
-                                </a>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom d-flex items-center">
+                                <a href="/?locale=en-US" title="en"><img src="https://longhau.com.vn/assets/images/flag-en.png" width="20" alt="en" class="border-2 border border-white rounded-full"></a>
                             </li>
-                            <li class="menu-item menu-item-type-custom menu-item-object-custom">
-                                <a href="/search" class="text-white">
-                                    <localize key="search" />
-                                </a>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom d-flex items-center">
+                                <a href="/?locale=zh-CN" title="ja"><img src="https://shinecgialai.com.vn/imgs/cn.png" width="20" alt="cn" class="border-2 border border-white rounded-full"></a>
+                            </li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom d-flex items-center">
+                                <a href="/?locale=ja-JP" title="ja"><img src="https://longhau.com.vn/assets/images/flag-ja.png" width="20" alt="ja" class="border-2 border border-white rounded-full"></a>
+                            </li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom d-flex items-center">
+                                <a href="/?locale=ko-KR" title="ko"><img src="https://longhau.com.vn/assets/images/flag-ko.png" width="20" alt="ko" class="border-2 border border-white rounded-full"></a>
+                            </li>
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom d-flex items-center">
+                                <a href="/?locale=vi-VN" title="vi"><img src="https://longhau.com.vn/assets/images/flag-vi.png" width="20" alt="vi" class="border-2 border border-white rounded-full"></a>
                             </li>
                         </ul>
                     </div>
                 </li>
-            </ul><ul class="nav topbar-ul pull-center justify-content-center right-element-exist"><li>Mon – Fri: 8.00 am – 5.00 pm</li></ul><ul class="nav topbar-ul pull-right justify-content-end right-element-exist">
+            </ul><ul class="nav topbar-ul pull-center justify-content-center right-element-exist"><li>Mon – Sat: 8.00 am – 5.00 pm</li></ul><ul class="nav topbar-ul pull-right justify-content-end right-element-exist">
                 <li>
                     <ul class="nav social-icons social-transparent social-white social-h-white social-bg-white social-hbg-white" target="_blank">
                         <li><a class="social-facebook" href="https://www.facebook.com/shinecgialai/"><span class="fab fa-facebook"></span></a></li>
@@ -84,7 +90,8 @@
                                 <a class="site-link" href="/"><img class="img-fluid site-logo" src="https://shinecgialai.com.vn/imgs/logo.png" alt="LOGO"></a>
                             </div>
                         </li>
-                    </ul><ul class="nav navbar-ul pull-center justify-content-center right-element-exist">
+                    </ul>
+                    <ul class="nav navbar-ul pull-center justify-content-center right-element-exist items-center">
                         <li class="header-navigation-wrapper">
                             <nav class="primary-menu-wrapper" aria-label="Horizontal">
                                 <ul class="nav wp-menu primary-menu">
@@ -102,8 +109,13 @@
                                 </ul>
                             </nav>
                         </li>
-                        <li>
-                            <a class="full-search-toggle" href="/search"><i class="fa-solid fa-magnifying-glass"></i></a>
+                        <li class="flex items-center h-full">
+                            <form method="get" action="/search">
+                                <div class="rounded-full flex items-center h-10 bg-gray-100 pe-3">
+                                    <input type="text" name="searchTerm" class="w-full h-full rounded-full px-3 bg-gray-100" placeholder="@Model.SearchPlaceHolder">
+                                    <button class="full-search-toggle" type="submit"><i class="fa-solid fa-magnifying-glass text-gray-500"></i></button>
+                                </div>
+                            </form>
                         </li>
                     </ul>
                     <ul class="nav navbar-ul pull-right justify-content-end right-element-exist"><li><a href="/vr360" class="h-phone">VR 360<i class="fa-solid fa-vr-cardboard ms-2"></i></a></li></ul>
@@ -124,7 +136,8 @@
                                 <a class="site-link" href="/"><img class="img-fluid mobile-logo" src="https://shinecgialai.com.vn/imgs/logo.png" alt="LOGO"></a>
                             </div>
                         </li>
-                    </ul><ul class="nav mobilebar pull-right justify-content-end right-element-exist">
+                    </ul>
+                    <ul class="nav mobilebar pull-right justify-content-end right-element-exist">
                         <li class="header-search-wrapper">
                             <a class="full-search-toggle" href="/search"><i class="bi bi-search"></i></a>
                         </li>

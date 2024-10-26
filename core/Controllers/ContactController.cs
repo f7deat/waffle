@@ -104,7 +104,7 @@ public class ContactController : BaseController
             await _appLogService.AddAsync("Finish page not found!", contactForm.FinishPageId);
             return BadRequest("Finish page not found!");
         }
-        return Redirect(page.GetUrl());
+        return Redirect("/contact/thank");
     }
 
     [HttpPost("delete/{id}")]
