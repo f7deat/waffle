@@ -64,7 +64,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
           colorBgMenuItemSelected: '#1677ff',
           colorTextMenuSecondary: '#FFFFFF',
           colorTextMenuTitle: '#FFFFFF',
-        },
+        }
     },
     footerRender: () => (
       <DefaultFooter copyright="Produced by Waffle Financial Experience Department" links={[

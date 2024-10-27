@@ -3,7 +3,6 @@ import {
   FacebookFilled,
   GithubFilled,
   GoogleCircleFilled,
-  LinkOutlined,
   LockOutlined,
   MobileOutlined,
   UserOutlined,
@@ -24,10 +23,12 @@ import '../index.css';
 import { Helmet } from '@umijs/max';
 import Settings from '../../../../config/defaultSetting';
 import '../../../../style.css';
+import ForgotPassword from '../components/forgot-password';
 
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
+  const [open, setOpen] = useState<boolean>(false);
 
   const intl = useIntl();
 
@@ -59,14 +60,11 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className='h-full'>
+    <div className='h-screen'>
       <Helmet>
         <title>{intl.formatMessage({ id: 'menu.login', defaultMessage: 'Login', })} - {Settings.title}</title>
       </Helmet>
-      <div className='fixed' style={{
-        left: 10,
-        top: 10
-      }}>
+      <div className='fixed z-50 right-2 top-2'>
         <SelectLang />
       </div>
       <div className="flex items-center relative h-full">
@@ -210,13 +208,14 @@ const Login: React.FC = () => {
                 float: 'right',
               }}
             >
-              <Link to="#">
+              <button type='button' onClick={() => setOpen(true)}>
                 <FormattedHTMLMessage id="pages.login.forgotPassword" />
-              </Link>
+              </button>
             </div>
           </div>
         </LoginForm>
       </div>
+      <ForgotPassword open={open} onOpenChange={setOpen} />
     </div>
   );
 };

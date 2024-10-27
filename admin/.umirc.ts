@@ -1,10 +1,15 @@
 import { defineConfig } from "@umijs/max";
 import defaultSettings from "./config/defaultSetting";
 import routes from "./config/routes";
-import config from "./config/config";
 
 export default defineConfig({
-  antd: {},
+  antd: {
+    theme: {
+      token: {
+        fontFamily: `"Inter", sans-serif`
+      }
+    }
+  },
   access: {},
   model: {},
   initialState: {},
@@ -24,5 +29,8 @@ export default defineConfig({
   npmClient: "yarn",
   esbuildMinifyIIFE: true,
   tailwindcss: {},
-  ...config
+  publicPath: '/admin/',
+  headScripts: [
+    { src: "/scripts/loading.js", async: true },
+  ]
 });
