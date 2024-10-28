@@ -107,7 +107,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 };
 
 export const request: RequestConfig = {
-  baseURL: 'https://shinecgialai.com.vn/api/',
+  baseURL: 'https://defzone.net/api/',
   ...errorConfig,
   responseInterceptors: [
     (response: any) => {
