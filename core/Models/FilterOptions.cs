@@ -95,7 +95,7 @@ public class TagFilterOptions : FilterOptions
 public class LocalizationFilterOptions: FilterOptions
 {
     public string? Key { get; set; }
-    public string Locale { get; set; } = "vi-VN";
+    public bool? IsTranslated { get; set; }
 }
 
 public class SelectFilterOptions

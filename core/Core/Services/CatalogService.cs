@@ -282,7 +282,7 @@ public class CatalogService : ICatalogService
         var normalizedName = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
 
         return await _context.Catalogs.Where(x =>
-        x.Active && x.Type == CatalogType.Tag && x.NormalizedName.Contains(normalizedName))
+        x.Active && x.Type == CatalogType.Tag && x.NormalizedName.Contains(normalizedName) && x.Locale == filterOptions.Locale)
             .Select(x => new Option
             {
                 Label = x.Name,

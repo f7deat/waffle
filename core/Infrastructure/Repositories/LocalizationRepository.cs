@@ -27,6 +27,7 @@ public class LocalizationRepository : EfRepository<Localization>, ILocalizationR
         {
             query = query.Where(x => x.Key.ToLower().Contains(key.ToLower()));
         }
+        
         return query.OrderBy(x => x.Key);
     }
 

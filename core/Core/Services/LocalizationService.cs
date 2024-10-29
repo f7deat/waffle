@@ -94,6 +94,17 @@ public class LocalizationService : ILocalizationService
     {
         var lang = filterOptions.Locale;
         var query = _localizationRepository.GetListAsync(lang, filterOptions.Key);
+        if (filterOptions.IsTranslated is not null)
+        {
+            if (filterOptions.IsTranslated == true)
+            {
+                query = query.Where(x => !string.IsNullOrEmpty(x.Value));
+            }
+            else
+            {
+                query = query.Where(x => string.IsNullOrEmpty(x.Value));
+            }
+        }
         return await ListResult<Localization>.Success(query, filterOptions);
     }
 
