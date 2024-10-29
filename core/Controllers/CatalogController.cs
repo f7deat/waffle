@@ -99,8 +99,6 @@ public class CatalogController : BaseController
         {
             case CatalogType.Entry:
                 return "🏠";
-            case CatalogType.Setting:
-                return "⚙️";
             default:
                 return "🗍";
         }

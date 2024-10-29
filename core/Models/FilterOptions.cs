@@ -34,7 +34,6 @@ public class CatalogFilterOptions : FilterOptions
     public CatalogType? Type { get; set; }
     public Guid? ParentId { get; set; }
     public Guid? CreatedBy { get; set; }
-    public string? Locale { get; set; }
     #endregion
 
     #region Sort order
@@ -48,7 +47,6 @@ public class ProductFilterOptions : FilterOptions
     public string? Name { get; set; }
     public bool? Active { get; set; }
     public Guid? ParentId { get; set; }
-    public string? Locale { get; set; }
 }
 
 public class SearchFilterOptions : FilterOptions

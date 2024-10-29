@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -250,4 +251,11 @@ public class UserController : BaseController
         if (await _userManager.IsInRoleAsync(user, RoleName.Admin) && user.Id != User.GetId()) return Unauthorized();
         return Ok(await _userService.UpdateAsync(user, args));
     }
+
+    [HttpGet("options")]
+    public async Task<IActionResult> GetOptionsAsync() => Ok(await _userManager.Users.Select(x => new
+    {
+        label = x.UserName,
+        value = x.Id
+    }).ToListAsync());
 }

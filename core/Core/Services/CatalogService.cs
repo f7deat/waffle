@@ -230,6 +230,7 @@ public class CatalogService : ICatalogService
         {
             var key = item.ToString();
             if (string.IsNullOrEmpty(key)) continue;
+            if (key == CatalogType.Tag.ToString()) continue;
             yield return new Option
             {
                 Value = item.GetHashCode().ToString(),

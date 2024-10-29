@@ -1,4 +1,5 @@
 import CatalogList from '@/components/catalog/list';
+import { CatalogType } from '@/constants';
 import { apiGetCatalogTypes } from '@/services/catalog';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
 import { useEffect, useState } from 'react';
@@ -7,7 +8,7 @@ const Page: React.FC = () => {
   const [catalogTypes, setCatalogTypes] = useState<any[]>([]);
 
   useEffect(() => {
-    apiGetCatalogTypes().then(response => setCatalogTypes(response));
+    apiGetCatalogTypes().then(response => setCatalogTypes(response.filter((x: any) => x.value !== CatalogType.Product.toString())));
   }, []);
 
   return (

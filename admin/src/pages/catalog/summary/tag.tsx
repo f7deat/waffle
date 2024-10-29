@@ -76,7 +76,11 @@ const TagList: React.FC = () => {
         </Space>
       </Button>
       <ModalForm open={open} onOpenChange={setOpen} onFinish={onFinish} title="Thêm mới" formRef={formRef}>
-        <FormTag label='Tag' name='id' />
+        <FormTag label='Tag' name='id' rules={[
+          {
+            required: true
+          }
+        ]} />
         <ProFormDigit label="Sort order" name="sortOrder" />
       </ModalForm>
     </div>

@@ -29,7 +29,7 @@ public class BloggerViewComponent : ViewComponent
         var post = await _googleService.BloggerGetAsync(args.BlogId, args.PostId, blogger.BloggerApiKey);
         return View("~/Pages/Shared/Components/Html/Default.cshtml", new Html
         {
-            Value = post?.Content
+            Value = post?.Content ?? string.Empty
         });
     }
 }

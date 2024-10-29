@@ -228,6 +228,11 @@ export default [
       path: '/ecommerce',
       routes: [
         {
+          name: 'product',
+          path: '/ecommerce/product',
+          component: './product'
+        },
+        {
           name: 'order',
           path: '/ecommerce/order',
           component: './order'

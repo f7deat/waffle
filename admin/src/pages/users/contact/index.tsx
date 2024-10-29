@@ -44,7 +44,7 @@ const ContactPage: React.FC = () => {
                                 </Tooltip>
                             </Popconfirm>
                         ],
-                        width: 60
+                        width: 70
                     }
                 ]}
             />

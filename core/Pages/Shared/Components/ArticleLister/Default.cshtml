@@ -17,7 +17,7 @@
                         Link = new Link
                         {
                             Name = item.Name,
-                            Href = item.Url
+                            Href = item.Url ?? string.Empty
                         }
                     });
         }

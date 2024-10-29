@@ -1,4 +1,5 @@
 export default {
+  'menu.dashboard': 'Dashboard',
   'menu.catalog.article': 'Article',
   'menu.catalog.tag': 'Tag',
   'menu.catalog.tagCenter': 'Tag center',
@@ -64,6 +65,7 @@ export default {
   'menu.settings.sendGrid': 'SendGrid',
   'menu.users': 'Users',
   'menu.users.list': 'Users List',
+  'menu.users.contact': 'Contact',
   'menu.users.profile': 'Profile',
   'menu.users.role': 'Roles',
   'menu.users.roleCenter': 'Role Center',

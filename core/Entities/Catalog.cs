@@ -48,8 +48,6 @@ public enum CatalogType
     Article = 1,
     [Description("Sản phẩm")]
     Product = 2,
-    [Description("Cài đặt")]
-    Setting = 3,
     [Description("Entry")]
     Entry = 4,
     [Description("Địa điểm")]

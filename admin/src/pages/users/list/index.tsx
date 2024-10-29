@@ -98,7 +98,8 @@ const UserList: React.FC = () => {
     },
     {
       title: 'Địa chỉ',
-      dataIndex: 'address'
+      dataIndex: 'address',
+      search: false
     },
     {
       title: 'Amount',

@@ -6,8 +6,7 @@ const FormTag: React.FC<ProFormSelectProps> = (props) => {
     <ProFormSelect
       showSearch
       request={listTagSelect}
-      label={props.label}
-      name={props.name}
+      {...props}
     />
   );
 };
