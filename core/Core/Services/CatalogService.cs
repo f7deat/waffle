@@ -209,20 +209,17 @@ public class CatalogService : ICatalogService
         catalog.Description = args.Description;
         catalog.Thumbnail = args.Thumbnail;
         catalog.ParentId = args.ParentId;
-        if (!string.IsNullOrWhiteSpace(args.Locale))
+        if (!LocaleHelper.IsAvailable(args.Locale))
         {
-            if (!CultureInfo.GetCultures(CultureTypes.AllCultures).Any(x => x.Name == args.Locale))
+            return IdentityResult.Failed(new IdentityError
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Code = "locale.culturesError",
-                    Description = "Culture not valid!"
-                });
-            }
-            catalog.Locale = args.Locale;
+                Code = "locale.culturesError",
+                Description = "Culture not valid!"
+            });
         }
+        catalog.Locale = args.Locale;
         catalog.Type = args.Type;
-        await _catalogRepository.SaveChangesAsync();
+        await _catalogRepository.UpdateAsync(catalog);
         return IdentityResult.Success;
     }
 

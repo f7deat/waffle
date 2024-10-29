@@ -21,6 +21,11 @@ li {
     padding: 0.25rem 0;
 }
 
+.footer .dropdown-item:focus, .dropdown-item:hover {
+    --bs-dropdown-link-hover-bg: var(--bs-primary);
+    --bs-dropdown-link-hover-color: white;
+}
+
 .title {
     padding: 0.5rem 0;
     font-weight: 500;
@@ -65,6 +70,10 @@ li {
     --primary-color-hover: white;
     background-color: var(--primary-hover);
     color: var(--primary-color-hover);
+}
+
+.btn-link {
+    text-decoration: none;
 }
 
 @media screen and (min-width: 640px) {

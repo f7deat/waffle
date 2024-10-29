@@ -13,17 +13,22 @@
     color: var(--bs-gray-500);
 }
 
-    .footer a {
+    .footer .footer-item a {
         color: var(--bs-gray-500);
     }
 
-    .footer a:hover {
-        color: white;
+        .footer .footer-item a:hover {
+            color: white;
+        }
+
+    .footer .dropdown-menu {
+        --bs-dropdown-min-width: auto;
     }
 
-.footer-social a {
-    padding: 0 .75rem;
-}
+    .footer-social {
+        display: flex;
+        gap: 1rem;
+    }
 
 .footer-title {
     text-transform: uppercase;
