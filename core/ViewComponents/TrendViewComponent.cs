@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models.GoogleAggregate;
@@ -12,10 +13,12 @@ public class TrendViewComponent : ViewComponent
 {
     private readonly IGoogleService _googleService;
     private readonly SettingOptions Options;
-    public TrendViewComponent(IGoogleService googleService, IOptions<SettingOptions> options)
+    private readonly ILocalizationService _localizationService;
+    public TrendViewComponent(IGoogleService googleService, IOptions<SettingOptions> options, ILocalizationService localizationService)
     {
         _googleService = googleService;
         Options = options.Value;
+        _localizationService = localizationService;
     }
 
     public async Task<IViewComponentResult> InvokeAsync(Guid id) 
@@ -31,7 +34,7 @@ public class TrendViewComponent : ViewComponent
         }
         return View("~/Pages/Shared/Components/ListGroup/Default.cshtml", new ListGroup
         {
-            Name = "Daily Trending",
+            Name = await _localizationService.GetAsync("DailyTrending"),
             Items = GetItems(trend.Channel.Item)
         });
     }

@@ -49,7 +49,7 @@
 
             @if (Model.PlaylistItems.Any())
             {
-                @await Html.PartialAsync("/Pages/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
+                @await Html.PartialAsync("/Pages/Components/VideoPlayList/Default.cshtml", new VideoPlayList {
                     Title = "Playlist",
                     PlaylistItems = Model.PlaylistItems
                 })

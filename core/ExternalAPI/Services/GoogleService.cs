@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Waffle.Core.Helpers;
+using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Googles.Models;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models.GoogleAggregate;
@@ -10,17 +11,22 @@ public class GoogleService : IGoogleService
 {
     private readonly HttpClient _http;
     private readonly ILogger<GoogleService> _logger;
-    public GoogleService(HttpClient httpClient, ILogger<GoogleService> logger)
+    private readonly ILocalizationService _localizationService;
+
+    public GoogleService(HttpClient httpClient, ILogger<GoogleService> logger, ILocalizationService localizationService)
     {
         _http = httpClient;
         _logger = logger;
+        _localizationService = localizationService;
     }
 
     public async Task<Trend?> GetDailyTrendingAsync()
     {
         try
         {
-            var response = await _http.GetStreamAsync("https://trends.google.com.vn/trends/trendingsearches/daily/rss?geo=VN");
+            var locale = _localizationService.CurrentLocale();
+            var geo = locale.Split('-').Last();
+            var response = await _http.GetStreamAsync($"https://trends.google.com.vn/trending/rss?geo={geo}");
             return XmlHelper.Deserialize<Trend>(response);
         }
         catch (Exception ex)
