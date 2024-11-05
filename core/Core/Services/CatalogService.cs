@@ -471,9 +471,8 @@ public class CatalogService : ICatalogService
         return result;
     }
 
-    public async Task<PageData> GetEntryPageDataAsync(string normalizedName)
+    public async Task<PageData> GetEntryPageDataAsync(string normalizedName, string locale)
     {
-        var locale = _localizationService.CurrentLocale();
         var pageData = await _catalogRepository.GetByNameAsync(normalizedName, locale);
         if (pageData is null)
         {

@@ -28,7 +28,8 @@ public class IndexModel : EntryPageModel
             Active = true,
             PageSize = 12,
             Current = Current,
-            Type = CatalogType.Location
+            Type = CatalogType.Location,
+            Locale = PageData.Locale ?? "vi-VN"
         });
     }
 }

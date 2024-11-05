@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            @await Html.PartialAsync("/Pages/Shared/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
+            @await Html.PartialAsync("/Pages/Components/VideoPlaylist/Default.cshtml", new VideoPlayList {
                 Title = "Video mới",
                 PlaylistItems = Model.PlaylistItems
             })
