@@ -471,11 +471,12 @@ public class CatalogService : ICatalogService
         return result;
     }
 
-    public async Task<PageData> GetEntryPageDataAsync(string normalizedName, string locale)
+    public async Task<PageData> GetEntryPageDataAsync(string normalizedName)
     {
-        var pageData = await _catalogRepository.GetByNameAsync(normalizedName, locale);
+        var pageData = await _catalogRepository.GetByNameAsync(normalizedName);
         if (pageData is null)
         {
+            var locale = normalizedName.Split(".").LastOrDefault();
             if (!LocaleHelper.IsAvailable(locale)) throw new Exception("Locale not support!");
 
             pageData = new Catalog

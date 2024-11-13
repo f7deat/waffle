@@ -43,7 +43,7 @@ public interface ICatalogService
     Task<object?> GetStructureAsync(string normalizedName);
     Task<IdentityResult> DeleteRangeAsync(List<Guid> ids);
     Task<object?> GetActivityAsync();
-    Task<PageData> GetEntryPageDataAsync(string normalizedName, string locale);
+    Task<PageData> GetEntryPageDataAsync(string normalizedName);
     Task<IdentityResult> SaveSettingAsync(Catalog catalog);
     Task<PageData?> GetPageDataAsync(string? normalizedName);
     Task<object?> GetUrlOptionsAsync(OptionFilterOptions filterOptions);

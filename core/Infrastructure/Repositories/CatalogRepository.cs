@@ -26,7 +26,7 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         return await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
     }
 
-    public async Task<Catalog?> GetByNameAsync(string normalizedName, string locale) => await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName == normalizedName && x.Locale == locale);
+    public async Task<Catalog?> GetByNameAsync(string normalizedName) => await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName == normalizedName);
 
     public async Task<dynamic> GetComponentsAsync(Guid id)
     {
