@@ -51,7 +51,7 @@ const UserList: React.FC = () => {
       width: 50
     },
     {
-      title: 'User name',
+      title: 'Tài khoản',
       dataIndex: 'userName',
       width: 200
     },
@@ -100,6 +100,13 @@ const UserList: React.FC = () => {
       title: 'Địa chỉ',
       dataIndex: 'address',
       search: false
+    },
+    {
+      title: 'Ngày tạo',
+      dataIndex: 'createdDate',
+      search: false,
+      valueType: 'fromNow',
+      width: 120
     },
     {
       title: 'Amount',

@@ -42,6 +42,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMigrationService, MigrationService>();
 
         services.AddScoped<ICurrentUser, CurrentUser>();
+        services.AddScoped<IRouteDataService, RouteDataService>();
 
         services.AddScoped<IGenerator, LeafGenerator>();
         services.AddScoped<IGenerator, ComponentGenerator>();

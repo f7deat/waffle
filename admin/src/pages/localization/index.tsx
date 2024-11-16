@@ -15,7 +15,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, message, Popconfirm, Segmented, Space } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 
 const Localization: React.FC = () => {
@@ -23,6 +23,7 @@ const Localization: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>();
+  const [isTranslated, setItranslated] = useState<boolean>(false);
 
   const handleAdd = () => {
     formRef.current?.resetFields();
@@ -47,7 +48,7 @@ const Localization: React.FC = () => {
         },
       ]);
     }
-    
+
   }, [JSON.stringify(selectedItem)]);
 
   const handleUpdate = (item: any) => {
@@ -94,7 +95,7 @@ const Localization: React.FC = () => {
           onConfirm={() => handleRemove(entity.id)}
         >
           <Button icon={<DeleteOutlined />} type="primary"
-          size='small' danger />
+            size='small' danger />
         </Popconfirm>,
       ],
       width: 80
@@ -119,32 +120,52 @@ const Localization: React.FC = () => {
 
   return (
     <PageContainer
-      extra={
-        <Button type="primary" className='flex gap-2 items-center' icon={<PlusOutlined />} onClick={handleAdd}>
-          <FormattedMessage id="general.new" />
-        </Button>
-      }
-    >
+      extra={(
+        <Segmented
+          options={[
+            { label: 'Chưa dịch', value: false },
+            { label: 'Đã dịch', value: true },
+          ]}
+          onChange={(value) => {
+            setItranslated(value);
+            actionRef.current?.reload();
+          }}
+        />
+      )}>
+
       <ProTable
+        headerTitle={(
+          <Space>
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+              <FormattedMessage id="general.new" />
+            </Button>
+            <Popconfirm title="Xác nhận xóa trùng?">
+              <Button type='primary' danger>Xóa trùng</Button>
+            </Popconfirm>
+          </Space>
+        )}
         rowSelection={{}}
         actionRef={actionRef}
         columns={columns}
-        request={listLocalization}
+        request={(params) => listLocalization({
+          ...params,
+          isTranslated
+        })}
         rowKey="id"
         search={{
           layout: "vertical"
         }}
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true
-        }}
       />
+
       <ModalForm
         title={<FormattedMessage id='menu.settings.localization' />}
         formRef={formRef}
         open={open}
         onOpenChange={setOpen}
         onFinish={onFinish}
+        modalProps={{
+          centered: true,
+        }}
       >
         <ProFormText name="id" hidden />
         <ProFormText

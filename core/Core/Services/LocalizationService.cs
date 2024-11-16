@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System.Net;
 using Waffle.Core.Constants;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
@@ -17,13 +18,15 @@ public class LocalizationService : ILocalizationService
     private readonly IMemoryCache _memoryCache;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly SettingOptions Options;
+    private readonly IRouteDataService _routeDataService;
 
-    public LocalizationService(ILocalizationRepository localizationRepository, IMemoryCache memoryCache, IHttpContextAccessor httpContextAccessor, IOptions<SettingOptions> options)
+    public LocalizationService(IRouteDataService routeDataService, ILocalizationRepository localizationRepository, IMemoryCache memoryCache, IHttpContextAccessor httpContextAccessor, IOptions<SettingOptions> options)
     {
         _localizationRepository = localizationRepository;
         _memoryCache = memoryCache;
         _httpContextAccessor = httpContextAccessor;
         Options = options.Value;
+        _routeDataService = routeDataService;
     }
 
     public string CurrentLocale()
@@ -34,7 +37,6 @@ public class LocalizationService : ILocalizationService
         {
             return cookies[CookieKey.Locale] ?? "vi-VN";
         }
-
         return "vi-VN";
     }
 
@@ -70,7 +72,7 @@ public class LocalizationService : ILocalizationService
         var cacheKey = $"{nameof(Localization)}-{key}";
         if (!_memoryCache.TryGetValue($"{cacheKey}", out string cacheValue))
         {
-            var locale = CurrentLocale();
+            var locale = _routeDataService.GetLocale();
             var i18n = await _localizationRepository.FindAsync(key, locale);
             if (i18n is null)
             {
