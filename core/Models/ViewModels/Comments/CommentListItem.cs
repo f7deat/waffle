@@ -1,10 +1,9 @@
 ﻿using Waffle.Entities;
 
-namespace Waffle.Models.ViewModels.Comments
+namespace Waffle.Models.ViewModels.Comments;
+
+public class CommentListItem : Comment
 {
-    public class CommentListItem : Comment
-    {
-        public string UserName { get; set; } = default!;
-        public string? CatalogName { get; set; }
-    }
+    public string? UserName { get; set; } = default!;
+    public string? CatalogName { get; set; }
 }

@@ -47,7 +47,8 @@ public class OrderController : BaseController
     [HttpPost("place-order"), AllowAnonymous]
     public async Task<IActionResult> AddAsync([FromBody] AddOrderRequest args)
     {
-        if (!args.OrderDetails.Any()) return BadRequest("Không tìm thấy sản phẩm trong giỏ hàng!");
+        if (args.OrderDetails.Count == 0) return BadRequest("Không tìm thấy sản phẩm trong giỏ hàng!");
+        if (string.IsNullOrWhiteSpace(args.PhoneNumber)) return BadRequest("Phone number is required!");
         var userId = User.GetClaimId();
         if (!string.IsNullOrEmpty(userId))
         {

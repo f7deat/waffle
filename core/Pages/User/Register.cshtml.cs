@@ -69,6 +69,14 @@ public class RegisterModel : EntryPageModel
             });
             return Page();
         }
+        if (string.IsNullOrWhiteSpace(Password))
+        {
+            Result = IdentityResult.Failed(new IdentityError
+            {
+                Description = "Password is required"
+            });
+            return Page();
+        }
         var user = CreateUser();
         user.CreatedDate = DateTime.Now;
         await _userStore.SetUserNameAsync(user, UserName, CancellationToken.None);
@@ -86,9 +94,11 @@ public class RegisterModel : EntryPageModel
                 pageHandler: null,
                 values: new { userId, code },
             protocol: Request.Scheme) ?? "/Users/ConfirmEmail";
-
-            await _emailSender.SendEmailAsync(Email, "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            if (!string.IsNullOrEmpty(Email))
+            {
+                await _emailSender.SendEmailAsync(Email, "Confirm your email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            }
         }
         // If we got this far, something failed, redisplay form
         return Page();

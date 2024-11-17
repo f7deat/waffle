@@ -17,7 +17,7 @@ public class ArticleListerViewComponent : BaseViewComponent<ArticleLister>
 
     protected override async Task<ArticleLister> ExtendAsync(ArticleLister work)
     {
-        var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"]);
+        var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"].ToString());
         var articles = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Active = true,

@@ -70,7 +70,7 @@ public class LocalizationService : ILocalizationService
     public async Task<string> GetAsync(string key)
     {
         var cacheKey = $"{nameof(Localization)}-{key}";
-        if (!_memoryCache.TryGetValue($"{cacheKey}", out string cacheValue))
+        if (!_memoryCache.TryGetValue($"{cacheKey}", out string? cacheValue))
         {
             var locale = _routeDataService.GetLocale();
             var i18n = await _localizationRepository.FindAsync(key, locale);
@@ -87,7 +87,7 @@ public class LocalizationService : ILocalizationService
             var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(1));
             _memoryCache.Set(cacheKey, cacheValue, cacheEntryOptions);
         }
-        return cacheValue;
+        return cacheValue ?? key;
     }
 
     public async Task<Localization?> GetAsync(Guid id) => await _localizationRepository.FindAsync(id);

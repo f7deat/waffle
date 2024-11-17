@@ -19,7 +19,7 @@ public class BloggerListerViewComponent : BaseViewComponent<BloggerLister>
     {
         var google = await _settingService.GetAsync<ExternalAPI.GoogleAggregate.Google>(nameof(Google));
         if (google is null) return work;
-        work.Posts = await _googleService.BloggerPostsAsync(work.BlogId, google.BloggerApiKey, work.PageSize, Request.Query["pageToken"], string.Empty);
+        work.Posts = await _googleService.BloggerPostsAsync(work.BlogId, google.BloggerApiKey, work.PageSize, Request.Query["pageToken"].ToString(), string.Empty);
         work.Category = PageData.NormalizedName;
         return work;
     }

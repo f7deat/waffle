@@ -16,7 +16,8 @@ public class ProductListerViewComponent : BaseViewComponent<ProductLister>
 
     protected override async Task<ProductLister> ExtendAsync(ProductLister work)
     {
-        var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"]);
+        var currentQuery = Request.Query["current"];
+        var current = string.IsNullOrEmpty(currentQuery) ? 1 : int.Parse(currentQuery.ToString());
 
         work.Products = await _productService.ListAsync(new ProductFilterOptions
         {

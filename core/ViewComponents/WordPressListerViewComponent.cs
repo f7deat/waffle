@@ -41,7 +41,7 @@ public class WordPressListerViewComponent : ViewComponent
         }
         work.Category = PageData.NormalizedName;
         work.SearchTerm = Request.Query["searchTerm"];
-        var current = Request.Query["current"];
+        var current = Request.Query["current"].ToString();
         var filterOptions = new SearchFilterOptions
         {
             SearchTerm = work.SearchTerm
