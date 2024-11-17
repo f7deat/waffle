@@ -1,4 +1,5 @@
-﻿using Waffle.Core.Foundations;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;

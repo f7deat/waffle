@@ -76,8 +76,34 @@ li {
     text-decoration: none;
 }
 
-@media screen and (min-width: 640px) {
-    .breadcrumb {
+.talent-network .title-wrap {
+    height: 200px;
+}
+
+    .talent-network .title-wrap h2 {
+        display: inline-block;
+        color: #e8c80d;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .talent-network .title-wrap h2 span {
+        display: block;
+        color: #2f4ba0;
+        font-size: 1rem;
+        text-align: right;
+        margin-top: 0.25rem;
+    }
+
+    .talent-network .title-wrap .quote-right {
+        display: flex;
+        align-items: flex-end;
+        margin-bottom: -20px;
+        padding-left: 5px;
+    }
+
+    @media screen and (min-width: 640px) {
+        .breadcrumb {
         max-width: 640px;
     }
 }
@@ -94,6 +120,18 @@ li {
         align-items: center;
         gap: 0.5rem;
     }
+
+    .talent-network .title-wrap {
+        height: 284px;
+    }
+
+    .talent-network .title-wrap h2 {
+        font-size: 1.8rem;
+    }
+
+        .talent-network .title-wrap h2 span {
+            font-size: 1.3rem;
+        }
 }
 
 @media screen and (min-width: 1024px) {

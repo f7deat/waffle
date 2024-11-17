@@ -101,8 +101,28 @@ public class SettingService : ISettingService
         _memoryCache.Remove(cacheKey);
     }
 
+    private async Task EnsureSettingAsync()
+    {
+        var settings = await _context.AppSettings.ToListAsync();
+        var newSettings = new List<AppSetting>();
+        if (!settings.Any(x => x.NormalizedName == nameof(EmailSetting)))
+        {
+            newSettings.Add(new AppSetting
+            {
+                NormalizedName = nameof(EmailSetting),
+                Name = "Email"
+            });
+        }
+        if (newSettings.Any())
+        {
+            await _context.AppSettings.AddRangeAsync(settings);
+            await _context.SaveChangesAsync();
+        }
+    }
+
     public async Task<ListResult<AppSetting>> ListAsync()
     {
+        await EnsureSettingAsync();
         return await ListResult<AppSetting>.Success(_context.AppSettings.Select(x => new AppSetting
         {
             Name = x.Name,

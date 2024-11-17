@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 
 namespace Waffle.Pages.Users;
@@ -10,10 +11,13 @@ public class ForgotPasswordModel : Microsoft.AspNetCore.Identity.UI.V4.Pages.Acc
 {
     private readonly UserManager<ApplicationUser> _userManager; 
     private readonly IEmailSender _emailSender;
-    public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+    private readonly ILocalizationService _localizationService;
+
+    public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, ILocalizationService localizationService)
     {
         _userManager = userManager;
         _emailSender = emailSender;
+        _localizationService = localizationService;
     }
 
     public string Error { get; set; } = string.Empty;
@@ -21,26 +25,15 @@ public class ForgotPasswordModel : Microsoft.AspNetCore.Identity.UI.V4.Pages.Acc
     public override async Task<IActionResult> OnPostAsync()
     {
         var user = await _userManager.FindByEmailAsync(Input.Email);
-        if (user == null)
+        if (user is null)
         {
-            Error = "User not found!";
+            Error = await _localizationService.GetAsync("user.not_found"); ;
             return Page();
         }
-
         if (!user.EmailConfirmed)
         {
-            var userId = await _userManager.GetUserIdAsync(user);
-            var confirmCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmUrl = Url.Page(
-                "/User/ConfirmEmail",
-                pageHandler: null,
-                values: new { userId, code = confirmCode },
-            protocol: Request.Scheme) ?? "/Users/ConfirmEmail";
-
-            await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(confirmUrl)}'>clicking here</a>.");
-
-            return RedirectToPage("./ForgotPasswordConfirmation");
+            Error = await _localizationService.GetAsync("user.email_not_confirm");
+            return Page();
         }
 
         // For more information on how to enable account confirmation and password reset please

@@ -9,7 +9,7 @@ public class PageData : BaseEntity
     public string NormalizedName { get; set; } = default!;
     public string? Description { get; set; }
     public string? Thumbnail { get; set; }
-    public string? Locale { get; set; }
+    public string Locale { get; set; } = "vi-VN";
     public string? Category { get; set; }
     public CatalogType Type { get; set; }
     public int ViewCount { get; set; }

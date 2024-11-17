@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -167,7 +168,11 @@ public class SettingController : BaseController
     }
 
     [HttpPost("test-send-mail")]
-    public async Task<IActionResult> TestSendMailAsync([FromBody] EmailSenderMessageUnitTest args) => Ok(await _emailSender.SendEmailAsync(args.Email, args.Subject, args.Message));
+    public async Task<IActionResult> TestSendMailAsync([FromBody] EmailSenderMessageUnitTest args)
+    {
+        await _emailSender.SendEmailAsync(args.Email, args.Subject, args.Message);
+        return Ok(IdentityResult.Success);
+    }
 
     [HttpGet("graph-api-explorer")]
     public async Task<IActionResult> GraphAPIExplorerAsync([FromQuery] string query)

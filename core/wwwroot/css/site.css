@@ -578,10 +578,6 @@ table {
     background-color: var(--gray-100);
 }
 
-.navbar {
-    --bs-navbar-padding-y: 0;
-}
-
 @media screen and (min-width: 640px) {
     .container {
         max-width: 640px;
@@ -646,10 +642,6 @@ table {
 
     .masonry {
         column-count: 3;
-    }
-
-    .navbar {
-        --bs-navbar-padding-y: 0.5rem;
     }
 }
 

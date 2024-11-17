@@ -405,7 +405,14 @@ public class CatalogService : ICatalogService
         return await _catalogRepository.GetFormSelectAsync(filterOptions);
     }
 
-    public Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize) => _catalogRepository.ListSpotlightAsync(pageData, pageSize);
+    public Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize)
+    {
+        if (pageData.Type == CatalogType.Entry || pageData.Type == CatalogType.Tag)
+        {
+            pageData.Type = CatalogType.Article;
+        }
+        return _catalogRepository.ListSpotlightAsync(pageData, pageSize);
+    }
 
     public async Task DeleteAsync(Catalog catalog) => await _catalogRepository.DeleteAsync(catalog);
 

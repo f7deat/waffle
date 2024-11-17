@@ -26,10 +26,10 @@ public class IndexModel : EntryPageModel
         Catalogs = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Active = true,
-            PageSize = 12,
+            PageSize = 6,
             Current = Current,
             Type = CatalogType.Location,
-            Locale = PageData.Locale ?? "vi-VN"
+            Locale = PageData.Locale 
         });
     }
 }
