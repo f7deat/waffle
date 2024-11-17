@@ -10,6 +10,7 @@ using Waffle.Data;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Foundations;
+using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Settings;
 using Waffle.UnitTest;
@@ -45,7 +46,17 @@ public class SettingController : BaseController
     public async Task<IActionResult> GetAsync([FromRoute] string normalizedName) => Ok(await _settingService.GetAsync<object>(normalizedName));
 
     [HttpGet("list")]
-    public async Task<IActionResult> ListAsync() => Ok(await _settingService.ListAsync());
+    public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions)
+    {
+        try
+        {
+            return Ok(await _settingService.ListAsync(filterOptions));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.ToString());
+        }
+    }
 
     [HttpPost("save/{id}")]
     public async Task<IActionResult> SaveAsync([FromRoute] Guid id, [FromBody] object args) => Ok(await _settingService.SaveAsync(id, args));

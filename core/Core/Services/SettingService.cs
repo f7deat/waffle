@@ -110,30 +110,36 @@ public class SettingService : ISettingService
             newSettings.Add(new AppSetting
             {
                 NormalizedName = nameof(EmailSetting),
-                Name = "Email"
+                Name = "Email",
+                Value = JsonSerializer.Serialize(new EmailSetting
+                {
+                    DisplayName = "noreply@defzone.net",
+                    FromEmail = "tandc@dhhp.edu.vn",
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    Protocol = EmailProtocol.Default,
+                    Password = "<-- Your Email Password -->"
+                })
             });
         }
-        if (newSettings.Any())
+        if (newSettings.Count != 0)
         {
-            await _context.AppSettings.AddRangeAsync(settings);
+            await _context.AppSettings.AddRangeAsync(newSettings);
             await _context.SaveChangesAsync();
         }
     }
 
-    public async Task<ListResult<AppSetting>> ListAsync()
+    public async Task<ListResult<AppSetting>> ListAsync(SearchFilterOptions filterOptions)
     {
         await EnsureSettingAsync();
-        return await ListResult<AppSetting>.Success(_context.AppSettings.Select(x => new AppSetting
+        var query = from a in _context.AppSettings
+                    select a;
+        if (!string.IsNullOrWhiteSpace(filterOptions.SearchTerm))
         {
-            Name = x.Name,
-            Description = x.Description,
-            NormalizedName = x.NormalizedName,
-            Id = x.Id
-        }), new BasicFilterOptions
-        {
-            Current = 1,
-            PageSize = 10
-        });
+            query = query.Where(x => x.Name.Contains(filterOptions.SearchTerm, StringComparison.CurrentCultureIgnoreCase));
+        }
+        query = query.OrderBy(x => x.NormalizedName);
+        return await ListResult<AppSetting>.Success(query, filterOptions);
     }
 
     public async Task<IdentityResult> SaveAsync(Guid id, object args)
