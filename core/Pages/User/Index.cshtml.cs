@@ -6,7 +6,7 @@ using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.ViewModels;
 
-namespace Waffle.Pages.Users;
+namespace Waffle.Pages.User;
 
 public class IndexModel : PageModel
 {
@@ -24,9 +24,11 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {
-        if (id == null) return NotFound();
-        ApplicationUser = await _userManager.FindByIdAsync(id.ToString());
-        if (ApplicationUser is null) return NotFound();
+        var userId = id?.ToString();
+        if (string.IsNullOrEmpty(userId)) return Redirect("/user/login");
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null) return Redirect("/user/login");
+        ApplicationUser = user;
         Articles = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Type = CatalogType.Article,

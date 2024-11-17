@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Users;
 
 namespace Waffle.Core.Services;
@@ -24,9 +22,9 @@ public class UserService : IUserService
 
     private async Task<ApplicationUser?> FindAsync(Guid id) => await _context.Users.FindAsync(id);
 
-    public async Task<IdentityResult> AddToRoleAsync(AddToRoleModel model)
+    public async Task<IdentityResult> AddToRoleAsync(Guid userId, string roleName)
     {
-        var user = await FindAsync(model.Id);
+        var user = await FindAsync(userId);
         if (user is null)
         {
             return IdentityResult.Failed(new IdentityError
@@ -34,14 +32,14 @@ public class UserService : IUserService
                 Description = "User not found!"
             });
         }
-        if (!await _roleManager.RoleExistsAsync(model.RoleName))
+        if (!await _roleManager.RoleExistsAsync(roleName))
         {
             return IdentityResult.Failed(new IdentityError
             {
                 Description = "Role not found!"
             });
         }
-        return await _userManager.AddToRoleAsync(user, model.RoleName);
+        return await _userManager.AddToRoleAsync(user, roleName);
     }
 
     public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel args)
@@ -55,6 +53,7 @@ public class UserService : IUserService
                 Description = "User not found!"
             });
         }
+        if (string.IsNullOrWhiteSpace(args.CurrentPassword) || string.IsNullOrWhiteSpace(args.NewPassword)) return IdentityResult.Failed();
         return await _userManager.ChangePasswordAsync(user, args.CurrentPassword, args.NewPassword);
     }
 
@@ -99,9 +98,9 @@ public class UserService : IUserService
         return await ListResult<Contact>.Success(query, filterOptions);
     }
 
-    public async Task<IdentityResult> RemoveFromRoleAsync(RemoveFromRoleModel args)
+    public async Task<IdentityResult> RemoveFromRoleAsync(Guid userId, string roleName)
     {
-        var user = await FindAsync(args.Id);
+        var user = await FindAsync(userId);
         if (user is null)
         {
             return IdentityResult.Failed(new IdentityError
@@ -109,7 +108,7 @@ public class UserService : IUserService
                 Description = "User not found!"
             });
         }
-        return await _userManager.RemoveFromRoleAsync(user, args.RoleName);
+        return await _userManager.RemoveFromRoleAsync(user, roleName);
     }
 
     public async Task<IdentityResult> UpdateAsync(ApplicationUser user, ApplicationUser args)

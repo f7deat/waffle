@@ -67,36 +67,48 @@ public class UserController : BaseController
     public async Task<IActionResult> GetUsersInRoleAsync([FromRoute] string roleName) => Ok(await _userService.GetUsersInRoleAsync(roleName));
 
     [HttpPost("add-to-role"), Authorize(Roles = RoleName.Admin)]
-    public async Task<IActionResult> AddToRoleAsync([FromBody] AddToRoleModel model) => Ok(await _userService.AddToRoleAsync(model));
+    public async Task<IActionResult> AddToRoleAsync([FromBody] AddToRoleModel model)
+    {
+        if (string.IsNullOrWhiteSpace(model.RoleName)) return BadRequest("Role name is required!");
+        return Ok(await _userService.AddToRoleAsync(model.Id, model.RoleName));
+    }
 
     [HttpPost("remove-from-role")]
-    public async Task<IActionResult> RemoveFromRoleAsync([FromBody] RemoveFromRoleModel args) => Ok(await _userService.RemoveFromRoleAsync(args));
+    public async Task<IActionResult> RemoveFromRoleAsync([FromBody] RemoveFromRoleModel args)
+    {
+        if (string.IsNullOrWhiteSpace(args.RoleName)) return BadRequest("Role name is required!");
+        return Ok(await _userService.RemoveFromRoleAsync(args.Id, args.RoleName));
+    }
 
     [HttpPost("password-sign-in"), AllowAnonymous]
     public async Task<IActionResult> PasswordSignInAsync([FromBody] LoginModel login)
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(login.UserName) || string.IsNullOrWhiteSpace(login.Password)) return BadRequest("Please input Username or Password");
             var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(login.UserName);
                 if (user is null) return BadRequest($"User {login.UserName} not found!");
-                var userRoles = await _userManager.GetRolesAsync(user);
+                if (string.IsNullOrEmpty(user.UserName)) return BadRequest("User name is empty!");
 
                 var authClaims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String),
-                new Claim(ClaimTypes.Name, user.UserName, ClaimValueTypes.String),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
+                {
+                    new(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String),
+                    new(ClaimTypes.Name, user.UserName, ClaimValueTypes.String),
+                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
 
+                var userRoles = await _userManager.GetRolesAsync(user);
                 foreach (var userRole in userRoles)
                 {
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole, ClaimValueTypes.String));
                 }
+                var secret = _configuration["JWT:Secret"];
+                if (string.IsNullOrEmpty(secret)) return BadRequest("Secret key is empty!");
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
                 var token = new JwtSecurityToken(
                     expires: DateTime.Now.AddDays(7),
@@ -248,6 +260,7 @@ public class UserController : BaseController
     {
         if (args.DateOfBirth > DateTime.Now) return BadRequest("Date of birth invalid!");
         var user = await _userManager.FindByIdAsync(args.Id.ToString());
+        if (user is null) return BadRequest("User not found!");
         if (await _userManager.IsInRoleAsync(user, RoleName.Admin) && user.Id != User.GetId()) return Unauthorized();
         return Ok(await _userService.UpdateAsync(user, args));
     }

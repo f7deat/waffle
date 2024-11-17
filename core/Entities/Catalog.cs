@@ -35,7 +35,7 @@ public class Catalog : BaseEntity
     public Guid? CreatedBy { get; set; }
     [JsonPropertyName("locale")]
     [StringLength(10)]
-    public string? Locale { get; set; }
+    public string Locale { get; set; } = default!;
     public string? Setting { get; set; }
     public string? Url { get; set; }
 }
