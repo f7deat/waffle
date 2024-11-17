@@ -1,5 +1,5 @@
 ﻿@page
-@model Waffle.Pages.Users.RegisterModel
+@model Waffle.Pages.User.RegisterModel
 
 <main class="container">
     <div class="d-flex justify-content-center align-items-center">
@@ -27,6 +27,13 @@
                 </div>
                 <div class="title">Đăng ký</div>
                 <form method="post">
+                    <div class="form-item">
+                        <div class="form-label">
+                            Họ và tên
+                            <font color="red">*</font>
+                        </div>
+                        <input class="form-control" type="text" required name="name" />
+                    </div>
                     <div class="form-item">
                         <div class="form-label">
                             Tên đăng nhập
@@ -75,7 +82,7 @@
                 </form>
             </div>
             <div class="mb-4 text-right">
-                Bạn đã có tài khoản? <a href="/users/login">Đăng nhập</a>
+                Bạn đã có tài khoản? <a href="/user/login">Đăng nhập</a>
             </div>
         </div>
     </div>

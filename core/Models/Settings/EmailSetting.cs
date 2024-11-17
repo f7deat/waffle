@@ -8,8 +8,18 @@ public class EmailSetting
     public int Port { get; set; }
     [JsonPropertyName("host")]
     public string? Host { get; set; }
-    [JsonPropertyName("userName")]
-    public string? UserName { get; set; }
+    [JsonPropertyName("fromEmail")]
+    public string? FromEmail { get; set; }
+    [JsonPropertyName("displayName")]
+    public string? DisplayName { get; set; }
     [JsonPropertyName("password")]
     public string? Password { get; set; }
+    [JsonPropertyName("protocol")]
+    public EmailProtocol Protocol { get; set; }
+}
+
+public enum EmailProtocol
+{
+    Default,
+    SendGrid
 }
