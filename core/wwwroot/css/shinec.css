@@ -1,5 +1,5 @@
 ﻿:root {
-    --primary: #2a7d2e;
+    --primary: #006b1d;
 }
 
 .title {
@@ -102,8 +102,8 @@
 
 .btn-primary {
     --bs-btn-border-color: var(--primary);
-    --bs-btn-hover-bg: #3e8f50;
-    --bs-btn-hover-border-color: #3e8f50;
+    --bs-btn-hover-bg: #00802A;
+    --bs-btn-hover-border-color: #00802A;
 }
 
 .breadcrumb {
@@ -2955,7 +2955,7 @@ aside.footer-widget-2 {
 }
 
 .site-footer-wrap, .site-footer-wrap a {
-    color: #ababab
+    color: #fff;
 }
 
 .footer-widget-1.col-3 {
