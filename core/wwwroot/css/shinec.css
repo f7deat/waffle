@@ -376,12 +376,18 @@ legend {
 
 .cea-icon-list-item {
     padding-bottom: calc(10px/2);
-    font-size: 1.25rem;
+    font-size: 1rem;
 }
+.count, .elementor-counter-number-suffix {
+    color: #3b82f6;
+}
+    .cea-icon-list-item b {
+        color: #3b82f6;
+    }
 
-ul.nav.flex-column.cea-icon-list {
-    margin-bottom: 0;
-}
+    ul.nav.flex-column.cea-icon-list {
+        margin-bottom: 0;
+    }
 
 .display-1 {
     font-size: 6rem;
@@ -456,6 +462,149 @@ hr {
     margin-bottom: 1rem;
     font-size: 1.25rem
 }
+.vr1 .btn1 {
+    --color-green: #93c493;
+}
+
+.btn1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    border: none;
+    background: none;
+    position: relative;
+    padding: 1px;
+    text-decoration: none;
+    transition: all 0.18s ease-in-out;
+    transform: translate3d(0, 0, 0);
+}
+
+    .btn1:after, .btn1:before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: calc(100px + 1.5px);
+        background-size: 100% 100%;
+        background-position: 0px 0px;
+        background-image: conic-gradient(from var(--angle) at 50% 50%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 33%, var(--glowColor) 50%, rgba(0, 0, 0, 0) 66%, rgba(0, 0, 0, 0) 100%);
+        animation: rotate 2s infinite linear;
+    }
+
+    .btn1:before {
+        animation: rotate 2s infinite linear;
+        filter: blur(20px);
+    }
+
+    .btn1 .btnInner {
+        position: relative;
+        width: 100%;
+        border-radius: 100px;
+        font-weight: 500;
+        z-index: 1;
+        transition: all 0.18s ease;
+        backface-visibility: hidden;
+    }
+
+    .btn1:hover .btnInner {
+        transform: scale(1.05);
+    }
+
+    .btn1:active {
+        transform: scale(0.95);
+    }
+
+.loader {
+    --speed: 1000ms;
+    position: relative;
+    display: flex;
+}
+
+    .loader .tile {
+        width: 0.5em;
+        height: 0.5em;
+        animation: var(--speed) ease infinite jump;
+        transform-origin: 0 100%;
+        will-change: transform;
+    }
+
+        .loader .tile::before {
+            content: "";
+            display: block;
+            width: inherit;
+            height: inherit;
+            border-radius: 0.5em;
+            background-color: currentColor;
+            animation: var(--speed) ease-out infinite spin;
+            will-change: transform;
+        }
+
+    .loader::after {
+        content: "";
+        display: block;
+        width: 6.1em;
+        height: 0.2em;
+        background-color: #013 2;
+        border-radius: 60%;
+        position: absolute;
+        left: -0.05em;
+        bottom: -0.1em;
+        z-index: -1;
+        animation: var(--speed) ease-in-out infinite shadow;
+        filter: blur(0.02em);
+        will-change: transform filter;
+    }
+
+@keyframes jump {
+    0% {
+        transform: scaleY(1) translateY(0);
+    }
+
+    16% {
+        transform: scaleY(0.6) translateY(0);
+    }
+
+    22% {
+        transform: scaleY(1.2) translateY(-5%);
+    }
+
+    24%, 62% {
+        transform: scaleY(1) translateY(-33%);
+    }
+
+    66% {
+        transform: scaleY(1.2) translateY(0);
+    }
+
+    72% {
+        transform: scaleY(0.8) translateY(0);
+    }
+
+    88% {
+        transform: scaleY(1) translateY(0);
+    }
+}
+
+@keyframes spin {
+    0%, 18% {
+        transform: rotateZ(0);
+        border-radius: 0.15em;
+    }
+
+    38% {
+        border-radius: 0.25em;
+    }
+
+    66%, 100% {
+        transform: rotateZ(1turn);
+        border-radius: 0.15em;
+    }
+}
+ 
 
 .blockquote-footer {
     display: block;
@@ -796,6 +945,12 @@ figure.alignnone, figure.aligncenter {
 .section-title-wrapper .section-title {
     margin-bottom: 1.25rem !important;
     font-size: 1.5rem !important;
+    color: var(--primary);
+}
+
+.about-us {
+    background-image: url(https://namcaukien.com.vn/wp-content/uploads/2021/05/photo-background-01.jpg);
+    background-size: cover;
 }
 
 .attachment-full {
@@ -1648,17 +1803,16 @@ figure.alignnone, figure.aligncenter {
         color: #3e8f50 !important
     }
 
-    header.garland-page-header {
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-        background: #f1f1f1;
-        position: relative;
-        z-index: 0;
-        overflow: hidden;
-        background-color: saddlebrown;
-        background-image: url(https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/2023/12/page-titke-2.png);
-    }
+header.garland-page-header {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+    background-color: #2a7d2e;
+    background-image: url(https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/2023/12/page-titke-2.png);
+}
 
     header.garland-page-header:after {
         content: "";
@@ -3582,7 +3736,7 @@ span.rss-date {
 
 .footer-bottom-wrap {
     padding: 20px 0;
-    background: rgba(0,0,0,0.7);
+    background: #2a7d2e;
 }
 
     .footer-bottom-wrap ul.nav:last-child {
@@ -7137,6 +7291,10 @@ li.breadcrumb-wrap {
         margin-bottom: 17px
     }
 
+    .btn {
+        position: relative;
+    }
+
     .insta-footer-wrap a.btn {
         font-size: 16px;
         padding: 10px 20px 10px 20px
@@ -7597,13 +7755,6 @@ img.mobile-logo {
     --bs-pagination-active-border-color: var(--primary);
 }
 
-.about-us {
-    padding: 1rem 0;
-    background-image: url(https://shinecgialai.com.vn/imgs/bg-indust.svg);
-    background-position: bottom right;
-    background-repeat: no-repeat;
-}
-
 @media only screen and (min-width: 768px) {
     .jumbotron {
         height: 600px;
@@ -7618,7 +7769,7 @@ img.mobile-logo {
     }
 
     .section-title-wrapper .section-title {
-        font-size: 3rem !important;
+        font-size: 2rem !important;
     }
 }
 
