@@ -16,6 +16,8 @@ public class WordPressPost
     public DateTime? Date { get; set; }
     [JsonPropertyName("excerpt")]
     public WordPressExcerpt Excerpt { get; set; } = new();
+    [JsonPropertyName("featured_media")]
+    public int? FeaturedMedia { get; set; }
 }
 
 public class WordPressTitle

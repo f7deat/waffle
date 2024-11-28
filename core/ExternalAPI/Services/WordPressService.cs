@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json.Linq;
+using System.Text.Json;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
@@ -39,9 +40,10 @@ public class WordPressService : IWordPressService
         try
         {
             var uri = new Uri(domain);
-            _httpClient.BaseAddress = uri;
+            var client = new HttpClient();
+            client.BaseAddress = uri;
             var url = $"wp-json/wp/v2/posts?page={filterOptions.Current}&search={filterOptions.SearchTerm}";
-            var response = await _httpClient.GetStreamAsync(url);
+            var response = await client.GetStreamAsync(url);
             return await JsonSerializer.DeserializeAsync<List<WordPressPost>>(response);
         }
         catch (Exception ex)
