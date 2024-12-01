@@ -40,7 +40,6 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
     switch (props.type) {
       case CatalogType.Tag:
         return 'catalog/tag';
-
       default:
         return 'catalog';
     }
@@ -65,7 +64,8 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
     {
       title: '#',
       valueType: 'indexBorder',
-      width: 50
+      width: 30,
+      align: 'center'
     },
     {
       title: 'Name',
@@ -108,7 +108,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
           status: 'Processing',
         },
       },
-      width: 100
+      width: 90
     },
     {
       title: 'Option',
@@ -118,7 +118,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
           items: [
             {
               key: 'edit',
-              label: 'Edit',
+              label: 'Chỉnh sửa',
               icon: <EditOutlined />
             },
             {
@@ -171,7 +171,6 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
         headerTitle={(
           <Button type="primary" onClick={() => setOpen(true)} icon={<PlusOutlined />}>Thêm mới</Button>
         )}
-        ghost
         rowSelection={{
           onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys)
         }}
@@ -183,9 +182,6 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
             type: props.type
           }, sort)
         }
-        pagination={{
-          defaultPageSize: 10
-        }}
         search={{
           layout: "vertical",
         }}

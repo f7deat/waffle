@@ -107,6 +107,7 @@ public class CatalogController : BaseController
     [HttpPost("delete/{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
+        if (!User.IsInRole(RoleName.Admin)) return Unauthorized();
         var catalog = await _catalogService.FindAsync(id);
         if (catalog is null) return BadRequest("Catalog not found!");
 
@@ -115,19 +116,21 @@ public class CatalogController : BaseController
             return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child catalog first!" }));
         }
 
-        if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id))
+        if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id)) return BadRequest("Please remove work item!");
+
+        var products = await _context.Products.Where(x => x.CatalogId == catalog.Id).ToListAsync();
+        if (products.Count > 0)
         {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Code = "error.hasWork",
-                Description = "Please remove work first"
-            }));
+            _context.Products.RemoveRange(products);
         }
 
         var tags = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
-        _context.WorkItems.RemoveRange(tags);
-        await _catalogService.DeleteAsync(catalog);
+        if (tags.Count > 0)
+        {
+            _context.WorkItems.RemoveRange(tags);
+        }
         await _logService.AddAsync($"Delete catalog: {catalog.Name}", id);
+        await _catalogService.DeleteAsync(catalog);
 
         return Ok(IdentityResult.Success);
     }
