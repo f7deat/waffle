@@ -5,67 +5,120 @@
 
 @await Component.InvokeAsync(nameof(Breadcrumb))
 
-<div class="container">
-
-    <div class="row">
-        <div class="col-md-8 mb-4">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15486.038331836062!2d108.10330145956281!3d13.987771454376812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x316ea1bcbdbe3dcd%3A0x399c4960798249b4!2zxJDEg2sgxJBvYSwgVHAuIFBsZWlrdSwgR2lhIExhaSwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1728702908354!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow rounded p-4 bg-white">
-                <div class="card-body">
-                    @if (!Model.IdentityResult.Succeeded)
-                    {
-                        <div class="alert">
-                            <div class="alert-title">Error: Something Wrong Here!</div>
-                            <ul>
-                                @foreach (var item in Model.IdentityResult.Errors)
-                                {
-                                    <li>@item.Description</li>
-                                }
+<div class="relative -mt-6">
+    <img src="https://longhau.com.vn/assets/images/contact-bg.jpg" class="absolute w-full h-full object-cover" />
+    <div class="container mb-4 md:pt-[200px]">
+        <div class="row">
+            <div class="col-md-8 mb-4">
+                <div class="card shadow rounded p-4 bg-white mb-4 h-full">
+                    <h2 class="text-primary mb-4">Bộ phận kinh doanh</h2>
+                    <div class="bg-[#2a7d2e] px-4 py-2 border-l-4 border-green-900 font-bold mb-2 text-white"><i class="fa-solid fa-location-dot mr-1"></i> Việt Nam</div>
+                    <div class="w-full max-w-sm bg-white rounded-lg shadow mb-4">
+                        <div class="flex flex-col items-center pb-10">
+                            <img class="w-32 h-40 mb-3 shadow object-cover" src="https://i.imgur.com/LDCjaV3.png" alt="Bonnie image" />
+                            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Ms. Thu Hằng</h5>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Trưởng phòng kinh doanh</span>
+                            <ul class="mt-4">
+                                <li>
+                                    <i class="fa-solid fa-phone mr-1"></i> +84 987720820
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-envelope mr-1"></i> dothuhang1801@gmail.com
+                                </li>
                             </ul>
                         </div>
-                    }
-                    <form method="post">
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <localize key="name" />
-                            </label>
-                            <input class="form-control" type="text" name="name" id="contact-input-name" required />
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Email</label>
-                                <input class="form-control" type="email" name="email" id="contact-input-email" required />
+                    </div>
+                    <h2 class="text-primary mb-4">Bộ phận văn phòng</h2>
+                    <div class="card shadow rounded p-4 bg-white">
+                        <div class="text-lg font-medium text-dark">Đơn vị có nhu cầu hợp tác, vui lòng liên hệ</div>
+                        <div class="mb-2 text-dark">
+                            <div>
+                                Ms. Nguyễn Dung
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div>
+                                <b>Hotline:&nbsp;</b><a href="telto:+84 393900704">+84 393900704</a>
+                            </div>
+                            <div>
+                                <b>Email:</b> nd.nndung@gmail.com
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow rounded p-4 bg-white h-full">
+                    <div class="card-body">
+                        <h2 class="text-primary">Liên hệ với chúng tôi</h2>
+                        @if (!Model.IdentityResult.Succeeded)
+                        {
+                            <div class="alert">
+                                <div class="alert-title">Error: Something Wrong Here!</div>
+                                <ul>
+                                    @foreach (var item in Model.IdentityResult.Errors)
+                                    {
+                                        <li>@item.Description</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        <form method="post">
+                            <div class="mb-3">
                                 <label class="form-label">
-                                    <localize key="phoneNumber" />
+                                    <localize key="name" />
                                 </label>
-                                <input class="form-control" type="tel" name="phoneNumber" id="contact-input-phoneNumber" required />
+                                <input class="form-control" type="text" name="name" id="contact-input-name" required />
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <localize key="note" />
-                            </label>
-                            <textarea class="form-control" name="note" id="contact-input-note"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <button class="btn btn-primary" type="submit" id="contact-btn-submit">
-                                <i class="far fa-paper-plane me-2"></i>
-                                <localize key="submit" />
-                            </button>
-                            <button class="btn btn-secondary" type="reset">
-                                <localize key="reset" />
-                            </button>
-                        </div>
-                        <div class="mb-2 text-muted">
-                            <small>We do not share any of your information without your consent</small>
-                        </div>
-                    </form>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input class="form-control" type="email" name="email" id="contact-input-email" required />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <localize key="phoneNumber" />
+                                    </label>
+                                    <input class="form-control" type="tel" name="phoneNumber" id="contact-input-phoneNumber" required />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <localize key="note" />
+                                </label>
+                                <textarea class="form-control" name="note" id="contact-input-note"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" type="submit" id="contact-btn-submit">
+                                    <i class="far fa-paper-plane me-2"></i>
+                                    <localize key="submit" />
+                                </button>
+                                <button class="btn btn-secondary" type="reset">
+                                    <localize key="reset" />
+                                </button>
+                            </div>
+                            <div class="mb-2 text-primary font-medium text-lg">
+                                Công ty cổ phần Shinec Gia Lai.
+                            </div>
+                            <div class="mb-2 text-dark">
+                                <div>
+                                    <b>Địa chỉ:&nbsp;</b>14 Trần Hưng Đạo, Phường Tây Sơn, TP. Pleiku, Tỉnh Gia Lai
+                                </div>
+                                <div>
+                                    <b>Hotline:&nbsp;</b><a href="telto:84868379299">+84 868379299</a>
+                                </div>
+                                <div>
+                                    <b>SDT:&nbsp;</b><a href="telto:02696333456">+84 696333456</a>
+                                </div>
+                                <div>
+                                    <b>Email:</b>&nbsp;congtyshinecgialai@gmail.com&nbsp;&nbsp;
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15486.038331836062!2d108.10330145956281!3d13.987771454376812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x316ea1bcbdbe3dcd%3A0x399c4960798249b4!2zxJDEg2sgxJBvYSwgVHAuIFBsZWlrdSwgR2lhIExhaSwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1728702908354!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

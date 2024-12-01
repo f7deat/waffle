@@ -197,8 +197,9 @@ public class UserController : BaseController
         {
             authClaims.Add(new Claim(ClaimTypes.Role, userRole, ClaimValueTypes.String));
         }
-
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+        var secretKey = _configuration["JWT:Secret"];
+        if (string.IsNullOrEmpty(secretKey)) return BadRequest("JWT secret key missing!");
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
         var token = new JwtSecurityToken(
             expires: DateTime.Now.AddDays(7),

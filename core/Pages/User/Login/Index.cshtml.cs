@@ -49,7 +49,7 @@ public class IndexModel : EntryPageModel
         SignInResult = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);
         if (SignInResult.Succeeded)
         {
-            var user = await _userManager.FindByEmailAsync(UserName);
+            var user = await _userManager.FindByNameAsync(UserName);
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>

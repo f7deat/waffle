@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net;
 using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Options;
 using Waffle.Data;
 
 namespace Waffle.Pages.Contact;
@@ -16,22 +18,26 @@ public class IndexModel<TUser> : EntryPageModel where TUser : class
     private readonly ISettingService _settingService;
     private readonly ApplicationDbContext _context;
     private readonly ILocalizationService _localizationService;
+    private readonly SettingOptions Options;
 
-    public IndexModel(ICatalogService catalogService, UserManager<TUser> userManager, ISettingService settingService, ApplicationDbContext context, ILocalizationService localizationService) : base(catalogService)
+    public IndexModel(ICatalogService catalogService, IOptions<SettingOptions> options, UserManager<TUser> userManager, ISettingService settingService, ApplicationDbContext context, ILocalizationService localizationService) : base(catalogService)
     {
         _userManager = userManager;
         _settingService = settingService;
         _context = context;
         _localizationService = localizationService;
+        Options = options.Value;
     }
 
     [BindProperty]
     public Entities.Contact Input { get; set; } = default!;
+    public string Theme = "Default";
 
     public IdentityResult IdentityResult { get; set; } = IdentityResult.Success;
 
     public void OnGet()
     {
+        Theme = Options.Theme;
     }
 
     public async Task<IActionResult> OnPostAsync()

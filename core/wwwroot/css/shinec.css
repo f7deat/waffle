@@ -2825,7 +2825,7 @@ body .elementor-widget:not(:last-child) {
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: rgba(255, 255, 255, 0.15);
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: #2a7d2e;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -3109,7 +3109,11 @@ aside.footer-widget-2 {
 }
 
 .site-footer-wrap, .site-footer-wrap a {
-    color: #fff;
+    color: white;
+}
+
+.footer-copyright a {
+    color: var(--primary);
 }
 
 .footer-widget-1.col-3 {
@@ -3736,7 +3740,7 @@ span.rss-date {
 
 .footer-bottom-wrap {
     padding: 20px 0;
-    background: #2a7d2e;
+    background-color: white;
 }
 
     .footer-bottom-wrap ul.nav:last-child {
@@ -3750,7 +3754,7 @@ img.footer-logo {
 }
 
 .site-footer .footer-bottom-wrap {
-    color: #C5C5C5
+    color: var(--primary);
 }
 
 .close {

@@ -111,7 +111,7 @@ public class CatalogController : BaseController
         var catalog = await _catalogService.FindAsync(id);
         if (catalog is null) return BadRequest("Catalog not found!");
 
-        if (await _context.Catalogs.AnyAsync(x => x.ParentId == catalog.Id))
+        if (await _catalogService.HasChildAsync(catalog.Id))
         {
             return Ok(IdentityResult.Failed(new IdentityError { Description = "Please remove child catalog first!" }));
         }

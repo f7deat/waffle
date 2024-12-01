@@ -483,7 +483,7 @@ public class CatalogService : ICatalogService
         var pageData = await _catalogRepository.GetByNameAsync(normalizedName);
         if (pageData is null)
         {
-            var locale = normalizedName.Split(".").LastOrDefault();
+            var locale = normalizedName.Split(".").LastOrDefault() ?? "vi-VN";
             if (!LocaleHelper.IsAvailable(locale)) throw new Exception("Locale not support!");
 
             pageData = new Catalog
@@ -557,4 +557,6 @@ public class CatalogService : ICatalogService
             value = x.Url
         });
     }
+
+    public async Task<bool> HasChildAsync(Guid parentId) => await _context.Catalogs.AnyAsync(x => x.ParentId == parentId);
 }

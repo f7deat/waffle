@@ -36,7 +36,7 @@ public class RoleGenerator : BaseGenerator
         var roles = GetData();
         foreach (var role in roles)
         {
-            if (await _roleManager.RoleExistsAsync(role.Name))
+            if (string.IsNullOrEmpty(role.Name) || await _roleManager.RoleExistsAsync(role.Name))
             {
                 continue;
             }

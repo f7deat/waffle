@@ -19,6 +19,7 @@ public interface ICatalogService
     Task<IdentityResult> UpdateThumbnailAsync(Catalog args);
     Task<ListResult<CatalogListItem>?> ArticleRelatedListAsync(ArticleRelatedFilterOption filterOptions);
     Task<Catalog?> FindAsync(Guid id);
+    Task<bool> HasChildAsync(Guid parentId);
     Task<IdentityResult> SaveAsync(Catalog args);
     IAsyncEnumerable<Option> GetTypesAsync();
     Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions);
