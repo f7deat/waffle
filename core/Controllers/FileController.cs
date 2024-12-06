@@ -78,7 +78,7 @@ public class FileController : BaseController
     {
         try
         {
-            if (files is null || !files.Any()) return BadRequest("Files not found!");
+            if (files is null || files.Count == 0) return BadRequest("Files not found!");
             var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
             var folder = Guid.NewGuid().ToString();
             var folderPath = Path.Combine(uploadPath, folder);

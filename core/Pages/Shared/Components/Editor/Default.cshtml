@@ -8,7 +8,7 @@
         switch (item.Type)
         {
             case BlockEditorType.PARAGRAPH:
-                <p id="@item.Id">
+                <p id="@item.Id" class="text-@item.Data.Alignment">
                     @Html.Raw(item.Data.Text)
                 </p>
                 break;
@@ -74,24 +74,26 @@
             case BlockEditorType.LIST:
                 @if (item.Data.Items != null)
                 {
-                    @if (item.Data.Style.Equals("ordered"))
-                    {
-                        <ol class="wf-list">
-                            @foreach (var li in item.Data.Items)
-                            {
-                                <li class="wf-list__item">@li</li>
-                            }
-                        </ol>
-                    }
-                    else
-                    {
-                        <ul class="wf-list">
-                            @foreach (var li in item.Data.Items)
-                            {
-                                <li class="wf-list__item">@li</li>
-                            }
-                        </ul>
-                    }
+                    <div class="def-list">
+                        @if (item.Data.Style.Equals("ordered"))
+                        {
+                            <ol>
+                                @foreach (var li in item.Data.Items)
+                                {
+                                    <li>@Html.Raw(li)</li>
+                                }
+                            </ol>
+                        }
+                        else
+                        {
+                            <ul>
+                                @foreach (var li in item.Data.Items)
+                                {
+                                    <li>@Html.Raw(li)</li>
+                                }
+                            </ul>
+                        }
+                    </div>
                 }
                 break;
             case BlockEditorType.SIMPLE_IMAGE:

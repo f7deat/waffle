@@ -209,7 +209,18 @@ export default [
     name: 'catalog',
     path: '/catalog',
     icon: 'SlackOutlined',
-    component: './catalog/page'
+    routes: [
+      {
+        name: 'page',
+        path: '/catalog/page',
+        component: './catalog/page'
+      },
+      {
+        name: 'article',
+        path: '/catalog/article',
+        component: './catalog/article'
+      }
+    ]
   },
   {
     path: '/catalog/:id',

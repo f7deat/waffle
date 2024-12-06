@@ -14,6 +14,10 @@ import Delimiter from '@editorjs/delimiter';
 import InlineCode from '@editorjs/inline-code';
 import SimpleImage from '@editorjs/simple-image';
 import { Blogger } from './tools';
+// @ts-ignore
+import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
+// @ts-ignore
+import Paragraph from 'editorjs-paragraph-with-alignment';
 
 export const EDITOR_JS_TOOLS = {
   embed: Embed,
@@ -35,5 +39,19 @@ export const EDITOR_JS_TOOLS = {
   delimiter: Delimiter,
   inlineCode: InlineCode,
   simpleImage: SimpleImage,
-  blogger: Blogger
+  blogger: Blogger,
+  alignmentTune: {
+    class: AlignmentTuneTool,
+    config:{
+      default: "right",
+      blocks: {
+        header: 'center',
+        list: 'right'
+      }
+    },
+  },
+  paragraph: {
+    class: Paragraph,
+    inlineToolbar: true,
+  }
 };

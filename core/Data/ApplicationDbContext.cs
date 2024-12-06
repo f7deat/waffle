@@ -2,27 +2,27 @@
 using Microsoft.EntityFrameworkCore;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
+using Waffle.Entities.Files;
 
 namespace Waffle.Data;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
-    public virtual DbSet<AppLog> AppLogs { get; set; } = default!;
-    public virtual DbSet<AppSetting> AppSettings { get; set; } = default!;
-    public virtual DbSet<Catalog> Catalogs { get; set; } = default!;
-    public virtual DbSet<Comment> Comments { get; set; } = default!;
-    public virtual DbSet<Component> Components { get; set; } = default!;
-    public virtual DbSet<FileContent> FileContents { get; set; } = default!;
-    public virtual DbSet<WorkContent> WorkContents { get; set; } = default!;
-    public virtual DbSet<WorkItem> WorkItems { get; set; } = default!;
-    public virtual DbSet<Contact> Contacts { get; set; } = default!;
-    public virtual DbSet<Localization> Localizations { get; set; } = default!;
-    public virtual DbSet<Order> Orders { get; set; } = default!;
-    public virtual DbSet<OrderDetail> OrderDetails { get; set; } = default!;
-    public virtual DbSet<Product> Products { get; set; } = default!;
-    public virtual DbSet<Menu> Menus { get; set; } = default!;
+    public DbSet<AppLog> AppLogs { get; set; } = default!;
+    public DbSet<AppSetting> AppSettings { get; set; } = default!;
+    public DbSet<Catalog> Catalogs { get; set; } = default!;
+    public DbSet<Comment> Comments { get; set; } = default!;
+    public DbSet<Component> Components { get; set; } = default!;
+    public DbSet<FileContent> FileContents { get; set; } = default!;
+    public DbSet<WorkContent> WorkContents { get; set; } = default!;
+    public DbSet<WorkItem> WorkItems { get; set; } = default!;
+    public DbSet<Contact> Contacts { get; set; } = default!;
+    public DbSet<Localization> Localizations { get; set; } = default!;
+    public DbSet<Order> Orders { get; set; } = default!;
+    public DbSet<OrderDetail> OrderDetails { get; set; } = default!;
+    public DbSet<Product> Products { get; set; } = default!;
+    public DbSet<Menu> Menus { get; set; } = default!;
+    public DbSet<Folder> Folders { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

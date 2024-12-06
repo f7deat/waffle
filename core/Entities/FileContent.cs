@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Waffle.Entities.Files;
 
 namespace Waffle.Entities;
 
@@ -16,4 +17,8 @@ public class FileContent : BaseEntity
     public string Url { get; set; } = default!;
     public DateTime UploadDate { get; set; }
     public Guid UploadBy { get; set; }
+    [ForeignKey(nameof(Folder))]
+    public Guid? FolderId { get; set; }
+
+    public Folder? Folder { get; set; }
 }

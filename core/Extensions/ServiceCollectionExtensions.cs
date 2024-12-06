@@ -6,6 +6,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Senders;
 using Waffle.Core.Services;
 using Waffle.Core.Services.Ecommerces;
+using Waffle.Core.Services.Files;
 using Waffle.Data.ContentGenerators;
 using Waffle.Infrastructure.Repositories;
 
@@ -41,6 +42,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ISettingRepository, SettingRepository>();
         services.AddScoped<IMigrationService, MigrationService>();
+        services.AddScoped<IFolderService, FolderService>();
 
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IRouteDataService, RouteDataService>();

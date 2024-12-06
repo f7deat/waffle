@@ -45,6 +45,20 @@
     padding: 1rem;
 }
 
+.def-list ul, .def-list ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.75rem;
+}
+
+.def-list ul {
+    list-style: disc;
+}
+
+.def-list ol {
+    list-style: decimal;
+}
+
 @media screen and (min-width: 768px) {
     .video-player {
         height: 550px;

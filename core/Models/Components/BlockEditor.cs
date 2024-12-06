@@ -51,6 +51,8 @@ public class BlockEditorItemData
     public string? Service { get; set; }
     [JsonPropertyName("embed")]
     public string? Embed { get; set; }
+    [JsonPropertyName("alignment")]
+    public string? Alignment { get; set; }
 }
 
 public class BlockEditorMeta

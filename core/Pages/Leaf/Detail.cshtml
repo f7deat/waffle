@@ -6,15 +6,17 @@
 @using Waffle.ViewComponents;
 @model Waffle.Pages.Leaf.DetailModel
 
-@await Component.InvokeAsync(nameof(Breadcrumb))
+<main class="leaf">
+    @await Component.InvokeAsync(nameof(Breadcrumb))
 
-<div class="@Model.PageData.Setting.Layout">
+    <div class="@Model.PageData.Setting.Layout">
 
-    @if (Model.Components != null)
-    {
-        @foreach (var item in Model.Components)
+        @if (Model.Components != null)
         {
-            @await Component.InvokeAsync(item.Name, item.Id)
+            @foreach (var item in Model.Components)
+            {
+                @await Component.InvokeAsync(item.Name, item.Id)
+            }
         }
-    }
-</div>
+    </div>
+</main>
