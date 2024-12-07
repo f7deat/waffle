@@ -50,8 +50,9 @@ public class IndexModel : EntryPageModel
         if (SignInResult.Succeeded)
         {
             var user = await _userManager.FindByNameAsync(UserName);
+            if (user is null) return Unauthorized();
             var userRoles = await _userManager.GetRolesAsync(user);
-
+            if (string.IsNullOrEmpty(user.UserName)) return BadRequest();
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String),
@@ -63,8 +64,9 @@ public class IndexModel : EntryPageModel
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole, ClaimValueTypes.String));
             }
-
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var jwtSecret = _configuration["JWT:Secret"];
+            if (string.IsNullOrEmpty(jwtSecret)) return BadRequest();
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
 
             var token = new JwtSecurityToken(
                 expires: DateTime.Now.AddDays(7),

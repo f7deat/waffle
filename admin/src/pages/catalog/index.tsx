@@ -57,13 +57,21 @@ const CatalogPage: React.FC = () => {
               tabPosition: 'top',
               activeKey: tab,
               items: [
+                ...(catalog?.type === CatalogType.Product ? [
+                  {
+                    label: <FormattedMessage id='pages.catalog.productDetail' />,
+                    key: 'product-detail',
+                    children: <ProductDetail />,
+                    disabled: catalog?.type !== CatalogType.Product
+                  }
+                ] : []),
                 {
-                  label: 'Content',
+                  label: 'Nội dung',
                   key: 'content',
                   children: <WorkContentComponent />,
                 },
                 {
-                  label: 'Information',
+                  label: 'Thông tin',
                   key: 'info',
                   children: <CatalogSetting catalog={catalog} reload={reload} />,
                 },
@@ -71,12 +79,6 @@ const CatalogPage: React.FC = () => {
                   label: <FormattedMessage id='menu.settings' />,
                   key: 'setting',
                   children: <CatalogInfoComponent />,
-                },
-                {
-                  label: <FormattedMessage id='pages.catalog.productDetail' />,
-                  key: 'product-detail',
-                  children: <ProductDetail />,
-                  disabled: catalog?.type !== CatalogType.Product
                 },
                 {
                   label: 'Trang con',

@@ -1,7 +1,7 @@
 ﻿@using Waffle.Models.Components
 @model WordPressLister
 @{
-    var page = Context.Request.Query["current"];
+    var page = Context.Request.Query["current"].ToString();
     var current = 1;
     if (!string.IsNullOrEmpty(page))
     {

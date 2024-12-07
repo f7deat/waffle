@@ -14,7 +14,7 @@
             <div class="col-md-8">
 
                 <h1 class="title">@Model.PageData.Name</h1>
-                <div class="mb-4 bg-white post-body">
+                <div class="mb-4 post-body">
                     @foreach (var item in Model.Works)
                     {
                         @await Component.InvokeAsync(item.NormalizedName, item.Id)

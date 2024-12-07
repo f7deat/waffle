@@ -59,6 +59,7 @@ public class UserService : IUserService
 
     public async Task<IdentityResult> CreateAsync(CreateUserModel model)
     {
+        if (string.IsNullOrWhiteSpace(model.Password)) return IdentityResult.Failed();
         return await _userManager.CreateAsync(new ApplicationUser
         {
             Email = model.Email,
@@ -76,7 +77,7 @@ public class UserService : IUserService
             Id = user.Id,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
-            UserName = user.UserName,
+            UserName = user.UserName ?? string.Empty,
             Name = user.Name,
             Roles = await _userManager.GetRolesAsync(user)
         };

@@ -51,7 +51,7 @@ public class ChangePasswordModel : PageModel
     public async Task<IActionResult> OnGetAsync()
     {
         var user = await _userManager.GetUserAsync(User);
-
+        if (user is null) return Unauthorized();
         var hasPassword = await _userManager.HasPasswordAsync(user);
         if (!hasPassword)
         {

@@ -18,7 +18,7 @@ public class IndexModel : EntryPageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
-        var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"]);
+        var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"].ToString());
         var videos = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Active = true,

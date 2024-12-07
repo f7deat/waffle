@@ -1,5 +1,6 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { SelectLang as UmiSelectLang } from '@umijs/max';
+import { Button } from 'antd';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -11,16 +12,8 @@ export const SelectLang = () => {
 
 export const Question = () => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        height: 26,
-      }}
-      onClick={() => {
-        window.open('https://pro.ant.design/docs/getting-started');
-      }}
-    >
+    <Button type='text'>
       <QuestionCircleOutlined />
-    </div>
+    </Button>
   );
 };

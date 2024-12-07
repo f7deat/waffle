@@ -6,7 +6,7 @@
     <div class="title">
         @Model.Title
     </div>
-    <div class="bg-white">
+    <div>
         @foreach (var item in Model.Articles)
         {
             <div class="d-flex mt-1 gap-2">
@@ -14,7 +14,7 @@
                     <img class="object-cover" loading="lazy" width="80" height="64" src="@item.Thumbnail" alt="@Html.Raw(item.Name)">
                 </a>
                 <div>
-                    <div class="mb-1 fw-medium">
+                    <div class="mb-1 fw-medium line-clamp-2">
                         <a href="@item.Url">@Html.Raw(item.Name)</a>
                     </div>
                     <div class="text-muted text-sm flex">

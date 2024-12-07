@@ -1,7 +1,7 @@
 import { ProCard, ProForm, ProFormDigit, ProFormInstance, ProFormText } from "@ant-design/pro-components"
 import { useParams } from "@umijs/max"
 import { queryProduct, saveProduct } from "@/services/catalog";
-import { Space, message } from "antd";
+import { Col, Row, message } from "antd";
 import { useEffect, useRef } from "react";
 import ProductImage from "./image";
 
@@ -30,6 +30,10 @@ const ProductDetail: React.FC = () => {
                         name: 'unitInStock',
                         value: response.unitInStock
                     },
+                    {
+                        name: 'affiliateLink',
+                        value: response.affiliateLink
+                    }
                 ])
             }
         })
@@ -47,12 +51,23 @@ const ProductDetail: React.FC = () => {
         <>
             <ProCard title="Details" headerBordered bordered className="mb-4">
                 <ProForm onFinish={onFinish} formRef={formRef}>
-                    <Space>
-                        <ProFormText name="sku" label="SKU" />
-                        <ProFormDigit name="price" label="Price" />
-                        <ProFormDigit name="salePrice" label="Sale price" />
-                        <ProFormDigit name="unitInStock" label="Stock" />
-                    </Space>
+                    <Row gutter={16}>
+                        <Col md={6} xs={12}>
+                            <ProFormText name="sku" label="SKU" />
+                        </Col>
+                        <Col md={6} xs={12}>
+                            <ProFormDigit name="price" label="Price" />
+                        </Col>
+                        <Col md={6} xs={12}>
+                            <ProFormDigit name="salePrice" label="Sale price" />
+                        </Col>
+                        <Col md={6} xs={12}>
+                            <ProFormDigit name="unitInStock" label="Stock" />
+                        </Col>
+                        <Col md={24} xs={24}>
+                            <ProFormDigit name="affiliateLink" label="Affiliate Link" placeholder="https://" />
+                        </Col>
+                    </Row>
                 </ProForm>
             </ProCard>
             <ProductImage />

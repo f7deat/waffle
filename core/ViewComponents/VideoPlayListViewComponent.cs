@@ -17,7 +17,7 @@ public class VideoPlayListViewComponent : BaseViewComponent<VideoPlayList>
 
     protected override async Task<VideoPlayList> ExtendAsync(VideoPlayList work)
     {
-        var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"]);
+        var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"].ToString());
         var videos = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Active = true,

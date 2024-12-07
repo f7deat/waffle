@@ -5,8 +5,6 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Waffle", "Waffle.csproj", "{C152ADF6-5662-4DFD-BFFC-16C34E88C57E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefCore", "..\DefCore\DefCore.csproj", "{3B79F705-76A4-4E64-BACF-EBA71804BC76}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{C152ADF6-5662-4DFD-BFFC-16C34E88C57E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C152ADF6-5662-4DFD-BFFC-16C34E88C57E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C152ADF6-5662-4DFD-BFFC-16C34E88C57E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B79F705-76A4-4E64-BACF-EBA71804BC76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B79F705-76A4-4E64-BACF-EBA71804BC76}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B79F705-76A4-4E64-BACF-EBA71804BC76}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B79F705-76A4-4E64-BACF-EBA71804BC76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

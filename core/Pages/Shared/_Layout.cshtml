@@ -2,7 +2,7 @@
 @inject IConfiguration Configuration
 
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Waffle.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/@(Configuration.GetValue<string>("Settings:Theme").ToLower()).css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/@(Configuration.GetValue<string>("Settings:Theme")?.ToLower()).css" asp-append-version="true" />
 
     @if (Configuration.GetValue<bool>("Settings:PWA"))
     {

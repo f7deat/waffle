@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Models.Components;
 
 namespace Waffle.Pages.Product;
 
@@ -27,7 +25,6 @@ public class DetailsModel : DynamicPageModel
     public ProductWorkItem? Editor;
     public IEnumerable<Catalog> Tags = new List<Catalog>();
     public Guid ProductImage;
-    public AffiliateLink? AffiliateLink;
     public IEnumerable<Catalog> RelatedProducts = new List<Catalog>();
     public Entities.Ecommerces.Product? Product;
     public string Theme = "Default";
@@ -41,11 +38,6 @@ public class DetailsModel : DynamicPageModel
         {
             Editor = component.FirstOrDefault(x => x.NormalizedName == nameof(Editor));
             ProductImage = component.FirstOrDefault(x => x.NormalizedName == nameof(ProductImage))?.Id ?? Guid.Empty;
-            var affiliateLink = component.FirstOrDefault(x => x.NormalizedName == nameof (AffiliateLink));
-            if (affiliateLink != null && !string.IsNullOrEmpty(affiliateLink.Arguments))
-            {
-                AffiliateLink = JsonSerializer.Deserialize<AffiliateLink>(affiliateLink.Arguments);
-            }
         }
         Theme = Options.Theme;
         return Page();

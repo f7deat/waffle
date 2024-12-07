@@ -35,6 +35,7 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
+        if (string.IsNullOrEmpty(UserId)) return Unauthorized();
         var user = await _userManager.FindByIdAsync(UserId);
         if (user is null) return NotFound();
         user.Name = Name;

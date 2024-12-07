@@ -72,26 +72,12 @@
                                         </div>
                                     </div>
                                 }
-                                @if (Model.AffiliateLink != null)
+                                @if (!string.IsNullOrEmpty(Model.Product?.AffiliateLink))
                                 {
                                     <div class="md:flex mb-4 gap-2">
-                                        <a href="@Model.AffiliateLink.Href" class="btn btn-outline-primary d-flex gap-2 items-center fw-medium" target="@Model.AffiliateLink.Target" rel="nofollow">
-                                            @if (Model.AffiliateLink.Href.Contains("shope") == true)
-                                            {
-                                                <img src="https://shopee.vn/pcmall-assets/assets/icon_favicon_1_32.png" alt="icon" loading="lazy" style="width: 16px" />
-                                            }
-                                            else
-                                            {
-                                                <i class="fas fa-cart-shopping me-2"></i>
-                                            }
-                                            @if (string.IsNullOrEmpty(Model.AffiliateLink.Name))
-                                            {
-                                                <span>Mua ngay</span>
-                                            }
-                                            else
-                                            {
-                                                <span>@Model.AffiliateLink.Name</span>
-                                            }
+                                        <a href="@Model.Product.AffiliateLink" class="btn btn-outline-primary d-flex gap-2 items-center fw-medium" target="_blank" rel="nofollow">
+                                            <i class="fas fa-cart-shopping me-2"></i>
+                                            <span>Mua ngay</span>
                                         </a>
                                     </div>
                                 }
