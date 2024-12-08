@@ -62,7 +62,8 @@ public class HeaderViewComponent : ViewComponent
             {
                 Name = parent.Name,
                 Id = parent.Id,
-                Href = parent.Url ?? "#"
+                Href = parent.Url ?? "#",
+                Icon = parent.Icon
             };
             if (menus.Any(x => x.ParentId == parent.Id))
             {

@@ -50,7 +50,8 @@ public class MenuController : BaseController
                     Id = parent.Id,
                     Url = parent.Url,
                     SortOrder = parent.SortOrder,
-                    Active = parent.Active
+                    Active = parent.Active,
+                    Icon = parent.Icon
                 };
                 if (menus.Any(x => x.ParentId == parent.Id))
                 {
@@ -60,7 +61,8 @@ public class MenuController : BaseController
                         Name = x.Name,
                         Url = x.Url,
                         SortOrder = x.SortOrder,
-                        Active = x.Active
+                        Active = x.Active,
+                        Icon = x.Icon
                     });
                 }
                 results.Add(navItem);
@@ -99,6 +101,7 @@ public class MenuController : BaseController
         data.Active = args.Active;
         data.Name = args.Name;
         data.SortOrder = args.SortOrder;
+        data.Icon = args.Icon;
         _context.Menus.Update(data);
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
@@ -110,6 +113,7 @@ public class MenuController : BaseController
         var data = await _context.Menus.FindAsync(id);
         if (data is null) return NoContent();
         _context.Menus.Remove(data);
+        if (await _context.Menus.AnyAsync(x => x.ParentId == id)) return BadRequest("Please remove child menu!");
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
     }

@@ -105,6 +105,10 @@
                                         {
                                             <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children">
                                                 <a href="@navItem.Href">
+                                                    @if (!string.IsNullOrEmpty(navItem.Icon))
+                                                    {
+                                                        @Html.Raw(navItem.Icon)
+                                                    }
                                                     @navItem.Name
                                                 </a>
                                                 @if (navItem.Children != null && navItem.Children.Any())

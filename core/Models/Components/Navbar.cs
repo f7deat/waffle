@@ -17,6 +17,7 @@ public class NavItem : Link
 {
     [JsonPropertyName("children")]
     public IEnumerable<NavItem>? Children { get; set; }
+    public string? Icon { get; set; }
 }
 
 public enum Layout

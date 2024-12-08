@@ -2,7 +2,7 @@ import { apiMenuAdd, apiMenuGet, apiMenuParent, apiMenuUpdate } from "@/services
 import { PlusOutlined } from "@ant-design/icons";
 import { ModalForm, ModalFormProps, ProFormDigit, ProFormInstance, ProFormSelect, ProFormSwitch, ProFormText } from "@ant-design/pro-components"
 import { Button, Col, message, Row } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 type Props = ModalFormProps & {
     reload: any;
@@ -39,6 +39,10 @@ const MenuForm: React.FC<Props> = (props) => {
                     {
                         name: 'active',
                         value: response.active
+                    },
+                    {
+                        name: 'icon',
+                        value: response.icon
                     }
                 ])
             })
@@ -48,7 +52,7 @@ const MenuForm: React.FC<Props> = (props) => {
     return (
         <>
             <Button type="primary" icon={<PlusOutlined />} onClick={() => props.onOpenChange?.(true)}>Tạo mới</Button>
-            <ModalForm {...props} title="Menu"
+            <ModalForm {...props} title="Menu setting"
                 formRef={formRef}
                 onFinish={async (values) => {
                     if (values.id) {
@@ -67,6 +71,7 @@ const MenuForm: React.FC<Props> = (props) => {
                     }
                 ]} />
                 <ProFormText name="url" label="Url" />
+                <ProFormText name="icon" label="Icon" />
                 <ProFormSelect name="parentId" label="Parent" request={apiMenuParent} />
                 <Row gutter={16}>
                     <Col span={12}>

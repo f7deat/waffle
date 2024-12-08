@@ -11,4 +11,6 @@ public class Menu : BaseEntity
     [StringLength(10)]
     public string Locale { get; set; } = default!;
     public bool Active { get; set; }
+    [StringLength(1024)]
+    public string? Icon { get; set; }
 }

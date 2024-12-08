@@ -8,4 +8,5 @@ public class NavItem
     public int SortOrder { get; set; }
     public bool Active { get; set; }
     public IEnumerable<NavItem>? Children { get; set; }
+    public string? Icon { get; set; }
 }
