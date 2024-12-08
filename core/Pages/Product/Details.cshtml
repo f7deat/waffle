@@ -9,7 +9,7 @@
 
 @await Component.InvokeAsync(nameof(Breadcrumb))
 
-<main class="container">
+<main class="container page-container">
 
     @if (Model.Theme != "Default")
     {
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="title">@Model.PageData.Name</div>
-                <div class="bg-white rounded mb-4 post-body">
+                <div class="rounded mb-4 post-body">
                     <div class="row">
                         <div class="col-md-4">
                             @await Component.InvokeAsync(nameof(ProductImage))

@@ -12,7 +12,7 @@
         <img src="@Model.Thumbnail" class="object-cover" alt="@Html.Raw(Model.Name)" height="220" loading="lazy" />
     </a>
     <div class="wf-article-item__body">
-        <a href="@Model.Url" class="fw-medium">@Html.Raw(Model.Name)</a>
+        <a href="@Model.Url" class="fw-medium line-clamp-2">@Html.Raw(Model.Name)</a>
         <div class="line-clampin">
             @Html.Raw(Model.Description)
         </div>

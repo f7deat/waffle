@@ -9,7 +9,7 @@
 <main class="leaf">
     @await Component.InvokeAsync(nameof(Breadcrumb))
 
-    <div class="@Model.PageData.Setting.Layout">
+    <div class="@Model.PageData.Setting.Layout page-container">
 
         @if (Model.Components != null)
         {
