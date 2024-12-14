@@ -18,6 +18,8 @@
         if (btnAddToCart) {
             btnAddToCart.addEventListener('click', this.addToCart);
         }
+        const plusQuantity = document.querySelector('#js-plusQuantity');
+        if (!plusQuantity) return;
         document.querySelector('#js-plusQuantity').addEventListener('click', (evt) => {
             Product.onQuantityChange(true);
         });

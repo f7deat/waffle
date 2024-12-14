@@ -3,6 +3,7 @@ using Waffle.Core.Foundations;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
+using Waffle.Models.Result;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Interfaces.IService;
@@ -17,4 +18,8 @@ public interface IProductService
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions catalogFilterOptions);
     Task<IEnumerable<ProductListItem>> ListRelatedAsync(PageData pageData);
     Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds, string locale);
+    Task<DefResult> AddLinkAsync(ProductLink args);
+    Task<DefResult> DeleteLinkAsync(Guid id);
+    Task<IEnumerable<ProductLink>> GetLinksAsync(Guid productId);
+    Task<DefResult> GoToProductLinkAsync(Guid id);
 }

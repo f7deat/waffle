@@ -6,35 +6,31 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 
 namespace Waffle.Pages.Product;
 
-public class DetailsModel : DynamicPageModel
+public class DetailsModel(ICatalogService catalogService, ApplicationDbContext context, IProductService productService, IOptions<SettingOptions> options) : DynamicPageModel(catalogService)
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IProductService _productService;
-    private readonly SettingOptions Options;
-
-    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, IProductService productService, IOptions<SettingOptions> options) : base(catalogService)
-    {
-        _context = context;
-        _productService = productService;
-        Options = options.Value;
-    }
-
+    private readonly ApplicationDbContext _context = context;
+    private readonly IProductService _productService = productService;
+    private readonly SettingOptions Options = options.Value;
     public ProductWorkItem? Editor;
-    public IEnumerable<Catalog> Tags = new List<Catalog>();
+    public IEnumerable<Catalog> Tags = [];
     public Guid ProductImage;
-    public IEnumerable<Catalog> RelatedProducts = new List<Catalog>();
+    public IEnumerable<Catalog> RelatedProducts = [];
     public Entities.Ecommerces.Product? Product;
     public string Theme = "Default";
+    public IEnumerable<ProductLink> Links = [];
 
     public async Task<IActionResult> OnGetAsync()
     {
-        Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
         Product = await _productService.GetByCatalogIdAsync(PageData.Id);
+        if (Product is null) return NotFound();
+        Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
+        Links = await _productService.GetLinksAsync(Product.Id);
         var component = await GetComponentsAsync();
-        if (component.Any())
+        if (component.Count != 0)
         {
             Editor = component.FirstOrDefault(x => x.NormalizedName == nameof(Editor));
             ProductImage = component.FirstOrDefault(x => x.NormalizedName == nameof(ProductImage))?.Id ?? Guid.Empty;

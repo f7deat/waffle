@@ -35,14 +35,20 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IWorkService, WorkService>();
         services.AddScoped<IWorkContentRepository, WorkItemRepository>();
         services.AddScoped<IFileRepository, FileRepository>();
-        services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<IOrderService, OrderSerivce>();
         services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ISettingRepository, SettingRepository>();
         services.AddScoped<IMigrationService, MigrationService>();
         services.AddScoped<IFolderService, FolderService>();
+
+        #region Products
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductService, ProductService>();
+
+        services.AddScoped<IProductLinkRepository, ProductLinkRepository>();
+
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderService, OrderSerivce>();
+        #endregion
 
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IRouteDataService, RouteDataService>();

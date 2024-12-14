@@ -7,24 +7,55 @@ using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
+using Waffle.Models.Result;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Services.Ecommerces;
 
-public class ProductService : IProductService
+public class ProductService(IProductRepository productRepository, ICatalogRepository catalogRepository, IProductLinkRepository productLinkRepository) : IProductService
 {
-    private readonly IProductRepository _productRepository;
-    private readonly ICatalogRepository _catalogRepository;
+    private readonly IProductRepository _productRepository = productRepository;
+    private readonly ICatalogRepository _catalogRepository = catalogRepository;
+    private readonly IProductLinkRepository _productLinkRepository = productLinkRepository;
 
-    public ProductService(IProductRepository productRepository, ICatalogRepository catalogRepository)
+    public async Task<DefResult> AddLinkAsync(ProductLink args)
     {
-        _productRepository = productRepository;
-        _catalogRepository = catalogRepository;
+        if (!await _productRepository.AnyAsync(args.ProductId)) return DefResult.Failed("Product not found!");
+        await _productLinkRepository.AddAsync(new ProductLink
+        {
+            CreatedDate = DateTime.Now,
+            ProductId = args.ProductId,
+            Name = args.Name,
+            Url = args.Url
+        });
+        return DefResult.Success;
     }
 
     public Task<int> CountAsync() => _catalogRepository.CountAsync(CatalogType.Product);
 
+    public async Task<DefResult> DeleteLinkAsync(Guid id)
+    {
+        var productLink = await _productLinkRepository.FindAsync(id);
+        if (productLink is null) return DefResult.Failed("Product link not found!");
+        await _productLinkRepository.DeleteAsync(productLink);
+        return DefResult.Success;
+    }
+
     public async Task<Product?> GetByCatalogIdAsync(Guid catalogId) => await _productRepository.FindByCatalogAsync(catalogId);
+
+    public Task<IEnumerable<ProductLink>> GetLinksAsync(Guid productId)
+    {
+        return _productLinkRepository.ListByProductIdAsync(productId);
+    }
+
+    public async Task<DefResult> GoToProductLinkAsync(Guid id)
+    {
+        var productLink = await _productLinkRepository.FindAsync(id);
+        if (productLink is null) return DefResult.Failed("Product link not found!");
+        productLink.ClickCount++;
+        await _productLinkRepository.UpdateAsync(productLink);
+        return DefResult.Success;
+    }
 
     public Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
     {
@@ -53,7 +84,8 @@ public class ProductService : IProductService
                 Price = args.Price,
                 SKU = args.SKU,
                 UnitInStock = args.UnitInStock,
-                SalePrice = args.SalePrice
+                SalePrice = args.SalePrice,
+                IsAffiliate = args.IsAffiliate
             };
             await _productRepository.AddAsync(product);
 
@@ -64,6 +96,7 @@ public class ProductService : IProductService
             product.SKU = args.SKU;
             product.UnitInStock = args.UnitInStock;
             product.SalePrice = args.SalePrice;
+            product.IsAffiliate = args.IsAffiliate;
             await _productRepository.SaveChangesAsync();
         }
         return IdentityResult.Success;

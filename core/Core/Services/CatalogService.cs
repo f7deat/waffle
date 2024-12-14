@@ -12,6 +12,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
@@ -61,6 +62,15 @@ public class CatalogService : ICatalogService
 
     private async Task<bool> IsExistAsync(string normalizedName) => await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(normalizedName));
 
+    private async Task AddProductAsync(Guid catalogId)
+    {
+        await _context.Products.AddAsync(new Product
+        {
+            CatalogId = catalogId
+        });
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<IdentityResult> AddAsync(Catalog catalog)
     {
         if (string.IsNullOrEmpty(catalog.NormalizedName))
@@ -89,6 +99,10 @@ public class CatalogService : ICatalogService
             catalog.Locale = _options.DefaultLanguage;
         }
         await _catalogRepository.AddAsync(catalog);
+        if (catalog.Type == CatalogType.Product)
+        {
+            await AddProductAsync(catalog.Id);
+        }
         return IdentityResult.Success;
     }
 

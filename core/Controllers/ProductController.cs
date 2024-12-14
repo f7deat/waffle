@@ -12,20 +12,12 @@ using Waffle.Models.Params.Products;
 
 namespace Waffle.Controllers;
 
-public class ProductController : BaseController
+public class ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, ILogService appLogService) : BaseController
 {
-    private readonly ICatalogService _catalogService;
-    private readonly IWorkService _workService;
-    private readonly IProductService _productService;
-    private readonly ILogService _appLogService;
-
-    public ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, ILogService appLogService)
-    {
-        _catalogService = catalogService;
-        _workService = workService;
-        _productService = productService;
-        _appLogService = appLogService;
-    }
+    private readonly ICatalogService _catalogService = catalogService;
+    private readonly IWorkService _workService = workService;
+    private readonly IProductService _productService = productService;
+    private readonly ILogService _appLogService = appLogService;
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _productService.GetByCatalogIdAsync(id));
@@ -39,7 +31,6 @@ public class ProductController : BaseController
         var catalog  = await _catalogService.FindAsync(args.CatalogId);
         if (catalog is null) return BadRequest("Catalog not found!");
         if (args.Price != null && args.Price < 1) return BadRequest("Price is not valid!");
-        await _appLogService.AddAsync($"Update product: {JsonSerializer.Serialize(args)}", args.CatalogId);
         return Ok(await _productService.SaveAsync(args));
     }
 
@@ -73,4 +64,20 @@ public class ProductController : BaseController
 
     [HttpPost("brand/save")]
     public async Task<IActionResult> SaveBrandAsync([FromBody] SaveBrandModel args) => Ok(await _productService.SaveBrandAsync(args));
+
+    [HttpPost("add-link")]
+    public async Task<IActionResult> AddLinkAsync([FromBody] ProductLink args) => Ok(await _productService.AddLinkAsync(args));
+
+    [HttpPost("delete-link/{id}")]
+    public async Task<IActionResult> DeleteLinkAsync([FromRoute] Guid id) => Ok(await _productService.DeleteLinkAsync(id));
+
+    [HttpGet("list-link/{id}")]
+    public async Task<IActionResult> ListLinkByProductIdAsync([FromRoute] Guid id)
+    {
+        var data = await _productService.GetLinksAsync(id);
+        return Ok(new { data, total = data.Count() });
+    }
+
+    [HttpPost("go-to-product-link/{id}"), AllowAnonymous]
+    public async Task<IActionResult> GoToProductLinkAsync([FromRoute] Guid id) => Ok(await _productService.GoToProductLinkAsync(id));
 }

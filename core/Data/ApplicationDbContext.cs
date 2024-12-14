@@ -23,6 +23,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Product> Products { get; set; } = default!;
     public DbSet<Menu> Menus { get; set; } = default!;
     public DbSet<Folder> Folders { get; set; } = default!;
+    public DbSet<ProductLink> ProductLinks { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

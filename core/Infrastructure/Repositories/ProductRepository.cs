@@ -12,11 +12,9 @@ using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class ProductRepository : EfRepository<Product>, IProductRepository
+public class ProductRepository(ApplicationDbContext context) : EfRepository<Product>(context), IProductRepository
 {
-    public ProductRepository(ApplicationDbContext context) : base(context)
-    {
-    }
+    public async Task<bool> AnyAsync(Guid productId) => await _context.Products.AnyAsync(x => x.Id == productId);
 
     public async Task<Product?> FindByCatalogAsync(Guid catalogId) => await _context.Products.FirstOrDefaultAsync(x => x.CatalogId == catalogId);
 
