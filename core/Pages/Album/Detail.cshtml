@@ -1,0 +1,22 @@
+﻿@page "/album/{category}/{normalizedName?}"
+@using Waffle.Core.Constants;
+@using Waffle.Entities;
+@using Waffle.Extensions;
+@using Waffle.Models.Components;
+@using Waffle.ViewComponents;
+@model Waffle.Pages.Album.DetailModel
+
+<main class="leaf">
+    @await Component.InvokeAsync(nameof(Breadcrumb))
+
+    <div class="@Model.PageData.Setting.Layout page-container">
+
+        @if (Model.Components != null)
+        {
+            @foreach (var item in Model.Components)
+            {
+                @await Component.InvokeAsync(item.Name, item.Id)
+            }
+        }
+    </div>
+</main>

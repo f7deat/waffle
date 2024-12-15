@@ -8,17 +8,11 @@ using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents;
 
-public class BreadcrumbViewComponent : ViewComponent
+public class BreadcrumbViewComponent(ICatalogService catalogService, ILocalizationService localizationService, IOptions<SettingOptions> options) : ViewComponent
 {
-    private readonly ILocalizationService _localizationService;
-    private readonly ICatalogService _catalogService;
-    private readonly SettingOptions Options;
-    public BreadcrumbViewComponent(ICatalogService catalogService, ILocalizationService localizationService, IOptions<SettingOptions> options)
-    {
-        _catalogService = catalogService;
-        _localizationService = localizationService;
-        Options = options.Value;
-    }
+    private readonly ILocalizationService _localizationService = localizationService;
+    private readonly ICatalogService _catalogService = catalogService;
+    private readonly SettingOptions Options = options.Value;
 
     private PageData PageData
     {

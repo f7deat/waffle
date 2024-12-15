@@ -87,7 +87,8 @@ public class ProductRepository(ApplicationDbContext context) : EfRepository<Prod
                          Name = catalog.Name,
                          Thumbnail = catalog.Thumbnail,
                          Price = product.Price,
-                         SalePrice = product.SalePrice
+                         SalePrice = product.SalePrice,
+                         Url = catalog.Url ?? catalog.NormalizedName
                      }).Distinct().OrderByDescending(x => Guid.NewGuid());
         return await query.Take(4).ToListAsync();
     }

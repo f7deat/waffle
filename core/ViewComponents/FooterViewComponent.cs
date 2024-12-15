@@ -7,15 +7,10 @@ using Waffle.Models.Settings;
 
 namespace Waffle.ViewComponents;
 
-public class FooterViewComponent : ViewComponent
+public class FooterViewComponent(ISettingService settingService, IOptions<SettingOptions> options) : ViewComponent
 {
-    private readonly ISettingService _settingService;
-    private readonly SettingOptions Options;
-    public FooterViewComponent(ISettingService settingService, IOptions<SettingOptions> options)
-    {
-        _settingService = settingService;
-        Options = options.Value;
-    }
+    private readonly ISettingService _settingService = settingService;
+    private readonly SettingOptions Options = options.Value;
 
     protected PageData PageData
     {

@@ -8,18 +8,11 @@ using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents;
 
-public class RelatedViewComponent : ViewComponent
+public class RelatedViewComponent(ICatalogService catalogService, IProductService productService, ILocalizationService localizationService) : ViewComponent
 {
-    private readonly ICatalogService _catalogService;
-    private readonly IProductService _productService;
-    private readonly ILocalizationService _localizationService;
-
-    public RelatedViewComponent(ICatalogService catalogService, IProductService productService, ILocalizationService localizationService)
-    {
-        _catalogService = catalogService;
-        _productService = productService;
-        _localizationService = localizationService;
-    }
+    private readonly ICatalogService _catalogService = catalogService;
+    private readonly IProductService _productService = productService;
+    private readonly ILocalizationService _localizationService = localizationService;
 
     private PageData PageData
     {
