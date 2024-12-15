@@ -18,28 +18,16 @@ using Waffle.Foundations;
 namespace Waffle.Controllers;
 
 [Route("api/[controller]")]
-public class ContactController : BaseController
+public class ContactController(ILogService appLogService, ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, ISettingService appSettingService, IUserService userService, IWorkService workService, ICatalogService catalogService) : BaseController
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ITelegramService _telegramService;
-    private readonly ILogger<ContactController> _logger;
-    private readonly ISettingService _appSettingService;
-    private readonly IUserService _userService;
-    private readonly ILogService _appLogService;
-    private readonly IWorkService _workService;
-    private readonly ICatalogService _catalogService;
-
-    public ContactController(ILogService appLogService, ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, ISettingService appSettingService, IUserService userService, IWorkService workService, ICatalogService catalogService)
-    {
-        _context = context;
-        _logger = logger;
-        _telegramService = telegramService;
-        _appSettingService = appSettingService;
-        _userService = userService;
-        _appLogService = appLogService;
-        _workService = workService;
-        _catalogService = catalogService;
-    }
+    private readonly ApplicationDbContext _context = context;
+    private readonly ITelegramService _telegramService = telegramService;
+    private readonly ILogger<ContactController> _logger = logger;
+    private readonly ISettingService _appSettingService = appSettingService;
+    private readonly IUserService _userService = userService;
+    private readonly ILogService _appLogService = appLogService;
+    private readonly IWorkService _workService = workService;
+    private readonly ICatalogService _catalogService = catalogService;
 
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _userService.ListContactAsync(filterOptions));

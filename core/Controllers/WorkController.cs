@@ -18,24 +18,14 @@ using Column = Waffle.Models.Components.Column;
 
 namespace Waffle.Controllers;
 
-public class WorkController : BaseController
+public class WorkController(ApplicationDbContext context, IFileService fileContentService, IWorkService workContentService, IComponentService componentService, ICatalogService catalogService, ILogService logService) : BaseController
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IFileService _fileContentService;
-    private readonly IWorkService _workService;
-    private readonly IComponentService _componentService;
-    private readonly ICatalogService _catalogService;
-    private readonly ILogService _logService;
-
-    public WorkController(ApplicationDbContext context, IFileService fileContentService, IWorkService workContentService, IComponentService componentService, ICatalogService catalogService, ILogService logService)
-    {
-        _context = context;
-        _fileContentService = fileContentService;
-        _workService = workContentService;
-        _componentService = componentService;
-        _catalogService = catalogService;
-        _logService = logService;
-    }
+    private readonly ApplicationDbContext _context = context;
+    private readonly IFileService _fileContentService = fileContentService;
+    private readonly IWorkService _workService = workContentService;
+    private readonly IComponentService _componentService = componentService;
+    private readonly ICatalogService _catalogService = catalogService;
+    private readonly ILogService _logService = logService;
 
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync([FromBody] AddWorkContentModel args)

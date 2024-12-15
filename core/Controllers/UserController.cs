@@ -19,30 +19,17 @@ using Waffle.Models.Params;
 
 namespace Waffle.Controllers;
 
-public class UserController : BaseController
+public class UserController(IWebHostEnvironment webHostEnvironment, IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<ApplicationRole> roleManager, ITelegramService telegramService, ICatalogService catalogService) : BaseController
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly ILogger<UserController> _logger;
-    private readonly IConfiguration _configuration;
-    private readonly IUserService _userService;
-    private readonly IWebHostEnvironment _webHostEnvironment;
-    private readonly ITelegramService _telegramService;
-    private readonly ICatalogService _catalogService;
-
-    public UserController(IWebHostEnvironment webHostEnvironment, IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<ApplicationRole> roleManager, ITelegramService telegramService, ICatalogService catalogService)
-    {
-        _userService = userService;
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _logger = logger;
-        _configuration = configuration;
-        _roleManager = roleManager;
-        _webHostEnvironment = webHostEnvironment;
-        _telegramService = telegramService;
-        _catalogService = catalogService;
-    }
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager = roleManager;
+    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+    private readonly ILogger<UserController> _logger = logger;
+    private readonly IConfiguration _configuration = configuration;
+    private readonly IUserService _userService = userService;
+    private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
+    private readonly ITelegramService _telegramService = telegramService;
+    private readonly ICatalogService _catalogService = catalogService;
 
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions)

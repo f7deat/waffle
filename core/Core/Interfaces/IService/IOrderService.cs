@@ -13,6 +13,6 @@ public interface IOrderService
     Task DeleteAsync(Order order);
     Task<int> CountAsync();
     Task AddOrderDetailsAsync(Guid orderId, List<OrderDetail> orderDetails);
-    Task<int> CountByStatusAsync(OrderStatus status);
+    Task<int> CountByStatusAsync(OrderStatus? status);
     Task<OrderDetailViewModel?> GetDetailsAsync(Guid id);
 }

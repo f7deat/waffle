@@ -7,13 +7,16 @@ using Waffle.Models;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class OrderRepository : EfRepository<Order>, IOrderRepository
+public class OrderRepository(ApplicationDbContext context) : EfRepository<Order>(context), IOrderRepository
 {
-    public OrderRepository(ApplicationDbContext context) : base(context)
+    public async Task<int> CountAsync(OrderStatus? status)
     {
+        if (status != null)
+        {
+            return await _context.Orders.CountAsync(x => x.Status == status);
+        }
+        return await _context.Orders.CountAsync();
     }
-
-    public async Task<int> CountAsync(OrderStatus status) => await _context.Orders.CountAsync(x => x.Status == status);
 
     public async Task<ListResult<Order>> ListAsync(IFilterOptions filterOptions)
     {

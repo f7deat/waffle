@@ -42,7 +42,7 @@ public class OrderSerivce : IOrderService
 
     public async Task AddOrderDetailsAsync(Guid orderId, List<OrderDetail> orderDetails)
     {
-        if (!orderDetails.Any())
+        if (orderDetails.Count == 0)
         {
             _logger.LogError("No product was found!");
             return;
@@ -56,7 +56,7 @@ public class OrderSerivce : IOrderService
 
     public Task<int> CountAsync() => _orderRepository.CountAsync();
 
-    public Task<int> CountByStatusAsync(OrderStatus status) => _orderRepository.CountAsync(status);
+    public Task<int> CountByStatusAsync(OrderStatus? status) => _orderRepository.CountAsync(status);
 
     public async Task DeleteAsync(Order order)
     {

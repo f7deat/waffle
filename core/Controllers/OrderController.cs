@@ -33,7 +33,7 @@ public class OrderController : BaseController
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _orderService.GetDetailsAsync(id));
 
     [HttpGet("count")]
-    public async Task<IActionResult> CountByStatusAsync([FromQuery] OrderStatus status) => Ok(await _orderService.CountByStatusAsync(status));
+    public async Task<IActionResult> CountByStatusAsync([FromQuery] OrderStatus? status) => Ok(await _orderService.CountByStatusAsync(status));
 
     [HttpPost("delete/{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)

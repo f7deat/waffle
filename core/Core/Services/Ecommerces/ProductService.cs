@@ -20,7 +20,11 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
 
     public async Task<DefResult> AddLinkAsync(ProductLink args)
     {
-        if (!await _productRepository.AnyAsync(args.ProductId)) return DefResult.Failed("Product not found!");
+        var product = await _productRepository.FindAsync(args.ProductId);
+        if (product is null) return DefResult.Failed("Product not found!");
+        var catalog = await _catalogRepository.FindAsync(product.CatalogId);
+        if (catalog is null) return DefResult.Failed("Catalog not found!");
+        catalog.ModifiedDate = DateTime.Now;
         await _productLinkRepository.AddAsync(new ProductLink
         {
             CreatedDate = DateTime.Now,
