@@ -10,14 +10,8 @@ using Waffle.Models.Result;
 
 namespace Waffle.Controllers;
 
-public class MenuController : BaseController
+public class MenuController(ApplicationDbContext _context) : BaseController
 {
-    private readonly ApplicationDbContext _context;
-    public MenuController(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
     [HttpGet("parent-options")]
     public async Task<IActionResult> GetParentOptionsAsync([FromQuery] string locale) => Ok(await _context.Menus.Where(x => x.ParentId == null && x.Active && x.Locale == locale).Select(x => new
     {

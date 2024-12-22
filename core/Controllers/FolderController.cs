@@ -6,10 +6,8 @@ using Waffle.Models.Filters.Folders;
 
 namespace Waffle.Controllers;
 
-public class FolderController(IFolderService folderService) : BaseController
+public class FolderController(IFolderService _folderService) : BaseController
 {
-    private readonly IFolderService _folderService = folderService;
-
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync([FromBody] Folder args) => Ok(await _folderService.AddAsync(args));
 

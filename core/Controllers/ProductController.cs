@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Text.Json;
 using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;

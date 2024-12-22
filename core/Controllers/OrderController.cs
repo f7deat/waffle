@@ -13,19 +13,8 @@ using Waffle.Models.Params.Products;
 
 namespace Waffle.Controllers;
 
-public class OrderController : BaseController
+public class OrderController(IOrderService _orderService, ITelegramService _telegramService, UserManager<ApplicationUser> _userManager) : BaseController
 {
-    private readonly IOrderService _orderService;
-    private readonly ITelegramService _telegramService;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public OrderController(IOrderService orderService, ITelegramService telegramService, UserManager<ApplicationUser> userManager)
-    {
-        _orderService = orderService;
-        _telegramService = telegramService;
-        _userManager = userManager;
-    }
-
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync(BasicFilterOptions filterOptions) => Ok(await _orderService.ListAsync(filterOptions));
 

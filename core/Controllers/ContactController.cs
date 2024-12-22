@@ -12,23 +12,13 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Core.Interfaces.IService;
 using SendGrid;
-using Waffle.Extensions;
 using Waffle.Foundations;
 
 namespace Waffle.Controllers;
 
 [Route("api/[controller]")]
-public class ContactController(ILogService appLogService, ApplicationDbContext context, ILogger<ContactController> logger, ITelegramService telegramService, ISettingService appSettingService, IUserService userService, IWorkService workService, ICatalogService catalogService) : BaseController
+public class ContactController(ILogService _appLogService, ApplicationDbContext _context, ILogger<ContactController> _logger, ITelegramService _telegramService, ISettingService _appSettingService, IUserService _userService, IWorkService _workService, ICatalogService _catalogService) : BaseController
 {
-    private readonly ApplicationDbContext _context = context;
-    private readonly ITelegramService _telegramService = telegramService;
-    private readonly ILogger<ContactController> _logger = logger;
-    private readonly ISettingService _appSettingService = appSettingService;
-    private readonly IUserService _userService = userService;
-    private readonly ILogService _appLogService = appLogService;
-    private readonly IWorkService _workService = workService;
-    private readonly ICatalogService _catalogService = catalogService;
-
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _userService.ListContactAsync(filterOptions));
 

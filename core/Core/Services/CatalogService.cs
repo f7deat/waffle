@@ -194,13 +194,13 @@ public class CatalogService : ICatalogService
             Description = "Name is required!"
         });
         catalog.Name = args.Name;
-        if (catalog.Type != CatalogType.Entry)
+        if (args.Type != CatalogType.Entry)
         {
             catalog.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
             catalog.Url = args.Url;
-            if (catalog.ParentId != null)
+            if (args.ParentId != null)
             {
-                var parent = await _catalogRepository.FindAsync(catalog.ParentId);
+                var parent = await _catalogRepository.FindAsync(args.ParentId);
                 if (parent is null) return IdentityResult.Failed(new IdentityError
                 {
                     Code = "B",
@@ -209,7 +209,7 @@ public class CatalogService : ICatalogService
                 catalog.Url = $"/{catalog.Type}/{parent.NormalizedName}/{catalog.NormalizedName}".ToLower();
             }
             var childs = await _context.Catalogs.Where(x => x.ParentId == catalog.Id).ToListAsync();
-            if (childs.Any())
+            if (childs.Count != 0)
             {
                 foreach (var child in childs)
                 {
@@ -349,6 +349,7 @@ public class CatalogService : ICatalogService
                     where a.CatalogId == tagId && b.Active &&
                     (string.IsNullOrEmpty(searchTerm) || b.NormalizedName.Contains(searchTerm)) &&
                     (filterOptions.Type == null || b.Type == filterOptions.Type)
+                    orderby b.ModifiedDate descending
                     select new CatalogListItem
                     {
                         Id = b.Id,

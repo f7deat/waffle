@@ -9,12 +9,8 @@ using Waffle.Models;
 
 namespace Waffle.Controllers;
 
-public class FileController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IFileService fileExplorerService) : BaseController
+public class FileController(IWebHostEnvironment _webHostEnvironment, ApplicationDbContext _context, IFileService _fileService) : BaseController
 {
-    private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
-    private readonly ApplicationDbContext _context = context;
-    private readonly IFileService _fileService = fileExplorerService;
-
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] FileFilterOptions filterOptions) => Ok(await _fileService.ListAsync(filterOptions));
 

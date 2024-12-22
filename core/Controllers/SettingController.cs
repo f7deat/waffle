@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Constants;
-using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.ExternalAPI.Interfaces;
@@ -18,26 +17,10 @@ using WFSendGrid = Waffle.ExternalAPI.SendGrids.SendGrid;
 
 namespace Waffle.Controllers;
 
-public class SettingController : BaseController
+public class SettingController(IEmailSender _emailSender, ApplicationDbContext _context, ISettingService _settingService, IConfiguration _configuration, IFacebookService _facebookService, ITelegramService telegramService, IWorkService workService) : BaseController
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ISettingService _settingService;
-    private readonly IConfiguration _configuration;
-    private readonly IFacebookService _facebookService;
-    private readonly ITelegramService _telegramService;
-    private readonly IWorkService _workService;
-    private readonly IEmailSender _emailSender;
-
-    public SettingController(IEmailSender emailSender, ApplicationDbContext context, ISettingService appSettingService, IConfiguration configuration, IFacebookService facebookService, ITelegramService telegramService, IWorkService workService)
-    {
-        _context = context;
-        _settingService = appSettingService;
-        _configuration = configuration;
-        _facebookService = facebookService;
-        _telegramService = telegramService;
-        _workService = workService;
-        _emailSender = emailSender;
-    }
+    private readonly ITelegramService _telegramService = telegramService;
+    private readonly IWorkService _workService = workService;
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync(id));

@@ -5,34 +5,13 @@ using System.IO.Compression;
 using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
-using Waffle.ExternalAPI.Interfaces;
-using Waffle.ExternalAPI.Models;
 using Waffle.Foundations;
 using Waffle.Models;
 
 namespace Waffle.Controllers;
 
-public class BackupController : BaseController
+public class BackupController(IWebHostEnvironment _webHostEnvironment, ApplicationDbContext _context, ICatalogService _catalogService, IWorkService _workService, ILogService _logService) : BaseController
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IComponentService _componentService;
-    private readonly ISettingService _appSettingService;
-    private readonly ICatalogService _catalogService;
-    private readonly IWorkService _workService;
-    private readonly IWebHostEnvironment _webHostEnvironment;
-    private readonly ILogService _logService;
-
-    public BackupController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext context, IComponentService componentService, ISettingService appSettingService, ICatalogService catalogService, IWorkService workService, ILogService logService)
-    {
-        _context = context;
-        _componentService = componentService;
-        _appSettingService = appSettingService;
-        _catalogService = catalogService;
-        _workService = workService;
-        _webHostEnvironment = webHostEnvironment;
-        _logService = logService;
-    }
-
     [HttpGet("export")]
     public async Task<IActionResult> ExportAsync()
     {

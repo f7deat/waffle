@@ -13,16 +13,8 @@ using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Pages.Tag;
 
-public class DetailsModel : DynamicPageModel
+public class DetailsModel(ICatalogService catalogService, IProductService _productService, ILocalizationService _localizationService) : DynamicPageModel(catalogService)
 {
-    private readonly IProductService _productService;
-    private readonly ILocalizationService _localizationService;
-    public DetailsModel(ICatalogService catalogService, IProductService productService, ILocalizationService localizationService) : base(catalogService)
-    {
-        _productService = productService;
-        _localizationService = localizationService;
-    }
-
     public ListResult<CatalogListItem>? Articles;
     [BindProperty(SupportsGet = true)]
     public int Current { get; set; } = 1;

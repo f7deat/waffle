@@ -19,18 +19,8 @@ using Waffle.Models.Params;
 
 namespace Waffle.Controllers;
 
-public class UserController(IWebHostEnvironment webHostEnvironment, IUserService userService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<UserController> logger, IConfiguration configuration, RoleManager<ApplicationRole> roleManager, ITelegramService telegramService, ICatalogService catalogService) : BaseController
+public class UserController(IUserService _userService, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, ILogger<UserController> _logger, IConfiguration _configuration, ITelegramService _telegramService, ICatalogService _catalogService) : BaseController
 {
-    private readonly UserManager<ApplicationUser> _userManager = userManager;
-    private readonly RoleManager<ApplicationRole> _roleManager = roleManager;
-    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-    private readonly ILogger<UserController> _logger = logger;
-    private readonly IConfiguration _configuration = configuration;
-    private readonly IUserService _userService = userService;
-    private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
-    private readonly ITelegramService _telegramService = telegramService;
-    private readonly ICatalogService _catalogService = catalogService;
-
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions)
     {
