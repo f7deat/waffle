@@ -17,6 +17,7 @@ import {
 import { history } from '@umijs/max';
 import { Avatar, Button, Col, message, Popconfirm, Row, Space, Statistic } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import FolderForm from './components/folder-form';
 
 const FilePage: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -113,7 +114,9 @@ const FilePage: React.FC = () => {
             pagination={{
               defaultPageSize: 8
             }}
-            headerTitle="Recent"
+            headerTitle={<FolderForm reload={() => {
+              actionRef.current?.reload();
+            }} />}
             request={(params) => listFile(params, [])}
             columns={columns}
             rowKey="id"

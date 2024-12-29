@@ -15,11 +15,12 @@ public class FolderService(ApplicationDbContext context, ICurrentUser currentUse
     private readonly ICurrentUser _currentUser = currentUser;
     private readonly ILookupNormalizer _lookupNormalizer = lookupNormalizer;
 
-    public async Task<DefResult> AddAsync(Folder args)
+    public async Task<DefResult> AddAsync(Folder args, string locale)
     {
-        if (await _context.Folders.AnyAsync(x => x.Name == args.Name)) return DefResult.Failed("Folder existed!");
+        if (await _context.Folders.AnyAsync(x => x.Name == args.Name && x.Locale == locale)) return DefResult.Failed("Folder existed!");
         if (args.ParentId != null && !await _context.Folders.AnyAsync(x => x.ParentId == args.ParentId)) return DefResult.Failed("Parent folder not found!");
         args.CreatedDate = DateTime.Now;
+        args.Locale = locale;
         args.CreatedBy = _currentUser.GetId();
         args.NormalizedName = _lookupNormalizer.NormalizeName(args.Name).ToLower().Replace(" ", "-");
         await _context.Folders.AddAsync(args);
@@ -41,7 +42,7 @@ public class FolderService(ApplicationDbContext context, ICurrentUser currentUse
     public async Task<object?> ListAsync(FolderFilterOptions filterOptions)
     {
         var query = from a in _context.Folders
-                    where a.ParentId == filterOptions.ParentId
+                    where a.ParentId == filterOptions.ParentId && a.Locale == filterOptions.Locale
                     select new
                     {
                         a.Id,

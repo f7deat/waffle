@@ -14,6 +14,13 @@ export async function addCatalog(data: API.Catalog) {
   });
 }
 
+export async function createTag(data: any) {
+  return request(`catalog/tag/create`, {
+    method: 'POST',
+    data
+  });
+}
+
 export async function listCatalog(params: {
   current?: number;
   pageSize?: number;

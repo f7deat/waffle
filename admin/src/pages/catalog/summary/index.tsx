@@ -8,7 +8,7 @@ import {
 import { ModalForm, ProCard, ProFormDigit, ProFormText } from '@ant-design/pro-components';
 import { Fragment, useState } from 'react';
 import { CatalogType } from '@/constants';
-import { addCatalog } from '@/services/catalog';
+import { createTag } from '@/services/catalog';
 import { message, Image, Empty, Divider, Descriptions, Typography, Button, Space, Tooltip } from 'antd';
 import { formatDate } from '@/utils/format';
 import TagList from './tag';
@@ -22,8 +22,7 @@ const CatalogSummary: React.FC<Props> = ({ catalog }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const onFinish = async (values: API.Catalog) => {
-    values.active = true;
-    const response = await addCatalog(values);
+    const response = await createTag(values);
     if (response.succeeded) {
       message.success('Added!');
       setOpen(false);

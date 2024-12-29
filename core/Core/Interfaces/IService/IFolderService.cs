@@ -6,7 +6,7 @@ namespace Waffle.Core.Interfaces.IService;
 
 public interface IFolderService
 {
-    Task<DefResult> AddAsync(Folder args);
+    Task<DefResult> AddAsync(Folder args, string locale);
     Task<DefResult> DeleteAsync(Guid id);
     Task<object?> ListAsync(FolderFilterOptions filterOptions);
     Task<DefResult> UpdateAsync(Folder args);

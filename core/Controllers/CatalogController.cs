@@ -225,4 +225,12 @@ public class CatalogController(ApplicationDbContext context, ICatalogService cat
 
     [HttpGet("url-options")]
     public async Task<IActionResult> GetUrlOptionsAsync([FromQuery] OptionFilterOptions filterOptions) => Ok(await catalogService.GetUrlOptionsAsync(filterOptions));
+
+    [HttpPost("tag/create")]
+    public async Task<IActionResult> CreateTagAsync([FromBody] CreateTagArgs args, [FromQuery] string locale)
+    {
+        var result = await catalogService.CreateTagAsync(args, locale);
+        if (!result.Succeeded) return BadRequest(result.Message);
+        return CreatedAtAction(nameof(CreateTagAsync), result);
+    }
 }

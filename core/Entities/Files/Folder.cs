@@ -13,6 +13,8 @@ public class Folder : BaseEntity
     public DateTime? ModifiedDate { get; set; }
     public Guid CreatedBy { get; set; }
     public Guid? ModifiedBy { get; set; }
+    [StringLength(10)]
+    public string Locale { get; set; } = default!;
 
     public List<FileContent>? Files { get; set; }
 }

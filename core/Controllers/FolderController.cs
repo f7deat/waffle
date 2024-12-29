@@ -9,7 +9,7 @@ namespace Waffle.Controllers;
 public class FolderController(IFolderService _folderService) : BaseController
 {
     [HttpPost("add")]
-    public async Task<IActionResult> AddAsync([FromBody] Folder args) => Ok(await _folderService.AddAsync(args));
+    public async Task<IActionResult> AddAsync([FromBody] Folder args, [FromQuery] string locale) => Ok(await _folderService.AddAsync(args, locale));
 
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] FolderFilterOptions filterOptions) => Ok(await _folderService.ListAsync(filterOptions));

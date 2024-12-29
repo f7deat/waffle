@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System.Globalization;
 using System.Text.Json;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
@@ -16,32 +15,14 @@ using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
+using Waffle.Models.Result;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services;
 
-public class CatalogService : ICatalogService
+public class CatalogService(ApplicationDbContext _context, ICurrentUser _currentUser, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, IOptions<SettingOptions> options, ILogService _logService, ILocalizationService _localizationService) : ICatalogService
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ICatalogRepository _catalogRepository;
-    private readonly ICurrentUser _currentUser;
-    private readonly IComponentRepository _componentRepository;
-    private readonly IWorkContentRepository _workRepository;
-    private readonly SettingOptions _options;
-    private readonly ILogService _logService;
-    private readonly ILocalizationService _localizationService;
-
-    public CatalogService(ApplicationDbContext context, ICurrentUser currentUser, ICatalogRepository catalogRepository, IComponentRepository componentRepository, IWorkContentRepository workContentRepository, IOptions<SettingOptions> options, ILogService logService, ILocalizationService localizationService)
-    {
-        _context = context;
-        _currentUser = currentUser;
-        _catalogRepository = catalogRepository;
-        _componentRepository = componentRepository;
-        _workRepository = workContentRepository;
-        _options = options.Value;
-        _logService = logService;
-        _localizationService = localizationService;
-    }
+    private readonly SettingOptions _options = options.Value;
 
     public async Task<IdentityResult> ActiveAsync(Guid id)
     {
@@ -574,4 +555,24 @@ public class CatalogService : ICatalogService
     }
 
     public async Task<bool> HasChildAsync(Guid parentId) => await _context.Catalogs.AnyAsync(x => x.ParentId == parentId);
+
+    public async Task<DefResult> CreateTagAsync(CreateTagArgs args, string locale)
+    {
+        if (string.IsNullOrWhiteSpace(args.Name)) return DefResult.Failed("Name is required!");
+        var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
+        if (await _context.Catalogs.AnyAsync(x => x.NormalizedName == normalizedName && x.Locale == locale)) return DefResult.Failed("Tag was existed!");
+        var tag = new Catalog
+        {
+            Name = args.Name,
+            NormalizedName = normalizedName,
+            Active = true,
+            CreatedDate = DateTime.Now,
+            ModifiedDate = DateTime.Now,
+            Type = CatalogType.Tag,
+            Locale = locale
+        };
+        await _context.Catalogs.AddAsync(tag);
+        await _context.SaveChangesAsync();
+        return DefResult.Success;
+    }
 }
