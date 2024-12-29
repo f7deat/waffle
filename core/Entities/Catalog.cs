@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Waffle.Entities.Affliates;
 
 namespace Waffle.Entities;
 
@@ -38,6 +39,8 @@ public class Catalog : BaseEntity
     public string Locale { get; set; } = default!;
     public string? Setting { get; set; }
     public string? Url { get; set; }
+
+    public List<AffiliateLink>? CatalogAffiliateLinks { get; set; }
 }
 
 public enum CatalogType
@@ -63,7 +66,11 @@ public enum CatalogType
     [Description("WordPress")]
     WordPress = 12,
     [Description("Thương hiệu")]
-    Brand = 13
+    Brand = 13,
+    [Description("Room")]
+    Room = 14,
+    [Description("Trip")]
+    Trip = 15
 }
 
 public class CatalogSetting

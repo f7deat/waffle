@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Entities;
+using Waffle.Entities.Affliates;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
 
@@ -24,6 +25,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Menu> Menus { get; set; } = default!;
     public DbSet<Folder> Folders { get; set; } = default!;
     public DbSet<ProductLink> ProductLinks { get; set; } = default!;
+    public DbSet<AffiliateLink> AffiliateLinks { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -5,6 +5,7 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Senders;
 using Waffle.Core.Services;
+using Waffle.Core.Services.Affiliates;
 using Waffle.Core.Services.Ecommerces;
 using Waffle.Core.Services.Files;
 using Waffle.Data.ContentGenerators;
@@ -49,6 +50,10 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderService, OrderSerivce>();
+        #endregion
+
+        #region Affiliates
+        services.AddScoped<IAffiliateService, AffiliateService>();
         #endregion
 
         services.AddScoped<ICurrentUser, CurrentUser>();
