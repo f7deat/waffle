@@ -26,6 +26,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Folder> Folders { get; set; } = default!;
     public DbSet<ProductLink> ProductLinks { get; set; } = default!;
     public DbSet<AffiliateLink> AffiliateLinks { get; set; } = default!;
+    public DbSet<Room> Rooms { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
