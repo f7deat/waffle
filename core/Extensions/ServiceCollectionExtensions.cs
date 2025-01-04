@@ -41,6 +41,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMigrationService, MigrationService>();
         services.AddScoped<IFolderService, FolderService>();
         services.AddScoped<IMenuService, MenuService>();
+        services.AddScoped<IRoomService, RoomService>();
 
         #region Products
         services.AddScoped<IProductRepository, ProductRepository>();
