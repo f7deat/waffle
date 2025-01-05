@@ -16,6 +16,7 @@ import ChildCatalog from './child';
 import ProductDetail from './products/detail';
 import { LeftOutlined } from '@ant-design/icons';
 import CatalogInfoComponent from './components/setting';
+import RoomDetail from './room';
 
 const CatalogPage: React.FC = () => {
   const { id } = useParams();
@@ -63,6 +64,14 @@ const CatalogPage: React.FC = () => {
                     key: 'product-detail',
                     children: <ProductDetail />,
                     disabled: catalog?.type !== CatalogType.Product
+                  }
+                ] : []),
+                ...(catalog?.type === CatalogType.Room ? [
+                  {
+                    label: 'Room',
+                    key: 'room-detail',
+                    children: <RoomDetail />,
+                    disabled: catalog?.type !== CatalogType.Room
                   }
                 ] : []),
                 {

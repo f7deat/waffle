@@ -14,7 +14,11 @@ export enum CatalogType {
   Video,
   Game,
   WordPress,
-  Brand
+  Brand,
+  Room,
+  Trip,
+  City,
+  Country
 }
 
 export enum ESortOrder {

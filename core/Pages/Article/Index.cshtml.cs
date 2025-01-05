@@ -7,19 +7,13 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Pages.Article;
 
-public class IndexModel : EntryPageModel
+public class IndexModel(ICatalogService catalogService, ILocalizationService _localizationService) : EntryPageModel(catalogService)
 {
-    private readonly ILocalizationService _localizationService;
 
     [BindProperty(SupportsGet = true)]
     public int Current { get; set; } = 1;
 
     public ListResult<CatalogListItem>? Articles;
-
-    public IndexModel(ICatalogService catalogService, ILocalizationService localizationService) : base(catalogService)
-    {
-        _localizationService = localizationService;
-    }
 
     [BindProperty(SupportsGet = true)]
     public string? SearchTerm { get; set; }

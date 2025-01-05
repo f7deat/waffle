@@ -12,15 +12,19 @@
                     </div>
                     @if (Model.Links != null && Model.Links.Any())
                     {
-                        foreach (var item in Model.Links)
-                        {
-                            <div class="footer-item">
-                                <a href="@item.Href" class="item-link" target="@item.Target">
-                                    <i class="fas fa-caret-right"></i>
-                                    @item.Name
-                                </a>
-                            </div>
-                        }
+                        <div class="row">
+                            @foreach (var item in Model.Links)
+                            {
+                                <div class="col-md-6">
+                                    <div class="footer-item">
+                                        <a href="@item.Href" class="item-link" target="@item.Target">
+                                            <i class="fas fa-caret-right me-1"></i>
+                                            <span>@item.Name</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     }
                 </div>
                 <div class="col-6 col-md-4 mb-4">

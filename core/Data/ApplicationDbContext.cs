@@ -4,7 +4,6 @@ using Waffle.Entities;
 using Waffle.Entities.Affliates;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
-using Waffle.Entities.Locations;
 
 namespace Waffle.Data;
 
@@ -28,8 +27,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ProductLink> ProductLinks { get; set; } = default!;
     public DbSet<AffiliateLink> AffiliateLinks { get; set; } = default!;
     public DbSet<Room> Rooms { get; set; } = default!;
-    public DbSet<City> Cities { get; set; } = default!;
-    public DbSet<Country> Countries { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

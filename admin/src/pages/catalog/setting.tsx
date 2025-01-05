@@ -114,7 +114,7 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
               name="locale" label="Locale" />
           </Col>
         </Row>
-        <FormCatalogList name="parentId" label="Parent" />
+        <FormCatalogList name="parentId" label="Parent" type={catalog?.type} />
         <Row gutter={16}>
           <Col span={16}>
             <ProFormText name="thumbnail" label="Thumbnail" addonAfter={<Space>

@@ -7,8 +7,7 @@ namespace Waffle.Core.Foundations;
 
 public class EntryPageModel : PageModel
 {
-    protected readonly ICatalogService _catalogService;
-
+    protected ICatalogService _catalogService;
     public EntryPageModel(ICatalogService catalogService)
     {
         _catalogService = catalogService;

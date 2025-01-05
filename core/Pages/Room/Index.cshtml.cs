@@ -1,12 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces.IService;
+using Waffle.Models;
+using Waffle.Models.List;
 
-namespace Waffle.Pages.Room
+namespace Waffle.Pages.Room;
+
+public class IndexModel(IRoomService _roomService, ICatalogService catalogService) : EntryPageModel(catalogService)
 {
-    public class IndexModel : PageModel
+    public ListResult<RoomListItem>? Rooms;
+    [BindProperty(SupportsGet = true)]
+    public BasicFilterOptions FilterOptions { get; set; } = new() { Current = 1, PageSize = 20 };
+
+    public async Task OnGetAsync()
     {
-        public void OnGet()
-        {
-        }
+        Rooms = await _roomService.GetRoomsAsync(FilterOptions);
     }
 }

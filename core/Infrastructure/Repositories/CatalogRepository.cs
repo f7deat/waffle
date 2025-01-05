@@ -46,7 +46,7 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
     public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions)
     {
         var query = _context.Catalogs
-            .Where(x => x.Active && x.Type == filterOptions.Type && (string.IsNullOrEmpty(filterOptions.KeyWords) || x.NormalizedName.Contains(filterOptions.KeyWords)) && x.ParentId == null)
+            .Where(x => x.Active && x.Type == filterOptions.Type && (string.IsNullOrEmpty(filterOptions.KeyWords) || x.NormalizedName.Contains(filterOptions.KeyWords)))
             .Where(x => x.Locale == filterOptions.Locale)
             .OrderByDescending(x => x.NormalizedName)
             .Select(x => new Option

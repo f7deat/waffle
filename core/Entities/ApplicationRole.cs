@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Waffle.Entities
+namespace Waffle.Entities;
+
+public class ApplicationRole : IdentityRole<Guid>
 {
-    public class ApplicationRole : IdentityRole<Guid>
-    {
-    }
 }

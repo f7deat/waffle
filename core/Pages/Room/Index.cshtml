@@ -1,4 +1,29 @@
 ﻿@page
 @model Waffle.Pages.Room.IndexModel
-@{
-}
+
+<div class="container">
+    @if (Model.Rooms != null)
+    {
+        <div class="rooms">
+            <div class="row mb-4">
+                @foreach (var room in Model.Rooms.Data)
+                {
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <img src="@room.Thumbnail" class="card-img-top" alt="@room.Name">
+                            <div class="card-body">
+                                <h5 class="card-title">@room.Name</h5>
+                                <p class="card-text">@room.Description</p>
+                                <a href="@room.AffiliateLink" class="btn btn-primary">Book now</a>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-body-secondary">@room.ModifiedDate</small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            @Html.DisplayFor(x => Model.Rooms.Pagination)
+        </div>
+    }
+</div>

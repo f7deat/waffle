@@ -20,7 +20,7 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services;
 
-public class CatalogService(ApplicationDbContext _context, ICurrentUser _currentUser, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, IOptions<SettingOptions> options, ILogService _logService, ILocalizationService _localizationService) : ICatalogService
+public class CatalogService(ApplicationDbContext _context, ICurrentUser _currentUser, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, IOptions<SettingOptions> options, ILogService _logService, ILocalizationService _localizationService, IRoomService _roomService) : ICatalogService
 {
     private readonly SettingOptions _options = options.Value;
 
@@ -80,9 +80,14 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             catalog.Locale = _options.DefaultLanguage;
         }
         await _catalogRepository.AddAsync(catalog);
-        if (catalog.Type == CatalogType.Product)
+        switch (catalog.Type)
         {
-            await AddProductAsync(catalog.Id);
+            case CatalogType.Room:
+                await _roomService.InitAsync(catalog.Id);
+                break;
+            case CatalogType.Product:
+                await AddProductAsync(catalog.Id);
+                break;
         }
         return IdentityResult.Success;
     }
