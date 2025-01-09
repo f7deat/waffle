@@ -10,7 +10,7 @@ public class IndexModel(IRoomService _roomService, ICatalogService catalogServic
 {
     public ListResult<RoomListItem>? Rooms;
     [BindProperty(SupportsGet = true)]
-    public BasicFilterOptions FilterOptions { get; set; } = new() { Current = 1, PageSize = 20 };
+    public BasicFilterOptions FilterOptions { get; set; } = new() { Current = 1, PageSize = 21 };
 
     public async Task OnGetAsync()
     {
