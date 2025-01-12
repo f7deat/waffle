@@ -150,9 +150,13 @@ table {
     min-height: 2.6rem;
 }
 
-.cdx-marker {
-    background-color: rgba(245,235,111,0.29);
+.line-clampin-3 {
+    -webkit-line-clamp: 3;
 }
+
+    .cdx-marker {
+        background-color: rgba(245,235,111,0.29);
+    }
 
 .video-player {
     margin-top: 0.5rem;
@@ -366,7 +370,7 @@ table {
     }
 
 .shadow {
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%) !important;
+    box-shadow: 0 0 30px rgba(112,120,137,.1) !important;
 }
 
 .thumbnail {
@@ -469,6 +473,11 @@ table {
 
 .opacity-50 {
     opacity: 0.5;
+}
+
+.room-title {
+    font-size: 1.25rem;
+    color: #333;
 }
 
 .wf-message {
@@ -633,6 +642,16 @@ table {
     .product-thumbnail {
         height: 235px;
         border: 1px solid var(--bs-light);
+    }
+
+    .room-title {
+        font-size: 1.5rem;
+        padding: 0;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .room-title:hover {
+        color: var(--primary);
     }
 }
 

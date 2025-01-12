@@ -2,28 +2,44 @@
 @model Waffle.Pages.Room.IndexModel
 
 <div class="container">
-    @if (Model.Rooms != null)
-    {
-        <div class="rooms">
-            <div class="row mb-4">
-                @foreach (var room in Model.Rooms.Data)
-                {
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <img src="@room.Thumbnail" class="card-img-top" alt="@room.Name">
-                            <div class="card-body">
-                                <h5 class="card-title">@room.Name</h5>
-                                <p class="card-text">@room.Description</p>
-                                <a href="@room.AffiliateLink" class="btn btn-primary">Book now</a>
-                            </div>
-                            <div class="card-footer">
-                                <small class="text-body-secondary">@room.ModifiedDate</small>
-                            </div>
-                        </div>
+    <div class="row">
+        <div class="col-md-6">
+            @if (Model.Rooms != null)
+            {
+                <div class="rooms">
+                    <div class="room-item px-3 md-px-0">
+                        @foreach (var room in Model.Rooms.Data)
+                        {
+                            <a href="@room.Url">
+                                <div class="mb-4 row shadow rounded">
+                                    <div class="col-md-4 py-4">
+                                        <img src="@room.Thumbnail" class="rounded-lg w-100" alt="@room.Name">
+                                    </div>
+                                    <div class="col-md-8 pt-md-4 pb-4">
+                                        <div class="card-body">
+                                            <h5 class="room-title">@room.Name</h5>
+                                            <p class="card-text line-clampin line-clampin-3 mb-2 text-muted">@room.Description</p>
+                                        </div>
+                                        <div class="d-flex">
+                                            <div class="flex-grow-1 text-primary d-flex gap-1">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                            </div>
+                                            <small class="text-body-secondary">@room.ModifiedDate</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        }
                     </div>
-                }
-            </div>
-            @Html.DisplayFor(x => Model.Rooms.Pagination)
+                    @Html.DisplayFor(x => Model.Rooms.Pagination)
+                </div>
+            }
         </div>
-    }
+        <div class="col-md-6">
+        </div>
+    </div>
 </div>

@@ -66,4 +66,11 @@ public class RoomService(ApplicationDbContext _context) : IRoomService
         query = query.OrderByDescending(x => x.ModifiedDate);
         return ListResult<RoomListItem>.Success(query, filterOptions);
     }
+
+    public async Task<Room?> GetByCatalogAsync(Guid catalogId)
+    {
+        var room = await _context.Rooms.FirstOrDefaultAsync(x => x.CatalogId == catalogId);
+        if (room is null) return default;
+        return room;
+    }
 }

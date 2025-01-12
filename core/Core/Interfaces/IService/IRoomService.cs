@@ -11,5 +11,6 @@ public interface IRoomService
     Task<DefResult> InitAsync(Guid catalogId);
     Task<DefResult> DeleteAsync(Guid catalogId);
     Task<DefResult> SaveAsync(RoomArgs args);
+    Task<Room?> GetByCatalogAsync(Guid catalogId);
     Task<ListResult<RoomListItem>> GetRoomsAsync(BasicFilterOptions filterOptions);
 }
