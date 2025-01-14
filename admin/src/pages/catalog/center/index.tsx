@@ -1,38 +1,37 @@
 import WorkContentComponent from '@/components/works';
-import { addCatalog, apiGetCatalogTypes, getCatalog } from '@/services/catalog';
+import { addCatalog, getCatalog } from '@/services/catalog';
 import {
   ModalForm,
   PageContainer,
   ProCard,
   ProFormText,
 } from '@ant-design/pro-components';
-import { FormattedMessage, history, Link, useParams } from '@umijs/max';
+import { FormattedMessage, history, useParams } from '@umijs/max';
 import { Button, Col, message, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import CatalogSetting from './setting';
-import CatalogSummary from './summary';
 import { CatalogType } from '@/constants';
-import ChildCatalog from './child';
-import ProductDetail from './products/detail';
-import { FormOutlined, LeftOutlined } from '@ant-design/icons';
-import CatalogInfoComponent from './components/setting';
-import RoomDetail from './room';
+import { LeftOutlined } from '@ant-design/icons';
+import ChildCatalog from '../child';
+import CatalogInfoComponent from '../components/setting';
+import ProductDetail from '../products/detail';
+import RoomDetail from '../room';
+import CatalogSetting from '../setting';
+import CatalogSummary from '../summary';
 
-const CatalogPage: React.FC = () => {
+const CatalogCenter: React.FC = () => {
   const { id } = useParams();
 
   const [open, setOpen] = useState<boolean>(false);
   const [catalog, setCatalog] = useState<API.Catalog>();
   const [tab, setTab] = useState('content');
-  const [data, setData] = useState<any[]>([]);
 
   const reload = () => {
     getCatalog(id).then((response) => setCatalog(response));
   }
 
   useEffect(() => {
-    apiGetCatalogTypes().then(response => setData(response));
-  }, []);
+    reload();
+  }, [id]);
 
   const onFinish = async (values: API.Catalog) => {
     addCatalog(values).then((response) => {
@@ -52,17 +51,7 @@ const CatalogPage: React.FC = () => {
       title={catalog?.name}
       extra={<Button icon={<LeftOutlined />} onClick={() => history.back()}><span><FormattedMessage id='general.back' /></span></Button>}
     >
-      <div className='grid md:grid-cols-4 gap-4'>
-        {
-          data.map((x) => (
-            <ProCard key={x.value} title={x.label} headerBordered 
-            actions={[
-              <Link key={x.value} to={`/catalog/center/${x.value}`}><FormOutlined /></Link>
-            ]}
-            />
-          ))
-        }
-      </div>
+      
       <Row gutter={16}>
         <Col md={18}>
           <ProCard
@@ -124,4 +113,4 @@ const CatalogPage: React.FC = () => {
   );
 };
 
-export default CatalogPage;
+export default CatalogCenter;

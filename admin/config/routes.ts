@@ -209,18 +209,19 @@ export default [
     name: 'catalog',
     path: '/catalog',
     icon: 'SlackOutlined',
-    routes: [
-      {
-        name: 'page',
-        path: '/catalog/page',
-        component: './catalog/page'
-      },
-      {
-        name: 'article',
-        path: '/catalog/article',
-        component: './catalog/article'
-      }
-    ]
+    component: './catalog'
+  },
+  {
+    name: 'article',
+    path: '/catalog/article',
+    component: './catalog/article',
+    hideInMenu: true
+  },
+  {
+    name: 'cenetr',
+    path: '/catalog/center/:id',
+    component: './catalog/center',
+    hideInMenu: true
   },
   {
     path: '/catalog/:id',

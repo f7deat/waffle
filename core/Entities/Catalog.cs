@@ -39,7 +39,7 @@ public class Catalog : BaseEntity
     public string? Url { get; set; }
 
     public List<AffiliateLink>? CatalogAffiliateLinks { get; set; }
-    public List<Room>? Room { get; set; }
+    public List<Room>? Rooms { get; set; }
 }
 
 public enum CatalogType
