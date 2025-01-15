@@ -212,15 +212,15 @@ export default [
     component: './catalog'
   },
   {
-    name: 'article',
-    path: '/catalog/article',
-    component: './catalog/article',
+    name: 'catalogCenter',
+    path: '/catalog/center/:id',
+    component: './catalog/center',
     hideInMenu: true
   },
   {
-    name: 'cenetr',
-    path: '/catalog/center/:id',
-    component: './catalog/center',
+    name: 'catalogList',
+    path: '/catalog/list/:id',
+    component: './catalog/list',
     hideInMenu: true
   },
   {

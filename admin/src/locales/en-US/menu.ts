@@ -1,12 +1,7 @@
 export default {
   'menu.dashboard': 'Dashboard',
-  'menu.catalog.article': 'Article',
   'menu.catalog.tag': 'Tag',
   'menu.catalog.tagCenter': 'Tag center',
-  'menu.catalog.page': 'Leaf',
-  'menu.article.center': 'Article center',
-  'menu.article.home': 'Articles',
-  'menu.article.list': 'Article list',
   'menu.catalog': 'Catalog',
   'menu.comments': 'Comments',
   'menu.ecommerce': 'E-Commerce',

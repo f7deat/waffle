@@ -36,18 +36,9 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
     }
   };
 
-  const url = () => {
-    switch (props.type) {
-      case CatalogType.Tag:
-        return 'catalog/tag';
-      default:
-        return 'catalog';
-    }
-  };
-
   const onMoreClick = (e: any, entity: any) => {
     if (e.key === 'edit') {
-      history.push(`/${url()}/${entity.id}`)
+      history.push(`/catalog/center/${entity.id}`)
       return;
     }
     if (e.key === 'publish') {

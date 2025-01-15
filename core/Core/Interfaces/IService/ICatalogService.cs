@@ -50,4 +50,5 @@ public interface ICatalogService
     Task<PageData?> GetPageDataAsync(string? normalizedName);
     Task<object?> GetUrlOptionsAsync(OptionFilterOptions filterOptions);
     Task<DefResult> CreateTagAsync(CreateTagArgs args, string locale);
+    Task<object> GetTypeAsync(CatalogType type);
 }

@@ -24,6 +24,9 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _catalogService.FindAsync(id));
 
+    [HttpGet("type/{id}")]
+    public async Task<IActionResult> GetTypeAsync([FromRoute] CatalogType id) => Ok(new { data = await _catalogService.GetTypeAsync(id) });
+
     [HttpGet("name/{normalizedName}")]
     public async Task<IActionResult> GetByNameAsync([FromRoute] string normalizedName) => Ok(await _catalogService.GetByNameAsync(normalizedName));
 

@@ -168,3 +168,7 @@ export const apiSaveCatalogSetting = (data: any, id?: string) => request(`catalo
 });
 
 export const apiGetUrlOption = (params: any) => request(`catalog/url-options`, { params });
+
+export async function apiGetCatalogType(id?: string) {
+  return request(`catalog/type/${id}`);
+}

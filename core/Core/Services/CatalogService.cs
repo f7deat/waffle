@@ -579,4 +579,13 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         await _context.SaveChangesAsync();
         return DefResult.Success;
     }
+
+    public async Task<object> GetTypeAsync(CatalogType type)
+    {
+        return new
+        {
+            id = type,
+            name = await _localizationService.GetAsync(type.ToString())
+        };
+    }
 }

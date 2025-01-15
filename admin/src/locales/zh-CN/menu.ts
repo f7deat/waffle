@@ -1,11 +1,6 @@
 export default {
-    'menu.catalog.article': 'Article',
     'menu.catalog.tag': 'Tag',
     'menu.catalog.tagCenter': 'Tag center',
-    'menu.catalog.page': 'Leaf',
-    'menu.article.center': 'Article center',
-    'menu.article.home': 'Articles',
-    'menu.article.list': 'Article list',
     'menu.catalog': '目录',
     'menu.comments': '评论',
     'menu.ecommerce': 'E-Commerce',
