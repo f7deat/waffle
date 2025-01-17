@@ -5,9 +5,9 @@ namespace Waffle.Core.Helpers;
 
 public class EncryptHelper
 {
-    public static string MD5Create(string input)
+    public static string MD5Create(string? input)
     {
-        using MD5 hash = MD5.Create();
-        return string.Join("", from ba in hash.ComputeHash(Encoding.UTF8.GetBytes(input)) select ba.ToString("x2"));
+        if (string.IsNullOrWhiteSpace(input)) return string.Empty;
+        return string.Join("", from ba in MD5.HashData(Encoding.UTF8.GetBytes(input)) select ba.ToString("x2"));
     }
 }

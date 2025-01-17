@@ -4,15 +4,12 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
+using Waffle.Models.Results.Components;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class ComponentRepository : EfRepository<Component>, IComponentRepository
+public class ComponentRepository(ApplicationDbContext context) : EfRepository<Component>(context), IComponentRepository
 {
-    public ComponentRepository(ApplicationDbContext context) : base(context)
-    {
-    }
-
     public async Task<Component?> FindByNameAsync(string normalizedName)
     {
         return await _context.Components.FirstOrDefaultAsync(x => x.NormalizedName.Equals(normalizedName) && x.Active);
@@ -23,10 +20,22 @@ public class ComponentRepository : EfRepository<Component>, IComponentRepository
         return await _context.Components.Where(x => (string.IsNullOrEmpty(filterOptions.SearchTerm) || x.NormalizedName.Contains(filterOptions.SearchTerm)) && x.Active).ToListAsync();
     }
 
-    public async Task<ListResult<Component>> ListAsync(ComponentFilterOptions filterOptions)
+    public async Task<ListResult<ComponentListResult>> ListAsync(ComponentFilterOptions filterOptions)
     {
-        var query = _context.Components.Where(x => string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower()))
-            .OrderBy(x => x.NormalizedName);
-        return await ListResult<Component>.Success(query, filterOptions);
+        var query = _context.Components.Where(x => string.IsNullOrEmpty(filterOptions.Name) || x.Name.Contains(filterOptions.Name, StringComparison.CurrentCultureIgnoreCase))
+            .Select(x => new ComponentListResult
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NormalizedName = x.NormalizedName,
+                Active = x.Active,
+                Count = _context.WorkContents.Count(w => w.ComponentId == x.Id)
+            });
+        if (filterOptions.Active != null)
+        {
+            query = query.Where(x => x.Active == filterOptions.Active);
+        }
+        query = query.OrderBy(x => x.NormalizedName);
+        return await ListResult<ComponentListResult>.Success(query, filterOptions);
     }
 }

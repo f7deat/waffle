@@ -99,34 +99,42 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     [HttpPost("delete/{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        if (!User.IsInRole(RoleName.Admin)) return Unauthorized();
-        var catalog = await _catalogService.FindAsync(id);
-        if (catalog is null) return BadRequest("Catalog not found!");
-
-        if (await _catalogService.HasChildAsync(catalog.Id)) return BadRequest("Please remove child catalog!");
-
-        if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id)) return BadRequest("Please remove work item!");
-
-        var products = await _context.Products.Where(x => x.CatalogId == catalog.Id).ToListAsync();
-        if (products.Count > 0)
+        try
         {
-            _context.Products.RemoveRange(products);
-        }
+            if (!User.IsInRole(RoleName.Admin)) return Unauthorized();
+            var catalog = await _catalogService.FindAsync(id);
+            if (catalog is null) return BadRequest("Catalog not found!");
 
-        var tags = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
-        if (tags.Count > 0)
-        {
-            _context.WorkItems.RemoveRange(tags);
-        }
-        var room = await _context.Rooms.FirstOrDefaultAsync(x => x.CatalogId == id);
-        if (room != null)
-        {
-            _context.Rooms.Remove(room);
-        }
-        await logService.AddAsync($"Delete catalog: {catalog.Name}", id);
-        await _catalogService.DeleteAsync(catalog);
+            if (await _catalogService.HasChildAsync(catalog.Id)) return BadRequest("Please remove child catalog!");
 
-        return Ok(IdentityResult.Success);
+            if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id)) return BadRequest("Please remove work item!");
+
+            var products = await _context.Products.Where(x => x.CatalogId == catalog.Id).ToListAsync();
+            if (products.Count > 0)
+            {
+                _context.Products.RemoveRange(products);
+            }
+
+            var tags = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
+            if (tags.Count > 0)
+            {
+                _context.WorkItems.RemoveRange(tags);
+            }
+            var room = await _context.Rooms.FirstOrDefaultAsync(x => x.CatalogId == id);
+            if (room != null)
+            {
+                _context.Rooms.Remove(room);
+            }
+            await logService.AddAsync($"Delete catalog: {catalog.Name}", id);
+            await _catalogService.DeleteAsync(catalog);
+
+            return Ok(IdentityResult.Success);
+        }
+        catch (Exception ex)
+        {
+            await logService.ExceptionAsync(ex);
+            return BadRequest(ex.ToString());
+        }
     }
 
     [HttpPost("active/{id}")]

@@ -9,12 +9,8 @@ using Waffle.Models.ViewModels.Logs;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class LogRepository : EfRepository<AppLog>, ILogRepository
+public class LogRepository(ApplicationDbContext context) : EfRepository<AppLog>(context), ILogRepository
 {
-    public LogRepository(ApplicationDbContext context) : base(context)
-    {
-    }
-
     public async Task<IdentityResult> DeleteAllAsync()
     {
         await _context.Database.ExecuteSqlRawAsync("DELETE FROM AppLogs");
@@ -38,8 +34,10 @@ public class LogRepository : EfRepository<AppLog>, ILogRepository
                     };
         if (!string.IsNullOrWhiteSpace(filterOptions.SearchTerm))
         {
-            query = query.Where(x => x.Message.ToLower().Contains(filterOptions.SearchTerm.ToLower()));
+            query = query.Where(x => x.Message.Contains(filterOptions.SearchTerm, StringComparison.CurrentCultureIgnoreCase));
         }
         return await ListResult<AppLogListItem>.Success(query, filterOptions);
     }
+
+    public async Task TraceAsync(AppLog appLog) => await _context.AppLogs.AddAsync(appLog);
 }

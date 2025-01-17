@@ -9,21 +9,8 @@ using Waffle.Models.ViewModels.Logs;
 
 namespace Waffle.Core.Services;
 
-public class LogService : ILogService
+public class LogService(ICurrentUser _currentUser, ILogRepository _logRepository, ILogger<LogService> _logger, ITelegramService _telegramService) : ILogService
 {
-    private readonly ICurrentUser _currentUser;
-    private readonly ILogRepository _logRepository;
-    private readonly ILogger<LogService> _logger;
-    private readonly ITelegramService _telegramService;
-
-    public LogService(ICurrentUser currentUser, ILogRepository appLogRepository, ILogger<LogService> logger, ITelegramService telegramService)
-    {
-        _currentUser = currentUser;
-        _logRepository = appLogRepository;
-        _logger = logger;
-        _telegramService = telegramService;
-    }
-
     public async Task AddAsync(string message, Guid catalogId)
     {
         await _logRepository.AddAsync(new AppLog
@@ -31,9 +18,23 @@ public class LogService : ILogService
             Message = message,
             CatalogId = catalogId,
             CreatedDate = DateTime.Now,
-            UserId = _currentUser.GetId()
+            UserId = _currentUser.GetId(),
+            Level = LogLevel.Trace
         });
     }
+
+    public async Task TraceAsync(string message, Guid catalogId)
+    {
+        await _logRepository.TraceAsync(new AppLog
+        {
+            Message = message,
+            CatalogId = catalogId,
+            CreatedDate = DateTime.Now,
+            UserId = _currentUser.GetId(),
+            Level = LogLevel.Trace
+        });
+    }
+
 
     public Task<IdentityResult> DeleteAllAsync() => _logRepository.DeleteAllAsync();
 
@@ -51,6 +52,17 @@ public class LogService : ILogService
         }
         await _logRepository.DeleteAsync(log);
         return IdentityResult.Success;
+    }
+
+    public async Task ExceptionAsync(Exception exception)
+    {
+        await _logRepository.AddAsync(new AppLog
+        {
+            CreatedDate = DateTime.Now,
+            UserId = _currentUser.GetId(),
+            Level = LogLevel.Critical,
+            Message = exception.ToString()
+        });
     }
 
     public Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions) => _logRepository.ListAsync(filterOptions);

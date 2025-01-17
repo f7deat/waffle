@@ -10,7 +10,7 @@ import { history } from '@umijs/max';
 import { Button, message, Popconfirm } from 'antd';
 import { useRef } from 'react';
 
-const Block: React.FC = () => {
+const Index: React.FC = () => {
   const actionRef = useRef<ActionType>();
 
   const onConfirm = async (id?: string) => {
@@ -90,13 +90,9 @@ const Block: React.FC = () => {
         search={{
           layout: 'vertical',
         }}
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true
-        }}
       />
     </PageContainer>
   );
 };
 
-export default Block;
+export default Index;

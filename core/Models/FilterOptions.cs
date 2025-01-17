@@ -69,6 +69,7 @@ public class BasicFilterOptions : FilterOptions
 public class ComponentFilterOptions : FilterOptions
 {
     public string? Name { get; set; }
+    public bool? Active { get; set; }
 }
 
 public class ArticleFilterOptions : FilterOptions

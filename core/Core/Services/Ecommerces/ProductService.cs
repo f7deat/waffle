@@ -89,7 +89,8 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
                 SKU = args.SKU,
                 UnitInStock = args.UnitInStock,
                 SalePrice = args.SalePrice,
-                IsAffiliate = args.IsAffiliate
+                IsAffiliate = args.IsAffiliate,
+                AffiliateLink = args.AffiliateLink
             };
             await _productRepository.AddAsync(product);
 
@@ -101,6 +102,7 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
             product.UnitInStock = args.UnitInStock;
             product.SalePrice = args.SalePrice;
             product.IsAffiliate = args.IsAffiliate;
+            product.AffiliateLink = args.AffiliateLink;
             await _productRepository.SaveChangesAsync();
         }
         return IdentityResult.Success;

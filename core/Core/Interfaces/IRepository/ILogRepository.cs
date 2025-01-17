@@ -9,4 +9,5 @@ public interface ILogRepository : IAsyncRepository<AppLog>
 {
     Task<IdentityResult> DeleteAllAsync();
     Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions);
+    Task TraceAsync(AppLog appLog);
 }

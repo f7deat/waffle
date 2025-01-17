@@ -8,20 +8,12 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models.Results.Components;
 
 namespace Waffle.Core.Services;
 
-public class ComponentService : IComponentService
+public class ComponentService(ApplicationDbContext _context, IComponentRepository _componentRepository) : IComponentService
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IComponentRepository _componentRepository;
-
-    public ComponentService(ApplicationDbContext context, IComponentRepository componentRepository)
-    {
-        _context = context;
-        _componentRepository = componentRepository;
-    }
-
     public async Task<IdentityResult> ActiveAsync(Guid id)
     {
         var component = await _context.Components.FindAsync(id);
@@ -127,7 +119,7 @@ public class ComponentService : IComponentService
 
     public async Task<IEnumerable<Component>> ListAllAsync() => await _context.Components.Where(x => x.Active).OrderBy(x => x.NormalizedName).ToListAsync();
 
-    public Task<ListResult<Component>> ListAsync(ComponentFilterOptions filterOptions) => _componentRepository.ListAsync(filterOptions);
+    public Task<ListResult<ComponentListResult>> ListAsync(ComponentFilterOptions filterOptions) => _componentRepository.ListAsync(filterOptions);
 
     public async Task<ListResult<WorkListItem>> ListWorkAsync(Guid id, WorkFilterOptions filterOptions)
     {

@@ -11,4 +11,5 @@ public interface ILogService
     Task<IdentityResult> DeleteAsync(Guid id);
     Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions);
     Task MessageAsync(string text);
+    Task ExceptionAsync(Exception exception);
 }

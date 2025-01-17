@@ -14,4 +14,6 @@ public class Product : BaseEntity
     [Column(TypeName = "money")]
     public decimal? SalePrice { get; set; }
     public bool IsAffiliate { get; set; }
+    [StringLength(2048)]
+    public string? AffiliateLink { get; set; }
 }
