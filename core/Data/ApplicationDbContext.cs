@@ -27,6 +27,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ProductLink> ProductLinks { get; set; } = default!;
     public DbSet<AffiliateLink> AffiliateLinks { get; set; } = default!;
     public DbSet<Room> Rooms { get; set; } = default!;
+    public DbSet<Collection> Collections { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -37,6 +38,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<WorkContent>().HasIndex(wc => wc.Id).HasDatabaseName("IDX_WorkContent_Id");
 
         builder.Entity<WorkItem>().HasKey(k => new { k.WorkId, k.CatalogId });
+        builder.Entity<Collection>().HasKey(k => new { k.CatalogId, k.CollectionId });
+
         base.OnModelCreating(builder);
     }
 }
