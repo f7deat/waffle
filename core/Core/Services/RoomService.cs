@@ -6,6 +6,7 @@ using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.List;
 using Waffle.Models.Result;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services;
 
@@ -72,5 +73,27 @@ public class RoomService(ApplicationDbContext _context) : IRoomService
         var room = await _context.Rooms.FirstOrDefaultAsync(x => x.CatalogId == catalogId);
         if (room is null) return default;
         return room;
+    }
+
+    public async Task<IEnumerable<CatalogListItem>> GetCitiesAsync(Guid countryId)
+    {
+        var query = from a in _context.Catalogs
+                    where a.ParentId == countryId && a.Active && a.Type == CatalogType.City
+                    select new CatalogListItem
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        ModifiedDate = a.ModifiedDate,
+                        Description = a.Description,
+                        Url = a.Url,
+                        CreatedDate = a.CreatedDate,
+                        ViewCount = a.ViewCount,
+                        CreatedBy = a.CreatedBy,
+                        Locale = a.Locale,
+                        Type = a.Type,
+                        NormalizedName = a.NormalizedName,
+                        Thumbnail = a.Thumbnail
+                    };
+        return await query.ToListAsync();
     }
 }

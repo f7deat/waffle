@@ -5,6 +5,8 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Extensions;
+using Waffle.ExternalAPI.Interfaces;
+using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Lister;
@@ -13,7 +15,7 @@ using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Pages.Tag;
 
-public class DetailsModel(ICatalogService catalogService, IProductService _productService, ILocalizationService _localizationService) : DynamicPageModel(catalogService)
+public class DetailsModel(ICatalogService catalogService, IProductService _productService, ILocalizationService _localizationService, IShopeeService _shopeeService) : DynamicPageModel(catalogService)
 {
     public ListResult<CatalogListItem>? Articles;
     [BindProperty(SupportsGet = true)]
@@ -26,8 +28,9 @@ public class DetailsModel(ICatalogService catalogService, IProductService _produ
     public ListResult<CatalogListItem> Albums = new();
     public ListResult<CatalogListItem> Locations = new();
     public VideoPlayList Videos = new();
+    public LandingPageLinkList ShopeeProducts = new();
 
-    public async Task<IActionResult> OnGetAsync(string normalizedName)
+    public async Task<IActionResult> OnGetAsync()
     {
         Articles = await _catalogService.ListByTagAsync(PageData.Id, new CatalogFilterOptions
         {
@@ -87,6 +90,9 @@ public class DetailsModel(ICatalogService catalogService, IProductService _produ
                 ViewCount = x.ViewCount.ToNumber()
             }).ToList() ?? new();
         }
+
+        ShopeeProducts = await _shopeeService.GetLinkListsAsync(PageData.Name, 1, 8);
+
         return Page();
     }
 }

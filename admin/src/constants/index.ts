@@ -18,7 +18,8 @@ export enum CatalogType {
   Room,
   Trip,
   City,
-  Country
+  Country,
+  Collection
 }
 
 export enum ESortOrder {

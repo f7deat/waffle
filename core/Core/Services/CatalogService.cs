@@ -588,4 +588,25 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             name = await _localizationService.GetAsync(type.ToString())
         };
     }
+
+    public async Task<object?> GetOptionsAsync(CatalogSelectOptions filterOptions)
+    {
+        var query = from a in _context.Catalogs
+                    where a.Active && a.Locale == filterOptions.Locale
+                    select new
+                    {
+                        a.Id,
+                        a.Name,
+                        a.Type
+                    };
+        if (filterOptions.Type != null)
+        {
+            query = query.Where(x => x.Type == filterOptions.Type);
+        }
+        return await query.Select(x => new
+        {
+            label = x.Name,
+            value = x.Id
+        }).ToListAsync();
+    }
 }

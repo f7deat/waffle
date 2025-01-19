@@ -246,4 +246,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
         if (!result.Succeeded) return BadRequest(result.Message);
         return CreatedAtAction(nameof(CreateTagAsync), result);
     }
+
+    [HttpGet("options")]
+    public async Task<IActionResult> GetOptionsAsync([FromQuery] CatalogSelectOptions filterOptions) => Ok(await _catalogService.GetOptionsAsync(filterOptions));
 }

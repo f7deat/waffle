@@ -1,0 +1,26 @@
+﻿@page "/country/{category}/{normalizedName?}"
+@using Waffle.Models.Components
+@model Waffle.Pages.Country.DetailModel
+
+<div class="container">
+
+    @await Component.InvokeAsync(nameof(Breadcrumb))
+
+    <div class="row">
+        @foreach (var city in Model.Cities)
+        {
+            <article class="col-md-2 mb-4">
+                <div class="card text-bg-dark">
+                    <img src="@city.Thumbnail" class="card-img" alt="@city.Name">
+                    <div class="card-img-overlay" style="background-image: linear-gradient(to bottom,#00000000 0%,#00000080 100%)">
+                        <h5 class="card-title">
+                            <a href="@city.Url" class="text-white">@city.Name</a>
+                        </h5>
+                        <p class="card-text">@city.Description</p>
+                        <p class="card-text"><small>@city.CreatedDate</small></p>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+</div>

@@ -25,7 +25,7 @@ public class DefResult
     public static DefResult Failed(string message)
     {
         var result = new DefResult { Succeeded = false };
-        if (string.IsNullOrEmpty(message))
+        if (!string.IsNullOrEmpty(message))
         {
             _message = message;
         }

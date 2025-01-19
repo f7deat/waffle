@@ -51,6 +51,7 @@
                 @await Component.InvokeAsync(nameof(Comment))
             </div>
             <div class="col-md-4">
+                @await Component.InvokeAsync("Collection")
                 @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
 
@@ -62,9 +63,9 @@
                             @foreach (var item in Model.ShopeeProducts.LinkList)
                             {
                                 <div class="bg-white">
-                                    <div class="card-image bg-dark">
+                                    <a href="@item.Link" class="thumbnail">
                                         <img src="@item.Image" alt="@item.LinkName" class="object-cover product-thumbnail w-100" loading="lazy" />
-                                    </div>
+                                    </a>
                                     <div class="p-2">
                                         <a href="@item.Link" class="line-clampin">
                                             @item.LinkName

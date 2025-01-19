@@ -494,7 +494,6 @@ table {
 .card {
     --bs-card-border-width: 0;
     background-color: white;
-    padding: 1rem;
     border-radius: 0.25rem;
 }
 

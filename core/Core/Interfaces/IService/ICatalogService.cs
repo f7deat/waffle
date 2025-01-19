@@ -51,4 +51,5 @@ public interface ICatalogService
     Task<object?> GetUrlOptionsAsync(OptionFilterOptions filterOptions);
     Task<DefResult> CreateTagAsync(CreateTagArgs args, string locale);
     Task<object> GetTypeAsync(CatalogType type);
+    Task<object?> GetOptionsAsync(CatalogSelectOptions filterOptions);
 }

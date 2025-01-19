@@ -172,3 +172,7 @@ export const apiGetUrlOption = (params: any) => request(`catalog/url-options`, {
 export async function apiGetCatalogType(id?: string) {
   return request(`catalog/type/${id}`);
 }
+
+export async function apiGetCatalogOptions(params: any) {
+  return request(`catalog/options`, { params });
+}

@@ -17,6 +17,7 @@ import ProductDetail from '../products/detail';
 import RoomDetail from '../room';
 import CatalogSetting from '../setting';
 import CatalogSummary from '../summary';
+import CatalogCollection from '../components/collection';
 
 const CatalogCenter: React.FC = () => {
   const { id } = useParams();
@@ -94,6 +95,11 @@ const CatalogCenter: React.FC = () => {
                   label: 'Trang con',
                   key: 'childen',
                   children: <ChildCatalog parent={catalog} />
+                },
+                {
+                  label: 'Collection',
+                  key: 'collection',
+                  children: <CatalogCollection />
                 }
               ],
               onChange: onTabChange,

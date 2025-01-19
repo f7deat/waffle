@@ -15,25 +15,13 @@ using Waffle.Models;
 
 namespace Waffle.Pages.Article;
 
-public class DetailsModel : DynamicPageModel
+public class DetailsModel(ICatalogService catalogService, ApplicationDbContext _context, IShopeeService _shopeeService, IOptions<SettingOptions> options) : DynamicPageModel(catalogService)
 {
-    private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IShopeeService _shopeeService;
-    private readonly SettingOptions Options;
-
-    public DetailsModel(ICatalogService catalogService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, IShopeeService shopeeService, IOptions<SettingOptions> options) : base(catalogService)
-    {
-        _context = context;
-        _userManager = userManager;
-        _shopeeService = shopeeService;
-        Options = options.Value;
-    }
-
-    public List<WorkListItem> Works = new();
+    private readonly SettingOptions Options = options.Value;
+    public List<WorkListItem> Works = [];
     [UIHint(UIHint.Tags)]
-    public List<Catalog> Tags = new();
-    public bool HasTag => Tags.Any();
+    public List<Catalog> Tags = [];
+    public bool HasTag => Tags.Count != 0;
     public LandingPageLinkList ShopeeProducts = new();
 
     public bool IsAuthenticated = false;
@@ -45,9 +33,9 @@ public class DetailsModel : DynamicPageModel
 
         IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
 
-        if (Tags.Any() && Options.Theme == "Default")
+        if (Tags.Count != 0 && Options.Theme == "Default")
         {
-            ShopeeProducts = await _shopeeService.GetLinkListsAsync(Tags.Last().Name, 1, 4);
+            ShopeeProducts = await _shopeeService.GetLinkListsAsync(Tags.OrderBy(x => Guid.NewGuid()).First().Name, 1, 4);
         }
 
         return Page();

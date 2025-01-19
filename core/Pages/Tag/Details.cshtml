@@ -30,7 +30,31 @@
                 <partial name="~/Pages/Article/_List.cshtml" model="Model.Articles.Data" />
                 @Html.DisplayFor(x => Model.Articles.Pagination)
             }
-            
+
+            @if (Model.ShopeeProducts.LinkList.Any())
+            {
+                <div class="mb-4">
+                    <div class="title">Sản phẩm mới (@Model.ShopeeProducts.TotalCount)</div>
+                    <div class="grid grid-cols-4 gap-4">
+                        @foreach (var item in Model.ShopeeProducts.LinkList)
+                        {
+                            <div class="bg-white">
+                                <a href="@item.Link">
+                                    <div class="thumbnail">
+                                        <img src="@item.Image" alt="@item.LinkName" class="object-cover product-thumbnail w-100" loading="lazy" />
+                                    </div>
+                                </a>
+                                <div class="p-2">
+                                    <a href="@item.Link" class="line-clampin fw-medium">
+                                        @item.LinkName
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
             @if (Model.Products.Products.Any())
             {
                 @await Html.PartialAsync("~/Pages/Components/Feed/Product.cshtml", Model.Products)

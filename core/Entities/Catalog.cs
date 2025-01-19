@@ -73,6 +73,8 @@ public enum CatalogType
     City = 16,
     [Description("Country")]
     Country = 17,
+    [Description("Collection")]
+    Collection = 18
 }
 
 public class CatalogSetting
