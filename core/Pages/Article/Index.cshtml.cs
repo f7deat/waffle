@@ -9,7 +9,6 @@ namespace Waffle.Pages.Article;
 
 public class IndexModel(ICatalogService catalogService, ILocalizationService _localizationService) : EntryPageModel(catalogService)
 {
-
     [BindProperty(SupportsGet = true)]
     public int Current { get; set; } = 1;
 

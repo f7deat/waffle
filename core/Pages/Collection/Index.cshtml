@@ -1,4 +1,24 @@
 ﻿@page
+@using Waffle.Models.Components
 @model Waffle.Pages.Collection.IndexModel
-@{
-}
+
+<main class="collection">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="title">@ViewData["Title"]</div>
+                @if (Model.Catalogs != null)
+                {
+                    <partial name="_List.cshtml" model="Model.Catalogs.Data" />
+
+                    @Html.DisplayFor(x => Model.Catalogs.Pagination)
+                }
+            </div>
+            <div class="col-md-4">
+                @await Component.InvokeAsync(nameof(ArticleSpotlight))
+                @await Component.InvokeAsync(nameof(Tag))
+                @await Component.InvokeAsync(nameof(ProductSpotlight))
+            </div>
+        </div>
+    </div>
+</main>

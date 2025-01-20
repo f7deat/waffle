@@ -5,11 +5,12 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
+using Waffle.Models.Result;
 using Waffle.Models.ViewModels.Logs;
 
 namespace Waffle.Core.Services;
 
-public class LogService(ICurrentUser _currentUser, ILogRepository _logRepository, ILogger<LogService> _logger, ITelegramService _telegramService) : ILogService
+public class LogService(ICurrentUser _currentUser, ILogRepository _logRepository, ITelegramService _telegramService) : ILogService
 {
     public async Task AddAsync(string message, Guid catalogId)
     {
@@ -38,20 +39,19 @@ public class LogService(ICurrentUser _currentUser, ILogRepository _logRepository
 
     public Task<IdentityResult> DeleteAllAsync() => _logRepository.DeleteAllAsync();
 
-    public async Task<IdentityResult> DeleteAsync(Guid id)
+    public async Task<DefResult> DeleteAsync(Guid id)
     {
-        var log = await _logRepository.FindAsync(id);
-        if (log is null)
+        try
         {
-            _logger.LogTrace("Log {id} not found!", id);
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = "error.dataNotFound",
-                Description = "Log not found!"
-            });
+            var log = await _logRepository.FindAsync(id);
+            if (log is null) return DefResult.Failed("Log not found!");
+            await _logRepository.DeleteAsync(log);
+            return DefResult.Success;
         }
-        await _logRepository.DeleteAsync(log);
-        return IdentityResult.Success;
+        catch (Exception ex)
+        {
+            return DefResult.Failed(ex.ToString());
+        }
     }
 
     public async Task ExceptionAsync(Exception exception)

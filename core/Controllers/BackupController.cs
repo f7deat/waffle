@@ -81,57 +81,57 @@ public class BackupController(IWebHostEnvironment _webHostEnvironment, Applicati
             var data = await JsonSerializer.DeserializeAsync<BackupListItem>(stream);
             if (data is null) return BadRequest("Data incorrect!");
 
-            if (data.WorkContents.Any())
+            if (data.WorkContents.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkContents");
                 await _context.WorkContents.AddRangeAsync(data.WorkContents);
             }
-            if (data.WorkItems.Any())
+            if (data.WorkItems.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.WorkItems");
                 await _context.WorkItems.AddRangeAsync(data.WorkItems);
             }
-            if (data.FileContents.Any())
+            if (data.FileContents.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.FileContents");
                 await _context.FileContents.AddRangeAsync(data.FileContents);
             }
-            if (data.Catalogs.Any())
+            if (data.Catalogs.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Catalogs");
                 await _context.Catalogs.AddRangeAsync(data.Catalogs);
             }
-            if (data.AppSettings.Any())
+            if (data.AppSettings.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.AppSettings");
                 await _context.AppSettings.AddRangeAsync(data.AppSettings);
             }
-            if (data.Components.Any())
+            if (data.Components.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Components");
                 await _context.Components.AddRangeAsync(data.Components);
             }
-            if (data.Localizations.Any())
+            if (data.Localizations.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Localizations");
                 await _context.Localizations.AddRangeAsync(data.Localizations);
             }
-            if (data.Comments.Any())
+            if (data.Comments.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Comments");
                 await _context.Comments.AddRangeAsync(data.Comments);
             }
-            if (data.Products.Any())
+            if (data.Products.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Products");
                 await _context.Products.AddRangeAsync(data.Products);
             }
-            if (data.Orders.Any())
+            if (data.Orders.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.Orders");
                 await _context.Orders.AddRangeAsync(data.Orders);
             }
-            if (data.OrderDetails.Any())
+            if (data.OrderDetails.Count != 0)
             {
                 await _context.Database.ExecuteSqlRawAsync("DELETE FROM dbo.OrderDetails");
                 await _context.OrderDetails.AddRangeAsync(data.OrderDetails);
