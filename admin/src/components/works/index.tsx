@@ -157,7 +157,7 @@ const WorkContentComponent: React.FC = () => {
           ></Button>
         </Popconfirm>
       ],
-      width: 100
+      width: 50
     }
   ];
 

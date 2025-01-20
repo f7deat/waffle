@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Waffle.Entities.Files;
 
@@ -7,6 +8,7 @@ namespace Waffle.Entities;
 public class FileContent : BaseEntity
 {
     [JsonPropertyName("name")]
+    [StringLength(260)]
     public string Name { get; set; } = default!;
     [JsonPropertyName("size")]
     [Column(TypeName = "decimal(18, 2)")]

@@ -25,11 +25,8 @@ const LogPage: React.FC = () => {
         },
         {
             title: 'User Name',
-            render: (dom, entity) => (
-                <div>
-                    <div className="text-muted">{entity.userName}</div>
-                </div>
-            )
+            dataIndex: 'userName',
+            width: 200
         },
         {
             title: 'Message',
@@ -38,7 +35,9 @@ const LogPage: React.FC = () => {
         {
             title: 'Date',
             dataIndex: 'createdDate',
-            valueType: 'fromNow'
+            valueType: 'fromNow',
+            width: 160,
+            search: false
         },
         {
             title: '',
@@ -50,7 +49,7 @@ const LogPage: React.FC = () => {
                     key={2}
                     onConfirm={() => remove(entity.id)}
                 >
-                    <Button icon={<DeleteOutlined />} type="primary" danger />
+                    <Button icon={<DeleteOutlined />} type="primary" danger size="small" />
                 </Popconfirm>,
             ],
         },

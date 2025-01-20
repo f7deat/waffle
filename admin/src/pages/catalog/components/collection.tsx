@@ -30,6 +30,9 @@ const CatalogCollection: React.FC = () => {
                     ...params,
                     catalogId: id
                 })}
+                search={{
+                    layout: 'vertical'
+                }}
                 headerTitle={<Button icon={<PlusOutlined />} type="primary" onClick={() => setOpen(true)}>Thêm vào Collection</Button>}
                 columns={[
                     {
@@ -40,12 +43,49 @@ const CatalogCollection: React.FC = () => {
                     {
                         title: 'Name',
                         dataIndex: 'name'
+                    },
+                    {
+                        title: 'Ngày tạo',
+                        dataIndex: 'createdDate',
+                        valueType: 'fromNow',
+                        width: 150,
+                        search: false
+                    },
+                    {
+                        title: 'Modified date',
+                        dataIndex: 'modifiedDate',
+                        valueType: 'fromNow',
+                        width: 150,
+                        search: false
+                    },
+                    {
+                        title: 'Lượt xem',
+                        dataIndex: 'viewCount',
+                        search: false,
+                        valueType: 'digit',
+                        width: 90
+                    },
+                    {
+                        title: 'Status',
+                        dataIndex: 'active',
+                        valueEnum: {
+                            true: {
+                                status: 'Processing',
+                                text: 'Active'
+                            },
+                            false: {
+                                status: 'Default',
+                                text: 'Draft'
+                            }
+                        },
+                        width: 80
                     }
                 ]}
             />
             <ModalForm open={open} onOpenChange={setOpen} title="Thêm vào Collection" onFinish={onFinish}>
                 <ProFormSelect
                     label="Collection" name="collectionId"
+                    showSearch
                     rules={[
                         {
                             required: true
