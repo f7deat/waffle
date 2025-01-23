@@ -1,4 +1,4 @@
-﻿@page "/product/{normalizedName}"
+﻿@page "/product/{category}/{normalizedName?}"
 @using Waffle.Core.Constants;
 @using Waffle.Entities;
 @using Waffle.Extensions;
@@ -57,30 +57,14 @@
                                 </div>
                                 @if (!string.IsNullOrEmpty(Model.Product?.AffiliateLink))
                                 {
-                                    <a href="@Model.Product?.AffiliateLink">Mua ngay</a>
-                                }
-
-                                @if (Model.Product?.IsAffiliate == true)
-                                {
-                                    <div class="affiliate">
-                                        <div class="mb-2 fw-medium">Mua sản phẩm:</div>
-                                        <ul class="affiliate-links">
-                                            @foreach (var link in Model.Links)
-                                            {
-                                                <li>
-                                                    <a href="@link.Url" target="_blank" rel="nofollow" onclick="goToProductLink('@link.Id')">
-                                                        <i class="fas fa-cart-shopping me-1"></i>
-                                                        <span class="fw-medium">@link.Name</span>
-                                                        <i class="text-muted">(@link.ClickCount.ToNumber() lượt mua)</i>
-                                                    </a>
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
+                                    <a href="@Model.Product?.AffiliateLink" class="btn btn-primary">
+                                        <i class="fa-solid fa-cart-plus me-1"></i>
+                                        <localize key="buy_now" />
+                                    </a>
                                 }
                                 else
                                 {
-                                    if (Model.Product?.Price != null)
+                                    @if (Model.Product?.Price != null)
                                     {
                                         <div class="mb-4 quantity">
                                             <div class="fw-medium mb-2">Số lượng</div>
@@ -97,7 +81,7 @@
                                             </div>
                                         </div>
                                     }
-                                    if (Model.Product?.Price == null)
+                                    @if (Model.Product?.Price == null)
                                     {
                                         <button type="button" class="btn btn-primary">
                                             <i class="fa-solid fa-phone me-2"></i>
@@ -171,15 +155,3 @@
     }
 </main>
 <input type="hidden" value="@Model.PageData.Id" id="js-productId" />
-
-@section scripts {
-    <script src="~/js/products/product.js"></script>
-    <script>
-        Product.init();
-        function goToProductLink(id) {
-            fetch(`/api/product/go-to-product-link/${id}`, {
-                method: 'POST'
-            })
-        }
-    </script>
-}

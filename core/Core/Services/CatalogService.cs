@@ -179,6 +179,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             Code = "field.required",
             Description = "Name is required!"
         });
+        catalog.Type = args.Type;
         catalog.Name = args.Name;
         if (args.Type != CatalogType.Entry)
         {
@@ -218,7 +219,6 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             });
         }
         catalog.Locale = args.Locale;
-        catalog.Type = args.Type;
         await _catalogRepository.UpdateAsync(catalog);
         return IdentityResult.Success;
     }
