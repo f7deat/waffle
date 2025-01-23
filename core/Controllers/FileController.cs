@@ -1,16 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Extensions;
+using Waffle.ExternalAPI.Models;
 using Waffle.Foundations;
 using Waffle.Models;
 
 namespace Waffle.Controllers;
 
-public class FileController(IWebHostEnvironment _webHostEnvironment, ApplicationDbContext _context, IFileService _fileService) : BaseController
+public class FileController(IWebHostEnvironment _webHostEnvironment, ApplicationDbContext _context, IFileService _fileService, IOptions<SettingOptions> options) : BaseController
 {
+    private readonly SettingOptions _options = options.Value;
+
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] FileFilterOptions filterOptions) => Ok(await _fileService.ListAsync(filterOptions));
 
@@ -55,6 +61,34 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
             });
             await _context.SaveChangesAsync();
             return Ok(IdentityResult.Success);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.ToString());
+        }
+    }
+
+    [HttpPost("3rd-upload")]
+    public async Task<IActionResult> ThirdPartyUploadAsync([FromForm] IFormFile? file)
+    {
+        try
+        {
+            if (file is null) return BadRequest("File not found!");
+            var url = $"https://dhhp.edu.vn/api/file/upload?apiKey={_options.UploadAPIKey}";
+            using var client = new HttpClient();
+            var response = await client.PostAsync(url, new MultipartFormDataContent
+            {
+                { new StreamContent(file.OpenReadStream()), "file", file.FileName }
+            });
+            if (!response.IsSuccessStatusCode) return BadRequest("Upload failed!");
+            var fileContent = await JsonSerializer.DeserializeAsync<FileUploadResponse>(await response.Content.ReadAsStreamAsync());
+            if (fileContent is null) return BadRequest("Upload dserialize failed!");
+
+            return Ok(new
+            {
+                success = 1,
+                url = fileContent.Url
+            });
         }
         catch (Exception ex)
         {

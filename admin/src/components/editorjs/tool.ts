@@ -18,6 +18,8 @@ import { Blogger } from './tools';
 import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 // @ts-ignore
 import Paragraph from 'editorjs-paragraph-with-alignment';
+import ImageTool from '@editorjs/image';
+import { api3rdUpload } from '@/services/file-service';
 
 export const EDITOR_JS_TOOLS = {
   embed: Embed,
@@ -42,7 +44,7 @@ export const EDITOR_JS_TOOLS = {
   blogger: Blogger,
   alignmentTune: {
     class: AlignmentTuneTool,
-    config:{
+    config: {
       default: "right",
       blocks: {
         header: 'center',
@@ -53,5 +55,29 @@ export const EDITOR_JS_TOOLS = {
   paragraph: {
     class: Paragraph,
     inlineToolbar: true,
+  },
+  image: {
+    class: ImageTool,
+    config: {
+      uploader: {
+        /**
+         * Upload file to the server and return an uploaded image data
+         * @param {File} file - file selected from the device or pasted by drag-n-drop
+         * @return {Promise.<{success, file: {url}}>}
+         */
+        uploadByFile(file: any) {
+          const formData = new FormData();
+          formData.append('file', file)
+          return api3rdUpload(formData).then((response) => {
+            return {
+              success: 1,
+              file: {
+                url: response.url
+              }
+            };
+          });
+        }
+      }
+    }
   }
-};
+}

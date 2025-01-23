@@ -76,4 +76,14 @@ export async function totalFileSize() {
 export const apiMultiUpload = (data: any) => request(`file/muti-upload`, {
   method: 'POST',
   data
-})
+});
+
+export async function api3rdUpload(data: any) {
+  return request(`file/3rd-upload`, {
+    method: 'POST',
+    data,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
