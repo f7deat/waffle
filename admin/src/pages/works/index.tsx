@@ -13,6 +13,7 @@ import { useEffect, useRef } from "react";
 import RowComponent from "./row";
 import ArticlePicker from "./article-picker";
 import ArticleLister from "./article-lister";
+import Feed from "./feed";
 
 const WorkPage: React.FC = () => {
     const { id } = useParams();
@@ -34,6 +35,7 @@ const WorkPage: React.FC = () => {
         if (data?.normalizedName === 'ArticlePicker') return <ArticlePicker data={data?.data} />;
         if (data?.normalizedName === 'ArticleLister') return <ArticleLister data={data?.data} />;
         if (data?.normalizedName === 'Html') return <HtmlBlock data={data?.data} />;
+        if (data?.normalizedName === 'Feed') return <Feed data={data?.data} />;
         return <Empty />
     }
 

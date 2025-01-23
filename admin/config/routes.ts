@@ -73,11 +73,6 @@ export default [
         component: './works/contact-form',
       },
       {
-        name: 'feed',
-        path: '/works/feed/:id',
-        component: './works/feed',
-      },
-      {
         name: 'row',
         path: '/works/row/:id',
         component: './works/row',
@@ -239,11 +234,6 @@ export default [
     name: 'ecommerce',
     path: '/e-commerce',
     routes: [
-      {
-        name: 'product',
-        path: '/e-commerce/product',
-        component: './product'
-      },
       {
         name: 'order',
         path: '/e-commerce/order',

@@ -53,7 +53,7 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
         },
         {
           name: 'type',
-          value: catalog.type.toString(),
+          value: catalog.type,
         },
         {
           name: 'active',

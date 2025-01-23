@@ -232,7 +232,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             if (string.IsNullOrEmpty(key)) continue;
             yield return new Option
             {
-                Value = item.GetHashCode().ToString(),
+                Value = item.GetHashCode(),
                 Label = await _localizationService.GetAsync(key)
             };
         }
