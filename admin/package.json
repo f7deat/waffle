@@ -3,8 +3,6 @@
   "author": "f7deat<f7deat@gmail.com>",
   "scripts": {
     "build": "max build",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "dev": "max dev",
     "format": "prettier --cache --write .",
     "postinstall": "max setup",
@@ -43,7 +41,6 @@
   "devDependencies": {
     "@types/react": "^18.2.13",
     "@types/react-dom": "^18.2.6",
-    "gh-pages": "^4.0.0",
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8",
     "prettier-plugin-organize-imports": "^2.3.4",
