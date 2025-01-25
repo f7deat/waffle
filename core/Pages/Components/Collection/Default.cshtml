@@ -2,10 +2,10 @@
 @using Waffle.Models.Components
 @model CollectionComponent
 
-<div class="mb-4 article-spotlight">
-    <div class="title">
-        @Model.Title
-    </div>
+<div class="mb-4 collection">
+    <h1 class="title">
+        <a href="@Model.Url">@Model.Title</a>
+    </h1>
     <div>
         @foreach (var item in Model.Catalogs)
         {

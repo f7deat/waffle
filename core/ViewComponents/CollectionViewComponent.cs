@@ -38,7 +38,8 @@ public class CollectionViewComponent(ICollectionService _collectionService) : Vi
         return View(new CollectionComponent
         {
             Catalogs = catalogs.Data,
-            Title = collection?.Name
+            Title = collection?.Name,
+            Url = collection?.Url ?? $"/collection/{collection?.NormalizedName}"
         });
     }
 }

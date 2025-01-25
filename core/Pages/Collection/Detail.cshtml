@@ -1,6 +1,6 @@
-﻿@page
+﻿@page "/collection/{normalizedName}"
 @using Waffle.Models.Components
-@model Waffle.Pages.Collection.IndexModel
+@model Waffle.Pages.Collection.DetailModel
 
 <main>
     <div class="container">
@@ -15,7 +15,6 @@
                 }
             </div>
             <div class="col-md-4">
-                @await Component.InvokeAsync(nameof(ArticleSpotlight))
                 @await Component.InvokeAsync(nameof(Tag))
                 @await Component.InvokeAsync(nameof(ProductSpotlight))
             </div>

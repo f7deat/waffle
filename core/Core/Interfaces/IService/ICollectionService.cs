@@ -15,4 +15,5 @@ public interface ICollectionService
     Task<ListResult<CatalogListItem>> GetListCatalogAsync(ListCatalogCollectionFilterOptions filterOptions);
     Task<ListResult<CollectionListItem>> ListAsync(CollectionFilterOptions filterOptions);
     Task<ListResult<CatalogListItem>> ListByCatalogAsync(ListCatalogCollectionFilterOptions filterOptions);
+    Task<ListResult<CatalogListItem>?> ListCatalogByCollectionAsync(ListCatalogCollectionFilterOptions listCatalogCollectionFilterOptions);
 }

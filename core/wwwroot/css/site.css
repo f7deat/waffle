@@ -389,7 +389,7 @@ table {
             opacity: 0.5;
         }
 
-.article-spotlight .thumbnail, .article-spotlight img {
+.article-spotlight .thumbnail, .article-spotlight img, .collection .thumbnail {
     width: 5rem;
     height: 4rem;
 }

@@ -1,4 +1,5 @@
-﻿using Waffle.Core.Helpers;
+﻿using System.IO;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
@@ -56,4 +57,6 @@ public class CollectionService(ICollectionRepository _collectionRepository, ICat
     }
 
     public Task<ListResult<CatalogListItem>> ListByCatalogAsync(ListCatalogCollectionFilterOptions filterOptions) => _collectionRepository.ListByCatalogAsync(filterOptions);
+
+    public Task<ListResult<CatalogListItem>?> ListCatalogByCollectionAsync(ListCatalogCollectionFilterOptions filterOptions) => _collectionRepository.GetListCatalogAsync(filterOptions);
 }

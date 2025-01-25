@@ -10,6 +10,7 @@ public interface ICollectionRepository : IAsyncRepository<Collection>
 {
     Task<Catalog?> FindByCatalogAsync(Guid catalogId);
     Task<ListResult<CatalogListItem>> GetListCatalogAsync(Guid collectionId, ListCatalogCollectionFilterOptions filterOptions);
+    Task<ListResult<CatalogListItem>?> GetListCatalogAsync(ListCatalogCollectionFilterOptions listCatalogCollectionFilterOptions);
     Task<bool> HasCatalogAsync(Guid collectionId);
     Task<ListResult<CollectionListItem>> ListAsync(CollectionFilterOptions filterOptions);
     Task<ListResult<CatalogListItem>> ListByCatalogAsync(ListCatalogCollectionFilterOptions filterOptions);
