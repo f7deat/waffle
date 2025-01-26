@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Ecommerces;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
@@ -136,6 +137,23 @@ public class ToolController : BaseController
             }
             current++;
         }
+        return Ok(IdentityResult.Success);
+    }
+
+    [HttpGet("migrate-product")]
+    public async Task<IActionResult> MigrateProductAsync()
+    {
+        var catalogs = await _context.Catalogs.Where(x => x.Type == CatalogType.Product).ToListAsync();
+        foreach (var catalog in catalogs)
+        {
+            if (await _context.Products.AnyAsync(x => x.CatalogId == catalog.Id)) continue;
+            var product = new Product
+            {
+                CatalogId = catalog.Id
+            };
+            await _context.Products.AddAsync(product);
+        }
+        await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
     }
 }

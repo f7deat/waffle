@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Waffle.Entities;
 using Waffle.Entities.Affliates;
+using Waffle.Entities.Careers;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
 
@@ -28,6 +29,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<AffiliateLink> AffiliateLinks { get; set; } = default!;
     public DbSet<Room> Rooms { get; set; } = default!;
     public DbSet<Collection> Collections { get; set; } = default!;
+    public DbSet<JobOpportunity> JobOpportunities { get; set; } = default!;
+    public DbSet<JobApplication> JobApplications { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

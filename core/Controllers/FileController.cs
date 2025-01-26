@@ -74,6 +74,22 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
         try
         {
             if (file is null) return BadRequest("File not found!");
+            if (string.IsNullOrEmpty(_options.UploadAPIKey))
+            {
+                var folder = Guid.NewGuid().ToString();
+                var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files", folder);
+                if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
+                using (var stream = System.IO.File.Create(Path.Combine(uploadPath, file.FileName)))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                return Ok(new
+                {
+                    success = 1,
+                    url = $"https://{Request.Host.Value}/files/{folder}/{file.FileName}"
+                });
+            }
             var url = $"https://dhhp.edu.vn/api/file/upload?apiKey={_options.UploadAPIKey}";
             using var client = new HttpClient();
             var response = await client.PostAsync(url, new MultipartFormDataContent

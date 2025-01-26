@@ -7,6 +7,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Senders;
 using Waffle.Core.Services;
 using Waffle.Core.Services.Affiliates;
+using Waffle.Core.Services.Careers;
 using Waffle.Core.Services.Ecommerces;
 using Waffle.Core.Services.Files;
 using Waffle.Data.ContentGenerators;
@@ -58,6 +59,10 @@ public static class ServiceCollectionExtensions
 
         #region Affiliates
         services.AddScoped<IAffiliateService, AffiliateService>();
+        #endregion
+
+        #region Careers
+        services.AddScoped<IJobOpportunityService, JobOpportunityService>();
         #endregion
 
         services.AddScoped<ICurrentUser, CurrentUser>();
