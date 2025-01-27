@@ -6,15 +6,8 @@ using Waffle.Models.Components;
 
 namespace Waffle.ViewComponents.Listers;
 
-public class ArticleListerViewComponent : BaseViewComponent<ArticleLister>
+public class ArticleListerViewComponent(IWorkService workService, ICatalogService _catalogService) : BaseViewComponent<ArticleLister>(workService)
 {
-    private readonly ICatalogService _catalogService;
-    
-    public ArticleListerViewComponent(IWorkService workService, ICatalogService catalogService) : base(workService)
-    {
-        _catalogService = catalogService;
-    }
-
     protected override async Task<ArticleLister> ExtendAsync(ArticleLister work)
     {
         var current = string.IsNullOrEmpty(Request.Query["current"]) ? 1 : int.Parse(Request.Query["current"].ToString());

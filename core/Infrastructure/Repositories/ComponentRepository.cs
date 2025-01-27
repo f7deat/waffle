@@ -22,7 +22,7 @@ public class ComponentRepository(ApplicationDbContext context) : EfRepository<Co
 
     public async Task<ListResult<ComponentListResult>> ListAsync(ComponentFilterOptions filterOptions)
     {
-        var query = _context.Components.Where(x => string.IsNullOrEmpty(filterOptions.Name) || x.Name.Contains(filterOptions.Name, StringComparison.CurrentCultureIgnoreCase))
+        var query = _context.Components.Where(x => string.IsNullOrEmpty(filterOptions.Name) || x.Name.ToLower().Contains(filterOptions.Name.ToLower()))
             .Select(x => new ComponentListResult
             {
                 Id = x.Id,

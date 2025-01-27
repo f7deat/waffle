@@ -26,6 +26,11 @@ article .thumbnail img {
     height: 200px;
 }
 
+.career .content {
+    background-color: white;
+    padding: 1rem;
+}
+
 .wp-block-image {
     display: flex;
     justify-content: center;
@@ -269,11 +274,11 @@ legend {
 }
 
 .h1, h1 {
-    font-size: 2rem !important;
+    font-size: 1.5rem !important;
 }
 
 .h2, h2 {
-    font-size: 1.75rem !important;
+    font-size: 1.25rem !important;
 }
 
 .h3, h3 {
@@ -7766,6 +7771,14 @@ img.mobile-logo {
 
     .page-container {
         padding: 1rem;
+    }
+
+    .h1, h1 {
+        font-size: 2rem !important;
+    }
+
+    .h2, h2 {
+        font-size: 1.75rem !important;
     }
 }
 

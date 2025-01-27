@@ -20,7 +20,7 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services;
 
-public class CatalogService(ApplicationDbContext _context, ICurrentUser _currentUser, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, IOptions<SettingOptions> options, ILogService _logService, ILocalizationService _localizationService, IRoomService _roomService) : ICatalogService
+public class CatalogService(ApplicationDbContext _context, ICurrentUser _currentUser, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, IOptions<SettingOptions> options, ILogService _logService, ILocalizationService _localizationService, IRoomService _roomService, IJobOpportunityService _jobOpportunityService) : ICatalogService
 {
     private readonly SettingOptions _options = options.Value;
 
@@ -407,14 +407,20 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
 
     public Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize)
     {
-        if (pageData.Type == CatalogType.Entry || pageData.Type == CatalogType.Tag)
+        if (pageData.Type == CatalogType.Entry || pageData.Type == CatalogType.Tag || pageData.Type == CatalogType.Leaf)
         {
             pageData.Type = CatalogType.Article;
         }
         return _catalogRepository.ListSpotlightAsync(pageData, pageSize);
     }
 
-    public async Task DeleteAsync(Catalog catalog) => await _catalogRepository.DeleteAsync(catalog);
+    public async Task<DefResult> DeleteAsync(Catalog catalog)
+    {
+        var jobResult = await _jobOpportunityService.DeleteAsync(catalog.Id);
+        if (!jobResult.Succeeded) return jobResult;
+        await _catalogRepository.DeleteAsync(catalog);
+        return DefResult.Success;
+    }
 
     public Task<Catalog?> FindAsync(Guid catalogId, CatalogType type) => _catalogRepository.FindAsync(catalogId, type);
 
@@ -541,7 +547,8 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
     public async Task<object?> GetUrlOptionsAsync(OptionFilterOptions filterOptions)
     {
         var query = from a in _context.Catalogs
-                    join b in _context.Catalogs on a.ParentId equals b.Id into ab from b in ab.DefaultIfEmpty()
+                    join b in _context.Catalogs on a.ParentId equals b.Id into ab
+                    from b in ab.DefaultIfEmpty()
                     where a.Active && a.Locale == filterOptions.Locale
                     select new UrlOption
                     {

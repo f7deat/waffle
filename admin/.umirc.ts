@@ -31,6 +31,6 @@ export default defineConfig({
   tailwindcss: {},
   publicPath: '/admin/',
   headScripts: [
-    { src: "/scripts/loading.js", async: true },
+    { src: "/admin/scripts/loading.js", async: true },
   ]
 });

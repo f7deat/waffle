@@ -1,0 +1,13 @@
+﻿@using Waffle.Models.Components.Lister
+@model JobLister
+@{
+    Layout = null;
+}
+
+<div class="title">@ViewData["Title"]</div>
+@if (Model.Catalogs != null)
+{
+    <partial name="/Pages/Article/_List.cshtml" model="Model.Catalogs.Data" />
+
+    @Html.DisplayFor(x => Model.Catalogs.Pagination)
+}

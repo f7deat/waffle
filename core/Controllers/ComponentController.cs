@@ -14,7 +14,17 @@ public class ComponentController(IComponentService componentService) : BaseContr
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await componentService.FindAsync(id));
 
     [HttpGet("list")]
-    public async Task<IActionResult> ListAsync([FromQuery] ComponentFilterOptions filterOptions) => Ok(await componentService.ListAsync(filterOptions));
+    public async Task<IActionResult> ListAsync([FromQuery] ComponentFilterOptions filterOptions)
+    {
+        try
+        {
+            return Ok(await componentService.ListAsync(filterOptions));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.ToString());
+        }
+    }
 
     [HttpGet("list-work/{id}")]
     public async Task<IActionResult> ListWorkAsync([FromRoute] Guid id, [FromQuery] WorkFilterOptions filterOptions) => Ok(await componentService.ListWorkAsync(id, filterOptions));

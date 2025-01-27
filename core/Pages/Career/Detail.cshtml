@@ -1,0 +1,52 @@
+﻿@page "/career/{category}/{normalizedName?}"
+@using Waffle.Core.Constants;
+@using Waffle.Entities;
+@using Waffle.Extensions;
+@using Waffle.Models.Components;
+@using Waffle.ViewComponents;
+@model Waffle.Pages.Career.DetailModel
+
+@await Component.InvokeAsync(nameof(Breadcrumb))
+<main class="career">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="content">
+                    <h1 class="title">@Model.PageData.Name</h1>
+                    <div class="mb-4 post-body">
+                        @if (Model.Components != null)
+                        {
+                            @foreach (var item in Model.Components)
+                            {
+                                @await Component.InvokeAsync(item.Name, item.Id)
+                            }
+                        }
+
+                        <div class="bg-gray-100 px-4 py-2 flex justify-between items-center text-muted text-sm">
+                            <div class="d-flex gap-4">
+                                <span>
+                                    <i class="fas fa-eye me-1"></i>
+                                    <span>@Model.PageData.ViewCount.ToNumber()</span>
+                                </span>
+                                <span>|</span>
+                                <span>
+                                    <i class="fas fa-calendar me-1"></i>
+                                    <span>@Model.PageData.ModifiedDate</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @await Component.InvokeAsync(nameof(Comment))
+            </div>
+            <div class="col-md-4">
+                @await Component.InvokeAsync(nameof(ArticleSpotlight))
+                @await Component.InvokeAsync(nameof(Tag))
+
+                @await Component.InvokeAsync(nameof(ProductSpotlight))
+            </div>
+        </div>
+
+        @await Component.InvokeAsync(ComponentName.Related)
+    </div>
+</main>

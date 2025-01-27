@@ -8,19 +8,11 @@ using Waffle.Entities;
 
 namespace Waffle.Pages.Install;
 
-public class IndexModel : PageModel
+public class IndexModel(IEnumerable<IGenerator> generators, IComponentService componentService, UserManager<ApplicationUser> userManager) : PageModel
 {
-    private readonly IEnumerable<IGenerator> _generators;
-    private readonly IComponentService _componentService;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public IndexModel(IEnumerable<IGenerator> generators, IComponentService componentService, UserManager<ApplicationUser> userManager)
-    {
-        _generators = generators;
-        _componentService = componentService;
-        _userManager = userManager;
-    }
-
+    private readonly IEnumerable<IGenerator> _generators = generators;
+    private readonly IComponentService _componentService = componentService;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
     public IEnumerable<Component> Components = new List<Component>();
 
     public async Task<IActionResult> OnGetAsync()

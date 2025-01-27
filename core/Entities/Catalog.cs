@@ -74,7 +74,9 @@ public enum CatalogType
     [Description("Country")]
     Country = 17,
     [Description("Collection")]
-    Collection = 18
+    Collection = 18,
+    [Description("Career")]
+    Career = 19
 }
 
 public class CatalogSetting
