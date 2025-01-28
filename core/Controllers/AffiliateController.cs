@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities.Affliates;
-using Waffle.Foundations;
 using Waffle.Models.Filters.Affiliates;
 
 namespace Waffle.Controllers;

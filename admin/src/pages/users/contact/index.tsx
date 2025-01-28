@@ -1,12 +1,23 @@
-import { listContact } from "@/services/contact";
+import { apiDeleteContact, listContact } from "@/services/contact";
 import { DeleteOutlined } from "@ant-design/icons";
-import { PageContainer, ProTable } from "@ant-design/pro-components"
-import { Button, Popconfirm, Tooltip } from "antd";
+import { ActionType, PageContainer, ProTable } from "@ant-design/pro-components"
+import { Button, message, Popconfirm, Tooltip } from "antd";
+import { useRef } from "react";
 
 const ContactPage: React.FC = () => {
+
+    const actionRef = useRef<ActionType>();
+
+    const onDelete = async (id: string) => {
+        await apiDeleteContact(id);
+        message.success('Xóa liên hệ thành công');
+        actionRef.current?.reload();
+    }
+
     return (
         <PageContainer>
             <ProTable
+                actionRef={actionRef}
                 search={{
                     layout: 'vertical'
                 }}
@@ -37,8 +48,8 @@ const ContactPage: React.FC = () => {
                     {
                         title: 'Tác vụ',
                         valueType: 'option',
-                        render: () => [
-                            <Popconfirm key="delete" title="Xác nhận xóa?">
+                        render: (_, entity) => [
+                            <Popconfirm key="delete" title="Xác nhận xóa?" onConfirm={() => onDelete(entity.id)}>
                                 <Tooltip title="Xóa">
                                     <Button type="primary" size="small" icon={<DeleteOutlined />} danger />
                                 </Tooltip>

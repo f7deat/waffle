@@ -12,12 +12,11 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Core.Interfaces.IService;
 using SendGrid;
-using Waffle.Foundations;
+using Waffle.Core.Foundations;
 
 namespace Waffle.Controllers;
 
-[Route("api/[controller]")]
-public class ContactController(ILogService _appLogService, ApplicationDbContext _context, ILogger<ContactController> _logger, ITelegramService _telegramService, ISettingService _appSettingService, IUserService _userService, IWorkService _workService, ICatalogService _catalogService) : BaseController
+public class ContactController(ILogService _appLogService, ApplicationDbContext _context, ILogger<ContactController> _logger, ILogService _logService, ITelegramService _telegramService, ISettingService _appSettingService, IUserService _userService, IWorkService _workService, ICatalogService _catalogService) : BaseController
 {
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _userService.ListContactAsync(filterOptions));
@@ -88,18 +87,20 @@ public class ContactController(ILogService _appLogService, ApplicationDbContext 
     [HttpPost("delete/{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        var contact = await _context.Contacts.FindAsync(id);
-        if (contact is null)
+        try
         {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "Contact not found!"
-            }));
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact is null) return BadRequest("Contact not found!");
+            _context.Contacts.Remove(contact);
+            await _appLogService.AddAsync($"Delete contact {contact.Name} - {contact.PhoneNumber} - {contact.Email}", id);
+            await _context.SaveChangesAsync();
+            return Ok(IdentityResult.Success);
         }
-        _context.Contacts.Remove(contact);
-        await _appLogService.AddAsync("Delete contact", id);
-        await _context.SaveChangesAsync();
-        return Ok(IdentityResult.Success);
+        catch (Exception ex)
+        {
+            await _logService.ExceptionAsync(ex);
+            return BadRequest(ex.ToString());
+        }
     }
 
     [HttpPost("add")]

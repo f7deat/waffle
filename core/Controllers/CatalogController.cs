@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Waffle.Core.Constants;
+using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Foundations;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
@@ -126,8 +126,8 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
                 _context.Rooms.Remove(room);
             }
             await logService.AddAsync($"Delete catalog: {catalog.Name}", id);
-            var result = await _catalogService.DeleteAsync(catalog);
-            if (!result.Succeeded) return BadRequest(result.Message);
+            await _catalogService.DeleteAsync(catalog);
+
             return Ok(IdentityResult.Success);
         }
         catch (Exception ex)

@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Constants;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Interfaces;
-using Waffle.Foundations;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
 

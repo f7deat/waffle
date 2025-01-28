@@ -7,7 +7,7 @@ using Waffle.Models.Result;
 
 namespace Waffle.Core.Services.Careers;
 
-public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _currentUser) : IJobOpportunityService
+public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _currentUser, ILogService _logService) : IJobOpportunityService
 {
     public async Task<DefResult> DeleteAsync(Guid id)
     {
@@ -20,33 +20,41 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
 
     public async Task<DefResult> SaveAsync(JobOpportunity args)
     {
-        var job = await _context.JobOpportunities.FirstOrDefaultAsync(x => x.Id == args.Id);
-        if (job is null)
-        {
-            job = new JobOpportunity
+		try
+		{
+            var job = await _context.JobOpportunities.FirstOrDefaultAsync(x => x.Id == args.Id);
+            if (job is null)
             {
-                JobTitle = args.JobTitle,
-                JobDescription = args.JobDescription,
-                JobRequirements = args.JobRequirements,
-                SalaryRange = args.SalaryRange,
-                JobLocation = args.JobLocation,
-                JobType = args.JobType,
-                CreatedDate = DateTime.Now,
-                CreatedBy = _currentUser.GetId()
-            };
-            await _context.JobOpportunities.AddAsync(job);
+                job = new JobOpportunity
+                {
+                    JobTitle = args.JobTitle,
+                    JobDescription = args.JobDescription,
+                    JobRequirements = args.JobRequirements,
+                    SalaryRange = args.SalaryRange,
+                    JobLocation = args.JobLocation,
+                    JobType = args.JobType,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = _currentUser.GetId()
+                };
+                await _context.JobOpportunities.AddAsync(job);
+                await _context.SaveChangesAsync();
+                return DefResult.Success;
+            }
+            job.JobTitle = args.JobTitle;
+            job.JobDescription = args.JobDescription;
+            job.JobRequirements = args.JobRequirements;
+            job.SalaryRange = args.SalaryRange;
+            job.JobLocation = args.JobLocation;
+            job.JobType = args.JobType;
+            job.ModifiedDate = DateTime.Now;
+            job.ModifiedBy = _currentUser.GetId();
             await _context.SaveChangesAsync();
             return DefResult.Success;
         }
-        job.JobTitle = args.JobTitle;
-        job.JobDescription = args.JobDescription;
-        job.JobRequirements = args.JobRequirements;
-        job.SalaryRange = args.SalaryRange;
-        job.JobLocation = args.JobLocation;
-        job.JobType = args.JobType;
-        job.ModifiedDate = DateTime.Now;
-        job.ModifiedBy = _currentUser.GetId();
-        await _context.SaveChangesAsync();
-        return DefResult.Success;
+		catch (Exception ex)
+		{
+            await _logService.ExceptionAsync(ex);
+            return DefResult.Failed(ex.ToString());
+		}
     }
 }

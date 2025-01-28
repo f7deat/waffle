@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Waffle.Foundations;
+using Waffle.Core.Foundations;
 
 namespace Waffle.Controllers;
 

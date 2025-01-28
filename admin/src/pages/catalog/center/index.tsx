@@ -18,6 +18,7 @@ import RoomDetail from '../room';
 import CatalogSetting from '../setting';
 import CatalogSummary from '../summary';
 import CatalogCollection from '../components/collection';
+import { CareerSetting } from '../components';
 
 const CatalogCenter: React.FC = () => {
   const { id } = useParams();
@@ -74,6 +75,14 @@ const CatalogCenter: React.FC = () => {
                     key: 'room-detail',
                     children: <RoomDetail />,
                     disabled: catalog?.type !== CatalogType.Room
+                  }
+                ] : []),
+                ...(catalog?.type === CatalogType.Career ? [
+                  {
+                    label: 'Career',
+                    key: 'career-detail',
+                    children: <CareerSetting />,
+                    disabled: catalog?.type !== CatalogType.Career
                   }
                 ] : []),
                 {

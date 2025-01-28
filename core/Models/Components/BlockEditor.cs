@@ -53,6 +53,14 @@ public class BlockEditorItemData
     public string? Embed { get; set; }
     [JsonPropertyName("alignment")]
     public string? Alignment { get; set; }
+    [JsonPropertyName("file")]
+    public EditorFile? File { get; set; }
+}
+
+public class EditorFile
+{
+    [JsonPropertyName("url")]
+    public string? Url { get; set; }
 }
 
 public class BlockEditorMeta
@@ -92,4 +100,5 @@ public class BlockEditorType {
     public const string BLOGGER = "blogger";
     public const string YOUTUBE = "youtube";
     public const string EMBED = "embed";
+    public const string IMAGE = "image";
 }

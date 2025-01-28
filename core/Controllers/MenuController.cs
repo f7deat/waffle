@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Foundations;
 using Waffle.Models.Filters;
 using Waffle.Models.Result;
 

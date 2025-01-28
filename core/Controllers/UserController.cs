@@ -8,12 +8,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Waffle.Core.Constants;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Googles;
 using Waffle.ExternalAPI.Interfaces;
-using Waffle.Foundations;
 using Waffle.Models;
 using Waffle.Models.Params;
 

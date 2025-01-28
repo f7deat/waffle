@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Waffle.Core.Constants;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
-using Waffle.Foundations;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
 

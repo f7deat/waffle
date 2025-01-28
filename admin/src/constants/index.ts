@@ -19,7 +19,8 @@ export enum CatalogType {
   Trip,
   City,
   Country,
-  Collection
+  Collection,
+  Career
 }
 
 export enum ESortOrder {

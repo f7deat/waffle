@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
@@ -12,7 +13,6 @@ using Waffle.Entities.Ecommerces;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
-using Waffle.Foundations;
 using Waffle.Models.Components;
 using Waffle.Models.Params.Tools;
 
