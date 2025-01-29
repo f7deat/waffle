@@ -5,7 +5,6 @@ using Waffle.Entities.Affliates;
 using Waffle.Entities.Careers;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
-using Waffle.Entities.Ranks;
 
 namespace Waffle.Data;
 
@@ -33,10 +32,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     #region Job
     public DbSet<JobOpportunity> JobOpportunities { get; set; } = default!;
     public DbSet<JobApplication> JobApplications { get; set; } = default!;
-    #endregion
-    #region Rank
-    public DbSet<RankItem> RankItems { get; set; } = default!;
-    public DbSet<RankReview> RankReviews { get; set; } = default!;
     #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)

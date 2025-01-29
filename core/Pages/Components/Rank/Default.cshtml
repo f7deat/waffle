@@ -15,9 +15,11 @@
                         @item.Name
                     </div>
                     <div>
-                        <form>
+                        <form action="/api/rank/vote">
+                            <input type="hidden" name="catalogId" value="@Model.CatalogId" />
+                            <input type="hidden" name="workId" value="@Model.Id" />
                             <input type="hidden" name="id" value="@item.Id" />
-                            <button type="submit" class="btn btn-primary">Vote</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Vote</button>
                         </form>
                     </div>
                 </li>

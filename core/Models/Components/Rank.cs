@@ -7,6 +7,8 @@ namespace Waffle.Models.Components;
 [Display(Name = "Rank", Prompt = "Rank")]
 public class Rank : AbstractComponent
 {
+    [JsonIgnore]
+    public Guid CatalogId { get; set; }
     [JsonPropertyName("items")]
     public List<RankItem>? Items { get; set; }
 }
@@ -21,4 +23,6 @@ public class RankItem
     public string? Thumbnail { get; set; }
     [JsonPropertyName("rating")]
     public int Rating { get; set; }
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
 }
