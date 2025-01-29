@@ -5,9 +5,6 @@ namespace Waffle.Entities.Careers;
 public class JobOpportunity : BaseEntity
 {
     [StringLength(256)]
-    public string JobTitle { get; set; } = default!;
-    public string? JobDescription { get; set; }
-    [StringLength(256)]
     public string? JobRequirements { get; set; }
     [StringLength(256)]
     public string? SalaryRange { get; set; }

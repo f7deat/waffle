@@ -16,11 +16,11 @@
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="mb-4">
-                <div class="title">Đăng nhập</div>
+                <div class="title"><localize key="login" /></div>
                 <div class="bg-white">
                     @if (Model.SignInResult != null && !Model.SignInResult.Succeeded)
                     {
-                        <div class="text-red-500 mb-4">
+                        <div class="alert alert-danger">
                             Đăng nhập thất bại
                         </div>
                     }
@@ -78,7 +78,7 @@
 
             </div>
             <div class="text-center mb-4">
-                Bạn chưa có tài khoản? <a href="/users/register">Đăng ký</a>
+                Bạn chưa có tài khoản? <a href="/user/register"><localize key="register" /></a>
             </div>
         </div>
     </div>

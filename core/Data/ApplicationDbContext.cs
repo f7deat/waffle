@@ -5,6 +5,7 @@ using Waffle.Entities.Affliates;
 using Waffle.Entities.Careers;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
+using Waffle.Entities.Ranks;
 
 namespace Waffle.Data;
 
@@ -29,8 +30,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<AffiliateLink> AffiliateLinks { get; set; } = default!;
     public DbSet<Room> Rooms { get; set; } = default!;
     public DbSet<Collection> Collections { get; set; } = default!;
+    #region Job
     public DbSet<JobOpportunity> JobOpportunities { get; set; } = default!;
     public DbSet<JobApplication> JobApplications { get; set; } = default!;
+    #endregion
+    #region Rank
+    public DbSet<RankItem> RankItems { get; set; } = default!;
+    public DbSet<RankReview> RankReviews { get; set; } = default!;
+    #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

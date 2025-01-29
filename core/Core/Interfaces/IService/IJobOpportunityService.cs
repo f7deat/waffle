@@ -7,4 +7,5 @@ public interface IJobOpportunityService
 {
     Task<DefResult> SaveAsync(JobOpportunity args);
     Task<DefResult> DeleteAsync(Guid id);
+    Task<JobOpportunity?> GetAsync(Guid id);
 }

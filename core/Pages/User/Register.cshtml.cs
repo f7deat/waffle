@@ -93,7 +93,7 @@ public class RegisterModel : EntryPageModel
                 "/Users/ConfirmEmail",
                 pageHandler: null,
                 values: new { userId, code },
-            protocol: Request.Scheme) ?? "/Users/ConfirmEmail";
+            protocol: Request.Scheme) ?? "/User/ConfirmEmail";
             if (!string.IsNullOrEmpty(Email))
             {
                 await _emailSender.SendEmailAsync(Email, "Confirm your email",

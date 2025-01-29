@@ -18,6 +18,8 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
         return DefResult.Success;
     }
 
+    public async Task<JobOpportunity?> GetAsync(Guid id) => await _context.JobOpportunities.FindAsync(id);
+
     public async Task<DefResult> SaveAsync(JobOpportunity args)
     {
 		try
@@ -27,8 +29,6 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
             {
                 job = new JobOpportunity
                 {
-                    JobTitle = args.JobTitle,
-                    JobDescription = args.JobDescription,
                     JobRequirements = args.JobRequirements,
                     SalaryRange = args.SalaryRange,
                     JobLocation = args.JobLocation,
@@ -40,8 +40,6 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
                 await _context.SaveChangesAsync();
                 return DefResult.Success;
             }
-            job.JobTitle = args.JobTitle;
-            job.JobDescription = args.JobDescription;
             job.JobRequirements = args.JobRequirements;
             job.SalaryRange = args.SalaryRange;
             job.JobLocation = args.JobLocation;

@@ -13,7 +13,7 @@
             <div class="col-md-8">
                 <div class="content">
                     <h1 class="title">@Model.PageData.Name</h1>
-                    <div class="mb-4 post-body">
+                    <div class="mb-2 post-body">
                         @if (Model.Components != null)
                         {
                             @foreach (var item in Model.Components)
@@ -21,6 +21,10 @@
                                 @await Component.InvokeAsync(item.Name, item.Id)
                             }
                         }
+
+                        <div class="mb-4">
+                            Địa điểm làm việc: @Model.JobOpportunity?.JobLocation
+                        </div>
 
                         <div class="bg-gray-100 px-4 py-2 flex justify-between items-center text-muted text-sm">
                             <div class="d-flex gap-4">

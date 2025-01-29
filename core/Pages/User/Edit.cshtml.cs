@@ -42,7 +42,7 @@ public class EditModel : PageModel
         user.Address = Address;
         user.PhoneNumber = PhoneNumber;
         var result = await _userManager.UpdateAsync(user);
-        if (result.Succeeded) return Redirect($"/users/{user.Id}");
+        if (result.Succeeded) return Redirect($"/user/{user.Id}");
         return Page();
     }
 }

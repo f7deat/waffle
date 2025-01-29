@@ -155,3 +155,9 @@
     }
 </main>
 <input type="hidden" value="@Model.PageData.Id" id="js-productId" />
+@section scripts {
+    <script src="~/js/products/product.js"></script>
+    <script>
+        Product.init();
+    </script>
+}
