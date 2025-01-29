@@ -15,6 +15,7 @@ import ArticlePicker from "./article-picker";
 import ArticleLister from "./article-lister";
 import Feed from "./feed";
 import JobLister from "./components/listers/job-lister";
+import RankComponent from "./components/rank";
 
 const WorkPage: React.FC = () => {
     const { id } = useParams();
@@ -38,6 +39,7 @@ const WorkPage: React.FC = () => {
         if (data?.normalizedName === 'Html') return <HtmlBlock data={data?.data} />;
         if (data?.normalizedName === 'Feed') return <Feed data={data?.data} />;
         if (data?.normalizedName === 'JobLister') return <JobLister data={data?.data} />;
+        if (data?.normalizedName === 'Rank') return <RankComponent data={data?.data} />;
         return <Empty />
     }
 

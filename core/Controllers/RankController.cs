@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Models.Components;
@@ -7,7 +8,7 @@ using Waffle.Modules.Ranks.Models;
 
 namespace Waffle.Controllers;
 
-public class RankController(ApplicationDbContext _context, IWorkService _workService) : Controller
+public class RankController(ApplicationDbContext _context, IWorkService _workService) : BaseController
 {
     [HttpPost("add-item")]
     public async Task<IActionResult> AddItemAsync([FromBody] AddItemArgs args)
@@ -46,7 +47,7 @@ public class RankController(ApplicationDbContext _context, IWorkService _workSer
     }
 
     [HttpPost("vote")]
-    public async Task<IActionResult> VoteAsync([FromBody] VoteArgs args)
+    public async Task<IActionResult> VoteAsync(VoteArgs args)
     {
         try
         {

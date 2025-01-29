@@ -4,24 +4,26 @@
     Layout = null;
 }
 
-<div class="rank">
+<div class="rank mb-4">
     @if (Model.Items != null)
     {
-        <ol>
+        <ol class="list-group list-group-numbered">
             @foreach (var item in Model.Items)
             {
-                <li class="d-flex gap-4">
-                    <div class="w-full">
-                        @item.Name
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold d-flex">
+                            <span class="me-2">@item.Name</span>
+                            <form action="/api/rank/vote" method="post">
+                                <input type="hidden" name="catalogId" value="@Model.CatalogId" />
+                                <input type="hidden" name="workId" value="@Model.Id" />
+                                <input type="hidden" name="rankId" value="@item.Id" />
+                                <button type="submit" class="text-success"><i class="fa-solid fa-circle-up"></i></button>
+                            </form>
+                        </div>
+                        @item.Description
                     </div>
-                    <div>
-                        <form action="/api/rank/vote">
-                            <input type="hidden" name="catalogId" value="@Model.CatalogId" />
-                            <input type="hidden" name="workId" value="@Model.Id" />
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <button type="submit" class="btn btn-primary btn-sm">Vote</button>
-                        </form>
-                    </div>
+                    <span class="badge text-bg-primary rounded-pill">@item.Rating</span>
                 </li>
             }
         </ol>

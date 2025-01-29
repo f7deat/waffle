@@ -2,6 +2,7 @@
 using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Components;
 using Waffle.Models;
+using Waffle.Core.Interfaces;
 
 namespace Waffle.Core.Foundations;
 
@@ -32,6 +33,10 @@ public abstract class BaseViewComponent<T> : ViewComponent where T : class
             {
                 RequestId = workId.ToString()
             });
+        }
+        if (work is IComponent component)
+        {
+            component.Id = workId;
         }
         work = await ExtendAsync(work);
         return View(ViewName, work);
