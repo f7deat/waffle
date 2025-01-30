@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
@@ -46,7 +47,7 @@ public class RankController(ApplicationDbContext _context, IWorkService _workSer
         return Ok();
     }
 
-    [HttpPost("vote")]
+    [HttpPost("vote"), AllowAnonymous]
     public async Task<IActionResult> VoteAsync(VoteArgs args)
     {
         try

@@ -7,13 +7,13 @@
 <div class="rank mb-4">
     @if (Model.Items != null)
     {
-        <ol class="list-group list-group-numbered">
+        <ol class="list-group list-group-numbered shadow">
             @foreach (var item in Model.Items)
             {
                 <li class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="ms-2 me-auto">
                         <div class="fw-bold d-flex">
-                            <span class="me-2">@item.Name</span>
+                            <span class="me-1">@item.Name</span>
                             <form action="/api/rank/vote" method="post">
                                 <input type="hidden" name="catalogId" value="@Model.CatalogId" />
                                 <input type="hidden" name="workId" value="@Model.Id" />

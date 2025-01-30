@@ -44,13 +44,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-item">
-                                <div class="form-label">Email</div>
+                                <div class="form-label">Email<font color="red">*</font></div>
                                 <input class="form-control" type="email" required name="email" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-item">
-                                <div class="form-label">Số điện thoại</div>
+                                <div class="form-label">Số điện thoại<font color="red">*</font></div>
                                 <input class="form-control" type="text" required name="phoneNumber" />
                             </div>
                         </div>
@@ -76,13 +76,15 @@
                         </label>
                     </div>
                     <div class="form-item">
-                        <button type="submit" class="btn btn-primary">Đăng ký</button>
+                        <button type="submit" class="btn btn-primary">
+                            <localize key="register" />
+                        </button>
                         <button type="reset" class="btn">Reset</button>
                     </div>
                 </form>
             </div>
             <div class="mb-4 text-right">
-                Bạn đã có tài khoản? <a href="/user/login">Đăng nhập</a>
+                Bạn đã có tài khoản? <a href="/user/login"><localize key="login" /></a>
             </div>
         </div>
     </div>

@@ -21,6 +21,11 @@ li {
     padding: 0.25rem 0;
 }
 
+.list-group-item {
+    border: none;
+    border-bottom: var(--bs-list-group-border-width) dashed var(--bs-list-group-border-color);
+}
+
 .footer .dropdown-item:focus, .dropdown-item:hover {
     --bs-dropdown-link-hover-bg: var(--bs-primary);
     --bs-dropdown-link-hover-color: white;

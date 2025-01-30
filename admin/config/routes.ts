@@ -145,12 +145,6 @@ export default [
         hideInMenu: true,
       },
       {
-        name: 'listGroup',
-        path: '/works/list-group/:id',
-        component: './works/list-group',
-        hideInMenu: true,
-      },
-      {
         name: 'productLister',
         path: '/works/product-lister/:id',
         component: './works/product-lister',

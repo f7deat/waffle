@@ -1,20 +1,13 @@
 ﻿using Waffle.Core.Foundations;
-using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
-using Waffle.Models;
 using Waffle.Models.Components;
+using Waffle.Models;
+using Waffle.Core.Interfaces.IService;
 
-namespace Waffle.ViewComponents;
+namespace Waffle.ViewComponents.Pickers;
 
-public class ArticlePickerViewComponent : BaseViewComponent<ArticlePicker>
+public class LocationPickerViewComponent(IWorkService workService, ICatalogService _catalogService) : BaseViewComponent<ArticlePicker>(workService)
 {
-    private readonly ICatalogService _catalogService;
-
-    public ArticlePickerViewComponent(IWorkService workService, ICatalogService catalogService) : base(workService)
-    {
-        _catalogService = catalogService;
-    }
-
     protected override async Task<ArticlePicker> ExtendAsync(ArticlePicker work)
     {
         var articles = await _catalogService.ListByTagAsync(work.TagId, new CatalogFilterOptions
@@ -24,7 +17,7 @@ public class ArticlePickerViewComponent : BaseViewComponent<ArticlePicker>
             PageSize = 5,
             Locale = PageData.Locale
         });
-        work.Articles = articles.Data?.ToList() ?? new();
+        work.Articles = articles.Data?.ToList() ?? [];
         return work;
     }
 }
