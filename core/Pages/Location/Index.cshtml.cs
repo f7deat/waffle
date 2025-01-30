@@ -7,18 +7,13 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Pages.Location;
 
-public class IndexModel : EntryPageModel
+public class IndexModel(ICatalogService catalogService) : EntryPageModel(catalogService)
 {
     [BindProperty(SupportsGet = true)]
     public int Current { get; set; } = 1;
 
     public ListResult<CatalogListItem>? Catalogs;
-
-    public IndexModel(ICatalogService catalogService) : base(catalogService)
-    {
-    }
-
-    public IEnumerable<ComponentListItem> Components = new List<ComponentListItem>();
+    public IEnumerable<ComponentListItem> Components = [];
 
     public async Task OnGetAsync()
     {
@@ -26,7 +21,7 @@ public class IndexModel : EntryPageModel
         Catalogs = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Active = true,
-            PageSize = 6,
+            PageSize = 12,
             Current = Current,
             Type = CatalogType.Location,
             Locale = PageData.Locale 

@@ -13,7 +13,7 @@
     --primary-hover: #0b5ed7;
     --yellow-500: #eab308;
     --light: #f1f5f9;
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+    --shadow: 0 0 30px rgba(112,120,137,.1);
     --bs-body-color: #0e1c71;
     --bs-btn-font-weight: 500;
 }
@@ -148,6 +148,10 @@ table {
     -webkit-box-orient: vertical;
     overflow: hidden;
     min-height: 2.6rem;
+}
+
+.line-clampin-2 {
+    -webkit-line-clamp: 2;
 }
 
 .line-clampin-3 {
