@@ -112,6 +112,7 @@ const RowContent: React.FC = () => {
           status: 'Processing',
         },
       },
+      width: 80
     },
     {
       title: 'Action',
@@ -171,7 +172,7 @@ const RowContent: React.FC = () => {
         {
           data.map((col, idx) => (
             <Col key={idx} span={getSpan(col.className)}>
-              <ProCard title={col.name} bordered headerBordered extra={
+              <ProCard title={col.name} size='small' bordered headerBordered extra={
                 <Space>
                   <Button type='primary' icon={<PlusOutlined />} onClick={() => {
                     setParentId(col.id || '');

@@ -14,4 +14,5 @@ public interface ILocalizationService
     Task<ListResult<Localization>> GetListAsync(LocalizationFilterOptions filterOptions);
     Task<IdentityResult> SaveAsync(Localization args);
     string CurrentLocale();
+    Task InitialAsync();
 }

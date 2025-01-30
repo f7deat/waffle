@@ -8,12 +8,12 @@ using Waffle.Entities;
 
 namespace Waffle.Pages.Install;
 
-public class IndexModel(IEnumerable<IGenerator> generators, IComponentService componentService, UserManager<ApplicationUser> userManager) : PageModel
+public class IndexModel(IEnumerable<IGenerator> generators, IComponentService componentService, UserManager<ApplicationUser> userManager, ILocalizationService _localizationService) : PageModel
 {
     private readonly IEnumerable<IGenerator> _generators = generators;
     private readonly IComponentService _componentService = componentService;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
-    public IEnumerable<Component> Components = new List<Component>();
+    public IEnumerable<Component> Components = [];
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -24,6 +24,7 @@ public class IndexModel(IEnumerable<IGenerator> generators, IComponentService co
 
     public async Task<IActionResult> OnPostAsync()
     {
+        await _localizationService.InitialAsync();
         foreach (var generator in _generators)
         {
             await generator.RunAsync();

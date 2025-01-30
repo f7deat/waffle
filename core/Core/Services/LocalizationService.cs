@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System.Net;
@@ -7,6 +8,7 @@ using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
+using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 
@@ -19,14 +21,16 @@ public class LocalizationService : ILocalizationService
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly SettingOptions Options;
     private readonly IRouteDataService _routeDataService;
+    private readonly ApplicationDbContext _context;
 
-    public LocalizationService(IRouteDataService routeDataService, ILocalizationRepository localizationRepository, IMemoryCache memoryCache, IHttpContextAccessor httpContextAccessor, IOptions<SettingOptions> options)
+    public LocalizationService(ApplicationDbContext context, IRouteDataService routeDataService, ILocalizationRepository localizationRepository, IMemoryCache memoryCache, IHttpContextAccessor httpContextAccessor, IOptions<SettingOptions> options)
     {
         _localizationRepository = localizationRepository;
         _memoryCache = memoryCache;
         _httpContextAccessor = httpContextAccessor;
         Options = options.Value;
         _routeDataService = routeDataService;
+        _context = context;
     }
 
     public string CurrentLocale()
@@ -120,5 +124,54 @@ public class LocalizationService : ILocalizationService
         localization.Value = args.Value;
         await _localizationRepository.SaveChangesAsync();
         return IdentityResult.Success;
+    }
+
+    private async Task TranslateAsync(Dictionary<string, Dictionary<string, string>> keys)
+    {
+        var translations = await _context.Localizations.Where(x => string.IsNullOrEmpty(x.Value)).ToListAsync();
+        foreach (var key in keys)
+        {
+            var translationKeys = translations.Where(x => x.Key == key.Key).ToList();
+            foreach (var item in key.Value)
+            {
+                var translation = translationKeys.FirstOrDefault(x => x.Language == item.Key);
+                if (translation is null) continue;
+                translation.Value = item.Value;
+                _context.Localizations.Update(translation);
+            }
+        }
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task InitialAsync()
+    {
+        var keys = new Dictionary<string, Dictionary<string, string>>();
+        // Add your keys here
+        keys.Add("login", new Dictionary<string, string>
+        {
+            { "en-US", "Login" },
+            { "vi-VN", "Đăng nhập" },
+            { "ko-KR", "로그인" },
+            { "ja-JP", "ログイン" },
+            { "zh-CN", "登录" },
+        });
+        keys.Add("register", new Dictionary<string, string>
+        {
+            { "en-US", "Register" },
+            { "vi-VN", "Đăng ký" },
+            { "ko-KR", "레지스터" },
+            { "ja-JP", "登録" },
+            { "zh-CN", "寄存器" },
+        });
+        keys.Add("home", new Dictionary<string, string>
+        {
+            { "en-US", "Home" },
+            { "vi-VN", "Trang chủ" },
+            { "ko-KR", "집" },
+            { "ja-JP", "ホーム" },
+            { "zh-CN", "家" },
+        });
+        await TranslateAsync(keys);
+
     }
 }
