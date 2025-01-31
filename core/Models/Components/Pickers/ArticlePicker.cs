@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 using Waffle.Models.ViewModels;
 
-namespace Waffle.Models.Components;
+namespace Waffle.Models.Components.Pickers;
 
 [Display(Name = "Article Picker", Prompt = "article-picker")]
 public class ArticlePicker : AbstractComponent
@@ -14,5 +14,5 @@ public class ArticlePicker : AbstractComponent
     public string Title { get; set; } = string.Empty;
 
     [JsonIgnore]
-    public List<CatalogListItem> Articles { get; set; } = new();
+    public List<CatalogListItem> Articles { get; set; } = [];
 }

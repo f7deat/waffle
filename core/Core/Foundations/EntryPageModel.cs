@@ -5,13 +5,9 @@ using Waffle.Core.Interfaces.IService;
 
 namespace Waffle.Core.Foundations;
 
-public class EntryPageModel : PageModel
+public class EntryPageModel(ICatalogService catalogService) : PageModel
 {
-    protected ICatalogService _catalogService;
-    public EntryPageModel(ICatalogService catalogService)
-    {
-        _catalogService = catalogService;
-    }
+    protected ICatalogService _catalogService = catalogService;
 
     public PageData PageData { private set; get; } = new();
 

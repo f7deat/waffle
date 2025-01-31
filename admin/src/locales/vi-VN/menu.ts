@@ -6,6 +6,7 @@ export default {
   'menu.catalog.tagCenter': 'Chi tiết',
   'menu.catalogList': 'Danh sách',
   'menu.catalogCenter': 'Chi tiết',
+  'menu.career': 'Tuyển dụng',
   'menu.comments': 'Bình luận',
   'menu.ecommerce': 'E-Commerce',
   'menu.ecommerce.center': 'Chi tiết',

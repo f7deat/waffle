@@ -9,7 +9,7 @@ const HtmlBlock : React.FC<AbstractBlock> = ({ data }) => {
       if (data) {
         formRef.setFields([
           {
-            name: 'value',
+            name: 'value' as any,
             value: data.value,
           }
         ]);

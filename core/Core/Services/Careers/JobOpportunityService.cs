@@ -67,6 +67,26 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
         return await ListResult<JobApplicationListItem>.Success(query, filterOptions);
     }
 
+    public async Task<ListResult<object>> ListAsync(BasicFilterOptions filterOptions)
+    {
+        var query = from a in _context.JobOpportunities
+                    select new
+                    {
+                        a.Id,
+                        a.JobRequirements,
+                        a.SalaryRange,
+                        a.JobLocation,
+                        a.JobType,
+                        a.CreatedDate,
+                        a.CreatedBy,
+                        a.ModifiedDate,
+                        a.ModifiedBy,
+                        ApplicationCount = _context.JobApplications.Count(x => x.JobId == a.Id)
+                    };
+        query = query.OrderByDescending(x => x.CreatedDate);
+        return await ListResult<object>.Success(query, filterOptions);
+    }
+
     public async Task<DefResult> SaveAsync(JobOpportunity args)
     {
 		try

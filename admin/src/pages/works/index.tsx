@@ -7,7 +7,7 @@ import Jumbotron from "./jumbotron";
 import Sponsor from "./sponsor";
 import { FormOutlined, LeftOutlined, SettingOutlined } from "@ant-design/icons";
 import VideoPlaylist from "./video-playlist";
-import { EditorComponent, HtmlBlock, ListGroupComponent } from "./components";
+import { EditorComponent, HtmlBlock, ListGroupComponent, LocationPicker } from "./components";
 import LatestNews from "./latest-news";
 import { useEffect, useRef } from "react";
 import RowComponent from "./row";
@@ -41,6 +41,7 @@ const WorkPage: React.FC = () => {
         if (data?.normalizedName === 'JobLister') return <JobLister data={data?.data} />;
         if (data?.normalizedName === 'Rank') return <RankComponent data={data?.data} />;
         if (data?.normalizedName === 'ListGroup') return <ListGroupComponent data={data?.data} />;
+        if (data?.normalizedName === 'LocationPicker') return <LocationPicker data={data?.data} />;
         return <Empty />
     }
 

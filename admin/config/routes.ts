@@ -248,6 +248,12 @@ export default [
     ],
   },
   {
+    icon: 'SolutionOutlined',
+    name: 'career',
+    path: '/career',
+    component: './career'
+  },
+  {
     icon: 'TeamOutlined',
     name: 'users',
     path: '/users',

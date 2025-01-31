@@ -73,10 +73,10 @@ public class LocalizationService : ILocalizationService
 
     public async Task<string> GetAsync(string key)
     {
-        var cacheKey = $"{nameof(Localization)}-{key}";
+        var locale = _routeDataService.GetLocale();
+        var cacheKey = $"{nameof(Localization)}-{key}-{locale}";
         if (!_memoryCache.TryGetValue($"{cacheKey}", out string? cacheValue))
         {
-            var locale = _routeDataService.GetLocale();
             var i18n = await _localizationRepository.FindAsync(key, locale);
             if (i18n is null)
             {

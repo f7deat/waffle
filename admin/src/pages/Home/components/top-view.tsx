@@ -46,7 +46,7 @@ const TopView: React.FC = () => {
                         children: <Children />,
                     },
                     {
-                        label: <FormattedMessage id='menu.ecommerce.product' />,
+                        label: 'Product',
                         key: CatalogType.Product.toString(),
                         children: <Children />,
                     },

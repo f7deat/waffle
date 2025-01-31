@@ -10,6 +10,7 @@ public class JobApplication : BaseEntity
     public DateTime AppliedDate { get; set; }
     public DateTime? ModifiedDate { get; set; }
     public JobApplicationStatus Status { get; set; }
+    public string? ResumeFile { get; set; }
 
     public JobOpportunity? JobOpportunity { get; set; }
 }

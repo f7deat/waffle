@@ -14,16 +14,16 @@ const Feed: React.FC<AbstractBlock> = ({ data }) => {
   useEffect(() => {
     formRef?.setFields([
       {
-        name: 'name',
-        value: data.name,
+        name: 'name' as any,
+        value: data?.name,
       },
       {
         name: 'type',
-        value: data.type ?? 0,
+        value: data?.type ?? 0,
       },
       {
         name: 'pageSize',
-        value: data.pageSize,
+        value: data?.pageSize,
       },
     ]);
   }, [data]);

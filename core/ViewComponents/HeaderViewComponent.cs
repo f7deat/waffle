@@ -6,28 +6,14 @@ using Waffle.Core.Options;
 using Microsoft.Extensions.Options;
 using Waffle.Core.Foundations;
 using Waffle.Data;
-using Waffle.Models;
 using Waffle.Models.Components;
 using Microsoft.EntityFrameworkCore;
 
 namespace Waffle.ViewComponents;
 
-public class HeaderViewComponent : ViewComponent
+public class HeaderViewComponent(ISettingService _settingService, IOptions<SettingOptions> options, ApplicationDbContext _context, ILocalizationService _localizationService) : ViewComponent
 {
-    private readonly ISettingService _settingService;
-    private readonly IConfiguration _configuration;
-    private readonly SettingOptions Options;
-    private readonly ApplicationDbContext _context;
-    private readonly ILocalizationService _localizationService;
-
-    public HeaderViewComponent(ISettingService settingService, IConfiguration configuration, IOptions<SettingOptions> options, ApplicationDbContext context, ILocalizationService localizationService)
-    {
-        _settingService = settingService;
-        _configuration = configuration;
-        Options = options.Value;
-        _context = context;
-        _localizationService = localizationService;
-    }
+    private readonly SettingOptions Options = options.Value;
 
     protected PageData PageData
     {

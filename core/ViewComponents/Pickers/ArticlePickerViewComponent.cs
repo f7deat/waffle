@@ -2,7 +2,7 @@
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Components;
+using Waffle.Models.Components.Pickers;
 
 namespace Waffle.ViewComponents.Pickers;
 

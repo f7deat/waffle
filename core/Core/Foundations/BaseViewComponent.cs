@@ -6,14 +6,9 @@ using Waffle.Core.Interfaces;
 
 namespace Waffle.Core.Foundations;
 
-public abstract class BaseViewComponent<T> : ViewComponent where T : class
+public abstract class BaseViewComponent<T>(IWorkService workService) : ViewComponent where T : class
 {
-    private readonly IWorkService _workService;
-
-    public BaseViewComponent(IWorkService workService)
-    {
-        _workService = workService;
-    }
+    private readonly IWorkService _workService = workService;
 
     protected PageData PageData
     {
