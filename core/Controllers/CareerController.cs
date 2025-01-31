@@ -28,4 +28,12 @@ public class CareerController(IJobOpportunityService _jobOpportunityService) : B
 
     [HttpGet("list-application")]
     public async Task<IActionResult> ListApplicationAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _jobOpportunityService.ListApplicationAsync(filterOptions));
+
+    [HttpPost("delete-application/{id}")]
+    public async Task<IActionResult> DeleteApplicationAsync([FromRoute] Guid id)
+    {
+        var result = await _jobOpportunityService.DeleteApplicationAsync(id);
+        if (!result.Succeeded) return BadRequest(result.Message);
+        return Ok(result);
+    }
 }

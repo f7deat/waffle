@@ -78,15 +78,17 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         return works;
     }
 
-    public async Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type)
+    public async Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type, string locale)
     {
-        return await _context.Catalogs.Where(x => x.Type == type && x.Active)
+        return await _context.Catalogs
+            .Where(x => x.Locale == locale)
+            .Where(x => x.Type == type && x.Active)
             .OrderByDescending(x => x.ViewCount)
             .Take(5)
             .ToListAsync();
     }
 
-    public async Task<int> GetViewCountAsync() => await _context.Catalogs.SumAsync(x => x.ViewCount);
+    public async Task<int> GetViewCountAsync(string locale) => await _context.Catalogs.Where(x => x.Locale == locale).SumAsync(x => x.ViewCount);
 
     public async Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions)
     {

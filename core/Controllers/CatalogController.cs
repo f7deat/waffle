@@ -19,7 +19,7 @@ namespace Waffle.Controllers;
 public class CatalogController(ApplicationDbContext _context, ICatalogService _catalogService, ILogService logService) : BaseController
 {
     [HttpGet("view-count")]
-    public async Task<IActionResult> GetViewCountAsync() => Ok(await _catalogService.GetViewCountAsync());
+    public async Task<IActionResult> GetViewCountAsync([FromQuery] string locale) => Ok(await _catalogService.GetViewCountAsync(locale));
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _catalogService.FindAsync(id));
@@ -190,10 +190,10 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     }));
 
     [HttpGet("pie-chart")]
-    public async Task<IActionResult> PieChartAsync() => Ok(await _catalogService.PieChartAsync());
+    public async Task<IActionResult> PieChartAsync([FromQuery] string locale) => Ok(await _catalogService.PieChartAsync(locale));
 
     [HttpGet("top-view")]
-    public async Task<IActionResult> GetTopViewAsync([FromQuery] CatalogType type) => Ok(await _catalogService.GetTopViewAsync(type));
+    public async Task<IActionResult> GetTopViewAsync([FromQuery] CatalogType type, [FromQuery] string locale) => Ok(await _catalogService.GetTopViewAsync(type, locale));
 
     [HttpGet("form-select")]
     public async Task<IActionResult> GetFormSelectAsync([FromQuery] SelectFilterOptions filterOptions) => Ok(await _catalogService.GetFormSelectAsync(filterOptions));

@@ -7,5 +7,5 @@ namespace Waffle.Controllers;
 public class ReportController(ICatalogService catalogService) : BaseController
 {
     [HttpGet("activity")]
-    public async Task<IActionResult> GetActivityAsync() => Ok(await catalogService.GetActivityAsync());
+    public async Task<IActionResult> GetActivityAsync([FromQuery] string locale) => Ok(await catalogService.GetActivityAsync(locale));
 }

@@ -381,13 +381,15 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         return await ListResult<TagListItem>.Success(query, filterOptions);
     }
 
-    public async Task<object?> PieChartAsync()
+    public async Task<object?> PieChartAsync(string locale)
     {
-        return await _context.Catalogs.GroupBy(x => x.Type).Select(x => new
-        {
-            label = x.Key.ToString(),
-            value = x.Count()
-        }).ToListAsync();
+        return await _context.Catalogs
+            .Where(x => x.Locale == locale)
+            .GroupBy(x => x.Type).Select(x => new
+            {
+                label = x.Key.ToString(),
+                value = x.Count()
+            }).ToListAsync();
     }
 
     public async Task<ProductImage?> GetProductImageAsync(Guid catalogId)
@@ -424,13 +426,13 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
 
     public Task<Catalog?> FindAsync(Guid catalogId, CatalogType type) => _catalogRepository.FindAsync(catalogId, type);
 
-    public Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type) => _catalogRepository.GetTopViewAsync(type);
+    public Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type, string locale) => _catalogRepository.GetTopViewAsync(type, locale);
 
     public Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id) => _workRepository.ListTagIdsAsync(id);
 
     public Task<object?> GetStructureByIdAsync(Guid id) => _catalogRepository.GetStructureAsync(id);
 
-    public Task<int> GetViewCountAsync() => _catalogRepository.GetViewCountAsync();
+    public Task<int> GetViewCountAsync(string locale) => _catalogRepository.GetViewCountAsync(locale);
 
     public async Task<object?> GetComponentsAsync(GetComponentsArgs args)
     {
@@ -459,9 +461,9 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         return IdentityResult.Success;
     }
 
-    public async Task<object?> GetActivityAsync()
+    public async Task<object?> GetActivityAsync(string locale)
     {
-        var query = await _context.Catalogs.Where(x => x.CreatedDate.Year == DateTime.Now.Year)
+        var query = await _context.Catalogs.Where(x => x.Locale == locale).Where(x => x.CreatedDate.Year == DateTime.Now.Year)
             .Select(x => new
             {
                 x.Id,

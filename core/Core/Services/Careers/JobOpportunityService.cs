@@ -27,6 +27,15 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
         return DefResult.Success;
     }
 
+    public async Task<DefResult> DeleteApplicationAsync(Guid id)
+    {
+        var application = await _context.JobApplications.FindAsync(id);
+        if (application is null) return DefResult.Failed("Job application not found!");
+        _context.JobApplications.Remove(application);
+        await _context.SaveChangesAsync();
+        return DefResult.Success;
+    }
+
     public async Task<DefResult> DeleteAsync(Guid id)
     {
         var job = await _context.JobOpportunities.FindAsync(id);
