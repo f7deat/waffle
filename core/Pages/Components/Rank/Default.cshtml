@@ -13,7 +13,7 @@
                 <li class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="ms-2 me-auto">
                         <div class="fw-bold d-flex">
-                            <span class="me-1">@item.Name</span>
+                            <a class="me-1" href="@item.Url">@item.Name</a>
                             <form action="/api/rank/vote" method="post">
                                 <input type="hidden" name="catalogId" value="@Model.CatalogId" />
                                 <input type="hidden" name="workId" value="@Model.Id" />

@@ -1,18 +1,19 @@
-import { saveArguments } from '@/services/work-content';
-import { ActionType, DragSortTable, ProColumns, ProForm, ProFormInstance, ProFormText } from '@ant-design/pro-components';
-import { useParams } from '@umijs/max';
+import { ActionType, DragSortTable, ModalForm, ProColumns, ProForm, ProFormInstance, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { Button, Divider, Popconfirm, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import ModalLink from '@/components/modals/link';
 import { FormattedMessage } from '@umijs/max';
 import { uuidv4 } from '@/utils/common';
 import { AbstractBlock } from '@/typings/work';
+import { apiGetCatalogTypes, apiGetUrlOption } from '@/services/catalog';
+import { CatalogType } from '@/constants';
 
 const ListGroup: React.FC<AbstractBlock> = ({ data }) => {
-  const { id } = useParams();
   const [dataTable, setDataTable] = useState<CPN.ListGroupItem[]>();
   const formRef = ProForm.useFormInstance<ProFormInstance>();
+  const modalFormRef = useRef<ProFormInstance>();
+  const [catalogOptions, setCatalogOptions] = useState<any[]>([]);
+  const [selectedType, setSelectedType] = useState<CatalogType>(CatalogType.Default);
 
   useEffect(() => {
     setDataTable(data?.items);
@@ -23,6 +24,10 @@ const ListGroup: React.FC<AbstractBlock> = ({ data }) => {
       }
     ])
   }, [data]);
+
+  useEffect(() => {
+    apiGetUrlOption({ type: selectedType }).then(response => setCatalogOptions(response));
+  }, [selectedType]);
 
   const actionRef = useRef<ActionType>();
   const [open, setOpen] = useState<boolean>(false);
@@ -127,7 +132,15 @@ const ListGroup: React.FC<AbstractBlock> = ({ data }) => {
       />
       <Divider dashed />
 
-      <ModalLink open={open} onOpenChange={setOpen} onFinish={addLink} />
+      <ModalForm open={open} onOpenChange={setOpen} title="Thêm mới" onFinish={addLink} formRef={modalFormRef}>
+        <ProFormText name="name" label="Name" />
+        <ProFormSelect name="type" label="Type" request={apiGetCatalogTypes} showSearch onChange={(value, option) => {
+          setSelectedType(value as CatalogType);
+        }} />
+        <ProFormSelect name="href" label="Catalog" options={catalogOptions} showSearch onChange={(value, option) => {
+          modalFormRef.current?.setFieldValue('name', option?.label);
+        }} />
+      </ModalForm>
     </>
   );
 };

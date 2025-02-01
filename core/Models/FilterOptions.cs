@@ -107,6 +107,7 @@ public class SelectFilterOptions
 public class OptionFilterOptions
 {
     public string? Locale { get; set; }
+    public string? KeyWords { get; set; }
 }
 
 public class CatalogSelectOptions

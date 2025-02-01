@@ -351,7 +351,7 @@ public class WorkController(ApplicationDbContext _context, IWorkService _workSer
     [HttpPost("child/sort")]
     public async Task<IActionResult> SortChildAsync([FromBody] List<Guid> workIds)
     {
-        if (!workIds.Any()) return BadRequest("No work was found!");
+        if (workIds.Count == 0) return BadRequest("No work was found!");
         int i = 0;
         foreach (var workId in workIds)
         {
@@ -361,6 +361,6 @@ public class WorkController(ApplicationDbContext _context, IWorkService _workSer
             i++;
         }
         await _context.SaveChangesAsync();
-        return Ok(IdentityResult.Success);
+        return Ok();
     }
 }

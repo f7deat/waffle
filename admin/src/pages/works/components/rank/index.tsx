@@ -1,19 +1,27 @@
 import { AbstractBlock } from "@/typings/work";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { ModalForm, ProForm, ProFormDigit, ProFormInstance, ProFormText, ProFormTextArea, ProTable } from "@ant-design/pro-components";
+import { ModalForm, ProForm, ProFormDigit, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea, ProTable } from "@ant-design/pro-components";
 import { Button, message, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import { uuidv4 } from "@/utils/common";
+import { apiGetCatalogOptions, apiGetCatalogTypes } from "@/services/catalog";
+import { CatalogType } from "@/constants";
 
 const RankComponent: React.FC<AbstractBlock> = ({ data }) => {
 
     const formRef = ProForm.useFormInstance<ProFormInstance>();
     const [open, setOpen] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState<any[]>([]);
+    const [catalogOptions, setCatalogOptions] = useState<any[]>([]);
+    const [selectedType, setSelectedType] = useState<CatalogType>(CatalogType.Default);
 
     useEffect(() => {
         setDataSource(data?.items);
     }, [data]);
+
+    useEffect(() => {
+        apiGetCatalogOptions({ type: selectedType }).then(response => setCatalogOptions(response));
+    }, [selectedType]);
 
     const onFinish = async (values: any) => {
         const newDataSource = dataSource || [];
@@ -74,6 +82,10 @@ const RankComponent: React.FC<AbstractBlock> = ({ data }) => {
             />
             <ModalForm open={open} onOpenChange={setOpen} title="Thêm mới" onFinish={onFinish}>
                 <ProFormText name="name" label="Name" />
+                <ProFormSelect name="type" label="Type" request={apiGetCatalogTypes} showSearch onChange={(value) => {
+                    setSelectedType(value as CatalogType);
+                }} />
+                <ProFormSelect name="url" label="Catalog" options={catalogOptions} showSearch />
                 <ProFormTextArea name="description" label="Descrription" />
                 <ProFormDigit name="rating" label="Rating" />
             </ModalForm>

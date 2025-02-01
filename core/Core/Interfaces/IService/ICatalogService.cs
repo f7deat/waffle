@@ -4,6 +4,7 @@ using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
+using Waffle.Models.Filters.Catalogs;
 using Waffle.Models.Result;
 using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
@@ -48,7 +49,7 @@ public interface ICatalogService
     Task<PageData> GetEntryPageDataAsync(string normalizedName);
     Task<IdentityResult> SaveSettingAsync(Catalog catalog);
     Task<PageData?> GetPageDataAsync(string? normalizedName);
-    Task<object?> GetUrlOptionsAsync(OptionFilterOptions filterOptions);
+    Task<object?> GetUrlOptionsAsync(UrlCatalogOptions filterOptions);
     Task<DefResult> CreateTagAsync(CreateTagArgs args, string locale);
     Task<object> GetTypeAsync(CatalogType type);
     Task<object?> GetOptionsAsync(CatalogSelectOptions filterOptions);

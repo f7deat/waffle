@@ -27,4 +27,6 @@ public class ListGroupItem
     public string Suffix { get; set; } = string.Empty;
     [JsonIgnore]
     public bool HasSuffix => !string.IsNullOrEmpty(Suffix);
+    [JsonPropertyName("url")]
+    public string? Url { get; set; } = "#";
 }

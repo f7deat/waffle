@@ -25,4 +25,6 @@ public class RankItem
     public int Rating { get; set; }
     [JsonPropertyName("description")]
     public string? Description { get; set; }
+    [JsonPropertyName("url")]
+    public string? Url { get; set; } = "#";
 }

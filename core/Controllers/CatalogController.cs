@@ -12,6 +12,7 @@ using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
+using Waffle.Models.Filters.Catalogs;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers;
@@ -237,7 +238,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     }
 
     [HttpGet("url-options")]
-    public async Task<IActionResult> GetUrlOptionsAsync([FromQuery] OptionFilterOptions filterOptions) => Ok(await _catalogService.GetUrlOptionsAsync(filterOptions));
+    public async Task<IActionResult> GetUrlOptionsAsync([FromQuery] UrlCatalogOptions filterOptions) => Ok(await _catalogService.GetUrlOptionsAsync(filterOptions));
 
     [HttpPost("tag/create")]
     public async Task<IActionResult> CreateTagAsync([FromBody] CreateTagArgs args, [FromQuery] string locale)

@@ -1,12 +1,11 @@
 import { addChildWorkContent, addColumn, deleteWork, getListColumn, sortChild } from '@/services/work-content';
 import {
+  BranchesOutlined,
   DeleteOutlined,
   EditOutlined,
-  MoreOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
 import {
-  ActionType,
   DragSortTable,
   ModalForm,
   ProCard,
@@ -27,7 +26,7 @@ const RowContent: React.FC = () => {
   const [openAddItem, setOpenAddItem] = useState<boolean>(false);
   const [parentId, setParentId] = useState<string>('');
   const formRef = useRef<ProFormInstance>();
-
+  const [openWork, setOpenWork] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
 
   const fetchData = () => {
@@ -165,7 +164,7 @@ const RowContent: React.FC = () => {
           type="primary"
           onClick={() => setVisible(true)}
         >
-          <span><FormattedMessage id="general.new" /></span>
+          <FormattedMessage id="general.new" />
         </Button>
       </div>
       <Row gutter={16}>
@@ -178,6 +177,7 @@ const RowContent: React.FC = () => {
                     setParentId(col.id || '');
                     setOpenAddItem(true);
                   }} size='small' />
+                  <Button icon={<BranchesOutlined />} size='small' onClick={() => setOpenWork(true)} />
                   <Popconfirm
                     title="Are you sure?"
                     onConfirm={() => onConfirm(col.id)}
@@ -269,6 +269,9 @@ const RowContent: React.FC = () => {
           ]}
           name="className"
         />
+      </ModalForm>
+      <ModalForm open={openWork} onOpenChange={setOpenWork} title="Work setting">
+
       </ModalForm>
     </div>
   );
