@@ -11,7 +11,7 @@ public interface IFilterOptions
     public int PageSize { get; set; }
 }
 
-public abstract class FilterOptions : IFilterOptions
+public class FilterOptions : IFilterOptions
 {
     [JsonPropertyName("current")]
     public int Current { get; set; } = 1;

@@ -6,10 +6,30 @@
     var prevUrl = $"?{nvc.ToString()}";
     nvc["current"] = (Model.Current + 1).ToString();
     var nextUrl = $"?{nvc.ToString()}";
+    nvc["current"] = "1";
+    var fistPage = $"?{nvc.ToString()}";
+    nvc["current"] = Model.LastPage.ToString();
+    var lastPage = $"?{nvc.ToString()}";
 }
 
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-end">
+        @if (Model.Current > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@fistPage">
+                    <i class="fa-solid fa-angles-left"></i>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link" aria-label="Fist">
+                    <i class="fa-solid fa-angles-left"></i>
+                </span>
+            </li>
+        }
         @if (Model.HasPrevPage)
         {
             <li class="page-item">
@@ -50,6 +70,22 @@
             <li class="page-item disabled">
                 <span class="page-link" aria-label="Next">
                     <i class="fa-solid fa-angle-right"></i>
+                </span>
+            </li>
+        }
+        @if (Model.Current < Model.LastPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@lastPage">
+                    <i class="fa-solid fa-angles-right"></i>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link" aria-label="Last">
+                    <i class="fa-solid fa-angles-right"></i>
                 </span>
             </li>
         }

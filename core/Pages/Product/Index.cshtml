@@ -2,11 +2,11 @@
 @using Waffle.Extensions
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
-@model Waffle.Pages.Products.IndexModel
+@model Waffle.Pages.Product.IndexModel
 
 @await Component.InvokeAsync(nameof(Breadcrumb))
 <main class="container">
-    
+
     @if (Model.Theme != "Default")
     {
         <div class="row">
@@ -37,43 +37,48 @@
                 </div>
 
                 <div class="title">@ViewData["Title"]</div>
-                <div class="row">
-                    @foreach (var item in Model.Products)
-                    {
-                        <div class="col-6 col-md-3">
-                            <a href="@item.Url">
-                                <div class="card-image bg-dark relative">
-                                    <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
-                                    @if (item.Price != null && item.SalePrice != null)
-                                    {
-                                        <span class="badge bg-danger position-absolute top-0 end-0">
-                                            <span>GIẢM</span>
-                                            @item.Discount %
-                                        </span>
-                                    }
-                                </div>
-                            </a>
-                            <div class="py-2">
-                                <div class="mb-1 d-flex justify-between">
-                                    <div>
-                                        <span class="text-danger fw-medium">@item.SalePrice.ToMoney()</span>
-                                        <s class="text-muted text-sm">@item.Price.ToMoney()</s>
+                @if (Model.Products != null)
+                {
+                    <div class="row">
+                        @foreach (var item in Model.Products.Data)
+                        {
+                            <div class="col-6 col-md-3">
+                                <a href="@item.Url">
+                                    <div class="card-image bg-dark relative">
+                                        <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
+                                        @if (item.Price != null && item.SalePrice != null)
+                                        {
+                                            <span class="badge bg-danger position-absolute top-0 end-0">
+                                                <span>GIẢM</span>
+                                                @item.Discount %
+                                            </span>
+                                        }
                                     </div>
-                                    <div class="text-warning text-xs">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                    </div>
-                                </div>
-                                <a href="@item.Url" class="line-clampin">
-                                    @item.Name
                                 </a>
+                                <div class="py-2">
+                                    <div class="mb-1 d-flex justify-between">
+                                        <div>
+                                            <span class="text-danger fw-medium">@item.SalePrice.ToMoney()</span>
+                                            <s class="text-muted text-sm">@item.Price.ToMoney()</s>
+                                        </div>
+                                        <div class="text-warning text-xs">
+                                            @for (int i = 0; i < 5; i++)
+                                            {
+                                                <i class="fa-solid fa-star"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                    <a href="@item.Url" class="line-clampin">
+                                        @item.Name
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
+                        }
+                    </div>
+
+                    @Html.DisplayFor(x => Model.Products.Pagination)
+                }
+
                 @if (Model.IsPremium)
                 {
                     <div class="title">Danh mục</div>
@@ -104,8 +109,6 @@
                             }
                         </div>
                     </div>
-
-                    <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
                 }
 
                 @foreach (var item in Model.Components)
@@ -149,43 +152,47 @@
                 </div>
 
                 <div class="title">@ViewData["Title"]</div>
-                <div class="row">
-                    @foreach (var item in Model.Products)
-                    {
-                        <div class="col-6 col-md-3">
-                            <a href="@item.Url">
-                                <div class="card-image bg-dark relative">
-                                    <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
-                                    @if (item.Price != null && item.SalePrice != null)
-                                    {
-                                        <span class="badge bg-danger position-absolute top-0 end-0">
-                                            <span>GIẢM</span>
-                                            @item.Discount %
-                                        </span>
-                                    }
-                                </div>
-                            </a>
-                            <div class="py-2">
-                                <div class="mb-1 d-flex justify-between">
-                                    <div>
-                                        <span class="text-danger fw-medium">@item.SalePrice.ToMoney()</span>
-                                        <s class="text-muted text-sm">@item.Price.ToMoney()</s>
+                @if (Model.Products != null)
+                {
+                    <div class="row">
+                        @foreach (var item in Model.Products.Data)
+                        {
+                            <div class="col-6 col-md-3">
+                                <a href="@item.Url">
+                                    <div class="card-image bg-dark relative">
+                                        <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
+                                        @if (item.Price != null && item.SalePrice != null)
+                                        {
+                                            <span class="badge bg-danger position-absolute top-0 end-0">
+                                                <span>GIẢM</span>
+                                                @item.Discount %
+                                            </span>
+                                        }
                                     </div>
-                                    <div class="text-warning text-xs">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                    </div>
-                                </div>
-                                <a href="@item.Url" class="line-clampin">
-                                    @item.Name
                                 </a>
+                                <div class="py-2">
+                                    <div class="mb-1 d-flex justify-between">
+                                        <div>
+                                            <span class="text-danger fw-medium">@item.SalePrice.ToMoney()</span>
+                                            <s class="text-muted text-sm">@item.Price.ToMoney()</s>
+                                        </div>
+                                        <div class="text-warning text-xs">
+                                            @for (int i = 0; i < 5; i++)
+                                            {
+                                                <i class="fa-solid fa-star"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                    <a href="@item.Url" class="line-clampin">
+                                        @item.Name
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
+                        }
+                    </div>
+
+                    @Html.DisplayFor(x => Model.Products.Pagination)
+                }
                 @if (Model.IsPremium)
                 {
                     <div class="title">Danh mục</div>
@@ -216,8 +223,6 @@
                             }
                         </div>
                     </div>
-
-                    <partial name="~/Pages/Shared/Components/Pagination/Token.cshtml" model="Model.Pagination" />
                 }
 
                 @foreach (var item in Model.Components)
@@ -234,5 +239,5 @@
         </div>
     }
 
-    
+
 </main>
