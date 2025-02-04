@@ -17,8 +17,9 @@ public class RegisterModel : EntryPageModel
     private readonly IUserEmailStore<ApplicationUser> _emailStore;
     private readonly IUserStore<ApplicationUser> _userStore;
     private readonly ISettingService _appSettingService;
+    private readonly ILocalizationService _localizationService;
 
-    public RegisterModel(ICatalogService catalogService, UserManager<ApplicationUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender, IUserStore<ApplicationUser> userStore, ISettingService appSettingService) : base(catalogService)
+    public RegisterModel(ICatalogService catalogService, UserManager<ApplicationUser> userManager, ILogger<RegisterModel> logger, IEmailSender emailSender, IUserStore<ApplicationUser> userStore, ISettingService appSettingService, ILocalizationService localizationService) : base(catalogService)
     {
         _userManager = userManager;
         _logger = logger;
@@ -26,6 +27,7 @@ public class RegisterModel : EntryPageModel
         _emailStore = GetEmailStore();
         _emailSender = emailSender;
         _appSettingService = appSettingService;
+        _localizationService = localizationService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -73,7 +75,8 @@ public class RegisterModel : EntryPageModel
         {
             Result = IdentityResult.Failed(new IdentityError
             {
-                Description = "Password is required"
+                Code = "password_is_required",
+                Description = await _localizationService.GetAsync("password_is_required")
             });
             return Page();
         }

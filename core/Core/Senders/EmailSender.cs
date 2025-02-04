@@ -8,17 +8,8 @@ using System.Net;
 
 namespace Waffle.Core.Senders;
 
-public class EmailSender : IEmailSender
+public class EmailSender(ILogger<EmailSender> _logger, ISettingService _appService) : IEmailSender
 {
-    private readonly ILogger _logger;
-    private readonly ISettingService _appService;
-
-    public EmailSender(ILogger<EmailSender> logger, ISettingService appService)
-    {
-        _appService = appService;
-        _logger = logger;
-    }
-
     public async Task SendEmailAsync(string toEmail, string subject, string message) => await Execute(subject, message, toEmail);
 
     public async Task Execute(string subject, string message, string toEmail)

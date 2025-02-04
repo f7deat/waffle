@@ -9,6 +9,7 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
 using Waffle.Data;
+using Waffle.Data.ContentData;
 using Waffle.Entities;
 using Waffle.Models;
 
@@ -143,35 +144,5 @@ public class LocalizationService : ILocalizationService
         await _context.SaveChangesAsync();
     }
 
-    public async Task InitialAsync()
-    {
-        var keys = new Dictionary<string, Dictionary<string, string>>();
-        // Add your keys here
-        keys.Add("login", new Dictionary<string, string>
-        {
-            { "en-US", "Login" },
-            { "vi-VN", "Đăng nhập" },
-            { "ko-KR", "로그인" },
-            { "ja-JP", "ログイン" },
-            { "zh-CN", "登录" },
-        });
-        keys.Add("register", new Dictionary<string, string>
-        {
-            { "en-US", "Register" },
-            { "vi-VN", "Đăng ký" },
-            { "ko-KR", "레지스터" },
-            { "ja-JP", "登録" },
-            { "zh-CN", "寄存器" },
-        });
-        keys.Add("home", new Dictionary<string, string>
-        {
-            { "en-US", "Home" },
-            { "vi-VN", "Trang chủ" },
-            { "ko-KR", "집" },
-            { "ja-JP", "ホーム" },
-            { "zh-CN", "家" },
-        });
-        await TranslateAsync(keys);
-
-    }
+    public async Task InitialAsync() => await TranslateAsync(LocaleData.Values);
 }

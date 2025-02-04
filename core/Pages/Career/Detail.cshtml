@@ -47,6 +47,7 @@
                     <h3>Ứng tuyển</h3>
                     <div class="border p-4">
                         <form action="/api/career/apply" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="JobId" value="@Model.PageData.Id" />
                             <div class="form-item">
                                 <label class="form-label">Hồ sơ <span class="text-danger">*</span></label>
                                 <div class="input-group mb-3">

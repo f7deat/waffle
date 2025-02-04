@@ -1,5 +1,5 @@
 ﻿@page
-@model Waffle.Pages.Users.Login.IndexModel
+@model Waffle.Pages.User.Login.IndexModel
 @{
     var loginUri = $"{Request.Scheme}://{Request.Host.Value}/api/user/google-signin";
 }
@@ -17,7 +17,7 @@
         <div class="col-md-4">
             <div class="mb-4">
                 <div class="title"><localize key="login" /></div>
-                <div class="bg-white">
+                <div>
                     @if (Model.SignInResult != null && !Model.SignInResult.Succeeded)
                     {
                         <div class="alert alert-danger">
@@ -29,7 +29,7 @@
                             <div class="form-label">
                                 <localize key="userName" />
                             </div>
-                            <input type="text" class="form-control" name="UserName" placeholder="Email" required />
+                            <input type="text" class="form-control" name="UserName" placeholder="Username" required />
                         </div>
                         <div class="form-item">
                             <div class="form-label">

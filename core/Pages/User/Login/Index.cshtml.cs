@@ -8,32 +8,17 @@ using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
-using Waffle.ExternalAPI.GoogleAggregate;
 
-namespace Waffle.Pages.Users.Login;
+namespace Waffle.Pages.User.Login;
 
-public class IndexModel : EntryPageModel
+public class IndexModel(ISettingService _appSettingService, SignInManager<ApplicationUser> _signInManager, UserManager<ApplicationUser> _userManager, IConfiguration _configuration, ICatalogService catalogService) : EntryPageModel(catalogService)
 {
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IConfiguration _configuration;
-    private readonly ISettingService _appSettingService;
-
     [BindProperty(SupportsGet = true)]
     public string? UserName { get; set; }
     [BindProperty(SupportsGet = true)]
     public string? Password { get; set; }
 
     public Microsoft.AspNetCore.Identity.SignInResult? SignInResult;
-
-    public IndexModel(ISettingService appSettingService, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IConfiguration configuration, ICatalogService catalogService) : base(catalogService)
-    {
-        _signInManager = signInManager;
-        _userManager = userManager;
-        _configuration = configuration;
-        _appSettingService = appSettingService;
-    }
-
     public ExternalAPI.GoogleAggregate.Google? Google;
 
     public async Task OnGetAsync()

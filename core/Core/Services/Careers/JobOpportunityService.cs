@@ -96,6 +96,7 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
             {
                 job = new JobOpportunity
                 {
+                    Id = args.Id,
                     JobRequirements = args.JobRequirements,
                     SalaryRange = args.SalaryRange,
                     JobLocation = args.JobLocation,

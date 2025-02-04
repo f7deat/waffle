@@ -15,6 +15,7 @@ const CareerSetting: React.FC = () => {
     return (
         <>
             <ProForm onFinish={onFinish}>
+                <ProFormText name="id" initialValue={id} hidden />
                 <ProFormText label="Lương" name="salaryRange" />
                 <ProFormText name="jobLocation" label="Nơi làm việc" />
                 <ProFormSelect label="Loại hình công việc" name="jobType" options={[
