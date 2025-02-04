@@ -15,11 +15,7 @@
                     <h1 class="title">@Model.PageData.Name</h1>
                     <div class="mb-2 post-body">
                         <div class="mb-4 d-flex justify-content-end border-top border-dashed pt-2">
-                            <form action="/api/career/apply" method="post">
-                                <input type="hidden" name="JobId" value="@Model.PageData.Id" />
-                                <button type="submit" class="btn btn-primary me-2">Ứng tuyển</button>
-                            </form>
-                            <a href="#" class="btn btn-outline-primary"><i class="fa-solid fa-bookmark me-1"></i>Lưu việc làm</a>
+                            <a href="#" class="btn btn-primary"><i class="fa-solid fa-bookmark me-1"></i>Lưu việc làm</a>
                         </div>
                         @if (Model.Components != null)
                         {
@@ -46,6 +42,24 @@
                                 </span>
                             </div>
                         </div>
+                    </div>
+                    <div class="wf-delimiter"></div>
+                    <h3>Ứng tuyển</h3>
+                    <div class="border p-4">
+                        <form action="/api/career/apply" method="post" enctype="multipart/form-data">
+                            <div class="form-item">
+                                <label class="form-label">Hồ sơ <span class="text-danger">*</span></label>
+                                <div class="input-group mb-3">
+                                    <input type="file" class="form-control" id="resumeFile" name="resumeFile">
+                                    <label class="input-group-text" for="resumeFile">
+                                        <localize key="upload" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <button type="submit" class="btn btn-primary">Nộp đơn ứng tuyển</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 @await Component.InvokeAsync(nameof(Comment))
