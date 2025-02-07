@@ -56,7 +56,16 @@ public class CollectionService(ICollectionRepository _collectionRepository, ICat
         return _collectionRepository.ListAsync(filterOptions);
     }
 
-    public Task<ListResult<CatalogListItem>> ListByCatalogAsync(ListCatalogCollectionFilterOptions filterOptions) => _collectionRepository.ListByCatalogAsync(filterOptions);
+    public Task<ListResult<object>> ListByCatalogAsync(ListCatalogCollectionFilterOptions filterOptions) => _collectionRepository.ListByCatalogAsync(filterOptions);
 
     public Task<ListResult<CatalogListItem>?> ListCatalogByCollectionAsync(ListCatalogCollectionFilterOptions filterOptions) => _collectionRepository.GetListCatalogAsync(filterOptions);
+
+    public async Task<DefResult> UpdateAsync(Collection args)
+    {
+        var collection = await _collectionRepository.FindAsync(args.CatalogId, args.CollectionId);
+        if (collection is null) return DefResult.Failed("Collection not found!");
+        collection.SortOrder = args.SortOrder;
+        await _collectionRepository.UpdateAsync(collection);
+        return DefResult.Success;
+    }
 }

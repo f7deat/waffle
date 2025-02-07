@@ -19,6 +19,14 @@ public class CollectionController(ICollectionService _collectionService) : BaseC
         return Ok(result);
     }
 
+    [HttpPost("update")]
+    public async Task<IActionResult> UpdateAsync([FromBody] Collection args)
+    {
+        var result = await _collectionService.UpdateAsync(args);
+        if (!result.Succeeded) return BadRequest(result.Message);
+        return Ok(result);
+    }
+
     [HttpPost("delete")]
     public async Task<IActionResult> DeleteAsync([FromBody] Collection args) => Ok(await _collectionService.DeleteAsync(args));
 

@@ -13,6 +13,8 @@ namespace Waffle.Infrastructure.Repositories.Catalogs;
 
 public class CollectionRepository(ApplicationDbContext context) : EfRepository<Collection>(context), ICollectionRepository
 {
+    public async Task<Collection?> FindAsync(Guid catalogId, Guid collectionId) => await _context.Collections.FirstOrDefaultAsync(x => x.CatalogId == catalogId && x.CollectionId == collectionId);
+
     public async Task<Catalog?> FindByCatalogAsync(Guid catalogId)
     {
         var query = from a in _context.Catalogs
@@ -27,6 +29,7 @@ public class CollectionRepository(ApplicationDbContext context) : EfRepository<C
         var query = from a in _context.Collections
                     join b in _context.Catalogs on a.CatalogId equals b.Id
                     where b.Active && a.CollectionId == collectionId && b.Locale == filterOptions.Locale
+                    orderby a.SortOrder ascending
                     select new CatalogListItem
                     {
                         Id = b.Id,
@@ -91,22 +94,24 @@ public class CollectionRepository(ApplicationDbContext context) : EfRepository<C
         return await ListResult<CollectionListItem>.Success(query, filterOptions);
     }
 
-    public async Task<ListResult<CatalogListItem>> ListByCatalogAsync(ListCatalogCollectionFilterOptions filterOptions)
+    public async Task<ListResult<object>> ListByCatalogAsync(ListCatalogCollectionFilterOptions filterOptions)
     {
         var query = from a in _context.Catalogs
                     join b in _context.Collections on a.Id equals b.CollectionId
                     where b.CatalogId == filterOptions.CatalogId && a.Locale == filterOptions.Locale
-                    select new CatalogListItem
+                    select new
                     {
-                        Id = a.Id,
-                        Name = a.Name,
-                        Url = a.Url,
-                        CreatedDate = a.CreatedDate,
-                        ModifiedDate = a.ModifiedDate,
-                        Active = a.Active,
-                        Thumbnail = a.Thumbnail,
-                        ViewCount = a.ViewCount
+                        a.Name,
+                        a.Url,
+                        a.CreatedDate,
+                        a.ModifiedDate,
+                        a.Active,
+                        a.Thumbnail,
+                        a.ViewCount,
+                        b.CollectionId,
+                        b.CatalogId,
+                        b.SortOrder
                     };
-        return await ListResult<CatalogListItem>.Success(query, filterOptions);
+        return await ListResult<object>.Success(query, filterOptions);
     }
 }
