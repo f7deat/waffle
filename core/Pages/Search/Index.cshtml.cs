@@ -10,21 +10,14 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Pages.Search;
 
-public class IndexModel : EntryPageModel
+public class IndexModel(ICatalogService catalogService, ILocalizationService _localizationService, IProductService _productService) : EntryPageModel(catalogService)
 {
-    private readonly ILocalizationService _localizationService;
-    private readonly IProductService _productService;
-    public IndexModel(ICatalogService catalogService, ILocalizationService localizationService, IProductService productService) : base(catalogService)
-    {
-        _localizationService = localizationService;
-        _productService = productService;
-    }
-
     [BindProperty(SupportsGet = true)]
     public SearchFilterOptions FilterOptions { get; set; } = new();
     public ListResult<CatalogListItem> Articles = new();
-    public List<PlaylistItem> PlaylistItems = new();
+    public List<PlaylistItem> PlaylistItems = [];
     public Feed ProductFeed = new();
+    public ListResult<CatalogListItem>? Locations;
     public string? SearchPlaceHolder { get; set; }
 
     public async Task<IActionResult> OnGetAsync()
@@ -64,7 +57,6 @@ public class IndexModel : EntryPageModel
             Url = x.GetUrl()
         }).ToList() ?? new();
 
-
         var products = await _productService.ListAsync(new ProductFilterOptions
         {
             Name = FilterOptions.SearchTerm,
@@ -72,13 +64,26 @@ public class IndexModel : EntryPageModel
             Active = true,
             Locale = PageData.Locale
         });
+
         ProductFeed = new Feed
         {
             Name = await _localizationService.GetAsync(nameof(Product)),
             Products = products.Data,
             ItemPerRow = "col-6 col-md-3"
         };
+
+        Locations = await _catalogService.ListAsync(new CatalogFilterOptions
+        {
+            Locale = PageData.Locale,
+            Active = true,
+            Current = FilterOptions.Current,
+            PageSize = 3,
+            Type = CatalogType.Location,
+            Name = FilterOptions.SearchTerm
+        });
+
         SearchPlaceHolder = await _localizationService.GetAsync(nameof(SearchPlaceHolder));
+
         return Page();
     }
 

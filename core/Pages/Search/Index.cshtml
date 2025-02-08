@@ -1,6 +1,7 @@
 ﻿@page
 @using Waffle.Core.Constants;
 @using Waffle.Core.Helpers;
+@using Waffle.Extensions
 @using Waffle.Models.Components
 @using Waffle.Models.Components.Specifications
 @using Waffle.Models.Components.Lister
@@ -53,6 +54,43 @@
                     Title = "Playlist",
                     PlaylistItems = Model.PlaylistItems
                 })
+            }
+
+            @if (Model.Locations != null)
+            {
+                <div class="title">@Model.Locations.Total địa điểm <localize key="search_results_for" />: @Model.FilterOptions.SearchTerm</div>
+                <div class="row">
+                    @foreach (var item in Model.Locations.Data)
+                    {
+                        <div class="col-md-4">
+                            <a href="@item.Url" class="thumbnail">
+                                <img src="@item.Thumbnail" class="thumbnail" alt="@Html.Raw(item.Name)" height="200" loading="lazy" />
+                            </a>
+                            <div class="wf-article-item__body">
+                                <a href="@item.Url" class="fw-medium text-truncate">@Html.Raw(item.Name)</a>
+                                <div class="wf-article-item__body-description">
+                                    @Html.Raw(item.Description)
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div>
+                                    <small class="me-2">
+                                        <i class="fas fa-clock"></i>
+                                        @item.ModifiedDate
+                                    </small>
+                                    <small>
+                                        <i class="fa fa-eye"></i> @(item.ViewCount.ToNumber())
+                                    </small>
+                                </div>
+                                <div class="dropdown">
+                                    <a class="btn-share" href="https://www.google.com/maps/search/@item.Name" aria-label="Share" target="_blank" rel="nofollow">
+                                        <i class="fas fa-location-crosshairs"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
             }
 
             @if (!string.IsNullOrWhiteSpace(Model.FilterOptions.SearchTerm))

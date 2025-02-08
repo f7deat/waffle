@@ -38,29 +38,48 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
         try
         {
             if (file is null) return BadRequest("File not found!");
-            var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
-            var folder = Guid.NewGuid().ToString();
-            var folderPath = Path.Combine(uploadPath, folder);
-            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
-
-            var filePath = Path.Combine(uploadPath, folder, file.FileName);
-
-            using (var stream = System.IO.File.Create(filePath))
+            if (string.IsNullOrEmpty(_options.UploadAPIKey))
             {
-                await file.CopyToAsync(stream);
+                var folder = Guid.NewGuid().ToString();
+                var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files", folder);
+                if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
+                using (var stream = System.IO.File.Create(Path.Combine(uploadPath, file.FileName)))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                return Ok(new
+                {
+                    success = 1,
+                    url = $"https://{Request.Host.Value}/files/{folder}/{file.FileName}"
+                });
             }
-            var url = $"https://{Request.Host.Value}/files/{folder}/{file.FileName}";
+            var url = $"https://dhhp.edu.vn/api/file/upload?apiKey={_options.UploadAPIKey}";
+            using var client = new HttpClient();
+            var response = await client.PostAsync(url, new MultipartFormDataContent
+            {
+                { new StreamContent(file.OpenReadStream()), "file", file.FileName }
+            });
+            if (!response.IsSuccessStatusCode) return BadRequest("Upload failed!");
+            var fileContent = await JsonSerializer.DeserializeAsync<FileUploadResponse>(await response.Content.ReadAsStreamAsync());
+            if (fileContent is null) return BadRequest("Upload dserialize failed!");
             await _context.FileContents.AddAsync(new FileContent
             {
+                Id = fileContent.Id,
                 Name = file.FileName,
                 Size = file.Length,
+                Url = fileContent.Url,
                 Type = file.ContentType,
-                Url = url,
-                UploadBy = User.GetId(),
-                UploadDate = DateTime.Now
+                UploadDate = DateTime.Now,
+                UploadBy = User.GetId()
             });
             await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
+
+            return Ok(new
+            {
+                success = 1,
+                url = fileContent.Url
+            });
         }
         catch (Exception ex)
         {
