@@ -53,7 +53,7 @@ const CatalogCenter: React.FC = () => {
       title={catalog?.name}
       extra={<Button icon={<LeftOutlined />} onClick={() => history.back()}><span><FormattedMessage id='general.back' /></span></Button>}
     >
-      
+
       <Row gutter={16}>
         <Col md={18}>
           <ProCard
@@ -105,11 +105,13 @@ const CatalogCenter: React.FC = () => {
                   key: 'childen',
                   children: <ChildCatalog parent={catalog} />
                 },
-                {
-                  label: 'Collection',
-                  key: 'collection',
-                  children: <CatalogCollection />
-                }
+                ...(catalog?.type !== CatalogType.Collection ? [
+                  {
+                    label: 'Collection',
+                    key: 'collection',
+                    children: <CatalogCollection />
+                  }
+                ] : [])
               ],
               onChange: onTabChange,
             }}

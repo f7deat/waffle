@@ -14,3 +14,10 @@ export async function apiListCatalogByCollection(params: any) {
 export async function apiListCollectionByCatalog(params: any) {
     return request(`collection/list-by-catalog`, { params })
 }
+
+export async function apiUpdateCatalogCollection(data: any) {
+    return request(`collection/update`, {
+        method: 'POST',
+        data
+    })
+}

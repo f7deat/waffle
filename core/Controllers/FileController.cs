@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
@@ -32,7 +33,7 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
         return Ok(IdentityResult.Success);
     }
 
-    [HttpPost("upload")]
+    [HttpPost("upload"), AllowAnonymous]
     public async Task<IActionResult> UploadAsync([FromForm] IFormFile? file)
     {
         try
@@ -54,11 +55,12 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
                     url = $"https://{Request.Host.Value}/files/{folder}/{file.FileName}"
                 });
             }
-            var url = $"https://dhhp.edu.vn/api/file/upload?apiKey={_options.UploadAPIKey}";
+            var url = $"https://file.dhhp.edu.vn/api/file/upload?apiKey={_options.UploadAPIKey}";
             using var client = new HttpClient();
             var response = await client.PostAsync(url, new MultipartFormDataContent
             {
-                { new StreamContent(file.OpenReadStream()), "file", file.FileName }
+                { new StreamContent(file.OpenReadStream()), "file", file.FileName },
+                { new StringContent("common"), "SiteCode" }
             });
             if (!response.IsSuccessStatusCode) return BadRequest("Upload failed!");
             var fileContent = await JsonSerializer.DeserializeAsync<FileUploadResponse>(await response.Content.ReadAsStreamAsync());

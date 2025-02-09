@@ -1,23 +1,47 @@
 import { CatalogType } from "@/constants";
 import { apiGetCatalogOptions } from "@/services/catalog";
-import { apiAddToCollection, apiListCollectionByCatalog } from "@/services/collection";
-import { PlusOutlined } from "@ant-design/icons";
-import { ActionType, ModalForm, ProFormDigit, ProFormSelect, ProTable } from "@ant-design/pro-components";
-import { useParams } from "@umijs/max";
-import { Button, message } from "antd";
-import { useRef, useState } from "react";
+import { apiAddToCollection, apiListCollectionByCatalog, apiUpdateCatalogCollection } from "@/services/collection";
+import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from "@ant-design/icons";
+import { ActionType, ModalForm, ProFormDigit, ProFormInstance, ProFormSelect, ProFormText, ProTable } from "@ant-design/pro-components";
+import { Link, useParams } from "@umijs/max";
+import { Button, Dropdown, message, Popconfirm } from "antd";
+import { useEffect, useRef, useState } from "react";
 
 const CatalogCollection: React.FC = () => {
 
     const { id } = useParams();
     const [open, setOpen] = useState<boolean>(false);
     const actionRef = useRef<ActionType>();
+    const formRef = useRef<ProFormInstance>();
+    const [collection, setCollection] = useState<any>();
+
+    useEffect(() => {
+        formRef.current?.setFields([
+            {
+                name: 'catalogId',
+                value: collection?.catalogId
+            },
+            {
+                name: 'collectionId',
+                value: collection?.collectionId
+            },
+            {
+                name: 'sortOrder',
+                value: collection?.sortOrder
+            }
+        ])
+    }, [collection]);
 
     const onFinish = async (values: any) => {
-        values.catalogId = id;
-        await apiAddToCollection(values);
+        if (!values.catalogId) {
+            values.catalogId = id;
+            await apiAddToCollection(values);
+        } else {
+            await apiUpdateCatalogCollection(values);
+        }
         message.success('Saved!');
         actionRef.current?.reload();
+        formRef.current?.resetFields();
         setOpen(false);
     }
 
@@ -42,7 +66,14 @@ const CatalogCollection: React.FC = () => {
                     },
                     {
                         title: 'Name',
-                        dataIndex: 'name'
+                        dataIndex: 'name',
+                        render: (dom, entity) => <Link to={`/catalog/center/${entity.collectionId}`}>{dom}</Link>
+                    },
+                    {
+                        title: 'Thứ tự',
+                        dataIndex: 'sortOrder',
+                        valueType: 'digit',
+                        search: false
                     },
                     {
                         title: 'Ngày tạo',
@@ -79,10 +110,39 @@ const CatalogCollection: React.FC = () => {
                             }
                         },
                         width: 80
+                    },
+                    {
+                        title: 'Option',
+                        valueType: 'option',
+                        render: (_, entity) => [
+                            <Dropdown key="more" menu={{
+                                items: [
+                                    {
+                                        key: 'edit',
+                                        label: 'Chỉnh sửa',
+                                        icon: <EditOutlined />
+                                    }
+                                ],
+                                onClick: (info) => {
+                                    setCollection(entity);
+                                    if (info.key === 'edit') {
+                                        setOpen(true);
+                                        return;
+                                    }
+                                }
+                            }}>
+                                <Button type="dashed" icon={<MoreOutlined />} size="small" />
+                            </Dropdown>,
+                            <Popconfirm key="delete" title="Are you sure?">
+                                <Button type="primary" danger size="small" icon={<DeleteOutlined />} />
+                            </Popconfirm>
+                        ],
+                        width: 30
                     }
                 ]}
             />
-            <ModalForm open={open} onOpenChange={setOpen} title="Thêm vào Collection" onFinish={onFinish}>
+            <ModalForm open={open} onOpenChange={setOpen} title="Thêm vào Collection" onFinish={onFinish} formRef={formRef}>
+                <ProFormText name="catalogId" hidden />
                 <ProFormSelect
                     label="Collection" name="collectionId"
                     showSearch
