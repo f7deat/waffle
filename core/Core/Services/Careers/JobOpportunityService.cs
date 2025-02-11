@@ -61,7 +61,8 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
                         CandidateId = a.CandidateId,
                         CandidateName = c.Name,
                         AppliedDate = a.AppliedDate,
-                        Status = a.Status
+                        Status = a.Status,
+                        ResumeFile = a.ResumeFile
                     };
         query = query.OrderByDescending(x => x.AppliedDate);
         return await ListResult<JobApplicationListItem>.Success(query, filterOptions);

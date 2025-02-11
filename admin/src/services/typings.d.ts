@@ -13,7 +13,7 @@ declare namespace API {
     name: string;
     description?: string;
     normalizedName: string;
-    type: number;
+    type: CatalogType;
     viewCount: number;
     thumbnail?: string;
     createdDate: Date;

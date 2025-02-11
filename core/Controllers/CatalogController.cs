@@ -250,4 +250,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
 
     [HttpGet("options")]
     public async Task<IActionResult> GetOptionsAsync([FromQuery] CatalogSelectOptions filterOptions) => Ok(await _catalogService.GetOptionsAsync(filterOptions));
+
+    [HttpGet("list-type")]
+    public async Task<IActionResult> ListTypeAsync() => Ok(new { data = await _catalogService.ListTypeAsync() });
 }

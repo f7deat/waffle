@@ -18,6 +18,7 @@ import { history } from '@umijs/max';
 import { Avatar, Button, Col, message, Popconfirm, Row, Space, Statistic } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import FolderForm from './components/folder-form';
+import { formatFileSize } from './utils';
 
 const FilePage: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -45,12 +46,18 @@ const FilePage: React.FC = () => {
     {
       title: '#',
       valueType: 'indexBorder',
-      width: 40,
+      width: 30,
       align: 'center'
     },
     {
       title: 'Name',
       dataIndex: 'name',
+    },
+    {
+      title: 'Ngày upload',
+      dataIndex: 'uploadDate',
+      valueType: 'fromNow',
+      search: false
     },
     {
       title: 'Type',
@@ -60,8 +67,8 @@ const FilePage: React.FC = () => {
       title: 'Size',
       dataIndex: 'size',
       search: false,
-      render: (dom, entity) => `${(entity.size / 1024).toFixed(2)} KB`,
-      width: 80
+      render: (_, entity) => formatFileSize(entity.size),
+      width: 100
     },
     {
       title: '',

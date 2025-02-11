@@ -1,13 +1,17 @@
 import { CatalogType } from "@/constants";
 import { apiGetCatalogOptions } from "@/services/catalog";
-import { apiAddToCollection, apiListCollectionByCatalog, apiUpdateCatalogCollection } from "@/services/collection";
+import { apiAddToCollection, apiDeleteCatalogFromCollection, apiListCatalogByCollection, apiListCollectionByCatalog, apiUpdateCatalogCollection } from "@/services/collection";
 import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from "@ant-design/icons";
 import { ActionType, ModalForm, ProFormDigit, ProFormInstance, ProFormSelect, ProFormText, ProTable } from "@ant-design/pro-components";
 import { Link, useParams } from "@umijs/max";
 import { Button, Dropdown, message, Popconfirm } from "antd";
 import { useEffect, useRef, useState } from "react";
 
-const CatalogCollection: React.FC = () => {
+type Props = {
+    data?: API.Catalog;
+}
+
+const CatalogCollection: React.FC<Props> = ({ data }) => {
 
     const { id } = useParams();
     const [open, setOpen] = useState<boolean>(false);
@@ -23,7 +27,7 @@ const CatalogCollection: React.FC = () => {
             },
             {
                 name: 'collectionId',
-                value: collection?.collectionId
+                value: data?.type === CatalogType.Collection ? data.id : collection?.collectionId
             },
             {
                 name: 'sortOrder',
@@ -50,10 +54,18 @@ const CatalogCollection: React.FC = () => {
             <ProTable
                 actionRef={actionRef}
                 ghost
-                request={(params) => apiListCollectionByCatalog({
-                    ...params,
-                    catalogId: id
-                })}
+                request={(params) => {
+                    if (data?.type === CatalogType.Collection) {
+                        return apiListCatalogByCollection({
+                            ...params,
+                            collectionId: data?.id
+                        })
+                    }
+                    return apiListCollectionByCatalog({
+                        ...params,
+                        catalogId: id
+                    });
+                }}
                 search={{
                     layout: 'vertical'
                 }}
@@ -133,7 +145,11 @@ const CatalogCollection: React.FC = () => {
                             }}>
                                 <Button type="dashed" icon={<MoreOutlined />} size="small" />
                             </Dropdown>,
-                            <Popconfirm key="delete" title="Are you sure?">
+                            <Popconfirm key="delete" title="Are you sure?" onConfirm={async () => {
+                                await apiDeleteCatalogFromCollection(entity);
+                                message.success('Saved!');
+                                actionRef.current?.reload();
+                            }}>
                                 <Button type="primary" danger size="small" icon={<DeleteOutlined />} />
                             </Popconfirm>
                         ],

@@ -15,4 +15,5 @@ public class JobApplicationListItem : BaseEntity
     public DateTime? DateOfBirth { get; set; }
     public Guid CandidateId { get; set; }
     public JobApplicationStatus Status { get; set; }
+    public string? ResumeFile { get; set; }
 }

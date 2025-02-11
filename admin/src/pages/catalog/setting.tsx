@@ -2,7 +2,6 @@ import { saveCatalog } from '@/services/catalog';
 import { FolderOutlined, UploadOutlined } from '@ant-design/icons';
 import {
   ProForm,
-  ProFormCheckbox,
   ProFormInstance,
   ProFormSelect,
   ProFormText,
@@ -100,10 +99,10 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
           }
         ]} />
         <Row gutter={16}>
-          <Col span={12}>
+          <Col span={8}>
             <FormCatalogType name="type" label="Type" />
           </Col>
-          <Col span={12}>
+          <Col span={8}>
             <ProFormSelect
               rules={[
                 {
@@ -113,19 +112,30 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
               options={getAllLocales().map(value => ({ label: value, value: value }))}
               name="locale" label="Locale" />
           </Col>
+          <Col md={8} xs={12}>
+            <ProFormSelect name="active" label="Active" rules={[
+              {
+                required: true
+              }
+            ]} options={[
+              {
+                label: 'Active',
+                value: true as any
+              },
+              {
+                label: 'Draft',
+                value: false as any
+              }
+            ]} />
+          </Col>
         </Row>
         <FormCatalogList name="parentId" label="Parent" type={catalog?.type} />
-        <Row gutter={16}>
-          <Col span={16}>
-            <ProFormText name="thumbnail" label="Thumbnail" addonAfter={<Space>
-              <Button icon={<UploadOutlined />} onClick={() => setUpload(true)}>Upload</Button>
-              <Button icon={<FolderOutlined />} type='dashed' onClick={() => setOpen(true)}>File explorer</Button>
-            </Space>} />
-          </Col>
-          <Col span={8}>
-            <ProFormCheckbox name="active" label="Active" />
-          </Col>
-        </Row>
+        <ProFormText name="thumbnail" label="Thumbnail" fieldProps={{
+          addonAfter: <Space>
+            <Button type='text' size='small' icon={<UploadOutlined />} onClick={() => setUpload(true)}>Upload</Button>
+            <Button type='text' size='small' icon={<FolderOutlined />} onClick={() => setOpen(true)}>File explorer</Button>
+          </Space>
+        }} />
       </ProForm>
       <FileExplorer open={open} onOpenChange={setOpen} onSelect={onSelect} />
       <WfUpload open={upload} onCancel={setUpload} onFinish={() => { }} />

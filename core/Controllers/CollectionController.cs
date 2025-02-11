@@ -34,5 +34,8 @@ public class CollectionController(ICollectionService _collectionService) : BaseC
     public async Task<IActionResult> ListByCatalogAsync([FromQuery] ListCatalogCollectionFilterOptions filterOptions) => Ok(await _collectionService.ListByCatalogAsync(filterOptions));
 
     [HttpGet("list-catalog")]
-    public async Task<IActionResult> GetListCatalogAsync([FromQuery] ListCatalogCollectionFilterOptions filterOptions) => Ok(await _collectionService.GetListCatalogAsync(filterOptions));
+    public async Task<IActionResult> GetListCatalogAsync([FromQuery] ListCatalogByCollectionFilterOptions filterOptions) => Ok(await _collectionService.ListCatalogByCollectionAsync(filterOptions));
+
+    [HttpPost("delete-catalog")]
+    public async Task<IActionResult> DeleteCatalogAsync([FromBody] Collection args) => Ok(await _collectionService.DeleteCatalogAsync(args));
 }

@@ -45,12 +45,12 @@ public class CollectionRepository(ApplicationDbContext context) : EfRepository<C
         return await ListResult<CatalogListItem>.Success(query, filterOptions);
     }
 
-    public async Task<ListResult<CatalogListItem>?> GetListCatalogAsync(ListCatalogCollectionFilterOptions filterOptions)
+    public async Task<ListResult<CollectionListItem>?> GetListCatalogAsync(ListCatalogByCollectionFilterOptions filterOptions)
     {
         var query = from a in _context.Collections
                     join b in _context.Catalogs on a.CatalogId equals b.Id
-                    where b.Active && a.CollectionId == filterOptions.CatalogId && b.Locale == filterOptions.Locale
-                    select new CatalogListItem
+                    where b.Active && a.CollectionId == filterOptions.CollectionId && b.Locale == filterOptions.Locale
+                    select new CollectionListItem
                     {
                         Id = b.Id,
                         Name = b.Name,
@@ -60,9 +60,13 @@ public class CollectionRepository(ApplicationDbContext context) : EfRepository<C
                         Description = b.Description,
                         ViewCount = b.ViewCount,
                         Thumbnail = b.Thumbnail,
-                        Type = b.Type
+                        Type = b.Type,
+                        Active = b.Active,
+                        SortOrder = a.SortOrder,
+                        CatalogId = a.CatalogId,
+                        CollectionId = a.CollectionId
                     };
-        return await ListResult<CatalogListItem>.Success(query, filterOptions);
+        return await ListResult<CollectionListItem>.Success(query, filterOptions);
     }
 
     public async Task<bool> HasCatalogAsync(Guid collectionId) => await _context.Collections.AnyAsync(x => x.CollectionId == collectionId);

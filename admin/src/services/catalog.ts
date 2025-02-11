@@ -79,8 +79,12 @@ export async function updateThumbnail(data: API.Catalog) {
   });
 }
 
-export async function apiGetCatalogTypes(params: any) {
+export async function apiGetCatalogTypes(params?: any) {
   return request(`catalog/types`, { params });
+}
+
+export async function apiListCatalogType() {
+  return request(`catalog/list-type`);
 }
 
 export async function listTagById(id: string | undefined) {

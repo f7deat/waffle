@@ -7,6 +7,8 @@ import {
     FileImageTwoTone,
     FileTextTwoTone,
     HomeOutlined,
+    MoreOutlined,
+    SelectOutlined,
     UploadOutlined,
 } from '@ant-design/icons';
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
@@ -14,15 +16,14 @@ import { FormattedMessage, history } from '@umijs/max';
 import {
     Breadcrumb,
     Button,
-    Col,
     Dropdown,
     Modal,
     Popconfirm,
-    Row,
     Space
 } from 'antd';
 import { useRef, useState } from 'react';
 import WfUpload from './upload';
+import { formatFileSize } from '@/pages/files/utils';
 
 type ExplorerProps = {
     open: boolean;
@@ -57,7 +58,9 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
     const columns: ProColumns<API.FileContent>[] = [
         {
             title: '#',
-            valueType: 'indexBorder'
+            valueType: 'indexBorder',
+            width: 30,
+            align: 'center'
         },
         {
             title: 'Name',
@@ -65,8 +68,9 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
         },
         {
             title: 'Date modified',
-            dataIndex: 'modifiedDate',
-            search: false
+            dataIndex: 'uploadDate',
+            search: false,
+            valueType: 'fromNow'
         },
         {
             title: 'Type',
@@ -75,12 +79,14 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
         {
             title: 'Size',
             dataIndex: 'size',
-            search: false
+            search: false,
+            render: (_, entity) => formatFileSize(entity.size),
+            width: 100
         },
         {
             title: 'Action',
             valueType: 'option',
-            render: (_, row) => (
+            render: (_, row) => [
                 <Dropdown
                     menu={{
                         items: [
@@ -98,6 +104,11 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
                                 ),
                             },
                             {
+                                key: 'select',
+                                label: 'Select',
+                                icon: <SelectOutlined />
+                            },
+                            {
                                 key: 2,
                                 label: (
                                     <Popconfirm title="Are you sure?">
@@ -110,36 +121,43 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
                                 danger: true,
                             },
                         ],
+                        onClick: (info) => {
+                            if (info.key === 'select') {
+                                props.onSelect?.(row);
+                                return;
+                            }
+                        }
                     }}
                 >
-                    <Button icon={<BarsOutlined />} type="link" size="small" />
+                    <Button icon={<MoreOutlined />} type="dashed" size="small" />
                 </Dropdown>
-            ),
+            ],
+            width: 60
         }
     ]
 
     return (
         <Modal
-            title="File Explorer"
+            title={<div className='mb-4'>File Explorer</div>}
+            styles={{
+                body: {
+                    padding: 0
+                }
+            }}
             open={props.open}
             onCancel={() => props.onOpenChange()}
             centered
             width={1100}
             footer={false}
         >
-            <div className='flex items-center justify-between'>
-                <Breadcrumb>
-                    <Breadcrumb.Item href="">
-                        <HomeOutlined />
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item href="">Home</Breadcrumb.Item>
-                </Breadcrumb>
-                <div>
-                    <Button icon={<UploadOutlined />} type='primary' onClick={() => setOpen(true)}>Upload</Button>
-                </div>
-            </div>
-            <Row gutter={16}>
-                <Col md={4}>
+            <Breadcrumb className='p-1 bg-slate-100 px-2 border'>
+                <Breadcrumb.Item href="">
+                    <HomeOutlined />
+                </Breadcrumb.Item>
+                <Breadcrumb.Item href="">Home</Breadcrumb.Item>
+            </Breadcrumb>
+            <div className='flex border-b border-r border-l'>
+                <div className='w-40 border-r'>
                     {
                         categories.map(category => (
                             <div key={category.key} className='hover-light'>
@@ -147,14 +165,15 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
                             </div>
                         ))
                     }
-                </Col>
-                <Col md={20}>
+                </div>
+                <div className='flex-1 p-4'>
                     <ProTable<API.FileContent>
+                        headerTitle={<Button icon={<UploadOutlined />} type='primary' onClick={() => setOpen(true)}>Upload</Button>}
                         rowSelection={{}}
                         size='small'
                         columns={columns}
                         search={{
-                            layout: 'vertical'
+                            filterType: 'light'
                         }}
                         request={(params) =>
                             listFile(
@@ -170,8 +189,8 @@ const FileExplorer: React.FC<ExplorerProps> = (props) => {
                         actionRef={actionRef}
                         ghost
                     />
-                </Col>
-            </Row>
+                </div>
+            </div>
             <WfUpload open={open} onCancel={() => setOpen(false)} onFinish={() => {
                 actionRef.current?.reload();
                 setOpen(false);

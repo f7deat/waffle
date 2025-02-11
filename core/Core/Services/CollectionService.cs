@@ -1,7 +1,8 @@
-﻿using System.IO;
+﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Filters.Catalogs.Collections;
@@ -11,7 +12,7 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services;
 
-public class CollectionService(ICollectionRepository _collectionRepository, ICatalogService _catalogService) : ICollectionService
+public class CollectionService(ICollectionRepository _collectionRepository, ICatalogService _catalogService, ApplicationDbContext _context) : ICollectionService
 {
     public async Task<DefResult> AddAsync(Collection args)
     {
@@ -41,6 +42,15 @@ public class CollectionService(ICollectionRepository _collectionRepository, ICat
         return DefResult.Success;
     }
 
+    public async Task<DefResult> DeleteCatalogAsync(Collection args)
+    {
+        var catalog = await _context.Collections.FirstOrDefaultAsync(x => x.CatalogId == args.CatalogId && x.CollectionId == args.CollectionId);
+        if (catalog is null) return DefResult.Failed("Catalog not found!");
+        _context.Collections.Remove(catalog);
+        await _context.SaveChangesAsync();
+        return DefResult.Success;
+    }
+
     public Task<Catalog?> FindByCatalogAsync(Guid catalogId) => _collectionRepository.FindByCatalogAsync(catalogId);
 
     public async Task<ListResult<CatalogListItem>> GetListCatalogAsync(ListCatalogCollectionFilterOptions filterOptions)
@@ -58,7 +68,7 @@ public class CollectionService(ICollectionRepository _collectionRepository, ICat
 
     public Task<ListResult<object>> ListByCatalogAsync(ListCatalogCollectionFilterOptions filterOptions) => _collectionRepository.ListByCatalogAsync(filterOptions);
 
-    public Task<ListResult<CatalogListItem>?> ListCatalogByCollectionAsync(ListCatalogCollectionFilterOptions filterOptions) => _collectionRepository.GetListCatalogAsync(filterOptions);
+    public Task<ListResult<CollectionListItem>?> ListCatalogByCollectionAsync(ListCatalogByCollectionFilterOptions filterOptions) => _collectionRepository.GetListCatalogAsync(filterOptions);
 
     public async Task<DefResult> UpdateAsync(Collection args)
     {

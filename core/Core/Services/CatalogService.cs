@@ -16,6 +16,7 @@ using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
 using Waffle.Models.Filters.Catalogs;
+using Waffle.Models.List;
 using Waffle.Models.Result;
 using Waffle.Models.ViewModels;
 
@@ -622,5 +623,28 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             label = x.Name,
             value = x.Id
         }).ToListAsync();
+    }
+
+    public async Task<object?> ListTypeAsync()
+    {
+        var returnValue = new List<CatalogTypeListItem>();
+        var types = EnumHelper.EnumToList<CatalogType>();
+
+        var catalogs = await _context.Catalogs.GroupBy(x => x.Type).Select(x => new
+        {
+            x.Key,
+            Count = x.Count()
+        }).ToListAsync();
+
+        foreach (var type in types)
+        {
+            returnValue.Add(new CatalogTypeListItem
+            {
+                CatalogType = type,
+                Name = await _localizationService.GetAsync(type.ToString()),
+                CatalogCount = catalogs.FirstOrDefault(x => x.Key == type)?.Count
+            });
+        }
+        return returnValue;
     }
 }

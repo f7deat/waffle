@@ -1,9 +1,8 @@
 import FormCatalogList from "@/components/form/catalog-list";
 import FormCatalogType from "@/components/form/catalog-type";
-import { CatalogType } from "@/constants";
 import { addCatalog, deleteCatalog, listCatalog } from "@/services/catalog";
 import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from "@ant-design/icons";
-import { ActionType, ModalForm, ProFormSelect, ProFormText, ProFormTextArea, ProList } from "@ant-design/pro-components";
+import { ActionType, ModalForm, ProFormText, ProFormTextArea, ProList } from "@ant-design/pro-components";
 import { FormattedMessage, useParams, history, useIntl } from "@umijs/max";
 import { Button, Col, Popconfirm, Row, message } from "antd";
 import { useEffect, useRef, useState } from "react";

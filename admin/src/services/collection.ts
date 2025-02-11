@@ -21,3 +21,10 @@ export async function apiUpdateCatalogCollection(data: any) {
         data
     })
 }
+
+export async function apiDeleteCatalogFromCollection(data: any) {
+    return request(`collection/delete-catalog`, {
+        method: 'POST',
+        data
+    })
+}

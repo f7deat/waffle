@@ -105,13 +105,11 @@ const CatalogCenter: React.FC = () => {
                   key: 'childen',
                   children: <ChildCatalog parent={catalog} />
                 },
-                ...(catalog?.type !== CatalogType.Collection ? [
-                  {
-                    label: 'Collection',
-                    key: 'collection',
-                    children: <CatalogCollection />
-                  }
-                ] : [])
+                {
+                  label: 'Collection',
+                  key: 'collection',
+                  children: <CatalogCollection data={catalog} />
+                }
               ],
               onChange: onTabChange,
             }}
