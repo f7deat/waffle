@@ -5,8 +5,8 @@ import {
   ProColumns,
   ProTable,
 } from '@ant-design/pro-components';
-import { history, useIntl } from '@umijs/max';
-import { Button, Col, message, Row } from 'antd';
+import { history } from '@umijs/max';
+import { Button} from 'antd';
 
 const SettingPage: React.FC = () => {
 

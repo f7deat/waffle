@@ -1,4 +1,4 @@
-import { getSetting, saveSetting } from '@/services/setting';
+import { saveSetting } from '@/services/setting';
 import {
   PageContainer,
   ProCard,
@@ -11,64 +11,61 @@ import { Button, Col, Row, Space, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import Blogger from './blogger';
+import { SettingProps } from '../typings';
 
-const GoogleApp: React.FC = () => {
+const GoogleSetting: React.FC<SettingProps> = ({ data }) => {
   const { id } = useParams();
   const formRef = useRef<ProFormInstance>();
   const [bloggers, setBloggers] = useState<any>([]);
 
   useEffect(() => {
-    getSetting(id).then((response) => {
-      if (!response) {
-        return;
-      }
       formRef.current?.setFields([
         {
           name: 'bloggerApiKey',
-          value: response.bloggerApiKey,
+          value: data?.bloggerApiKey,
         },
         {
           name: 'clientId',
-          value: response.clientId,
+          value: data?.clientId,
         },
         {
           name: 'firebaseApiKey',
-          value: response.firebase?.apiKey
+          value: data?.firebase?.apiKey
         },
         {
           name: 'authDomain',
-          value: response.firebase?.authDomain
+          value: data?.firebase?.authDomain
         },
         {
           name: 'databaseURL',
-          value: response.firebase?.databaseURL
+          value: data?.firebase?.databaseURL
         },
         {
           name: 'storageBucket',
-          value: response.firebase?.storageBucket
+          value: data?.firebase?.storageBucket
         },
         {
           name: 'messagingSenderId',
-          value: response.firebase?.messagingSenderId
+          value: data?.firebase?.messagingSenderId
         },
         {
           name: 'appId',
-          value: response.firebase?.appId
+          value: data?.firebase?.appId
         },
         {
           name: 'measurementId',
-          value: response.firebase?.measurementId
+          value: data?.firebase?.measurementId
         },
         {
           name: 'gTagId',
-          value: response.gTagId
+          value: data?.gTagId
         }
       ]);
-      if (response.bloggers) {
-        setBloggers(response.bloggers);
+      if (data?.bloggers) {
+        setBloggers(data.bloggers);
       }
-    });
-  }, [id]);
+
+  }, [data]);
 
   const onFinish = async (values: any) => {
     values.bloggers = bloggers;
@@ -79,7 +76,6 @@ const GoogleApp: React.FC = () => {
   };
 
   return (
-    <PageContainer extra={<Button icon={<ArrowLeftOutlined />} onClick={() => history.back()}><span><FormattedMessage id='general.back' /></span></Button>}>
       <ProForm formRef={formRef} onFinish={onFinish}>
         <Row gutter={16}>
           <Col span={6}>
@@ -112,8 +108,7 @@ const GoogleApp: React.FC = () => {
           </Col>
         </Row>
       </ProForm>
-    </PageContainer>
   );
 };
 
-export default GoogleApp;
+export default GoogleSetting;

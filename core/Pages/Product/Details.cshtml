@@ -160,4 +160,27 @@
     <script>
         Product.init();
     </script>
+    <script type="application/ld+json">
+        {
+          "@@context": "https://schema.org/",
+          "@@type": "Product",
+              "name": "@Html.Raw(Model.PageData.Name)",
+          "image": [
+            "@Model.PageData.Thumbnail"
+          ],
+              "description": "@Html.Raw(Model.PageData.Description)",
+          "aggregateRating": {
+            "@@type": "AggregateRating",
+            "ratingValue": 5.0,
+            "reviewCount": 1
+          },
+          "offers": {
+            "@@type": "AggregateOffer",
+            "offerCount": 5,
+            "lowPrice": @(Model.Product?.SalePrice ?? 0),
+            "highPrice": @(Model.Product?.Price ?? 0),
+            "priceCurrency": "VND"
+          }
+        }
+    </script>
 }

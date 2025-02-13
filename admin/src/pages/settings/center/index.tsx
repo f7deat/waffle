@@ -5,6 +5,7 @@ import { Button, Empty, message } from "antd";
 import Footer from "../footer";
 import { LeftOutlined } from "@ant-design/icons";
 import EmailSetting from "../components/email";
+import GoogleSetting from "../google";
 
 const SettingCenterPage: React.FC = () => {
 
@@ -26,6 +27,9 @@ const SettingCenterPage: React.FC = () => {
         }
         if (data.normalizedName === 'EmailSetting') {
             return <EmailSetting data={data.data} onFinish={onFinish} />
+        }
+        if (data.normalizedName === 'Google') {
+            return <GoogleSetting data={data.data} onFinish={onFinish} />
         }
         return <Empty />
     }
