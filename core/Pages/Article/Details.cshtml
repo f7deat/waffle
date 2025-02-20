@@ -84,3 +84,22 @@
         @await Component.InvokeAsync(ComponentName.Related)
     </div>
 </main>
+<script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "NewsArticle",
+      "headline": "@Model.PageData.Name",
+      "image": [
+        "@Model.PageData.Thumbnail"
+       ],
+      "datePublished": "@Model.PageData.CreatedDate",
+      "dateModified": "@Model.PageData.ModifiedDate",
+      "author": [
+            {
+                "@@type": "Person",
+                "name": "@Model.AuthorName",
+                "url": "@($"https://{Request.Host.Value}/user/{Model.PageData.CreatedBy}")"
+            }
+        ]
+    }
+</script>

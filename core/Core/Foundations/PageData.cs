@@ -16,6 +16,8 @@ public class PageData : BaseEntity
     public DateTime ModifiedDate { get; set; }
     public string Url { get; set; } = default!;
     public string? SettingString { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public Guid? CreatedBy { get; set; }
 
     public CatalogSetting Setting
     {

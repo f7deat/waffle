@@ -69,29 +69,19 @@ public class SettingService : ISettingService
         }
     }
 
-    public async Task<T?> GetAsync<T>(string normalizedName)
+    public async Task<T?> GetAsync<T>(string normalizedName, string locale = "vi-VN")
     {
         if (string.IsNullOrEmpty(normalizedName)) throw new ArgumentNullException(nameof(normalizedName));
 
-        var cacheKey = $"{nameof(AppSetting)}-{normalizedName}";
-
-        if (!_memoryCache.TryGetValue($"{cacheKey}", out T? cacheValue))
+        var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.ToLower().Equals(normalizedName));
+        if (setting is null)
         {
-            var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.ToLower().Equals(normalizedName));
-            if (setting is null)
-            {
-                setting = new AppSetting { Name = normalizedName, NormalizedName = normalizedName };
-                await _settingRepository.AddAsync(setting);
-            }
-            if (string.IsNullOrEmpty(setting.Value)) return default;
-
-            cacheValue = JsonSerializer.Deserialize<T>(setting.Value);
-
-            var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(1));
-            _memoryCache.Set(cacheKey, cacheValue, cacheEntryOptions);
+            setting = new AppSetting { Name = normalizedName, NormalizedName = normalizedName };
+            await _settingRepository.AddAsync(setting);
         }
+        if (string.IsNullOrEmpty(setting.Value)) return default;
 
-        return cacheValue;
+        return JsonSerializer.Deserialize<T>(setting.Value);
     }
 
     private void RemoveCache(string normalizedName)

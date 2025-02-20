@@ -25,6 +25,7 @@ public class DetailsModel(ICatalogService catalogService, ApplicationDbContext _
     public LandingPageLinkList ShopeeProducts = new();
 
     public bool IsAuthenticated = false;
+    public string AuthorName = "Đinh Công Tân";
 
     public async Task<IActionResult> OnGetAsync()
     {

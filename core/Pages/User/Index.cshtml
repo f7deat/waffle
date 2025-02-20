@@ -1,8 +1,10 @@
 ﻿@page "/user/{id}"
+@using Waffle.Core.Helpers
 @using Waffle.Extensions;
 @model Waffle.Pages.User.IndexModel
 @{
     ViewData["Title"] = Model.ApplicationUser.UserName;
+    var avatar = $"https://www.gravatar.com/avatar/{EncryptHelper.MD5Create(Model.ApplicationUser.Email)}?s=520";
 }
 
 <main class="container">
@@ -42,3 +44,19 @@
         </div>
     </div>
 </main>
+
+<script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "ProfilePage",
+      "dateCreated": "@Model.ApplicationUser.CreatedDate",
+      "mainEntity": {
+        "@@type": "Person",
+        "name": "@Model.ApplicationUser.Name",
+        "alternateName": "@Model.ApplicationUser.UserName",
+        "identifier": "@Model.ApplicationUser.Id",
+        "description": "Defender of Truth",
+        "image": "@avatar"
+      }
+    }
+</script>

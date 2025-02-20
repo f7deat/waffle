@@ -544,7 +544,9 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             ViewCount = catalog.ViewCount,
             Id = catalog.Id,
             ModifiedDate = catalog.ModifiedDate,
-            ParentId = catalog.ParentId
+            ParentId = catalog.ParentId,
+            CreatedDate = catalog.CreatedDate,
+            CreatedBy = catalog.CreatedBy
         };
     }
 

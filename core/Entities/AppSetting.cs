@@ -16,5 +16,7 @@ namespace Waffle.Entities
         public string? Description { get; set; }
         [JsonPropertyName("value")]
         public string? Value { get; set; }
+        [JsonPropertyName("locale")]
+        public string Locale { get; set; } = "vi-VN";
     }
 }
