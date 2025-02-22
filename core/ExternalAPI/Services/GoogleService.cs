@@ -8,19 +8,8 @@ using Waffle.ExternalAPI.Models.GoogleAggregate;
 
 namespace Waffle.ExternalAPI.Services;
 
-public class GoogleService : IGoogleService
+public class GoogleService(HttpClient _http, IRouteDataService _routeDataService, ILogService _logService) : IGoogleService
 {
-    private readonly HttpClient _http;
-    private readonly ILogger<GoogleService> _logger;
-    private readonly IRouteDataService _routeDataService;
-
-    public GoogleService(HttpClient httpClient, ILogger<GoogleService> logger, IRouteDataService routeDataService)
-    {
-        _http = httpClient;
-        _logger = logger;
-        _routeDataService = routeDataService;
-    }
-
     public async Task<Trend?> GetDailyTrendingAsync()
     {
         try
@@ -32,7 +21,7 @@ public class GoogleService : IGoogleService
         }
         catch (Exception ex)
         {
-            _logger.LogError("{Message}", ex.Message);
+            await _logService.ExceptionAsync(ex);
             return default;
         }
     }
@@ -66,7 +55,7 @@ public class GoogleService : IGoogleService
         }
         catch (Exception ex)
         {
-            _logger.LogError("{Message}", ex.Message);
+            await _logService.ExceptionAsync(ex);
             return default;
         }
     }
