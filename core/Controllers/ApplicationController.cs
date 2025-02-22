@@ -8,9 +8,5 @@ namespace Waffle.Controllers;
 public class ApplicationController(IWikiService _wikiService) : BaseController
 {
     [HttpGet("wiki/{id}"), AllowAnonymous]
-    public async Task<IActionResult> IndexAsync([FromRoute] string id, [FromQuery] string locale)
-    {
-        var wiki = await _wikiService.ParseAsync(id, locale);
-        return Ok(wiki);
-    }
+    public async Task<IActionResult> IndexAsync([FromRoute] string id, [FromQuery] string locale) => Ok(await _wikiService.ParseDynamicAsync(id, locale));
 }
