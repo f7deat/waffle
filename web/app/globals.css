@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-image: url('https://pbs.twimg.com/media/GkdgRj0XIAAKNSr?format=jpg&name=4096x4096');
+  background-size: cover;
+  background-position: center center;
+}
+
 input {
   outline: none;
 }

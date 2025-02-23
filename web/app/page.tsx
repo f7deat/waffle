@@ -9,6 +9,7 @@ export default function Home() {
       <Shortcut title="Wikipedia" href="/wiki" icon={<WikipediaIcon />} />
       <Shortcut title="Pokemon" href="/pokemon" icon={<CircleExclamationIcon />} />
       <Shortcut title="Shopee" href="/shopee" icon={<ShopeeIcon />} />
+      <Shortcut title="Klook" href="/klook" icon={<CircleExclamationIcon />} />
     </main>
   );
 }

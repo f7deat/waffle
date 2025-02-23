@@ -1,20 +1,18 @@
+import PageContainer from "@/components/layout/page-container";
 import { apiPokemonList } from "@/service/apps/pokemon";
-import { Pagination } from "antd";
 
 const Page: React.FC = async () => {
 
     const data = await apiPokemonList({ limit: 10, offset: 0 });
 
     return (
-        <div className="container mx-auto p-4">
-            <h1>Pokemon</h1>
+        <PageContainer title="Pokemon">
             {
                 data.data.results.map((pokemon: { name: string }) => (
-                    <div key={pokemon.name}>{pokemon.name}</div>
+                    <div key={pokemon.name} className="border-b border-dashed px-2 py-1">{pokemon.name}</div>
                 ))
             }
-            <Pagination total={data.data.count} />
-        </div>
+        </PageContainer>
     );
 }
 export default Page;
