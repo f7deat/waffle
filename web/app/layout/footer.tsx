@@ -1,3 +1,6 @@
+import { Tooltip } from "antd";
+import Link from "next/link";
+
 const Footer: React.FC = () => {
     return (
         <footer>
@@ -13,6 +16,11 @@ const Footer: React.FC = () => {
                 <div className="flex-1 bg-slate-900">
 
                 </div>
+                <Tooltip title="DefZone.Net" placement="rightTop">
+                    <Link href="/" className="border-l border-slate-800 bg-slate-900 w-1">
+                        <span hidden>Home</span>
+                    </Link>
+                </Tooltip>
             </div>
         </footer>
     )
