@@ -11,3 +11,25 @@ body {
 input {
   outline: none;
 }
+
+.prose ul, .prose ol {
+  padding-left: 1rem;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.prose th {
+  text-align: left;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  background-color: #f7fafc;
+}
+
+.prose td {
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+}

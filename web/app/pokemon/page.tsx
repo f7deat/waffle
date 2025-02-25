@@ -9,7 +9,7 @@ const Page: React.FC = async () => {
         <PageContainer title="Pokemon">
             {
                 data.data.results.map((pokemon: { name: string }) => (
-                    <div key={pokemon.name} className="border-b border-dashed px-2 py-1">{pokemon.name}</div>
+                    <div key={pokemon.name} className="border-b border-dashed px-2 py-1 hover:bg-slate-100">{pokemon.name}</div>
                 ))
             }
         </PageContainer>

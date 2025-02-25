@@ -1,6 +1,6 @@
+import PageContainer from "@/components/layout/page-container";
 import { apiWikiParse } from "@/service/apps/wiki"
 import { Metadata } from "next";
-import Link from "next/link";
 
 type Params = Promise<{ slug: string }>
 
@@ -20,16 +20,11 @@ const Page: React.FC<{ params: Params }> = async ({ params }) => {
     const response = await apiWikiParse(slug);
 
     return (
-        <>
-            <main>
-                <div className="flex justify-end">
-                    <Link href="/wiki" className="font-medium hover:text-blue-500 px-4 py-1">Wiki</Link>
-                </div>
-                <div className="container mx-auto p-4">
-                    <div dangerouslySetInnerHTML={{ __html: response.parse.text["*"] }} />
-                </div>
-            </main>
-        </>
+        <PageContainer title={response.parse.title} breadcrumbs={[{ label: "Wiki", href: "/wiki" }]}>
+            <div className="prose">
+                <div dangerouslySetInnerHTML={{ __html: response.parse.text["*"] }} />
+            </div>
+        </PageContainer>
     )
 }
 

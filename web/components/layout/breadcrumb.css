@@ -1,0 +1,4 @@
+.breadcrumb li:not(:first-child):before {
+  content: "›";
+  padding: 0 5px;
+}

@@ -1,3 +1,4 @@
+import PageContainer from "@/components/layout/page-container";
 import { apiWikiRandom } from "@/service/apps/wiki";
 import Link from "next/link";
 
@@ -6,11 +7,8 @@ export default async function Page() {
   const response = await apiWikiRandom();
 
   return (
-    <main>
-    <div className="flex justify-end">
-        <Link href="/" className="font-medium hover:text-blue-500 px-4 py-1">Home</Link>
-    </div>
-      <div className="container mx-auto p-4">
+    <PageContainer title="Wiki">
+      <div className="p-4">
         <div>
           Today&apos;s random article:
         </div>
@@ -20,6 +18,6 @@ export default async function Page() {
           </Link>
         </h1>
       </div>
-    </main>
+    </PageContainer>
   );
 }
