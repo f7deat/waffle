@@ -54,4 +54,5 @@ public interface ICatalogService
     Task<object> GetTypeAsync(CatalogType type);
     Task<object?> GetOptionsAsync(CatalogSelectOptions filterOptions);
     Task<object?> ListTypeAsync();
+    Task<object?> GetMetaAsync(string slug);
 }

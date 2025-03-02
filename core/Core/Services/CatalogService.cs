@@ -649,4 +649,14 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         }
         return returnValue;
     }
+
+    public async Task<object?> GetMetaAsync(string slug)
+    {
+        return await _context.Catalogs.Where(x => x.NormalizedName == slug).Select(x => new
+        {
+            x.Name,
+            x.Description,
+            x.Thumbnail
+        }).FirstOrDefaultAsync();
+    }
 }

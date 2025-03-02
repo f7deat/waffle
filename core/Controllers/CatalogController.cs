@@ -56,7 +56,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
         }
     }
 
-    [HttpGet("list")]
+    [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> ListAsync([FromQuery] CatalogFilterOptions filterOptions) => Ok(await _catalogService.ListAsync(filterOptions));
 
     [HttpGet("tree")]
@@ -253,4 +253,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
 
     [HttpGet("list-type")]
     public async Task<IActionResult> ListTypeAsync() => Ok(new { data = await _catalogService.ListTypeAsync() });
+
+    [HttpGet("meta/{slug}")]
+    public async Task<IActionResult> GetMetaAsync([FromRoute] string slug) => Ok(await _catalogService.GetMetaAsync(slug));
 }
