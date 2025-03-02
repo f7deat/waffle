@@ -1,0 +1,20 @@
+.mw-editsection,
+.taxobox-edit-taxonomy,
+.hide-when-compact,
+.mw-file-element {
+    display: none;
+}
+
+a {
+    color: rgb(35, 45, 185);
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 1rem;
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+    font-size: 1.25rem;
+}

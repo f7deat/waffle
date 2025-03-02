@@ -1,6 +1,7 @@
 import PageContainer from "@/components/layout/page-container";
 import { apiWikiParse } from "@/service/apps/wiki"
 import { Metadata } from "next";
+import '../style.css';
 
 type Params = Promise<{ slug: string }>
 
