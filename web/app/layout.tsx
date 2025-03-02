@@ -3,6 +3,8 @@ import "./globals.css";
 import { Inter } from 'next/font/google'
 import Script from "next/script";
 import Footer from "@/components/layout/footer";
+import { ConfigProvider } from "antd";
+import '@ant-design/v5-patch-for-react-19';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,10 +29,23 @@ export default function RootLayout({
         />
       </head>
       <body className="h-screen flex flex-col" style={inter.style}>
-        <div className="flex-1">
-          {children}
-        </div>
-        <Footer />
+        <ConfigProvider
+        theme={{
+          components: {
+            Input: {
+              borderRadius: 0
+            },
+            Button: {
+              borderRadius: 0
+            }
+          }
+        }}
+        >
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
+        </ConfigProvider>
       </body>
     </html>
   );

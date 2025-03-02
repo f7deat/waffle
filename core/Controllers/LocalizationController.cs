@@ -6,14 +6,8 @@ using Waffle.Models;
 
 namespace Waffle.Controllers;
 
-public class LocalizationController : BaseController
+public class LocalizationController(ILocalizationService _localizationService) : BaseController
 {
-    private readonly ILocalizationService _localizationService;
-    public LocalizationController(ILocalizationService localizationService)
-    {
-        _localizationService = localizationService;
-    }
-
     [HttpGet("list")]
     public async Task<IActionResult> GetListAsync([FromQuery] LocalizationFilterOptions filterOptions)
     {

@@ -9,11 +9,11 @@ type Props = {
 const Shortcut: React.FC<Props> = ({ title, href, icon }) => {
     return (
         <Link href={href}>
-            <div className="flex flex-col gap-1 items-center shadow bg-white shadow rounded p-1 w-20">
-                <div className="h-10 w-10 flex items-center justify-center p-1">
+            <div className="flex flex-col gap-1 items-center rounded p-1 w-20 hover:shadow">
+                <div className="h-10 w-10 bg-white flex items-center justify-center p-2 shadow text-slate-900">
                     {icon}
                 </div>
-                <div className="text-center text-xs font-medium hover:text-blue-500 drop-shadow">{title}</div>
+                <div className="text-center text-xs font-medium text-white [text-shadow:_0_4px_4px_rgb(99_102_241_/_0.8)]">{title}</div>
             </div>
         </Link>
     )

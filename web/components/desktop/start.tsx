@@ -1,6 +1,7 @@
 "use client";
 
 import { Drawer } from "antd";
+import Link from "next/link";
 import { useState } from "react";
 
 const Start: React.FC = () => {
@@ -14,7 +15,7 @@ const Start: React.FC = () => {
                     <path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z" />
                 </svg>
             </div>
-            <Drawer open={open} onClose={() => setOpen(false)} placement="left" title="ALL" styles={{
+            <Drawer open={open} onClose={() => setOpen(false)} placement="left" styles={{
                 body: {
                     padding: 0,
                     backgroundColor: "#1a202c"
@@ -26,6 +27,14 @@ const Start: React.FC = () => {
             }}>
                 <div className="flex h-full">
                     <div className="w-10 shadow h-full flex flex-col justify-end">
+                        <Link href="/user/profile" onClick={() => setOpen(false)}>
+                            <div className="h-10 w-10 border-b border-slate-800 bg-slate-900 text-white flex items-center justify-center hover:bg-blue-500 hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                    <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                                </svg>
+                            </div>
+                        </Link>
                         <div className="border-b border-slate-800 h-10 w-10 bg-slate-900 text-white flex items-center justify-center hover:bg-blue-500 hover:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-gear" viewBox="0 0 16 16">
                                 <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
