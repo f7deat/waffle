@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
 import { apiShopeeBaseInfoAndLinks } from "@/service/apps/shopee";
 import Link from "next/link";
@@ -8,12 +9,11 @@ export default async function Page({
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
     const { pageNum = '1' } = await searchParams
-    console.log(pageNum)
 
     const data = await apiShopeeBaseInfoAndLinks({ pageNum: pageNum, pageSize: 12 });
 
     return (
-        <PageContainer title="Shopee">
+        <PageContainer title="Shopee" breadcrumbs={[{ label: "Shopee", href: "/shopee" }]}> 
             <div className="grid grid-cols-2 md:grid-cols-4 2xl:grid-cols-6 gap-4 mb-4">
                 {
                     data.data.data.landingPageLinkList.linkList.map((link: {
@@ -35,20 +35,24 @@ export default async function Page({
                     })
                 }
             </div>
-            <div className="flex justify-center">
-                <span className="mr-2">Trang:</span>
+            <div className="flex justify-center text-sm items-center">
                 <ul className="flex gap-1">
-                    <li className="px-2 border bg-white" hidden={parseInt(pageNum as string) === 1}>
+                    <li className="p-1 border flex items-center" hidden={parseInt(pageNum as string) === 1}>
                         <Link href={`/shopee?pageNum=${parseInt(pageNum as string) - 1}`}>
-                            Previous
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                            </svg>
+
                         </Link>
                     </li>
-                    <li className="px-2 bg-white">
+                    <li className="w-8 h-8 border flex items-center justify-center bg-slate-100">
                         {pageNum}
                     </li>
-                    <li className="px-2 bg-white">
+                    <li className="p-1 bg-white border flex items-center">
                         <Link href={`/shopee?pageNum=${parseInt(pageNum as string) + 1}`}>
-                            Next
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                            </svg>
                         </Link>
                     </li>
                 </ul>

@@ -9,7 +9,7 @@ a {
     color: rgb(35, 45, 185);
 }
 
-ul {
+.wiki-content ul {
     list-style-type: disc;
     margin-left: 1rem;
 }
