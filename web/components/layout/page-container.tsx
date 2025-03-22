@@ -15,7 +15,7 @@ const PageContainer: React.FC<Props> = ({ children, title, breadcrumbs }) => {
             <Breadcrumb items={breadcrumbs} />
             <div className="md:flex h-[calc(100vh-130px)]">
                 <div className="w-40 border-r"></div>
-                <div className="flex-1 p-4 overflow-y-auto overflow-x-hidden">
+                <div className="flex-1 overflow-y-auto overflow-x-hidden">
                     {children}
                 </div>
             </div>

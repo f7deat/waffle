@@ -4,7 +4,7 @@ import Start from "../desktop/start";
 
 const Footer: React.FC = () => {
     return (
-        <footer>
+        <footer className="border-t border-slate-800">
             <div className="flex">
                 <Start />
                 <div className="w-96">
