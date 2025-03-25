@@ -6663,14 +6663,6 @@ li.breadcrumb-wrap {
         background-position: -190px -42px !important
     }
 
-    .back-to-top {
-        right: 80px
-    }
-
-    .site-footer .site-footer-wrap .insta-footer-wrap, .site-footer .site-footer-wrap .footer-widgets-wrap {
-        border-radius: 0
-    }
-
     .float-parallax img {
         display: none
     }
@@ -6696,10 +6688,6 @@ li.breadcrumb-wrap {
 
     .feature-box-rope1 .feature-box-wrapper.feature-box-default:before, .feature-box-rope2 .feature-box-wrapper.feature-box-default:before {
         content: unset
-    }
-
-    .site-footer .site-footer-wrap .insta-footer-wrap, .site-footer .site-footer-wrap .footer-widgets-wrap {
-        border-radius: 0
     }
 }
 
@@ -6990,12 +6978,6 @@ li.breadcrumb-wrap {
         line-height: 130px
     }
 
-    .footer-widgets-wrap aside.footer-widget-2.col-md-3 {
-        flex: 0 0 auto;
-        width: 50%;
-        margin-bottom: 35px
-    }
-
     aside.footer-insta-widget.col-12 h3 {
         max-width: 100%;
         font-size: 35px;
@@ -7268,19 +7250,6 @@ li.breadcrumb-wrap {
         display: none
     }
 
-    .footer-widgets-wrap aside.footer-widget-2.col-md-3 {
-        flex: 0 0 auto;
-        width: 100%;
-        margin-bottom: 0;
-        margin-top: 40px
-    }
-
-        .footer-widgets-wrap aside.footer-widget-2.col-md-3:last-child {
-            flex: 0 0 auto;
-            width: 100%;
-            margin-bottom: 0
-        }
-
     body .insta-footer-wrap {
         padding: 20px;
         margin-left: 0;
@@ -7343,10 +7312,6 @@ li.breadcrumb-wrap {
         padding: 30px
     }
 
-    .footer-widgets-wrap .garland_mailchimp_widget {
-        margin-top: 40px
-    }
-
     .insta-footer-wrap .footer-insta-widget .widget-content .footer-hero-title {
         font-size: 40px;
         line-height: 50px
@@ -7404,14 +7369,6 @@ li.breadcrumb-wrap {
             .blog-multi-layout-1 .cea-block-secondary .media .post-thumb > a > img {
                 border-radius: 6px 6px 0 0px !important
             }
-
-    body .footer-widgets-wrap {
-        padding: 0 0 50px 0
-    }
-
-    .site-footer .site-footer-wrap .footer-widgets-wrap {
-        padding: 0 15px 50px 15px
-    }
 }
 
 .cea-view-framed {
