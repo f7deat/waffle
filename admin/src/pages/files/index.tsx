@@ -1,11 +1,13 @@
 import WfUpload from '@/components/file-explorer/upload';
-import { countFile, deleteFileContent, listFile, totalFileSize } from '@/services/file-service';
+import { apiMultiUpload, countFile, deleteFileContent, listFile, totalFileSize } from '@/services/file-service';
 import {
   ArrowUpOutlined,
   ClearOutlined,
   DeleteOutlined,
   DownloadOutlined,
   EyeOutlined,
+  FileFilled,
+  FolderFilled,
 } from '@ant-design/icons';
 import {
   ActionType,
@@ -15,7 +17,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Avatar, Button, Col, message, Popconfirm, Row, Space, Statistic } from 'antd';
+import { Avatar, Button, Col, message, Popconfirm, Row, Space, Statistic, UploadFile } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import FolderForm from './components/folder-form';
 import { formatFileSize } from './utils';
@@ -44,24 +46,21 @@ const FilePage: React.FC = () => {
 
   const columns: ProColumns<API.FileListItem>[] = [
     {
-      title: '#',
-      valueType: 'indexBorder',
-      width: 30,
-      align: 'center'
-    },
-    {
       title: 'Name',
       dataIndex: 'name',
+      render: (_, entity) => {
+        if (entity.isFolder) {
+          return <div className='font-medium cursor-pointer'><FolderFilled className='text-orange-500' /> {entity.name}</div>
+        }
+        return <div className='text-slate-800'><FileFilled /> {entity.name}</div>
+      },
     },
     {
       title: 'Ngày upload',
-      dataIndex: 'uploadDate',
+      dataIndex: 'createdDate',
       valueType: 'fromNow',
-      search: false
-    },
-    {
-      title: 'Type',
-      dataIndex: 'type',
+      search: false,
+      width: 160
     },
     {
       title: 'Size',
@@ -110,7 +109,21 @@ const FilePage: React.FC = () => {
         </Button>
       }
     >
-      <WfUpload open={open} onCancel={() => setOpen(false)} onFinish={() => setOpen(true)} />
+      <WfUpload open={open} onCancel={() => setOpen(false)} onFinish={async (files: UploadFile[]) => {
+        const formData = new FormData();
+        console.log(files);
+        files.forEach((file) => {
+          if (file.size && file.size > 10 * 1024 * 1024) { // Example: Limit file size to 10MB
+            message.error(`File ${file.name} exceeds the size limit.`);
+            return;
+          }
+          formData.append('files', file as any);
+        });
+        await apiMultiUpload(formData);
+        message.success('Uploaded!');
+        actionRef.current?.reload();
+        setOpen(false);
+      }} />
       <Row gutter={16}>
         <Col span={18}>
           <ProTable

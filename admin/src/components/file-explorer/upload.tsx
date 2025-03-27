@@ -58,9 +58,9 @@ const WfUpload: React.FC<WfUploadProps> = (props) => {
                         newFileList.splice(index, 1);
                         setFileList(newFileList);
                     }}
-                    beforeUpload={(file) => {
-                        setFileList([...fileList, file]);
-                        return false
+                    beforeUpload={(_, fileList) => {
+                        setFileList(fileList);
+                        return false;
                     }}>
                     <p className="ant-upload-drag-icon">
                         <InboxOutlined />

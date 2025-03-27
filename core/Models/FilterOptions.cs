@@ -24,6 +24,8 @@ public class FileFilterOptions : FilterOptions
 {
     public string? Name { get; set; }
     public string? Type { get; set; }
+    public Guid? ParentId { get; set; }
+    public Guid? FolderId { get; set; }
 }
 
 public class CatalogFilterOptions : FilterOptions

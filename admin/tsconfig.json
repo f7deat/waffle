@@ -2,5 +2,8 @@
   "extends": "./src/.umi/tsconfig.json",
   "compilerOptions": {
     "forceConsistentCasingInFileNames": false
+  },
+  "global": {
+    "page": true
   }
 }

@@ -167,7 +167,8 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
                     Type = file.ContentType,
                     Url = url,
                     UploadBy = User.GetId(),
-                    UploadDate = DateTime.Now
+                    UploadDate = DateTime.Now,
+                    FolderId = args.FolderId
                 });
             }
             await _context.FileContents.AddRangeAsync(fileContents);

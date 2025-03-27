@@ -74,6 +74,7 @@ declare namespace API {
     size: number;
     type: string;
     url: string;
+    isFolder: boolean;
   };
 
   type FileContent = BaseEntity & {
