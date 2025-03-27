@@ -6,6 +6,7 @@ using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
+using Waffle.Core.Services.Files.Args;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Extensions;
@@ -134,25 +135,31 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
     }
 
     [HttpPost("muti-upload")]
-    public async Task<IActionResult> MultiUploadAsync([FromForm] List<IFormFile>? files)
+    public async Task<IActionResult> MultiUploadAsync([FromForm] MutiUploadArgs args)
     {
         try
         {
-            if (files is null || files.Count == 0) return BadRequest("Files not found!");
+            if (args.Files is null || args.Files.Count == 0) return BadRequest("Files not found!");
             var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
-            var folder = Guid.NewGuid().ToString();
-            var folderPath = Path.Combine(uploadPath, folder);
-            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+            var url = $"https://{Request.Host.Value}/files/";
+            if (args.FolderId != null)
+            {
+                var folder = await _context.Folders.FindAsync(args.FolderId);
+                if (folder is null) return BadRequest("Folder not found!");
+                uploadPath = Path.Combine(uploadPath, folder.Name);
+                url += folder.Name + "/";
+            }
+            if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
             var fileContents = new List<FileContent>();
 
-            foreach (var file in files)
+            foreach (var file in args.Files)
             {
-                var filePath = Path.Combine(uploadPath, folder, file.FileName);
+                var filePath = Path.Combine(uploadPath, file.FileName);
                 using (var stream = System.IO.File.Create(filePath))
                 {
                     await file.CopyToAsync(stream);
                 }
-                var url = $"https://{Request.Host.Value}/files/{folder}/{file.FileName}";
+                url += file.FileName;
                 fileContents.Add(new FileContent
                 {
                     Name = file.FileName,
