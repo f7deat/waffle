@@ -23,22 +23,24 @@ const Page: React.FC = async () => {
                 <tbody>
                     {articles.map((article: ArticleListItem) => (
                         <tr key={article.id} className="hover:bg-blue-50">
-                            <td className="px-2 py-1">{article.name}</td>
+                            <td className="px-2 py-1">
+                                <Link href={`/article/${article.normalizedName}`} className="text-blue-500 hover:underline">{article.name}</Link>
+                            </td>
                             <td className="px-2 py-1">{article.viewCount}</td>
                             <td className="px-2 py-1">{dayjs(article.modifiedDate).format('DD/MM/YYYY HH:mm')}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-                    <div className="text-sm flex">
-                        <Link href="/article" className="w-6 h-6 flex items-center justify-center bg-gray-100"><DoubleLeftOutlined /></Link>
-                        <Link href="/article?current=1" className="w-6 h-6 flex items-center justify-center bg-gray-100">
-                            <LeftOutlined />
-                        </Link>
-                        <Link href="/article?current=1" className="w-6 h-6 flex items-center justify-center bg-gray-100">
-                            1
-                        </Link>
-                    </div>
+            <div className="text-sm flex">
+                <Link href="/article" className="w-6 h-6 flex items-center justify-center bg-gray-100"><DoubleLeftOutlined /></Link>
+                <Link href="/article?current=1" className="w-6 h-6 flex items-center justify-center bg-gray-100">
+                    <LeftOutlined />
+                </Link>
+                <Link href="/article?current=1" className="w-6 h-6 flex items-center justify-center bg-gray-100">
+                    1
+                </Link>
+            </div>
         </PageContainer>
     );
 };

@@ -3,4 +3,6 @@ export interface ArticleListItem {
     name: string;
     viewCount: number;
     modifiedDate: string;
+    url: string;
+    normalizedName: string;
 }

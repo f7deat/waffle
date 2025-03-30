@@ -254,6 +254,6 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     [HttpGet("list-type")]
     public async Task<IActionResult> ListTypeAsync() => Ok(new { data = await _catalogService.ListTypeAsync() });
 
-    [HttpGet("meta/{slug}")]
+    [HttpGet("meta/{slug}"), AllowAnonymous]
     public async Task<IActionResult> GetMetaAsync([FromRoute] string slug) => Ok(await _catalogService.GetMetaAsync(slug));
 }
