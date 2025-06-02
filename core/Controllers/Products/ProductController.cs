@@ -8,8 +8,9 @@ using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
+using Waffle.Models.Result;
 
-namespace Waffle.Controllers;
+namespace Waffle.Controllers.Products;
 
 public class ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, ILogService appLogService) : BaseController
 {
@@ -22,7 +23,7 @@ public class ProductController(ICatalogService catalogService, IWorkService work
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _productService.GetByCatalogIdAsync(id));
 
     [HttpGet("count")]
-    public async Task<IActionResult> CountAsync() => Ok(await _productService.CountAsync());
+    public async Task<IActionResult> CountAsync() => Ok(DefResult.Ok(await _productService.CountAsync()));
 
     [HttpPost("save")]
     public async Task<IActionResult> SaveAsync([FromBody] Product args)
@@ -79,4 +80,7 @@ public class ProductController(ICatalogService catalogService, IWorkService work
 
     [HttpPost("go-to-product-link/{id}"), AllowAnonymous]
     public async Task<IActionResult> GoToProductLinkAsync([FromRoute] Guid id) => Ok(await _productService.GoToProductLinkAsync(id));
+
+    [HttpGet("options")]
+    public async Task<IActionResult> OptionsAsync() => Ok(await _productService.OptionsAsync());
 }

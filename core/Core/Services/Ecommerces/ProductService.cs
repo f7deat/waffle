@@ -77,6 +77,8 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
 
     public Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds, string locale) => _productRepository.ListSpotlightAsync(pageSize, tagIds, locale);
 
+    public Task<object> OptionsAsync() => _productRepository.OptionsAsync();
+
     public async Task<IdentityResult> SaveAsync(Product args)
     {
         var product = await _productRepository.FindByCatalogAsync(args.CatalogId);

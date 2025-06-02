@@ -118,6 +118,20 @@ public class ProductRepository(ApplicationDbContext context) : EfRepository<Prod
         return await query.Distinct().OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }
 
+    public async Task<object> OptionsAsync()
+    {
+        var query = from c in _context.Catalogs
+                    join p in _context.Products on c.Id equals p.CatalogId
+                    where c.Type == CatalogType.Product && c.Active
+                    orderby c.NormalizedName ascending
+                    select new
+                    {
+                        label = c.Name,
+                        value = c.Id
+                    };
+        return await query.ToListAsync();
+    }
+
     public async Task<IdentityResult> SaveBrandAsync(SaveBrandModel args)
     {
         var product = await _context.Catalogs.FindAsync(args.ProductId);

@@ -14,7 +14,9 @@ public class DefResult
     public bool Succeeded { get; protected set; }
     private static readonly DefResult _success = new() { Succeeded = true };
     private static string _message = string.Empty;
+    private object? _data;
     public string Message => _message;
+    public object? Data => _data;
 
     /// <summary>
     /// Returns an <see cref="DefResult"/> indicating a successful identity operation.
@@ -22,6 +24,11 @@ public class DefResult
     /// <returns>An <see cref="DefResult"/> indicating a successful operation.</returns>
     public static DefResult Success => _success;
 
+    /// <summary>
+    /// Creates an <see cref="DefResult"/> indicating a failed identity operation, with a list of <paramref name="message"/> if applicable.
+    /// </summary>
+    /// <param name="message">An optional array of <see cref="Message"/>s which caused the operation to fail.</param>
+    /// <returns>An <see cref="DefResult"/> indicating a failed identity operation, with a list of <paramref name="message"/> if applicable.</returns>
     public static DefResult Failed(string message)
     {
         var result = new DefResult { Succeeded = false };
@@ -31,4 +38,6 @@ public class DefResult
         }
         return result;
     }
+
+    public static DefResult Ok(object? data) => new() { _data = data, Succeeded = true };
 }

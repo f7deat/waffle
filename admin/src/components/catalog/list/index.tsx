@@ -10,7 +10,7 @@ import {
   ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
-import { useIntl } from '@umijs/max';
+import { Link, useIntl } from '@umijs/max';
 import { history } from '@umijs/max';
 import { message, Button, Popconfirm, Tooltip, Dropdown } from 'antd';
 import React, { useRef, useState } from 'react';
@@ -61,6 +61,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
     {
       title: 'Name',
       dataIndex: 'name',
+      render: (text, record) => <Link to={`/catalog/center/${record.id}`}>{text}</Link>,
     },
     {
       title: 'Created date',

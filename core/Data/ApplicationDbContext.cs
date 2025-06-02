@@ -5,6 +5,7 @@ using Waffle.Entities.Affliates;
 using Waffle.Entities.Careers;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
+using Waffle.Entities.Notifications;
 
 namespace Waffle.Data;
 
@@ -32,6 +33,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     #region Job
     public DbSet<JobOpportunity> JobOpportunities { get; set; } = default!;
     public DbSet<JobApplication> JobApplications { get; set; } = default!;
+    #endregion
+
+    #region Notifications
+    public DbSet<Notification> Notifications { get; set; } = default!;
+    public DbSet<NotificationUser> NotificationUsers { get; set; } = default!;
     #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)

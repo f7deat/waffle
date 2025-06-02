@@ -11,7 +11,7 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
 
-namespace Waffle.Controllers;
+namespace Waffle.Controllers.Products;
 
 public class OrderController(IOrderService _orderService, ITelegramService _telegramService, UserManager<ApplicationUser> _userManager) : BaseController
 {

@@ -16,3 +16,7 @@ export async function apiDeleteProductLink(id: string) {
         method: 'POST'
     })
 }
+
+export async function apiProductCount() {
+    return request(`product/count`);
+}

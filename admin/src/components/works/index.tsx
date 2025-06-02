@@ -20,7 +20,7 @@ import {
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
-import { Button, Dropdown, MenuProps, message, Popconfirm } from 'antd';
+import { Button, Dropdown, MenuProps, message, Popconfirm, Switch } from 'antd';
 import { FormattedMessage, history } from '@umijs/max';
 import { useParams } from '@umijs/max';
 import { useEffect, useState } from 'react';
@@ -84,10 +84,6 @@ const WorkContentComponent: React.FC = () => {
 
   const items: MenuProps['items'] = [
     {
-      key: '1',
-      label: 'Show / Hide'
-    },
-    {
       key: 'edit',
       label: 'Edit',
       icon: <EditOutlined />
@@ -111,12 +107,19 @@ const WorkContentComponent: React.FC = () => {
     history.push(`/works/${entity.id}`);
   }
 
+  const onActive = async (entity: API.WorkItem) => {
+    await activeWork(entity.id);
+    message.success('Actived!');
+    fetchData();
+  }
+
   const columns: ProColumns<API.WorkItem>[] = [
     {
       title: '#',
       dataIndex: 'sort',
       className: 'drag-visible',
-      width: 50
+      width: 30,
+      align: 'center'
     },
     {
       title: 'Name',
@@ -125,17 +128,9 @@ const WorkContentComponent: React.FC = () => {
     {
       title: 'Status',
       dataIndex: 'active',
-      valueEnum: {
-        false: {
-          text: 'Draft',
-          status: 'Default',
-        },
-        true: {
-          text: 'Active',
-          status: 'Processing',
-        },
-      },
-      width: 100
+      width: 60,
+      render: (_, entity) => <Switch size='small' checked={entity.active} onChange={() => onActive(entity)} />,
+      align: 'center'
     },
     {
       title: 'Action',

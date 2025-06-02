@@ -16,7 +16,7 @@ import { useEffect, useRef, useState } from 'react';
 const Order: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
-  const [totalOrder, setTotalOrder] = useState<number>(0); 
+  const [totalOrder, setTotalOrder] = useState<number>(0);
 
   useEffect(() => {
     apiTotalOrder().then(response => setTotalOrder(response));
@@ -87,7 +87,7 @@ const Order: React.FC = () => {
       title: '',
       valueType: 'option',
       render: (dom, entity) => [
-        <Button key="view" icon={<EyeOutlined />} type="primary" onClick={() => history.push(`/ecommerce/order/center/${entity.id}`)} />,
+        <Button key="view" icon={<EyeOutlined />} type="primary" onClick={() => history.push(`/e-commerce/order/center/${entity.id}`)} />,
         <Popconfirm key="delete" title="Are you sure?" onConfirm={() => handleRemove(entity.id)}>
           <Button
             icon={<DeleteOutlined />}
@@ -138,7 +138,7 @@ const Order: React.FC = () => {
     <PageContainer
       extra={
         <Space>
-          <Link to="/ecommerce/order/new">
+          <Link to="/e-commerce/order/new">
           <Button type="primary" icon={<PlusOutlined />}>New order</Button>
           </Link>
           <Button icon={<ExportOutlined />}>Export</Button>
