@@ -77,6 +77,8 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
 
     public Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds, string locale) => _productRepository.ListSpotlightAsync(pageSize, tagIds, locale);
 
+    public Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions) => _productRepository.NewArrivalsAsync(filterOptions);
+
     public Task<object> OptionsAsync() => _productRepository.OptionsAsync();
 
     public async Task<IdentityResult> SaveAsync(Product args)

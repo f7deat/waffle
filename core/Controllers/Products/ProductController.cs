@@ -83,4 +83,7 @@ public class ProductController(ICatalogService catalogService, IWorkService work
 
     [HttpGet("options")]
     public async Task<IActionResult> OptionsAsync() => Ok(await _productService.OptionsAsync());
+
+    [HttpGet("new-arrivals"), AllowAnonymous]
+    public async Task<IActionResult> NewArrivalsAsync([FromQuery] ProductFilterOptions filterOptions) => Ok(await _productService.NewArrivalsAsync(filterOptions));
 }

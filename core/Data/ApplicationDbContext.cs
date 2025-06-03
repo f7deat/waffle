@@ -50,6 +50,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         builder.Entity<WorkItem>().HasKey(k => new { k.WorkId, k.CatalogId });
         builder.Entity<Collection>().HasKey(k => new { k.CatalogId, k.CollectionId });
+        builder.Entity<NotificationUser>().HasKey(k => new { k.NotificationId, k.UserId });
 
         base.OnModelCreating(builder);
     }

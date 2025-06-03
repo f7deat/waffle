@@ -17,4 +17,5 @@ public interface IProductRepository : IAsyncRepository<Product>
     Task<IdentityResult> SaveBrandAsync(SaveBrandModel args);
     Task<bool> AnyAsync(Guid productId);
     Task<object> OptionsAsync();
+    Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions);
 }

@@ -118,6 +118,27 @@ public class ProductRepository(ApplicationDbContext context) : EfRepository<Prod
         return await query.Distinct().OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
     }
 
+    public async Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions)
+    {
+        var query = from a in _context.Products
+                    join b in _context.Catalogs on a.CatalogId equals b.Id
+                    where b.Type == CatalogType.Product && b.Active && b.Locale == filterOptions.Locale
+                    orderby b.ModifiedDate descending
+                    select new
+                    {
+                        id = b.Id,
+                        name = b.Name,
+                        normalizedName = b.NormalizedName,
+                        thumbnail = b.Thumbnail,
+                        price = a.Price,
+                        salePrice = a.SalePrice,
+                        description = b.Description,
+                        type = b.Type,
+                        modifiedDate = b.ModifiedDate
+                    };
+        return await ListResult<object>.Success(query, filterOptions);
+    }
+
     public async Task<object> OptionsAsync()
     {
         var query = from c in _context.Catalogs
