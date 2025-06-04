@@ -74,5 +74,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGenerator, LeafGenerator>();
         services.AddScoped<IGenerator, ComponentGenerator>();
         services.AddScoped<IGenerator, RoleGenerator>();
+
+        #region Notification
+        services.AddScoped<INotificationService, NotificationService>();
+        #endregion
     }
 }

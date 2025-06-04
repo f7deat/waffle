@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces.IService;
 
 namespace Waffle.Controllers;
 
-public class NotificationController : BaseController
+public class NotificationController(INotificationService _notificationService) : BaseController
 {
-    public IActionResult Index()
-    {
-        return View();
-    }
+    [HttpPost("mark-as-read/{id}")]
+    public async Task<IActionResult> MarkAsReadAsync([FromRoute] Guid id) => Ok(await _notificationService.MarkAsReadAsync(id));
 }
