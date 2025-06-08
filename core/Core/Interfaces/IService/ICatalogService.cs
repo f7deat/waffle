@@ -7,13 +7,12 @@ using Waffle.Models.Components;
 using Waffle.Models.Filters.Catalogs;
 using Waffle.Models.Result;
 using Waffle.Models.ViewModels;
-using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Interfaces.IService;
 
 public interface ICatalogService
 {
-    Task<IdentityResult> ActiveAsync(Guid id);
+    Task<DefResult> ActiveAsync(Guid id);
     Task<IdentityResult> AddAsync(Catalog catalog);
     Task<Catalog> EnsureDataAsync(string name, string locale, CatalogType type = CatalogType.Leaf);
     Task<Catalog?> GetByNameAsync(string? normalizedName);

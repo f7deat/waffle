@@ -4,7 +4,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Models;
 
-namespace Waffle.Controllers;
+namespace Waffle.Controllers.Users;
 
 public class CityController(ICityService _cityService) : BaseController
 {

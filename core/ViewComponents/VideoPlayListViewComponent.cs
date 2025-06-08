@@ -31,9 +31,9 @@ public class VideoPlayListViewComponent : BaseViewComponent<VideoPlayList>
             Name = x.Name,
             Thumbnail = x.Thumbnail,
             Url = $"/video/{x.NormalizedName}",
-            Date = x.ModifiedDate.ToString("f"),
+            Date = x.CreatedDate.ToString("f"),
             ViewCount = x.ViewCount.ToNumber(),
-        }).ToList() ?? new();
+        }).ToList() ?? [];
         return work;
     }
 }

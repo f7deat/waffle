@@ -12,6 +12,7 @@ using Waffle.Entities;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
+using Waffle.Models.Args;
 
 namespace Waffle.Controllers;
 
@@ -35,32 +36,32 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
     }
 
     [HttpPost("upload"), AllowAnonymous]
-    public async Task<IActionResult> UploadAsync([FromForm] IFormFile? file)
+    public async Task<IActionResult> UploadAsync([FromForm] UploadArgs args)
     {
         try
         {
-            if (file is null) return BadRequest("File not found!");
+            if (args.File is null) return BadRequest("File not found!");
             if (string.IsNullOrEmpty(_options.UploadAPIKey))
             {
                 var folder = Guid.NewGuid().ToString();
                 var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files", folder);
                 if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
-                using (var stream = System.IO.File.Create(Path.Combine(uploadPath, file.FileName)))
+                using (var stream = System.IO.File.Create(Path.Combine(uploadPath, args.File.FileName)))
                 {
-                    await file.CopyToAsync(stream);
+                    await args.File.CopyToAsync(stream);
                 }
 
                 return Ok(new
                 {
                     success = 1,
-                    url = $"https://{Request.Host.Value}/files/{folder}/{file.FileName}"
+                    url = $"https://{Request.Host.Value}/files/{folder}/{args.File.FileName}"
                 });
             }
             var url = $"https://file.dhhp.edu.vn/api/file/upload?apiKey={_options.UploadAPIKey}";
             using var client = new HttpClient();
             var response = await client.PostAsync(url, new MultipartFormDataContent
             {
-                { new StreamContent(file.OpenReadStream()), "file", file.FileName },
+                { new StreamContent(args.File.OpenReadStream()), "file", args.File.FileName },
                 { new StringContent("common"), "SiteCode" }
             });
             if (!response.IsSuccessStatusCode) return BadRequest("Upload failed!");
@@ -69,10 +70,10 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
             await _context.FileContents.AddAsync(new FileContent
             {
                 Id = fileContent.Id,
-                Name = file.FileName,
-                Size = file.Length,
+                Name = args.File.FileName,
+                Size = args.File.Length,
                 Url = fileContent.Url,
-                Type = file.ContentType,
+                Type = args.File.ContentType,
                 UploadDate = DateTime.Now,
                 UploadBy = User.GetId()
             });
@@ -91,32 +92,32 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
     }
 
     [HttpPost("3rd-upload")]
-    public async Task<IActionResult> ThirdPartyUploadAsync([FromForm] IFormFile? file)
+    public async Task<IActionResult> ThirdPartyUploadAsync([FromForm] UploadArgs args)
     {
         try
         {
-            if (file is null) return BadRequest("File not found!");
+            if (args.File is null) return BadRequest("File not found!");
             if (string.IsNullOrEmpty(_options.UploadAPIKey))
             {
                 var folder = Guid.NewGuid().ToString();
                 var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files", folder);
                 if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
-                using (var stream = System.IO.File.Create(Path.Combine(uploadPath, file.FileName)))
+                using (var stream = System.IO.File.Create(Path.Combine(uploadPath, args.File.FileName)))
                 {
-                    await file.CopyToAsync(stream);
+                    await args.File.CopyToAsync(stream);
                 }
 
                 return Ok(new
                 {
                     success = 1,
-                    url = $"https://{Request.Host.Value}/files/{folder}/{file.FileName}"
+                    url = $"https://{Request.Host.Value}/files/{folder}/{args.File.FileName}"
                 });
             }
             var url = $"https://dhhp.edu.vn/api/file/upload?apiKey={_options.UploadAPIKey}";
             using var client = new HttpClient();
             var response = await client.PostAsync(url, new MultipartFormDataContent
             {
-                { new StreamContent(file.OpenReadStream()), "file", file.FileName }
+                { new StreamContent(args.File.OpenReadStream()), "file", args.File.FileName }
             });
             if (!response.IsSuccessStatusCode) return BadRequest("Upload failed!");
             var fileContent = await JsonSerializer.DeserializeAsync<FileUploadResponse>(await response.Content.ReadAsStreamAsync());

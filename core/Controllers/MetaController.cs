@@ -47,7 +47,7 @@ public class MetaController : BaseController
             foreach (var item in catalogs)
             {
                 var url = item.GetUrl();
-                AddUrl(writer, $"https://{Request.Host.Value}{url}", item.ModifiedDate.ToString("yyyy-MM-dd"), "0.8");
+                AddUrl(writer, $"https://{Request.Host.Value}{url}", item.CreatedDate.ToString("yyyy-MM-dd"), "0.8");
             }
 
             // End the document

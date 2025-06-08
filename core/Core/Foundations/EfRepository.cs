@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore;
-using Waffle.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Waffle.Core.Interfaces;
+using Waffle.Data;
+using Waffle.Entities;
 
 namespace Waffle.Core.Foundations;
 
@@ -10,14 +11,10 @@ namespace Waffle.Core.Foundations;
 /// https://blogs.msdn.microsoft.com/pfxteam/2012/04/13/should-i-expose-synchronous-wrappers-for-asynchronous-methods/
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class EfRepository<T> : IAsyncRepository<T> where T : class
+public class EfRepository<T>(ApplicationDbContext context, IHCAService hcaService) : IAsyncRepository<T> where T : class
 {
-    protected readonly ApplicationDbContext _context;
-
-    public EfRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    protected readonly ApplicationDbContext _context = context;
+    protected readonly IHCAService _hcaService = hcaService;
 
     public async Task<T?> FindAsync(object id) => await _context.Set<T>().FindAsync(id);
 
@@ -26,6 +23,11 @@ public class EfRepository<T> : IAsyncRepository<T> where T : class
 
     public async Task<T> AddAsync(T entity)
     {
+        if (entity is IAuditEntity auditEntity)
+        {
+            auditEntity.CreatedDate = DateTime.UtcNow;
+            auditEntity.CreatedBy = _hcaService.GetUserId();
+        }
         await _context.Set<T>().AddAsync(entity);
         await _context.SaveChangesAsync();
         return entity;
@@ -33,6 +35,11 @@ public class EfRepository<T> : IAsyncRepository<T> where T : class
 
     public async Task<T> UpdateAsync(T entity)
     {
+        if (entity is IAuditEntity auditEntity)
+        {
+            auditEntity.ModifiedDate = DateTime.UtcNow;
+            auditEntity.ModifiedBy = _hcaService.GetUserId();
+        }
         _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
         return entity;

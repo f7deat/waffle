@@ -1,5 +1,6 @@
 ﻿@using Waffle.Extensions;
 @using Waffle.Models.Components
+@using Waffle.Models.Components.ECommerces
 @model ProductPicker
 
 @if (Model.Products != null)
@@ -12,12 +13,12 @@
                 {
                     <div class="col-6 col-md-3">
                         <div class="card-image bg-dark">
-                            <a href="@item.GetUrl()">
+                            <a href="@item.Url">
                                 <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
                             </a>
                         </div>
                         <div class="py-2">
-                            <a href="@item.GetUrl()" class="line-clampin">
+                            <a href="@item.Url" class="line-clampin">
                                 @item.Name
                             </a>
                         </div>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Services.Files.Models;
 using Waffle.Data;
@@ -8,7 +9,7 @@ using Waffle.Models;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class FileRepository(ApplicationDbContext context) : EfRepository<FileContent>(context), IFileRepository
+public class FileRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<FileContent>(context, hcaService), IFileRepository
 {
     public async Task<decimal> GetTotalSizeAsync() => await _context.FileContents.SumAsync(x => x.Size);
 

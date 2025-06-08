@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities.Ecommerces;
@@ -7,7 +8,7 @@ using Waffle.Models;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class OrderRepository(ApplicationDbContext context) : EfRepository<Order>(context), IOrderRepository
+public class OrderRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Order>(context, hcaService), IOrderRepository
 {
     public async Task<int> CountAsync(OrderStatus? status)
     {

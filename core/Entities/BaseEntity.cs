@@ -54,7 +54,7 @@ public interface IAuditEntity<T> : IBaseEntity<T>
 public class AuditEntity : BaseEntity, IAuditEntity
 {
     [JsonPropertyName("createdBy")]
-    public Guid CreatedBy { get; set; } = default!;
+    public Guid CreatedBy { get; set; }
     [JsonPropertyName("createdDate")]
     public DateTime CreatedDate { get; set; }
     [JsonPropertyName("modifiedBy")]
@@ -66,7 +66,7 @@ public class AuditEntity : BaseEntity, IAuditEntity
 public class AuditEntity<T> : BaseEntity<T>, IAuditEntity<T>
 {
     [JsonPropertyName("createdBy")]
-    public Guid CreatedBy { get; set; } = default!;
+    public Guid CreatedBy { get; set; }
     [JsonPropertyName("createdDate")]
     public DateTime CreatedDate { get; set; }
     [JsonPropertyName("modifiedBy")]

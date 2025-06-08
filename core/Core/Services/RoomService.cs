@@ -78,6 +78,7 @@ public class RoomService(ApplicationDbContext _context) : IRoomService
     public async Task<IEnumerable<CatalogListItem>> GetCitiesAsync(Guid countryId)
     {
         var query = from a in _context.Catalogs
+                    join b in _context.Users on a.CreatedBy equals b.Id
                     where a.ParentId == countryId && a.Active && a.Type == CatalogType.City
                     select new CatalogListItem
                     {
@@ -88,7 +89,7 @@ public class RoomService(ApplicationDbContext _context) : IRoomService
                         Url = a.Url,
                         CreatedDate = a.CreatedDate,
                         ViewCount = a.ViewCount,
-                        CreatedBy = a.CreatedBy,
+                        CreatedBy = b.UserName,
                         Locale = a.Locale,
                         Type = a.Type,
                         NormalizedName = a.NormalizedName,

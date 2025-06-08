@@ -2,9 +2,9 @@
 using System.Text.Json.Serialization;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
-using Waffle.Entities;
+using Waffle.Models.ViewModels;
 
-namespace Waffle.Models.Components;
+namespace Waffle.Models.Components.ECommerces;
 
 [Display(Name = "Product Picker", Prompt = "product-picker", GroupName = GroupName.ECommerce)]
 public class ProductPicker : AbstractComponent
@@ -15,5 +15,5 @@ public class ProductPicker : AbstractComponent
     public List<Guid> TagIds { get; set; } = new();
 
     [JsonIgnore]
-    public IEnumerable<Catalog>? Products { get; set; }
+    public IEnumerable<CatalogListItem>? Products { get; set; }
 }

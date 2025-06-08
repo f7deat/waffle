@@ -21,6 +21,23 @@ export default [
     component: './Home',
   },
   {
+    icon: 'FormOutlined',
+    name: 'article',
+    path: '/article',
+    routes: [
+      {
+        path: '/article',
+        redirect: '/article/list',
+      },
+      {
+        name: 'list',
+        path: '/article/list',
+        component: './article',
+        hideInMenu: true
+      }
+    ]
+  },
+  {
     name: 'component',
     path: '/works',
     hideInMenu: true,
@@ -225,23 +242,28 @@ export default [
   },
   {
     icon: 'ShoppingCartOutlined',
-    name: 'ecommerce',
-    path: '/e-commerce',
+    name: 'shop',
+    path: '/shop',
     routes: [
       {
+        name: 'product',
+        path: '/shop/product',
+        component: './shop/product'
+      },
+      {
         name: 'order',
-        path: '/e-commerce/order',
+        path: '/shop/order',
         component: './order'
       },
       {
         name: 'newOrder',
-        path: '/e-commerce/order/new',
+        path: '/shop/order/new',
         component: './order/new',
         hideInMenu: true
       },
       {
         name: 'order',
-        path: '/e-commerce/order/center/:id',
+        path: '/shop/order/center/:id',
         component: './order/center',
         hideInMenu: true
       }

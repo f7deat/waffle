@@ -26,21 +26,13 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
 {
     private readonly SettingOptions _options = options.Value;
 
-    public async Task<IdentityResult> ActiveAsync(Guid id)
+    public async Task<DefResult> ActiveAsync(Guid id)
     {
         var catalog = await _catalogRepository.FindAsync(id);
-        if (catalog is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = "error.catalogNotFound",
-                Description = "Catalog not found!"
-            });
-        }
+        if (catalog is null) return DefResult.Failed("Catalog not found!");
         catalog.Active = !catalog.Active;
-        catalog.ModifiedDate = DateTime.Now;
-        await _catalogRepository.SaveChangesAsync();
-        return IdentityResult.Success;
+        await _catalogRepository.UpdateAsync(catalog);
+        return DefResult.Success;
     }
 
     private async Task<bool> IsExistAsync(string normalizedName) => await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(normalizedName));
@@ -517,7 +509,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             SettingString = pageData.Setting,
             Locale = pageData.Locale,
             ViewCount = pageData.ViewCount,
-            ModifiedDate = pageData.ModifiedDate,
+            ModifiedDate = pageData.ModifiedDate ?? pageData.CreatedDate,
             Id = pageData.Id
         };
     }
@@ -543,7 +535,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             Thumbnail = catalog.Thumbnail,
             ViewCount = catalog.ViewCount,
             Id = catalog.Id,
-            ModifiedDate = catalog.ModifiedDate,
+            ModifiedDate = catalog.ModifiedDate ?? catalog.CreatedDate,
             ParentId = catalog.ParentId,
             CreatedDate = catalog.CreatedDate,
             CreatedBy = catalog.CreatedBy

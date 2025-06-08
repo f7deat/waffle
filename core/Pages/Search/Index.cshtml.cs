@@ -51,11 +51,11 @@ public class IndexModel(ICatalogService catalogService, ILocalizationService _lo
         PlaylistItems = videos.Data?.Select(x => new PlaylistItem
         {
             Name = x.Name,
-            Date = x.ModifiedDate.ToString("D"),
+            Date = x.CreatedDate.ToString("D"),
             Thumbnail = x.Thumbnail,
             ViewCount = x.ViewCount.ToNumber(),
-            Url = x.GetUrl()
-        }).ToList() ?? new();
+            Url = x.Url
+        }).ToList() ?? [];
 
         var products = await _productService.ListAsync(new ProductFilterOptions
         {

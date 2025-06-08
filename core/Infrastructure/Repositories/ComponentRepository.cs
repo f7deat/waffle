@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
@@ -8,7 +9,7 @@ using Waffle.Models.Results.Components;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class ComponentRepository(ApplicationDbContext context) : EfRepository<Component>(context), IComponentRepository
+public class ComponentRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Component>(context, hcaService), IComponentRepository
 {
     public async Task<Component?> FindByNameAsync(string normalizedName)
     {

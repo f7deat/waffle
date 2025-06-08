@@ -7,6 +7,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Models;
+using Waffle.Models.Args;
 
 namespace Waffle.Controllers;
 
@@ -68,11 +69,11 @@ public class BackupController(IWebHostEnvironment _webHostEnvironment, Applicati
     });
 
     [HttpPost("import")]
-    public async Task<IActionResult> ImportAsync([FromForm] IFormFile file)
+    public async Task<IActionResult> ImportAsync([FromForm] ImportArgs args)
     {
-        if (file is null) return BadRequest("File not found!");
-        var fileStream = file.OpenReadStream();
-        if (!file.FileName.EndsWith(".zip")) return BadRequest("File extension not support!");
+        if (args.File is null) return BadRequest("File not found!");
+        var fileStream = args.File.OpenReadStream();
+        if (!args.File.FileName.EndsWith(".zip")) return BadRequest("File extension not support!");
 
         using var archive = new ZipArchive(fileStream);
         foreach (ZipArchiveEntry entry in archive.Entries)

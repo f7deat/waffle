@@ -7,6 +7,7 @@ using Waffle.Core.Options;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
+using Waffle.Models.ViewModels;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Pages.Wiki;
@@ -27,7 +28,7 @@ public class DetailModel : PageModel
     }
 
     public Parse Data = new();
-    public IEnumerable<Catalog> Articles = new List<Catalog>();
+    public IEnumerable<CatalogListItem> Articles = new List<CatalogListItem>();
     public IEnumerable<ProductListItem> Products = new List<ProductListItem>();
 
     public async Task<IActionResult> OnGetAsync(string id, string lang = "vi")

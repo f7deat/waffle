@@ -5,8 +5,6 @@ namespace Waffle.Controllers;
 
 public class ArticleController : BaseController
 {
-    public IActionResult Index()
-    {
-        return View();
-    }
+    [HttpPost("save")]
+    public IActionResult SaveAsync() => Ok();
 }

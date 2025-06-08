@@ -76,7 +76,7 @@ const Login: React.FC = () => {
             autoLogin: true,
           }}
           actions={[
-            <div key={2} className="mb-4 text-center">
+            <div key={2} className="mb-4 text-center text-gray-̀500 text-sm">
               <FormattedHTMLMessage id="pages.login.orLoginWith" />
             </div>,
             <div className="text-center" key={3}>
@@ -117,11 +117,11 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined />,
                 }}
-                placeholder="Email"
+                placeholder="Tài khoản"
                 rules={[
                   {
                     required: true,
-                    message: 'Please input email!',
+                    message: 'Please input username!'
                   },
                 ]}
               />
@@ -195,20 +195,12 @@ const Login: React.FC = () => {
               />
             </>
           )}
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
+          <div className='mb-6'>
             <ProFormCheckbox noStyle name="autoLogin">
               <FormattedHTMLMessage id="pages.login.rememberMe" />
             </ProFormCheckbox>
-            <div
-              style={{
-                float: 'right',
-              }}
-            >
-              <button type='button' onClick={() => setOpen(true)}>
+            <div className='float-right'>
+              <button type='button' onClick={() => setOpen(true)} className='hover:text-blue-500'>
                 <FormattedHTMLMessage id="pages.login.forgotPassword" />
               </button>
             </div>

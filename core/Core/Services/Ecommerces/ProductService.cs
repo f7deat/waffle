@@ -37,6 +37,8 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
 
     public Task<int> CountAsync() => _catalogRepository.CountAsync(CatalogType.Product);
 
+    public Task<DefResult> CreateAsync(Catalog args, string locale) => _productRepository.CreateAsync(args, locale);
+
     public async Task<DefResult> DeleteLinkAsync(Guid id)
     {
         var productLink = await _productLinkRepository.FindAsync(id);

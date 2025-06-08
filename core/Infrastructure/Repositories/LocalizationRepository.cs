@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Options;
 using Waffle.Data;
@@ -11,7 +12,7 @@ namespace Waffle.Infrastructure.Repositories;
 public class LocalizationRepository : EfRepository<Localization>, ILocalizationRepository
 {
     private readonly SettingOptions Options;
-    public LocalizationRepository(ApplicationDbContext context, IOptions<SettingOptions> options) : base(context)
+    public LocalizationRepository(ApplicationDbContext context, IOptions<SettingOptions> options, IHCAService hcaService) : base(context, hcaService)
     {
         Options = options.Value;
     }

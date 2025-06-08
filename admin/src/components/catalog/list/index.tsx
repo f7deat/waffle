@@ -1,6 +1,6 @@
 import { CatalogType } from '@/constants';
 import { activeCatalog, addCatalog, apiCatalogDeleteRange, deleteCatalog, listCatalog } from '@/services/catalog';
-import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined, SendOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   ActionType,
   ModalForm,
@@ -11,8 +11,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Link, useIntl } from '@umijs/max';
-import { history } from '@umijs/max';
-import { message, Button, Popconfirm, Tooltip, Dropdown } from 'antd';
+import { message, Button, Popconfirm, Tooltip, Dropdown, Switch } from 'antd';
 import React, { useRef, useState } from 'react';
 
 type CatalogListProps = {
@@ -37,19 +36,20 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
   };
 
   const onMoreClick = (e: any, entity: any) => {
-    if (e.key === 'edit') {
-      history.push(`/catalog/center/${entity.id}`)
+    if (e.key === 'view') {
       return;
     }
-    if (e.key === 'publish') {
-      activeCatalog(entity.id).then(response => {
-        if (response.succeeded) {
-          message.success(entity.active ? 'Drafted' : 'Published');
-          actionRef.current?.reload();
-        }
-      })
-    }
   }
+
+  const onSwitchChange = async (checked: boolean, id?: string) => {
+    const response = await activeCatalog(id);
+    if (response.succeeded) {
+      message.success(checked ? 'Published' : 'Drafted');
+      actionRef.current?.reload();
+    } else {
+      message.error(response.errors[0].description);
+    }
+  };
 
   const columns: ProColumns<API.Catalog>[] = [
     {
@@ -88,19 +88,16 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
       width: 100
     },
     {
-      title: 'Status',
+      title: 'Active',
       dataIndex: 'active',
+      render: (text, record) => <Switch size='small' checked={record.active} onChange={(checked) => onSwitchChange(checked, record.id)} />,
+      width: 50,
+      align: 'center',
+      valueType: 'select',
       valueEnum: {
-        false: {
-          text: 'Draft',
-          status: 'Default',
-        },
-        true: {
-          text: 'Active',
-          status: 'Processing',
-        },
-      },
-      width: 90
+        true: 'Published',
+        false: 'Drafted',
+      }
     },
     {
       title: 'Option',
@@ -109,14 +106,9 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
         <Dropdown key="more" menu={{
           items: [
             {
-              key: 'edit',
-              label: 'Chỉnh sửa',
-              icon: <EditOutlined />
-            },
-            {
-              key: 'publish',
-              label: entity.active ? 'Draft' : 'Publish',
-              icon: <SendOutlined />
+              key: 'view',
+              label: 'Xem trước',
+              icon: <EyeOutlined />
             }
           ], onClick: (event) => onMoreClick(event, entity)
         }}>
@@ -182,7 +174,9 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
         toolBarRender={() => [
           <Popconfirm key="delete" title="Xác nhận xóa?" onConfirm={onRemoveRange}>
             <Tooltip title="Xóa">
-              <Button type="text" danger icon={<DeleteOutlined />} />
+              <button type="button" className='ant-pro-table-list-toolbar-setting-item'>
+                <DeleteOutlined />
+              </button>
             </Tooltip>
           </Popconfirm>
         ]}

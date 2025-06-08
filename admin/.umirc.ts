@@ -7,9 +7,9 @@ export default defineConfig({
   antd: {
     theme: {
       token: {
-        fontFamily: `"Inter", sans-serif`
-      }
-    }
+        fontFamily: `"Inter", sans-serif`,
+      },
+    },
   },
   access: {},
   model: {},
@@ -29,12 +29,12 @@ export default defineConfig({
   routes,
   npmClient: "yarn",
   esbuildMinifyIIFE: true,
-  tailwindcss: {},
-  publicPath: '/admin/',
-  headScripts: [
-    { src: "/admin/scripts/loading.js", async: true },
-  ],
+  publicPath: "/admin/",
+  headScripts: [{ src: "/admin/scripts/loading.js", async: true }],
+
   define: {
     API_BASE_URL: API_BASE_URL || "https://defzone.net/api/",
-  }
+  },
+  mako: {},
+  tailwindcss: {},
 });

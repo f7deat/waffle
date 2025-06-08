@@ -5,7 +5,7 @@ using Waffle.Entities.Affliates;
 
 namespace Waffle.Entities;
 
-public class Catalog : BaseEntity
+public class Catalog : AuditEntity
 {
     [JsonPropertyName("parentId")]
     public Guid? ParentId { get; set; }
@@ -18,10 +18,6 @@ public class Catalog : BaseEntity
     [StringLength(200)]
     [JsonPropertyName("normalizedName")]
     public string NormalizedName { get; set; } = default!;
-    [JsonPropertyName("createdDate")]
-    public DateTime CreatedDate { get; set; }
-    [JsonPropertyName("modifiedDate")]
-    public DateTime ModifiedDate { get; set; }
     [JsonPropertyName("type")]
     public CatalogType Type { get; set; }
     [JsonPropertyName("viewCount")]
@@ -30,8 +26,6 @@ public class Catalog : BaseEntity
     public string? Thumbnail { get; set; }
     [JsonPropertyName("active")]
     public bool Active { get; set; }
-    [JsonPropertyName("createdBy")]
-    public Guid? CreatedBy { get; set; }
     [StringLength(10), JsonPropertyName("locale")]
     public string Locale { get; set; } = default!;
     public string? Setting { get; set; }

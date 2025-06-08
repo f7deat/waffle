@@ -2,9 +2,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using Waffle.Core.Constants;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Options;
+using Waffle.Core.Services;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Extensions;
@@ -24,6 +28,7 @@ builder.Services
 
 builder.Services.AddServices();
 builder.Services.AddHttpClients();
+builder.Services.AddTransient<IHCAService, HCAService>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
@@ -63,11 +68,16 @@ builder.Services
 
 builder.Services.AddSession();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.UseMigrationsEndPoint();
 }
 else

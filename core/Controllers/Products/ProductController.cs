@@ -22,6 +22,10 @@ public class ProductController(ICatalogService catalogService, IWorkService work
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _productService.GetByCatalogIdAsync(id));
 
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromBody] Catalog args, [FromQuery] string locale) => Ok(await _productService.CreateAsync(args, locale));
+
+
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync() => Ok(DefResult.Ok(await _productService.CountAsync()));
 

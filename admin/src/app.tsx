@@ -62,12 +62,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
           colorTextMenuItemHover: '#FFFFFF',
           colorTextMenuActive: '#FFFFFF',
           colorBgMenuItemSelected: '#1677ff',
-          colorTextMenuSecondary: '#FFFFFF',
-          colorTextMenuTitle: '#FFFFFF',
+          colorTextMenuTitle: '#FFFFFF'
         }
     },
     footerRender: () => (
-      <DefaultFooter copyright="Produced by Waffle Financial Experience Department" links={[
+      <DefaultFooter copyright="Produced by DefZone Financial Experience Department" links={[
         {
           key: 'github',
           title: <GithubOutlined />,
@@ -107,7 +106,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 };
 
 export const request: RequestConfig = {
-  baseURL: 'https://defzone.net/api/',
+  baseURL: 'https://shinecgialai.com.vn/api/',
   ...errorConfig,
   responseInterceptors: [
     (response: any) => {

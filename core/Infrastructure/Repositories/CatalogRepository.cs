@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
@@ -12,7 +13,7 @@ namespace Waffle.Infrastructure.Repositories;
 
 public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
 {
-    public CatalogRepository(ApplicationDbContext context) : base(context)
+    public CatalogRepository(ApplicationDbContext context, IHCAService hcaService) : base(context, hcaService)
     {
     }
 
@@ -93,6 +94,7 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
     public async Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions)
     {
         var query = from catalog in _context.Catalogs
+                    join user in _context.Users on catalog.CreatedBy equals user.Id
                     select new CatalogListItem
                     {
                         Id = catalog.Id,
@@ -100,7 +102,7 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
                         Active = catalog.Active,
                         Description = catalog.Description,
                         NormalizedName = catalog.NormalizedName,
-                        CreatedBy = catalog.CreatedBy,
+                        CreatedBy = user.UserName ?? string.Empty,
                         CreatedDate = catalog.CreatedDate,
                         Locale = catalog.Locale,
                         ModifiedDate = catalog.ModifiedDate,
@@ -125,7 +127,7 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         }
         if (filterOptions.CreatedBy != null)
         {
-            query = query.Where(x => x.CreatedBy == filterOptions.CreatedBy);
+            query = query.Where(x => x.CreatedBy != null && x.CreatedBy.ToLower().Contains(filterOptions.CreatedBy.ToLower()));
         }
         if (!string.IsNullOrEmpty(filterOptions.Locale))
         {

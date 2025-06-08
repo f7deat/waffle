@@ -30,7 +30,7 @@ public class IndexModel : EntryPageModel
         PlaylistItems = videos.Data?.Select(x => new PlaylistItem
         {
             Name = x.Name,
-            Date = x.ModifiedDate.ToString("D"),
+            Date = x.CreatedDate.ToString("D"),
             Thumbnail = x.Thumbnail,
             ViewCount = x.ViewCount.ToNumber(),
             Url = x.Url

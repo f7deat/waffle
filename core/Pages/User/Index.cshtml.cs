@@ -32,7 +32,7 @@ public class IndexModel : PageModel
         Articles = await _catalogService.ListAsync(new CatalogFilterOptions
         {
             Type = CatalogType.Article,
-            CreatedBy = id
+            CreatedBy = user.UserName
         });
         return Page();
     }

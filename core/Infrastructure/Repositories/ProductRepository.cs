@@ -2,19 +2,41 @@
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Waffle.Core.Foundations;
+using Waffle.Core.Helpers;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
+using Waffle.Models.Result;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class ProductRepository(ApplicationDbContext context) : EfRepository<Product>(context), IProductRepository
+public class ProductRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Product>(context, hcaService), IProductRepository
 {
     public async Task<bool> AnyAsync(Guid productId) => await _context.Products.AnyAsync(x => x.Id == productId);
+
+    public async Task<DefResult> CreateAsync(Catalog args, string locale)
+    {
+        var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
+        if (await _context.Catalogs.AnyAsync(x => x.NormalizedName == normalizedName && x.Type == CatalogType.Product)) return DefResult.Failed("Product with the same name already exists!");
+        args.NormalizedName = normalizedName;
+        args.Type = CatalogType.Product;
+        args.CreatedDate = DateTime.Now;
+        args.CreatedBy = _hcaService.GetUserId();
+        args.Locale = locale;
+        args.Id = Guid.NewGuid();
+        await _context.Catalogs.AddAsync(args);
+        await _context.Products.AddAsync(new Product
+        {
+            CatalogId = args.Id
+        });
+        await _context.SaveChangesAsync();
+        return DefResult.Success;
+    }
 
     public async Task<Product?> FindByCatalogAsync(Guid catalogId) => await _context.Products.FirstOrDefaultAsync(x => x.CatalogId == catalogId);
 
@@ -36,7 +58,7 @@ public class ProductRepository(ApplicationDbContext context) : EfRepository<Prod
                         SalePrice = product.SalePrice,
                         Description = catalog.Description,
                         Type = catalog.Type,
-                        ModifiedDate = catalog.ModifiedDate,
+                        ModifiedDate = catalog.ModifiedDate ?? catalog.CreatedDate,
                         Locale = catalog.Locale,
                         Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
                     };
@@ -111,7 +133,7 @@ public class ProductRepository(ApplicationDbContext context) : EfRepository<Prod
                         SalePrice = product.SalePrice,
                         Thumbnail = catalog.Thumbnail,
                         ViewCount = catalog.ViewCount,
-                        ModifiedDate = catalog.ModifiedDate,
+                        ModifiedDate = catalog.ModifiedDate ?? catalog.CreatedDate,
                         Type = catalog.Type,
                         Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
                     };

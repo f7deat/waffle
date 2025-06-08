@@ -83,10 +83,10 @@ public class DetailsModel(ICatalogService catalogService, IProductService _produ
             Videos.Title = "Videos";
             Videos.PlaylistItems = videos.Data?.Select(x => new PlaylistItem
             {
-                Date = x.ModifiedDate.ToString("D"),
+                Date = x.CreatedDate.ToString("D"),
                 Name = x.Name,
                 Thumbnail = x.Thumbnail,
-                Url = x.GetUrl(),
+                Url = x.Url,
                 ViewCount = x.ViewCount.ToNumber()
             }).ToList() ?? new();
         }

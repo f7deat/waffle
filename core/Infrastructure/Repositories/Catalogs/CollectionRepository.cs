@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Waffle.Core.Foundations;
+using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Data;
 using Waffle.Entities;
@@ -11,7 +12,7 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Infrastructure.Repositories.Catalogs;
 
-public class CollectionRepository(ApplicationDbContext context) : EfRepository<Collection>(context), ICollectionRepository
+public class CollectionRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Collection>(context, hcaService), ICollectionRepository
 {
     public async Task<Collection?> FindAsync(Guid catalogId, Guid collectionId) => await _context.Collections.FirstOrDefaultAsync(x => x.CatalogId == catalogId && x.CollectionId == collectionId);
 

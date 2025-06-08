@@ -15,4 +15,5 @@ public class Product : BaseEntity
     public decimal? SalePrice { get; set; }
     [StringLength(2048)]
     public string? AffiliateLink { get; set; }
+    public string? Content { get; set; }
 }
