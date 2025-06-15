@@ -91,6 +91,13 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
 
     public async Task<int> GetViewCountAsync(string locale) => await _context.Catalogs.Where(x => x.Locale == locale).SumAsync(x => x.ViewCount);
 
+    public async Task IncreaseCountAsync(Catalog catalog)
+    {
+        catalog.ViewCount++;
+        _context.Catalogs.Update(catalog);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions)
     {
         var query = from catalog in _context.Catalogs

@@ -155,8 +155,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
     {
         var catalog = await _catalogRepository.FindAsync(id);
         if (catalog is null) return default;
-        catalog.ViewCount++;
-        await _catalogRepository.UpdateAsync(catalog);
+        await _catalogRepository.IncreaseCountAsync(catalog);
         return catalog;
     }
 
