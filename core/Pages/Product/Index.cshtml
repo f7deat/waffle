@@ -157,7 +157,7 @@
                     <div class="row">
                         @foreach (var item in Model.Products.Data)
                         {
-                            <div class="col-6 col-md-3">
+                            <div class="col-6 col-md-3 product-item">
                                 <a href="@item.Url">
                                     <div class="card-image bg-dark relative">
                                         <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
@@ -183,7 +183,7 @@
                                             }
                                         </div>
                                     </div>
-                                    <a href="@item.Url" class="line-clampin">
+                                    <a href="@item.Url" class="product-name">
                                         @item.Name
                                     </a>
                                 </div>

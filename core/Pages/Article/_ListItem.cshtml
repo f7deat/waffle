@@ -7,13 +7,13 @@
     var domain = Context.Request.Host;
 }
 
-<div class="wf-article-item shadow">
+<div class="article-item shadow">
     <a href="@Model.Url" class="thumbnail">
         <img src="@Model.Thumbnail" class="object-cover" alt="@Html.Raw(Model.Name)" height="220" loading="lazy" />
     </a>
-    <div class="wf-article-item__body">
-        <a href="@Model.Url" class="fw-medium line-clamp-2">@Html.Raw(Model.Name)</a>
-        <div class="line-clampin">
+    <div class="article-item__body">
+        <a href="@Model.Url" class="line-clamp-2 article-item__name">@Html.Raw(Model.Name)</a>
+        <div class="article-item__description">
             @Html.Raw(Model.Description)
         </div>
     </div>

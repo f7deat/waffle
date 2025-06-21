@@ -10,7 +10,7 @@
         {
             @foreach (var item in Model.Products.Data)
             {
-                <div class="@Model.ItemPerRow">
+                <div class="@Model.ItemPerRow product-item">
                     <a href="@item.Url">
                         <div class="card-image bg-dark relative">
                             <img src="@item.Thumbnail" alt="@item.Name" class="object-cover product-thumbnail" loading="lazy" />
@@ -37,7 +37,7 @@
                                 <i class="fa-solid fa-star"></i>
                             </div>
                         </div>
-                        <a href="@item.Url" class="line-clampin">
+                        <a href="@item.Url" class="product-name">
                             @item.Name
                         </a>
                     </div>
