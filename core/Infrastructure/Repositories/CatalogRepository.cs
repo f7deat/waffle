@@ -144,13 +144,13 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         {
             query = query.Where(x => x.ParentId == filterOptions.ParentId);
         }
-        if (SortOrder.Ascending == filterOptions.ModifiedDate)
+        if (SortOrder.Ascending == filterOptions.CreatedDate)
         {
-            query = query.OrderBy(x => x.ModifiedDate);
+            query = query.OrderBy(x => x.CreatedDate);
         }
         else
         {
-            query = query.OrderByDescending(x => x.ModifiedDate);
+            query = query.OrderByDescending(x => x.CreatedDate);
         }
 
         if (filterOptions.ViewCount != null)

@@ -8,6 +8,7 @@ using Waffle.Core.Senders;
 using Waffle.Core.Services;
 using Waffle.Core.Services.Affiliates;
 using Waffle.Core.Services.Careers;
+using Waffle.Core.Services.Contacts;
 using Waffle.Core.Services.Ecommerces;
 using Waffle.Core.Services.Files;
 using Waffle.Data.ContentGenerators;

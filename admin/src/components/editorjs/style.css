@@ -44,3 +44,7 @@ h2.ce-header {
 h3.ce-header {
     font-size: 1.115rem;
 }
+
+.cdx-simple-image__caption {
+    text-align: center;
+}

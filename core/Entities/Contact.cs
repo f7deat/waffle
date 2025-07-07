@@ -5,7 +5,7 @@ namespace Waffle.Entities;
 public class Contact : BaseEntity
 {
     [StringLength(450)]
-    public string? Name { get; set; }
+    public string Name { get; set; } = default!;
     [StringLength(450)]
     public string? Email { get; set; }
     [StringLength(20)]

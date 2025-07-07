@@ -6,9 +6,6 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Waffle.Core.Services.Contacts.Models;
 using Waffle.Models.Components;
-using Microsoft.AspNetCore.Identity;
-using Waffle.ExternalAPI.Models;
-using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Core.Interfaces.IService;
 using SendGrid;
@@ -16,7 +13,7 @@ using Waffle.Core.Foundations;
 
 namespace Waffle.Controllers;
 
-public class ContactController(ILogService _appLogService, ApplicationDbContext _context, ILogger<ContactController> _logger, ILogService _logService, ITelegramService _telegramService, ISettingService _appSettingService, IUserService _userService, IWorkService _workService, ICatalogService _catalogService) : BaseController
+public class ContactController(ILogService _appLogService, ApplicationDbContext _context, ILogger<ContactController> _logger, ISettingService _appSettingService, IUserService _userService, IWorkService _workService, ICatalogService _catalogService, IContactService _contactService) : BaseController
 {
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _userService.ListContactAsync(filterOptions));
@@ -69,12 +66,6 @@ public class ContactController(ILogService _appLogService, ApplicationDbContext 
         };
         await _context.Contacts.AddAsync(contact);
         await _context.SaveChangesAsync();
-        var telegram = await _appSettingService.GetAsync<Telegram>(nameof(Telegram));
-        if (telegram != null)
-        {
-            var chatId = contactForm.ChatId ?? telegram.ChatId;
-            await _telegramService.SendMessageAsync(telegram.Token, chatId, $"{contactForm.Type}\nName: {contact.Name}\nEmail: {contact.Email}\nPhone: {contact.PhoneNumber}\nAddress: {contact.Address}\nNote: {contact.Note}");
-        }
         var page = await _catalogService.FindAsync(contactForm.FinishPageId);
         if (page is null)
         {
@@ -85,23 +76,7 @@ public class ContactController(ILogService _appLogService, ApplicationDbContext 
     }
 
     [HttpPost("delete/{id}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
-    {
-        try
-        {
-            var contact = await _context.Contacts.FindAsync(id);
-            if (contact is null) return BadRequest("Contact not found!");
-            _context.Contacts.Remove(contact);
-            await _appLogService.AddAsync($"Delete contact {contact.Name} - {contact.PhoneNumber} - {contact.Email}", id);
-            await _context.SaveChangesAsync();
-            return Ok(IdentityResult.Success);
-        }
-        catch (Exception ex)
-        {
-            await _logService.ExceptionAsync(ex);
-            return BadRequest(ex.ToString());
-        }
-    }
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _contactService.DeleteAsync(id));
 
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync([FromBody] Contact args)

@@ -41,6 +41,13 @@ const ContactPage: React.FC = () => {
                         dataIndex: 'email'
                     },
                     {
+                        title: 'Ngày liên hệ',
+                        dataIndex: 'createdDate',
+                        valueType: 'fromNow',
+                        search: false,
+                        minWidth: 150
+                    },
+                    {
                         title: 'Ghi chú',
                         dataIndex: 'note',
                         search: false

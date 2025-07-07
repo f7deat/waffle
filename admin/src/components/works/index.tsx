@@ -21,7 +21,7 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { Button, Dropdown, MenuProps, message, Popconfirm, Switch } from 'antd';
-import { FormattedMessage, history } from '@umijs/max';
+import { FormattedMessage, history, Link } from '@umijs/max';
 import { useParams } from '@umijs/max';
 import { useEffect, useState } from 'react';
 import AddComponent from '../add-component';
@@ -118,12 +118,17 @@ const WorkContentComponent: React.FC = () => {
       title: '#',
       dataIndex: 'sort',
       className: 'drag-visible',
-      width: 30,
+      width: 20,
       align: 'center'
     },
     {
       title: 'Name',
       dataIndex: 'name',
+      render: (dom, entity) => (
+        <Link to={`/works/${entity.id}`} className='font-semibold text-blue-500 hover:text-blue-700'>
+          {dom}
+        </Link>
+      )
     },
     {
       title: 'Status',

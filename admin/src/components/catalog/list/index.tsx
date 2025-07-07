@@ -76,7 +76,6 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
       dataIndex: 'modifiedDate',
       valueType: 'fromNow',
       search: false,
-      sorter: true,
       width: 180
     },
     {

@@ -40,7 +40,7 @@ public class CatalogFilterOptions : FilterOptions
 
     #region Sort order
     public SortOrder? ViewCount { get; set; }
-    public SortOrder? ModifiedDate { get; set; }
+    public SortOrder? CreatedDate { get; set; }
     #endregion
 }
 
