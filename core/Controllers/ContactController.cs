@@ -1,19 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SendGrid.Helpers.Mail;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Waffle.Core.Foundations;
+using Waffle.Core.Helpers;
+using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Contacts.Models;
 using Waffle.Data;
 using Waffle.Entities;
-using System.Text.Json;
-using Microsoft.AspNetCore.Authorization;
-using Waffle.Core.Services.Contacts.Models;
-using Waffle.Models.Components;
 using Waffle.Models;
-using Waffle.Core.Interfaces.IService;
-using SendGrid;
-using Waffle.Core.Foundations;
 
 namespace Waffle.Controllers;
 
-public class ContactController(ILogService _appLogService, ApplicationDbContext _context, ILogger<ContactController> _logger, ISettingService _appSettingService, IUserService _userService, IWorkService _workService, ICatalogService _catalogService, IContactService _contactService) : BaseController
+public class ContactController(ApplicationDbContext _context, IUserService _userService, IContactService _contactService) : BaseController
 {
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _userService.ListContactAsync(filterOptions));
@@ -21,39 +18,34 @@ public class ContactController(ILogService _appLogService, ApplicationDbContext 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Contacts.FindAsync(id));
 
-    [HttpPost("submit-form"), AllowAnonymous]
+    [HttpPost("submit"), AllowAnonymous]
     public async Task<IActionResult> SubmitContactAsync(SubmitFormModel model)
     {
         if (model is null) return BadRequest();
-        var meta = new ContactMeta();
-        var config = await _appSettingService.GetAsync<ExternalAPI.SendGrids.SendGrid>(nameof(SendGrid));
-        if (config != null)
+        if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Name))
         {
-            var client = new SendGridClient(config.ApiKey);
-            var from = new EmailAddress(config.From.Email, config.From.Name);
-            var subject = "[DLiTi.Com.Au] Thank for register";
-            var to = new EmailAddress(model.Email, model.Name);
-            var plainTextContent = $"Hi {model.Name}";
-            var htmlContent = "Thank for register, we will contact you asap!";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError("Sending to {Email} error!", model.Email);
-            }
-            subject = "[DLiTi.Com.Au] You have a new contact";
-            to = new EmailAddress("dlititimberbuild@gmail.com", "Taan");
-            plainTextContent = $"Hi there";
-            htmlContent = "You have a new contact, Please go to https://crm.defzone.net to view details";
-            msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError("Email sending error!");
-            }
+            return BadRequest("Email and Name are required.");
         }
-        var contactForm = await _workService.GetAsync<ContactForm>(model.WorkId);
-        if (contactForm is null) return BadRequest("Work not found!");
+        if (model.Email.Length > 100 || model.Name.Length > 100)
+        {
+            return BadRequest("Email and Name must be less than 100 characters.");
+        }
+        if (!string.IsNullOrWhiteSpace(model.PhoneNumber) && model.PhoneNumber.Length > 20)
+        {
+            return BadRequest("Phone number must be less than 20 characters.");
+        }
+        if (!string.IsNullOrWhiteSpace(model.Address) && model.Address.Length > 200)
+        {
+            return BadRequest("Address must be less than 200 characters.");
+        }
+        if (!string.IsNullOrWhiteSpace(model.Note) && model.Note.Length > 500)
+        {
+            return BadRequest("Note must be less than 500 characters.");
+        }
+        if (!string.IsNullOrWhiteSpace(model.Email) && !EmailHelper.IsValid(model.Email))
+        {
+            return BadRequest("Invalid email format.");
+        }
         var contact = new Contact
         {
             CreatedDate = DateTime.Now,
@@ -61,17 +53,10 @@ public class ContactController(ILogService _appLogService, ApplicationDbContext 
             Name = model.Name,
             Note = model.Note,
             PhoneNumber = model.PhoneNumber,
-            Address = model.Address,
-            Meta = JsonSerializer.Serialize(meta)
+            Address = model.Address
         };
         await _context.Contacts.AddAsync(contact);
         await _context.SaveChangesAsync();
-        var page = await _catalogService.FindAsync(contactForm.FinishPageId);
-        if (page is null)
-        {
-            await _appLogService.AddAsync("Finish page not found!", contactForm.FinishPageId);
-            return BadRequest("Finish page not found!");
-        }
         return Redirect("/contact/thank");
     }
 

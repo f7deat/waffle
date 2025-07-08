@@ -57,9 +57,9 @@
                                     <localize key="contactUs" />
                                 </h3>
                                 <div class="mailchimp-wrapper">
-                                    <form class="zozo-mc-form" id="zozo-mc-form" method="post">
+                                    <form class="zozo-mc-form" id="zozo-mc-form" method="post" action="/api/contact/submit">
                                         <div class="input-group mb-4">
-                                            <input type="text" class="form-control zozo-mc-email" required="required" placeholder="@await localizationService.GetAsync("FullName")" name="fullName">
+                                            <input type="text" class="form-control zozo-mc-email" required="required" placeholder="@await localizationService.GetAsync("FullName")" name="name">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-4">

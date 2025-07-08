@@ -16,5 +16,5 @@ public class Folder : BaseEntity
     [StringLength(10)]
     public string Locale { get; set; } = default!;
 
-    public List<FileContent>? Files { get; set; }
+    public virtual ICollection<FileContent>? Files { get; set; }
 }

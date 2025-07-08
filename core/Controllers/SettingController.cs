@@ -29,17 +29,7 @@ public class SettingController(IEmailSender _emailSender, ApplicationDbContext _
     public async Task<IActionResult> GetAsync([FromRoute] string normalizedName) => Ok(await _settingService.GetAsync<object>(normalizedName));
 
     [HttpGet("list")]
-    public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions)
-    {
-        try
-        {
-            return Ok(await _settingService.ListAsync(filterOptions));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.ToString());
-        }
-    }
+    public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _settingService.ListAsync(filterOptions));
 
     [HttpPost("save/{id}")]
     public async Task<IActionResult> SaveAsync([FromRoute] Guid id, [FromBody] object args) => Ok(await _settingService.SaveAsync(id, args));
@@ -184,4 +174,7 @@ public class SettingController(IEmailSender _emailSender, ApplicationDbContext _
         if (google is null) return BadRequest();
         return Ok(google.Bloggers);
     }
+
+    [HttpGet("init")]
+    public async Task<IActionResult> InitAsync() => Ok(await _settingService.InitAsync());
 }

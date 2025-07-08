@@ -9,6 +9,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
+using Waffle.Models.Result;
 using Waffle.Models.Settings;
 
 namespace Waffle.Core.Services;
@@ -91,38 +92,10 @@ public class SettingService : ISettingService
         _memoryCache.Remove(cacheKey);
     }
 
-    private async Task EnsureSettingAsync()
-    {
-        var settings = await _context.AppSettings.ToListAsync();
-        var newSettings = new List<AppSetting>();
-        if (!settings.Any(x => x.NormalizedName == nameof(EmailSetting)))
-        {
-            newSettings.Add(new AppSetting
-            {
-                NormalizedName = nameof(EmailSetting),
-                Name = "Email",
-                Value = JsonSerializer.Serialize(new EmailSetting
-                {
-                    DisplayName = "noreply@defzone.net",
-                    FromEmail = "tandc@dhhp.edu.vn",
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    Protocol = EmailProtocol.Default,
-                    Password = "<-- Your Email Password -->"
-                })
-            });
-        }
-        if (newSettings.Count != 0)
-        {
-            await _context.AppSettings.AddRangeAsync(newSettings);
-            await _context.SaveChangesAsync();
-        }
-    }
-
     public async Task<ListResult<AppSetting>> ListAsync(SearchFilterOptions filterOptions)
     {
-        await EnsureSettingAsync();
         var query = from a in _context.AppSettings
+                    where a.Locale == filterOptions.Locale
                     select a;
         if (!string.IsNullOrWhiteSpace(filterOptions.SearchTerm))
         {
@@ -177,5 +150,26 @@ public class SettingService : ISettingService
         await _settingRepository.UpdateAsync(setting);
         RemoveCache(setting.NormalizedName);
         return IdentityResult.Success;
+    }
+
+    public async Task<DefResult> InitAsync()
+    {
+        var upload = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName == nameof(UploadSetting));
+        if (upload is null)
+        {
+            upload = new AppSetting
+            {
+                NormalizedName = nameof(UploadSetting),
+                Name = "Upload",
+                Value = JsonSerializer.Serialize(new UploadSetting
+                {
+                    Type = UploadSettingType.LOCAL
+                }),
+                Locale = "vi-VN"
+            };
+            await _context.AppSettings.AddAsync(upload);
+            await _context.SaveChangesAsync();
+        }
+        return DefResult.Success;
     }
 }

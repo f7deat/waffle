@@ -13,10 +13,12 @@ using Waffle.Extensions;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Args;
+using Waffle.Models.Result;
+using Waffle.Models.Settings;
 
 namespace Waffle.Controllers;
 
-public class FileController(IWebHostEnvironment _webHostEnvironment, ApplicationDbContext _context, IFileService _fileService, IOptions<SettingOptions> options) : BaseController
+public class FileController(IWebHostEnvironment _webHostEnvironment, ApplicationDbContext _context, IFileService _fileService, IOptions<SettingOptions> options, ISettingService _settingService) : BaseController
 {
     private readonly SettingOptions _options = options.Value;
 
@@ -35,55 +37,42 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
         return Ok(IdentityResult.Success);
     }
 
-    [HttpPost("upload"), AllowAnonymous]
+    [HttpPost("upload")]
     public async Task<IActionResult> UploadAsync([FromForm] UploadArgs args)
     {
         try
         {
             if (args.File is null) return BadRequest("File not found!");
-            if (string.IsNullOrEmpty(_options.UploadAPIKey))
-            {
-                var folder = Guid.NewGuid().ToString();
-                var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files", folder);
-                if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
-                using (var stream = System.IO.File.Create(Path.Combine(uploadPath, args.File.FileName)))
-                {
-                    await args.File.CopyToAsync(stream);
-                }
+            if (args.File.Length > 10 * 1024 * 1024) return BadRequest("File size exceeds the limit of 10 MB.");
 
-                return Ok(new
-                {
-                    success = 1,
-                    url = $"https://{Request.Host.Value}/files/{folder}/{args.File.FileName}"
-                });
+            var uploadSetting = await _settingService.GetAsync<UploadSetting>(nameof(UploadSetting));
+            if (uploadSetting is null) return BadRequest("Upload setting not found!");
+            if (uploadSetting.Type == UploadSettingType.HPUNI) return Ok(await _fileService.UploadToHPUNIAsync(args.File));
+
+            var folder = Guid.NewGuid().ToString();
+            var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files", folder);
+
+            if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
+            using (var stream = System.IO.File.Create(Path.Combine(uploadPath, args.File.FileName)))
+            {
+                await args.File.CopyToAsync(stream);
             }
-            var url = $"https://file.dhhp.edu.vn/api/file/upload?apiKey={_options.UploadAPIKey}";
-            using var client = new HttpClient();
-            var response = await client.PostAsync(url, new MultipartFormDataContent
+            var url = $"{Request.Scheme}://{Request.Host.Value}/files/{folder}/{args.File.FileName}";
+
+            var fileContent = new FileContent
             {
-                { new StreamContent(args.File.OpenReadStream()), "file", args.File.FileName },
-                { new StringContent("common"), "SiteCode" }
-            });
-            if (!response.IsSuccessStatusCode) return BadRequest("Upload failed!");
-            var fileContent = await JsonSerializer.DeserializeAsync<FileUploadResponse>(await response.Content.ReadAsStreamAsync());
-            if (fileContent is null) return BadRequest("Upload dserialize failed!");
-            await _context.FileContents.AddAsync(new FileContent
-            {
-                Id = fileContent.Id,
                 Name = args.File.FileName,
                 Size = args.File.Length,
-                Url = fileContent.Url,
                 Type = args.File.ContentType,
+                Url = url,
+                UploadBy = User.GetId(),
                 UploadDate = DateTime.Now,
-                UploadBy = User.GetId()
-            });
+                FolderId = args.FolderId
+            };
+            await _context.FileContents.AddAsync(fileContent);
             await _context.SaveChangesAsync();
 
-            return Ok(new
-            {
-                success = 1,
-                url = fileContent.Url
-            });
+            return Ok(DefResult.Ok(fileContent.Url));
         }
         catch (Exception ex)
         {

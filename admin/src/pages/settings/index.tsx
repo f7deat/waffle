@@ -1,59 +1,51 @@
-import { listSetting } from '@/services/setting';
-import { EditOutlined } from '@ant-design/icons';
+import { apiSyncSetting, listSetting } from '@/services/setting';
+import { EditOutlined, SyncOutlined } from '@ant-design/icons';
 import {
+  ActionType,
   PageContainer,
-  ProColumns,
-  ProTable,
+  ProList,
 } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Button} from 'antd';
+import { Button, message } from 'antd';
+import { useRef } from 'react';
 
 const SettingPage: React.FC = () => {
 
-  const columns: ProColumns<API.AppSetting>[] = [
-    {
-      title: '#',
-      valueType: 'indexBorder',
-      width: 40,
-      align: 'center'
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      search: false
-    },
-    {
-      title: 'Option',
-      valueType: 'option',
-      render: (dom, entity) => [
-        <Button
-          size='small'
-          icon={<EditOutlined />}
-          key={1}
-          type='primary'
-          onClick={() =>
-            history.push(
-              `/settings/general/center/${entity.id
-              }`,
-            )
-          }
-        ></Button>,
-      ],
-      width: 40
-    },
-  ];
+  const actionRef = useRef<ActionType>();
 
   return (
-    <PageContainer>
-      <ProTable
-        search={{
-          layout: 'vertical'
+    <PageContainer extra={<Button type='primary' icon={<SyncOutlined />} onClick={async () => {
+      await apiSyncSetting();
+      message.success('Sync setting successfully');
+      actionRef.current?.reload();
+    }}>Sync Setting</Button>}>
+      <ProList
+        grid={{ gutter: 16, column: 2, xxl: 4 }}
+        actionRef={actionRef}
+        ghost
+        search={false}
+        metas={{
+          title: {
+            dataIndex: 'name'
+          },
+          description: {
+            dataIndex: 'description'
+          },
+          actions: {
+            render: (text, record) => [
+              <Button
+                key="edit"
+                type="primary"
+                size="small"
+                icon={<EditOutlined />}
+                onClick={() => history.push(`/settings/general/center/${record.id}`)}
+              >
+                Edit
+              </Button>,
+            ],
+          }
         }}
-        request={listSetting} rowKey="id" columns={columns} />
+        request={listSetting} rowKey="id" />
     </PageContainer>
   );
 };

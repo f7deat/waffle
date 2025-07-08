@@ -2,6 +2,7 @@
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
+using Waffle.Models.Result;
 
 namespace Waffle.Core.Interfaces.IService;
 
@@ -10,6 +11,7 @@ public interface ISettingService
     Task<AppSetting> EnsureSettingAsync(string name);
     Task<object> GetAsync(Guid id);
     Task<T?> GetAsync<T>(string normalizedName, string locale = "vi-VN");
+    Task<DefResult> InitAsync();
     Task<ListResult<AppSetting>> ListAsync(SearchFilterOptions filterOptions);
     Task<IdentityResult> SaveAsync(Guid id, object args);
     Task<IdentityResult> SaveAsync(string normalizedName, object args);

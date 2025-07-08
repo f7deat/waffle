@@ -22,5 +22,5 @@ public class FileContent : BaseEntity
     [ForeignKey(nameof(Folder))]
     public Guid? FolderId { get; set; }
 
-    public Folder? Folder { get; set; }
+    public virtual Folder? Folder { get; set; }
 }

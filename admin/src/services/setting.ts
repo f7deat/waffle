@@ -1,7 +1,9 @@
 import { request } from '@umijs/max';
 
-export async function listSetting() {
-  return request(`setting/list`);
+export async function listSetting(params: any) {
+  return request(`setting/list`, {
+    params
+  });
 }
 
 export async function saveTelegram(id: string | undefined, data: API.Telegam) {
@@ -86,4 +88,8 @@ export async function graphFacebook(query: string) {
 
 export async function queryThemeOptions() {
   return request(`setting/themes/options`);
+}
+
+export async function apiSyncSetting() {
+  return request(`setting/init`);
 }

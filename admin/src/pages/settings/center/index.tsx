@@ -6,6 +6,7 @@ import Footer from "../footer";
 import { LeftOutlined } from "@ant-design/icons";
 import EmailSetting from "../components/email";
 import GoogleSetting from "../google";
+import UploadSetting from "../components/upload";
 
 const SettingCenterPage: React.FC = () => {
 
@@ -30,6 +31,9 @@ const SettingCenterPage: React.FC = () => {
         }
         if (data.normalizedName === 'Google') {
             return <GoogleSetting data={data.data} onFinish={onFinish} />
+        }
+        if (data.normalizedName === 'UploadSetting') {
+            return <UploadSetting data={data.data} onFinish={onFinish} />;
         }
         return <Empty />
     }
