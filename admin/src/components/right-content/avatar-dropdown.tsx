@@ -39,9 +39,9 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     const { search, pathname } = window.location;
     const urlParams = new URL(window.location.href).searchParams;
     const redirect = urlParams.get('redirect');
-    if (window.location.pathname !== '/accounts/login' && !redirect) {
+    if (window.location.pathname !== '/account/login' && !redirect) {
       history.replace({
-        pathname: '/accounts/login',
+        pathname: '/account/login',
         search: stringify({
           redirect: pathname + search,
         }),
@@ -66,7 +66,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         history.push(`/users/center/${initialState?.currentUser?.id}`);
         return;
       }
-      history.push(`/accounts/${key}`);
+      history.push(`/account/${key}`);
     },
     [setInitialState],
   );

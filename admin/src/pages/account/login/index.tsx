@@ -13,7 +13,7 @@ import {
   ProFormCheckbox,
   ProFormText,
 } from '@ant-design/pro-components';
-import { FormattedHTMLMessage, Link, SelectLang, useIntl } from '@umijs/max';
+import { FormattedHTMLMessage, SelectLang, useIntl } from '@umijs/max';
 import { history, useModel } from '@umijs/max';
 import { Button, message, Space, Tabs } from 'antd';
 import React, { useState } from 'react';

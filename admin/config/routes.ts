@@ -4,15 +4,9 @@ export default [
     redirect: '/home',
   },
   {
-    path: '/accounts',
+    path: '/login',
     layout: false,
-    routes: [
-      {
-        name: 'login',
-        path: '/accounts/login',
-        component: './accounts/login'
-      }
-    ],
+    component: './account/login'
   },
   {
     icon: 'HomeOutlined',
@@ -340,6 +334,19 @@ export default [
         component: './files/center',
         hideInMenu: true,
       },
+    ],
+  },
+  {
+    path: '/account',
+    name: 'account',
+    icon: 'UserOutlined',
+    routes: [
+      {
+        name: 'profile',
+        path: '/account/profile',
+        component: './account/profile',
+        hideInMenu: true
+      }
     ],
   },
   {

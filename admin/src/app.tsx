@@ -12,7 +12,7 @@ import { Space, message } from 'antd';
 import { errorConfig } from './requestErrorConfig';
 
 const isDev = process.env.NODE_ENV === 'development';
-const loginPath = '/accounts/login';
+const loginPath = '/account/login';
 
 export async function getInitialState(): Promise<{
   avatar?: string;

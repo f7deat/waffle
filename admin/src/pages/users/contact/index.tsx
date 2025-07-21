@@ -30,7 +30,8 @@ const ContactPage: React.FC = () => {
                     },
                     {
                         title: 'Họ và tên',
-                        dataIndex: 'name'
+                        dataIndex: 'name',
+                        minWidth: 150
                     },
                     {
                         title: 'Số điện thoại',

@@ -29,10 +29,11 @@ const MenuPage: React.FC = () => {
                         dataIndex: 'url'
                     },
                     {
-                        title: 'Sort order',
+                        title: 'TT',
                         dataIndex: 'sortOrder',
                         search: false,
-                        valueType: 'digit'
+                        valueType: 'digit',
+                        width: 80
                     },
                     {
                         title: 'Active',
@@ -69,6 +70,7 @@ const MenuPage: React.FC = () => {
                 ]}
                 actionRef={actionRef}
                 request={apiMenuList}
+                rowKey="id"
             />
         </PageContainer>
     )
