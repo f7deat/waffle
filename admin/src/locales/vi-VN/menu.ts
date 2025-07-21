@@ -1,4 +1,5 @@
 export default {
+  'menu.account': 'Tài khoản',
   'menu.catalog': 'Catalog',
   'menu.catalog.article': 'Bài viết',
   'menu.catalog.center': 'Chi tiết',

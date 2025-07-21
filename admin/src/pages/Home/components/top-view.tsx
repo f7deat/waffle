@@ -35,7 +35,7 @@ const TopView: React.FC = () => {
 
     return (
         <>
-            <ProCard title="Top view" tabs={{
+            <ProCard title="Top view" headerBordered tabs={{
                 tabPosition: 'top',
                 activeKey: activeKey,
                 onChange: (actKey) => setActiveKey(actKey),

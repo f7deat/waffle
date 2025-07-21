@@ -12,7 +12,7 @@ export default [
     icon: 'HomeOutlined',
     name: 'dashboard',
     path: '/home',
-    component: './Home',
+    component: './home',
   },
   {
     icon: 'FormOutlined',

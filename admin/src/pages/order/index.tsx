@@ -1,4 +1,5 @@
 import { apiTotalOrder, deleteOrder, listOrder } from '@/services/order';
+import { Column } from '@ant-design/charts';
 import { ArrowDownOutlined, DeleteOutlined, ExportOutlined, EyeOutlined, PlusOutlined, SkinOutlined } from '@ant-design/icons';
 import {
   ActionType,
@@ -10,7 +11,6 @@ import {
 } from '@ant-design/pro-components';
 import { Link, history } from '@umijs/max';
 import { Button, Card, Col, Empty, Popconfirm, Row, Space, Statistic, message } from 'antd';
-import { ColumnChart } from 'bizcharts';
 import { useEffect, useRef, useState } from 'react';
 
 const Order: React.FC = () => {
@@ -148,7 +148,7 @@ const Order: React.FC = () => {
       <Row gutter={16}>
         <Col span={18}>
           <ProCard className='mb-4' title="Sales summary" extra={<ProFormDateRangePicker label="Showing" />}>
-            <ColumnChart data={data}
+            <Column data={data}
               xField='type'
               yField='sales'
               label={{

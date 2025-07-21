@@ -1,7 +1,7 @@
-import { CopyOutlined, DownloadOutlined } from '@ant-design/icons';
-import { ProCard } from '@ant-design/pro-components';
+import { DownloadOutlined } from '@ant-design/icons';
+import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 import { useIntl } from '@umijs/max';
-import { Divider, Descriptions, Image, Empty, Button, Input } from 'antd';
+import { Divider, Image, Empty, Button } from 'antd';
 
 type FilePreviewProps = {
   file?: API.FileContent;
@@ -50,6 +50,7 @@ const FilePreview: React.FC<FilePreviewProps> = (props) => {
   };
   return (
     <ProCard
+      headerBordered
       title={intl.formatMessage({
         id: 'general.preview',
       })}
@@ -60,17 +61,14 @@ const FilePreview: React.FC<FilePreviewProps> = (props) => {
       ]}
     >
       {renderPreview()}
-      <Divider orientation='left'>File info</Divider>
-      <Descriptions column={1}>
-        <Descriptions.Item label="Name">{file?.name}</Descriptions.Item>
-        <Descriptions.Item label="Size">
+      <ProDescriptions column={1} size='small' bordered title="File Details">
+        <ProDescriptions.Item label="Name">{file?.name}</ProDescriptions.Item>
+        <ProDescriptions.Item label="Size">
           {((file?.size ?? 0) / 1024).toFixed(2)} KB
-        </Descriptions.Item>
-        <Descriptions.Item label="Type">{file?.type}</Descriptions.Item>
-        <Descriptions.Item label="URL" className='flex items-center'>
-          <Input value={file?.url} readOnly addonAfter={<Button type='text' size='small' icon={<CopyOutlined />} />} />
-        </Descriptions.Item>
-      </Descriptions>
+        </ProDescriptions.Item>
+        <ProDescriptions.Item label="Type">{file?.type}</ProDescriptions.Item>
+        <ProDescriptions.Item label="URL" className='flex items-center' copyable ellipsis>{file?.url}</ProDescriptions.Item>
+      </ProDescriptions>
     </ProCard>
   );
 };

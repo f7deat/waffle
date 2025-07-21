@@ -34,6 +34,8 @@ const FileCenter: React.FC = () => {
     {
       title: '#',
       valueType: 'indexBorder',
+      width: 30,
+      align: 'center'
     },
     {
       title: 'Name',
@@ -114,9 +116,13 @@ const FileCenter: React.FC = () => {
         </Col>
         <Col span={16}>
           <ProTable
+            headerTitle="Vị trí tập tin"
             columns={columns}
             request={(params) => listWorkItemFiles(params, { id })}
             rowKey="id"
+            search={{
+              layout: 'vertical'
+            }}
           />
         </Col>
       </Row>
