@@ -138,8 +138,8 @@ const Order: React.FC = () => {
     <PageContainer
       extra={
         <Space>
-          <Link to="/e-commerce/order/new">
-          <Button type="primary" icon={<PlusOutlined />}>New order</Button>
+          <Link to="/shop/order/new">
+            <Button type="primary" icon={<PlusOutlined />}>New order</Button>
           </Link>
           <Button icon={<ExportOutlined />}>Export</Button>
         </Space>
@@ -147,7 +147,11 @@ const Order: React.FC = () => {
     >
       <Row gutter={16}>
         <Col span={18}>
-          <ProCard className='mb-4' title="Sales summary" extra={<ProFormDateRangePicker label="Showing" />}>
+          <ProCard className='mb-4' title="Sales summary" extra={<ProFormDateRangePicker
+            formItemProps={{
+              className: 'mb-0'
+            }}
+          />} headerBordered>
             <Column data={data}
               xField='type'
               yField='sales'
@@ -172,6 +176,7 @@ const Order: React.FC = () => {
                   alias: 'Money',
                 },
               }}
+              sizeField={60}
             />
           </ProCard>
           <ProTable

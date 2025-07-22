@@ -6,3 +6,9 @@ export async function apiAddFolder(data: any) {
         data
     });
 }
+
+export async function apiFolderDelete(id: string) {
+    return request(`folder/delete/${id}`, {
+        method: 'DELETE'
+    });
+}

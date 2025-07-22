@@ -1,10 +1,12 @@
+import { LeftOutlined } from "@ant-design/icons";
 import { PageContainer, ProCard, ProForm, ProFormSelect } from "@ant-design/pro-components";
-import { Divider } from "antd";
+import { history } from "@umijs/max";
+import { Button, Divider } from "antd";
 
 const NewOrderPage: React.FC = () => {
 
     return (
-        <PageContainer>
+        <PageContainer extra={<Button icon={<LeftOutlined />} onClick={() => history.back()}>Back</Button>} title="New Order">
             <ProCard>
             <ProForm>
                 <Divider>Details</Divider>

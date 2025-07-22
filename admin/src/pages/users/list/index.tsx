@@ -48,7 +48,8 @@ const UserList: React.FC = () => {
     {
       title: '#',
       valueType: 'indexBorder',
-      width: 50
+      width: 30,
+      align: 'center'
     },
     {
       title: 'Tài khoản',
