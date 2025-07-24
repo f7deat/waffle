@@ -1,13 +1,15 @@
 import { PageContainer, ProCard } from '@ant-design/pro-components';
-import { Empty } from 'antd';
+import { Button, Empty } from 'antd';
 import { useState } from 'react';
 import SecuriryCenter from './components/security';
 import Basic from './components/basic';
+import { LeftOutlined } from '@ant-design/icons';
+import { history } from '@umijs/max';
 
 const UserCenter: React.FC = () => {
   const [tab, setTab] = useState('basic');
   return (
-    <PageContainer>
+    <PageContainer extra={<Button icon={<LeftOutlined />} onClick={() => history.back()}>Quay lại</Button>}>
       <ProCard
         tabs={{
           tabPosition: 'top',

@@ -1,5 +1,6 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { SelectLang as UmiSelectLang } from '@umijs/max';
+import NotificationBell from './notification';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -11,8 +12,9 @@ export const SelectLang = () => {
 
 export const Question = () => {
   return (
-    <div className='w-8 h-8 flex items-center justify-center cursor-pointer text-lg'>
-      <QuestionCircleOutlined />
+    <div className='flex items-center justify-center gap-4'>
+      <NotificationBell />
+      <QuestionCircleOutlined className="text-lg" />
     </div>
   );
 };
