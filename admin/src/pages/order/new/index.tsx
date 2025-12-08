@@ -1,3 +1,4 @@
+import { apiProductOptions } from "@/services/products/product";
 import { LeftOutlined } from "@ant-design/icons";
 import { PageContainer, ProCard, ProForm, ProFormSelect } from "@ant-design/pro-components";
 import { history } from "@umijs/max";
@@ -10,7 +11,7 @@ const NewOrderPage: React.FC = () => {
             <ProCard>
             <ProForm>
                 <Divider>Details</Divider>
-                <ProFormSelect label="Product" />
+                <ProFormSelect label="Product" request={apiProductOptions} showSearch />
             </ProForm>
             </ProCard>
         </PageContainer>

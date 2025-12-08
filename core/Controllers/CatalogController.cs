@@ -197,7 +197,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     public async Task<IActionResult> GetTopViewAsync([FromQuery] CatalogType type, [FromQuery] string locale) => Ok(await _catalogService.GetTopViewAsync(type, locale));
 
     [HttpGet("form-select")]
-    public async Task<IActionResult> GetFormSelectAsync([FromQuery] SelectFilterOptions filterOptions) => Ok(await _catalogService.GetFormSelectAsync(filterOptions));
+    public async Task<IActionResult> GetFormSelectAsync([FromQuery] SelectOptions filterOptions) => Ok(await _catalogService.GetFormSelectAsync(filterOptions));
 
     [HttpGet("structure-by-id/{id}")]
     public async Task<IActionResult> GetStructureByIdAsync([FromRoute] Guid id) => Ok(await _catalogService.GetStructureByIdAsync(id));

@@ -8,12 +8,15 @@ type WfUploadProps = {
     open: boolean;
     onFinish: any;
     onCancel: any;
+    maxCount?: number;
+    multiple?: boolean;
 }
 
 const { Dragger } = Upload;
 
 const WfUpload: React.FC<WfUploadProps> = (props) => {
 
+    const { maxCount, multiple } = props;
     const [url, setUrl] = useState<string>('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -51,6 +54,8 @@ const WfUpload: React.FC<WfUploadProps> = (props) => {
         <Modal open={props.open} onCancel={() => props.onCancel()} centered title="Upload" onOk={onOk}>
             <div className="mb-4">
                 <Dragger
+                    maxCount={maxCount}
+                    multiple={multiple}
                     fileList={fileList}
                     onRemove={(file) => {
                         const index = fileList.indexOf(file);

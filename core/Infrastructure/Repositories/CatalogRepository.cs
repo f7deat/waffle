@@ -44,7 +44,7 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
         return await works.ToListAsync();
     }
 
-    public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions)
+    public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectOptions filterOptions)
     {
         var query = _context.Catalogs
             .Where(x => x.Active && x.Type == filterOptions.Type && (string.IsNullOrEmpty(filterOptions.KeyWords) || x.NormalizedName.Contains(filterOptions.KeyWords)))

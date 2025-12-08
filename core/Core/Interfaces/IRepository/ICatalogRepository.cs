@@ -13,7 +13,7 @@ public interface ICatalogRepository : IAsyncRepository<Catalog>
     Task<Catalog?> FindByNameAsync(string? normalizedName);
     Task<Catalog?> GetByNameAsync(string normalizedName);
     Task<dynamic> GetComponentsAsync(Guid id);
-    Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions);
+    Task<IEnumerable<Option>> GetFormSelectAsync(SelectOptions filterOptions);
     Task<object?> GetStructureAsync(Guid id);
     Task<object?> GetStructureAsync(string normalizedName);
     Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type, string locale);

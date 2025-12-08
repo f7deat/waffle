@@ -20,3 +20,9 @@ export async function apiDeleteProductLink(id: string) {
 export async function apiProductCount() {
     return request(`product/count`);
 }
+
+export async function apiProductOptions(params?: any) {
+    return request(`product/options`, {
+        params
+    });
+}

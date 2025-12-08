@@ -23,7 +23,7 @@ public interface IProductService
     Task<DefResult> DeleteLinkAsync(Guid id);
     Task<IEnumerable<ProductLink>> GetLinksAsync(Guid productId);
     Task<DefResult> GoToProductLinkAsync(Guid id);
-    Task<object> OptionsAsync();
+    Task<object> OptionsAsync(SelectOptions selectOptions);
     Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions);
     Task<DefResult> CreateAsync(Catalog args, string locale);
 }

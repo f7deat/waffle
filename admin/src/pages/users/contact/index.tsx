@@ -1,5 +1,5 @@
 import { apiDeleteContact, listContact } from "@/services/contact";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
 import { ActionType, PageContainer, ProTable } from "@ant-design/pro-components"
 import { Button, message, Popconfirm, Tooltip } from "antd";
 import { useRef } from "react";
@@ -54,7 +54,7 @@ const ContactPage: React.FC = () => {
                         search: false
                     },
                     {
-                        title: 'Tác vụ',
+                        title: <SettingOutlined />,
                         valueType: 'option',
                         render: (_, entity) => [
                             <Popconfirm key="delete" title="Xác nhận xóa?" onConfirm={() => onDelete(entity.id)}>
@@ -63,7 +63,8 @@ const ContactPage: React.FC = () => {
                                 </Tooltip>
                             </Popconfirm>
                         ],
-                        width: 70
+                        width: 40,
+                        align: 'center'
                     }
                 ]}
             />

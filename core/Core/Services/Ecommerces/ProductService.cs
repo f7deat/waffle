@@ -81,7 +81,7 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
 
     public Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions) => _productRepository.NewArrivalsAsync(filterOptions);
 
-    public Task<object> OptionsAsync() => _productRepository.OptionsAsync();
+    public Task<object> OptionsAsync(SelectOptions selectOptions) => _productRepository.OptionsAsync(selectOptions);
 
     public async Task<IdentityResult> SaveAsync(Product args)
     {

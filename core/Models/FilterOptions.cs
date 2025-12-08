@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Text.Json.Serialization;
 using Waffle.Core.Constants;
+using Waffle.Core.Interfaces;
 using Waffle.Entities;
 
 namespace Waffle.Models;
@@ -99,7 +100,7 @@ public class LocalizationFilterOptions: FilterOptions
     public bool? IsTranslated { get; set; }
 }
 
-public class SelectFilterOptions
+public class SelectOptions : ILocale
 {
     public string? KeyWords { get; set; }
     public CatalogType Type { get; set; }

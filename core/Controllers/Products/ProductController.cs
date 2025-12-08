@@ -86,7 +86,7 @@ public class ProductController(ICatalogService catalogService, IWorkService work
     public async Task<IActionResult> GoToProductLinkAsync([FromRoute] Guid id) => Ok(await _productService.GoToProductLinkAsync(id));
 
     [HttpGet("options")]
-    public async Task<IActionResult> OptionsAsync() => Ok(await _productService.OptionsAsync());
+    public async Task<IActionResult> OptionsAsync([FromQuery] SelectOptions selectOptions) => Ok(await _productService.OptionsAsync(selectOptions));
 
     [HttpGet("new-arrivals"), AllowAnonymous]
     public async Task<IActionResult> NewArrivalsAsync([FromQuery] ProductFilterOptions filterOptions) => Ok(await _productService.NewArrivalsAsync(filterOptions));

@@ -131,7 +131,7 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
         {
             if (args.Files is null || args.Files.Count == 0) return BadRequest("Files not found!");
             var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
-            var url = $"https://{Request.Host.Value}/files/";
+            var url = $"{Request.Scheme}://{Request.Host.Value}/files/";
             if (args.FolderId != null)
             {
                 var folder = await _context.Folders.FindAsync(args.FolderId);
@@ -149,15 +149,14 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
                 {
                     await file.CopyToAsync(stream);
                 }
-                url += file.FileName;
                 fileContents.Add(new FileContent
                 {
                     Name = file.FileName,
                     Size = file.Length,
                     Type = file.ContentType,
-                    Url = url,
+                    Url = url + file.FileName,
                     UploadBy = User.GetId(),
-                    UploadDate = DateTime.Now,
+                    UploadDate = DateTime.UtcNow,
                     FolderId = args.FolderId
                 });
             }

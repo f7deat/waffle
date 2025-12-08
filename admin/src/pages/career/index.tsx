@@ -20,7 +20,8 @@ const Index: React.FC = () => {
                     {
                         title: 'Ngày ứng tuyển',
                         dataIndex: 'appliedDate',
-                        valueType: 'dateTime'
+                        valueType: 'dateTime',
+                        search: false
                     },
                     {
                         title: 'Họ và tên',
@@ -29,7 +30,8 @@ const Index: React.FC = () => {
                     {
                         title: 'Ngày sinh',
                         dataIndex: 'dateOfBirth',
-                        valueType: 'date'
+                        valueType: 'date',
+                        search: false
                     },
                     {
                         title: 'Email',

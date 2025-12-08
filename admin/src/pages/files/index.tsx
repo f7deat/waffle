@@ -1,13 +1,18 @@
 import WfUpload from '@/components/file-explorer/upload';
 import { apiMultiUpload, countFile, deleteFileContent, listFile, totalFileSize } from '@/services/file-service';
 import {
+  ArrowsAltOutlined,
   ArrowUpOutlined,
   ClearOutlined,
   DeleteOutlined,
   DownloadOutlined,
+  EditOutlined,
   EyeOutlined,
   FileFilled,
   FolderFilled,
+  MoreOutlined,
+  SettingOutlined,
+  ShareAltOutlined,
 } from '@ant-design/icons';
 import {
   ActionType,
@@ -17,7 +22,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Avatar, Button, Col, message, Popconfirm, Row, Space, Statistic, UploadFile } from 'antd';
+import { Avatar, Button, Col, Dropdown, message, Modal, Row, Space, Statistic, UploadFile } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import FolderForm from './components/folder-form';
 import { formatFileSize } from './utils';
@@ -28,6 +33,7 @@ const FilePage: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
   const [size, setSize] = useState<number>(0);
+  const [folderId, setFolderId] = useState<string>('');
 
   useEffect(() => {
     countFile().then(response => setCount(response || 0));
@@ -44,15 +50,38 @@ const FilePage: React.FC = () => {
     }
   };
 
+  const confirmDelete = (id?: string) => {
+    Modal.confirm({
+      title: 'Xác nhận xóa',
+      content: 'Bạn có chắc chắn muốn xóa mục này?',
+      onOk: () => handleDelete(id),
+    });
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        message.success('Copied to clipboard!');
+      },
+      () => {
+        message.error('Failed to copy!');
+      }
+    );
+  };
+
   const columns: ProColumns<API.FileListItem>[] = [
     {
       title: 'Name',
       dataIndex: 'name',
       render: (_, entity) => {
         if (entity.isFolder) {
-          return <div className='font-medium cursor-pointer'><FolderFilled className='text-orange-500' /> {entity.name}</div>
+          return <div className='font-medium cursor-pointer' onClick={() => {
+            setFolderId(entity.id || '');
+            actionRef.current?.reload();
+          }}>
+            <FolderFilled className='text-orange-500' /> {entity.name}</div>
         }
-        return <div className='text-slate-800'><FileFilled /> {entity.name}</div>
+        return <div className='text-slate-800'><FileFilled className='text-slate-500' /> {entity.name}</div>
       },
     },
     {
@@ -66,35 +95,76 @@ const FilePage: React.FC = () => {
       title: 'Size',
       dataIndex: 'size',
       search: false,
-      render: (_, entity) => formatFileSize(entity.size),
+      render: (_, entity) => {
+        if (entity.size === 0) {
+          return '-';
+        }
+        return formatFileSize(entity.size);
+      },
       width: 100
     },
     {
-      title: '',
+      title: <SettingOutlined />,
       valueType: 'option',
       render: (dom, entity) => [
-        <Button size='small'
-          type="primary"
-          icon={<EyeOutlined />}
-          key={1}
-          onClick={() => {
-            history.push(`/files/center/${entity.id}`);
-          }}
-        />,
-        <Button size='small'
-          key={2}
-          icon={<DownloadOutlined />}
-          onClick={() => (window.location.href = entity.url)}
-        />,
-        <Popconfirm
-          title="Are you sure?"
-          onConfirm={() => handleDelete(entity.id)}
-          key={3}
-        >
-          <Button type="primary" icon={<DeleteOutlined />} danger size='small' />
-        </Popconfirm>,
+        <Dropdown key={"more"} menu={{
+          items: [
+            {
+              key: 'view',
+              label: 'Chi tiết',
+              icon: <EyeOutlined />,
+              onClick: () => {
+                history.push(`/files/center/${entity.id}`);
+              }
+            },
+            {
+              key: 'download',
+              label: 'Tải xuống',
+              icon: <DownloadOutlined />,
+              onClick: () => {
+                window.open(entity.url, '_blank');
+              }
+            },
+            {
+              key: 'share',
+              label: 'Chia sẻ',
+              icon: <ShareAltOutlined />,
+              onClick: () => {
+                copyToClipboard(entity.url);
+              }
+            },
+            {
+              key: 'rename',
+              label: 'Đổi tên',
+              icon: <EditOutlined />,
+              onClick: () => {
+                message.info('Chức năng đang phát triển');
+              }
+            },
+            {
+              key: 'move',
+              label: 'Di chuyển',
+              icon: <ArrowsAltOutlined />,
+              onClick: () => {
+                message.info('Chức năng đang phát triển');
+              }
+            },
+            {
+              key: 'delete',
+              label: 'Xóa',
+              icon: <DeleteOutlined />,
+              onClick: () => {
+                confirmDelete(entity.id);
+              },
+              danger: true
+            }
+          ]
+        }}>
+          <Button size='small' type='dashed' icon={<MoreOutlined />} />
+        </Dropdown>
       ],
-      width: 100
+      width: 30,
+      align: 'center'
     },
   ];
   return (
@@ -109,27 +179,31 @@ const FilePage: React.FC = () => {
         </Button>
       }
     >
-      <WfUpload open={open} onCancel={() => setOpen(false)} onFinish={async (files: UploadFile[]) => {
-        const formData = new FormData();
-        console.log(files);
-        files.forEach((file) => {
-          if (file.size && file.size > 10 * 1024 * 1024) { // Example: Limit file size to 10MB
-            message.error(`File ${file.name} exceeds the size limit.`);
-            return;
-          }
-          formData.append('files', file as any);
-        });
-        await apiMultiUpload(formData);
-        message.success('Uploaded!');
-        actionRef.current?.reload();
-        setOpen(false);
-      }} />
+      <WfUpload open={open}
+        multiple
+        onCancel={() => setOpen(false)} onFinish={async (files: UploadFile[]) => {
+          const formData = new FormData();
+          files.forEach((file) => {
+            if (file.size && file.size > 10 * 1024 * 1024) { // Example: Limit file size to 10MB
+              message.error(`File ${file.name} exceeds the size limit.`);
+              return;
+            }
+            formData.append('files', file as any);
+          });
+          await apiMultiUpload(formData);
+          message.success('Uploaded!');
+          actionRef.current?.reload();
+          setOpen(false);
+        }} />
       <Row gutter={16}>
         <Col span={18}>
           <ProTable
             rowSelection={{}}
             search={{
               layout: 'vertical'
+            }}
+            params={{
+              folderId
             }}
             pagination={{
               defaultPageSize: 8

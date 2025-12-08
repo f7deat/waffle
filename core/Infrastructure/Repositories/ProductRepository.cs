@@ -161,7 +161,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         return await ListResult<object>.Success(query, filterOptions);
     }
 
-    public async Task<object> OptionsAsync()
+    public async Task<object> OptionsAsync(SelectOptions selectOptions)
     {
         var query = from c in _context.Catalogs
                     join p in _context.Products on c.Id equals p.CatalogId

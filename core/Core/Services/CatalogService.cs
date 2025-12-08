@@ -394,7 +394,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         return JsonSerializer.Deserialize<ProductImage?>(work.Arguments);
     }
 
-    public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectFilterOptions filterOptions)
+    public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectOptions filterOptions)
     {
         filterOptions.KeyWords = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
         return await _catalogRepository.GetFormSelectAsync(filterOptions);
