@@ -4,7 +4,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { history, useIntl, useModel } from '@umijs/max';
-import { Avatar, Space, Spin } from 'antd';
+import { Space, Spin } from 'antd';
 import { stringify } from 'querystring';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import React, { useCallback } from 'react';
@@ -20,15 +20,6 @@ export const AvatarName = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   return <span className="anticon">{currentUser?.userName}</span>;
-};
-
-const AvatarLogo = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  if (!currentUser?.avatar) {
-    return <Avatar size="small" icon={<UserOutlined />} alt="avatar" />
-  }
-  return <Avatar size="small" src={currentUser?.avatar} alt="avatar" />;
 };
 
 export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
@@ -131,7 +122,6 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       }}
     >
       <Space className='cursor-pointer'>
-        <AvatarLogo />
         <AvatarName />
       </Space>
     </HeaderDropdown>

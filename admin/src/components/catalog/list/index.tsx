@@ -157,7 +157,6 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
         rowSelection={{
           onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys)
         }}
-        onSubmit={(params) => console.log(params)}
         rowKey="id"
         request={(params, sort) =>
           listCatalog({

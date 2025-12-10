@@ -260,6 +260,12 @@ export default [
         path: '/shop/order/center/:id',
         component: './order/center',
         hideInMenu: true
+      },
+      {
+        name: 'productCenter',
+        path: '/shop/product/center/:id',
+        component: './shop/product/center',
+        hideInMenu: true
       }
     ],
   },

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
@@ -47,7 +48,11 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
         return DefResult.Success;
     }
 
-    public async Task<Product?> GetByCatalogIdAsync(Guid catalogId) => await _productRepository.FindByCatalogAsync(catalogId);
+    public async Task<TResult<Product?>> GetByCatalogIdAsync(Guid catalogId)
+    {
+        var product = await _productRepository.FindByCatalogAsync(catalogId);
+        return TResult<Product?>.Ok(product);
+    }
 
     public Task<IEnumerable<ProductLink>> GetLinksAsync(Guid productId)
     {
@@ -95,10 +100,10 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
                 SKU = args.SKU,
                 UnitInStock = args.UnitInStock,
                 SalePrice = args.SalePrice,
-                AffiliateLink = args.AffiliateLink
+                AffiliateLink = args.AffiliateLink,
+                Content = args.Content
             };
             await _productRepository.AddAsync(product);
-
         }
         else
         {
@@ -107,6 +112,7 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
             product.UnitInStock = args.UnitInStock;
             product.SalePrice = args.SalePrice;
             product.AffiliateLink = args.AffiliateLink;
+            product.Content = args.Content;
             await _productRepository.SaveChangesAsync();
         }
         return IdentityResult.Success;

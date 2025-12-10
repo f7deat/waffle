@@ -17,7 +17,7 @@ import WfUpload from '@/components/file-explorer/upload';
 
 type Props = {
   catalog?: API.Catalog;
-  reload: Function
+  reload?: Function
 }
 
 const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
@@ -75,7 +75,7 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
     const response = await saveCatalog(values);
     if (response.succeeded) {
       message.success('Saved!');
-      reload();
+      reload?.();
     }
   };
 

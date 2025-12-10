@@ -29,9 +29,7 @@ export default defineConfig({
   routes,
   npmClient: "yarn",
   esbuildMinifyIIFE: true,
-  publicPath: "/admin/",
-  headScripts: [{ src: "/admin/scripts/loading.js", async: true }],
-
+  headScripts: [{ src: "/scripts/loading.js", async: true }],
   define: {
     API_BASE_URL: API_BASE_URL || "https://defzone.net/api/",
   },

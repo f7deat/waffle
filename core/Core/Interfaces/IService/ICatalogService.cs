@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
@@ -54,4 +55,5 @@ public interface ICatalogService
     Task<object?> GetOptionsAsync(CatalogSelectOptions filterOptions);
     Task<object?> ListTypeAsync();
     Task<object?> GetMetaAsync(string slug);
+    Task<TResult> DetailAsync(Guid id);
 }

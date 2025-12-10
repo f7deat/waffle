@@ -23,7 +23,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     public async Task<IActionResult> GetViewCountAsync([FromQuery] string locale) => Ok(await _catalogService.GetViewCountAsync(locale));
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _catalogService.FindAsync(id));
+    public async Task<IActionResult> DetailAsync([FromRoute] Guid id) => Ok(await _catalogService.DetailAsync(id));
 
     [HttpGet("type/{id}")]
     public async Task<IActionResult> GetTypeAsync([FromRoute] CatalogType id) => Ok(new { data = await _catalogService.GetTypeAsync(id) });

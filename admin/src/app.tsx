@@ -50,20 +50,21 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       locale: true,
     },
     layout: 'mix',
-    waterMarkProps: {
-      content: initialState?.currentUser?.userName
-    },
     token: {
-        sider: {
-          colorMenuBackground: '#020617',
-          colorBgMenuItemHover: '#1677ff',
-          colorTextMenu: '#FFFFFF',
-          colorTextMenuSelected: '#FFFFFF',
-          colorTextMenuItemHover: '#FFFFFF',
-          colorTextMenuActive: '#FFFFFF',
-          colorBgMenuItemSelected: '#1677ff',
-          colorTextMenuTitle: '#FFFFFF'
-        }
+      sider: {
+        colorMenuBackground: '#020617',
+        colorBgMenuItemHover: '#1677ff',
+        colorTextMenu: '#FFFFFF',
+        colorTextMenuSelected: '#FFFFFF',
+        colorTextMenuItemHover: '#FFFFFF',
+        colorTextMenuActive: '#FFFFFF',
+        colorBgMenuItemSelected: '#1677ff',
+        colorTextMenuTitle: '#FFFFFF'
+      }
+    },
+    avatarProps: {
+      src: initialState?.avatar,
+      title: <AvatarDropdown menu />
     },
     footerRender: () => (
       <DefaultFooter copyright="Produced by DefZone Financial Experience Department" links={[
@@ -87,13 +88,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         history.push(loginPath);
       }
     },
-    rightContentRender: () => (
-      <Space>
-        <Question key="doc" />
-        <SelectLang key="SelectLang" />
-        <AvatarDropdown menu />
-      </Space>
-    ),
+    actionsRender: () => [
+      <Question key="doc" />,
+      <SelectLang key="SelectLang" />
+    ],
     links: isDev
       ? [
         <a key="openapi" href="https://waffleverse.gitbook.io/api/" target="_blank" rel="noreferrer">

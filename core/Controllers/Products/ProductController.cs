@@ -12,19 +12,15 @@ using Waffle.Models.Result;
 
 namespace Waffle.Controllers.Products;
 
-public class ProductController(ICatalogService catalogService, IWorkService workService, IProductService productService, ILogService appLogService) : BaseController
+public class ProductController(ICatalogService _catalogService, IWorkService workService, IProductService _productService) : BaseController
 {
-    private readonly ICatalogService _catalogService = catalogService;
     private readonly IWorkService _workService = workService;
-    private readonly IProductService _productService = productService;
-    private readonly ILogService _appLogService = appLogService;
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _productService.GetByCatalogIdAsync(id));
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] Catalog args, [FromQuery] string locale) => Ok(await _productService.CreateAsync(args, locale));
-
 
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync() => Ok(DefResult.Ok(await _productService.CountAsync()));
@@ -57,7 +53,8 @@ public class ProductController(ICatalogService catalogService, IWorkService work
         foreach (var item in args)
         {
             item.Catalog = await _catalogService.FindAsync(item.ProductId);
-            item.Product = await _productService.GetByCatalogIdAsync(item.ProductId);
+            var result = await _productService.GetByCatalogIdAsync(item.ProductId);
+            item.Product = result.Data;
         }
         if ("checkout".Equals(type))
         {

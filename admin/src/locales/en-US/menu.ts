@@ -9,6 +9,7 @@ export default {
   'menu.comments': 'Comments',
   'menu.shop': 'E-Commerce',
   'menu.shop.product': 'Product',
+  'menu.shop.productCenter': 'Product center',
   'menu.shop.order': 'Orders',
   'menu.shop.newOrder': 'New order',
   'menu.component': 'Components',

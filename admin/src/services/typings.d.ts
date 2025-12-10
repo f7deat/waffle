@@ -1,4 +1,10 @@
 declare namespace API {
+
+  type TResult<T> = {
+    message: string;
+    data: T;
+  };
+
   type BaseEntity = {
     id?: string;
   };

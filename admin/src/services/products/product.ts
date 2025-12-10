@@ -26,3 +26,14 @@ export async function apiProductOptions(params?: any) {
         params
     });
 }
+
+export async function apiProductSave(data: any) {
+    return request(`product/save`, {
+        method: 'POST',
+        data
+    });
+}
+
+export async function apiProductDetail(id?: string) {
+    return request(`product/${id}`);
+}

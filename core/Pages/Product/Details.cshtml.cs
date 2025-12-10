@@ -25,7 +25,8 @@ public class DetailsModel(ICatalogService catalogService, ApplicationDbContext c
 
     public async Task<IActionResult> OnGetAsync()
     {
-        Product = await _productService.GetByCatalogIdAsync(PageData.Id);
+        var result = await _productService.GetByCatalogIdAsync(PageData.Id);
+        Product = result.Data;
         if (Product is null) return NotFound();
         Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
         Links = await _productService.GetLinksAsync(Product.Id);

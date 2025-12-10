@@ -180,3 +180,7 @@ export async function apiGetCatalogType(id?: string) {
 export async function apiGetCatalogOptions(params: any) {
   return request(`catalog/options`, { params });
 }
+
+export async function apiCatalogDetail(id?: string) {
+  return request<API.TResult<API.Catalog>>(`catalog/${id}`);
+}

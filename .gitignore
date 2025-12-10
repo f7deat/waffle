@@ -2,12 +2,10 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/core/Data/Migrations
 /core/obj
 /core/Properties
 /core/bin/Debug/net6.0
 /core/Waffle.csproj.user
-/core/Migrations
 /core/.vs
 /core/wwwroot/imgs
 /core/wwwroot/files

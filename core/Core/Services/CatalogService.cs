@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
@@ -649,5 +650,28 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             x.Description,
             x.Thumbnail
         }).FirstOrDefaultAsync();
+    }
+
+    public async Task<TResult> DetailAsync(Guid id)
+    {
+        var data = await _catalogRepository.FindAsync(id);
+        if (data is null) return TResult.Failed("Data not found!");
+        data.ViewCount++;
+        await _catalogRepository.UpdateAsync(data);
+        return TResult.Ok(new
+        {
+            data.Id,
+            data.ViewCount,
+            data.Name,
+            data.NormalizedName,
+            data.Description,
+            data.Thumbnail,
+            data.Active,
+            data.CreatedBy,
+            data.ModifiedBy,
+            data.CreatedDate,
+            data.ModifiedDate,
+            data.ParentId
+        });
     }
 }
