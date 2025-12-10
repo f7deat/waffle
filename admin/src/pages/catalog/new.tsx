@@ -1,3 +1,4 @@
+import { PlusOutlined } from '@ant-design/icons';
 import {
   ModalForm,
   ProFormText,
@@ -5,12 +6,13 @@ import {
   ProFormCheckbox,
 } from '@ant-design/pro-components';
 import { useIntl } from '@umijs/max';
+import { Button } from 'antd';
 
 type NewCatalogProps = {
   type: number;
-  open: boolean;
-  setOpen: any;
-  onFinish: any;
+  open?: boolean;
+  setOpen?: any;
+  onFinish?: any;
 };
 
 const NewCatalog: React.FC<NewCatalogProps> = (props) => {
@@ -24,6 +26,7 @@ const NewCatalog: React.FC<NewCatalogProps> = (props) => {
       title={intl.formatMessage({
         id: 'general.new',
       })}
+      trigger={<Button type='primary' icon={<PlusOutlined />}>New Catalog</Button>}
     >
       <ProFormText
         label="Name"
@@ -35,7 +38,7 @@ const NewCatalog: React.FC<NewCatalogProps> = (props) => {
         ]}
       />
       <ProFormTextArea label="Description" name="description" />
-      <ProFormText name="type" initialValue={props.type} label="Type" />
+      <ProFormText name="type" initialValue={props.type} hidden />
       <ProFormCheckbox name="active" initialValue={false} hidden />
     </ModalForm>
   );

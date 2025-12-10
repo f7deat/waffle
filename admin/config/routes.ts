@@ -273,7 +273,13 @@ export default [
     icon: 'SolutionOutlined',
     name: 'career',
     path: '/career',
-    component: './career'
+    routes: [
+      {
+        name: 'application',
+        path: '/career/application',
+        component: './career'
+      }
+    ]
   },
   {
     icon: 'TeamOutlined',

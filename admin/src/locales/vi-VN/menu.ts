@@ -8,6 +8,7 @@ export default {
   'menu.catalogList': 'Danh sách',
   'menu.catalogCenter': 'Chi tiết',
   'menu.career': 'Tuyển dụng',
+  'menu.career.application': 'Đơn ứng tuyển',
   'menu.comments': 'Bình luận',
   'menu.article': 'Bài viết',
   'menu.article.list': 'Danh sách',

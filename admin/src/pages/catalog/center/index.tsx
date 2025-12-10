@@ -6,7 +6,7 @@ import {
   ProCard,
   ProFormText,
 } from '@ant-design/pro-components';
-import { FormattedMessage, history, useParams } from '@umijs/max';
+import { FormattedMessage, history, useParams, useRequest } from '@umijs/max';
 import { Button, Col, message, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { CatalogType } from '@/constants';
@@ -22,18 +22,9 @@ import { CareerSetting } from '../components';
 
 const CatalogCenter: React.FC = () => {
   const { id } = useParams();
-
+  const { data: catalog, refresh } = useRequest(() => getCatalog(id));
   const [open, setOpen] = useState<boolean>(false);
-  const [catalog, setCatalog] = useState<API.Catalog>();
   const [tab, setTab] = useState('content');
-
-  const reload = () => {
-    getCatalog(id).then((response) => setCatalog(response));
-  }
-
-  useEffect(() => {
-    reload();
-  }, [id]);
 
   const onFinish = async (values: API.Catalog) => {
     addCatalog(values).then((response) => {
@@ -93,7 +84,7 @@ const CatalogCenter: React.FC = () => {
                 {
                   label: 'Thông tin',
                   key: 'info',
-                  children: <CatalogSetting catalog={catalog} reload={reload} />,
+                  children: <CatalogSetting catalog={catalog} reload={refresh} />,
                 },
                 {
                   label: <FormattedMessage id='menu.settings' />,

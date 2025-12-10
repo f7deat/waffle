@@ -4,7 +4,7 @@ import { SortOrder } from 'antd/lib/table/interface';
 import { DataNode } from 'antd/lib/tree';
 
 export async function getCatalog(id: string | undefined) {
-  return request<API.Catalog>(`catalog/${id}`);
+  return request<API.TResult<API.Catalog>>(`catalog/${id}`);
 }
 
 export async function addCatalog(data: API.Catalog) {

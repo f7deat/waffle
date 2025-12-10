@@ -12,29 +12,27 @@ const FormEditor: React.FC<Props> = (props) => {
     const formRef = ProForm.useFormInstance();
 
     useEffect(() => {
-        if (formRef) {
-            if (!ejInstance.current) {
-                const editor = new EditorJS({
-                    holder: 'editorjs',
-                    data: formRef.getFieldValue(props.name),
-                    onReady: () => {
-                        ejInstance.current = editor;
-                    },
-                    onChange: (api) => {
-                        api.saver.save().then((outputData) => {
-                            formRef?.setFieldValue(props.name, outputData);
-                        });
-                    },
-                    autofocus: true,
-                    tools: EDITOR_JS_TOOLS,
-                });
-            }
-            return () => {
-                ejInstance.current.destroy();
-                ejInstance.current = null;
-            };
+        if (!ejInstance.current) {
+            const editor = new EditorJS({
+                holder: 'editorjs',
+                data: props.initialValue,
+                onReady: () => {
+                    ejInstance.current = editor;
+                },
+                onChange: (api) => {
+                    api.saver.save().then((outputData) => {
+                        formRef.setFieldValue(props.name, outputData);
+                    });
+                },
+                autofocus: true,
+                tools: EDITOR_JS_TOOLS,
+            });
         }
-    }, [formRef]);
+        return () => {
+            ejInstance.current.destroy();
+            ejInstance.current = null;
+        };
+    }, []);
 
     return (
         <ProForm.Item {...props}>

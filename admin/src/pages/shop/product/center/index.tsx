@@ -12,7 +12,7 @@ const Index: React.FC = () => {
 
     const { id } = useParams<{ id: string }>();
     const { data: catalog } = useRequest(() => apiCatalogDetail(id));
-    const { data: product } = useRequest(() => apiProductDetail(id));
+    const { data: product, loading } = useRequest(() => apiProductDetail(id));
     const formRef = useRef<ProFormInstance>(null);
 
     useEffect(() => {
@@ -48,11 +48,13 @@ const Index: React.FC = () => {
                                     <ProForm formRef={formRef} onFinish={onFinish}>
                                         <Row gutter={16}>
                                             <Col md={18}>
-                                                <FormEditor name="content" label="Nội dung" rules={[
-                                                    {
-                                                        required: true
-                                                    }
-                                                ]} />
+                                                {
+                                                    product && (<FormEditor initialValue={JSON.parse(product.content || '{}')} name="content" label="Nội dung" rules={[
+                                                        {
+                                                            required: true
+                                                        }
+                                                    ]} />)
+                                                }
                                                 <ProFormText name={"content"} hidden />
                                             </Col>
                                             <Col md={6}>

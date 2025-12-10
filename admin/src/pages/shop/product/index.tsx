@@ -1,5 +1,5 @@
-import CatalogList from "@/components/catalog/list";
 import { CatalogType } from "@/constants";
+import NewCatalog from "@/pages/catalog/new";
 import { listCatalog } from "@/services/catalog";
 import { CalendarOutlined } from "@ant-design/icons";
 import { PageContainer, ProList } from "@ant-design/pro-components"
@@ -8,7 +8,9 @@ import dayjs from "dayjs";
 
 const ProductPage: React.FC = () => {
     return (
-        <PageContainer>
+        <PageContainer
+        extra={<NewCatalog type={CatalogType.Product} />}
+        >
             <ProList
                 request={listCatalog}
                 params={{
