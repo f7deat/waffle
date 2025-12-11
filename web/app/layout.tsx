@@ -1,23 +1,28 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter } from 'next/font/google'
+import { Quicksand } from 'next/font/google'
 import Script from "next/script";
 import Footer from "@/components/layout/footer";
 import { ConfigProvider } from "antd";
 import '@ant-design/v5-patch-for-react-19';
 
-const inter = Inter({ subsets: ['latin'] });
+const quicksand = Quicksand({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-quicksand',
+});
 
 export const metadata: Metadata = {
   title: "DefZone.Net - Home",
   description: "DefZone.Net - Home",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <head>
@@ -28,18 +33,18 @@ export default function RootLayout({
           async
         />
       </head>
-      <body className="h-screen flex flex-col" style={inter.style}>
+      <body className="h-screen flex flex-col" style={quicksand.style}>
         <ConfigProvider
-        theme={{
-          components: {
-            Input: {
-              borderRadius: 0
-            },
-            Button: {
-              borderRadius: 0
+          theme={{
+            components: {
+              Input: {
+                borderRadius: 0
+              },
+              Button: {
+                borderRadius: 0
+              }
             }
-          }
-        }}
+          }}
         >
           <div className="flex-1">
             {children}

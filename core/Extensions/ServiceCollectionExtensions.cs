@@ -7,6 +7,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Senders;
 using Waffle.Core.Services;
 using Waffle.Core.Services.Affiliates;
+using Waffle.Core.Services.Articles;
 using Waffle.Core.Services.Careers;
 using Waffle.Core.Services.Contacts;
 using Waffle.Core.Services.Ecommerces;
@@ -47,6 +48,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMenuService, MenuService>();
         services.AddScoped<IRoomService, RoomService>();
         services.AddScoped<ICityService, CityService>();
+        services.AddScoped<IArticleRepository, ArticleRepository>();
+        services.AddScoped<IArticleService, ArticleService>();
 
         #region Products
         services.AddScoped<IProductRepository, ProductRepository>();

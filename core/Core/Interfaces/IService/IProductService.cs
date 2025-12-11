@@ -27,4 +27,5 @@ public interface IProductService
     Task<object> OptionsAsync(SelectOptions selectOptions);
     Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions);
     Task<DefResult> CreateAsync(Catalog args, string locale);
+    Task<TResult> GetByNameAsync(string normalizedName);
 }

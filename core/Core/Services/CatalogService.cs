@@ -644,12 +644,21 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
 
     public async Task<object?> GetMetaAsync(string slug)
     {
-        return await _context.Catalogs.Where(x => x.NormalizedName == slug).Select(x => new
+        var catalog = await _context.Catalogs.Where(x => x.NormalizedName == slug).Select(x => new
         {
             x.Name,
             x.Description,
             x.Thumbnail
         }).FirstOrDefaultAsync();
+        if (catalog is null) return default;
+        var theme = _options.Theme;
+        return new
+        {
+            catalog.Name,
+            catalog.Description,
+            catalog.Thumbnail,
+            theme
+        };
     }
 
     public async Task<TResult> DetailAsync(Guid id)

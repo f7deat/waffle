@@ -54,6 +54,8 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
         return TResult<Product?>.Ok(product);
     }
 
+    public Task<TResult> GetByNameAsync(string normalizedName) => _productRepository.GetByNameAsync(normalizedName);
+
     public Task<IEnumerable<ProductLink>> GetLinksAsync(Guid productId)
     {
         return _productLinkRepository.ListByProductIdAsync(productId);

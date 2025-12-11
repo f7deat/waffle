@@ -19,6 +19,9 @@ public class ProductController(ICatalogService _catalogService, IWorkService wor
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _productService.GetByCatalogIdAsync(id));
 
+    [HttpGet("by-name/{normalizedName}"), AllowAnonymous]
+    public async Task<IActionResult> GetByNameAsync([FromRoute] string normalizedName) => Ok(await _productService.GetByNameAsync(normalizedName));
+
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] Catalog args, [FromQuery] string locale) => Ok(await _productService.CreateAsync(args, locale));
 
@@ -87,4 +90,7 @@ public class ProductController(ICatalogService _catalogService, IWorkService wor
 
     [HttpGet("new-arrivals"), AllowAnonymous]
     public async Task<IActionResult> NewArrivalsAsync([FromQuery] ProductFilterOptions filterOptions) => Ok(await _productService.NewArrivalsAsync(filterOptions));
+
+    [HttpGet("list"), AllowAnonymous]
+    public async Task<IActionResult> ListAsync([FromQuery] ProductFilterOptions filterOptions) => Ok(await _productService.ListAsync(filterOptions));
 }

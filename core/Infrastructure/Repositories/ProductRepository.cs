@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
@@ -39,6 +40,31 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
     }
 
     public async Task<Product?> FindByCatalogAsync(Guid catalogId) => await _context.Products.FirstOrDefaultAsync(x => x.CatalogId == catalogId);
+
+    public async Task<TResult> GetByNameAsync(string normalizedName)
+    {
+        var query = from c in _context.Catalogs
+                    join p in _context.Products on c.Id equals p.CatalogId
+                    where c.NormalizedName == normalizedName && c.Type == CatalogType.Product && c.Active
+                    select new
+                    {
+                        c.Id,
+                        c.Name,
+                        c.NormalizedName,
+                        c.Thumbnail,
+                        c.CreatedDate,
+                        c.ModifiedDate,
+                        c.ViewCount,
+                        p.Price,
+                        p.SalePrice,
+                        c.Description,
+                        p.SKU,
+                        p.Content,
+                        p.UnitInStock,
+                        p.AffiliateLink
+                    };
+        return TResult.Ok(await _context.Products.FirstOrDefaultAsync());
+    }
 
     public async Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
     {
