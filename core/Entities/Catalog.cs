@@ -73,6 +73,7 @@ public enum CatalogType
     Career = 19,
     [Description("ProductCategory")]
     ProductCategory = 20
+
 }
 
 public class CatalogSetting

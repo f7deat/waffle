@@ -27,7 +27,7 @@ export default defineConfig({
     type: "hash",
   },
   routes,
-  npmClient: "yarn",
+  npmClient: "npm",
   esbuildMinifyIIFE: true,
   headScripts: [{ src: "/scripts/loading.js", async: true }],
   define: {

@@ -38,7 +38,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
         return Ok(await _catalogService.GetByNameAsync(normalizedName));
     }
 
-    [HttpPost("add")]
+    [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] Catalog catalog, [FromQuery] string locale)
     {
         try

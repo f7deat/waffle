@@ -402,6 +402,11 @@ export default [
         name: 'menu',
         path: '/settings/menu',
         component: './settings/menu',
+      },
+      {
+        name: 'country',
+        path: '/settings/country',
+        component: './settings/country'
       }
     ],
   },

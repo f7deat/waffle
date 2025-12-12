@@ -47,33 +47,23 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IdentityResult> AddAsync(Catalog catalog)
+    public async Task<TResult> AddAsync(Catalog args)
     {
-        if (string.IsNullOrEmpty(catalog.NormalizedName))
+        var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
+        if (await IsExistAsync(normalizedName)) return TResult.Failed("Catalog was existed!");
+        var catalog = new Catalog
         {
-            catalog.NormalizedName = SeoHelper.ToSeoFriendly(catalog.Name);
-        }
-        if (await IsExistAsync(catalog.NormalizedName))
-        {
-            if (catalog.Type == CatalogType.Tag)
-            {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Code = "error.dataDupplicate",
-                    Description = "Tag was existed!"
-                });
-            }
-            var count = await _context.Catalogs.CountAsync(x => x.NormalizedName.Contains(catalog.NormalizedName));
-            catalog.NormalizedName += $"-{count + 1}";
-        }
-        catalog.CreatedDate = DateTime.Now;
-        catalog.ModifiedDate = DateTime.Now;
-        catalog.CreatedBy = _currentUser.GetId();
-        catalog.ViewCount = 0;
-        if (string.IsNullOrEmpty(catalog.Locale))
-        {
-            catalog.Locale = _options.DefaultLanguage;
-        }
+            Id = Guid.NewGuid(),
+            Active = args.Active,
+            CreatedBy = _currentUser.GetId(),
+            CreatedDate = DateTime.Now,
+            Description = args.Description,
+            Name = args.Name,
+            NormalizedName = normalizedName,
+            Locale = args.Locale,
+            Type = args.Type,
+            ParentId = args.ParentId
+        };
         await _catalogRepository.AddAsync(catalog);
         switch (catalog.Type)
         {
@@ -84,7 +74,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
                 await AddProductAsync(catalog.Id);
                 break;
         }
-        return IdentityResult.Success;
+        return TResult.Success;
     }
 
     public async Task<Catalog> EnsureDataAsync(string name, string locale, CatalogType type = CatalogType.Leaf)

@@ -3,7 +3,7 @@ import FormCatalogType from "@/components/form/catalog-type";
 import { addCatalog, deleteCatalog, listCatalog } from "@/services/catalog";
 import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from "@ant-design/icons";
 import { ActionType, ModalForm, ProFormText, ProFormTextArea, ProList } from "@ant-design/pro-components";
-import { FormattedMessage, useParams, history, useIntl } from "@umijs/max";
+import { FormattedMessage, useParams, history } from "@umijs/max";
 import { Button, Col, Popconfirm, Row, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 
@@ -14,7 +14,6 @@ type ChildCatalogProps = {
 const ChildCatalog: React.FC<ChildCatalogProps> = ({ parent }) => {
 
     const { id } = useParams();
-    const intl = useIntl();
 
     const [open, setOpen] = useState<boolean>(false);
     const actionRef = useRef<ActionType>();
@@ -93,13 +92,8 @@ const ChildCatalog: React.FC<ChildCatalogProps> = ({ parent }) => {
                         ]
                     }
                 }}
-                request={(params) =>
-                    listCatalog({
-                        ...params,
-                        parentId: id,
-                        locale: intl.locale
-                    }, {})
-                }
+                request={listCatalog}
+                params={{ parentId: id }}
                 pagination={{
                     pageSize: 10
                 }}
@@ -122,7 +116,7 @@ const ChildCatalog: React.FC<ChildCatalogProps> = ({ parent }) => {
                 />
                 <Row gutter={16}>
                     <Col span={12}>
-                        <FormCatalogType label='Type' name='type' initialValue={parent?.type.toString()} disabled />
+                        <FormCatalogType label='Type' name='type' initialValue={parent?.type?.toString()} disabled />
                     </Col>
                     <Col span={12}>
                         <FormCatalogList label="Parent" name="parentId" initialValue={parent?.id} />

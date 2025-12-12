@@ -14,7 +14,7 @@ namespace Waffle.Core.Interfaces.IService;
 public interface ICatalogService
 {
     Task<DefResult> ActiveAsync(Guid id);
-    Task<IdentityResult> AddAsync(Catalog catalog);
+    Task<TResult> AddAsync(Catalog catalog);
     Task<Catalog> EnsureDataAsync(string name, string locale, CatalogType type = CatalogType.Leaf);
     Task<Catalog?> GetByNameAsync(string? normalizedName);
     Task<List<ComponentListItem>> ListComponentAsync(Guid catalogId);
