@@ -1,9 +1,8 @@
 ﻿namespace Waffle.Entities.Locations;
 
-public class Country : BaseEntity
+public class Country : BaseEntity<int>
 {
-    public Guid CatalogId { get; set; }
     public string Name { get; set; } = default!;
 
-    public ICollection<Room>? Rooms { get; set; }
+    public ICollection<Province>? Provinces { get; set; }
 }

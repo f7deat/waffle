@@ -5,9 +5,44 @@ using Waffle.Models.Components;
 
 namespace Waffle.Models;
 
+public class ListResult
+{
+    public IEnumerable<object> Data { get; set; } = [];
+    public int Total { get; set; }
+    public bool Succeeded { get; }
+    private IFilterOptions FilterOptions { get; set; }
+    public bool HasNextPage => Total > FilterOptions.Current * FilterOptions.PageSize;
+    public bool HasPreviousPage => FilterOptions.Current > 1;
+    public bool HasData => Data.Any();
+
+    public ListResult()
+    {
+        FilterOptions = new BasicFilterOptions();
+    }
+
+    public ListResult(IEnumerable<object> data, int total, IFilterOptions filterOptions)
+    {
+        Data = data;
+        Succeeded = true;
+        Total = total;
+        FilterOptions = filterOptions;
+    }
+
+    public static async Task<ListResult> Success(IQueryable<object> query, IFilterOptions filterOptions)
+    {
+        if (filterOptions.Current < 1) filterOptions.Current = 1;
+        return new ListResult(await query.AsNoTracking().Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync(), await query.CountAsync(), filterOptions);
+    }
+
+    public static ListResult Success(IEnumerable<object> query, IFilterOptions filterOptions)
+    {
+        return new ListResult(query, query.Count(), filterOptions);
+    }
+}
+
 public class ListResult<T> where T : class
 {
-    public IEnumerable<T> Data { get; set; } = new List<T>();
+    public IEnumerable<T> Data { get; set; } = [];
     public int Total { get; set; }
     public bool Succeeded { get; }
     private IFilterOptions FilterOptions { get; set; }

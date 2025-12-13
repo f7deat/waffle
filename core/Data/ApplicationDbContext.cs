@@ -5,6 +5,7 @@ using Waffle.Entities.Affliates;
 using Waffle.Entities.Careers;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
+using Waffle.Entities.Locations;
 using Waffle.Entities.Notifications;
 
 namespace Waffle.Data;
@@ -38,6 +39,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     #region Notifications
     public DbSet<Notification> Notifications { get; set; } = default!;
     public DbSet<NotificationUser> NotificationUsers { get; set; } = default!;
+    #endregion
+
+    #region Locations
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<Province> Provinces { get; set; }
+    public DbSet<District> Districts { get; set; }
+    public DbSet<Street> Streets { get; set; }
+    public DbSet<Place> Places { get; set; }
+    public DbSet<PlaceImage> PlaceImages { get; set; }
     #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)

@@ -4,6 +4,7 @@ using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Locations;
 using Waffle.Core.Senders;
 using Waffle.Core.Services;
 using Waffle.Core.Services.Affiliates;
@@ -12,9 +13,11 @@ using Waffle.Core.Services.Careers;
 using Waffle.Core.Services.Contacts;
 using Waffle.Core.Services.Ecommerces;
 using Waffle.Core.Services.Files;
+using Waffle.Core.Services.Locations;
 using Waffle.Data.ContentGenerators;
 using Waffle.Infrastructure.Repositories;
 using Waffle.Infrastructure.Repositories.Catalogs;
+using Waffle.Infrastructure.Repositories.Locations;
 
 namespace Waffle.Extensions;
 
@@ -81,6 +84,15 @@ public static class ServiceCollectionExtensions
 
         #region Notification
         services.AddScoped<INotificationService, NotificationService>();
+        #endregion
+
+        #region Locations
+        services.AddScoped<ICountryRepository, CountryRepository>();
+        services.AddScoped<ICountryService, CountryService>();
+        services.AddScoped<IProvinceRepository, ProvinceRepository>();
+        services.AddScoped<IProvinceService, ProvinceService>();
+        services.AddScoped<IDistrictRepository, DistrictRepository>();
+        services.AddScoped<IDistrictService, DistrictService>();
         #endregion
     }
 }

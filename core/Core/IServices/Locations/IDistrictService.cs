@@ -1,0 +1,11 @@
+﻿using Waffle.Core.Foundations.Models;
+using Waffle.Core.Services.Locations.Filters;
+using Waffle.Entities.Locations;
+
+namespace Waffle.Core.IServices.Locations;
+
+public interface IDistrictService
+{
+    Task<TResult> CreateAsync(District args);
+    Task<object> GetOptionsAsync(DistrictSelectOptions filterOptions);
+}

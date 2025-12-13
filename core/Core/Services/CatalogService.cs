@@ -13,6 +13,7 @@ using Waffle.Core.Options;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
+using Waffle.Entities.Locations;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
@@ -72,6 +73,12 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
                 break;
             case CatalogType.Product:
                 await AddProductAsync(catalog.Id);
+                break;
+            case CatalogType.Location:
+                await _context.Places.AddAsync(new Place
+                {
+                    Id = catalog.Id
+                });
                 break;
         }
         return TResult.Success;
@@ -536,7 +543,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
     {
         var query = from a in _context.Catalogs
                     where a.Active && a.Locale == filterOptions.Locale
-                    select new 
+                    select new
                     {
                         a.Name,
                         Url = a.Url ?? $"/{a.Type}/{a.NormalizedName}".ToLower(),
