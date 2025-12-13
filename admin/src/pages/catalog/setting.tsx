@@ -1,4 +1,4 @@
-import { saveCatalog } from '@/services/catalog';
+import { apiCatalogDetail, saveCatalog } from '@/services/catalog';
 import { FolderOutlined, UploadOutlined } from '@ant-design/icons';
 import {
   ProForm,
@@ -28,45 +28,10 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
   const [upload, setUpload] = useState<boolean>(false);
 
   useEffect(() => {
-    if (catalog) {
-      formRef.current?.setFields([
-        {
-          name: 'id',
-          value: catalog.id,
-        },
-        {
-          name: 'name',
-          value: catalog.name,
-        },
-        {
-          name: 'normalizedName',
-          value: catalog.normalizedName,
-        },
-        {
-          name: 'description',
-          value: catalog.description,
-        },
-        {
-          name: 'thumbnail',
-          value: catalog.thumbnail,
-        },
-        {
-          name: 'type',
-          value: catalog.type,
-        },
-        {
-          name: 'active',
-          value: catalog.active,
-        },
-        {
-          name: 'parentId',
-          value: catalog.parentId
-        },
-        {
-          name: 'locale',
-          value: catalog.locale
-        }
-      ]);
+    if (id) {
+      apiCatalogDetail(id).then((response) => {
+        formRef.current?.setFieldsValue(response.data);
+      });
     }
   }, [id]);
 

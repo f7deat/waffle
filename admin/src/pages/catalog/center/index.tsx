@@ -1,5 +1,5 @@
 import WorkContentComponent from '@/components/works';
-import { addCatalog, getCatalog } from '@/services/catalog';
+import { apiCatalogAdd, getCatalog } from '@/services/catalog';
 import {
   ModalForm,
   PageContainer,
@@ -8,7 +8,7 @@ import {
 } from '@ant-design/pro-components';
 import { FormattedMessage, history, useParams, useRequest } from '@umijs/max';
 import { Button, Col, message, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { CatalogType } from '@/constants';
 import { LeftOutlined } from '@ant-design/icons';
 import ChildCatalog from '../child';
@@ -27,7 +27,7 @@ const CatalogCenter: React.FC = () => {
   const [tab, setTab] = useState('content');
 
   const onFinish = async (values: API.Catalog) => {
-    addCatalog(values).then((response) => {
+    apiCatalogAdd(values).then((response) => {
       if (response.succeeded) {
         message.success('Saved!');
         setOpen(false);

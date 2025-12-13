@@ -1,27 +1,22 @@
+import CatalogForm from '@/components/form/catalog';
 import { CatalogType } from '@/constants';
-import { activeCatalog, addCatalog, apiCatalogDeleteRange, deleteCatalog, listCatalog } from '@/services/catalog';
+import { activeCatalog, apiCatalogDeleteRange, deleteCatalog, listCatalog } from '@/services/catalog';
 import { DeleteOutlined, EyeOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   ActionType,
-  ModalForm,
   ProColumns,
-  ProFormInstance,
-  ProFormText,
-  ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
-import { Link, useIntl } from '@umijs/max';
+import { Link } from '@umijs/max';
 import { message, Button, Popconfirm, Tooltip, Dropdown, Switch } from 'antd';
 import React, { useRef, useState } from 'react';
 
 type CatalogListProps = {
-  type?: CatalogType;
+  type: CatalogType;
 };
 
 const CatalogList: React.FC<CatalogListProps> = (props) => {
-  const intl = useIntl();
   const actionRef = useRef<ActionType>();
-  const formRef = useRef<ProFormInstance>();
   const [open, setOpen] = useState<boolean>(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
@@ -127,17 +122,6 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
     },
   ];
 
-  const onFinish = async (values: API.Catalog) => {
-    values.type = Number(values.type);
-    const response = await addCatalog(values);
-    if (response.succeeded) {
-      formRef.current?.resetFields();
-      message.success('Added!');
-      actionRef.current?.reload();
-      setOpen(false);
-    }
-  };
-
   const onRemoveRange = async () => {
     if (selectedRowKeys.length === 0) {
       message.warning('Vui lòng chọn dòng cần xóa!');
@@ -179,32 +163,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
           </Popconfirm>
         ]}
       />
-      <ModalForm
-        formRef={formRef}
-        open={open}
-        onOpenChange={setOpen}
-        onFinish={onFinish}
-        title={intl.formatMessage({
-          id: 'general.new',
-        })}
-      >
-        <ProFormText
-          name="name"
-          label="Name"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        />
-        <ProFormText name='type' initialValue={props.type} hidden />
-        <ProFormTextArea label="Description" name="description" rules={[
-          {
-            required: true
-          }
-        ]} />
-        <ProFormText name="locale" initialValue={intl.locale} hidden />
-      </ModalForm>
+      <CatalogForm open={open} onOpenChange={setOpen} reload={() => actionRef.current?.reload()} type={props.type} />
     </div>
   );
 };

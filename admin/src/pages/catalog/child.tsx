@@ -1,6 +1,6 @@
 import FormCatalogList from "@/components/form/catalog-list";
 import FormCatalogType from "@/components/form/catalog-type";
-import { addCatalog, deleteCatalog, listCatalog } from "@/services/catalog";
+import { apiCatalogAdd, deleteCatalog, listCatalog } from "@/services/catalog";
 import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from "@ant-design/icons";
 import { ActionType, ModalForm, ProFormText, ProFormTextArea, ProList } from "@ant-design/pro-components";
 import { FormattedMessage, useParams, history } from "@umijs/max";
@@ -27,12 +27,10 @@ const ChildCatalog: React.FC<ChildCatalogProps> = ({ parent }) => {
     const onFinish = async (values: API.Catalog) => {
         values.parentId = id;
         values.type = Number(values.type);
-        const response = await addCatalog(values);
-        if (response.succeeded) {
-            message.success('Added!');
-            actionRef.current?.reload();
-            setOpen(false);
-        }
+        await apiCatalogAdd(values);
+        message.success('Added!');
+        actionRef.current?.reload();
+        setOpen(false);
     };
 
     const onConfirm = async (id?: string) => {

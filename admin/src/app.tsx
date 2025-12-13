@@ -108,6 +108,10 @@ export const request: RequestConfig = {
   ...errorConfig,
   responseInterceptors: [
     (response: any) => {
+      if (response.data?.succeeded === false) {
+        message.error(response.data.message || 'Error occurred');
+        throw new Error(response.data.message || 'Error occurred');
+      }
       return response;
     },
   ],

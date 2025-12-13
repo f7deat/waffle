@@ -7,8 +7,8 @@ export async function getCatalog(id: string | undefined) {
   return request<API.TResult<API.Catalog>>(`catalog/${id}`);
 }
 
-export async function addCatalog(data: API.Catalog) {
-  return request('catalog/add', {
+export async function apiCatalogAdd(data: API.Catalog) {
+  return request('catalog', {
     method: 'POST',
     data,
   });

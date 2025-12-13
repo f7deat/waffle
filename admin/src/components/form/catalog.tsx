@@ -1,6 +1,7 @@
 import { CatalogType } from "@/constants";
-import { apiCatalogDetail } from "@/services/catalog";
+import { apiCatalogAdd, apiCatalogDetail } from "@/services/catalog";
 import { ModalForm, ModalFormProps, ProFormDigit, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea } from "@ant-design/pro-components";
+import { message } from "antd";
 import { useEffect, useRef } from "react";
 
 type Props = ModalFormProps & {
@@ -21,8 +22,23 @@ const CatalogForm: React.FC<Props> = ({ reload, catalogId, ...props }) => {
         }
     }, [catalogId]);
 
+    const onFinish = async (values: any) => {
+        if (values.id) {
+
+        } else {
+            await apiCatalogAdd({
+                ...values,
+                type: props.type
+            });
+        }
+        message.success('Succeeded!');
+        formRef.current?.resetFields();
+        reload?.();
+        return true;
+    }
+
     return (
-        <ModalForm {...props} title="Catalog Form">
+        <ModalForm {...props} title="Catalog Form" onFinish={onFinish} formRef={formRef}>
             <ProFormText name="id" hidden />
             <ProFormText name="name" label="Name" />
             <ProFormTextArea name="description" label="Description" />
@@ -31,7 +47,7 @@ const CatalogForm: React.FC<Props> = ({ reload, catalogId, ...props }) => {
             <ProFormSelect name="active" label="Active" initialValue={true} options={[
                 {
                     label: 'Active',
-                    value: true
+                    value: true as any
                 },
                 {
                     label: 'Draft',
