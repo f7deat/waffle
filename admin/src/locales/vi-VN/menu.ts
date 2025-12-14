@@ -40,6 +40,7 @@ export default {
   'menu.settings.sendGrid': 'SendGrid',
   'menu.settings.google': 'Google',
   'menu.settings.menu': 'Menu',
+  'menu.settings.country': 'Quốc gia',
   'menu.component': 'Component',
   'menu.component.articleLister': 'Article Lister',
   'menu.component.affiliateLink': 'Affiliate Link',

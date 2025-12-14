@@ -22,7 +22,7 @@ public class Feed : AbstractComponent
     [JsonIgnore]
     public List<CatalogListItem> Articles { get; set; } = new();
     [JsonIgnore]
-    public List<Catalog> Catalogs { get; set; } = new();
+    public List<CatalogListItem> Catalogs { get; set; } = new();
     [JsonIgnore]
     public IEnumerable<ProductListItem> Products { get; set; } = new List<ProductListItem>();
 }

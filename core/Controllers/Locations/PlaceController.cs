@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
+using Waffle.Core.IServices.Locations;
+using Waffle.Core.Services.Locations.Filters;
 
 namespace Waffle.Controllers.Locations;
 
-public class PlaceController : BaseController
+public class PlaceController(IPlaceService _placeService) : BaseController
 {
-    public IActionResult Index()
-    {
-        return View();
-    }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id) => Ok(await _placeService.GetByIdAsync(id));
+
+    [HttpGet("list"), AllowAnonymous]
+    public async Task<IActionResult> ListAsync([FromQuery] PlaceFilterOptions filterOptions) => Ok(await _placeService.ListAsync(filterOptions));
 }

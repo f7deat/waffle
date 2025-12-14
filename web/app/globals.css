@@ -7,12 +7,6 @@
   --color-primary-hover: #2c5282;
 }
 
-body {
-  background-image: url('https://i.redd.it/wwk2t0dgfcm21.png');
-  background-size: cover;
-  background-position: center center;
-}
-
 a {
   cursor: default;
 }

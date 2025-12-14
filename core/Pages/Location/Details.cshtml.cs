@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Models.Components;
 using Waffle.Models;
-using Microsoft.EntityFrameworkCore;
+using Waffle.Models.Components;
+using Waffle.Models.ViewModels;
 
 namespace Waffle.Pages.Location;
 
@@ -22,7 +23,7 @@ public class DetailsModel : DynamicPageModel
     }
 
     public List<WorkListItem> Works = [];
-    public List<Catalog> Tags = [];
+    public List<CatalogListItem> Tags = [];
     public bool HasTag => Tags.Count != 0;
     public Feed ProductFeed = new();
     public bool HasProduct = false;
@@ -33,7 +34,13 @@ public class DetailsModel : DynamicPageModel
     public async Task<IActionResult> OnGetAsync()
     {
         Works = await GetBlockEditorsAsync();
-        Tags = await _catalogService.ListTagByIdAsync(PageData.Id);
+        var tags = await _catalogService.ListTagByIdAsync(PageData.Id);
+        Tags = [.. tags.Select(x => new CatalogListItem
+        {
+            Name = x.Name,
+            Id = x.Id,
+            NormalizedName = x.NormalizedName,
+        })];
 
         IsAuthenticated = User.Identity?.IsAuthenticated ?? false;
         if (IsAuthenticated)
@@ -55,7 +62,12 @@ public class DetailsModel : DynamicPageModel
             ProductFeed = new Feed
             {
                 Name = "Sản phẩm liên quan",
-                Catalogs = product.Data?.ToList() ?? []
+                Catalogs = product.Data.Select(x => new CatalogListItem
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    NormalizedName = x.NormalizedName
+                }).ToList()
             };
         }
 

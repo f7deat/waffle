@@ -5,6 +5,7 @@ import Script from "next/script";
 import Footer from "@/components/layout/footer";
 import { ConfigProvider } from "antd";
 import '@ant-design/v5-patch-for-react-19';
+import Header from "@/components/layout/header";
 
 const quicksand = Quicksand({
   subsets: ['latin'],
@@ -33,7 +34,7 @@ export default async function RootLayout({
           async
         />
       </head>
-      <body className="h-screen flex flex-col" style={quicksand.style}>
+      <body style={quicksand.style}>
         <ConfigProvider
           theme={{
             components: {
@@ -46,9 +47,8 @@ export default async function RootLayout({
             }
           }}
         >
-          <div className="flex-1">
-            {children}
-          </div>
+          <Header />
+          {children}
           <Footer />
         </ConfigProvider>
       </body>

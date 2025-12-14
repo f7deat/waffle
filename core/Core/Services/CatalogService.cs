@@ -677,7 +677,9 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             data.ModifiedBy,
             data.CreatedDate,
             data.ModifiedDate,
-            data.ParentId
+            data.ParentId,
+            data.Type,
+            data.Locale
         });
     }
 }
