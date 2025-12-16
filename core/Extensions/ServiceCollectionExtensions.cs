@@ -4,6 +4,7 @@ using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IRepositories;
 using Waffle.Core.IServices.Locations;
 using Waffle.Core.Senders;
 using Waffle.Core.Services;
@@ -93,6 +94,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProvinceService, ProvinceService>();
         services.AddScoped<IDistrictRepository, DistrictRepository>();
         services.AddScoped<IDistrictService, DistrictService>();
+        services.AddScoped<IStreetRepository, StreetRepository>();
+        services.AddScoped<IStreetService, StreetService>();
+        services.AddScoped<IPlaceRepository, PlaceRepository>();
+        services.AddScoped<IPlaceService, PlaceService>();
         #endregion
     }
 }

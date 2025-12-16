@@ -209,7 +209,23 @@ export default [
     name: 'catalog',
     path: '/catalog',
     icon: 'SlackOutlined',
-    component: './catalog'
+    routes: [
+      {
+        path: '/catalog',
+        redirect: '/catalog/overview',
+      },
+      {
+        path: '/catalog/overview',
+        name: 'overview',
+        component: './catalog',
+      },
+      {
+        path: '/catalog/place/:id',
+        name: 'placeCenter',
+        component: './catalog/place',
+        hideInMenu: true,
+      }
+    ]
   },
   {
     name: 'catalogCenter',

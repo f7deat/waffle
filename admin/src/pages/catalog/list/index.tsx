@@ -12,7 +12,7 @@ const Index: React.FC = () => {
 
     return (
         <PageContainer title={data?.name} extra={<Button icon={<LeftOutlined />} onClick={() => history.back()}><FormattedMessage id="general.back" /></Button>}>
-            <CatalogList type={id as any} />
+            <CatalogList type={Number(id) as any} />
         </PageContainer>
     );
 };

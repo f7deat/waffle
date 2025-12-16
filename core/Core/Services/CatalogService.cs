@@ -65,7 +65,6 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             Type = args.Type,
             ParentId = args.ParentId
         };
-        await _catalogRepository.AddAsync(catalog);
         switch (catalog.Type)
         {
             case CatalogType.Room:
@@ -81,6 +80,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
                 });
                 break;
         }
+        await _catalogRepository.AddAsync(catalog);
         return TResult.Success;
     }
 

@@ -36,6 +36,10 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
                         d.ProvinceId,
                         c.Thumbnail
                     };
+        if (filterOptions.DistrictId.HasValue)
+        {
+            query = query.Where(x => x.DistrictId == filterOptions.DistrictId);
+        }
         if (filterOptions.StreetId.HasValue)
         {
             query = query.Where(x => x.StreetId == filterOptions.StreetId);

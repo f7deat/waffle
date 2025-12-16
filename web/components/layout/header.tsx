@@ -30,10 +30,9 @@ const Header: React.FC = () => {
     const navItems = [
         { label: "Bai viet", href: "/article" },
         { label: "Dia diem", href: "/location" },
-        { label: "Thu vien anh", href: "/gallery" },
+        { label: "Album anh", href: "/gallery" },
         { label: "Game", href: "/game" },
-        { label: "Cua hang", href: "/shop" },
-        { label: "Video", href: "/video" },
+        { label: "Cua hang", href: "/shop" }
     ];
 
     return (
@@ -102,14 +101,14 @@ const Header: React.FC = () => {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className="rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                            className="rounded-md px-2 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                         >
                             {item.label}
                         </Link>
                     ))}
                 </nav>
 
-                <div className="flex flex-1 items-center justify-end gap-3">
+                <div className="flex items-center justify-end gap-3">
                     <button
                         className="hidden h-10 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 md:flex dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
                         aria-label="Cart"

@@ -13,7 +13,6 @@ const Index: React.FC = () => {
         return true;
     }
 
-
     return (
         <PageContainer extra={<Button type="primary" onClick={() => setOpenForm(true)} icon={<PlusOutlined />}>Add Country</Button>}>
             <ModalForm open={openForm} onOpenChange={setOpenForm} onFinish={onFinish}>

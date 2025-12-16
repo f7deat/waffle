@@ -3,4 +3,8 @@ declare namespace API {
         data: T[];
         total: number;
     }
+    interface FilterOptions {
+        current: number;
+        pageSize: number;
+    }
 }

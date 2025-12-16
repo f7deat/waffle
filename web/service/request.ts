@@ -3,7 +3,7 @@ import axios from "axios";
 const request = axios.create();
 
 request.interceptors.request.use((config) => {
-    config.baseURL = "https://defzone.net/api/";
+    config.baseURL = "https://api.defzone.net/api/";
     return config;
 });
 

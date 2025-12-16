@@ -7,7 +7,7 @@ import {
   ProColumns,
   ProTable,
 } from '@ant-design/pro-components';
-import { Link } from '@umijs/max';
+import { Link, useParams } from '@umijs/max';
 import { message, Button, Popconfirm, Tooltip, Dropdown, Switch } from 'antd';
 import React, { useRef, useState } from 'react';
 
@@ -16,6 +16,9 @@ type CatalogListProps = {
 };
 
 const CatalogList: React.FC<CatalogListProps> = (props) => {
+
+  const { id } = useParams();
+
   const actionRef = useRef<ActionType>();
   const [open, setOpen] = useState<boolean>(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -56,7 +59,12 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
     {
       title: 'Name',
       dataIndex: 'name',
-      render: (text, record) => <Link to={`/catalog/center/${record.id}`}>{text}</Link>,
+      render: (text, record) => {
+        if (id === '5') {
+          return <Link to={`/catalog/place/${record.id}`}>{text}</Link>;
+        }
+        return <Link to={`/catalog/center/${record.id}`}>{text}</Link>;
+      },
     },
     {
       title: 'Created date',
