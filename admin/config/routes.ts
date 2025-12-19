@@ -423,6 +423,24 @@ export default [
         name: 'country',
         path: '/settings/country',
         component: './settings/country'
+      },
+      {
+        name: 'province',
+        path: '/settings/country/:id',
+        component: './settings/country/province',
+        hideInMenu: true
+      },
+      {
+        name: 'district',
+        path: '/settings/country/province/:id',
+        component: './settings/country/province/district',
+        hideInMenu: true
+      },
+      {
+        name: 'street',
+        path: '/settings/country/province/district/:id',
+        component: './settings/country/province/district/street',
+        hideInMenu: true
       }
     ],
   },

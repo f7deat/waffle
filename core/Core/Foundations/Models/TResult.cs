@@ -37,6 +37,8 @@ public class TResult
         return result;
     }
 
+    public static TResult DuplicateRecord => Failed("Duplicate record exists.");
+
     public static TResult Ok(object? data) => new() { _data = data, Succeeded = true };
 }
 

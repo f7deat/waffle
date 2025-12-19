@@ -2,6 +2,7 @@
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.IServices.Locations;
 using Waffle.Entities.Locations;
+using Waffle.Models;
 
 namespace Waffle.Core.Services.Locations;
 
@@ -15,4 +16,6 @@ public class CountryService(ICountryRepository _countryRepository) : ICountrySer
         });
         return TResult.Success;
     }
+
+    public Task<ListResult> GetListAsync(FilterOptions filterOptions) => _countryRepository.GetListAsync(filterOptions);
 }
