@@ -25,7 +25,11 @@ public class StreetRepository(ApplicationDbContext context, IHCAService hcaServi
         {
             query = query.Where(s => s.DistrictId == filterOptions.DistrictId);
         }
-        return await ListResult.Success(query.OrderByDescending(s => s.Id), filterOptions);
+        return await ListResult.Success(query.OrderByDescending(s => s.Id).Select(x => new
+        {
+            Label = x.Name,
+            Value = x.Id
+        }), filterOptions);
     }
 
     public async Task<object> GetOptionsAsync(StreetSelectOptions selectOptions)
@@ -43,8 +47,8 @@ public class StreetRepository(ApplicationDbContext context, IHCAService hcaServi
         }
         return await query.Select(s => new
         {
-            s.Id,
-            s.Name
+            Value = s.Id,
+            Label = s.Name
         }).ToListAsync();
     }
 

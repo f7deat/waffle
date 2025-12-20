@@ -1,9 +1,10 @@
 import { apiDistrictList } from "@/services/locations/district";
-import { EyeOutlined, SettingOutlined } from "@ant-design/icons";
+import { EyeOutlined, LeftOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import { ActionType, ModalForm, PageContainer, ProTable } from "@ant-design/pro-components";
-import { Link, useParams } from "@umijs/max";
+import { history, Link, useParams } from "@umijs/max";
 import { Button } from "antd";
 import { useRef, useState } from "react";
+import DistrictForm from "./components/form";
 
 const Index: React.FC = () => {
 
@@ -12,8 +13,9 @@ const Index: React.FC = () => {
     const actionRef = useRef<ActionType>();
 
     return (
-        <PageContainer>
+        <PageContainer extra={<Button onClick={() => history.back()} icon={<LeftOutlined />}>Back</Button>}>
             <ProTable
+                headerTitle={<Button type="primary" icon={<PlusOutlined />} onClick={() => setOpenForm(true)}>Add District</Button>}
                 actionRef={actionRef}
                 request={apiDistrictList}
                 rowKey={"id"}
@@ -45,9 +47,7 @@ const Index: React.FC = () => {
                     layout: 'vertical'
                 }}
             />
-            <ModalForm open={openForm} onOpenChange={setOpenForm}>
-                {/* Form fields for adding a new district can be added here */}
-            </ModalForm>
+            <DistrictForm open={openForm} onOpenChange={setOpenForm} reload={() => actionRef.current?.reload()} />
         </PageContainer>
     )
 }

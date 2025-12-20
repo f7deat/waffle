@@ -9,6 +9,7 @@ namespace Waffle.Core.IServices.Locations;
 public interface IPlaceService
 {
     Task<TResult> GetByIdAsync(Guid id);
+    Task<TResult> GetByNormalizedNameAsync(string normalizedName);
     Task<ListResult> ListAsync(PlaceFilterOptions filterOptions);
     Task<TResult> UpdateAsync(PlaceUpdateArgs args);
 }

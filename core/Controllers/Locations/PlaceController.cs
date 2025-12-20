@@ -9,7 +9,7 @@ namespace Waffle.Controllers.Locations;
 
 public class PlaceController(IPlaceService _placeService) : BaseController
 {
-    [HttpGet("{id}"), AllowAnonymous]
+    [HttpGet("details/{id}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id) => Ok(await _placeService.GetByIdAsync(id));
 
     [HttpGet("list"), AllowAnonymous]
@@ -17,4 +17,7 @@ public class PlaceController(IPlaceService _placeService) : BaseController
 
     [HttpPut]
     public async Task<IActionResult> UpdateAsync([FromBody] PlaceUpdateArgs args) => Ok(await _placeService.UpdateAsync(args));
+
+    [HttpGet("{normalizedName}"), AllowAnonymous]
+    public async Task<IActionResult> GetByNormalizedNameAsync([FromRoute] string normalizedName) => Ok(await _placeService.GetByNormalizedNameAsync(normalizedName));
 }

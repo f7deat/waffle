@@ -1,4 +1,5 @@
-﻿using Waffle.Core.Foundations;
+﻿using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces;
 using Waffle.Core.IRepositories;
 using Waffle.Core.Services.Locations.Filters;

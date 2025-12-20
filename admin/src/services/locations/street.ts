@@ -7,3 +7,10 @@ export async function apiStreetOptions(params: any) {
 export async function apiStreetList(params: any) {
     return request(`street/list`, { params  });
 }
+
+export async function apiStreetCreate(data: any) {
+    return request(`street`, {
+        method: 'POST',
+        data
+    });
+}
