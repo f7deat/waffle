@@ -3,7 +3,7 @@ const Footer: React.FC = () => {
 
     return (
         <footer className="border-t border-slate-800 bg-slate-950 text-slate-100">
-            <div className="mx-auto max-w-6xl px-4 py-10 grid gap-8 md:grid-cols-4">
+            <div className="mx-auto container px-4 py-10 grid gap-8 md:grid-cols-4">
                 <div className="space-y-4">
                     <div className="flex items-center gap-3">
                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-lg font-semibold text-white">
@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
                 </div>
             </div>
             <div className="border-t border-slate-800">
-                <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
+                <div className="mx-auto flex container flex-col gap-3 px-4 py-4 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
                     <div>© {year} DefZone.Net. All rights reserved.</div>
                     <div className="flex flex-wrap items-center gap-4">
                         <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>

@@ -14,22 +14,26 @@ public class StreetRepository(ApplicationDbContext context, IHCAService hcaServi
     public async Task<ListResult> GetListAsync(StreetFilterOptions filterOptions)
     {
         var query = from s in _context.Streets
+                    join d in _context.Districts on s.DistrictId equals d.Id
                     select new
                     {
                         s.Id,
                         s.Name,
                         s.DistrictId,
-                        PlaceCount = _context.Places.Count(p => p.StreetId == s.Id)
+                        PlaceCount = _context.Places.Count(p => p.StreetId == s.Id),
+                        Thumbnail = (from p in _context.Places
+                                     join c in _context.Catalogs on p.Id equals c.Id
+                                     where p.StreetId == s.Id
+                                     select c.Thumbnail).FirstOrDefault(),
+                        DistrictName = d.Name,
+                        d.ProvinceId
                     };
         if (filterOptions.DistrictId.HasValue)
         {
             query = query.Where(s => s.DistrictId == filterOptions.DistrictId);
         }
-        return await ListResult.Success(query.OrderByDescending(s => s.Id).Select(x => new
-        {
-            Label = x.Name,
-            Value = x.Id
-        }), filterOptions);
+        query = query.OrderBy(s => s.Id);
+        return await ListResult.Success(query, filterOptions);
     }
 
     public async Task<object> GetOptionsAsync(StreetSelectOptions selectOptions)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
 using Waffle.Core.IServices.Locations;
 using Waffle.Core.Services.Locations.Filters;
@@ -8,7 +9,7 @@ namespace Waffle.Controllers.Locations;
 
 public class StreetController(IStreetService _streetService) : BaseController
 {
-    [HttpGet("list")]
+    [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> GetListAsync([FromQuery] StreetFilterOptions filterOptions) => Ok(await _streetService.GetListAsync(filterOptions));
 
     [HttpPost]

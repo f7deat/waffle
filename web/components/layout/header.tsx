@@ -38,7 +38,7 @@ const Header: React.FC = () => {
     return (
         <header className="bg-white dark:bg-slate-950">
             <div className="hidden border-b border-slate-200 bg-slate-50 text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 md:block">
-                <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2">
+                <div className="mx-auto flex container items-center justify-between px-4 py-2">
                     <div className="flex items-center gap-4">
                         <a href="mailto:hello@defzone.net" className="hover:text-slate-900 dark:hover:text-white">hello@defzone.net</a>
                         <a href="/contact" className="hover:text-slate-900 dark:hover:text-white">Lien he</a>
@@ -64,7 +64,7 @@ const Header: React.FC = () => {
             </div>
 
             <div className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
-                <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
+                <div className="mx-auto flex container items-center gap-4 px-4 py-3">
                 <button
                     className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 md:hidden dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
                     onClick={() => setIsMobileMenuOpen(true)}
