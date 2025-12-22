@@ -4,11 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import PageContainer from '@/components/layout/page-container';
 import { apiStreetList } from '@/service/locations/street';
-
-interface StreetData {
-    data: API.StreetListItem[];
-    total: number;
-}
+import Link from 'next/link';
 
 const Page: React.FC = () => {
     const params = useParams();
@@ -56,8 +52,8 @@ const Page: React.FC = () => {
     ];
 
     return (
-        <PageContainer 
-            title="Streets" 
+        <PageContainer
+            title="Streets"
             breadcrumbs={breadcrumbs}
         >
             <div className="p-4">
@@ -71,26 +67,33 @@ const Page: React.FC = () => {
                     </div>
                 ) : (
                     <>
-                        <table className="w-full border-collapse">
-                            <thead>
-                                <tr className="bg-gray-100 border-b">
-                                    <th className="border px-4 py-2 text-left text-sm font-semibold">ID</th>
-                                    <th className="border px-4 py-2 text-left text-sm font-semibold">Name</th>
-                                    <th className="border px-4 py-2 text-left text-sm font-semibold">District</th>
-                                    <th className="border px-4 py-2 text-left text-sm font-semibold">Province</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {streets.map((street) => (
-                                    <tr key={street.id} className="border-b hover:bg-gray-50">
-                                        <td className="border px-4 py-2 text-sm">{street.id}</td>
-                                        <td className="border px-4 py-2 text-sm">{street.name}</td>
-                                        <td className="border px-4 py-2 text-sm">{street.districtName}</td>
-                                        <td className="border px-4 py-2 text-sm">{street.provinceId}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {streets.map((street) => (
+                                <div
+                                    key={street.id}
+                                    className="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow bg-white"
+                                >
+                                    <div className="mb-2">
+                                        <span className="text-xs text-gray-500">ID: {street.id}</span>
+                                    </div>
+                                    <Link href={`/district/street/${street.id}`}>
+                                        <h3 className="text-lg font-semibold mb-3 text-gray-800">
+                                            {street.name}
+                                        </h3>
+                                    </Link>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center">
+                                            <span className="text-xs text-gray-600 mr-2">District:</span>
+                                            <span className="text-sm text-gray-800">{street.districtName}</span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <span className="text-xs text-gray-600 mr-2">Province:</span>
+                                            <span className="text-sm text-gray-800">{street.provinceId}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
 
                         {/* Pagination */}
                         <div className="flex justify-center gap-2 mt-4">
@@ -107,11 +110,10 @@ const Page: React.FC = () => {
                                     <button
                                         key={page}
                                         onClick={() => setCurrent(page)}
-                                        className={`px-3 py-1 border rounded text-sm ${
-                                            current === page
+                                        className={`px-3 py-1 border rounded text-sm ${current === page
                                                 ? 'bg-blue-500 text-white border-blue-500'
                                                 : 'border-gray-300 hover:bg-gray-50'
-                                        }`}
+                                            }`}
                                     >
                                         {page}
                                     </button>

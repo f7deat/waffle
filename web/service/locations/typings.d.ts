@@ -17,4 +17,17 @@ declare namespace API {
         provinceId: number;
         thumbnail: string;
     }
+    interface PlaceListItem {
+        id: string;
+        name: string;
+        streetId: number;
+        streetName: string;
+        districtId: number;
+        districtName: string;
+        provinceId: number;
+        provinceName: string;
+        thumbnail: string;
+        viewCount: number;
+        modifiedDate: string;
+    }
 }

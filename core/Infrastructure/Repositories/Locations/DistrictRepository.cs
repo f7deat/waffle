@@ -14,12 +14,7 @@ public class DistrictRepository(ApplicationDbContext context, IHCAService hcaSer
     public async Task<object> GetOptionsAsync(DistrictSelectOptions filterOptions)
     {
         var query = from d in _context.Districts
-                    join p in _context.Provinces on d.ProvinceId equals p.Id
-                    select new { d.Id, d.Name, d.ProvinceId, p.CountryId };
-        if (filterOptions.CountryId.HasValue)
-        {
-            query = query.Where(x => x.CountryId == filterOptions.CountryId);
-        }
+                    select new { d.Id, d.Name, d.ProvinceId };
         if (filterOptions.ProvinceId.HasValue)
         {
             query = query.Where(x => x.ProvinceId == filterOptions.ProvinceId);
@@ -31,7 +26,7 @@ public class DistrictRepository(ApplicationDbContext context, IHCAService hcaSer
         return await query.Select(x => new
         {
             Label = x.Name,
-            Value = x.ProvinceId
+            Value = x.Id
         }).ToListAsync();
     }
 
