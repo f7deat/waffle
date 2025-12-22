@@ -11,7 +11,6 @@ public interface IWorkService
 {
     Task<IdentityResult> DeleteAsync(Guid id);
     Task<IdentityResult> ActiveAsync(Guid id);
-    Task<IdentityResult> SaveTagAsync(Tag tag);
     Task<IdentityResult> SaveColumnAsync(Column item);
     Task<T?> GetAsync<T>(Guid? id);
     T? Get<T>(string? arguments);

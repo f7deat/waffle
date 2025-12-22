@@ -7,5 +7,7 @@ namespace Waffle.Core.IRepositories;
 
 public interface IPlaceRepository : IAsyncRepository<Place>
 {
+    Task<IEnumerable<PlaceImage>> GetImagesAsync(Guid id);
+    Task<ListResult> GetRandomAsync(PlaceFilterOptions filterOptions);
     Task<ListResult> ListAsync(PlaceFilterOptions filterOptions);
 }

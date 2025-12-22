@@ -20,4 +20,7 @@ public class PlaceController(IPlaceService _placeService) : BaseController
 
     [HttpGet("{normalizedName}"), AllowAnonymous]
     public async Task<IActionResult> GetByNormalizedNameAsync([FromRoute] string normalizedName) => Ok(await _placeService.GetByNormalizedNameAsync(normalizedName));
+
+    [HttpGet("random"), AllowAnonymous]
+    public async Task<IActionResult> GetRandomAsync([FromQuery] PlaceFilterOptions filterOptions) => Ok(await _placeService.GetRandomAsync(filterOptions));
 }

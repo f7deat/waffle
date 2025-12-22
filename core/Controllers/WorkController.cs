@@ -314,9 +314,6 @@ public class WorkController(ApplicationDbContext _context, IWorkService _workSer
     [HttpGet("tag/list")]
     public async Task<IActionResult> TagListAsync(WorkFilterOptions filterOptions) => Ok(await _workService.TagListAsync(filterOptions));
 
-    [HttpPost("tag/save")]
-    public async Task<IActionResult> SaveTagAsync([FromBody] Tag tag) => Ok(await _workService.SaveTagAsync(tag));
-
     [HttpPost("link/save/{id}")]
     public async Task<IActionResult> SaveLinkAsync([FromRoute] Guid id, [FromBody] Link args) => Ok(await _workService.SaveArgumentsAsync(id, args));
 

@@ -225,21 +225,6 @@ public class WorkService : IWorkService
         return IdentityResult.Success;
     }
 
-    public async Task<IdentityResult> SaveTagAsync(Tag tag)
-    {
-        var work = await FindAsync(tag.Id);
-        if (work is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "Data not found!"
-            });
-        }
-        work.Arguments = JsonSerializer.Serialize(tag);
-        await _context.SaveChangesAsync();
-        return IdentityResult.Success;
-    }
-
     public async Task<IEnumerable<Option>> TagListAsync(WorkFilterOptions filterOptions)
     {
         var query = from a in _context.Components

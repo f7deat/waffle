@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
 import { apiPlaceList } from "@/service/locations/place";
+import Link from "next/link";
 
 type Props = {
     params: { id: string };
@@ -9,12 +10,12 @@ type Props = {
 const Page: React.FC<Props> = async ({ params }) => {
     const streetId = Number(params.id);
     const response = await apiPlaceList({ current: 1, pageSize: 50, streetId });
-    const places = response.data.data;
+    const places = response.data;
 
     const streetName = places[0]?.streetName || "Tuyen duong";
     const districtName = places[0]?.districtName;
     const provinceName = places[0]?.provinceName;
-    const totalPlaces = response.data.total;
+    const totalPlaces = response.total;
 
     return (
         <PageContainer
@@ -77,7 +78,9 @@ const Page: React.FC<Props> = async ({ params }) => {
                                                     <span className="text-slate-400">•</span>
                                                     <span className="text-slate-500">{place.districtName}</span>
                                                 </div>
-                                                <h3 className="text-lg font-semibold text-slate-900 group-hover:text-indigo-700">{place.name}</h3>
+                                                <Link href={`/place/${place.normalizedName}`} className="hover:underline">
+                                                    <h2 className="text-lg font-semibold text-slate-900 line-clamp-2">{place.name}</h2>
+                                                </Link>
                                                 <div className="mt-auto flex items-center gap-3 text-xs text-slate-500">
                                                     <span className="flex items-center gap-1">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 text-amber-500">

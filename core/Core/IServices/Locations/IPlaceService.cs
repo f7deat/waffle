@@ -10,6 +10,7 @@ public interface IPlaceService
 {
     Task<TResult> GetByIdAsync(Guid id);
     Task<TResult> GetByNormalizedNameAsync(string normalizedName);
+    Task<ListResult> GetRandomAsync(PlaceFilterOptions filterOptions);
     Task<ListResult> ListAsync(PlaceFilterOptions filterOptions);
     Task<TResult> UpdateAsync(PlaceUpdateArgs args);
 }

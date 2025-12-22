@@ -18,7 +18,7 @@ public class BlockEditorBlock
     [JsonPropertyName("type")]
     public string? Type { get; set; }
     [JsonPropertyName("data")]
-    public BlockEditorItemData Data { get; set; } = new();
+    public BlockEditorItemData? Data { get; set; }
 }
 
 public class BlockEditorItemData 
@@ -34,7 +34,7 @@ public class BlockEditorItemData
     [JsonPropertyName("code")]
     public string? Code { get; set; }
     [JsonPropertyName("meta")]
-    public BlockEditorMeta Meta { get; set; } = new();
+    public BlockEditorMeta? Meta { get; set; }
     [JsonPropertyName("items")]
     public List<string>? Items { get; set; }
     [JsonPropertyName("style")]
@@ -46,7 +46,7 @@ public class BlockEditorItemData
     [JsonPropertyName("withBackground")]
     public bool WithBackground { get; set; }
     [JsonPropertyName("blogger")]
-    public Blogger Blogger { get; set; } = new();
+    public Blogger? Blogger { get; set; }
     [JsonPropertyName("service")]
     public string? Service { get; set; }
     [JsonPropertyName("embed")]
@@ -70,7 +70,7 @@ public class BlockEditorMeta
     [JsonPropertyName("description")]
     public string? Description { get; set; }
     [JsonPropertyName("image")]
-    public BlockEditorImage Image { get; set; } = new();
+    public BlockEditorImage? Image { get; set; }
 }
 
 public class BlockEditorImage

@@ -1,15 +1,5 @@
-import { apiCatalogMeta } from "@/service/catalog";
 import Link from "next/link";
-import { Metadata } from "next";
 import { DistrictSection } from "./home";
-
-export async function generateMetadata(): Promise<Metadata> {
-  const meta = await apiCatalogMeta('vn-index');
-  return {
-    title: `${meta.data.name} - DefZone.Net`,
-    description: meta.data.description,
-  };
-}
 
 export default async function Home() {
   const articles = [

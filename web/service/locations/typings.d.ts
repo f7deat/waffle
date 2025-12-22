@@ -46,5 +46,9 @@ declare namespace API {
         thumbnail: string;
         viewCount: number;
         modifiedDate: string;
+        normalizedName: string;
+    }
+    interface PlaceDetail extends PlaceListItem {
+        content: API.BlockEditor
     }
 }

@@ -6,8 +6,7 @@ import Link from "next/link";
 const Page: React.FC = async () => {
 
     const response = await apiProducts({ current: 1, pageSize: 14 });
-    const products = response.data.data;
-    console.log(response.data);
+    const products = response.data;
 
     const renderPrice = (price?: number, salePrice?: number) => {
         if (!price && !salePrice) return null;

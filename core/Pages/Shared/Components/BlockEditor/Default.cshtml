@@ -5,15 +5,15 @@
 {
     if (BlockEditorType.HEADER.Equals(item.Type))
     {
-        if (item.Data.Level == 1)
+        if (item.Data?.Level == 1)
         {
             <h1 class="wf-h1">@item.Data.Text</h1>
         }
-        else if (item.Data.Level == 2)
+        else if (item.Data?.Level == 2)
         {
             <h2 class="wf-h2">@item.Data.Text</h2>
         }
-        else if (item.Data.Level == 3)
+        else if (item.Data?.Level == 3)
         {
             <h3 class="wf-h3">@item.Data.Text</h3>
         }
@@ -21,7 +21,7 @@
     if (BlockEditorType.PARAGRAPH.Equals(item.Type))
     {
         <p id="@item.Id">
-            @Html.Raw(item.Data.Text)
+            @Html.Raw(item.Data?.Text)
         </p>
     }
     if (BlockEditorType.DELIMITER.Equals(item.Type))
@@ -30,22 +30,22 @@
     }
     if (BlockEditorType.RAW.Equals(item.Type))
     {
-        @Html.Raw(item.Data.Html)
+        @Html.Raw(item.Data?.Html)
     }
     if (BlockEditorType.LINK_TOOL.Equals(item.Type))
     {
         <div class="wf-link-tool">
             <div class="wf-link-tool__image">
-                <img src="@item.Data.Meta.Image.Url" loading="lazy" alt="@item.Data.Meta.Title" width="100" height="100" class="object-cover" />
+                <img src="@item.Data?.Meta?.Image?.Url" loading="lazy" alt="@item.Data?.Meta?.Title" width="100" height="100" class="object-cover" />
             </div>
             <div class="wf-link-tool__content">
                 <div class="mb-2">
-                    <a href="@item.Data.Link">
-                        <b>@item.Data.Meta.Title</b>
+                    <a href="@item.Data?.Link">
+                        <b>@item.Data?.Meta?.Title</b>
                     </a>
                 </div>
                 <div class="text-muted text-sm">
-                    @item.Data.Meta.Description
+                    @item.Data?.Meta?.Description
                 </div>
             </div>
         </div>
@@ -53,18 +53,18 @@
     if (BlockEditorType.CODE.Equals(item.Type))
     {
         <div class="wf-code">
-            @item.Data.Code
+            @item.Data?.Code
         </div>
     }
     if (BlockEditorType.QUOTE.Equals(item.Type))
     {
         <div class="quote">
-            @Html.Raw(item.Data.Text)
+            @Html.Raw(item.Data?.Text)
         </div>
     }
     if (BlockEditorType.LIST.Equals(item.Type))
     {
-        @if (item.Data.Items != null)
+        @if (item.Data?.Items != null)
         {
             @if (item.Data.Style.Equals("ordered"))
             {
@@ -89,11 +89,11 @@
     if (BlockEditorType.SIMPLE_IMAGE.Equals(item.Type))
     {
         <div class="simple-image">
-            <div class="@(item.Data.WithBackground ? "simple-image__picture simple-image__picture--with-background" : "simple-image__picture")">
-                <img src="@item.Data.Url" alt="@(string.IsNullOrEmpty(item.Data.Caption) ? "IMG" : item.Data.Caption)" loading="lazy" />
+            <div class="@(item.Data?.WithBackground == true ? "simple-image__picture simple-image__picture--with-background" : "simple-image__picture")">
+                <img src="@item.Data?.Url" alt="@(string.IsNullOrEmpty(item.Data?.Caption) ? "IMG" : item.Data.Caption)" loading="lazy" />
             </div>
             <div class="simple-image__caption">
-                @item.Data.Caption
+                @item.Data?.Caption
             </div>
         </div>
     }

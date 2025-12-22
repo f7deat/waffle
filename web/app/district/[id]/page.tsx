@@ -25,11 +25,10 @@ const Page: React.FC = () => {
                     current,
                     pageSize,
                 });
-                const res = response.data;
-                setStreets(res.data);
-                setTotal(res.total);
-                if (res.data.length > 0) {
-                    setDistrictName(res.data[0].districtName);
+                setStreets(response.data);
+                setTotal(response.total);
+                if (response.data.length > 0) {
+                    setDistrictName(response.data[0].districtName);
                 }
             } catch (error) {
                 console.error('Failed to fetch streets:', error);
