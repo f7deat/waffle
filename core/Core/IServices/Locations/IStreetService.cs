@@ -8,6 +8,7 @@ namespace Waffle.Core.IServices.Locations;
 public interface IStreetService
 {
     Task<TResult> CreateAsync(Street args);
+    Task<TResult> GetByIdAsync(int id);
     Task<ListResult> GetListAsync(StreetFilterOptions filterOptions);
     Task<object> GetOptionsAsync(StreetSelectOptions selectOptions);
 }

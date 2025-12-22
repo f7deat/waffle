@@ -20,6 +20,18 @@ public class StreetService(IStreetRepository _streetRepository) : IStreetService
         return TResult.Success;
     }
 
+    public async Task<TResult> GetByIdAsync(int id)
+    {
+        var street = await _streetRepository.FindAsync(id);
+        if (street is null) return TResult.Failed("Street not found!");
+        return TResult.Ok(new
+        {
+            street.Id,
+            street.Name,
+            street.DistrictId
+        });
+    }
+
     public Task<ListResult> GetListAsync(StreetFilterOptions filterOptions) => _streetRepository.GetListAsync(filterOptions);
 
     public Task<object> GetOptionsAsync(StreetSelectOptions selectOptions) => _streetRepository.GetOptionsAsync(selectOptions);

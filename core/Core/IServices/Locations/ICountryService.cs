@@ -7,5 +7,6 @@ namespace Waffle.Core.IServices.Locations;
 public interface ICountryService
 {
     Task<TResult> CreateAsync(Country args);
+    Task<TResult> GetByIdAsync(int id);
     Task<ListResult> GetListAsync(FilterOptions filterOptions);
 }

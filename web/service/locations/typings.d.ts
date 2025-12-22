@@ -17,6 +17,23 @@ declare namespace API {
         provinceId: number;
         thumbnail: string;
     }
+    interface Street {
+        id: number;
+        name: string;
+        districtId: number;
+    }
+    interface StreetDetail extends Street {
+        districtName: string;
+        provinceId: number;
+        provinceName: string;
+        address?: string;
+    }
+    interface PlaceFilterOptions extends FilterOptions {
+        streetId?: number;
+        districtId?: number;
+        provinceId?: number;
+        keyword?: string;
+    }
     interface PlaceListItem {
         id: string;
         name: string;

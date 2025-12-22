@@ -17,4 +17,7 @@ public class StreetController(IStreetService _streetService) : BaseController
 
     [HttpGet("options")]
     public async Task<IActionResult> GetOptionsAsync([FromQuery] StreetSelectOptions selectOptions) => Ok(await _streetService.GetOptionsAsync(selectOptions));
+
+    [HttpGet("{id}"), AllowAnonymous]
+    public async Task<IActionResult> GetByIdAsync(int id) => Ok(await _streetService.GetByIdAsync(id));
 }

@@ -17,4 +17,7 @@ public class ProvinceController(IProvinceService _provinceService) : BaseControl
 
     [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> GetListAsync([FromQuery] ProvinceFilterOptions filterOptions) => Ok(await _provinceService.GetListAsync(filterOptions));
+
+    [HttpGet("{id}"), AllowAnonymous]
+    public async Task<IActionResult> GetByIdAsync(int id) => Ok(await _provinceService.GetByIdAsync(id));
 }

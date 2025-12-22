@@ -14,4 +14,7 @@ public class CountryController(ICountryService _countryService) : BaseController
 
     [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> GetListAsync([FromQuery] FilterOptions filterOptions) => Ok(await _countryService.GetListAsync(filterOptions));
+
+    [HttpGet("{id}"), AllowAnonymous]
+    public async Task<IActionResult> GetByIdAsync(int id) => Ok(await _countryService.GetByIdAsync(id));
 }

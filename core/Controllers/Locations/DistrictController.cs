@@ -17,4 +17,7 @@ public class DistrictController(IDistrictService _districtService) : BaseControl
 
     [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> GetListAsync([FromQuery] DistrictFilterOptions filterOptions) => Ok(await _districtService.ListAsync(filterOptions));
+
+    [HttpGet("{id}"), AllowAnonymous]
+    public async Task<IActionResult> GetByIdAsync(int id) => Ok(await _districtService.GetByIdAsync(id));
 }

@@ -17,5 +17,16 @@ public class CountryService(ICountryRepository _countryRepository) : ICountrySer
         return TResult.Success;
     }
 
+    public async Task<TResult> GetByIdAsync(int id)
+    {
+        var country = await _countryRepository.FindAsync(id);
+        if (country is null) return TResult.Failed("Country not found!");
+        return TResult.Ok(new
+        {
+            country.Id,
+            country.Name
+        });
+    }
+
     public Task<ListResult> GetListAsync(FilterOptions filterOptions) => _countryRepository.GetListAsync(filterOptions);
 }
