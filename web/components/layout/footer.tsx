@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Footer: React.FC = () => {
     const year = new Date().getFullYear();
 
@@ -40,12 +42,12 @@ const Footer: React.FC = () => {
 
                 <div className="space-y-3">
                     <h3 className="text-base font-semibold text-white">Lien ket nhanh</h3>
-                    <nav className="flex flex-col gap-2 text-sm text-slate-300">
-                        <a href="/" className="hover:text-white transition-colors">Trang chủ</a>
-                        <a href="/article" className="hover:text-white transition-colors">Bài viết</a>
-                        <a href="/wiki" className="hover:text-white transition-colors">Wiki</a>
-                        <a href="/shop" className="hover:text-white transition-colors">Cua hang</a>
-                        <a href="/contact" className="hover:text-white transition-colors">Lien he</a>
+                    <nav className="md:grid grid-cols-2 gap-2 text-sm text-slate-300">
+                        <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
+                        <Link href="/article" className="hover:text-white transition-colors">Bài viết</Link>
+                        <Link href="/wiki" className="hover:text-white transition-colors">Wiki</Link>
+                        <Link href="/shop" className="hover:text-white transition-colors">Cua hang</Link>
+                        <Link href="/contact" className="hover:text-white transition-colors">Lien he</Link>
                     </nav>
                 </div>
 

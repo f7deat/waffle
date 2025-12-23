@@ -3,8 +3,11 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
+using Waffle.Core.Services.Articles.Filters;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Models;
+using Waffle.Models.Components;
 
 namespace Waffle.Infrastructure.Repositories;
 
@@ -16,16 +19,38 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
         if (catalog is null) return TResult.Failed("Catalog not found");
         var query = from wi in _context.WorkItems
                     join wc in _context.WorkContents on wi.WorkId equals wc.Id
-                    where wi.CatalogId == catalog.Id && wc.Active
+                    join c in _context.Components on wc.ComponentId equals c.Id
+                    where wi.CatalogId == catalog.Id && wc.Active && c.NormalizedName == nameof(Editor)
+                    select wc.Arguments;
+        var workContents = await query.FirstOrDefaultAsync();
+        return TResult.Ok(new
+        {
+            catalog.Id,
+            catalog.Name,
+            catalog.NormalizedName,
+            catalog.Description,
+            catalog.ModifiedDate,
+            catalog.Thumbnail,
+            catalog.ViewCount,
+            Content = workContents != null ? System.Text.Json.JsonSerializer.Deserialize<BlockEditor>(workContents) : new BlockEditor()
+        });
+    }
+
+    public async Task<ListResult> ListAsync(ArticleFilterOptions filterOptions)
+    {
+        var query = from c in _context.Catalogs
+                    where c.Active && c.Locale == filterOptions.Locale && c.Type == CatalogType.Article
                     select new
                     {
-                        wc.Id,
-                        wc.Name,
-                        wc.Arguments,
-                        wc.SortOrder,
-                        wc.ComponentId
+                        c.Id,
+                        c.Name,
+                        c.ViewCount,
+                        c.NormalizedName,
+                        c.ModifiedDate,
+                        c.Thumbnail,
+                        c.Description
                     };
-        var workContents = await query.ToListAsync();
-        return TResult.Ok(workContents);
+        query = query.OrderByDescending(x => x.ModifiedDate);
+        return await ListResult.Success(query, filterOptions);
     }
 }

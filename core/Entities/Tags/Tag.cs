@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Waffle.Entities;
+namespace Waffle.Entities.Tags;
 
 public class Tag : BaseEntity
 {

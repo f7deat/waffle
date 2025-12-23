@@ -7,6 +7,7 @@ using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
 using Waffle.Entities.Locations;
 using Waffle.Entities.Notifications;
+using Waffle.Entities.Tags;
 
 namespace Waffle.Data;
 
@@ -23,14 +24,16 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Contact> Contacts { get; set; } = default!;
     public DbSet<Localization> Localizations { get; set; } = default!;
     public DbSet<Order> Orders { get; set; } = default!;
-    public DbSet<OrderDetail> OrderDetails { get; set; } = default!;
-    public DbSet<Product> Products { get; set; } = default!;
-    public DbSet<Menu> Menus { get; set; } = default!;
-    public DbSet<Folder> Folders { get; set; } = default!;
-    public DbSet<ProductLink> ProductLinks { get; set; } = default!;
-    public DbSet<AffiliateLink> AffiliateLinks { get; set; } = default!;
-    public DbSet<Room> Rooms { get; set; } = default!;
-    public DbSet<Collection> Collections { get; set; } = default!;
+    public DbSet<OrderDetail> OrderDetails { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<Folder> Folders { get; set; }
+    public DbSet<ProductLink> ProductLinks { get; set; }
+    public DbSet<AffiliateLink> AffiliateLinks { get; set; }
+    public DbSet<Room> Rooms { get; set; }
+    public DbSet<Collection> Collections { get; set; }
+    public DbSet<Tag> Tags { get; set; }
+    public DbSet<TagCatalog> TagCatalogs { get; set; }
     #region Job
     public DbSet<JobOpportunity> JobOpportunities { get; set; } = default!;
     public DbSet<JobApplication> JobApplications { get; set; } = default!;
@@ -61,6 +64,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<WorkItem>().HasKey(k => new { k.WorkId, k.CatalogId });
         builder.Entity<Collection>().HasKey(k => new { k.CatalogId, k.CollectionId });
         builder.Entity<NotificationUser>().HasKey(k => new { k.NotificationId, k.UserId });
+        builder.Entity<TagCatalog>().HasKey(tc => new { tc.CatalogId, tc.TagId });
 
         base.OnModelCreating(builder);
     }

@@ -5,6 +5,7 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IRepositories;
+using Waffle.Core.IServices;
 using Waffle.Core.IServices.Locations;
 using Waffle.Core.Senders;
 using Waffle.Core.Services;
@@ -15,6 +16,7 @@ using Waffle.Core.Services.Contacts;
 using Waffle.Core.Services.Ecommerces;
 using Waffle.Core.Services.Files;
 using Waffle.Core.Services.Locations;
+using Waffle.Core.Services.Tags;
 using Waffle.Data.ContentGenerators;
 using Waffle.Infrastructure.Repositories;
 using Waffle.Infrastructure.Repositories.Catalogs;
@@ -54,6 +56,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICityService, CityService>();
         services.AddScoped<IArticleRepository, ArticleRepository>();
         services.AddScoped<IArticleService, ArticleService>();
+        services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<ITagService, TagService>();
 
         #region Products
         services.AddScoped<IProductRepository, ProductRepository>();

@@ -29,7 +29,7 @@ const FormEditor: React.FC<Props> = (props) => {
             });
         }
         return () => {
-            ejInstance.current.destroy();
+            ejInstance.current?.destroy();
             ejInstance.current = null;
         };
     }, []);

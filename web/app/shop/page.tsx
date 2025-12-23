@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
 import { apiProducts } from "@/service/shop/product";
 import { SearchOutlined, ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
@@ -22,7 +23,7 @@ const Page: React.FC = async () => {
     };
 
     return (
-        <PageContainer title="Shop">
+        <PageContainer>
             <div className="bg-slate-100 p-4">
                 <div className="mb-4 bg-white rounded-lg p-4">
                     <div className="flex">

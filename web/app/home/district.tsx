@@ -4,7 +4,7 @@ import Link from "next/link";
 const DistrictSection: React.FC = async () => {
 
     const response = await apiDistrictList({ current: 1, pageSize: 10 });
-    const districts = response.data.data;
+    const districts = response.data;
 
     return (
         <section className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">

@@ -256,4 +256,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
 
     [HttpGet("meta/{slug}"), AllowAnonymous]
     public async Task<IActionResult> GetMetaAsync([FromRoute] string slug ) => Ok(await _catalogService.GetMetaAsync(slug));
+
+    [HttpGet("tags"), AllowAnonymous]
+    public async Task<IActionResult> GetTagsAsync([FromQuery] Guid catalogId) => Ok(await _catalogService.TagsAsync(catalogId));
 }

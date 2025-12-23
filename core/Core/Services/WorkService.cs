@@ -7,6 +7,7 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Tags;
 using Waffle.Models;
 using Waffle.Models.Args;
 using Waffle.Models.Components;

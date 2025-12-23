@@ -75,11 +75,6 @@ public class ComponentFilterOptions : FilterOptions
     public bool? Active { get; set; }
 }
 
-public class ArticleFilterOptions : FilterOptions
-{
-    public string? Name { get; set; }
-}
-
 public class ArticleRelatedFilterOption : FilterOptions
 {
     public IEnumerable<Guid> TagIds { get; set; } = null!;

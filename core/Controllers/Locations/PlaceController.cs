@@ -23,4 +23,13 @@ public class PlaceController(IPlaceService _placeService) : BaseController
 
     [HttpGet("random"), AllowAnonymous]
     public async Task<IActionResult> GetRandomAsync([FromQuery] PlaceFilterOptions filterOptions) => Ok(await _placeService.GetRandomAsync(filterOptions));
+
+    [HttpPost("images")]
+    public async Task<IActionResult> AddImagesAsync([FromForm] PlaceAddImageArgs args) => Ok(await _placeService.AddImageAsync(args, $"https://{Request.Host.Value}"));
+
+    [HttpGet("images"), AllowAnonymous]
+    public async Task<IActionResult> GetImagesAsync([FromQuery] Guid placeId) => Ok(await _placeService.GetImagesAsync(placeId));
+
+    [HttpDelete("image/{imageId}")]
+    public async Task<IActionResult> DeleteImageAsync([FromRoute] Guid imageId) => Ok(await _placeService.DeleteImageAsync(imageId, $"https://{Request.Host.Value}"));
 }

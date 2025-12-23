@@ -32,4 +32,8 @@ declare namespace API {
         version: string;
         blocks: Block[];
     }
+    interface Meta {
+        name: string;
+        description: string;
+    }
 }

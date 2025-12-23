@@ -11,7 +11,19 @@ namespace Waffle.Infrastructure.Repositories.Locations;
 
 public class PlaceRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Place>(context, hcaService), IPlaceRepository
 {
-    public async Task<IEnumerable<PlaceImage>> GetImagesAsync(Guid id) => await _context.PlaceImages.Where(pi => pi.PlaceId == id).AsNoTracking().ToListAsync();
+    public async Task AddImagesAsync(List<PlaceImage> images) => await _context.PlaceImages.AddRangeAsync(images);
+
+    public async Task DeleteImageAsync(PlaceImage placeImage)
+    {
+        _context.PlaceImages.Remove(placeImage);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<PlaceImage?> GetImageById(Guid imageId) => await _context.PlaceImages.FindAsync(imageId);
+
+    public async Task<IEnumerable<PlaceImage>> GetImagesAsync(Guid id) => await _context.PlaceImages.Where(pi => pi.PlaceId == id).AsNoTracking()
+        .OrderByDescending(x => x.UploadedAt)
+        .ToListAsync();
 
     public async Task<ListResult> GetRandomAsync(PlaceFilterOptions filterOptions)
     {

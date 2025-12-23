@@ -29,7 +29,7 @@ const Header: React.FC = () => {
 
     const navItems = [
         { label: "Bai viet", href: "/article" },
-        { label: "Dia diem", href: "/location" },
+        { label: "Dia diem", href: "/place" },
         { label: "Album anh", href: "/gallery" },
         { label: "Game", href: "/game" },
         { label: "Cua hang", href: "/shop" }

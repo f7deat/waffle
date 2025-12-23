@@ -21,7 +21,7 @@ const Page: React.FC<{ params: Params }> = async ({ params }) => {
     const response = await apiWikiParse(slug);
 
     return (
-        <PageContainer title={response.parse.title} breadcrumbs={[{ label: "Wiki", href: "/wiki" }]}>
+        <PageContainer breadcrumbs={[{ label: "Wiki", href: "/wiki" }]}>
             <div className="wiki-content">
                 <div dangerouslySetInnerHTML={{ __html: response.parse.text["*"] }} />
             </div>

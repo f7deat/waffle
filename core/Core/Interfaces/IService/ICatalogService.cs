@@ -56,4 +56,5 @@ public interface ICatalogService
     Task<object?> ListTypeAsync();
     Task<object?> GetMetaAsync(string slug);
     Task<TResult> DetailAsync(Guid id);
+    Task<TResult> TagsAsync(Guid catalogId);
 }

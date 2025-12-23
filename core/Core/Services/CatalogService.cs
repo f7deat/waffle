@@ -682,4 +682,6 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
             data.Locale
         });
     }
+
+    public Task<TResult> TagsAsync(Guid catalogId) => _catalogRepository.TagsAsync(catalogId);
 }

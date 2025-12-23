@@ -5,6 +5,9 @@ const client = axios.create();
 client.interceptors.request.use((config) => {
     config.baseURL = "https://api.defzone.net/api/";
 
+    // Ensure locale param defaults to vi-VN unless explicitly provided
+    config.params = { locale: "vi-VN", ...(config.params || {}) };
+
     // Thêm access token vào header
     const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
     if (token) {

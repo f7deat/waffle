@@ -1120,6 +1120,43 @@ namespace Waffle.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.Tags.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasAnnotation("Relational:JsonPropertyName", "id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Tags.TagCatalog", b =>
+                {
+                    b.Property<Guid>("CatalogId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CatalogId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("TagCatalogs");
+                });
+
             modelBuilder.Entity("Waffle.Entities.WorkContent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1356,6 +1393,25 @@ namespace Waffle.Migrations
                     b.Navigation("Catalog");
 
                     b.Navigation("City");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Tags.TagCatalog", b =>
+                {
+                    b.HasOne("Waffle.Entities.Catalog", "Catalog")
+                        .WithMany()
+                        .HasForeignKey("CatalogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Waffle.Entities.Tags.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Catalog");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Careers.JobOpportunity", b =>

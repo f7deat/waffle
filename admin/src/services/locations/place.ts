@@ -10,3 +10,28 @@ export async function apiPlaceUpdate(data: any) {
         data
     });
 }
+
+export async function apiPlaceAddImages(formData: FormData) {
+    return request(`place/images`, {
+        method: 'POST',
+        data: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
+
+export async function apiPlaceDeleteImage(imageId: string) {
+    return request(`place/image/${imageId}`, {
+        method: 'DELETE'
+    });
+}
+
+export async function apiPlaceImageList(placeId: string) {
+    return request(`place/images`, {
+        method: 'GET',
+        params: {
+            placeId
+        }
+    });
+}

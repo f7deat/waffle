@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
@@ -11,12 +12,8 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Infrastructure.Repositories;
 
-public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
+public class CatalogRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Catalog>(context, hcaService), ICatalogRepository
 {
-    public CatalogRepository(ApplicationDbContext context, IHCAService hcaService) : base(context, hcaService)
-    {
-    }
-
     public async Task<int> CountAsync(CatalogType type) => await _context.Catalogs.CountAsync(x => x.Type == type && x.Active);
 
     public async Task<Catalog?> FindAsync(Guid catalogId, CatalogType type) => await _context.Catalogs.FirstOrDefaultAsync(x => x.Id == catalogId && x.Type == type);
@@ -186,5 +183,20 @@ public class CatalogRepository : EfRepository<Catalog>, ICatalogRepository
                         Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
                     };
         return await query.OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
+    }
+
+    public async Task<TResult> TagsAsync(Guid catalogId)
+    {
+        var query = from tc in _context.TagCatalogs
+                    join t in _context.Tags on tc.TagId equals t.Id
+                    where tc.CatalogId == catalogId
+                    select new
+                    {
+                        t.Id,
+                        t.Name,
+                        t.NormalizedName
+                    };
+        var tags = await query.ToListAsync();
+        return TResult.Ok(tags);
     }
 }

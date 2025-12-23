@@ -12,8 +12,53 @@ using Waffle.Models.Components;
 
 namespace Waffle.Core.Services.Locations;
 
-public class PlaceService(IPlaceRepository _placeRepository, IProvinceRepository _provinceRepository, IStreetRepository _streetRepository, IDistrictRepository _districtRepository, ICatalogService _catalogService) : IPlaceService
+public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment _webHostEnvironment, IProvinceRepository _provinceRepository, IStreetRepository _streetRepository, IDistrictRepository _districtRepository, ICatalogService _catalogService) : IPlaceService
 {
+    public async Task<TResult> AddImageAsync(PlaceAddImageArgs args, string host)
+    {
+        if (args.Images is null || args.Images.Count == 0) return TResult.Failed("No images provided!");
+        var place = await _placeRepository.FindAsync(args.PlaceId);
+        if (place is null) return TResult.Failed("Place not found!");
+        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "places", place.Id.ToString());
+        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+        var images = new List<PlaceImage>();
+        foreach (var image in args.Images)
+        {
+            var fileExtension = Path.GetExtension(image.FileName);
+            var fileName = $"{Guid.NewGuid()}{fileExtension}";
+            var filePath = Path.Combine(uploadsFolder, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+            var imageUrl = $"{host}/uploads/places/{place.Id}/{fileName}";
+            var placeImage = new PlaceImage
+            {
+                PlaceId = place.Id,
+                Url = imageUrl,
+                UploadedAt = DateTime.UtcNow
+            };
+            images.Add(placeImage);
+        }
+        await _placeRepository.AddImagesAsync(images);
+        await _placeRepository.SaveChangesAsync();
+        return TResult.Success;
+    }
+
+    public async Task<TResult> DeleteImageAsync(Guid imageId, string host)
+    {
+        var image = await _placeRepository.GetImageById(imageId);
+        if (image is null) return TResult.Failed("Image not found!");
+        var uri = new Uri(image.Url);
+        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, uri.LocalPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
+        await _placeRepository.DeleteImageAsync(image);
+        return TResult.Success;
+    }
+
     public async Task<TResult> GetByIdAsync(Guid id)
     {
         var place = await _placeRepository.FindAsync(id);
@@ -34,7 +79,7 @@ public class PlaceService(IPlaceRepository _placeRepository, IProvinceRepository
                 district = await _districtRepository.FindAsync(street.DistrictId);
                 if (district != null)
                 {
-                    province = await _provinceRepository.FindAsync(district.Id);
+                    province = await _provinceRepository.FindAsync(district.ProvinceId);
                 }
             }
         }
@@ -100,6 +145,8 @@ public class PlaceService(IPlaceRepository _placeRepository, IProvinceRepository
             ProvinceName = province?.Name
         });
     }
+
+    public async Task<TResult> GetImagesAsync(Guid placeId) => TResult.Ok(await _placeRepository.GetImagesAsync(placeId));
 
     public Task<ListResult> GetRandomAsync(PlaceFilterOptions filterOptions) => _placeRepository.GetRandomAsync(filterOptions);
 

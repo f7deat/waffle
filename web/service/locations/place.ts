@@ -11,3 +11,7 @@ export async function apiPlaceDetail(id: string) {
 export async function apiPlaceRandom(params?: API.PlaceFilterOptions) {
     return request.get<API.TResult<API.PlaceListItem[]>>(`place/random`, { params });
 }
+
+export async function apiPlaceImages(placeId: string) {
+    return request.get<API.TResult<API.PlaceImage[]>>(`place/images`, { params: { placeId } });
+}
