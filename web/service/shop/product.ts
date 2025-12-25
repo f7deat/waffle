@@ -4,5 +4,9 @@ export async function apiProducts(params: {
     current: number;
     pageSize: number;
 }) {
-    return request.get<API.ListResult<API.ProductListItem>>('/product/list', { params });
+    return request.get<API.ListResult<API.ProductListItem>>('product/list', { params });
+}
+
+export async function apiProductDetail(id: string) {
+    return request.get<API.TResult<API.ProductDetail>>(`product/by-name/${id}`);
 }

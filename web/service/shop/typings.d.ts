@@ -10,4 +10,9 @@ declare namespace API {
         thumbnail: string;
         normalizedName: string;
     }
+    interface ProductDetail extends ProductListItem {
+        content?: string;
+        unitInStock?: number;
+        affiliateLink?: string;
+    }
 }

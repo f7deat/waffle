@@ -3,18 +3,18 @@ import PageContainer from "@/components/layout/page-container";
 import { apiArticleList } from "@/service/article";
 import Link from "next/link";
 
-type SearchParams = {
+type SearchParams = Promise<{
     page?: string;
     pageSize?: string;
     keyword?: string;
-};
+}>;
 
 const DEFAULT_PAGE_SIZE = 12;
 
 const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
-    const current = Math.max(1, Number(searchParams.page) || 1);
-    const pageSize = Math.max(1, Number(searchParams.pageSize) || DEFAULT_PAGE_SIZE);
-    const keyword = searchParams.keyword?.trim();
+    const current = Math.max(1, Number((await searchParams).page) || 1);
+    const pageSize = Math.max(1, Number((await searchParams).pageSize) || DEFAULT_PAGE_SIZE);
+    const keyword = (await searchParams).keyword?.trim();
 
     const response = await apiArticleList({ current, pageSize });
     const articles = response.data || [];

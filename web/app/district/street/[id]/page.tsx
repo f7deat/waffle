@@ -3,12 +3,12 @@ import PageContainer from "@/components/layout/page-container";
 import { apiPlaceList } from "@/service/locations/place";
 import Link from "next/link";
 
-type Props = {
-    params: { id: string };
-};
+type Params = Promise<{
+    id: string;
+}>;
 
-const Page: React.FC<Props> = async ({ params }) => {
-    const streetId = Number(params.id);
+const Page = async ({ params }: { params: Params }) => {
+    const streetId = Number((await params).id);
     const response = await apiPlaceList({ current: 1, pageSize: 50, streetId });
     const places = response.data;
 
@@ -19,10 +19,9 @@ const Page: React.FC<Props> = async ({ params }) => {
 
     return (
         <PageContainer
-            title={streetName}
             breadcrumbs={[
                 { label: "Quan / Huyen", href: "/district" },
-                { label: streetName, href: `/district/street/${params.id}` }
+                { label: streetName, href: `/district/street/${(await params).id}` }
             ]}
         >
             <div className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-indigo-50">

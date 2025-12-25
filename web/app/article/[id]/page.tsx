@@ -6,12 +6,12 @@ import { JSX } from "react";
 import Link from "next/link";
 import { apiCatalogMeta } from "@/service/catalog";
 
-type Params = {
+type Params = Promise<{
     id: string;
-};
+}>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-    const { id } = params;
+    const { id } = await params;
     const res = await apiCatalogMeta(id);
     const article = res;
     return {
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 const Page = async ({ params }: { params: Params }) => {
-    const { id } = params;
+    const { id } = await params;
     const res = await apiArticleDetail(id);
     const article = res.data;
     console.log("Article detail:", article);
@@ -130,11 +130,6 @@ const Page = async ({ params }: { params: Params }) => {
         <PageContainer breadcrumbs={breadcrumbs}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
-                    {article.thumbnail && (
-                        <div className="rounded-lg overflow-hidden">
-                            <img src={article.thumbnail} alt={article.name} className="w-full h-auto object-cover" />
-                        </div>
-                    )}
                     <div className="bg-gray-50 p-4 rounded-lg">
                         <h1 className="text-3xl font-bold mb-3">{article.name}</h1>
                         <div className="flex flex-wrap gap-4 text-sm text-gray-600">

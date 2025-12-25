@@ -63,7 +63,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                         p.UnitInStock,
                         p.AffiliateLink
                     };
-        return TResult.Ok(await _context.Products.FirstOrDefaultAsync());
+        return TResult.Ok(await query.FirstOrDefaultAsync());
     }
 
     public async Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)

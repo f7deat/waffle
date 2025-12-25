@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { DistrictSection } from "./home";
+import { apiArticleList } from "@/service/article";
 
 export default async function Home() {
-  const articles = [
-    { title: "AI transforms daily work", slug: "ai-transforms", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5" },
-    { title: "Cloud cost control tips", slug: "cloud-cost", image: "https://images.unsplash.com/photo-1518770660439-4636190af475" },
-    { title: "Building resilient apps", slug: "resilient-apps", image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d" },
-  ];
+  const articlesResponse = await apiArticleList({ current: 1, pageSize: 4 });
+  const articles = articlesResponse.data || [];
 
   const locations = [
     { name: "Ha Noi", slug: "ha-noi", image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad" },
@@ -65,8 +63,8 @@ export default async function Home() {
               <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">Bai viet ngau nhien</h3>
               <div className="mt-3 space-y-3">
                 {randomArticles.map((item) => (
-                  <Link key={item.slug} href={`/article/${item.slug}`} className="block rounded-lg border border-slate-200/60 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70 dark:hover:text-blue-300">
-                    {item.title}
+                  <Link key={item.id} href={`/article/${item.normalizedName}`} className="block rounded-lg border border-slate-200/60 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70 dark:hover:text-blue-300">
+                    {item.name}
                   </Link>
                 ))}
               </div>
@@ -107,13 +105,13 @@ export default async function Home() {
                 <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Bai viet moi</h2>
                 <Link href="/article" className="text-sm font-medium text-blue-600 hover:text-blue-500">View all</Link>
               </div>
-              <div className="grid gap-4 md:grid-cols-3">
+              <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4">
                 {articles.map((item) => (
-                  <Link key={item.slug} href={`/article/${item.slug}`} className="group relative overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
-                    <div className="h-48 bg-cover bg-center" style={cardStyle(item.image)} />
+                  <Link key={item.id} href={`/article/${item.normalizedName}`} className="group relative overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
+                    <div className="h-48 bg-cover bg-center" style={cardStyle(item.thumbnail || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5')} />
                     <div className="p-4">
                       <p className="text-sm text-slate-500 dark:text-slate-400">Featured</p>
-                      <h3 className="mt-1 text-lg font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.title}</h3>
+                      <h3 className="mt-1 text-lg line-clamp-2 font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
                     </div>
                   </Link>
                 ))}
