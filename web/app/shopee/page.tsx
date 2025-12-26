@@ -13,7 +13,7 @@ export default async function Page({
     const data = await apiShopeeBaseInfoAndLinks({ pageNum: pageNum, pageSize: 12 });
 
     return (
-        <PageContainer title="Shopee" breadcrumbs={[{ label: "Shopee", href: "/shopee" }]}> 
+        <PageContainer breadcrumbs={[{ label: "Shopee", href: "/shopee" }]}> 
             <div className="grid grid-cols-2 md:grid-cols-4 2xl:grid-cols-6 gap-4 mb-4">
                 {
                     data.data.data.landingPageLinkList.linkList.map((link: {

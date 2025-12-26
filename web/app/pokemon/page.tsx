@@ -15,7 +15,7 @@ const Page: React.FC<Props> = async ({ searchParams }) => {
     const data = await apiPokemonList({ limit: 20, offset: current });
 
     return (
-        <PageContainer title="Pokemon">
+        <PageContainer>
             <div className="mb-2">
                 {
                     data.data.results.map((pokemon: { name: string }) => (

@@ -12,7 +12,7 @@ const Page: React.FC = () => {
     }
 
     return (
-        <PageContainer title="Login"></PageContainer>
+        <PageContainer></PageContainer>
     )
 }
 

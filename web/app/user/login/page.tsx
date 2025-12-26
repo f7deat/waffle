@@ -5,7 +5,7 @@ import { Button, Checkbox, Form, Input } from "antd"
 
 const Page: React.FC = () => {
     return (
-        <PageContainer title="Login">
+        <PageContainer>
             <div className="p-4">
                 <Form layout="vertical">
                     <Form.Item label="Username" rules={[{ required: true }]} required >

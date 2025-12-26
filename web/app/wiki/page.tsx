@@ -7,7 +7,7 @@ export default async function Page() {
   const response = await apiWikiRandom();
 
   return (
-    <PageContainer title="Wiki">
+    <PageContainer>
       <div className="p-4">
         <div>
           Today&apos;s random article:

@@ -1,22 +1,19 @@
 import Link from "next/link";
 import { DistrictSection } from "./home";
 import { apiArticleList } from "@/service/article";
+import { apiProducts } from "@/service/shop/product";
 
 export default async function Home() {
   const articlesResponse = await apiArticleList({ current: 1, pageSize: 4 });
   const articles = articlesResponse.data || [];
 
+  const productsResponse = await apiProducts({ current: 1, pageSize: 4 });
+  const products = productsResponse.data || [];
+
   const locations = [
     { name: "Ha Noi", slug: "ha-noi", image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad" },
     { name: "Da Nang", slug: "da-nang", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" },
     { name: "Sai Gon", slug: "sai-gon", image: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef" },
-  ];
-
-  const products = [
-    { name: "Mechanical keyboard", price: "$129", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8" },
-    { name: "Studio headset", price: "$189", image: "https://images.unsplash.com/photo-1518444028781-cca182c2acbf" },
-    { name: "4K monitor", price: "$329", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8" },
-    { name: "Smart lamp", price: "$59", image: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e" },
   ];
 
   const videos = [
@@ -142,17 +139,19 @@ export default async function Home() {
                 <Link href="/shop" className="text-sm font-medium text-blue-600 hover:text-blue-500">Shop now</Link>
               </div>
               <div className="grid gap-4 md:grid-cols-4">
-                {products.map((item, idx) => (
-                  <div key={`${item.name}-${idx}`} className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
-                    <div className="h-40 bg-cover bg-center" style={cardStyle(item.image)} />
+                {products.map((item) => (
+                  <Link key={item.id} href={`/shop/${item.normalizedName}`} className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+                    <div className="h-40 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
                     <div className="flex items-center justify-between p-4">
                       <div>
                         <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{item.name}</h3>
                         <p className="text-sm text-slate-500 dark:text-slate-400">In stock</p>
                       </div>
-                      <span className="text-sm font-semibold text-blue-600">{item.price}</span>
+                      <span className="text-sm font-semibold text-blue-600">
+                        {item.salePrice ? `$${item.salePrice}` : `$${item.price}`}
+                      </span>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </section>

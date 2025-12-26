@@ -52,7 +52,6 @@ const Page: React.FC = () => {
 
     return (
         <PageContainer
-            title="Streets"
             breadcrumbs={breadcrumbs}
         >
             <div className="p-4">
