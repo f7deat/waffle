@@ -252,4 +252,7 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
         label = x.UserName,
         value = x.Id
     }).ToListAsync());
+
+    [HttpGet("influencers"), AllowAnonymous]
+    public async Task<IActionResult> GetInfluencersAsync([FromQuery] FilterOptions filterOptions) => Ok(await _userService.GetInfluencersAsync(filterOptions));
 }

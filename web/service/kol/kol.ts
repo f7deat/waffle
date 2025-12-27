@@ -1,7 +1,7 @@
 import request from "../request";
 
 export async function apiKolList(params?: API.KolFilterOptions) {
-    return request.get<API.ListResult<API.KolListItem>>("kol/list", { params });
+    return request.get<API.ListResult<API.KolListItem>>("user/influencers", { params });
 }
 
 export async function apiKolDetail(id: string) {

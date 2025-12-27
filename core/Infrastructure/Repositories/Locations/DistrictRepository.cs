@@ -41,9 +41,8 @@ public class DistrictRepository(ApplicationDbContext context, IHCAService hcaSer
                         d.ProvinceId,
                         ProvinceName = p.Name,
                         Thumbnail = (from pl in _context.Places
-                                     join s in _context.Streets on pl.StreetId equals s.Id
                                      join c in _context.Catalogs on pl.Id equals c.Id
-                                     where s.DistrictId == d.Id
+                                     where pl.DistrictId == d.Id
                                      select c.Thumbnail).FirstOrDefault()
                     };
         if (filterOptions.ProvinceId.HasValue)

@@ -12,7 +12,7 @@ using Waffle.Models.Components;
 
 namespace Waffle.Core.Services.Locations;
 
-public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment _webHostEnvironment, IProvinceRepository _provinceRepository, IStreetRepository _streetRepository, IDistrictRepository _districtRepository, ICatalogService _catalogService) : IPlaceService
+public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment _webHostEnvironment, IProvinceRepository _provinceRepository, IDistrictRepository _districtRepository, ICatalogService _catalogService) : IPlaceService
 {
     public async Task<TResult> AddImageAsync(PlaceAddImageArgs args, string host)
     {
@@ -69,28 +69,21 @@ public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment
             content = JsonSerializer.Deserialize<BlockEditor>(place.Content);
         }
         var district = new District();
-        var street = new Street();
         var province = new Province();
-        if (place.StreetId.HasValue)
+        if (place.DistrictId.HasValue)
         {
-            street = await _streetRepository.FindAsync(place.StreetId);
-            if (street != null)
+            district = await _districtRepository.FindAsync(place.DistrictId);
+            if (district != null)
             {
-                district = await _districtRepository.FindAsync(street.DistrictId);
-                if (district != null)
-                {
-                    province = await _provinceRepository.FindAsync(district.ProvinceId);
-                }
+                province = await _provinceRepository.FindAsync(district.ProvinceId);
             }
         }
         return TResult.Ok(new
         {
             place.Id,
             content,
-            place.StreetId,
+            place.DistrictId,
             place.Address,
-            StreetName = street?.Name,
-            DistrictId = district?.Id,
             DistrictName = district?.Name,
             ProvinceId = province?.Id,
             ProvinceName = province?.Name
@@ -105,18 +98,13 @@ public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment
         if (place is null) return TResult.Failed("Place not found!");
         var images = await _placeRepository.GetImagesAsync(catalog.Id);
         var district = new District();
-        var street = new Street();
         var province = new Province();
-        if (place.StreetId.HasValue)
+        if (place.DistrictId.HasValue)
         {
-            street = await _streetRepository.FindAsync(place.StreetId);
-            if (street != null)
+            district = await _districtRepository.FindAsync(place.DistrictId);
+            if (district != null)
             {
-                district = await _districtRepository.FindAsync(street.DistrictId);
-                if (district != null)
-                {
-                    province = await _provinceRepository.FindAsync(district.Id);
-                }
+                province = await _provinceRepository.FindAsync(district.Id);
             }
         }
         return TResult.Ok(new
@@ -130,7 +118,6 @@ public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment
             catalog.CreatedDate,
             catalog.ViewCount,
             place.Address,
-            place.StreetId,
             Content = string.IsNullOrEmpty(place.Content) ? new BlockEditor() : JsonSerializer.Deserialize<BlockEditor>(place.Content),
             Images = images.Select(x => new
             {
@@ -138,7 +125,6 @@ public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment
                 x.Url,
                 x.UploadedAt
             }),
-            StreetName = street?.Name,
             DistrictId = district?.Id,
             DistrictName = district?.Name,
             ProvinceId = province?.Id,
@@ -157,7 +143,7 @@ public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment
         var place = await _placeRepository.FindAsync(args.Id);
         if (place is null) return TResult.Failed("Place not found!");
         place.Content = args.Content;
-        place.StreetId = args.StreetId;
+        place.DistrictId = args.DistrictId;
         place.Address = args.Address;
         await _placeRepository.UpdateAsync(place);
         return TResult.Success;

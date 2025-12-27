@@ -5,6 +5,5 @@ namespace Waffle.Core.Services.Locations.Filters;
 public class PlaceFilterOptions : FilterOptions
 {
     public string? Name { get; set; }
-    public int? StreetId { get; set; }
     public int? DistrictId { get; set; }
 }

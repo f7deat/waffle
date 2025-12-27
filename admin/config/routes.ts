@@ -144,12 +144,6 @@ export default [
         hideInMenu: true,
       },
       {
-        name: 'tag',
-        path: '/works/tag/:id',
-        component: './works/tag',
-        hideInMenu: true,
-      },
-      {
         name: 'link',
         path: '/works/link/:id',
         component: './works/link',
@@ -441,6 +435,11 @@ export default [
         path: '/settings/country/province/district/:id',
         component: './settings/country/province/district/street',
         hideInMenu: true
+      },
+      {
+        name: 'tag',
+        path: '/settings/tag',
+        component: './tag',
       }
     ],
   },

@@ -15,4 +15,5 @@ public interface IUserService
     Task<IdentityResult> RemoveFromRoleAsync(Guid userId, string roleName);
     Task<ListResult<Contact>> ListContactAsync(SearchFilterOptions filterOptions);
     Task<IdentityResult> UpdateAsync(ApplicationUser user, ApplicationUser args);
+    Task<ListResult> GetInfluencersAsync(FilterOptions filterOptions);
 }

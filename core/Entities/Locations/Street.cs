@@ -11,5 +11,4 @@ public class Street : BaseEntity<int>
     public int DistrictId { get; set; }
 
     public District? District { get; set; }
-    public ICollection<Place>? Places { get; set; }
 }

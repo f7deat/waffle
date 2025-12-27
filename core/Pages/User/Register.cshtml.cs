@@ -81,7 +81,7 @@ public class RegisterModel : EntryPageModel
             return Page();
         }
         var user = CreateUser();
-        user.CreatedDate = DateTime.Now;
+        user.CreatedAt = DateTime.UtcNow;
         await _userStore.SetUserNameAsync(user, UserName, CancellationToken.None);
         await _emailStore.SetEmailAsync(user, Email, CancellationToken.None);
 

@@ -12,4 +12,5 @@ public class District : BaseEntity<int>
 
     public Province? Province { get; set; }
     public ICollection<Street>? Streets { get; set; }
+    public ICollection<Place>? Places { get; set; }
 }

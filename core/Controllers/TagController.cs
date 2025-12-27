@@ -11,7 +11,7 @@ public class TagController(ITagService _tagService) : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] TagCreateArgs args) => Ok(await _tagService.CreateAsync(args));
 
-    [HttpGet]
+    [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] TagFilterOptions filterOptions) => Ok(await _tagService.ListAsync(filterOptions));
 
     [HttpGet("{id}")]

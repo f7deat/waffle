@@ -20,10 +20,10 @@ public class StreetRepository(ApplicationDbContext context, IHCAService hcaServi
                         s.Id,
                         s.Name,
                         s.DistrictId,
-                        PlaceCount = _context.Places.Count(p => p.StreetId == s.Id),
+                        PlaceCount = _context.Places.Count(p => p.DistrictId == s.Id),
                         Thumbnail = (from p in _context.Places
                                      join c in _context.Catalogs on p.Id equals c.Id
-                                     where p.StreetId == s.Id
+                                     where p.DistrictId == s.Id
                                      select c.Thumbnail).FirstOrDefault(),
                         DistrictName = d.Name,
                         d.ProvinceId

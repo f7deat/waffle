@@ -7,19 +7,8 @@ using Waffle.Models.ViewModels.Users;
 
 namespace Waffle.Core.Services;
 
-public class UserService : IUserService
+public class UserService(UserManager<ApplicationUser> _userManager, RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : IUserService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly ApplicationDbContext _context;
-
-    public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext context)
-    {
-        _userManager = userManager;
-        _roleManager = roleManager;
-        _context = context;
-    }
-
     private async Task<ApplicationUser?> FindAsync(Guid id) => await _context.Users.FindAsync(id);
 
     public async Task<IdentityResult> AddToRoleAsync(Guid userId, string roleName)
@@ -120,5 +109,27 @@ public class UserService : IUserService
         user.DateOfBirth = args.DateOfBirth;
         await _userManager.UpdateAsync(user);
         return IdentityResult.Success;
+    }
+
+    public async Task<ListResult> GetInfluencersAsync(FilterOptions filterOptions)
+    {
+        var query = from u in _context.Users
+                    join ur in _context.UserRoles on u.Id equals ur.UserId
+                    join r in _context.Roles on ur.RoleId equals r.Id
+                    where r.Name == "Influencer"
+                    select new
+                    {
+                        u.Id,
+                        u.UserName,
+                        u.Email,
+                        u.Name,
+                        Followers = 0,
+                        u.Avatar,
+                        u.PhoneNumberConfirmed,
+                        ReviewCount = 0,
+                        Rating = 5,
+                        PricePerReview = 0,
+                    };
+        return await ListResult.Success(query, filterOptions);
     }
 }
