@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Tags.Filters;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;
@@ -31,7 +32,7 @@ public class IndexModel : EntryPageModel
         {
             Current = Current,
             PageSize = 20,
-            KeyWords = SearchTerm
+            Name = SearchTerm
         });
         Tags = new ListGroup
         {

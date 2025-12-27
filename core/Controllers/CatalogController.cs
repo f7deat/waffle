@@ -7,6 +7,7 @@ using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;

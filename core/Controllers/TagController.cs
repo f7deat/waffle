@@ -2,6 +2,7 @@
 using Waffle.Core.Foundations;
 using Waffle.Core.IServices;
 using Waffle.Core.Services.Tags.Args;
+using Waffle.Core.Services.Tags.Filters;
 
 namespace Waffle.Controllers;
 
@@ -11,17 +12,17 @@ public class TagController(ITagService _tagService) : BaseController
     public async Task<IActionResult> CreateAsync([FromBody] TagCreateArgs args) => Ok(await _tagService.CreateAsync(args));
 
     [HttpGet]
-    public async Task<IActionResult> ListAsync() => Ok(await _tagService.ListAsync());
+    public async Task<IActionResult> ListAsync([FromQuery] TagFilterOptions filterOptions) => Ok(await _tagService.ListAsync(filterOptions));
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync(Guid id) => Ok(await _tagService.GetAsync(id));
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] TagUpdateArgs args) => Ok(await _tagService.UpdateAsync(id, args));
+    [HttpPut]
+    public async Task<IActionResult> UpdateAsync([FromBody] TagUpdateArgs args) => Ok(await _tagService.UpdateAsync(args));
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(Guid id) => Ok(await _tagService.DeleteAsync(id));
 
-    [HttpGet("random")]
-    public async Task<IActionResult> GetRandomAsync() => Ok(await _tagService.GetRandomAsync());
+    [HttpGet("randoms")]
+    public async Task<IActionResult> GetRandomsAsync() => Ok(await _tagService.GetRandomsAsync());
 }

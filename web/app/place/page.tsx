@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
 import { apiPlaceList } from "@/service/locations/place";
+import KolList from "@/components/place/kol-list";
+import { apiKolList } from "@/service/kol/kol";
 import Link from "next/link";
 
 type SearchParams = Promise<{
@@ -16,9 +18,14 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 	const pageSize = Math.max(1, Number((await searchParams).pageSize) || DEFAULT_PAGE_SIZE);
 	const keyword = (await searchParams).keyword?.trim();
 
-	const response = await apiPlaceList({ current, pageSize, keyword });
-	const places = response.data || [];
-	const total = response.total || places.length;
+	const [placeResponse, kolResponse] = await Promise.all([
+		apiPlaceList({ current, pageSize, keyword }),
+		apiKolList({ current: 1, pageSize: 6 })
+	]);
+
+	const places = placeResponse.data || [];
+	const kols = kolResponse.data || [];
+	const total = placeResponse.total || places.length;
 	const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
 	const buildPageHref = (page: number) => {
@@ -34,6 +41,12 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 			breadcrumbs={[{ label: "Place", href: "/place" }]}
 		>
 			<div className="space-y-6">
+				{/* KOL Section */}
+				<KolList 
+					kolList={kols} 
+					placeId="" 
+					placeName="các địa điểm" 
+				/>
 				<div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
 					<div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
 						<div>

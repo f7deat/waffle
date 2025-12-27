@@ -83,12 +83,6 @@ public class ArticleRelatedFilterOption : FilterOptions
     public Guid? ParentId { get; set; }
 }
 
-public class TagFilterOptions : FilterOptions
-{
-    public string? KeyWords { get; set; }
-    public OrderBy? OrderBy { get; set; }
-}
-
 public class LocalizationFilterOptions: FilterOptions
 {
     public string? Key { get; set; }

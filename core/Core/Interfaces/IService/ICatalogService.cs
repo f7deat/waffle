@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Services.Tags.Filters;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;

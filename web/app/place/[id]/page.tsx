@@ -5,7 +5,9 @@ import { JSX, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import PageContainer from "@/components/layout/page-container";
+import KolList from "@/components/place/kol-list";
 import { apiPlaceDetail, apiPlaceRandom, apiPlaceList, apiPlaceImages } from '@/service/locations/place';
+import { apiKolByPlace } from '@/service/kol/kol';
 import { Image } from 'antd';
 
 const Page: React.FC = () => {
@@ -15,10 +17,12 @@ const Page: React.FC = () => {
     const [randomPlaces, setRandomPlaces] = useState<API.PlaceListItem[]>([]);
     const [relatedPlaces, setRelatedPlaces] = useState<API.PlaceListItem[]>([]);
     const [placeImages, setPlaceImages] = useState<API.PlaceImage[]>([]);
+    const [kolList, setKolList] = useState<API.KolListItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [loadingRandom, setLoadingRandom] = useState(false);
     const [loadingRelated, setLoadingRelated] = useState(false);
     const [loadingImages, setLoadingImages] = useState(false);
+    const [loadingKol, setLoadingKol] = useState(false);
 
     useEffect(() => {
         const fetchPlace = async () => {
@@ -97,6 +101,24 @@ const Page: React.FC = () => {
 
         fetchPlaceImages();
     }, [place]);
+
+    useEffect(() => {
+        const fetchKolList = async () => {
+            if (!placeId) return;
+            try {
+                setLoadingKol(true);
+                const data = await apiKolByPlace(placeId as string, { current: 1, pageSize: 6 });
+                setKolList(data.data || []);
+            } catch (error) {
+                console.error('Failed to fetch KOL list:', error);
+                setKolList([]);
+            } finally {
+                setLoadingKol(false);
+            }
+        };
+
+        fetchKolList();
+    }, [placeId]);
 
     const breadcrumbs = place ? [
         { label: 'Place', href: '/place' },
@@ -286,6 +308,17 @@ const Page: React.FC = () => {
                         </div>
                     </aside>
                 </div>
+
+                {/* KOL Section */}
+                {!loadingKol && kolList.length > 0 && (
+                    <div className="mt-12">
+                        <KolList 
+                            kolList={kolList} 
+                            placeId={place.id} 
+                            placeName={place.name} 
+                        />
+                    </div>
+                )}
             ) : (
                 <div className="text-center py-12">
                     <p className="text-gray-600">Place not found.</p>

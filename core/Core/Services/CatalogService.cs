@@ -10,6 +10,7 @@ using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
+using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
@@ -268,9 +269,9 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
 
     public async Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions)
     {
-        if (string.IsNullOrWhiteSpace(filterOptions.KeyWords)) return new List<Option>();
+        if (string.IsNullOrWhiteSpace(filterOptions.Name)) return new List<Option>();
 
-        var normalizedName = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
+        var normalizedName = SeoHelper.ToSeoFriendly(filterOptions.Name);
 
         return await _context.Catalogs.Where(x =>
         x.Active && x.Type == CatalogType.Tag && x.NormalizedName.Contains(normalizedName) && x.Locale == filterOptions.Locale)
@@ -350,7 +351,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
 
     public async Task<ListResult<TagListItem>> ListTagAsync(TagFilterOptions filterOptions)
     {
-        var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
+        var searchTerm = SeoHelper.ToSeoFriendly(filterOptions.Name);
         var query = _context.Catalogs
             .Where(x => x.Type == CatalogType.Tag && x.Active)
             .Where(x => string.IsNullOrEmpty(searchTerm) || x.NormalizedName.Contains(searchTerm))
@@ -362,13 +363,6 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
                 ViewCount = x.ViewCount,
                 PostCount = _context.WorkItems.Count(y => y.CatalogId == x.Id)
             }).OrderByDescending(x => x.Id);
-        if (filterOptions.OrderBy != null)
-        {
-            if (filterOptions.OrderBy == OrderBy.View)
-            {
-                query = query.OrderByDescending(x => x.ViewCount);
-            }
-        }
         return await ListResult<TagListItem>.Success(query, filterOptions);
     }
 
