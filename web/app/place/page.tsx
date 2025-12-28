@@ -112,7 +112,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 											</div>
 										</div>
 										<div className="flex flex-1 flex-col gap-3 p-4">
-											<Link href={`/place/${place.id}`} className="hover:underline">
+											<Link href={`/place/${place.normalizedName}`} className="hover:underline">
 												<h2 className="text-lg font-semibold text-slate-900 line-clamp-2">{place.name}</h2>
 											</Link>
 											<p className="text-sm text-slate-600 line-clamp-2">

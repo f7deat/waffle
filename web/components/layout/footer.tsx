@@ -46,23 +46,23 @@ const Footer: React.FC = () => {
                         <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
                         <Link href="/article" className="hover:text-white transition-colors">Bài viết</Link>
                         <Link href="/wiki" className="hover:text-white transition-colors">Wiki</Link>
-                        <Link href="/shop" className="hover:text-white transition-colors">Cua hang</Link>
-                        <Link href="/contact" className="hover:text-white transition-colors">Lien he</Link>
+                        <Link href="/shop" className="hover:text-white transition-colors">Cửa hàng</Link>
+                        <Link href="/contact" className="hover:text-white transition-colors">Liên hệ</Link>
                     </nav>
                 </div>
 
                 <div className="space-y-3">
-                    <h3 className="text-base font-semibold text-white">Lien he</h3>
+                    <h3 className="text-base font-semibold text-white">Liên hệ</h3>
                     <div className="flex flex-col gap-2 text-sm text-slate-300">
-                        <div>Email: <a className="hover:text-white" href="mailto:hello@defzone.net">hello@defzone.net</a></div>
-                        <div>Dien thoai: <a className="hover:text-white" href="tel:+84999999999">+84 999 999 999</a></div>
-                        <div>Dia chi: 123 Duong Cong Nghe, Ha Noi</div>
+                        <div>Email: <a className="hover:text-white" href="mailto:defzone.net@gmail.com">defzone.net@gmail.com</a></div>
+                        <div>Điện thoại: <a className="hover:text-white" href="tel:+84762559696">+84 762 559 696</a></div>
+                        <div>Địa chỉ: Thiên Hương, Thủy Nguyên, Hải Phòng</div>
                     </div>
                 </div>
 
                 <div className="space-y-3">
-                    <h3 className="text-base font-semibold text-white">Dang ky nhan tin</h3>
-                    <p className="text-sm text-slate-300">Nhan bai viet va cap nhat moi nhat qua email.</p>
+                    <h3 className="text-base font-semibold text-white">Đăng ký nhận tin</h3>
+                    <p className="text-sm text-slate-300">Nhận bài viết và cập nhật mới nhất qua email.</p>
                     <form className="space-y-2">
                         <label className="sr-only" htmlFor="footer-email">Email</label>
                         <input
@@ -77,7 +77,7 @@ const Footer: React.FC = () => {
                             type="submit"
                             className="w-full rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
                         >
-                            Dang ky
+                            Đăng ký
                         </button>
                     </form>
                 </div>

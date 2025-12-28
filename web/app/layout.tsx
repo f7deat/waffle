@@ -4,7 +4,6 @@ import { Quicksand } from 'next/font/google'
 import Script from "next/script";
 import Footer from "@/components/layout/footer";
 import { ConfigProvider } from "antd";
-import '@ant-design/v5-patch-for-react-19';
 import Header from "@/components/layout/header";
 
 const quicksand = Quicksand({

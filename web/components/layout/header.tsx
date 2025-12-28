@@ -40,11 +40,11 @@ const Header: React.FC = () => {
             <div className="hidden border-b border-slate-200 bg-slate-50 text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 md:block">
                 <div className="mx-auto flex container items-center justify-between px-4 py-2">
                     <div className="flex items-center gap-4">
-                        <a href="mailto:hello@defzone.net" className="hover:text-slate-900 dark:hover:text-white">hello@defzone.net</a>
-                        <a href="/contact" className="hover:text-slate-900 dark:hover:text-white">Lien he</a>
+                        <a href="mailto:defzone.net@gmail.com" className="hover:text-slate-900 dark:hover:text-white">defzone.net@gmail.com</a>
+                        <a href="/contact" className="hover:text-slate-900 dark:hover:text-white">Liên hệ</a>
                     </div>
                     <div className="flex items-center gap-3 text-slate-500 dark:text-slate-300">
-                        <a href="https://facebook.com" aria-label="Facebook" className="hover:text-blue-600">
+                        <a href="https://facebook.com/tan.dct" aria-label="Facebook" className="hover:text-blue-600">
                             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
                                 <path d="M13.5 9H15V6h-1.5C10.91 6 10 7.79 10 10v2H8v3h2v6h3v-6h2.07L15.5 12H13v-1.75c0-.69.18-1.25 1.25-1.25Z" />
                             </svg>
@@ -83,9 +83,10 @@ const Header: React.FC = () => {
                     </div>
                 </Link>
 
-                <form className="hidden items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 lg:flex dark:border-slate-800 dark:bg-slate-900">
+                <form action="/search" className="hidden items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 lg:flex dark:border-slate-800 dark:bg-slate-900">
                     <input
                         type="search"
+                        name="q"
                         placeholder="Tim kiem..."
                         className="w-48 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-100"
                     />

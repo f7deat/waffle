@@ -1,12 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
+import { apiShopeeBaseInfoAndLinks } from "@/service/apps/shopee";
 import { apiProducts } from "@/service/shop/product";
 import { SearchOutlined, ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
 import Link from "next/link";
 
 const Page: React.FC = async () => {
 
-    const response = await apiProducts({ current: 1, pageSize: 14 });
+    const data = await apiShopeeBaseInfoAndLinks({ pageNum: "1", pageSize: 12 });
+
+    const response = await apiProducts({ current: 1, pageSize: 15 });
     const products = response.data;
 
     const renderPrice = (price?: number, salePrice?: number) => {
@@ -136,6 +139,28 @@ const Page: React.FC = async () => {
 
                     {/* Right Side - Products */}
                     <div className="flex-1">
+                        
+            <div className="grid grid-cols-2 md:grid-cols-4 2xl:grid-cols-6 gap-4 mb-4">
+                {
+                    data.data.data.landingPageLinkList.linkList.map((link: {
+                        linkId: string;
+                        link: string;
+                        linkName: string;
+                        image: string;
+                        linkType: string;
+                        groupIds: string[];
+                    }) => {
+                        return (
+                            <div key={link.linkId} className="bg-white">
+                                <a href={link.link} target="_blank" rel="noreferrer">
+                                    <img src={link.image} loading="lazy" alt={link.linkName} className="mb-1 transition-transform duration-300 ease-in-out transform hover:scale-105" />
+                                    <div className="hover:text-blue-500 py-1 px-2 font-medium line-clamp-2">{link.linkName}</div>
+                                </a>
+                            </div>
+                        )
+                    })
+                }
+            </div>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 2xl:grid-cols-5">
                             {products.map((product) => (
                                 <div key={product.id} className="bg-white transition duration-300 rounded-lg p-2 flex flex-col hover:shadow-xl">
@@ -145,7 +170,7 @@ const Page: React.FC = async () => {
                                             {product.name}
                                         </Link>
                                     </h3>
-                                    <p className="text-gray-600 mb-2">{renderPrice(product.price, product.salePrice)}</p>
+                                    <div className="text-gray-600 mb-2">{renderPrice(product.price, product.salePrice)}</div>
                                     <div className="flex justify-between items-center">
                                         <div className="text-yellow-500 text-sm md:text-base font-bold">
                                             5<StarFilled />

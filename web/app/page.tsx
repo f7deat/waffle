@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DistrictSection } from "./home";
 import { apiArticleList } from "@/service/article";
 import { apiProducts } from "@/service/shop/product";
+import { apiTagRandoms } from "@/service/contents/tag";
 
 export default async function Home() {
   const articlesResponse = await apiArticleList({ current: 1, pageSize: 4 });
@@ -9,6 +10,10 @@ export default async function Home() {
 
   const productsResponse = await apiProducts({ current: 1, pageSize: 4 });
   const products = productsResponse.data || [];
+
+  const tagsResponse = await apiTagRandoms();
+  const tagsData = Array.isArray(tagsResponse.data) ? tagsResponse.data : [tagsResponse.data].filter(Boolean);
+  const tags = tagsData.map(tag => tag.name);
 
   const locations = [
     { name: "Ha Noi", slug: "ha-noi", image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad" },
@@ -32,14 +37,13 @@ export default async function Home() {
     "Microsoft", "OpenAI", "Google", "Amazon", "Vercel", "Shopee", "Klook", "Wikipedia"
   ];
 
-  const tags = ["AI", "Cloud", "DevOps", "Security", "Travel", "Photo", "Video", "Game"];
   const categories = ["Huong dan", "Phan tich", "Danh gia", "Tin tuc", "Thu thuat"];
 
   const randomArticles = articles.slice(0, 2);
   const randomLocations = locations.slice(0, 2);
 
   const cardStyle = (url: string) => ({
-    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.65)), url(${url})`,
+    backgroundImage: `url(${url})`,
   });
 
   return (
@@ -99,8 +103,8 @@ export default async function Home() {
 
             <section className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Bai viet moi</h2>
-                <Link href="/article" className="text-sm font-medium text-blue-600 hover:text-blue-500">View all</Link>
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Bài viết mới</h2>
+                <Link href="/article" className="text-sm font-medium text-blue-600 hover:text-blue-500">Xem tất cả</Link>
               </div>
               <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4">
                 {articles.map((item) => (
