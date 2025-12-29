@@ -2,7 +2,7 @@
 using Waffle.Core.Foundations.Models;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Components;
+using Waffle.Models.Components.Common;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Interfaces.IRepository;
@@ -17,6 +17,7 @@ public interface ICatalogRepository : IAsyncRepository<Catalog>
     Task<IEnumerable<Option>> GetFormSelectAsync(SelectOptions filterOptions);
     Task<object?> GetStructureAsync(Guid id);
     Task<object?> GetStructureAsync(string normalizedName);
+    Task<object> GetTagOptionsAsync(SelectOptions selectOptions);
     Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type, string locale);
     Task<int> GetViewCountAsync(string locale);
     Task IncreaseCountAsync(Catalog catalog);

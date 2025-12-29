@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Waffle.Models.Components;
+namespace Waffle.Models.Components.Common;
 
 public class Option
 {

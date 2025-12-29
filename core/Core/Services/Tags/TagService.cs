@@ -7,6 +7,7 @@ using Waffle.Core.Services.Tags.Args;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Entities.Tags;
 using Waffle.Models;
+using Waffle.Models.Components.Common;
 
 namespace Waffle.Core.Services.Tags;
 
@@ -46,6 +47,12 @@ public class TagService(ITagRepository _tagRepository) : ITagService
             .Take(10)
             .ToListAsync();
         return TResult.Ok(tags);
+    }
+
+    public async Task<IEnumerable<Option>> GetTagOptionsAsync(SelectOptions selectOptions)
+    {
+        selectOptions.KeyWords = SeoHelper.ToSeoFriendly(selectOptions.KeyWords);
+        return await _tagRepository.GetTagOptionsAsync(selectOptions);
     }
 
     public async Task<ListResult> ListAsync(TagFilterOptions filterOptions)

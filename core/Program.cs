@@ -59,6 +59,7 @@ builder.Services
         };
         options.TokenValidationParameters = new TokenValidationParameters()
         {
+            ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"] ?? string.Empty)),
             ValidateIssuer = false,
             ValidateAudience = false

@@ -4,6 +4,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.IServices;
 using Waffle.Core.Services.Tags.Args;
 using Waffle.Core.Services.Tags.Filters;
+using Waffle.Models;
 
 namespace Waffle.Controllers;
 
@@ -26,4 +27,7 @@ public class TagController(ITagService _tagService) : BaseController
 
     [HttpGet("randoms"), AllowAnonymous]
     public async Task<IActionResult> GetRandomsAsync() => Ok(await _tagService.GetRandomsAsync());
+
+    [HttpGet("options")]
+    public async Task<IActionResult> GetTagOptionsAsync([FromQuery] SelectOptions selectOptions) => Ok(await _tagService.GetTagOptionsAsync(selectOptions));
 }

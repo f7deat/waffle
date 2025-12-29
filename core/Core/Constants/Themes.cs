@@ -1,4 +1,4 @@
-﻿using Waffle.Models.Components;
+﻿using Waffle.Models.Components.Common;
 
 namespace Waffle.Core.Constants;
 

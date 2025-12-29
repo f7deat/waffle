@@ -3,6 +3,7 @@ using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Args;
 using Waffle.Models.Components;
+using Waffle.Models.Components.Common;
 using Waffle.Models.Params.Products;
 
 namespace Waffle.Core.Interfaces.IService;

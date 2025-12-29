@@ -7,7 +7,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Components;
+using Waffle.Models.Components.Common;
 using Waffle.Models.Results.Components;
 
 namespace Waffle.Core.Services;

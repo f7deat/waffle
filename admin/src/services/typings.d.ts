@@ -193,6 +193,10 @@ declare namespace API {
       componentName: string;
       data: any
   }
+  interface CatalogTag extends BaseEntity {
+    name: string;
+    normalizedName: string;
+  }
 }
 
 declare namespace Entity {

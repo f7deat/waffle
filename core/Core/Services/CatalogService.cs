@@ -18,6 +18,7 @@ using Waffle.Entities.Locations;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
+using Waffle.Models.Components.Common;
 using Waffle.Models.Filters.Catalogs;
 using Waffle.Models.List;
 using Waffle.Models.Result;
@@ -678,4 +679,10 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
     }
 
     public Task<TResult> TagsAsync(Guid catalogId) => _catalogRepository.TagsAsync(catalogId);
+
+    public Task<object> GetTagOptionsAsync(SelectOptions selectOptions)
+    {
+        selectOptions.KeyWords = SeoHelper.ToSeoFriendly(selectOptions.KeyWords);
+        return _catalogRepository.GetTagOptionsAsync(selectOptions);
+    }
 }

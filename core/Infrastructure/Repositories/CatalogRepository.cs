@@ -7,7 +7,7 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Components;
+using Waffle.Models.Components.Common;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Infrastructure.Repositories;
@@ -74,6 +74,22 @@ public class CatalogRepository(ApplicationDbContext context, IHCAService hcaServ
                           orderby i.SortOrder ascending
                           select w).ToListAsync();
         return works;
+    }
+
+    public async Task<object> GetTagOptionsAsync(SelectOptions selectOptions)
+    {
+        var query = from t in _context.Tags
+                    join tc in _context.TagCatalogs on t.Id equals tc.TagId
+                    join c in _context.Catalogs on tc.CatalogId equals c.Id
+                    where c.Type == selectOptions.Type
+                        && (string.IsNullOrEmpty(selectOptions.KeyWords) || t.NormalizedName.Contains(selectOptions.KeyWords))
+                        && c.Locale == selectOptions.Locale
+                    select new Option
+                    {
+                        Label = t.Name,
+                        Value = t.Id
+                    };
+        return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type, string locale)

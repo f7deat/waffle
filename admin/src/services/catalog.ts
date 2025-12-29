@@ -184,3 +184,7 @@ export async function apiGetCatalogOptions(params: any) {
 export async function apiCatalogDetail(id?: string) {
   return request<API.TResult<API.Catalog>>(`catalog/${id}`);
 }
+
+export async function apiCatalogTags(id?: string) {
+  return request<API.TResult<API.CatalogTag[]>>(`catalog/tags/${id}`);
+}

@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Services.Catalogs.Filters;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
+using Waffle.Models.Components.Common;
 using Waffle.Models.Filters.Catalogs;
 using Waffle.Models.Result;
 using Waffle.Models.ViewModels;
@@ -58,4 +60,5 @@ public interface ICatalogService
     Task<object?> GetMetaAsync(string slug);
     Task<TResult> DetailAsync(Guid id);
     Task<TResult> TagsAsync(Guid catalogId);
+    Task<object> GetTagOptionsAsync(TagSelectOptions selectOptions);
 }

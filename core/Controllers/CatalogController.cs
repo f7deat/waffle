@@ -7,6 +7,7 @@ using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Catalogs.Filters;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
 using Waffle.Entities;
@@ -39,22 +40,13 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
         return Ok(await _catalogService.GetByNameAsync(normalizedName));
     }
 
-    [HttpPost]
+    [HttpPost, Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> AddAsync([FromBody] Catalog catalog, [FromQuery] string locale)
     {
-        try
-        {
-            if (!User.IsInRole(RoleName.Admin)) return Unauthorized();
-            if (!LocaleHelper.IsAvailable(locale)) return BadRequest("Locale not avaiable!");
-            catalog.Locale = locale;
-            if (string.IsNullOrWhiteSpace(catalog.Name)) return BadRequest("Please enter name!");
-            catalog.Active = catalog.Type == CatalogType.Tag;
-            return Ok(await _catalogService.AddAsync(catalog));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.ToString());
-        }
+        if (!LocaleHelper.IsAvailable(locale)) return BadRequest("Locale not avaiable!");
+        catalog.Locale = locale;
+        if (string.IsNullOrWhiteSpace(catalog.Name)) return BadRequest("Please enter name!");
+        return Ok(await _catalogService.AddAsync(catalog));
     }
 
     [HttpGet("list"), AllowAnonymous]
@@ -98,12 +90,11 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
         }
     }
 
-    [HttpPost("delete/{id}")]
+    [HttpPost("delete/{id}"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         try
         {
-            if (!User.IsInRole(RoleName.Admin)) return Unauthorized();
             var catalog = await _catalogService.FindAsync(id);
             if (catalog is null) return BadRequest("Catalog not found!");
 
@@ -260,4 +251,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
 
     [HttpGet("tags"), AllowAnonymous]
     public async Task<IActionResult> GetTagsAsync([FromQuery] Guid catalogId) => Ok(await _catalogService.TagsAsync(catalogId));
+
+    [HttpGet("tag-options")]
+    public async Task<IActionResult> GetTagOptionsAsync([FromQuery] TagSelectOptions selectOptions) => Ok(await _catalogService.GetTagOptionsAsync(selectOptions));
 }

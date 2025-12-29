@@ -7,6 +7,7 @@ export default {
   'menu.catalog.tagCenter': 'Chi tiết',
   'menu.catalogList': 'Danh sách',
   'menu.catalogCenter': 'Chi tiết',
+  'menu.catalog.placeCenter': 'Chi tiết địa điểm',
   'menu.career': 'Tuyển dụng',
   'menu.career.application': 'Đơn ứng tuyển',
   'menu.comments': 'Bình luận',

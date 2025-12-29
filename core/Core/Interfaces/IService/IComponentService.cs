@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Entities;
 using Waffle.Models;
-using Waffle.Models.Components;
+using Waffle.Models.Components.Common;
 using Waffle.Models.Results.Components;
 
 namespace Waffle.Core.Interfaces.IService;
