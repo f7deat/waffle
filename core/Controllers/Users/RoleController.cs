@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
-using Waffle.Entities;
+using Waffle.Entities.Users;
 using Waffle.Models;
 
-namespace Waffle.Controllers;
+namespace Waffle.Controllers.Users;
 
 public class RoleController(RoleManager<ApplicationRole> roleManager) : BaseController
 {

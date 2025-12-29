@@ -1,4 +1,6 @@
-﻿namespace Waffle.Models.Filters.Folders;
+﻿using Waffle.Models;
+
+namespace Waffle.Core.Services.Files.Filters;
 
 public class FolderFilterOptions : FilterOptions
 {

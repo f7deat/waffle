@@ -1,4 +1,5 @@
-﻿using Waffle.Entities.Ecommerces;
+﻿using Waffle.Core.Foundations.Interfaces;
+using Waffle.Entities.Ecommerces;
 
 namespace Waffle.Core.Interfaces.IRepository;
 

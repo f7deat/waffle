@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
 
 namespace Waffle.Entities;
 

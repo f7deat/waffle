@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
-using Waffle.Core.Services.Files.Models;
+using Waffle.Core.Services.Files.Results;
 using Waffle.Data;
-using Waffle.Entities;
+using Waffle.Entities.Files;
 using Waffle.Models;
 
 namespace Waffle.Infrastructure.Repositories;

@@ -1,4 +1,5 @@
-﻿using Waffle.Entities;
+﻿using Waffle.Core.Foundations.Interfaces;
+using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Filters;
 using Waffle.Models.ViewModels.Comments;

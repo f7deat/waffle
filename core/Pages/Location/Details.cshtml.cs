@@ -5,6 +5,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Users;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.ViewModels;

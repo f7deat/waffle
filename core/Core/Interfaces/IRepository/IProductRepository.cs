@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
@@ -21,6 +22,6 @@ public interface IProductRepository : IAsyncRepository<Product>
     Task<bool> AnyAsync(Guid productId);
     Task<object> OptionsAsync(SelectOptions selectOptions);
     Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions);
-    Task<DefResult> CreateAsync(Catalog args, string locale);
+    Task<TResult> CreateAsync(Catalog args, string locale);
     Task<TResult> GetByNameAsync(string normalizedName);
 }

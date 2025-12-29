@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
 using Waffle.Entities.Careers;
+using Waffle.Entities.Users;
 using Waffle.Extensions;
 using Waffle.Models;
 

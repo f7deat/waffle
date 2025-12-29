@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
-using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Users;
 
 namespace Waffle.Controllers;
 

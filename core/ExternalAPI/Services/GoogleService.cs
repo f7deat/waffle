@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Helpers;
-using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Googles.Models;
 using Waffle.ExternalAPI.Interfaces;

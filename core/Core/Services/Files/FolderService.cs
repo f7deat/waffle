@@ -1,42 +1,38 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Files.Filters;
 using Waffle.Data;
 using Waffle.Entities.Files;
-using Waffle.Models.Filters.Folders;
-using Waffle.Models.Result;
 
 namespace Waffle.Core.Services.Files;
 
-public class FolderService(ApplicationDbContext context, ICurrentUser currentUser, ILookupNormalizer lookupNormalizer) : IFolderService
+public class FolderService(ApplicationDbContext _context, IHCAService _hcaService, ILookupNormalizer _lookupNormalizer) : IFolderService
 {
-    private readonly ApplicationDbContext _context = context;
-    private readonly ICurrentUser _currentUser = currentUser;
-    private readonly ILookupNormalizer _lookupNormalizer = lookupNormalizer;
-
-    public async Task<DefResult> AddAsync(Folder args, string locale)
+    public async Task<TResult> AddAsync(Folder args, string locale)
     {
-        if (await _context.Folders.AnyAsync(x => x.Name == args.Name && x.Locale == locale)) return DefResult.Failed("Folder existed!");
-        if (args.ParentId != null && !await _context.Folders.AnyAsync(x => x.ParentId == args.ParentId)) return DefResult.Failed("Parent folder not found!");
+        if (await _context.Folders.AnyAsync(x => x.Name == args.Name && x.Locale == locale)) return TResult.Failed("Folder existed!");
+        if (args.ParentId != null && !await _context.Folders.AnyAsync(x => x.ParentId == args.ParentId)) return TResult.Failed("Parent folder not found!");
         args.CreatedDate = DateTime.Now;
         args.Locale = locale;
-        args.CreatedBy = _currentUser.GetId();
+        args.CreatedBy = _hcaService.GetUserId();
         args.NormalizedName = _lookupNormalizer.NormalizeName(args.Name).ToLower().Replace(" ", "-");
         await _context.Folders.AddAsync(args);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
-    public async Task<DefResult> DeleteAsync(Guid id)
+    public async Task<TResult> DeleteAsync(Guid id)
     {
         var folder = await _context.Folders.FindAsync(id);
-        if (folder is null) return DefResult.Failed("Folder not found!");
-        if (await _context.Folders.AnyAsync(x => x.ParentId == id)) return DefResult.Failed("Please remove child folders!");
-        if (await _context.FileContents.AnyAsync(x => x.FolderId == id)) return DefResult.Failed("Please remove files!");
+        if (folder is null) return TResult.Failed("Folder not found!");
+        if (await _context.Folders.AnyAsync(x => x.ParentId == id)) return TResult.Failed("Please remove child folders!");
+        if (await _context.FileContents.AnyAsync(x => x.FolderId == id)) return TResult.Failed("Please remove files!");
         _context.Folders.Remove(folder);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     public async Task<object?> ListAsync(FolderFilterOptions filterOptions)
@@ -65,17 +61,17 @@ public class FolderService(ApplicationDbContext context, ICurrentUser currentUse
         };
     }
 
-    public async Task<DefResult> UpdateAsync(Folder args)
+    public async Task<TResult> UpdateAsync(Folder args)
     {
         var folder = await _context.Folders.FindAsync(args.Id);
-        if (folder is null) return DefResult.Failed("Folder not found!");
-        if (await _context.Folders.AnyAsync(x => x.Name == args.Name)) return DefResult.Failed("Folder existed!");
+        if (folder is null) return TResult.Failed("Folder not found!");
+        if (await _context.Folders.AnyAsync(x => x.Name == args.Name)) return TResult.Failed("Folder existed!");
         folder.Name = args.Name;
         folder.NormalizedName = _lookupNormalizer.NormalizeName(folder.Name).ToLower().Replace(" ", "-");
-        folder.ModifiedBy = _currentUser.GetId();
+        folder.ModifiedBy = _hcaService.GetUserId();
         folder.ModifiedDate = DateTime.Now;
         _context.Folders.Update(folder);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 }

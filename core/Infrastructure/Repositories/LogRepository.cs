@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
@@ -12,10 +12,10 @@ namespace Waffle.Infrastructure.Repositories;
 
 public class LogRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<AppLog>(context, hcaService), ILogRepository
 {
-    public async Task<IdentityResult> DeleteAllAsync()
+    public async Task<TResult> DeleteAllAsync()
     {
         await _context.Database.ExecuteSqlRawAsync("DELETE FROM AppLogs");
-        return IdentityResult.Success;
+        return TResult.Success;
     }
 
     public async Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions)

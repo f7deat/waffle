@@ -8,7 +8,7 @@ using Waffle.Models.Params.Products;
 using Waffle.Models.Result;
 using Waffle.Models.ViewModels.Products;
 
-namespace Waffle.Core.Interfaces.IService;
+namespace Waffle.Core.IServices.Shops;
 
 public interface IProductService
 {
@@ -20,12 +20,12 @@ public interface IProductService
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions catalogFilterOptions);
     Task<IEnumerable<ProductListItem>> ListRelatedAsync(PageData pageData);
     Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds, string locale);
-    Task<DefResult> AddLinkAsync(ProductLink args);
-    Task<DefResult> DeleteLinkAsync(Guid id);
+    Task<TResult> AddLinkAsync(ProductLink args);
+    Task<TResult> DeleteLinkAsync(Guid id);
     Task<IEnumerable<ProductLink>> GetLinksAsync(Guid productId);
-    Task<DefResult> GoToProductLinkAsync(Guid id);
+    Task<TResult> GoToProductLinkAsync(Guid id);
     Task<object> OptionsAsync(SelectOptions selectOptions);
     Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions);
-    Task<DefResult> CreateAsync(Catalog args, string locale);
+    Task<TResult> CreateAsync(Catalog args, string locale);
     Task<TResult> GetByNameAsync(string normalizedName);
 }

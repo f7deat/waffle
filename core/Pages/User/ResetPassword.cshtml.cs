@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Waffle.Entities;
+using Waffle.Entities.Users;
 
 namespace Waffle.Pages.Users;
 

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
-using Waffle.Entities;
+using Waffle.Entities.Files;
 
 namespace Waffle.Models.Components;
 

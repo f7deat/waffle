@@ -8,6 +8,7 @@ using Waffle.Entities.Files;
 using Waffle.Entities.Locations;
 using Waffle.Entities.Notifications;
 using Waffle.Entities.Tags;
+using Waffle.Entities.Users;
 
 namespace Waffle.Data;
 

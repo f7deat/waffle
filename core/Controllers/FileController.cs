@@ -1,19 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
 using Waffle.Core.Services.Files.Args;
 using Waffle.Data;
-using Waffle.Entities;
+using Waffle.Entities.Files;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
-using Waffle.Models.Args;
-using Waffle.Models.Result;
 using Waffle.Models.Settings;
 
 namespace Waffle.Controllers;
@@ -72,7 +70,7 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
             await _context.FileContents.AddAsync(fileContent);
             await _context.SaveChangesAsync();
 
-            return Ok(DefResult.Ok(fileContent.Url));
+            return Ok(TResult.Ok(fileContent.Url));
         }
         catch (Exception ex)
         {

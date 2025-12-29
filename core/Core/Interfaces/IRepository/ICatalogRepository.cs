@@ -1,4 +1,5 @@
 ﻿using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Entities;
 using Waffle.Models;

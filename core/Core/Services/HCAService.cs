@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
 
 namespace Waffle.Core.Services;
 

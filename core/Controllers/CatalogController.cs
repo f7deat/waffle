@@ -251,7 +251,4 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
 
     [HttpGet("tags"), AllowAnonymous]
     public async Task<IActionResult> GetTagsAsync([FromQuery] Guid catalogId) => Ok(await _catalogService.TagsAsync(catalogId));
-
-    [HttpGet("tag-options")]
-    public async Task<IActionResult> GetTagOptionsAsync([FromQuery] TagSelectOptions selectOptions) => Ok(await _catalogService.GetTagOptionsAsync(selectOptions));
 }

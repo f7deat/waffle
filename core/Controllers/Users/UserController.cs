@@ -11,15 +11,16 @@ using System.Text;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Users;
 using Waffle.Core.Options;
-using Waffle.Entities;
+using Waffle.Entities.Users;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Googles;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Models.Params;
 
-namespace Waffle.Controllers;
+namespace Waffle.Controllers.Users;
 
 public class UserController(IUserService _userService, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, ILogger<UserController> _logger, IConfiguration _configuration, ITelegramService _telegramService, ICatalogService _catalogService, IOptions<SettingOptions> options) : BaseController
 {

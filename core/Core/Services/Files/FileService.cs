@@ -1,20 +1,21 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
-using Waffle.Core.Services.Files.Models;
+using Waffle.Core.Services.Files.Results;
 using Waffle.Data;
-using Waffle.Entities;
+using Waffle.Entities.Files;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Result;
 
-namespace Waffle.Core.Services;
+namespace Waffle.Core.Services.Files;
 
-public class FileExplorerService(ApplicationDbContext context, IFileRepository _fileRepository, IOptions<SettingOptions> options, IHCAService _hcaService) : IFileService
+public class FileService(ApplicationDbContext context, IFileRepository _fileRepository, IOptions<SettingOptions> options, IHCAService _hcaService) : IFileService
 {
     private readonly ApplicationDbContext _context = context;
     private readonly SettingOptions _options = options.Value;
@@ -41,7 +42,7 @@ public class FileExplorerService(ApplicationDbContext context, IFileRepository _
         return IdentityResult.Success;
     }
 
-    public async Task<DefResult> UploadToHPUNIAsync(IFormFile file)
+    public async Task<TResult> UploadToHPUNIAsync(IFormFile file)
     {
         var url = $"https://file.dhhp.edu.vn/api/file/upload?apiKey={_options.UploadAPIKey}";
         using var client = new HttpClient();
@@ -50,9 +51,9 @@ public class FileExplorerService(ApplicationDbContext context, IFileRepository _
                 { new StreamContent(file.OpenReadStream()), "file", file.FileName },
                 { new StringContent("common"), "SiteCode" }
             });
-        if (!response.IsSuccessStatusCode) return DefResult.Failed("Upload faidled!");
+        if (!response.IsSuccessStatusCode) return TResult.Failed("Upload faidled!");
         var fileContent = await JsonSerializer.DeserializeAsync<FileUploadResponse>(await response.Content.ReadAsStreamAsync());
-        if (fileContent is null) return DefResult.Failed("Upload dserialize failed!");
+        if (fileContent is null) return TResult.Failed("Upload dserialize failed!");
         await _context.FileContents.AddAsync(new FileContent
         {
             Id = fileContent.Id,
@@ -64,7 +65,7 @@ public class FileExplorerService(ApplicationDbContext context, IFileRepository _
             UploadBy = _hcaService.GetUserId()
         });
         await _context.SaveChangesAsync();
-        return DefResult.Ok(new
+        return TResult.Ok(new
         {
             fileContent.Url
         });

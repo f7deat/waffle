@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Helpers;
-using Waffle.Core.Interfaces;
 using Waffle.Entities;
 
 namespace Waffle.Data.ContentGenerators;

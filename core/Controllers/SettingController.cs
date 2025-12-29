@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -12,12 +11,11 @@ using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Settings;
-using Waffle.UnitTest;
 using WFSendGrid = Waffle.ExternalAPI.SendGrids.SendGrid;
 
 namespace Waffle.Controllers;
 
-public class SettingController(IEmailSender _emailSender, ApplicationDbContext _context, ISettingService _settingService, IConfiguration _configuration, IFacebookService _facebookService, ITelegramService telegramService, IWorkService workService) : BaseController
+public class SettingController(ApplicationDbContext _context, ISettingService _settingService, IConfiguration _configuration, IFacebookService _facebookService, ITelegramService telegramService, IWorkService workService) : BaseController
 {
     private readonly ITelegramService _telegramService = telegramService;
     private readonly IWorkService _workService = workService;
@@ -149,13 +147,6 @@ public class SettingController(IEmailSender _emailSender, ApplicationDbContext _
         var sidebar = await _settingService.EnsureSettingAsync(nameof(Sidebar));
         var components = await _workService.ListBySettingIdAsync(sidebar.Id);
         return Ok(components);
-    }
-
-    [HttpPost("test-send-mail")]
-    public async Task<IActionResult> TestSendMailAsync([FromBody] EmailSenderMessageUnitTest args)
-    {
-        await _emailSender.SendEmailAsync(args.Email, args.Subject, args.Message);
-        return Ok(IdentityResult.Success);
     }
 
     [HttpGet("graph-api-explorer")]

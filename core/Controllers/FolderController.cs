@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Files.Filters;
 using Waffle.Entities.Files;
-using Waffle.Models.Filters.Folders;
 
 namespace Waffle.Controllers;
 

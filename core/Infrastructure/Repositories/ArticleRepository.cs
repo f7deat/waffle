@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
-using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Services.Articles.Filters;
 using Waffle.Data;

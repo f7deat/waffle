@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -9,40 +11,40 @@ using Waffle.Modules.Jobs.Models;
 
 namespace Waffle.Core.Services.Careers;
 
-public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _currentUser, ILogService _logService) : IJobOpportunityService
+public class JobOpportunityService(ApplicationDbContext _context, IHCAService _hcaService, ILogService _logService) : IJobOpportunityService
 {
-    public async Task<DefResult> ApplyAsync(JobApplication args)
+    public async Task<TResult> ApplyAsync(JobApplication args)
     {
         var job = await _context.JobOpportunities.FindAsync(args.JobId);
-        if (job is null) return DefResult.Failed("Job opportunity not found!");
+        if (job is null) return TResult.Failed("Job opportunity not found!");
         var application = new JobApplication
         {
             JobId = args.JobId,
-            CandidateId = _currentUser.GetId(),
+            CandidateId = _hcaService.GetUserId(),
             AppliedDate = DateTime.Now,
             Status = JobApplicationStatus.Pending
         };
         await _context.JobApplications.AddAsync(application);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
-    public async Task<DefResult> DeleteApplicationAsync(Guid id)
+    public async Task<TResult> DeleteApplicationAsync(Guid id)
     {
         var application = await _context.JobApplications.FindAsync(id);
-        if (application is null) return DefResult.Failed("Job application not found!");
+        if (application is null) return TResult.Failed("Job application not found!");
         _context.JobApplications.Remove(application);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
-    public async Task<DefResult> DeleteAsync(Guid id)
+    public async Task<TResult> DeleteAsync(Guid id)
     {
         var job = await _context.JobOpportunities.FindAsync(id);
-        if (job is null) return DefResult.Success;
-        if (await _context.JobApplications.AnyAsync(x => x.JobId == id)) return DefResult.Failed("Job opportunity has applications!");
+        if (job is null) return TResult.Success;
+        if (await _context.JobApplications.AnyAsync(x => x.JobId == id)) return TResult.Failed("Job opportunity has applications!");
         _context.JobOpportunities.Remove(job);
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     public async Task<JobOpportunity?> GetAsync(Guid id) => await _context.JobOpportunities.FindAsync(id);
@@ -88,7 +90,7 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
         return await ListResult<object>.Success(query, filterOptions);
     }
 
-    public async Task<DefResult> SaveAsync(JobOpportunity args)
+    public async Task<TResult> SaveAsync(JobOpportunity args)
     {
 		try
 		{
@@ -103,25 +105,25 @@ public class JobOpportunityService(ApplicationDbContext _context, ICurrentUser _
                     JobLocation = args.JobLocation,
                     JobType = args.JobType,
                     CreatedDate = DateTime.Now,
-                    CreatedBy = _currentUser.GetId()
+                    CreatedBy = _hcaService.GetUserId()
                 };
                 await _context.JobOpportunities.AddAsync(job);
                 await _context.SaveChangesAsync();
-                return DefResult.Success;
+                return TResult.Success;
             }
             job.JobRequirements = args.JobRequirements;
             job.SalaryRange = args.SalaryRange;
             job.JobLocation = args.JobLocation;
             job.JobType = args.JobType;
             job.ModifiedDate = DateTime.Now;
-            job.ModifiedBy = _currentUser.GetId();
+            job.ModifiedBy = _hcaService.GetUserId();
             await _context.SaveChangesAsync();
-            return DefResult.Success;
+            return TResult.Success;
         }
 		catch (Exception ex)
 		{
             await _logService.ExceptionAsync(ex);
-            return DefResult.Failed(ex.ToString());
+            return TResult.Failed(ex.ToString());
 		}
     }
 }

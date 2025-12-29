@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
+using Waffle.Entities.Users;
 
 namespace Waffle.Pages.Users;
 

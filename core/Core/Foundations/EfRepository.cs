@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Data;
 using Waffle.Entities;
 

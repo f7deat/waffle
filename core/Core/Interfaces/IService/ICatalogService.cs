@@ -16,7 +16,7 @@ namespace Waffle.Core.Interfaces.IService;
 
 public interface ICatalogService
 {
-    Task<DefResult> ActiveAsync(Guid id);
+    Task<TResult> ActiveAsync(Guid id);
     Task<TResult> AddAsync(Catalog catalog);
     Task<Catalog> EnsureDataAsync(string name, string locale, CatalogType type = CatalogType.Leaf);
     Task<Catalog?> GetByNameAsync(string? normalizedName);
@@ -39,7 +39,7 @@ public interface ICatalogService
     Task<ProductImage?> GetProductImageAsync(Guid catalogId);
     Task<IEnumerable<Option>> GetFormSelectAsync(SelectOptions filterOptions);
     Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize);
-    Task<DefResult> DeleteAsync(Catalog catalog);
+    Task<TResult> DeleteAsync(Catalog catalog);
     Task<Catalog?> FindAsync(Guid brandId, CatalogType brand);
     Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type, string locale);
     Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id);
@@ -53,12 +53,11 @@ public interface ICatalogService
     Task<IdentityResult> SaveSettingAsync(Catalog catalog);
     Task<PageData?> GetPageDataAsync(string? normalizedName);
     Task<object?> GetUrlOptionsAsync(UrlCatalogOptions filterOptions);
-    Task<DefResult> CreateTagAsync(CreateTagArgs args, string locale);
+    Task<TResult> CreateTagAsync(CreateTagArgs args, string locale);
     Task<object> GetTypeAsync(CatalogType type);
     Task<object?> GetOptionsAsync(CatalogSelectOptions filterOptions);
     Task<object?> ListTypeAsync();
     Task<object?> GetMetaAsync(string slug);
     Task<TResult> DetailAsync(Guid id);
     Task<TResult> TagsAsync(Guid catalogId);
-    Task<object> GetTagOptionsAsync(TagSelectOptions selectOptions);
 }

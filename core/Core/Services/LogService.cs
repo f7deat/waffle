@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Waffle.Core.Interfaces;
+﻿using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
-using Waffle.Models.Result;
 using Waffle.Models.ViewModels.Logs;
 
 namespace Waffle.Core.Services;
 
-public class LogService(ICurrentUser _currentUser, ILogRepository _logRepository, ITelegramService _telegramService) : ILogService
+public class LogService(IHCAService _hcaService, ILogRepository _logRepository, ITelegramService _telegramService) : ILogService
 {
     public async Task AddAsync(string message, Guid catalogId)
     {
@@ -19,7 +18,7 @@ public class LogService(ICurrentUser _currentUser, ILogRepository _logRepository
             Message = message,
             CatalogId = catalogId,
             CreatedDate = DateTime.Now,
-            UserId = _currentUser.GetId(),
+            UserId = _hcaService.GetUserId(),
             Level = LogLevel.Trace
         });
     }
@@ -31,26 +30,26 @@ public class LogService(ICurrentUser _currentUser, ILogRepository _logRepository
             Message = message,
             CatalogId = catalogId,
             CreatedDate = DateTime.Now,
-            UserId = _currentUser.GetId(),
+            UserId = _hcaService.GetUserId(),
             Level = LogLevel.Trace
         });
     }
 
 
-    public Task<IdentityResult> DeleteAllAsync() => _logRepository.DeleteAllAsync();
+    public Task<TResult> DeleteAllAsync() => _logRepository.DeleteAllAsync();
 
-    public async Task<DefResult> DeleteAsync(Guid id)
+    public async Task<TResult> DeleteAsync(Guid id)
     {
         try
         {
             var log = await _logRepository.FindAsync(id);
-            if (log is null) return DefResult.Failed("Log not found!");
+            if (log is null) return TResult.Failed("Log not found!");
             await _logRepository.DeleteAsync(log);
-            return DefResult.Success;
+            return TResult.Success;
         }
         catch (Exception ex)
         {
-            return DefResult.Failed(ex.ToString());
+            return TResult.Failed(ex.ToString());
         }
     }
 
@@ -59,7 +58,7 @@ public class LogService(ICurrentUser _currentUser, ILogRepository _logRepository
         await _logRepository.AddAsync(new AppLog
         {
             CreatedDate = DateTime.Now,
-            UserId = _currentUser.GetId(),
+            UserId = _hcaService.GetUserId(),
             Level = LogLevel.Critical,
             Message = exception.ToString()
         });

@@ -1,5 +1,6 @@
-﻿using Waffle.Core.Services.Files.Models;
-using Waffle.Entities;
+﻿using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Services.Files.Results;
+using Waffle.Entities.Files;
 using Waffle.Models;
 
 namespace Waffle.Core.Interfaces.IRepository;

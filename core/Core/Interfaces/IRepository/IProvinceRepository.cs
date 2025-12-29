@@ -1,4 +1,5 @@
-﻿using Waffle.Core.Services.Locations.Filters;
+﻿using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Services.Locations.Filters;
 using Waffle.Entities.Locations;
 using Waffle.Models;
 

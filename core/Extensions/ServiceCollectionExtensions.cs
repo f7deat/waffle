@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Waffle.Core.Foundations;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IRepositories;
 using Waffle.Core.IServices;
 using Waffle.Core.IServices.Locations;
+using Waffle.Core.IServices.Shops;
+using Waffle.Core.IServices.Users;
 using Waffle.Core.Senders;
 using Waffle.Core.Services;
 using Waffle.Core.Services.Affiliates;
@@ -16,6 +18,7 @@ using Waffle.Core.Services.Contacts;
 using Waffle.Core.Services.Ecommerces;
 using Waffle.Core.Services.Files;
 using Waffle.Core.Services.Locations;
+using Waffle.Core.Services.Shop;
 using Waffle.Core.Services.Tags;
 using Waffle.Data.ContentGenerators;
 using Waffle.Infrastructure.Repositories;
@@ -40,7 +43,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IComponentRepository, ComponentRepository>();
         services.AddScoped<IComponentService, ComponentService>();
-        services.AddScoped<IFileService, FileExplorerService>();
+        services.AddScoped<IFileService, FileService>();
         services.AddScoped<ILocalizationService, LocalizationService>();
         services.AddScoped<ILocalizationRepository, LocalizationRepository>();
         services.AddScoped<IUserService, UserService>();
@@ -77,13 +80,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IJobOpportunityService, JobOpportunityService>();
         #endregion
 
-        services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IRouteDataService, RouteDataService>();
-
         services.AddScoped<ICollectionService, CollectionService>();
         services.AddScoped<ICollectionRepository, CollectionRepository>();
 
-        services.AddScoped<IGenerator, LeafGenerator>();
         services.AddScoped<IGenerator, ComponentGenerator>();
         services.AddScoped<IGenerator, RoleGenerator>();
 

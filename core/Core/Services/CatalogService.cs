@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces;
@@ -26,17 +27,17 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services;
 
-public class CatalogService(ApplicationDbContext _context, ICurrentUser _currentUser, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, IOptions<SettingOptions> options, ILogService _logService, ILocalizationService _localizationService, IRoomService _roomService, IJobOpportunityService _jobOpportunityService) : ICatalogService
+public class CatalogService(ApplicationDbContext _context, IHCAService _hcaService, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, IOptions<SettingOptions> options, ILogService _logService, ILocalizationService _localizationService, IRoomService _roomService, IJobOpportunityService _jobOpportunityService) : ICatalogService
 {
     private readonly SettingOptions _options = options.Value;
 
-    public async Task<DefResult> ActiveAsync(Guid id)
+    public async Task<TResult> ActiveAsync(Guid id)
     {
         var catalog = await _catalogRepository.FindAsync(id);
-        if (catalog is null) return DefResult.Failed("Catalog not found!");
+        if (catalog is null) return TResult.Failed("Catalog not found!");
         catalog.Active = !catalog.Active;
         await _catalogRepository.UpdateAsync(catalog);
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     private async Task<bool> IsExistAsync(string normalizedName) => await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(normalizedName));
@@ -58,7 +59,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         {
             Id = Guid.NewGuid(),
             Active = args.Active,
-            CreatedBy = _currentUser.GetId(),
+            CreatedBy = _hcaService.GetUserId(),
             CreatedDate = DateTime.Now,
             Description = args.Description,
             Name = args.Name,
@@ -91,10 +92,6 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         var catalog = await _context.Catalogs.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name.ToLower()) && x.Locale == locale);
         if (catalog is null)
         {
-            if (!Languages.Codes.Contains(locale))
-            {
-                locale = "vi-VN";
-            }
             catalog = new Catalog
             {
                 Name = name,
@@ -402,12 +399,12 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         return _catalogRepository.ListSpotlightAsync(pageData, pageSize);
     }
 
-    public async Task<DefResult> DeleteAsync(Catalog catalog)
+    public async Task<TResult> DeleteAsync(Catalog catalog)
     {
         var jobResult = await _jobOpportunityService.DeleteAsync(catalog.Id);
         if (!jobResult.Succeeded) return jobResult;
         await _catalogRepository.DeleteAsync(catalog);
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     public Task<Catalog?> FindAsync(Guid catalogId, CatalogType type) => _catalogRepository.FindAsync(catalogId, type);
@@ -561,11 +558,11 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
 
     public async Task<bool> HasChildAsync(Guid parentId) => await _context.Catalogs.AnyAsync(x => x.ParentId == parentId);
 
-    public async Task<DefResult> CreateTagAsync(CreateTagArgs args, string locale)
+    public async Task<TResult> CreateTagAsync(CreateTagArgs args, string locale)
     {
-        if (string.IsNullOrWhiteSpace(args.Name)) return DefResult.Failed("Name is required!");
+        if (string.IsNullOrWhiteSpace(args.Name)) return TResult.Failed("Name is required!");
         var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
-        if (await _context.Catalogs.AnyAsync(x => x.NormalizedName == normalizedName && x.Locale == locale)) return DefResult.Failed("Tag was existed!");
+        if (await _context.Catalogs.AnyAsync(x => x.NormalizedName == normalizedName && x.Locale == locale)) return TResult.Failed("Tag was existed!");
         var tag = new Catalog
         {
             Name = args.Name,
@@ -578,7 +575,7 @@ public class CatalogService(ApplicationDbContext _context, ICurrentUser _current
         };
         await _context.Catalogs.AddAsync(tag);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     public async Task<object> GetTypeAsync(CatalogType type)

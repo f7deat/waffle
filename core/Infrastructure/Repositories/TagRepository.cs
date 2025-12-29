@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.IRepositories;
 using Waffle.Data;
 using Waffle.Entities.Tags;
@@ -15,7 +15,7 @@ public class TagRepository(ApplicationDbContext context, IHCAService hcaService)
     {
         return await _context.Tags
             .Where(t => string.IsNullOrEmpty(selectOptions.KeyWords) || t.NormalizedName.Contains(selectOptions.KeyWords))
-            .OrderBy(t => t.Name)
+            .OrderBy(t => t.NormalizedName)
             .Select(t => new Option
             {
                 Label = t.Name,

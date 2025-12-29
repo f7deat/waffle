@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Users;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Users;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Users;
 

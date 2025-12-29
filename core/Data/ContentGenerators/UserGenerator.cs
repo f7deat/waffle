@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Foundations;
-using Waffle.Entities;
+using Waffle.Entities.Users;
 
 namespace Waffle.Data.ContentGenerators
 {

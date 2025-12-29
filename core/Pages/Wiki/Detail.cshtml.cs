@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using System.Web;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Shops;
 using Waffle.Core.Options;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;

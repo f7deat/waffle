@@ -2,6 +2,8 @@
 using System.Text.Json.Serialization;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
+using Waffle.Entities.Files;
+using Waffle.Entities.Users;
 
 namespace Waffle.Models
 {

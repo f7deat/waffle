@@ -5,6 +5,7 @@ using Waffle.Models.Components.Pages;
 using Waffle.Core.Options;
 using Microsoft.Extensions.Options;
 using Waffle.Models;
+using Waffle.Core.IServices.Shops;
 
 namespace Waffle.ViewComponents;
 

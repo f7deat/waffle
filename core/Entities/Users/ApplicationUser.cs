@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace Waffle.Entities;
+namespace Waffle.Entities.Users;
 
 public class ApplicationUser : IdentityUser<Guid>
 {

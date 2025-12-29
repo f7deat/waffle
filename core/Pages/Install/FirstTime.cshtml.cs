@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Constants;
-using Waffle.Entities;
+using Waffle.Entities.Users;
 
 namespace Waffle.Pages.Install;
 

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Interfaces.IRepository;
-using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
+using Waffle.Core.IServices.Shops;
 using Waffle.Entities.Ecommerces;
+using Waffle.Entities.Users;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Orders;
 
-namespace Waffle.Core.Services;
+namespace Waffle.Core.Services.Shop;
 
 public class OrderSerivce : IOrderService
 {

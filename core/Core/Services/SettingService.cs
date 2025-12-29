@@ -152,7 +152,7 @@ public class SettingService : ISettingService
         return IdentityResult.Success;
     }
 
-    public async Task<DefResult> InitAsync()
+    public async Task<TResult> InitAsync()
     {
         var upload = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName == nameof(UploadSetting));
         if (upload is null)
@@ -170,6 +170,6 @@ public class SettingService : ISettingService
             await _context.AppSettings.AddAsync(upload);
             await _context.SaveChangesAsync();
         }
-        return DefResult.Success;
+        return TResult.Success;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Waffle.Models.Args;
+﻿namespace Waffle.Core.Services.Files.Args;
 
 public class UploadArgs
 {

@@ -1,28 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.List;
-using Waffle.Models.Result;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services;
 
 public class RoomService(ApplicationDbContext _context) : IRoomService
 {
-    public async Task<DefResult> InitAsync(Guid catalogId)
+    public async Task<TResult> InitAsync(Guid catalogId)
     {
         await _context.Rooms.AddAsync(new Room { CatalogId = catalogId });
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
-    public async Task<DefResult> DeleteAsync(Guid catalogId)
+    public async Task<TResult> DeleteAsync(Guid catalogId)
     {
         var catalog = await _context.Catalogs.FindAsync(catalogId);
-        if (catalog == null) return DefResult.Failed("Catalog not found!");
+        if (catalog == null) return TResult.Failed("Catalog not found!");
         var room = await _context.Rooms.FirstOrDefaultAsync(x => x.CatalogId == catalog.Id);
         if (room != null)
         {
@@ -30,13 +30,13 @@ public class RoomService(ApplicationDbContext _context) : IRoomService
         }
         _context.Catalogs.Remove(catalog);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
-    public async Task<DefResult> SaveAsync(RoomArgs args)
+    public async Task<TResult> SaveAsync(RoomArgs args)
     {
         var room = await _context.Rooms.FirstOrDefaultAsync(x => x.CatalogId == args.CatalogId);
-        if (room is null) return DefResult.Failed("Room not found!");
+        if (room is null) return TResult.Failed("Room not found!");
         room.AffiliateLink = args.AffiliateLink;
         if (args.Galleries != null && args.Galleries.Count != 0)
         {
@@ -44,7 +44,7 @@ public class RoomService(ApplicationDbContext _context) : IRoomService
         }
         _context.Rooms.Update(room);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     public Task<ListResult<RoomListItem>> GetRoomsAsync(BasicFilterOptions filterOptions)

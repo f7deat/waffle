@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Shops;
 using Waffle.Core.Options;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Interfaces;

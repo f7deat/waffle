@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Waffle.Core.Interfaces
+namespace Waffle.Core.Foundations.Interfaces
 {
     public interface IAsyncRepository<T> where T : class
     {

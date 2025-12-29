@@ -1,4 +1,5 @@
-﻿using Waffle.Entities.Locations;
+﻿using Waffle.Core.Foundations.Interfaces;
+using Waffle.Entities.Locations;
 using Waffle.Models;
 
 namespace Waffle.Core.Interfaces.IRepository;

@@ -6,7 +6,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Models.Filters;
 using Waffle.Models.Params;
 
-namespace Waffle.Controllers;
+namespace Waffle.Controllers.Users;
 
 public class CommentController(ICommentService commentService) : BaseController
 {

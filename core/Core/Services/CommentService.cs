@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
+using Waffle.Entities.Users;
 using Waffle.Models;
 using Waffle.Models.Filters;
 using Waffle.Models.Params;
@@ -11,24 +13,13 @@ using Waffle.Models.ViewModels.Comments;
 
 namespace Waffle.Core.Services;
 
-public class CommentService : ICommentService
+public class CommentService(ICatalogRepository catalogRepository, ILogger<CommentService> logger, ILogRepository appLogRepository, IHCAService _hcaService, ICommentRepository commentRepository, UserManager<ApplicationUser> userManager) : ICommentService
 {
-    private readonly ICommentRepository _commentRepository;
-    private readonly ICurrentUser _currentUser;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ILogger<CommentService> _logger;
-    private readonly ILogRepository _appLogRepository;
-    private readonly ICatalogRepository _catalogRepository;
-
-    public CommentService(ICatalogRepository catalogRepository, ILogger<CommentService> logger, ILogRepository appLogRepository, ICurrentUser currentUser, ICommentRepository commentRepository, UserManager<ApplicationUser> userManager)
-    {
-        _commentRepository = commentRepository;
-        _userManager = userManager;
-        _currentUser = currentUser;
-        _logger = logger;
-        _appLogRepository = appLogRepository;
-        _catalogRepository = catalogRepository;
-    }
+    private readonly ICommentRepository _commentRepository = commentRepository;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly ILogger<CommentService> _logger = logger;
+    private readonly ILogRepository _appLogRepository = appLogRepository;
+    private readonly ICatalogRepository _catalogRepository = catalogRepository;
 
     public async Task<IdentityResult> ActiveAsync(Guid id)
     {
@@ -42,13 +33,13 @@ public class CommentService : ICommentService
         comment.Status = CommentStatus.Active;
         await _commentRepository.UpdateAsync(comment);
 
-        _logger.LogInformation("User {userId} Active comment {commentId}", _currentUser.GetId(), id);
+        _logger.LogInformation("User {userId} Active comment {commentId}", _hcaService.GetUserId(), id);
 
         await _appLogRepository.AddAsync(new AppLog
         {
             CatalogId = comment.CatalogId,
             CreatedDate = DateTime.Now,
-            UserId = _currentUser.GetId(),
+            UserId = _hcaService.GetUserId(),
             Message = $"Active comment {id}"
         });
 
@@ -77,7 +68,7 @@ public class CommentService : ICommentService
         {
             CreatedDate = DateTime.Now,
             ModifiedDate = DateTime.Now,
-            UserId = _currentUser.GetId(),
+            UserId = _hcaService.GetUserId(),
             Status = CommentStatus.Active,
             CatalogId = addComment.CatalogId,
             Content = addComment.Message,
@@ -107,7 +98,7 @@ public class CommentService : ICommentService
         {
             CatalogId = comment.CatalogId,
             CreatedDate = DateTime.Now,
-            UserId = _currentUser.GetId(),
+            UserId = _hcaService.GetUserId(),
             Message = $"Delete comment {id}"
         });
 
@@ -159,7 +150,7 @@ public class CommentService : ICommentService
         {
             CatalogId = comment.CatalogId,
             CreatedDate = DateTime.Now,
-            UserId = _currentUser.GetId(),
+            UserId = _hcaService.GetUserId(),
             Message = $"Remove comment {id}"
         });
 

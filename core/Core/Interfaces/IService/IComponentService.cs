@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Core.Foundations.Models;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components.Common;
@@ -13,11 +14,11 @@ public interface IComponentService
     Task<Component?> FindAsync(Guid id);
     Task<ListResult<ComponentListResult>> ListAsync(ComponentFilterOptions filterOptions);
     Task<bool> HasWorkContentAsync(Guid id);
-    Task<IdentityResult> ActiveAsync(Guid id);
-    Task<IdentityResult> DeleteAsync(Guid id);
+    Task<TResult> ActiveAsync(Guid id);
+    Task<TResult> DeleteAsync(Guid id);
     Task<ListResult<WorkListItem>> ListWorkAsync(Guid id, WorkFilterOptions filterOptions);
     Task<IEnumerable<Component>> ListAllAsync();
-    Task<IdentityResult> UpdateAsync(Component args);
+    Task<TResult> UpdateAsync(Component args);
     Task<IEnumerable<Option>> FormSelectAsync(SearchFilterOptions filterOptions);
-    Task<IdentityResult> AddAsync(Component args);
+    Task<TResult> AddAsync(Component args);
 }

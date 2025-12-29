@@ -5,11 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Waffle.Core.Constants;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Options;
 using Waffle.Core.Services;
 using Waffle.Data;
-using Waffle.Entities;
+using Waffle.Entities.Users;
 using Waffle.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

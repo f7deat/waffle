@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Shops;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
@@ -26,7 +28,7 @@ public class ProductController(ICatalogService _catalogService, IWorkService wor
     public async Task<IActionResult> CreateAsync([FromBody] Catalog args, [FromQuery] string locale) => Ok(await _productService.CreateAsync(args, locale));
 
     [HttpGet("count")]
-    public async Task<IActionResult> CountAsync() => Ok(DefResult.Ok(await _productService.CountAsync()));
+    public async Task<IActionResult> CountAsync() => Ok(TResult.Ok(await _productService.CountAsync()));
 
     [HttpPost("save")]
     public async Task<IActionResult> SaveAsync([FromBody] Product args)

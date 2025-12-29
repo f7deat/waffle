@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Shops;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components;

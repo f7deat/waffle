@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Waffle.Core.Foundations;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Data;
 using Waffle.Entities;

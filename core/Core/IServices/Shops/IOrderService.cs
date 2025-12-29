@@ -3,7 +3,7 @@ using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Orders;
 
-namespace Waffle.Core.Interfaces.IService;
+namespace Waffle.Core.IServices.Shops;
 
 public interface IOrderService
 {

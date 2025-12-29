@@ -1,13 +1,13 @@
-﻿using Waffle.Entities.Files;
-using Waffle.Models.Filters.Folders;
-using Waffle.Models.Result;
+﻿using Waffle.Core.Foundations.Models;
+using Waffle.Core.Services.Files.Filters;
+using Waffle.Entities.Files;
 
 namespace Waffle.Core.Interfaces.IService;
 
 public interface IFolderService
 {
-    Task<DefResult> AddAsync(Folder args, string locale);
-    Task<DefResult> DeleteAsync(Guid id);
+    Task<TResult> AddAsync(Folder args, string locale);
+    Task<TResult> DeleteAsync(Guid id);
     Task<object?> ListAsync(FolderFilterOptions filterOptions);
-    Task<DefResult> UpdateAsync(Folder args);
+    Task<TResult> UpdateAsync(Folder args);
 }

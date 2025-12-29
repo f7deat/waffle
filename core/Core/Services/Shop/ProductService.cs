@@ -3,7 +3,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
-using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Shops;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
@@ -19,12 +19,12 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
     private readonly ICatalogRepository _catalogRepository = catalogRepository;
     private readonly IProductLinkRepository _productLinkRepository = productLinkRepository;
 
-    public async Task<DefResult> AddLinkAsync(ProductLink args)
+    public async Task<TResult> AddLinkAsync(ProductLink args)
     {
         var product = await _productRepository.FindAsync(args.ProductId);
-        if (product is null) return DefResult.Failed("Product not found!");
+        if (product is null) return TResult.Failed("Product not found!");
         var catalog = await _catalogRepository.FindAsync(product.CatalogId);
-        if (catalog is null) return DefResult.Failed("Catalog not found!");
+        if (catalog is null) return TResult.Failed("Catalog not found!");
         catalog.ModifiedDate = DateTime.Now;
         await _productLinkRepository.AddAsync(new ProductLink
         {
@@ -33,19 +33,19 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
             Name = args.Name,
             Url = args.Url
         });
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     public Task<int> CountAsync() => _catalogRepository.CountAsync(CatalogType.Product);
 
-    public Task<DefResult> CreateAsync(Catalog args, string locale) => _productRepository.CreateAsync(args, locale);
+    public Task<TResult> CreateAsync(Catalog args, string locale) => _productRepository.CreateAsync(args, locale);
 
-    public async Task<DefResult> DeleteLinkAsync(Guid id)
+    public async Task<TResult> DeleteLinkAsync(Guid id)
     {
         var productLink = await _productLinkRepository.FindAsync(id);
-        if (productLink is null) return DefResult.Failed("Product link not found!");
+        if (productLink is null) return TResult.Failed("Product link not found!");
         await _productLinkRepository.DeleteAsync(productLink);
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     public async Task<TResult<Product?>> GetByCatalogIdAsync(Guid catalogId)
@@ -61,13 +61,13 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
         return _productLinkRepository.ListByProductIdAsync(productId);
     }
 
-    public async Task<DefResult> GoToProductLinkAsync(Guid id)
+    public async Task<TResult> GoToProductLinkAsync(Guid id)
     {
         var productLink = await _productLinkRepository.FindAsync(id);
-        if (productLink is null) return DefResult.Failed("Product link not found!");
+        if (productLink is null) return TResult.Failed("Product link not found!");
         productLink.ClickCount++;
         await _productLinkRepository.UpdateAsync(productLink);
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     public Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)

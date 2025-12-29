@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Text.Json.Serialization;
-using Waffle.Core.Constants;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Entities;
 
 namespace Waffle.Models;

@@ -1,8 +1,8 @@
-﻿using Waffle.Models.Result;
+﻿using Waffle.Core.Foundations.Models;
 
 namespace Waffle.Core.Interfaces.IService;
 
 public interface IContactService
 {
-    Task<DefResult> DeleteAsync(Guid id);
+    Task<TResult> DeleteAsync(Guid id);
 }

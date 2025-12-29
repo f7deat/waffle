@@ -1,4 +1,4 @@
-﻿namespace Waffle.Core.Interfaces;
+﻿namespace Waffle.Core.Foundations.Interfaces;
 
 public interface IHCAService
 {

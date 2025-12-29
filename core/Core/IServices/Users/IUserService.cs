@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Entities;
+using Waffle.Entities.Users;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Users;
 
-namespace Waffle.Core.Interfaces.IService;
+namespace Waffle.Core.IServices.Users;
 
 public interface IUserService
 {

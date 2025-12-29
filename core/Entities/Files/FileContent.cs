@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Waffle.Entities.Files;
 
-namespace Waffle.Entities;
+namespace Waffle.Entities.Files;
 
 public class FileContent : BaseEntity
 {

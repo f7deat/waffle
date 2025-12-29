@@ -1,4 +1,4 @@
-﻿using Waffle.Core.Interfaces;
+﻿using Waffle.Core.Foundations.Interfaces;
 using Waffle.Entities.Tags;
 using Waffle.Models;
 using Waffle.Models.Components.Common;

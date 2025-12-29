@@ -1,6 +1,6 @@
 ﻿using Waffle.Entities;
 
-namespace Waffle.Core.Services.Files.Models;
+namespace Waffle.Core.Services.Files.Results;
 
 public class FileAndFolderListItem : BaseEntity
 {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Encodings.Web;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Entities;
+using Waffle.Entities.Users;
 
 namespace Waffle.Pages.User;
 

@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
@@ -14,56 +13,32 @@ namespace Waffle.Core.Services;
 
 public class ComponentService(ApplicationDbContext _context, IComponentRepository _componentRepository) : IComponentService
 {
-    public async Task<IdentityResult> ActiveAsync(Guid id)
+    public async Task<TResult> ActiveAsync(Guid id)
     {
         var component = await _context.Components.FindAsync(id);
-        if (component == null)
-        {
-            return IdentityResult.Failed();
-        }
+        if (component == null) return TResult.Failed("Data not found");
         component.Active = !component.Active;
         await _context.SaveChangesAsync();
-        return IdentityResult.Success;
+        return TResult.Success;
     }
 
-    public async Task<IdentityResult> AddAsync(Component args)
+    public async Task<TResult> AddAsync(Component args)
     {
-        if (args == null || string.IsNullOrEmpty(args.NormalizedName))
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "Missing params!"
-            });
-        }
-        if (await _context.Components.AnyAsync(x => x.NormalizedName.Equals(args.NormalizedName)))
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "Component exist!"
-            });
-        }
+        if (args == null || string.IsNullOrEmpty(args.NormalizedName)) return TResult.Failed("Invalid data");
+        if (await _context.Components.AnyAsync(x => x.NormalizedName.Equals(args.NormalizedName))) return TResult.Failed("Data already exists");
         await _context.Components.AddAsync(args);
         await _context.SaveChangesAsync();
-        return IdentityResult.Success;
+        return TResult.Success;
     }
 
-    public async Task<IdentityResult> DeleteAsync(Guid id)
+    public async Task<TResult> DeleteAsync(Guid id)
     {
         var component = await FindAsync(id);
-        if (component is null)
-        {
-            return IdentityResult.Failed();
-        }
-        if (await HasWorkContentAsync(id))
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "Has work content!"
-            });
-        }
+        if (component is null) return TResult.Failed("Data not found");
+        if (await HasWorkContentAsync(id)) return TResult.Failed("Component is in use");
         _context.Remove(component);
         await _context.SaveChangesAsync();
-        return IdentityResult.Success;
+        return TResult.Success;
     }
 
     public async Task<Component> EnsureComponentAsync(string normalizedName)
@@ -137,20 +112,14 @@ public class ComponentService(ApplicationDbContext _context, IComponentRepositor
         return await ListResult<WorkListItem>.Success(query, filterOptions);
     }
 
-    public async Task<IdentityResult> UpdateAsync(Component args)
+    public async Task<TResult> UpdateAsync(Component args)
     {
         var component = await FindAsync(args.Id);
-        if (component is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "Data not found"
-            });
-        }
+        if (component is null) return TResult.Failed("Data not found");
         component.Active = args.Active;
         component.Name = args.Name;
         component.NormalizedName = args.NormalizedName;
         await _context.SaveChangesAsync();
-        return IdentityResult.Success;
+        return TResult.Success;
     }
 }

@@ -1,31 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Foundations.Models;
+using Waffle.Core.IServices.Shops;
 using Waffle.Data;
 using Waffle.Entities.Affliates;
 using Waffle.Models.Filters.Affiliates;
-using Waffle.Models.Result;
 
 namespace Waffle.Core.Services.Affiliates;
 
 public class AffiliateService(ApplicationDbContext _context) : IAffiliateService
 {
-    public async Task<DefResult> AddLinkAsync(AffiliateLink args)
+    public async Task<TResult> AddLinkAsync(AffiliateLink args)
     {
-        if (string.IsNullOrWhiteSpace(args.Url)) return DefResult.Failed("Link is required");
-        if (await _context.AffiliateLinks.AnyAsync(x => x.Url == args.Url)) return DefResult.Failed("Link already exists");
+        if (string.IsNullOrWhiteSpace(args.Url)) return TResult.Failed("Link is required");
+        if (await _context.AffiliateLinks.AnyAsync(x => x.Url == args.Url)) return TResult.Failed("Link already exists");
         args.CreatedDate = DateTime.Now;
         await _context.AffiliateLinks.AddAsync(args);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
-    public async Task<DefResult> DeleteLinkAsync(Guid id)
+    public async Task<TResult> DeleteLinkAsync(Guid id)
     {
         var affliateLink = await _context.AffiliateLinks.FindAsync(id);
-        if (affliateLink is null) return DefResult.Failed("Affiliate link not found");
+        if (affliateLink is null) return TResult.Failed("Affiliate link not found");
         _context.AffiliateLinks.Remove(affliateLink);
         await _context.SaveChangesAsync();
-        return DefResult.Success;
+        return TResult.Success;
     }
 
     public async Task<object?> ListAsync(AffiliateFilterOptions filterOptions)
