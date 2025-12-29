@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Services.Catalogs.Args;
 using Waffle.Core.Services.Catalogs.Filters;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Entities;
@@ -60,4 +61,5 @@ public interface ICatalogService
     Task<object?> GetMetaAsync(string slug);
     Task<TResult> DetailAsync(Guid id);
     Task<TResult> TagsAsync(Guid catalogId);
+    Task<TResult> SaveTagsAsync(SaveCatalogTagsArgs args);
 }

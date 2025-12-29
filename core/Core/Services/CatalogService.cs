@@ -11,6 +11,7 @@ using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Options;
+using Waffle.Core.Services.Catalogs.Args;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
 using Waffle.Entities;
@@ -682,4 +683,6 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
         selectOptions.KeyWords = SeoHelper.ToSeoFriendly(selectOptions.KeyWords);
         return _catalogRepository.GetTagOptionsAsync(selectOptions);
     }
+
+    public Task<TResult> SaveTagsAsync(SaveCatalogTagsArgs args) => _catalogRepository.SaveTagsAsync(args);
 }

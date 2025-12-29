@@ -7,6 +7,7 @@ using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Catalogs.Args;
 using Waffle.Core.Services.Catalogs.Filters;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
@@ -251,4 +252,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
 
     [HttpGet("tags"), AllowAnonymous]
     public async Task<IActionResult> GetTagsAsync([FromQuery] Guid catalogId) => Ok(await _catalogService.TagsAsync(catalogId));
+
+    [HttpPost("tags")]
+    public async Task<IActionResult> SaveTagsAsync([FromBody] SaveCatalogTagsArgs args) => Ok(await _catalogService.SaveTagsAsync(args));
 }

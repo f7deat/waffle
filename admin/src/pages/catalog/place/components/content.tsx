@@ -7,6 +7,7 @@ import { useParams, useRequest } from "@umijs/max";
 import { Col, message, Row, Upload, Image as AntImage, Button, Spin } from "antd";
 import { useState, useEffect, useRef } from "react";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
+import CatalogTag from "@/components/catalog/catalog-tag";
 
 const PlaceContent: React.FC = () => {
 
@@ -185,6 +186,7 @@ const PlaceContent: React.FC = () => {
                             }}
                         />
                         <ProFormText name={"address"} label="Address" initialValue={data?.address} />
+                        <CatalogTag />
                     </Col>
                 </Row>
             </ProForm>

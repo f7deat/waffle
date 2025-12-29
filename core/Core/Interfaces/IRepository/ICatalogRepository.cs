@@ -1,6 +1,7 @@
 ﻿using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Services.Catalogs.Args;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Components.Common;
@@ -24,5 +25,6 @@ public interface ICatalogRepository : IAsyncRepository<Catalog>
     Task IncreaseCountAsync(Catalog catalog);
     Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions);
     Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize);
+    Task<TResult> SaveTagsAsync(SaveCatalogTagsArgs args);
     Task<TResult> TagsAsync(Guid catalogId);
 }

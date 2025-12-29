@@ -186,5 +186,19 @@ export async function apiCatalogDetail(id?: string) {
 }
 
 export async function apiCatalogTags(id?: string) {
-  return request<API.TResult<API.CatalogTag[]>>(`catalog/tags/${id}`);
+  return request<API.TResult<API.CatalogTag[]>>(`catalog/tags`, {
+    params: {
+      catalogId: id
+    }
+  });
+}
+
+export async function apiSaveCatalogTags(data: {
+  catalogId: string;
+  tagIds: string[];
+}) {
+  return request(`catalog/tags`, {
+    method: 'POST',
+    data
+  });
 }

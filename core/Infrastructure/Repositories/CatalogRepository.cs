@@ -4,8 +4,10 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
+using Waffle.Core.Services.Catalogs.Args;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Tags;
 using Waffle.Models;
 using Waffle.Models.Components.Common;
 using Waffle.Models.ViewModels;
@@ -199,6 +201,26 @@ public class CatalogRepository(ApplicationDbContext context, IHCAService hcaServ
                         Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
                     };
         return await query.OrderBy(x => Guid.NewGuid()).Take(pageSize).AsNoTracking().ToListAsync();
+    }
+
+    public async Task<TResult> SaveTagsAsync(SaveCatalogTagsArgs args)
+    {
+        var existingTags = _context.TagCatalogs.Where(x => x.CatalogId == args.CatalogId);
+        if (existingTags.Any())
+        {
+            _context.TagCatalogs.RemoveRange(existingTags);
+            await _context.SaveChangesAsync();
+        }
+        if (args.TagIds != null && args.TagIds.Count > 0)
+        {
+            await _context.TagCatalogs.AddRangeAsync(args.TagIds.Select(tagId => new TagCatalog
+            {
+                CatalogId = args.CatalogId,
+                TagId = tagId
+            }));
+            await _context.SaveChangesAsync();
+        }
+        return TResult.Success;
     }
 
     public async Task<TResult> TagsAsync(Guid catalogId)

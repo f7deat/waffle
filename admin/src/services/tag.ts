@@ -45,3 +45,7 @@ export async function apiTagDelete(id: string) {
 export async function apiTagDetail(id: string) {
     return request(`tag/${id}`);
 }
+
+export async function apiTagOptions(params: any) {
+    return request(`tag/options`, { params });
+}
