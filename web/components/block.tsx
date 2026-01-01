@@ -9,7 +9,7 @@ const Block: React.FC<API.Block> = (block) => {
     }
     if (block.type === 'header') {
         const HeaderTag = `h${block.data.level || 2}` as keyof JSX.IntrinsicElements;
-        return <HeaderTag className={`font-bold mb-3 mt-6 ${block.data.level === 1 ? 'text-3xl' : block.data.level === 2 ? 'text-2xl' : 'text-xl'}`}>{block.data.text}</HeaderTag>;
+        return <HeaderTag className={`font-bold mb-3 mt-6 ${block.data.level === 1 ? 'text-3xl' : block.data.level === 2 ? 'text-2xl' : 'text-xl'}`} dangerouslySetInnerHTML={{ __html: block.data.text || '' }}></HeaderTag>;
     }
     if (block.type === 'image') {
         return (

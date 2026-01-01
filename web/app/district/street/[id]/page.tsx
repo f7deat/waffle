@@ -9,7 +9,7 @@ type Params = Promise<{
 
 const Page = async ({ params }: { params: Params }) => {
     const streetId = Number((await params).id);
-    const response = await apiPlaceList({ current: 1, pageSize: 50, streetId });
+    const response = await apiPlaceList({ current: 1, pageSize: 50 });
     const places = response.data;
 
     const streetName = places[0]?.streetName || "Tuyen duong";

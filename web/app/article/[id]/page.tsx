@@ -2,9 +2,10 @@
 import PageContainer from "@/components/layout/page-container";
 import { apiArticleDetail, apiArticleList } from "@/service/article";
 import { Metadata } from "next";
-import { JSX } from "react";
 import Link from "next/link";
 import { apiCatalogMeta } from "@/service/catalog";
+import { EyeFilled } from "@ant-design/icons";
+import Block from "@/components/block";
 
 type Params = Promise<{
     id: string;
@@ -33,88 +34,9 @@ const Page = async ({ params }: { params: Params }) => {
     );
 
     const breadcrumbs = [
-        { label: "Article", href: "/article" },
+        { label: "Bài viết", href: "/article" },
         { label: article?.name || "Chi tiết", href: "#" },
     ];
-
-    const renderBlock = (block: API.Block, index: number) => {
-        switch (block.type) {
-            case "paragraph":
-                return (
-                    <p
-                        key={index}
-                        className="mb-4 text-gray-700 leading-relaxed"
-                        dangerouslySetInnerHTML={{ __html: block.data.text || "" }}
-                    />
-                );
-            case "header": {
-                const HeaderTag = `h${block.data.level || 2}` as keyof JSX.IntrinsicElements;
-                return (
-                    <HeaderTag
-                        key={index}
-                        className={`font-bold mb-3 mt-6 ${block.data.level === 1
-                                ? "text-3xl"
-                                : block.data.level === 2
-                                    ? "text-2xl"
-                                    : "text-xl"
-                            }`}
-                        dangerouslySetInnerHTML={{ __html: block.data.text || "" }}
-                    >
-                    </HeaderTag>
-                );
-            }
-            case "image":
-                return (
-                    <figure
-                        key={index}
-                        className={`mb-6 ${block.data.align === "center"
-                                ? "text-center"
-                                : block.data.align === "right"
-                                    ? "text-right"
-                                    : ""
-                            }`}
-                    >
-                        <img
-                            src={block.data.url}
-                            alt={block.data.caption || ""}
-                            className="max-w-full h-auto inline-block"
-                        />
-                        {block.data.caption && (
-                            <figcaption className="text-sm text-gray-600 mt-2">
-                                {block.data.caption}
-                            </figcaption>
-                        )}
-                    </figure>
-                );
-            case "list":
-                return (
-                    <ul key={index} className="list-disc list-inside mb-4 ml-4">
-                        {block.data.items?.map((item: string, i: number) => (
-                            <li key={i} className="mb-1">
-                                {item}
-                            </li>
-                        ))}
-                    </ul>
-                );
-            case "quote":
-                return (
-                    <blockquote
-                        key={index}
-                        className="border-l-4 border-gray-300 pl-4 italic my-4 text-gray-600"
-                    >
-                        {block.data.text}
-                    </blockquote>
-                );
-            case "code":
-                return (
-                    <pre key={index} className="bg-gray-100 p-4 rounded overflow-x-auto mb-4">
-                        <code>{block.data.code}</code>
-                    </pre>
-                );
-            default:
-                return null;
-        }
-    };
 
     if (!article) {
         return (
@@ -134,7 +56,7 @@ const Page = async ({ params }: { params: Params }) => {
                         <h1 className="text-3xl font-bold mb-3">{article.name}</h1>
                         <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                             <span>
-                                👁️ {article.viewCount?.toLocaleString()} lượt xem
+                                <EyeFilled /> {article.viewCount?.toLocaleString()} lượt xem
                             </span>
                             <span>•</span>
                             <span>Cập nhật {new Date(article.modifiedDate).toLocaleDateString("vi-VN")}</span>
@@ -142,12 +64,12 @@ const Page = async ({ params }: { params: Params }) => {
                     </div>
 
                     <div className="prose max-w-none">
-                        {article.content?.blocks?.map((block: API.Block, index: number) => renderBlock(block, index))}
+                        {article.content?.blocks?.map((block: API.Block, index: number) => <Block key={index} {...block} />)}
                     </div>
                 </div>
 
                 <aside className="space-y-8">
-                    <div className="border rounded-lg p-4">
+                    <div>
                         <h2 className="text-xl font-bold mb-4">Bài viết mới</h2>
                         {latestArticles.length === 0 ? (
                             <p className="text-sm text-gray-500">Chưa có bài viết.</p>
@@ -159,7 +81,7 @@ const Page = async ({ params }: { params: Params }) => {
                                         : "Chưa cập nhật";
                                     return (
                                         <Link key={item.id} href={`/article/${item.normalizedName}`}>
-                                            <div className="group cursor-pointer flex gap-3">
+                                            <div className="group cursor-pointer flex gap-3 mb-2">
                                                 <div className="relative flex-shrink-0 w-20 h-20 overflow-hidden rounded-md bg-gray-200">
                                                     {item.thumbnail ? (
                                                         <img
@@ -176,7 +98,7 @@ const Page = async ({ params }: { params: Params }) => {
                                                         {item.name}
                                                     </h3>
                                                     <p className="text-xs text-gray-500">Cập nhật {updatedAt}</p>
-                                                    <p className="text-xs text-gray-500 mt-1">👁️ {item.viewCount?.toLocaleString()}</p>
+                                                    <p className="text-xs text-gray-500 mt-1"><EyeFilled /> {item.viewCount?.toLocaleString()}</p>
                                                 </div>
                                             </div>
                                         </Link>

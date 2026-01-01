@@ -28,11 +28,11 @@ const Header: React.FC = () => {
     };
 
     const navItems = [
-        { label: "Bai viet", href: "/article" },
-        { label: "Dia diem", href: "/place" },
-        { label: "Album anh", href: "/gallery" },
+        { label: "Bài viết", href: "/article" },
+        { label: "Địa điểm", href: "/place" },
+        { label: "Album ảnh", href: "/gallery" },
         { label: "Game", href: "/game" },
-        { label: "Cua hang", href: "/shop" }
+        { label: "Cửa hàng", href: "/shop" }
     ];
 
     return (

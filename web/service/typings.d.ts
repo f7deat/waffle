@@ -36,4 +36,9 @@ declare namespace API {
         name: string;
         description: string;
     }
+    interface Tag {
+        id: string;
+        name: string;
+        normalizedName: string;
+    }
 }

@@ -3,6 +3,7 @@ import { DistrictSection } from "./home";
 import { apiArticleList } from "@/service/article";
 import { apiProducts } from "@/service/shop/product";
 import { apiTagRandoms } from "@/service/contents/tag";
+import { apiPlaceList } from "@/service/locations/place";
 
 export default async function Home() {
   const articlesResponse = await apiArticleList({ current: 1, pageSize: 4 });
@@ -15,11 +16,8 @@ export default async function Home() {
   const tagsData = Array.isArray(tagsResponse.data) ? tagsResponse.data : [tagsResponse.data].filter(Boolean);
   const tags = tagsData.map(tag => tag.name);
 
-  const locations = [
-    { name: "Ha Noi", slug: "ha-noi", image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad" },
-    { name: "Da Nang", slug: "da-nang", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" },
-    { name: "Sai Gon", slug: "sai-gon", image: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef" },
-  ];
+  const placesResponse = await apiPlaceList({ current: 1, pageSize: 6 });
+  const locations = (placesResponse.data || []).slice(0, 3);
 
   const videos = [
     { title: "Travel vlog", duration: "8:12", image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085" },
@@ -40,7 +38,12 @@ export default async function Home() {
   const categories = ["Huong dan", "Phan tich", "Danh gia", "Tin tuc", "Thu thuat"];
 
   const randomArticles = articles.slice(0, 2);
-  const randomLocations = locations.slice(0, 2);
+  const randomLocations = locations.slice(0, 2).map(place => ({
+    id: place.id,
+    name: place.districtName,
+    image: place.thumbnail,
+    districtId: place.districtId,
+  }));
 
   const cardStyle = (url: string) => ({
     backgroundImage: `url(${url})`,
@@ -75,7 +78,7 @@ export default async function Home() {
               <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">Dia diem ngau nhien</h3>
               <div className="mt-3 space-y-3">
                 {randomLocations.map((item) => (
-                  <Link key={item.slug} href={`/location/city/${item.slug}`} className="flex items-center gap-3 rounded-lg border border-slate-200/60 bg-slate-50 px-3 py-2 hover:border-blue-200 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70">
+                  <Link key={item.id} href={`/district/${item.districtId}`} className="flex items-center gap-3 rounded-lg border border-slate-200/60 bg-slate-50 px-3 py-2 hover:border-blue-200 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70">
                     <div className="h-10 w-10 flex-shrink-0 rounded-lg bg-cover bg-center" style={cardStyle(item.image)} />
                     <div>
                       <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.name}</p>
@@ -126,11 +129,11 @@ export default async function Home() {
               </div>
               <div className="flex gap-4 overflow-x-auto pb-2 snap-x">
                 {locations.map((item) => (
-                  <Link key={item.slug} href={`/district/${item.slug}`} className="group relative w-72 snap-start overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
-                    <div className="h-44 bg-cover bg-center" style={cardStyle(item.image)} />
+                  <Link key={item.id} href={`/place/${item.id}`} className="group relative w-72 snap-start overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
+                    <div className="h-44 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
                     <div className="p-4">
                       <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">Guide, food, and spots</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Views: {item.viewCount?.toLocaleString()}</p>
                     </div>
                   </Link>
                 ))}
@@ -139,7 +142,7 @@ export default async function Home() {
 
             <section className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">San pham goi y</h2>
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Sản phẩm gợi ý</h2>
                 <Link href="/shop" className="text-sm font-medium text-blue-600 hover:text-blue-500">Shop now</Link>
               </div>
               <div className="grid gap-4 md:grid-cols-4">
@@ -152,7 +155,13 @@ export default async function Home() {
                         <p className="text-sm text-slate-500 dark:text-slate-400">In stock</p>
                       </div>
                       <span className="text-sm font-semibold text-blue-600">
-                        {item.salePrice ? `$${item.salePrice}` : `$${item.price}`}
+                        {
+                          item.salePrice || item.price ? (
+                            item.salePrice ? `${item.salePrice?.toLocaleString()}` : `${item.price?.toLocaleString()}`
+                          ) : (
+                            "Liên hệ"
+                          )
+                        }
                       </span>
                     </div>
                   </Link>

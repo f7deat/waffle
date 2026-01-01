@@ -29,7 +29,6 @@ declare namespace API {
         address?: string;
     }
     interface PlaceFilterOptions extends FilterOptions {
-        streetId?: number;
         districtId?: number;
         provinceId?: number;
         keyword?: string;
@@ -49,7 +48,7 @@ declare namespace API {
         normalizedName: string;
     }
     interface PlaceDetail extends PlaceListItem {
-        content: API.BlockEditor
+        content: API.BlockEditor;
     }
     interface PlaceImage {
         id: string;

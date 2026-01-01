@@ -5,8 +5,10 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import PageContainer from "@/components/layout/page-container";
 import { apiPlaceDetail, apiPlaceRandom, apiPlaceList, apiPlaceImages } from '@/service/locations/place';
-import { Image } from 'antd';
+import { apiCatalogTags } from '@/service/catalog';
+import { Image, Masonry } from 'antd';
 import Block from '@/components/block';
+import { EnvironmentOutlined, EyeOutlined } from '@ant-design/icons';
 
 const Page: React.FC = () => {
     const params = useParams();
@@ -15,10 +17,12 @@ const Page: React.FC = () => {
     const [randomPlaces, setRandomPlaces] = useState<API.PlaceListItem[]>([]);
     const [relatedPlaces, setRelatedPlaces] = useState<API.PlaceListItem[]>([]);
     const [placeImages, setPlaceImages] = useState<API.PlaceImage[]>([]);
+    const [tags, setTags] = useState<API.Tag[]>([]);
     const [loading, setLoading] = useState(true);
     const [loadingRandom, setLoadingRandom] = useState(false);
     const [loadingRelated, setLoadingRelated] = useState(false);
     const [loadingImages, setLoadingImages] = useState(false);
+    const [loadingTags, setLoadingTags] = useState(false);
 
     useEffect(() => {
         const fetchPlace = async () => {
@@ -63,7 +67,7 @@ const Page: React.FC = () => {
             try {
                 setLoadingRelated(true);
                 const data = await apiPlaceList({
-                    streetId: place.streetId,
+                    districtId: place.districtId,
                     current: 1,
                     pageSize: 6
                 });
@@ -97,6 +101,29 @@ const Page: React.FC = () => {
 
         fetchPlaceImages();
     }, [place]);
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            const catalogId = place?.id;
+            if (!catalogId) {
+                setTags([]);
+                return;
+            }
+            try {
+                setLoadingTags(true);
+                const data = await apiCatalogTags(catalogId);
+                const tagList = Array.isArray(data.data) ? data.data : [];
+                setTags(tagList);
+            } catch (error) {
+                console.error('Failed to fetch tags:', error);
+                setTags([]);
+            } finally {
+                setLoadingTags(false);
+            }
+        };
+
+        fetchTags();
+    }, [place?.id]);
 
     const breadcrumbs = place ? [
         { label: 'Place', href: '/place' },
@@ -154,17 +181,19 @@ const Page: React.FC = () => {
                                     <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
                                 </div>
                             ) : placeImages.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {placeImages.map((image) => (
-                                        <div key={image.id} className="relative overflow-hidden rounded-lg bg-gray-100">
-                                            <Image
-                                                src={image.url}
-                                                alt={place.name}
-                                                className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-                                            />
-                                        </div>
+                                <Masonry columns={3} gutter={8}
+                                    items={placeImages.map((image) => (
+                                        {
+                                            key: image.id,
+                                            data: image.url
+                                        }
                                     ))}
-                                </div>
+
+                                    itemRender={({ data }) => (
+                                        <Image src={`${data}?w=523&auto=format`} alt="IMG" className='w-full' />
+                                    )}
+                                >
+                                </Masonry>
                             ) : (
                                 <p className="text-gray-600">No gallery images yet.</p>
                             )}
@@ -174,6 +203,29 @@ const Page: React.FC = () => {
                         <div className="prose max-w-none">
                             {place.content?.blocks?.map((block, index) => <Block key={index} {...block} />)}
                         </div>
+
+
+                        {(loadingTags || tags.length > 0) && (
+                            <div>
+                                <div className="flex items-center justify-between mb-3">
+                                    <h2 className="text-xl font-bold">Tags</h2>
+                                    {loadingTags && (
+                                        <div className="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900"></div>
+                                    )}
+                                </div>
+                                {tags.length > 0 ? (
+                                    <div className="flex flex-wrap gap-2">
+                                        {tags.map((tag) => (
+                                            <Link key={tag.id} href={`/search?q=${encodeURIComponent(tag.name)}`}>
+                                                <span className="inline-block rounded-full bg-blue-50 text-blue-700 text-sm px-3 py-1 hover:bg-blue-100 transition-colors">#{tag.name}</span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    !loadingTags && <p className="text-sm text-gray-600">No tags for this place yet.</p>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <aside className="space-y-8">
@@ -189,7 +241,7 @@ const Page: React.FC = () => {
                                     <div className="space-y-4">
                                         {relatedPlaces.map((relatedPlace) => (
                                             <Link key={relatedPlace.id} href={`/place/${relatedPlace.id}`}>
-                                                <div className="group cursor-pointer flex gap-3">
+                                                <div className="group cursor-pointer flex gap-3 mb-4">
                                                     <div className="relative flex-shrink-0 w-20 h-20 overflow-hidden rounded-md bg-gray-200">
                                                         <img
                                                             src={relatedPlace.thumbnail}
@@ -198,14 +250,11 @@ const Page: React.FC = () => {
                                                         />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
+                                                        <h3 className="font-semibold line-clamp-2 text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
                                                             {relatedPlace.name}
                                                         </h3>
                                                         <p className="text-sm text-gray-600 line-clamp-1">
-                                                            {relatedPlace.districtName}
-                                                        </p>
-                                                        <p className="text-xs text-gray-500 mt-1">
-                                                            👁️ {relatedPlace.viewCount?.toLocaleString()}
+                                                            {relatedPlace.districtName} <EyeOutlined /> {relatedPlace.viewCount?.toLocaleString()}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -226,8 +275,8 @@ const Page: React.FC = () => {
                             ) : randomPlaces.length > 0 ? (
                                 <div className="space-y-4">
                                     {randomPlaces.map((randomPlace) => (
-                                        <Link key={randomPlace.id} href={`/place/${randomPlace.id}`}>
-                                            <div className="group cursor-pointer flex gap-3">
+                                        <Link key={randomPlace.id} href={`/place/${randomPlace.normalizedName}`}>
+                                            <div className="group cursor-pointer flex gap-3 mb-2">
                                                 <div className="relative flex-shrink-0 w-20 h-20 overflow-hidden rounded-md bg-gray-200">
                                                     <img
                                                         src={randomPlace.thumbnail}
@@ -239,11 +288,8 @@ const Page: React.FC = () => {
                                                     <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
                                                         {randomPlace.name}
                                                     </h3>
-                                                    <p className="text-sm text-gray-600 line-clamp-1">
-                                                        {randomPlace.districtName}, {randomPlace.provinceName}
-                                                    </p>
-                                                    <p className="text-xs text-gray-500 mt-1">
-                                                        👁️ {randomPlace.viewCount?.toLocaleString()}
+                                                    <p className="text-sm text-slate-500">
+                                                       <EnvironmentOutlined /> {randomPlace.districtName}, {randomPlace.provinceName} <EyeOutlined /> {randomPlace.viewCount?.toLocaleString()}
                                                     </p>
                                                 </div>
                                             </div>
