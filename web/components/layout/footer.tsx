@@ -1,3 +1,5 @@
+import { CaretRightFilled, GlobalOutlined } from "@ant-design/icons";
+import { Dropdown } from "antd";
 import Link from "next/link";
 
 const Footer: React.FC = () => {
@@ -41,13 +43,13 @@ const Footer: React.FC = () => {
                 </div>
 
                 <div className="space-y-3">
-                    <h3 className="text-base font-semibold text-white">Lien ket nhanh</h3>
+                    <h3 className="text-base font-semibold text-white">Liên kết nhanh</h3>
                     <nav className="md:grid grid-cols-2 gap-2 text-sm text-slate-300">
-                        <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
-                        <Link href="/article" className="hover:text-white transition-colors">Bài viết</Link>
-                        <Link href="/wiki" className="hover:text-white transition-colors">Wiki</Link>
-                        <Link href="/shop" className="hover:text-white transition-colors">Cửa hàng</Link>
-                        <Link href="/contact" className="hover:text-white transition-colors">Liên hệ</Link>
+                        <Link href="/" className="hover:text-white transition-colors"><CaretRightFilled /> Trang chủ</Link>
+                        <Link href="/article" className="hover:text-white transition-colors"><CaretRightFilled /> Bài viết</Link>
+                        <Link href="/wiki" className="hover:text-white transition-colors"><CaretRightFilled /> Wiki</Link>
+                        <Link href="/shop" className="hover:text-white transition-colors"><CaretRightFilled /> Cửa hàng</Link>
+                        <Link href="/contact" className="hover:text-white transition-colors"><CaretRightFilled /> Liên hệ</Link>
                     </nav>
                 </div>
 
@@ -89,6 +91,32 @@ const Footer: React.FC = () => {
                         <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
                         <a href="/terms" className="hover:text-white transition-colors">Terms</a>
                         <a href="/sitemap" className="hover:text-white transition-colors">Sitemap</a>
+                        <Dropdown menu={{
+                            items: [
+                                {
+                                    label: '🇻🇳 Tiếng việt',
+                                    key: 'vi-VN'
+                                },
+                                {
+                                    label: '🇺🇸 English',
+                                    key: 'en-US'
+                                },
+                                {
+                                    label: '🇨🇳 Chinese',
+                                    key: 'zh-CN'
+                                },
+                                {
+                                    label: '🇯🇵 Japanese',
+                                    key: 'ja-JP'
+                                },
+                                {
+                                    label: '🇰🇷 Korean',
+                                    key: 'ko-KR'
+                                }
+                            ]
+                        }}>
+                            <a href="#" className="hover:text-white transition-colors"><GlobalOutlined /> Language</a>
+                        </Dropdown>
                     </div>
                 </div>
             </div>

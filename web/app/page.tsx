@@ -4,6 +4,7 @@ import { apiArticleList } from "@/service/article";
 import { apiProducts } from "@/service/shop/product";
 import { apiTagRandoms } from "@/service/contents/tag";
 import { apiPlaceList } from "@/service/locations/place";
+import { Carousel } from "antd";
 
 export default async function Home() {
   const articlesResponse = await apiArticleList({ current: 1, pageSize: 4 });
@@ -50,7 +51,7 @@ export default async function Home() {
   });
 
   return (
-    <main className="bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <main className="dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       <div className="mx-auto px-4 py-10">
         <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
           <aside className="space-y-6 lg:sticky lg:top-20 self-start">
@@ -64,7 +65,7 @@ export default async function Home() {
             </div>
 
             <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">Bai viet ngau nhien</h3>
+              <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">Bài viết ngẫu nhiên</h3>
               <div className="mt-3 space-y-3">
                 {randomArticles.map((item) => (
                   <Link key={item.id} href={`/article/${item.normalizedName}`} className="block rounded-lg border border-slate-200/60 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70 dark:hover:text-blue-300">
@@ -104,12 +105,12 @@ export default async function Home() {
 
           <div className="flex flex-col gap-10">
 
-            <section className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
+            <section>
+              <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Bài viết mới</h2>
                 <Link href="/article" className="text-sm font-medium text-blue-600 hover:text-blue-500">Xem tất cả</Link>
               </div>
-              <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4">
+              <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {articles.map((item) => (
                   <Link key={item.id} href={`/article/${item.normalizedName}`} className="group relative overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
                     <div className="h-48 bg-cover bg-center" style={cardStyle(item.thumbnail || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5')} />
@@ -124,12 +125,12 @@ export default async function Home() {
             <DistrictSection />
             <section className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Dia diem noi bat</h2>
-                <Link href="/location" className="text-sm font-medium text-blue-600 hover:text-blue-500">Explore</Link>
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Địa điểm nổi bật</h2>
+                <Link href="/place" className="text-sm font-medium text-blue-600 hover:text-blue-500">Khám phá</Link>
               </div>
-              <div className="flex gap-4 overflow-x-auto pb-2 snap-x">
+              <div className="md:flex gap-4 overflow-x-auto pb-2 snap-x">
                 {locations.map((item) => (
-                  <Link key={item.id} href={`/place/${item.id}`} className="group relative w-72 snap-start overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
+                  <Link key={item.id} href={`/place/${item.id}`} className="group relative w-72 snap-start overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
                     <div className="h-44 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
                     <div className="p-4">
                       <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
@@ -140,18 +141,18 @@ export default async function Home() {
               </div>
             </section>
 
-            <section className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
+            <section>
+              <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Sản phẩm gợi ý</h2>
                 <Link href="/shop" className="text-sm font-medium text-blue-600 hover:text-blue-500">Shop now</Link>
               </div>
-              <div className="grid gap-4 md:grid-cols-4">
+              <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-4">
                 {products.map((item) => (
-                  <Link key={item.id} href={`/shop/${item.normalizedName}`} className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+                  <Link key={item.id} href={`/shop/${item.normalizedName}`} className="group overflow-hidden rounded bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
                     <div className="h-40 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
-                    <div className="flex items-center justify-between p-4">
+                    <div className="md:flex items-center justify-between p-2 md:p-4">
                       <div>
-                        <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{item.name}</h3>
+                        <h3 className="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100">{item.name}</h3>
                         <p className="text-sm text-slate-500 dark:text-slate-400">In stock</p>
                       </div>
                       <span className="text-sm font-semibold text-blue-600">
@@ -165,60 +166,6 @@ export default async function Home() {
                       </span>
                     </div>
                   </Link>
-                ))}
-              </div>
-            </section>
-
-            <section className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Video</h2>
-                <Link href="/video" className="text-sm font-medium text-blue-600 hover:text-blue-500">Watch more</Link>
-              </div>
-              <div className="flex gap-4 overflow-x-auto pb-2 snap-x">
-                {videos.map((item, idx) => (
-                  <div key={`${item.title}-${idx}`} className="group relative w-80 snap-start overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
-                    <div className="h-44 bg-cover bg-center" style={cardStyle(item.image)} />
-                    <div className="absolute bottom-3 right-3 rounded-md bg-black/70 px-2 py-1 text-xs font-semibold text-white">{item.duration}</div>
-                    <div className="p-4">
-                      <h3 className="text-base font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.title}</h3>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">HD, subtitles</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Album anh</h2>
-                <Link href="/gallery" className="text-sm font-medium text-blue-600 hover:text-blue-500">View gallery</Link>
-              </div>
-              <div className="grid gap-4 md:grid-cols-3">
-                {albums.map((item, idx) => (
-                  <div key={`${item.title}-${idx}`} className="group overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
-                    <div className="h-44 bg-cover bg-center" style={cardStyle(item.image)} />
-                    <div className="flex items-center justify-between p-4">
-                      <div>
-                        <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{item.title}</h3>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">{item.count} photos</p>
-                      </div>
-                      <span className="text-xs rounded-full bg-slate-100 px-3 py-1 text-slate-700 dark:bg-slate-800 dark:text-slate-200">New</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Thuong hieu lien ket</h2>
-                <Link href="/partners" className="text-sm font-medium text-blue-600 hover:text-blue-500">All partners</Link>
-              </div>
-              <div className="flex items-center gap-4 overflow-x-auto pb-2">
-                {brands.map((name, idx) => (
-                  <div key={`${name}-${idx}`} className="flex h-16 min-w-[140px] items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white px-4 text-sm font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
-                    {name}
-                  </div>
                 ))}
               </div>
             </section>

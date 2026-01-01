@@ -7,10 +7,10 @@ const DistrictSection: React.FC = async () => {
     const districts = response.data;
 
     return (
-        <section className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <section className="rounded bg-white shadow-sm dark:border-slate-800 shadow-sm dark:bg-slate-900">
             <div className="border-b border-slate-200 px-6 py-4 dark:border-slate-800">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Danh sach diem den</h2>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Kham pha nhung dia diem dep nhat</p>
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Danh sách địa điểm</h2>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Khám phá những địa điểm đẹp nhất</p>
             </div>
 
             <div className="grid gap-4 p-6 md:grid-cols-2 lg:grid-cols-3">
@@ -18,7 +18,7 @@ const DistrictSection: React.FC = async () => {
                     <Link
                         key={district.id}
                         href={`/district/${district.id || district.name.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="group overflow-hidden rounded-lg border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4 transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:from-slate-800 dark:to-slate-900 dark:hover:border-blue-500"
+                        className="group overflow-hidden rounded border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4 transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:from-slate-800 dark:to-slate-900 dark:hover:border-blue-500"
                     >
                         <div className="flex items-start justify-between">
                             <div className="flex-1">

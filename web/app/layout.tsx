@@ -33,7 +33,7 @@ export default async function RootLayout({
           async
         />
       </head>
-      <body style={quicksand.style}>
+      <body style={quicksand.style} className="bg-slate-100">
         <ConfigProvider
           theme={{
             components: {
