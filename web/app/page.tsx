@@ -4,13 +4,13 @@ import { apiArticleList } from "@/service/article";
 import { apiProducts } from "@/service/shop/product";
 import { apiTagRandoms } from "@/service/contents/tag";
 import { apiPlaceList } from "@/service/locations/place";
-import { Carousel } from "antd";
+import { EyeFilled } from "@ant-design/icons";
 
 export default async function Home() {
-  const articlesResponse = await apiArticleList({ current: 1, pageSize: 4 });
+  const articlesResponse = await apiArticleList({ current: 1, pageSize: 5 });
   const articles = articlesResponse.data || [];
 
-  const productsResponse = await apiProducts({ current: 1, pageSize: 4 });
+  const productsResponse = await apiProducts({ current: 1, pageSize: 5 });
   const products = productsResponse.data || [];
 
   const tagsResponse = await apiTagRandoms();
@@ -18,23 +18,7 @@ export default async function Home() {
   const tags = tagsData.map(tag => tag.name);
 
   const placesResponse = await apiPlaceList({ current: 1, pageSize: 6 });
-  const locations = (placesResponse.data || []).slice(0, 3);
-
-  const videos = [
-    { title: "Travel vlog", duration: "8:12", image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085" },
-    { title: "Build a pc", duration: "12:33", image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d" },
-    { title: "City timelapse", duration: "3:41", image: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e" },
-  ];
-
-  const albums = [
-    { title: "Street life", count: 24, image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085" },
-    { title: "Nature escapes", count: 18, image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470" },
-    { title: "Night lights", count: 32, image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e" },
-  ];
-
-  const brands = [
-    "Microsoft", "OpenAI", "Google", "Amazon", "Vercel", "Shopee", "Klook", "Wikipedia"
-  ];
+  const locations = (placesResponse.data || []).slice(0, 5);
 
   const categories = ["Huong dan", "Phan tich", "Danh gia", "Tin tuc", "Thu thuat"];
 
@@ -105,36 +89,48 @@ export default async function Home() {
 
           <div className="flex flex-col gap-10">
 
-            <section>
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Bài viết mới</h2>
-                <Link href="/article" className="text-sm font-medium text-blue-600 hover:text-blue-500">Xem tất cả</Link>
+            <section className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Địa điểm nổi bật</h2>
+                <Link href="/place" className="text-sm font-medium text-blue-600 hover:text-blue-500">Khám phá</Link>
               </div>
-              <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-                {articles.map((item) => (
-                  <Link key={item.id} href={`/article/${item.normalizedName}`} className="group relative overflow-hidden rounded-xl border border-slate-200 bg-slate-900/5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
-                    <div className="h-48 bg-cover bg-center" style={cardStyle(item.thumbnail || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5')} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {locations.map((item) => (
+                  <Link key={item.id} href={`/place/${item.normalizedName}`} className="group relative snap-start overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
+                    <div className="h-44 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
                     <div className="p-4">
-                      <p className="text-sm text-slate-500 dark:text-slate-400">Featured</p>
-                      <h3 className="mt-1 text-lg line-clamp-2 font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
+                      <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Lượt xem: {item.viewCount?.toLocaleString()} <EyeFilled /></p>
                     </div>
                   </Link>
                 ))}
               </div>
             </section>
             <DistrictSection />
-            <section className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Địa điểm nổi bật</h2>
-                <Link href="/place" className="text-sm font-medium text-blue-600 hover:text-blue-500">Khám phá</Link>
+
+            <section>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Sản phẩm gợi ý</h2>
+                <Link href="/shop" className="text-sm font-medium text-blue-600 hover:text-blue-500">Shop now</Link>
               </div>
-              <div className="md:flex gap-4 overflow-x-auto pb-2 snap-x">
-                {locations.map((item) => (
-                  <Link key={item.id} href={`/place/${item.id}`} className="group relative w-72 snap-start overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
-                    <div className="h-44 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">Views: {item.viewCount?.toLocaleString()}</p>
+              <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-4 2xl:grid-cols-5">
+                {products.map((item) => (
+                  <Link key={item.id} href={`/shop/${item.normalizedName}`} className="group overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+                    <div className="h-40 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
+                    <div className="flex flex-col p-2 md:p-4">
+                      <h3 className="text-sm flex-1 md:text-base font-semibold text-slate-900 dark:text-slate-100">{item.name}</h3>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">In stock</p>
+                        <span className="text-sm font-semibold text-blue-600">
+                          {
+                            item.salePrice || item.price ? (
+                              item.salePrice ? `${item.salePrice?.toLocaleString()}` : `${item.price?.toLocaleString()}`
+                            ) : (
+                              "Liên hệ"
+                            )
+                          }
+                        </span>
+                      </div>
                     </div>
                   </Link>
                 ))}
@@ -143,27 +139,16 @@ export default async function Home() {
 
             <section>
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Sản phẩm gợi ý</h2>
-                <Link href="/shop" className="text-sm font-medium text-blue-600 hover:text-blue-500">Shop now</Link>
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Bài viết mới</h2>
+                <Link href="/article" className="text-sm font-medium text-blue-600 hover:text-blue-500">Xem tất cả</Link>
               </div>
-              <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-4">
-                {products.map((item) => (
-                  <Link key={item.id} href={`/shop/${item.normalizedName}`} className="group overflow-hidden rounded bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
-                    <div className="h-40 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
-                    <div className="md:flex items-center justify-between p-2 md:p-4">
-                      <div>
-                        <h3 className="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100">{item.name}</h3>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">In stock</p>
-                      </div>
-                      <span className="text-sm font-semibold text-blue-600">
-                        {
-                          item.salePrice || item.price ? (
-                            item.salePrice ? `${item.salePrice?.toLocaleString()}` : `${item.price?.toLocaleString()}`
-                          ) : (
-                            "Liên hệ"
-                          )
-                        }
-                      </span>
+              <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                {articles.map((item) => (
+                  <Link key={item.id} href={`/article/${item.normalizedName}`} className="group relative overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
+                    <div className="h-48 bg-cover bg-center" style={cardStyle(item.thumbnail || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5')} />
+                    <div className="p-4">
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Featured</p>
+                      <h3 className="mt-1 text-lg line-clamp-2 font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
                     </div>
                   </Link>
                 ))}

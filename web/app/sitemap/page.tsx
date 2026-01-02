@@ -17,9 +17,7 @@ export default function SitemapPage() {
       title: "Khu vực/Quận",
       items: [
         { label: "Danh sách quận", href: "/district" },
-        { label: "Tuyến đường", href: "/district/street" },
         { label: "Chi tiết quận (dynamic)", pattern: "/district/[id]" },
-        { label: "Chi tiết tuyến đường (dynamic)", pattern: "/district/street/[id]" },
       ],
     },
     {

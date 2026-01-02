@@ -63,7 +63,7 @@ const Page: React.FC = () => {
 
     useEffect(() => {
         const fetchRelatedPlaces = async () => {
-            if (!place?.streetId) return;
+            if (!place?.districtId) return;
             try {
                 setLoadingRelated(true);
                 const data = await apiPlaceList({
@@ -82,7 +82,7 @@ const Page: React.FC = () => {
         };
 
         fetchRelatedPlaces();
-    }, [place?.streetId, place?.id]);
+    }, [place?.districtId, place?.id]);
 
     useEffect(() => {
         const fetchPlaceImages = async () => {
@@ -126,12 +126,11 @@ const Page: React.FC = () => {
     }, [place?.id]);
 
     const breadcrumbs = place ? [
-        { label: 'Place', href: '/place' },
+        { label: 'Địa điểm', href: '/place' },
         { label: place.provinceName, href: `/location/city/${place.provinceId}` },
         { label: place.districtName, href: `/district/${place.districtId}` },
-        { label: place.streetName, href: `/district/street/${place.streetId}` },
         { label: place.name, href: '#' },
-    ] : [{ label: 'Place', href: '/place' }];
+    ] : [{ label: 'Địa điểm', href: '/place' }];
 
     return (
         <PageContainer breadcrumbs={breadcrumbs}>
@@ -143,7 +142,7 @@ const Page: React.FC = () => {
             ) : place ? (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-8">
-                        <div className="bg-gray-50 p-4 rounded-lg flex gap-4">
+                        <div className="bg-white p-4 rounded-lg flex gap-4">
                             {place.thumbnail && (
                                 <div className="rounded-lg w-32 h-32 flex-shrink-0 overflow-hidden bg-gray-200">
                                     <img src={place.thumbnail} alt={place.name} className="w-full h-full object-cover" />
@@ -153,15 +152,15 @@ const Page: React.FC = () => {
                                 <h1 className="text-3xl font-bold mb-3">{place.name}</h1>
                                 <div className="space-y-2 text-sm text-gray-600">
                                     <div className="flex items-center">
-                                        <span className="font-semibold w-24">Address:</span>
-                                        <span>{place.districtName}, {place.provinceName}</span>
+                                        <span className="font-semibold w-24">Địa chỉ:</span>
+                                        <span>{place.address} {place.districtName}, {place.provinceName}</span>
                                     </div>
                                     <div className="flex items-center">
-                                        <span className="font-semibold w-24">Views:</span>
+                                        <span className="font-semibold w-24">Lượt xem:</span>
                                         <span>{place.viewCount?.toLocaleString()}</span>
                                     </div>
                                     <div className="flex items-center">
-                                        <span className="font-semibold w-24">Updated:</span>
+                                        <span className="font-semibold w-24">Cập nhật:</span>
                                         <span>{new Date(place.modifiedDate).toLocaleDateString()}</span>
                                     </div>
                                 </div>
@@ -169,7 +168,7 @@ const Page: React.FC = () => {
                         </div>
 
                         {/* Gallery */}
-                        <div>
+                        <div className="bg-white rounded-lg p-4">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-2xl font-bold">Photo Gallery</h2>
                                 {!loadingImages && placeImages.length > 0 && (
@@ -200,7 +199,7 @@ const Page: React.FC = () => {
                         </div>
 
                         {/* Content */}
-                        <div className="prose max-w-none">
+                        <div className="prose max-w-none bg-white p-4 rounded-lg">
                             {place.content?.blocks?.map((block, index) => <Block key={index} {...block} />)}
                         </div>
 
@@ -229,10 +228,9 @@ const Page: React.FC = () => {
                     </div>
 
                     <aside className="space-y-8">
-                        {/* Related Places on Same Street */}
                         {relatedPlaces.length > 0 && (
-                            <div className="border rounded-lg p-4">
-                                <h2 className="text-xl font-bold mb-4">More on {place.streetName}</h2>
+                            <div className="bg-white rounded-lg p-4">
+                                <h2 className="text-xl font-bold mb-4">Nhiều hơn {place.districtName}</h2>
                                 {loadingRelated ? (
                                     <div className="text-center py-4">
                                         <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
@@ -266,7 +264,7 @@ const Page: React.FC = () => {
                         )}
 
                         {/* Random Places */}
-                        <div className="border rounded-lg p-4">
+                        <div className="bg-white rounded-lg p-4">
                             <h2 className="text-xl font-bold mb-4">More Places to Explore</h2>
                             {loadingRandom ? (
                                 <div className="text-center py-4">

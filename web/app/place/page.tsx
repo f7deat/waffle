@@ -38,7 +38,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 
 	return (
 		<PageContainer
-			breadcrumbs={[{ label: "Place", href: "/place" }]}
+			breadcrumbs={[{ label: "Địa điểm", href: "/place" }]}
 		>
 			<div className="space-y-6">
 				{/* KOL Section */}
@@ -85,7 +85,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 					</div>
 				) : (
 					<>
-						<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+						<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
 							{places.map((place) => {
 								const updatedAt = place.modifiedDate
 									? new Date(place.modifiedDate).toLocaleDateString("vi-VN")
@@ -94,7 +94,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 								return (
 									<div
 										key={place.id}
-										className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white/85 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg"
+										className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white/85 backdrop-blur transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg"
 									>
 										<div className="relative h-44 w-full overflow-hidden bg-gradient-to-br from-indigo-100 via-white to-slate-100">
 											{place.thumbnail ? (
@@ -116,7 +116,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 												<h2 className="text-lg font-semibold text-slate-900 line-clamp-2">{place.name}</h2>
 											</Link>
 											<p className="text-sm text-slate-600 line-clamp-2">
-												{place.streetName}, {place.districtName}, {place.provinceName}
+												{place.address}, {place.districtName}, {place.provinceName}
 											</p>
 											<div className="mt-auto flex items-center gap-3 text-xs text-slate-500">
 												<span className="flex items-center gap-1">

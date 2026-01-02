@@ -8,7 +8,7 @@ type Props = {
 
 const PageContainer: React.FC<Props> = ({ children, breadcrumbs, fluid }) => {
     return (
-        <main className="bg-white h-full">
+        <main className="h-full">
             <Breadcrumb items={breadcrumbs} />
             <div className={`container mx-auto mb-4 ${fluid ? 'max-w-full px-4' : ''}`}>
                 {children}

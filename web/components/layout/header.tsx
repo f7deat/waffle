@@ -1,5 +1,6 @@
 "use client";
 
+import { BlockOutlined, BookOutlined, EnvironmentOutlined, FacebookFilled, InstagramFilled, LinkedinFilled, MailOutlined, PhoneFilled, ShopOutlined, TikTokFilled } from "@ant-design/icons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -28,11 +29,10 @@ const Header: React.FC = () => {
     };
 
     const navItems = [
-        { label: "Bài viết", href: "/article" },
-        { label: "Địa điểm", href: "/place" },
-        { label: "Album ảnh", href: "/gallery" },
-        { label: "Game", href: "/game" },
-        { label: "Cửa hàng", href: "/shop" }
+        { label: "Bài viết", href: "/article", icon: <BlockOutlined /> },
+        { label: "Địa điểm", href: "/place", icon: <EnvironmentOutlined /> },
+        { label: "Wiki", href: "/wiki", icon: <BookOutlined /> },
+        { label: "Cửa hàng", href: "/shop", icon: <ShopOutlined /> }
     ];
 
     return (
@@ -40,24 +40,21 @@ const Header: React.FC = () => {
             <div className="hidden border-b border-slate-200 bg-slate-50 text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 md:block">
                 <div className="mx-auto flex container items-center justify-between px-4 py-2">
                     <div className="flex items-center gap-4">
-                        <a href="mailto:defzone.net@gmail.com" className="hover:text-slate-900 dark:hover:text-white">defzone.net@gmail.com</a>
-                        <a href="/contact" className="hover:text-slate-900 dark:hover:text-white">Liên hệ</a>
+                        <a href="mailto:defzone.net@gmail.com" className="hover:text-slate-900 dark:hover:text-white"><MailOutlined /> defzone.net@gmail.com</a>
+                        <a href="/contact" className="hover:text-slate-900 dark:hover:text-white"><PhoneFilled /> Liên hệ</a>
                     </div>
                     <div className="flex items-center gap-3 text-slate-500 dark:text-slate-300">
                         <a href="https://facebook.com/tan.dct" aria-label="Facebook" className="hover:text-blue-600">
-                            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-                                <path d="M13.5 9H15V6h-1.5C10.91 6 10 7.79 10 10v2H8v3h2v6h3v-6h2.07L15.5 12H13v-1.75c0-.69.18-1.25 1.25-1.25Z" />
-                            </svg>
+                            <FacebookFilled />
                         </a>
-                        <a href="https://twitter.com" aria-label="Twitter" className="hover:text-sky-500">
-                            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-                                <path d="M22 5.92c-.77.35-1.6.58-2.46.69a4.17 4.17 0 0 0 1.83-2.3 8.19 8.19 0 0 1-2.6.99 4.12 4.12 0 0 0-7.1 3.75 11.67 11.67 0 0 1-8.47-4.3 4.12 4.12 0 0 0 1.28 5.5 4.05 4.05 0 0 1-1.86-.51v.05a4.12 4.12 0 0 0 3.3 4.04 4.1 4.1 0 0 1-1.85.07 4.13 4.13 0 0 0 3.85 2.86A8.26 8.26 0 0 1 2 19.54 11.65 11.65 0 0 0 8.29 21c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.35 8.35 0 0 0 22 5.92Z" />
-                            </svg>
+                        <a href="https://www.tiktok.com/@f7deat" aria-label="TikTok" className="hover:text-sky-500">
+                            <TikTokFilled />
                         </a>
-                        <a href="https://www.youtube.com" aria-label="YouTube" className="hover:text-red-500">
-                            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-                                <path d="M21.6 7.2s-.2-1.4-.8-2a2.8 2.8 0 0 0-2-.8C16.4 4 12 4 12 4s-4.4 0-6.8.4a2.8 2.8 0 0 0-2 .8c-.6.6-.8 2-.8 2S2 8.8 2 10.3v1.4C2 13.2 2.4 15 2.4 15s.2 1.4.8 2a2.8 2.8 0 0 0 2 .8C7.6 18 12 18 12 18s4.4 0 6.8-.4a2.8 2.8 0 0 0 2-.8c.6-.6.8-2 .8-2s.4-1.8.4-3.3v-1.4c0-1.5-.4-3.3-.4-3.3Zm-11 6.6V8.2l4.8 2.8-4.8 2.8Z" />
-                            </svg>
+                        <a href="https://www.instagram.com/f7deat/" aria-label="Instagram" className="hover:text-red-500">
+                            <InstagramFilled />
+                        </a>
+                        <a href="https://www.linkedin.com/in/f7deat/" aria-label="LinkedIn" className="hover:text-white transition-colors">
+                            <LinkedinFilled />
                         </a>
                     </div>
                 </div>
@@ -104,7 +101,7 @@ const Header: React.FC = () => {
                             href={item.href}
                             className="rounded-md px-2 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                         >
-                            {item.label}
+                            {item.icon} {item.label}
                         </Link>
                     ))}
                 </nav>
