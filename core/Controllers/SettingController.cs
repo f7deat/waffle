@@ -155,9 +155,6 @@ public class SettingController(ApplicationDbContext _context, ISettingService _s
         return Ok(await _facebookService.GraphAPIExplorerAsync(query));
     }
 
-    [HttpGet("themes/options")]
-    public IActionResult GetThemeOptionsAsync() => Ok(Themes.All);
-
     [HttpGet("blogger/blog-list")]
     public async Task<IActionResult> GetBloggerListAsync()
     {

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Core.Constants;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.IServices.Users;
+using Waffle.Core.Services.Users;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Users;
@@ -12,50 +15,34 @@ public class UserService(UserManager<ApplicationUser> _userManager, RoleManager<
 {
     private async Task<ApplicationUser?> FindAsync(Guid id) => await _context.Users.FindAsync(id);
 
-    public async Task<IdentityResult> AddToRoleAsync(Guid userId, string roleName)
+    public async Task<TResult> AddToRoleAsync(Guid userId, string roleName)
     {
         var user = await FindAsync(userId);
-        if (user is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "User not found!"
-            });
-        }
-        if (!await _roleManager.RoleExistsAsync(roleName))
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "Role not found!"
-            });
-        }
-        return await _userManager.AddToRoleAsync(user, roleName);
+        if (user is null) return TResult.Failed("User not found!");
+        if (!await _roleManager.RoleExistsAsync(roleName)) return TResult.Failed("Role does not exist!");
+        var result = await _userManager.AddToRoleAsync(user, roleName);
+        return result.Succeeded ? TResult.Success : TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Failed to add user to role.");
     }
 
-    public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordModel args)
+    public async Task<TResult> ChangePasswordAsync(ChangePasswordModel args)
     {
         var user = await FindAsync(args.Id);
-        if (user is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = "UserNotFound",
-                Description = "User not found!"
-            });
-        }
-        if (string.IsNullOrWhiteSpace(args.CurrentPassword) || string.IsNullOrWhiteSpace(args.NewPassword)) return IdentityResult.Failed();
-        return await _userManager.ChangePasswordAsync(user, args.CurrentPassword, args.NewPassword);
+        if (user is null) return TResult.Failed("User not found!");
+        if (string.IsNullOrWhiteSpace(args.CurrentPassword) || string.IsNullOrWhiteSpace(args.NewPassword)) return TResult.Failed("Password is required");
+        var result = await _userManager.ChangePasswordAsync(user, args.CurrentPassword, args.NewPassword);
+        return result.Succeeded ? TResult.Success : TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Password change failed.");
     }
 
-    public async Task<IdentityResult> CreateAsync(CreateUserModel model)
+    public async Task<TResult> CreateAsync(CreateUserModel model)
     {
-        if (string.IsNullOrWhiteSpace(model.Password)) return IdentityResult.Failed();
-        return await _userManager.CreateAsync(new ApplicationUser
+        if (string.IsNullOrWhiteSpace(model.Password)) return TResult.Failed("Password is required!");
+        var result = await _userManager.CreateAsync(new ApplicationUser
         {
             Email = model.Email,
             UserName = model.UserName,
             PhoneNumber = model.PhoneNumber
         }, model.Password);
+        return result.Succeeded ? TResult.Success : TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "User creation failed.");
     }
 
     public async Task<CurrentUserViewModel?> GetCurrentUserAsync(Guid id)
@@ -89,27 +76,22 @@ public class UserService(UserManager<ApplicationUser> _userManager, RoleManager<
         return await ListResult<Contact>.Success(query, filterOptions);
     }
 
-    public async Task<IdentityResult> RemoveFromRoleAsync(Guid userId, string roleName)
+    public async Task<TResult> RemoveFromRoleAsync(Guid userId, string roleName)
     {
         var user = await FindAsync(userId);
-        if (user is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "User not found!"
-            });
-        }
-        return await _userManager.RemoveFromRoleAsync(user, roleName);
+        if (user is null) return TResult.Failed("User not found!");
+        var result = await _userManager.RemoveFromRoleAsync(user, roleName);
+        return result.Succeeded ? TResult.Success : TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Failed to remove user from role.");
     }
 
-    public async Task<IdentityResult> UpdateAsync(ApplicationUser user, ApplicationUser args)
+    public async Task<TResult> UpdateAsync(ApplicationUser user, ApplicationUser args)
     {
         user.Name = args.Name;
         user.Gender = args.Gender;
         user.Address = args.Address;
         user.DateOfBirth = args.DateOfBirth;
         await _userManager.UpdateAsync(user);
-        return IdentityResult.Success;
+        return TResult.Success;
     }
 
     public async Task<ListResult> GetInfluencersAsync(FilterOptions filterOptions)
@@ -132,5 +114,24 @@ public class UserService(UserManager<ApplicationUser> _userManager, RoleManager<
                         PricePerReview = 0,
                     };
         return await ListResult.Success(query, filterOptions);
+    }
+
+    public async Task<TResult> BecomeInfluencerAsync(BecomeInfluencerArgs args)
+    {
+        var user = new ApplicationUser
+        {
+            Name = args.FullName,
+            Email = args.Email,
+            PhoneNumber = args.PhoneNumber,
+            UserName = args.PhoneNumber,
+            Gender = args.Gender,
+            DateOfBirth = args.DateOfBirth,
+        };
+        var result = await _userManager.CreateAsync(user, args.Password);
+        if (result.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(user, RoleName.Influencer);
+        }
+        return result.Succeeded ? TResult.Success : TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Failed to create influencer account.");
     }
 }

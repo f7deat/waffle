@@ -41,12 +41,77 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 			breadcrumbs={[{ label: "Địa điểm", href: "/place" }]}
 		>
 			<div className="space-y-6">
-				{/* KOL Section */}
 				<KolList 
 					kolList={kols} 
 					placeId="" 
 					placeName="các địa điểm" 
 				/>
+
+				<div className="grid gap-4 rounded-xl bg-gradient-to-br from-indigo-50 via-white to-slate-50 p-5 shadow-sm md:grid-cols-2">
+					<div className="flex flex-col gap-3 rounded-lg border border-indigo-100 bg-white/70 p-4 shadow-sm">
+						<div className="inline-flex w-fit items-center gap-2 rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+								<path d="M2.5 5.75A2.25 2.25 0 014.75 3.5h10.5a2.25 2.25 0 012.25 2.25v8.5A2.25 2.25 0 0115.25 16.5H4.75A2.25 2.25 0 012.5 14.25v-8.5zm2.25-.75a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h10.5a.75.75 0 00.75-.75v-8.5a.75.75 0 00-.75-.75H4.75z" />
+								<path d="M5.75 6.5a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm0 3.25a.75.75 0 01.75-.75h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" />
+							</svg>
+							Booking & review
+						</div>
+						<h2 className="text-lg font-semibold text-slate-900">Đặt lịch và chia sẻ trải nghiệm</h2>
+						<p className="text-sm text-slate-600">
+							Hỏi lịch trải nghiệm, đặt dịch vụ hoặc gửi review nhanh cho địa điểm bạn đã ghé thăm để giúp cộng đồng có thêm thông tin cập nhật.
+						</p>
+						<div className="flex flex-col gap-2 text-sm text-slate-600">
+							<span>• Gửi review kèm hình ảnh, video.</span>
+							<span>• Nhận phản hồi từ quản lý địa điểm trong 24h.</span>
+							<span>• Đặt dịch vụ trực tiếp qua đội ngũ Waffle.</span>
+						</div>
+						<div className="flex flex-wrap gap-2 pt-1">
+							<Link
+								href="/contact"
+								className="inline-flex hover:text-white items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+							>
+								Gửi review / đặt lịch
+							</Link>
+							<Link
+								href="/user/login"
+								className="inline-flex items-center gap-2 rounded-lg border border-indigo-200 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-50"
+							>
+								Theo dõi yêu cầu
+							</Link>
+						</div>
+					</div>
+					<div className="flex flex-col gap-3 rounded-lg border border-emerald-100 bg-white/70 p-4 shadow-sm">
+						<div className="inline-flex w-fit items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+								<path d="M10 2a.75.75 0 01.67.415l2.167 4.39 4.846.704a.75.75 0 01.416 1.279l-3.506 3.416.828 4.826a.75.75 0 01-1.088.791L10 15.874l-4.333 2.273a.75.75 0 01-1.088-.79l.828-4.827-3.506-3.416a.75.75 0 01.415-1.279l4.847-.704L9.33 2.415A.75.75 0 0110 2z" />
+							</svg>
+							Đăng ký Influencer
+						</div>
+						<h2 className="text-lg font-semibold text-slate-900">Trở thành người tạo ảnh hưởng</h2>
+						<p className="text-sm text-slate-600">
+							Đăng ký làm influencer để nhận brief hợp tác, ưu đãi trải nghiệm và được ghim nổi bật trên danh sách KOL tại các địa điểm bạn yêu thích.
+						</p>
+						<div className="flex flex-col gap-2 text-sm text-slate-600">
+							<span>• Hồ sơ kiểm duyệt trong 48h.</span>
+							<span>• Nhận thư mời hợp tác và quyền truy cập tài liệu brand.</span>
+							<span>• Theo dõi hiệu quả chiến dịch trên hồ sơ cá nhân.</span>
+						</div>
+						<div className="flex flex-wrap gap-2 pt-1">
+							<Link
+								href="/influencer/register"
+								className="inline-flex items-center gap-2 hover:text-white rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+							>
+								Đăng ký ngay
+							</Link>
+							<Link
+								href="/user/profile"
+								className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
+							>
+								Xem hướng dẫn
+							</Link>
+						</div>
+					</div>
+				</div>
 				<div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
 					<div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
 						<div>

@@ -9,10 +9,10 @@ public class ApplicationUser : IdentityUser<Guid>
     public string? Name { get; set; }
     [StringLength(512)]
     public string? Address { get; set; }
-    public DateTime? DateOfBirth { get; set; }
+    public DateOnly? DateOfBirth { get; set; }
     public bool? Gender { get; set; }
     public decimal Amount { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     [StringLength(2058)]
     public string? Avatar { get; set; }
     public int? DistrictId { get; set; }

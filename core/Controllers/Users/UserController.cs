@@ -13,6 +13,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices.Users;
 using Waffle.Core.Options;
+using Waffle.Core.Services.Users;
 using Waffle.Entities.Users;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Googles;
@@ -240,7 +241,6 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
     [HttpPost("update")]
     public async Task<IActionResult> UpdateAsync([FromBody] ApplicationUser args)
     {
-        if (args.DateOfBirth > DateTime.Now) return BadRequest("Date of birth invalid!");
         var user = await _userManager.FindByIdAsync(args.Id.ToString());
         if (user is null) return BadRequest("User not found!");
         if (await _userManager.IsInRoleAsync(user, RoleName.Admin) && user.Id != User.GetId()) return Unauthorized();
@@ -256,4 +256,7 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
 
     [HttpGet("influencers"), AllowAnonymous]
     public async Task<IActionResult> GetInfluencersAsync([FromQuery] FilterOptions filterOptions) => Ok(await _userService.GetInfluencersAsync(filterOptions));
+
+    [HttpPost("influencer"), AllowAnonymous]
+    public async Task<IActionResult> BecomeInfluencerAsync([FromBody] BecomeInfluencerArgs args) => Ok(await _userService.BecomeInfluencerAsync(args));
 }

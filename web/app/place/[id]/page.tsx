@@ -127,7 +127,6 @@ const Page: React.FC = () => {
 
     const breadcrumbs = place ? [
         { label: 'Địa điểm', href: '/place' },
-        { label: place.provinceName, href: `/location/city/${place.provinceId}` },
         { label: place.districtName, href: `/district/${place.districtId}` },
         { label: place.name, href: '#' },
     ] : [{ label: 'Địa điểm', href: '/place' }];
@@ -163,6 +162,63 @@ const Page: React.FC = () => {
                                         <span className="font-semibold w-24">Cập nhật:</span>
                                         <span>{new Date(place.modifiedDate).toLocaleDateString()}</span>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-4 rounded-xl bg-gradient-to-br from-indigo-50 via-white to-slate-50 p-4 shadow-sm md:grid-cols-2">
+                            <div className="flex flex-col gap-3 rounded-lg border border-indigo-100 bg-white/80 p-4 shadow-sm">
+                                <div className="inline-flex w-fit items-center gap-2 rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+                                    Booking & review
+                                </div>
+                                <h2 className="text-lg font-semibold text-slate-900">Đặt lịch và gửi review</h2>
+                                <p className="text-sm text-slate-600">
+                                    Đặt dịch vụ tại địa điểm này, gửi feedback kèm hình ảnh/video và nhận phản hồi trong 24h.
+                                </p>
+                                <div className="flex flex-col gap-2 text-sm text-slate-600">
+                                    <span>• Theo dõi tình trạng booking của bạn.</span>
+                                    <span>• Nhận hỗ trợ từ đội ngũ Waffle.</span>
+                                </div>
+                                <div className="flex flex-wrap gap-2 pt-1">
+                                    <Link
+                                        href="/contact"
+                                        className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+                                    >
+                                        Gửi review / đặt lịch
+                                    </Link>
+                                    <Link
+                                        href="/user/login"
+                                        className="inline-flex items-center gap-2 rounded-lg border border-indigo-200 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-50"
+                                    >
+                                        Theo dõi yêu cầu
+                                    </Link>
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-3 rounded-lg border border-emerald-100 bg-white/80 p-4 shadow-sm">
+                                <div className="inline-flex w-fit items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                                    Đăng ký Influencer
+                                </div>
+                                <h2 className="text-lg font-semibold text-slate-900">Trở thành KOL cho địa điểm</h2>
+                                <p className="text-sm text-slate-600">
+                                    Nhận brief hợp tác, ưu đãi trải nghiệm và được ghim nổi bật trên danh sách KOL liên quan địa điểm này.
+                                </p>
+                                <div className="flex flex-col gap-2 text-sm text-slate-600">
+                                    <span>• Duyệt hồ sơ trong 48h.</span>
+                                    <span>• Quyền truy cập media kit và KPI rõ ràng.</span>
+                                </div>
+                                <div className="flex flex-wrap gap-2 pt-1">
+                                    <Link
+                                        href="/influencer/register"
+                                        className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                                    >
+                                        Đăng ký ngay
+                                    </Link>
+                                    <Link
+                                        href="/user/profile"
+                                        className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
+                                    >
+                                        Xem hướng dẫn
+                                    </Link>
                                 </div>
                             </div>
                         </div>

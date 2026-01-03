@@ -14,15 +14,5 @@ public class Contact : BaseEntity
     public string? Note { get; set; }
     [StringLength(500)]
     public string? Address { get; set; }
-    public string? Meta { get; set; }
-    public DateTime CreatedDate { get; set; }
-}
-
-public class ContactMeta
-{
-    public ContactMeta()
-    {
-        ErrorMessage = string.Empty;
-    }
-    public string ErrorMessage { get; set; }
+    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 }

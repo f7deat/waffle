@@ -5,10 +5,6 @@
     display: none;
 }
 
-a {
-    color: rgb(35, 45, 185);
-}
-
 .wiki-content ul {
     list-style-type: disc;
     margin-left: 1rem;

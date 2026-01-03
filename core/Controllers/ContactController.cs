@@ -19,7 +19,7 @@ public class ContactController(ApplicationDbContext _context, IUserService _user
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Contacts.FindAsync(id));
 
     [HttpPost("submit"), AllowAnonymous]
-    public async Task<IActionResult> SubmitContactAsync(Contact args)
+    public async Task<IActionResult> SubmitContactAsync([FromBody] Contact args)
     {
         if (string.IsNullOrWhiteSpace(args.Email) || string.IsNullOrWhiteSpace(args.Name)) return BadRequest("Email and Name are required.");
         if (args.Email.Length > 100 || args.Name.Length > 100) return BadRequest("Email and Name must be less than 100 characters.");
