@@ -62,7 +62,19 @@ public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment
     public async Task<TResult> GetByIdAsync(Guid id)
     {
         var place = await _placeRepository.FindAsync(id);
-        if (place is null) return TResult.Failed("Place not found!");
+        if (place is null)
+        {
+            var catalog = await _catalogService.FindAsync(id);
+            if (catalog is null) return TResult.Failed("Place not found!");
+            place = new Place
+            {
+                Id = catalog.Id,
+                Address = string.Empty,
+                Content = string.Empty,
+                DistrictId = null
+            };
+            await _placeRepository.AddAsync(place);
+        }
         var content = new BlockEditor();
         if (!string.IsNullOrEmpty(place.Content))
         {
@@ -85,7 +97,7 @@ public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment
             place.DistrictId,
             place.Address,
             DistrictName = district?.Name,
-            ProvinceId = province?.Id,
+            district?.ProvinceId,
             ProvinceName = province?.Name
         });
     }
