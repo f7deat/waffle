@@ -259,4 +259,7 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
 
     [HttpPost("influencer"), AllowAnonymous]
     public async Task<IActionResult> BecomeInfluencerAsync([FromBody] BecomeInfluencerArgs args) => Ok(await _userService.BecomeInfluencerAsync(args));
+
+    [HttpPost("change-avatar")]
+    public async Task<IActionResult> ChangeAvatarAsync([FromBody] ChangeAvatarArgs args) => Ok(await _userService.ChangeAvatarAsync(args, $"{Request.Scheme}://{Request.Host.Value}"));
 }

@@ -8,7 +8,7 @@ import {
   ProFormText,
   ProTable,
 } from '@ant-design/pro-components';
-import { FormattedMessage, useIntl, history } from '@umijs/max';
+import { FormattedMessage, useIntl, history, Link } from '@umijs/max';
 import { Badge, Button, message, Popconfirm, Space } from 'antd';
 import { useRef, useState } from 'react';
 
@@ -52,7 +52,10 @@ const UserList: React.FC = () => {
     {
       title: 'Tài khoản',
       dataIndex: 'userName',
-      width: 200
+      width: 200,
+      render: (dom, entity) => (
+        <Link to={`/users/profile/${entity.id}`}>{dom}</Link>
+      )
     },
     {
       title: 'Name',
@@ -102,7 +105,7 @@ const UserList: React.FC = () => {
     },
     {
       title: 'Ngày tạo',
-      dataIndex: 'createdDate',
+      dataIndex: 'createdAt',
       search: false,
       valueType: 'fromNow',
       width: 120

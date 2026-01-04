@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
@@ -12,7 +13,7 @@ using Waffle.Models.Components;
 
 namespace Waffle.Core.Services.Locations;
 
-public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment _webHostEnvironment, IProvinceRepository _provinceRepository, IDistrictRepository _districtRepository, ICatalogService _catalogService) : IPlaceService
+public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, IProvinceRepository _provinceRepository, IDistrictRepository _districtRepository, ICatalogService _catalogService) : IPlaceService
 {
     public async Task<TResult> AddImageAsync(PlaceAddImageArgs args, string host)
     {
@@ -157,6 +158,13 @@ public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment
         place.Content = args.Content;
         place.DistrictId = args.DistrictId;
         place.Address = args.Address;
+        var catalog = await _catalogService.FindAsync(place.Id);
+        if (catalog is not null)
+        {
+            catalog.ModifiedDate = DateTime.UtcNow;
+            catalog.ModifiedBy = _hcaService.GetUserId();
+            await _catalogService.UpdateAsync(catalog);
+        }
         await _placeRepository.UpdateAsync(place);
         return TResult.Success;
     }

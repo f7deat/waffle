@@ -62,4 +62,5 @@ public interface ICatalogService
     Task<TResult> DetailAsync(Guid id);
     Task<TResult> TagsAsync(Guid catalogId);
     Task<TResult> SaveTagsAsync(SaveCatalogTagsArgs args);
+    Task<TResult> UpdateAsync(Catalog catalog);
 }

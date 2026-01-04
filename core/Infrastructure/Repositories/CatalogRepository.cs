@@ -116,7 +116,6 @@ public class CatalogRepository(ApplicationDbContext context, IHCAService hcaServ
     public async Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions)
     {
         var query = from catalog in _context.Catalogs
-                    join user in _context.Users on catalog.CreatedBy equals user.Id
                     select new CatalogListItem
                     {
                         Id = catalog.Id,
@@ -124,7 +123,6 @@ public class CatalogRepository(ApplicationDbContext context, IHCAService hcaServ
                         Active = catalog.Active,
                         Description = catalog.Description,
                         NormalizedName = catalog.NormalizedName,
-                        CreatedBy = user.UserName ?? string.Empty,
                         CreatedDate = catalog.CreatedDate,
                         Locale = catalog.Locale,
                         ModifiedDate = catalog.ModifiedDate,

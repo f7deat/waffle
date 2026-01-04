@@ -50,7 +50,8 @@ const CommentPage: React.FC = () => {
             title: 'Date',
             dataIndex: 'createdDate',
             valueType: 'fromNow',
-            width: 130
+            width: 130,
+            search: false
         },
         {
             title: 'Status',

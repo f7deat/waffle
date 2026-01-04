@@ -672,4 +672,10 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
     }
 
     public Task<TResult> SaveTagsAsync(SaveCatalogTagsArgs args) => _catalogRepository.SaveTagsAsync(args);
+
+    public async Task<TResult> UpdateAsync(Catalog catalog)
+    {
+        await _catalogRepository.UpdateAsync(catalog);
+        return TResult.Success;
+    }
 }
