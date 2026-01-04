@@ -33,8 +33,9 @@ declare namespace API {
         blocks: Block[];
     }
     interface Meta {
-        name: string;
+        title: string;
         description: string;
+        thumbnail?: string;
     }
     interface Tag {
         id: string;

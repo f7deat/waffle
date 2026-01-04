@@ -32,7 +32,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 
     return (
         <PageContainer
-            breadcrumbs={[{ label: "Article", href: "/article" }]}
+            breadcrumbs={[{ label: "Bài viết", href: "/article" }]}
         >
             <div className="space-y-6">
                 <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -73,7 +73,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
                     </div>
                 ) : (
                     <>
-                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                             {articles.map((article) => {
                                 const updatedAt = article.modifiedDate
                                     ? new Date(article.modifiedDate).toLocaleDateString("vi-VN")

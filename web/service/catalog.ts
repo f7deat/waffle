@@ -1,7 +1,7 @@
 import request from "./request";
 
 export async function apiCatalogMeta(slug: string) {
-    return request.get<API.Meta>(`catalog/meta/${slug}`);
+    return request.get<API.TResult<API.Meta>>(`catalog/meta/${slug}`);
 }
 
 export async function apiCatalogTags(catalogId: string) {

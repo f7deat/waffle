@@ -58,7 +58,7 @@ public interface ICatalogService
     Task<object> GetTypeAsync(CatalogType type);
     Task<object?> GetOptionsAsync(CatalogSelectOptions filterOptions);
     Task<object?> ListTypeAsync();
-    Task<object?> GetMetaAsync(string slug);
+    Task<TResult> GetMetaAsync(string slug);
     Task<TResult> DetailAsync(Guid id);
     Task<TResult> TagsAsync(Guid catalogId);
     Task<TResult> SaveTagsAsync(SaveCatalogTagsArgs args);

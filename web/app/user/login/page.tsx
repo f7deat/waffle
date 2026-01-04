@@ -18,7 +18,14 @@ const Page: React.FC = () => {
     };
 
     return (
-        <PageContainer>
+        <PageContainer
+            breadcrumbs={[
+                {
+                    label: 'Đăng nhập',
+                    href: '/user/login'
+                }
+            ]}
+        >
             <div className="min-h-[70vh] bg-gradient-to-br from-indigo-50 via-white to-slate-50 py-10">
                 <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 lg:grid lg:grid-cols-[1.1fr,0.9fr]">
                     <section className="space-y-4">
@@ -41,7 +48,7 @@ const Page: React.FC = () => {
                         </div>
                     </section>
 
-                    <section className="rounded-2xl border border-indigo-100 bg-white/90 p-6 shadow-xl backdrop-blur lg:p-8">
+                    <section className="rounded-2xl border border-indigo-100 bg-white/90 p-6 backdrop-blur lg:p-8">
                         <div className="mb-6 space-y-1 text-center">
                             <p className="text-xs uppercase tracking-[0.12em] text-indigo-600">Welcome back</p>
                             <h2 className="text-2xl font-semibold text-slate-900">Đăng nhập tài khoản</h2>
@@ -57,20 +64,20 @@ const Page: React.FC = () => {
                         >
                             <Form.Item
                                 name="username"
-                                label="Username"
-                                rules={[{ required: true, message: "Vui lòng nhập username" }]}
+                                label="Tài khoản"
+                                rules={[{ required: true, message: "Vui lòng nhập tài khoản" }]}
                             >
                                 <Input
                                     size="large"
                                     prefix={<UserOutlined className="text-slate-400" />}
-                                    placeholder="Username"
+                                    placeholder="Tài khoản hoặc email"
                                     className="rounded-lg"
                                 />
                             </Form.Item>
 
                             <Form.Item
                                 name="password"
-                                label="Password"
+                                label="Mật khẩu"
                                 rules={[{ required: true, message: "Vui lòng nhập mật khẩu" }]}
                             >
                                 <Input.Password
@@ -95,7 +102,7 @@ const Page: React.FC = () => {
                             </Form.Item>
 
                             <p className="text-center text-sm text-slate-600">
-                                Chưa có tài khoản? <a href="/influencer/register" className="font-semibold text-indigo-600 hover:text-indigo-700">Đăng ký influencer</a>
+                                Chưa có tài khoản? <a href="/influencer/register" className="font-semibold text-indigo-600 hover:text-indigo-700">Đăng ký</a>
                             </p>
                         </Form>
                     </section>

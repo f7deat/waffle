@@ -116,7 +116,7 @@ public class PlaceService(IPlaceRepository _placeRepository, IWebHostEnvironment
             district = await _districtRepository.FindAsync(place.DistrictId);
             if (district != null)
             {
-                province = await _provinceRepository.FindAsync(district.Id);
+                province = await _provinceRepository.FindAsync(district.ProvinceId);
             }
         }
         return TResult.Ok(new

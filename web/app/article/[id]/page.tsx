@@ -14,10 +14,15 @@ type Params = Promise<{
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
     const { id } = await params;
     const res = await apiCatalogMeta(id);
-    const article = res;
+    const article = res.data;
     return {
-        title: `${article.name} - DefZone.Net`,
+        title: `${article.title} - DefZone.Net`,
         description: article.description,
+        openGraph: {
+            title: article.title,
+            description: article.description,
+            images: article.thumbnail ? [{ url: article.thumbnail }] : [],
+        },
     };
 }
 
@@ -25,7 +30,6 @@ const Page = async ({ params }: { params: Params }) => {
     const { id } = await params;
     const res = await apiArticleDetail(id);
     const article = res.data;
-    console.log("Article detail:", article);
 
     // Fetch latest articles for sidebar
     const latestRes = await apiArticleList({ current: 1, pageSize: 6 });

@@ -5,6 +5,14 @@ import { apiProducts } from "@/service/shop/product";
 import { apiTagRandoms } from "@/service/contents/tag";
 import { apiPlaceList } from "@/service/locations/place";
 import { EyeFilled } from "@ant-design/icons";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+        title: "DefZone.Net - Kênh thông tin giải trí và địa điểm ăn chơi",
+        description: "DefZone.Net - Kênh thông tin giải trí, đánh giá địa điểm ăn chơi, du lịch và mua sắm. Khám phá những trải nghiệm mới và xu hướng hot nhất hiện nay.",
+    };
+}
 
 export default async function Home() {
   const articlesResponse = await apiArticleList({ current: 1, pageSize: 5 });

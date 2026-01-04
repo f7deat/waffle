@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
-using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
-using Waffle.Core.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Core.Options;
 using Waffle.Core.Services.Catalogs.Args;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
@@ -23,15 +19,12 @@ using Waffle.Models.Components;
 using Waffle.Models.Components.Common;
 using Waffle.Models.Filters.Catalogs;
 using Waffle.Models.List;
-using Waffle.Models.Result;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services;
 
-public class CatalogService(ApplicationDbContext _context, IHCAService _hcaService, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, IOptions<SettingOptions> options, ILogService _logService, ILocalizationService _localizationService, IRoomService _roomService, IJobOpportunityService _jobOpportunityService) : ICatalogService
+public class CatalogService(ApplicationDbContext _context, IHCAService _hcaService, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, ILogService _logService, ILocalizationService _localizationService, IRoomService _roomService, IJobOpportunityService _jobOpportunityService) : ICatalogService
 {
-    private readonly SettingOptions _options = options.Value;
-
     public async Task<TResult> ActiveAsync(Guid id)
     {
         var catalog = await _catalogRepository.FindAsync(id);
@@ -47,6 +40,7 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
     {
         await _context.Products.AddAsync(new Product
         {
+            Id = catalogId,
             CatalogId = catalogId
         });
         await _context.SaveChangesAsync();
@@ -632,31 +626,24 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
         return returnValue;
     }
 
-    public async Task<object?> GetMetaAsync(string slug)
+    public async Task<TResult> GetMetaAsync(string slug)
     {
-        var catalog = await _context.Catalogs.Where(x => x.NormalizedName == slug).Select(x => new
+        var catalog = await _catalogRepository.FindByNameAsync(slug);
+        if (catalog is null) return TResult.Failed("Catalog not found!");
+        catalog.ViewCount++;
+        await _catalogRepository.SaveChangesAsync();
+        return TResult.Ok(new
         {
-            x.Name,
-            x.Description,
-            x.Thumbnail
-        }).FirstOrDefaultAsync();
-        if (catalog is null) return default;
-        var theme = _options.Theme;
-        return new
-        {
-            catalog.Name,
+            Title = catalog.Name,
             catalog.Description,
-            catalog.Thumbnail,
-            theme
-        };
+            catalog.Thumbnail
+        });
     }
 
     public async Task<TResult> DetailAsync(Guid id)
     {
         var data = await _catalogRepository.FindAsync(id);
         if (data is null) return TResult.Failed("Data not found!");
-        data.ViewCount++;
-        await _catalogRepository.UpdateAsync(data);
         return TResult.Ok(new
         {
             data.Id,

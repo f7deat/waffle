@@ -1,32 +1,11 @@
 "use client";
 
-import { BlockOutlined, BookOutlined, EnvironmentOutlined, FacebookFilled, InstagramFilled, LinkedinFilled, MailOutlined, PhoneFilled, ShopOutlined, TikTokFilled } from "@ant-design/icons";
+import { BlockOutlined, BookOutlined, EnvironmentOutlined, FacebookFilled, InstagramFilled, LinkedinFilled, MailOutlined, PhoneFilled, ShopOutlined, TikTokFilled, UserOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Header: React.FC = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isDark, setIsDark] = useState(false);
-
-    useEffect(() => {
-        const stored = typeof window !== "undefined" ? localStorage.getItem("theme") : null;
-        const prefersDark = typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const nextDark = stored ? stored === "dark" : prefersDark;
-        setIsDark(nextDark);
-        if (nextDark) document.documentElement.classList.add("dark");
-    }, []);
-
-    const toggleTheme = () => {
-        const next = !isDark;
-        setIsDark(next);
-        if (next) {
-            document.documentElement.classList.add("dark");
-            localStorage.setItem("theme", "dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-            localStorage.setItem("theme", "light");
-        }
-    };
 
     const navItems = [
         { label: "Bài viết", href: "/article", icon: <BlockOutlined /> },
@@ -62,77 +41,69 @@ const Header: React.FC = () => {
 
             <div className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
                 <div className="mx-auto flex container items-center gap-4 px-4 py-3">
-                <button
-                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 md:hidden dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
-                    onClick={() => setIsMobileMenuOpen(true)}
-                    aria-label="Open menu"
-                >
-                    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                        <path d="M4 7h16v2H4V7Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z" />
-                    </svg>
-                </button>
-
-                <Link href="/" className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-semibold">DZ</div>
-                    <div>
-                        <div className="text-lg font-semibold text-slate-900 dark:text-slate-100">DefZone.Net</div>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Kien thuc cong nghe & giai tri</p>
-                    </div>
-                </Link>
-
-                <form action="/search" className="hidden items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 lg:flex dark:border-slate-800 dark:bg-slate-900">
-                    <input
-                        type="search"
-                        name="q"
-                        placeholder="Tim kiem..."
-                        className="w-48 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-100"
-                    />
-                    <button type="submit" aria-label="Search" className="text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-white">
+                    <button
+                        className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 md:hidden dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                        onClick={() => setIsMobileMenuOpen(true)}
+                        aria-label="Open menu"
+                    >
                         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                            <path d="M10 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12Zm0-2a8 8 0 1 0 4.9 14.2l4.4 4.4 1.4-1.4-4.4-4.4A8 8 0 0 0 10 2Z" />
+                            <path d="M4 7h16v2H4V7Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z" />
                         </svg>
                     </button>
-                </form>
 
-                <nav className="hidden flex-1 items-center justify-center gap-2 md:flex">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className="rounded-md px-2 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                    <Link href="/" className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-semibold">DZ</div>
+                        <div>
+                            <div className="text-lg font-semibold text-slate-900 dark:text-slate-100">DefZone.Net</div>
+                            <p className="text-xs text-slate-500 dark:text-slate-400">Kien thuc cong nghe & giai tri</p>
+                        </div>
+                    </Link>
+
+                    <form action="/search" className="hidden items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 lg:flex dark:border-slate-800 dark:bg-slate-900">
+                        <input
+                            type="search"
+                            name="q"
+                            placeholder="Tìm kiếm..."
+                            className="w-48 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-100"
+                        />
+                        <button type="submit" aria-label="Search" className="text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-white">
+                            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+                                <path d="M10 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12Zm0-2a8 8 0 1 0 4.9 14.2l4.4 4.4 1.4-1.4-4.4-4.4A8 8 0 0 0 10 2Z" />
+                            </svg>
+                        </button>
+                    </form>
+
+                    <nav className="hidden flex-1 items-center justify-center gap-2 md:flex">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className="rounded-md px-2 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                            >
+                                {item.icon} {item.label}
+                            </Link>
+                        ))}
+                    </nav>
+
+                    <div className="flex items-center justify-end gap-3">
+                        <button
+                            className="hidden h-10 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 md:flex dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                            aria-label="Cart"
                         >
-                            {item.icon} {item.label}
+                            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
+                                <path d="M7 20a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM5.2 4l.6 3H21l-1.8 8H7.4l-.3-1.5H4.2L5 17a2 2 0 0 0 2 1.6h11.5a2 2 0 0 0 2-1.6l2-9a1 1 0 0 0-1-1.2H7.3L6.7 4H2V2h3.2a1 1 0 0 1 1 .8Z" />
+                            </svg>
+                            Giỏ hàng
+                        </button>
+
+                        <Link
+                            href="/user/profile"
+                            className="hidden h-10 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 md:flex dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                            aria-label="User profile"
+                        >
+                            <UserOutlined />
                         </Link>
-                    ))}
-                </nav>
-
-                <div className="flex items-center justify-end gap-3">
-                    <button
-                        className="hidden h-10 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 md:flex dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
-                        aria-label="Cart"
-                    >
-                        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-                            <path d="M7 20a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM5.2 4l.6 3H21l-1.8 8H7.4l-.3-1.5H4.2L5 17a2 2 0 0 0 2 1.6h11.5a2 2 0 0 0 2-1.6l2-9a1 1 0 0 0-1-1.2H7.3L6.7 4H2V2h3.2a1 1 0 0 1 1 .8Z" />
-                        </svg>
-                        Gio hang
-                    </button>
-
-                    <button
-                        onClick={toggleTheme}
-                        className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
-                        aria-label="Toggle theme"
-                    >
-                        {isDark ? (
-                            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                                <path d="M21 12a9 9 0 0 1-9 9c-1.2 0-2.4-.24-3.5-.71A9 9 0 0 0 17.29 6.5 9 9 0 0 1 21 12Z" />
-                            </svg>
-                        ) : (
-                            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                                <path d="M12 4a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1Zm0 12a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1Zm8-4a1 1 0 0 1-1 1h-2a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1ZM7 13H5a1 1 0 0 1 0-2h2a1 1 0 1 1 0 2Zm9.78-5.78a1 1 0 0 1 1.42 0l1.42 1.42a1 1 0 1 1-1.42 1.42L16.78 8.64a1 1 0 0 1 0-1.42Zm-9.56 9.56a1 1 0 0 1 1.42 0l1.42 1.42a1 1 0 1 1-1.42 1.42l-1.42-1.42a1 1 0 0 1 0-1.42Zm12.4 1.42a1 1 0 0 1-1.42 0l-1.42-1.42a1 1 0 0 1 1.42-1.42l1.42 1.42a1 1 0 0 1 0 1.42ZM7.78 7.22a1 1 0 0 1 0 1.42L6.36 10.06a1 1 0 0 1-1.42-1.42L6.36 7.22a1 1 0 0 1 1.42 0Z" />
-                            </svg>
-                        )}
-                    </button>
-                </div>
+                    </div>
                 </div>
             </div>
 
@@ -202,12 +173,12 @@ const Header: React.FC = () => {
                             </div>
 
                             <div className="flex items-center gap-3 pt-4">
-                                <button
-                                    onClick={toggleTheme}
+                                <Link
+                                    href="/user/profile"
                                     className="flex h-10 flex-1 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
                                 >
-                                    {isDark ? "Sang" : "Toi"}
-                                </button>
+                                    <UserOutlined />
+                                </Link>
                                 <button
                                     aria-label="Cart"
                                     className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"

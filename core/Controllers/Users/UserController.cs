@@ -134,7 +134,7 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model) => Ok(await _userService.ChangePasswordAsync(model));
 
-    [HttpPost("delete/{id}")]
+    [HttpDelete("{id}"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> DeleteAsync([FromRoute] string id)
     {
         var user = await _userManager.FindByIdAsync(id);

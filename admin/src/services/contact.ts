@@ -5,7 +5,7 @@ export async function listContact(params: any) {
 }
 
 export async function apiDeleteContact(id: string) {
-  return request(`contact/delete/${id}`, {
-    method: 'POST',
+  return request(`contact/${id}`, {
+    method: 'DELETE',
   });
 }

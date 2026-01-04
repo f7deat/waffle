@@ -31,9 +31,9 @@ export async function changePassword(data: any) {
   });
 }
 
-export async function deleteUser(id?: string) {
-  return request(`user/delete/${id}`, {
-    method: 'POST'
+export async function apiUserDelete(id?: string) {
+  return request(`user/${id}`, {
+    method: 'DELETE'
   })
 }
 

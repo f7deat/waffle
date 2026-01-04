@@ -4,6 +4,7 @@ import { apiPlaceList } from "@/service/locations/place";
 import KolList from "@/components/place/kol-list";
 import { apiKolList } from "@/service/kol/kol";
 import Link from "next/link";
+import { Metadata } from "next";
 
 type SearchParams = Promise<{
 	page?: string;
@@ -12,6 +13,17 @@ type SearchParams = Promise<{
 }>;
 
 const DEFAULT_PAGE_SIZE = 12;
+
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+		title: 'Địa điểm - DefZone.Net',
+		description: 'Khám phá các địa điểm thú vị cùng KOLs và người ảnh hưởng.',
+		openGraph: {
+			title: 'Địa điểm',
+			description: 'Khám phá các địa điểm thú vị cùng KOLs và người ảnh hưởng.',
+		},
+	};
+}
 
 const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 	const current = Math.max(1, Number((await searchParams).page) || 1);
