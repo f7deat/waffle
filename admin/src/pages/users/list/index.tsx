@@ -1,4 +1,4 @@
-import { createUser, deleteUser, listUser } from '@/services/user';
+import { createUser, apiUserDelete, listUser } from '@/services/user';
 import { DeleteOutlined, EyeOutlined, ManOutlined, PlusOutlined, WomanOutlined } from '@ant-design/icons';
 import {
   ActionType,
@@ -37,11 +37,9 @@ const UserList: React.FC = () => {
   };
 
   const onConfirm = async (id?: string) => {
-    const response = await deleteUser(id);
-    if (response.succeeded) {
-      message.success('Deleted');
-      actionRef.current?.reload();
-    }
+    await apiUserDelete(id);
+    message.success('Deleted');
+    actionRef.current?.reload();
   }
 
   const columns: ProColumns<API.User>[] = [
