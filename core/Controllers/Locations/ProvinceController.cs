@@ -9,7 +9,7 @@ namespace Waffle.Controllers.Locations;
 
 public class ProvinceController(IProvinceService _provinceService) : BaseController
 {
-    [HttpGet("options")]
+    [HttpGet("options"), AllowAnonymous]
     public async Task<IActionResult> GetOptionsAsync([FromQuery] ProvinceSelectOptions selecOptions) => Ok(await _provinceService.GetOptionsAsync(selecOptions));
 
     [HttpPost]

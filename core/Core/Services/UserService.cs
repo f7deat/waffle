@@ -119,21 +119,26 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
 
     public async Task<TResult> BecomeInfluencerAsync(BecomeInfluencerArgs args)
     {
-        var user = new ApplicationUser
+        try
         {
-            Name = args.FullName,
-            Email = args.Email,
-            PhoneNumber = args.PhoneNumber,
-            UserName = args.PhoneNumber,
-            Gender = args.Gender,
-            DateOfBirth = args.DateOfBirth,
-        };
-        var result = await _userManager.CreateAsync(user, args.Password);
-        if (result.Succeeded)
-        {
+            var user = new ApplicationUser
+            {
+                Name = args.FullName,
+                Email = args.Email,
+                PhoneNumber = args.PhoneNumber,
+                UserName = args.PhoneNumber,
+                Gender = args.Gender,
+                DateOfBirth = args.DateOfBirth,
+            };
+            var result = await _userManager.CreateAsync(user, args.Password);
+            if (!result.Succeeded) return TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Failed to create influencer account.");
             await _userManager.AddToRoleAsync(user, RoleName.Influencer);
+            return TResult.Success;
         }
-        return result.Succeeded ? TResult.Success : TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Failed to create influencer account.");
+        catch (Exception ex)
+        {
+            return TResult.Failed(ex.ToString());
+        }
     }
 
     public async Task<TResult> ChangeAvatarAsync(ChangeAvatarArgs args, string host)

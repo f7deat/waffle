@@ -9,7 +9,7 @@ namespace Waffle.Controllers.Locations;
 
 public class DistrictController(IDistrictService _districtService) : BaseController
 {
-    [HttpGet("options")]
+    [HttpGet("options"), AllowAnonymous]
     public async Task<IActionResult> GetOptionsAsync([FromQuery] DistrictSelectOptions filterOptions) => Ok(await _districtService.GetOptionsAsync(filterOptions));
 
     [HttpPost]

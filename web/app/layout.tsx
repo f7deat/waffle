@@ -38,11 +38,18 @@ export default async function RootLayout({
           theme={{
             components: {
               Input: {
-                borderRadius: 0
+                borderRadius: 0,
+                colorBorder: '#e2e8f0'
               },
               Button: {
                 borderRadius: 0
+              },
+              Select: {
+                colorBorder: '#e2e8f0'
               }
+            },
+            token: {
+              fontFamily: "'Quicksand', sans-serif"
             }
           }}
         >

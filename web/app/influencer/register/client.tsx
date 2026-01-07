@@ -1,42 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PageContainer from "@/components/layout/page-container";
 import { apiInfluencerRegister } from "@/service/user/influencer";
+import { Form, Input, Select } from "antd";
+import { apiProvinceOptions } from "@/service/locations/province";
 
 type SubmitState = "idle" | "success" | "error";
-
-type Grecaptcha = {
-	ready: (cb: () => void) => void;
-	execute: (key: string, options: { action: string }) => Promise<string>;
-};
-
-declare global {
-	interface Window {
-		grecaptcha?: Grecaptcha;
-	}
-}
 
 type FormData = {
 	fullName: string;
 	email: string;
-	phone: string;
-	city: string;
+	phoneNumber: string;
+	gender: string;
 	platforms: string;
 	followers: string;
-	niches: string;
+	password: string;
+	confirmPassword: string;
 	note: string;
 };
 
 const defaultFormData: FormData = {
 	fullName: "",
 	email: "",
-	phone: "",
-	city: "",
+	phoneNumber: "",
+	gender: "",
 	platforms: "",
 	followers: "",
-	niches: "",
+	password: "",
+	confirmPassword: "",
 	note: "",
 };
 
@@ -45,24 +38,27 @@ const InfluencerRegisterForm = () => {
 	const [submitState, setSubmitState] = useState<SubmitState>("idle");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+	const [provinceOptions, setProvinceOptions] = useState<API.IOption[]>([]);
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({ ...prev, [name]: value }));
-	};
+	useEffect(() => {
+		apiProvinceOptions().then((data: API.IOption[]) => {
+			setProvinceOptions(data);
+		});
+	}, []);
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
+	const handleSubmit = async (values: FormData) => {
 		setIsSubmitting(true);
 		setSubmitState("idle");
 		setErrorMessage(null);
+		if (formData.password !== formData.confirmPassword) {
+			setSubmitState("error");
+			setErrorMessage("Mật khẩu và xác nhận mật khẩu không khớp.");
+			setIsSubmitting(false);
+			return;
+		}
 
 		try {
-			await apiInfluencerRegister({
-                fullName: formData.fullName,
-                email: formData.email,
-                phoneNumber: formData.phone,
-            });
+			await apiInfluencerRegister(values);
 			setSubmitState("success");
 			setFormData(defaultFormData);
 		} catch (error) {
@@ -85,7 +81,7 @@ const InfluencerRegisterForm = () => {
 					<div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
 						<div className="space-y-3">
 							<p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/70">Influencer Program</p>
-							<h1 className="text-3xl font-bold leading-tight md:text-4xl">Đăng ký trở thành influencer của Waffle</h1>
+							<h1 className="text-3xl font-bold leading-tight md:text-4xl">Đăng ký trở thành influencer của DefZone.Net</h1>
 							<p className="max-w-2xl text-sm text-white/80 md:text-base">
 								Nhận brief hợp tác, ưu đãi trải nghiệm và được ưu tiên ghim trên danh sách KOL tại các địa điểm bạn yêu thích. Điền hồ sơ và chúng tôi sẽ phản hồi trong 48 giờ.
 							</p>
@@ -143,112 +139,62 @@ const InfluencerRegisterForm = () => {
 							<p className="text-sm text-slate-600">Điền thông tin chi tiết để chúng tôi kết nối cơ hội phù hợp nhất.</p>
 						</div>
 
-						<form onSubmit={handleSubmit} className="space-y-4">
+						<Form onFinish={handleSubmit} layout="vertical">
 							<div className="grid gap-4 md:grid-cols-2">
-								<label className="space-y-2 text-sm">
-									<span className="font-medium text-slate-800">Họ và tên *</span>
-									<input
-										type="text"
-										name="fullName"
-										value={formData.fullName}
-										onChange={handleChange}
-										required
-										className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-										placeholder="Nguyen Van A"
-									/>
-								</label>
-								<label className="space-y-2 text-sm">
-									<span className="font-medium text-slate-800">Email *</span>
-									<input
-										type="email"
-										name="email"
-										value={formData.email}
-										onChange={handleChange}
-										required
-										className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-										placeholder="influencer@email.com"
-									/>
-								</label>
+								<Form.Item label="Họ và tên" name={"fullName"} required>
+									<Input size="large" />
+								</Form.Item>
+								<Form.Item label="Email" name={"email"} required>
+									<Input size="large" />
+								</Form.Item>
 							</div>
 
 							<div className="grid gap-4 md:grid-cols-2">
-								<label className="space-y-2 text-sm">
-									<span className="font-medium text-slate-800">Số điện thoại *</span>
-									<input
-										type="tel"
-										name="phone"
-										value={formData.phone}
-										onChange={handleChange}
-										required
-										className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-										placeholder="0987 123 456"
-									/>
-								</label>
-								<label className="space-y-2 text-sm">
-									<span className="font-medium text-slate-800">Thành phố/ Tỉnh *</span>
-									<input
-										type="text"
-										name="city"
-										value={formData.city}
-										onChange={handleChange}
-										required
-										className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-										placeholder="Ha Noi, Da Nang, ..."
-									/>
-								</label>
+								<Form.Item label="Số điện thoại" name={"phone"}>
+									<Input size="large" />
+								</Form.Item>
+								<Form.Item label="Giới tính" name={"gender"}>
+									<Select size="large" options={[
+										{
+											label: 'Nam',
+											value: false
+										},
+										{
+											label: 'Nữ',
+											value: true
+										},
+										{
+											label: 'Khác',
+											value: null
+										}
+									]} />
+								</Form.Item>
 							</div>
 
 							<div className="grid gap-4 md:grid-cols-2">
-								<label className="space-y-2 text-sm">
-									<span className="font-medium text-slate-800">Nền tảng chính *</span>
-									<input
-										type="text"
-										name="platforms"
-										value={formData.platforms}
-										onChange={handleChange}
-										required
-										className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-										placeholder="Instagram, TikTok, YouTube..."
-									/>
-								</label>
-								<label className="space-y-2 text-sm">
-									<span className="font-medium text-slate-800">Tổng follower *</span>
-									<input
-										type="text"
-										name="followers"
-										value={formData.followers}
-										onChange={handleChange}
-										required
-										className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-										placeholder="Ví dụ: 250k across platforms"
-									/>
-								</label>
+								<Form.Item label="Tỉnh/Thành phố" name={"provinceId"}>
+									<Select size="large" options={provinceOptions} />
+								</Form.Item>
+								<Form.Item label="Xã/Phường" name={"districtId"}>
+									<Select size="large" options={[]} />
+								</Form.Item>
 							</div>
 
-							<label className="space-y-2 text-sm">
-								<span className="font-medium text-slate-800">Ngách nội dung ưu tiên *</span>
-								<input
-									type="text"
-									name="niches"
-									value={formData.niches}
-									onChange={handleChange}
-									required
-									className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-									placeholder="Ẩm thực, du lịch, lifestyle..."
-								/>
-							</label>
+							<div className="grid md:grid-cols-2 gap-4">
+								<Form.Item label="Mật khẩu" name={"password"} required>
+									<Input.Password size="large" />
+								</Form.Item>
+								<Form.Item label="Xác nhận mật khẩu" name={"confirmPassword"} required>
+									<Input.Password size="large" />
+								</Form.Item>
+							</div>
 
-							<label className="space-y-2 text-sm">
-								<span className="font-medium text-slate-800">Ghi chú thêm</span>
-								<textarea
-									name="note"
-									value={formData.note}
-									onChange={handleChange}
+							<Form.Item label="Ghi chú thêm" name={"note"}>
+								<Input.TextArea
 									rows={5}
-									className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
 									placeholder="Link portfolio, media kit hoặc yêu cầu đặc biệt."
 								/>
-							</label>
+							</Form.Item>
 
 							{submitState === "success" && (
 								<div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
@@ -256,11 +202,11 @@ const InfluencerRegisterForm = () => {
 								</div>
 							)}
 							{submitState === "error" && (
-								<div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+								<div className="rounded-lg mb-2 border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
 									{errorMessage || "Không gửi được đăng ký. Vui lòng thử lại hoặc liên hệ trực tiếp."}
 								</div>
 							)}
-							<div className="text-xs text-slate-500">
+							<div className="text-xs text-slate-500 mb-2">
 								Bằng việc gửi đơn đăng ký, bạn đồng ý với <Link href="/terms" className="underline">Điều khoản dịch vụ</Link> và <Link href="/privacy" className="underline">Chính sách bảo mật</Link> của chúng tôi.
 							</div>
 
@@ -271,7 +217,7 @@ const InfluencerRegisterForm = () => {
 							>
 								{isSubmitting ? "Đang gửi..." : "Gửi đăng ký"}
 							</button>
-						</form>
+						</Form>
 						<div className="mt-4 text-xs text-slate-400">
 							Chú ý: Chúng tôi sẽ không chia sẻ thông tin của bạn với bên thứ ba mà không có sự đồng ý trước.
 						</div>

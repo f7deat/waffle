@@ -42,4 +42,8 @@ declare namespace API {
         name: string;
         normalizedName: string;
     }
+    interface IOption {
+        label: string;
+        value: string;
+    }
 }
