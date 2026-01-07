@@ -6,6 +6,7 @@ import PageContainer from "@/components/layout/page-container";
 import { apiInfluencerRegister } from "@/service/user/influencer";
 import { Form, Input, Select } from "antd";
 import { apiProvinceOptions } from "@/service/locations/province";
+import { apiDistrictOptions } from "@/service/locations/district";
 
 type SubmitState = "idle" | "success" | "error";
 
@@ -39,12 +40,24 @@ const InfluencerRegisterForm = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [provinceOptions, setProvinceOptions] = useState<API.IOption[]>([]);
+	const [districtOptions, setDistrictOptions] = useState<API.IOption[]>([]);
+	const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
 
 	useEffect(() => {
 		apiProvinceOptions().then((data: API.IOption[]) => {
 			setProvinceOptions(data);
 		});
 	}, []);
+
+	useEffect(() => {
+		if (selectedProvince !== null) {
+			apiDistrictOptions(selectedProvince).then((data: API.IOption[]) => {
+				setDistrictOptions(data);
+			});
+		} else {
+			setDistrictOptions([]);
+		}
+	}, [selectedProvince]);
 
 	const handleSubmit = async (values: FormData) => {
 		setIsSubmitting(true);
@@ -173,10 +186,10 @@ const InfluencerRegisterForm = () => {
 
 							<div className="grid gap-4 md:grid-cols-2">
 								<Form.Item label="Tỉnh/Thành phố" name={"provinceId"}>
-									<Select size="large" options={provinceOptions} />
+									<Select size="large" options={provinceOptions} onChange={setSelectedProvince} />
 								</Form.Item>
 								<Form.Item label="Xã/Phường" name={"districtId"}>
-									<Select size="large" options={[]} />
+									<Select size="large" options={districtOptions} />
 								</Form.Item>
 							</div>
 

@@ -12,7 +12,7 @@ declare namespace API {
         current: number;
         pageSize: number;
     }
-    type BlockType = 'paragraph' | 'header' | 'image' | 'list' | 'quote' | 'code';
+    type BlockType = 'paragraph' | 'header' | 'image' | 'list' | 'quote' | 'code' | 'simpleImage' | 'image';
     interface BlockData {
         text?: string;
         level?: number;

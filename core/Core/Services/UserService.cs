@@ -100,7 +100,7 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
         var query = from u in _context.Users
                     join ur in _context.UserRoles on u.Id equals ur.UserId
                     join r in _context.Roles on ur.RoleId equals r.Id
-                    where r.Name == "Influencer"
+                    where r.Name == RoleName.Influencer
                     select new
                     {
                         u.Id,
@@ -129,6 +129,7 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
                 UserName = args.PhoneNumber,
                 Gender = args.Gender,
                 DateOfBirth = args.DateOfBirth,
+                DistrictId = args.districtId
             };
             var result = await _userManager.CreateAsync(user, args.Password);
             if (!result.Succeeded) return TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Failed to create influencer account.");

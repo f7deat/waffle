@@ -38,7 +38,6 @@ export default async function RootLayout({
           theme={{
             components: {
               Input: {
-                borderRadius: 0,
                 colorBorder: '#e2e8f0'
               },
               Button: {

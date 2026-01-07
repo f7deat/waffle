@@ -1,6 +1,4 @@
-﻿using SendGrid.Helpers.Mail;
-using SendGrid;
-using Waffle.Core.Interfaces.IService;
+﻿using Waffle.Core.Interfaces.IService;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Waffle.Models.Settings;
 using System.Net.Mail;
@@ -18,7 +16,6 @@ public class EmailSender(ILogger<EmailSender> _logger, ISettingService _appServi
         if (setting is null) return;
         if (setting.Protocol == EmailProtocol.SendGrid)
         {
-            await SendGridAsync(subject, message, toEmail);
             return;
         }
         try
@@ -46,32 +43,6 @@ public class EmailSender(ILogger<EmailSender> _logger, ISettingService _appServi
         catch (Exception ex)
         {
             _logger.LogError($"Failed to send email. Error: {ex.Message}");
-        }
-    }
-
-    private async Task SendGridAsync(string subject, string message, string toEmail)
-    {
-        var app = await _appService.GetAsync<ExternalAPI.SendGrids.SendGrid>(nameof(SendGrid));
-        if (string.IsNullOrEmpty(app?.ApiKey))
-        {
-            _logger.LogError("Null SendGridKey");
-            return;
-        }
-        var client = new SendGridClient(app.ApiKey);
-        var from_email = new EmailAddress(app.From.Email, app.From.Name);
-        var to_email = new EmailAddress(toEmail);
-        var msg = MailHelper.CreateSingleEmail(from_email, to_email, subject, string.Empty, message);
-        // Disable click tracking.
-        // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
-        msg.SetClickTracking(false, false);
-        var response = await client.SendEmailAsync(msg);
-        if (response.IsSuccessStatusCode)
-        {
-            _logger.LogInformation("Email to {toEmail} queued successfully!", toEmail);
-        }
-        else
-        {
-            _logger.LogError("Failed to send email: {toEmail}", toEmail);
         }
     }
 }

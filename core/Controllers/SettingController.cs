@@ -44,15 +44,6 @@ public class SettingController(ApplicationDbContext _context, ISettingService _s
         });
     }
 
-    [HttpPost("sendgrid/save")]
-    public async Task<IActionResult> SaveSendGridAsync([FromBody] WFSendGrid args)
-    {
-        var app = await _settingService.EnsureSettingAsync(nameof(SendGrid));
-        app.Value = JsonSerializer.Serialize(args);
-        await _context.SaveChangesAsync();
-        return Ok(IdentityResult.Success);
-    }
-
     [HttpGet("layout/{id}")]
     public async Task<IActionResult> GetLayoutAsync([FromRoute] Guid id)
     {

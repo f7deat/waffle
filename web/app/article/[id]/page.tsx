@@ -6,6 +6,8 @@ import Link from "next/link";
 import { apiCatalogMeta } from "@/service/catalog";
 import { EyeFilled } from "@ant-design/icons";
 import Block from "@/components/block";
+import ArticleActions from "@/components/article/actions";
+import ArticleComments from "@/components/article/comments";
 
 type Params = Promise<{
     id: string;
@@ -56,23 +58,40 @@ const Page = async ({ params }: { params: Params }) => {
         <PageContainer breadcrumbs={breadcrumbs}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                        <h1 className="text-3xl font-bold mb-3">{article.name}</h1>
-                        <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                            <span>
-                                <EyeFilled /> {article.viewCount?.toLocaleString()} lượt xem
+                    <div className="bg-white/70 backdrop-blur p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{article.name}</h1>
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
+                                <EyeFilled className="text-gray-500" /> {article.viewCount?.toLocaleString() ?? 0} lượt xem
                             </span>
-                            <span>•</span>
-                            <span>Cập nhật {new Date(article.modifiedDate).toLocaleDateString("vi-VN")}</span>
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
+                                Cập nhật {article.modifiedDate ? new Date(article.modifiedDate).toLocaleDateString("vi-VN") : "Chưa cập nhật"}
+                            </span>
+                        </div>
+                        <div className="mt-4">
+                            <ArticleActions article={article} />
                         </div>
                     </div>
 
-                    <div className="prose max-w-none">
+                    {article.thumbnail && (
+                        <div className="relative rounded-xl overflow-hidden bg-gray-100">
+                            <div className="pt-[56.25%]"></div>
+                            <img
+                                src={article.thumbnail}
+                                alt={article.name}
+                                className="absolute inset-0 w-full h-full object-cover"
+                            />
+                        </div>
+                    )}
+
+                    <div className="prose prose-lg max-w-none">
                         {article.content?.blocks?.map((block: API.Block, index: number) => <Block key={index} {...block} />)}
                     </div>
+
+                    <ArticleComments articleId={article.id} articleSlug={article.normalizedName} />
                 </div>
 
-                <aside className="space-y-8">
+                <aside className="space-y-8 lg:sticky lg:top-24">
                     <div>
                         <h2 className="text-xl font-bold mb-4">Bài viết mới</h2>
                         {latestArticles.length === 0 ? (
@@ -85,8 +104,8 @@ const Page = async ({ params }: { params: Params }) => {
                                         : "Chưa cập nhật";
                                     return (
                                         <Link key={item.id} href={`/article/${item.normalizedName}`}>
-                                            <div className="group cursor-pointer flex gap-3 mb-2">
-                                                <div className="relative flex-shrink-0 w-20 h-20 overflow-hidden rounded-md bg-gray-200">
+                                            <div className="group cursor-pointer flex gap-3 p-2 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition">
+                                                <div className="relative flex-shrink-0 w-24 h-24 overflow-hidden rounded-md bg-gray-200">
                                                     {item.thumbnail ? (
                                                         <img
                                                             src={item.thumbnail}
@@ -102,7 +121,7 @@ const Page = async ({ params }: { params: Params }) => {
                                                         {item.name}
                                                     </h3>
                                                     <p className="text-xs text-gray-500">Cập nhật {updatedAt}</p>
-                                                    <p className="text-xs text-gray-500 mt-1"><EyeFilled /> {item.viewCount?.toLocaleString()}</p>
+                                                    <p className="text-xs text-gray-500 mt-1"><EyeFilled /> {item.viewCount?.toLocaleString() ?? 0}</p>
                                                 </div>
                                             </div>
                                         </Link>

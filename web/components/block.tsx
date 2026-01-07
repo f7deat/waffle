@@ -32,6 +32,22 @@ const Block: React.FC<API.Block> = (block) => {
     if (block.type === 'code') {
         return <pre className="bg-gray-100 p-4 rounded overflow-x-auto mb-4"><code>{block.data.code}</code></pre>;
     }
+    if (block.type === 'simpleImage') {
+        return (
+            <div className="flex justify-center">
+                <img src={block.data.url} alt={block.data.caption || ''} className="max-w-full h-auto my-4" />
+            </div>
+        );
+    }
+    if (block.type === 'image') {
+        return (
+            <figure className={`mb-6 ${block.data.align === 'center' ? 'text-center' : block.data.align === 'right' ? 'text-right' : ''}`}>
+                <img src={block.data.url} alt={block.data.caption || ''} className="max-w-full h-auto inline-block" />
+                {block.data.caption && <figcaption className="text-sm text-gray-600 mt-2">{block.data.caption}</figcaption>}
+            </figure>
+        );
+    }
+
     return <React.Fragment />;
 }
 
