@@ -33,12 +33,16 @@ public class TagService(ITagRepository _tagRepository) : ITagService
         return TResult.Success;
     }
 
+    public Task<ListResult> GetArticlesByTagAsync(TagArticleFilterOptions filterOptions) => _tagRepository.GetArticlesByTagAsync(filterOptions);
+
     public async Task<TResult> GetAsync(Guid id)
     {
         var tag = await _tagRepository.FindAsync(id);
         if (tag is null) return TResult.Failed("Tag not found.");
         return TResult.Ok(tag);
     }
+
+    public Task<ListResult> GetPlacesByTagAsync(TagPlaceFilterOptions filterOptions) => _tagRepository.GetPlacesByTagAsync(filterOptions);
 
     public async Task<TResult> GetRandomsAsync()
     {
@@ -58,7 +62,7 @@ public class TagService(ITagRepository _tagRepository) : ITagService
     public async Task<ListResult> ListAsync(TagFilterOptions filterOptions)
     {
         var query = _tagRepository.Queryable();
-        
+
         if (!string.IsNullOrWhiteSpace(filterOptions.Name))
         {
             query = query.Where(x => x.Name.Contains(filterOptions.Name));
@@ -76,7 +80,7 @@ public class TagService(ITagRepository _tagRepository) : ITagService
         {
             tag.Name = args.Name;
             tag.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
-            
+
             if (await _tagRepository.Queryable().AnyAsync(x => x.NormalizedName == tag.NormalizedName && x.Id != args.Id))
             {
                 return TResult.Failed("Tag with the same name already exists.");

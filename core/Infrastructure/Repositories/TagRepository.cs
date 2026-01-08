@@ -2,6 +2,7 @@
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.IRepositories;
+using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
 using Waffle.Entities.Tags;
 using Waffle.Models;
@@ -11,6 +12,49 @@ namespace Waffle.Infrastructure.Repositories;
 
 public class TagRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Tag>(context, hcaService), ITagRepository
 {
+    public async Task<ListResult> GetArticlesByTagAsync(TagArticleFilterOptions filterOptions)
+    {
+        var query = from tc in _context.TagCatalogs
+                    join a in _context.Catalogs on tc.CatalogId equals a.Id
+                    where tc.TagId == filterOptions.TagId
+                    orderby a.ModifiedDate descending
+                    select new
+                    {
+                        a.Id,
+                        a.Name,
+                        a.Description,
+                        a.ViewCount,
+                        a.NormalizedName,
+                        a.CreatedDate,
+                        a.ModifiedDate,
+                        a.Thumbnail
+                    };
+        return await ListResult.Success(query, filterOptions);
+    }
+
+    public async Task<ListResult> GetPlacesByTagAsync(TagPlaceFilterOptions filterOptions)
+    {
+        var query = from tc in _context.TagCatalogs
+                    join c in _context.Catalogs on tc.CatalogId equals c.Id
+                    join p in _context.Places on c.Id equals p.Id
+                    where tc.TagId == filterOptions.TagId
+                    orderby c.ModifiedDate descending
+                    select new
+                    {
+                        p.Id,
+                        c.Name,
+                        c.Description,
+                        c.ViewCount,
+                        c.NormalizedName,
+                        c.CreatedDate,
+                        c.ModifiedDate,
+                        c.Thumbnail,
+                        p.Address,
+                        p.DistrictId
+                    };
+        return await ListResult.Success(query, filterOptions);
+    }
+
     public async Task<IEnumerable<Option>> GetTagOptionsAsync(SelectOptions selectOptions)
     {
         return await _context.Tags

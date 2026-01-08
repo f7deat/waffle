@@ -30,4 +30,10 @@ public class TagController(ITagService _tagService) : BaseController
 
     [HttpGet("options")]
     public async Task<IActionResult> GetTagOptionsAsync([FromQuery] SelectOptions selectOptions) => Ok(await _tagService.GetTagOptionsAsync(selectOptions));
+
+    [HttpGet("articles"), AllowAnonymous]
+    public async Task<IActionResult> GetArticlesByTagAsync([FromQuery] TagArticleFilterOptions filterOptions) => Ok(await _tagService.GetArticlesByTagAsync(filterOptions));
+
+    [HttpGet("places"), AllowAnonymous]
+    public async Task<IActionResult> GetPlacesByTagAsync([FromQuery] TagPlaceFilterOptions filterOptions) => Ok(await _tagService.GetPlacesByTagAsync(filterOptions));
 }

@@ -10,7 +10,9 @@ public interface ITagService
 {
     Task<TResult> CreateAsync(TagCreateArgs args);
     Task<TResult> DeleteAsync(Guid id);
+    Task<ListResult> GetArticlesByTagAsync(TagArticleFilterOptions filterOptions);
     Task<TResult> GetAsync(Guid id);
+    Task<ListResult> GetPlacesByTagAsync(TagPlaceFilterOptions filterOptions);
     Task<TResult> GetRandomsAsync();
     Task<IEnumerable<Option>> GetTagOptionsAsync(SelectOptions selectOptions);
     Task<ListResult> ListAsync(TagFilterOptions filterOptions);

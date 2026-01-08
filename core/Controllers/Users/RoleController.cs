@@ -13,7 +13,7 @@ public class RoleController(RoleManager<ApplicationRole> roleManager) : BaseCont
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await ListResult<ApplicationRole>.Success(roleManager.Roles, filterOptions));
 
-    [HttpPost("delete/{name}"), Authorize(Roles = RoleName.Admin)]
+    [HttpPost("{name}"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> DeleteAsync([FromRoute] string name)
     {
         var role = await roleManager.FindByNameAsync(name);
@@ -21,7 +21,7 @@ public class RoleController(RoleManager<ApplicationRole> roleManager) : BaseCont
         return Ok(await roleManager.DeleteAsync(role));
     }
 
-    [HttpPost("create"), Authorize(Roles = RoleName.Admin)]
+    [HttpPost, Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> CreateAsync([FromBody] ApplicationRole role) => Ok(await roleManager.CreateAsync(role));
 
     [HttpGet("find-by-id/{id}")]
