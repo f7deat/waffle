@@ -4,5 +4,5 @@ namespace Waffle.Core.Services.Tags.Filters;
 
 public class TagArticleFilterOptions : FilterOptions
 {
-    public Guid TagId { get; set; }
+    public string? NormalizedName { get; set; }
 }

@@ -55,10 +55,6 @@ public class FileRepository(ApplicationDbContext context, IHCAService hcaService
             data.AddRange(files);
         }
 
-        return new ListResult<FileAndFolderListItem>
-        {
-            Total = total,
-            Data = data
-        };
+        return new ListResult<FileAndFolderListItem>(data, total, filterOptions);
     }
 }
