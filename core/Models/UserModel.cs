@@ -8,7 +8,7 @@ public class LoginModel
     public string? Password { get; set; }
 }
 
-public class ChangePasswordModel : BaseEntity
+public class ChangePasswordModel
 {
     public string? CurrentPassword { get; set; }
     public string? NewPassword { get; set; }

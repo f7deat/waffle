@@ -35,7 +35,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
             breadcrumbs={[{ label: "Bài viết", href: "/article" }]}
         >
             <div className="space-y-6">
-                <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div className="flex flex-col gap-4 rounded-xl bg-white p-5">
                     <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                         <div>
                             <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Danh sách bài viết</p>

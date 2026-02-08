@@ -27,7 +27,7 @@ const Page: React.FC = async () => {
 
     return (
         <PageContainer fluid>
-            <div className="bg-slate-100 p-4">
+            <div className="bg-slate-100">
                 <div className="mb-4 bg-white rounded-lg p-4">
                     <div className="flex">
                         <div className="flex-1 text-lg font-semibold">
@@ -43,14 +43,14 @@ const Page: React.FC = async () => {
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Filter and Products Layout */}
                 <div className="flex gap-4">
                     {/* Left Sidebar - Filters */}
                     <div className="hidden md:block w-64 flex-shrink-0">
                         <div className="bg-white rounded-lg p-4 sticky top-4">
                             <h3 className="font-semibold text-lg mb-4">Bộ lọc</h3>
-                            
+
                             {/* Category Filter */}
                             <div className="mb-6">
                                 <h4 className="font-semibold mb-3 text-sm">Danh mục</h4>
@@ -139,28 +139,28 @@ const Page: React.FC = async () => {
 
                     {/* Right Side - Products */}
                     <div className="flex-1">
-                        
-            <div className="grid grid-cols-2 md:grid-cols-4 2xl:grid-cols-6 gap-4 mb-4">
-                {
-                    data.data.data.landingPageLinkList.linkList.map((link: {
-                        linkId: string;
-                        link: string;
-                        linkName: string;
-                        image: string;
-                        linkType: string;
-                        groupIds: string[];
-                    }) => {
-                        return (
-                            <div key={link.linkId} className="bg-white">
-                                <a href={link.link} target="_blank" rel="noreferrer">
-                                    <img src={link.image} loading="lazy" alt={link.linkName} className="mb-1 transition-transform duration-300 ease-in-out transform hover:scale-105" />
-                                    <div className="hover:text-blue-500 py-1 px-2 font-medium line-clamp-2">{link.linkName}</div>
-                                </a>
-                            </div>
-                        )
-                    })
-                }
-            </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 2xl:grid-cols-6 gap-4 mb-4">
+                            {
+                                data.data.data.landingPageLinkList.linkList.map((link: {
+                                    linkId: string;
+                                    link: string;
+                                    linkName: string;
+                                    image: string;
+                                    linkType: string;
+                                    groupIds: string[];
+                                }) => {
+                                    return (
+                                        <div key={link.linkId} className="bg-white">
+                                            <a href={link.link} target="_blank" rel="noreferrer">
+                                                <img src={link.image} loading="lazy" alt={link.linkName} className="mb-1 transition-transform duration-300 ease-in-out transform hover:scale-105" />
+                                                <div className="hover:text-blue-500 py-1 px-2 font-medium line-clamp-2">{link.linkName}</div>
+                                            </a>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 2xl:grid-cols-5">
                             {products.map((product) => (
                                 <div key={product.id} className="bg-white transition duration-300 rounded-lg p-2 flex flex-col hover:shadow-xl">

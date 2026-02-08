@@ -27,7 +27,7 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
 
     public async Task<TResult> ChangePasswordAsync(ChangePasswordModel args)
     {
-        var user = await FindAsync(args.Id);
+        var user = await _userManager.FindByIdAsync(_hcaService.GetUserId().ToString());
         if (user is null) return TResult.Failed("User not found!");
         if (string.IsNullOrWhiteSpace(args.CurrentPassword) || string.IsNullOrWhiteSpace(args.NewPassword)) return TResult.Failed("Password is required");
         var result = await _userManager.ChangePasswordAsync(user, args.CurrentPassword, args.NewPassword);
@@ -113,6 +113,7 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
                         ReviewCount = 0,
                         Rating = 5,
                         PricePerReview = 0,
+                        u.EmailConfirmed
                     };
         return await ListResult.Success(query, filterOptions);
     }

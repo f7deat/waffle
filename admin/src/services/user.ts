@@ -44,10 +44,6 @@ export async function addToRole(data: any) {
   });
 }
 
-export async function getUserInRoles(roleName?: string | string[]) {
-  return request(`user/users-in-role/${roleName}`);
-}
-
 export async function apiConfirmEmail(id?: string | string[]) {
   return request(`user/confirm-email/${id}`, {
     method: 'POST'

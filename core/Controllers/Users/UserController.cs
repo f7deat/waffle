@@ -131,7 +131,7 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
         return Ok(result);
     }
 
-    [HttpPost("change-password")]
+    [HttpPut("change-password")]
     public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model) => Ok(await _userService.ChangePasswordAsync(model));
 
     [HttpDelete("{id}"), Authorize(Roles = RoleName.Admin)]

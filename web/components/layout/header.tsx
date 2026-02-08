@@ -190,11 +190,6 @@ const Header: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <button
-                        className="absolute inset-0 w-full cursor-default"
-                        aria-label="Close menu overlay"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                    />
                 </div>
             )}
         </header>

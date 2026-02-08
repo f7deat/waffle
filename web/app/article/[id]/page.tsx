@@ -58,33 +58,35 @@ const Page = async ({ params }: { params: Params }) => {
         <PageContainer breadcrumbs={breadcrumbs}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
-                    <div className="bg-white/70 backdrop-blur p-6 rounded-xl border border-gray-200 shadow-sm">
-                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{article.name}</h1>
-                        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
-                                <EyeFilled className="text-gray-500" /> {article.viewCount?.toLocaleString() ?? 0} lượt xem
-                            </span>
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
-                                Cập nhật {article.modifiedDate ? new Date(article.modifiedDate).toLocaleDateString("vi-VN") : "Chưa cập nhật"}
-                            </span>
+                    <div className="bg-white/70 backdrop-blur p-6 rounded-xl flex gap-4 flex-col md:flex-row">
+                        <div>
+                            {article.thumbnail && (
+                                <div className="relative rounded-lg overflow-hidden bg-gray-100">
+                                    <img
+                                        src={article.thumbnail}
+                                        alt={article.name}
+                                        className="w-full md:w-40 h-40 object-cover"
+                                    />
+                                </div>
+                            )}
                         </div>
-                        <div className="mt-4">
-                            <ArticleActions article={article} />
+                        <div className="flex-1">
+                            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{article.name}</h1>
+                            <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
+                                    <EyeFilled className="text-gray-500" /> {article.viewCount?.toLocaleString() ?? 0} lượt xem
+                                </span>
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
+                                    Cập nhật {article.modifiedDate ? new Date(article.modifiedDate).toLocaleDateString("vi-VN") : "Chưa cập nhật"}
+                                </span>
+                            </div>
+                            <div className="mt-4">
+                                <ArticleActions article={article} />
+                            </div>
                         </div>
                     </div>
 
-                    {article.thumbnail && (
-                        <div className="relative rounded-xl overflow-hidden bg-gray-100">
-                            <div className="pt-[56.25%]"></div>
-                            <img
-                                src={article.thumbnail}
-                                alt={article.name}
-                                className="absolute inset-0 w-full h-full object-cover"
-                            />
-                        </div>
-                    )}
-
-                    <div className="prose prose-lg max-w-none">
+                    <div className="prose prose-lg max-w-none bg-white rounded-lg p-4">
                         {article.content?.blocks?.map((block: API.Block, index: number) => <Block key={index} {...block} />)}
                     </div>
 

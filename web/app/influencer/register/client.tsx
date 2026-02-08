@@ -175,10 +175,6 @@ const InfluencerRegisterForm = () => {
 										{
 											label: 'Nữ',
 											value: true
-										},
-										{
-											label: 'Khác',
-											value: null
 										}
 									]} />
 								</Form.Item>

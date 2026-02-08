@@ -123,7 +123,7 @@ export default async function Home() {
               </div>
               <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-4 2xl:grid-cols-5">
                 {products.map((item) => (
-                  <Link key={item.id} href={`/shop/${item.normalizedName}`} className="group overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+                  <Link key={item.id} href={`/shop/${item.normalizedName}`} className="group overflow-hidden rounded-lg bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
                     <div className="h-40 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
                     <div className="flex flex-col p-2 md:p-4">
                       <h3 className="text-sm flex-1 md:text-base font-semibold text-slate-900 dark:text-slate-100">{item.name}</h3>
@@ -152,7 +152,7 @@ export default async function Home() {
               </div>
               <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {articles.map((item) => (
-                  <div className="group relative overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
+                  <div key={item.id} className="group relative overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
                     <div className="h-48 bg-cover bg-center" style={cardStyle(item.thumbnail || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5')} />
                     <div className="p-4">
                       <p className="text-sm text-slate-500 dark:text-slate-400">Featured</p>

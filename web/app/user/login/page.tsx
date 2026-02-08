@@ -1,8 +1,9 @@
 "use client";
 
 import PageContainer from "@/components/layout/page-container";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, notification } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { apiPasswordSignIn } from "@/services/user/user";
 
 type LoginValues = {
     username: string;
@@ -12,9 +13,23 @@ type LoginValues = {
 
 const Page: React.FC = () => {
     const [form] = Form.useForm<LoginValues>();
+    const [api, contextHolder] = notification.useNotification();
 
-    const handleFinish = (_values: LoginValues) => {
-        // TODO: hook up login API
+    const handleFinish = async (values: LoginValues) => {
+        const response = await apiPasswordSignIn(values);
+        if (!response.succeeded) {
+            api.error({
+                title: "Đăng nhập thất bại",
+                description: "Vui lòng kiểm tra lại tên đăng nhập và mật khẩu.",
+            });
+            return;
+        }
+        localStorage.setItem("access_token", response.token);
+        api.success({
+            title: "Đăng nhập thành công",
+            description: "Bạn đã đăng nhập thành công vào DefZone.Net.",
+        });
+        window.location.href = "/";
     };
 
     return (
@@ -26,6 +41,7 @@ const Page: React.FC = () => {
                 }
             ]}
         >
+            {contextHolder}
             <div className="min-h-[70vh] bg-gradient-to-br from-indigo-50 via-white to-slate-50 py-10">
                 <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 lg:grid lg:grid-cols-[1.1fr,0.9fr]">
                     <section className="space-y-4">

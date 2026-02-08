@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
             <div className="mx-auto container px-4 py-10 grid gap-8 md:grid-cols-4">
                 <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-lg font-semibold text-white">
+                        <div className="flex h-12 w-16 items-center justify-center rounded-full bg-blue-500 text-lg font-semibold text-white">
                             DZ
                         </div>
                         <div>
@@ -19,16 +19,16 @@ const Footer: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-4 text-slate-300">
-                        <a href="https://facebook.com/tan.dct" aria-label="Facebook" className="hover:text-white transition-colors">
+                        <a href="https://facebook.com/tan.dct" aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
                             <FacebookFilled />
                         </a>
-                        <a href="https://www.instagram.com/f7deat/" aria-label="Instagram" className="hover:text-white transition-colors">
+                        <a href="https://www.instagram.com/f7deat/" aria-label="Instagram" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
                             <InstagramFilled />
                         </a>
-                        <a href="https://www.tiktok.com/@f7deat" aria-label="TikTok" className="hover:text-white transition-colors">
+                        <a href="https://www.tiktok.com/@f7deat" aria-label="TikTok" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
                             <TikTokFilled />
                         </a>
-                        <a href="https://www.linkedin.com/in/f7deat/" aria-label="LinkedIn" className="hover:text-white transition-colors">
+                        <a href="https://www.linkedin.com/in/f7deat/" aria-label="LinkedIn" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
                             <LinkedinFilled />
                         </a>
                     </div>
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
 
                 <div className="space-y-3">
                     <h3 className="text-base font-semibold text-white">Liên kết nhanh</h3>
-                    <nav className="md:grid grid-cols-2 gap-2 text-sm text-slate-300">
+                    <nav className="grid grid-cols-2 gap-2 text-sm text-slate-300">
                         <Link href="/" className="hover:text-white transition-colors"><CaretRightFilled /> Trang chủ</Link>
                         <Link href="/article" className="hover:text-white transition-colors"><CaretRightFilled /> Bài viết</Link>
                         <Link href="/wiki" className="hover:text-white transition-colors"><CaretRightFilled /> Wiki</Link>
