@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
-import { apiArticleDetail, apiArticleList } from "@/service/article";
+import { apiArticleDetail, apiArticleList } from "@/services/article";
 import { Metadata } from "next";
 import Link from "next/link";
-import { apiCatalogMeta } from "@/service/catalog";
+import { apiCatalogMeta } from "@/services/catalog";
 import { EyeFilled } from "@ant-design/icons";
 import Block from "@/components/block";
 import ArticleActions from "@/components/article/actions";
@@ -104,7 +104,7 @@ const Page = async ({ params }: { params: Params }) => {
                                         : "Chưa cập nhật";
                                     return (
                                         <Link key={item.id} href={`/article/${item.normalizedName}`}>
-                                            <div className="group cursor-pointer flex gap-3 p-2 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition">
+                                            <div className="group cursor-pointer flex gap-3 p-2 rounded-lg bg-white mb-1">
                                                 <div className="relative flex-shrink-0 w-24 h-24 overflow-hidden rounded-md bg-gray-200">
                                                     {item.thumbnail ? (
                                                         <img

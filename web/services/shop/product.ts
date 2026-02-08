@@ -1,9 +1,6 @@
 import request from "../request";
 
-export async function apiProducts(params: {
-    current: number;
-    pageSize: number;
-}) {
+export async function apiProducts(params: API.ProductFilterOptions) {
     return request.get<API.ListResult<API.ProductListItem>>('product/list', { params });
 }
 

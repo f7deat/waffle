@@ -1,6 +1,6 @@
 import Link from "next/link";
 import PageContainer from "@/components/layout/page-container";
-import { apiWikiParse } from "@/service/apps/wiki";
+import { apiWikiParse } from "@/services/apps/wiki";
 import { Metadata } from "next";
 import "../style.css";
 

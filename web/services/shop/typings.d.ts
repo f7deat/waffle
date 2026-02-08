@@ -15,4 +15,7 @@ declare namespace API {
         unitInStock?: number;
         affiliateLink?: string;
     }
+    interface ProductFilterOptions extends FilterOptions {
+        name?: string;
+    }
 }

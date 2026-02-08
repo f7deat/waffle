@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import PageContainer from "@/components/layout/page-container";
-import { apiInfluencerRegister } from "@/service/user/influencer";
+import { apiInfluencerRegister } from "@/services/user/influencer";
 import { Form, Input, Select } from "antd";
-import { apiProvinceOptions } from "@/service/locations/province";
-import { apiDistrictOptions } from "@/service/locations/district";
+import { apiProvinceOptions } from "@/services/locations/province";
+import { apiDistrictOptions } from "@/services/locations/district";
 
 type SubmitState = "idle" | "success" | "error";
 
@@ -226,7 +226,7 @@ const InfluencerRegisterForm = () => {
 							<button
 								type="submit"
 								disabled={isSubmitting}
-								className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+								className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 md:py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
 							>
 								{isSubmitting ? "Đang gửi..." : "Gửi đăng ký"}
 							</button>

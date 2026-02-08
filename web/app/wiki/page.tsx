@@ -1,5 +1,5 @@
 import PageContainer from "@/components/layout/page-container";
-import { apiWikiRandom } from "@/service/apps/wiki";
+import { apiWikiRandom } from "@/services/apps/wiki";
 import Link from "next/link";
 
 export default async function Page() {

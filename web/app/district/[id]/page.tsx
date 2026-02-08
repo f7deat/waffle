@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import PageContainer from '@/components/layout/page-container';
-import { apiPlaceList } from '@/service/locations/place';
+import { apiPlaceList } from '@/services/locations/place';
 import { EnvironmentOutlined, EyeOutlined } from '@ant-design/icons';
+import { Form, Input, Select } from 'antd';
 
 const Page: React.FC = () => {
     const params = useParams();
@@ -24,23 +25,23 @@ const Page: React.FC = () => {
                 setLoading(true);
                 const data = await apiPlaceList({
                     districtId: parseInt(districtId as string),
-                    keyword: keyword || undefined,
+                    name: keyword || undefined,
                     current,
                     pageSize,
                 });
                 let sortedPlaces = data.data || [];
-                
+
                 // Sort based on selection
                 if (sortBy === 'name') {
                     sortedPlaces = [...sortedPlaces].sort((a, b) => a.name.localeCompare(b.name));
                 } else if (sortBy === 'views') {
                     sortedPlaces = [...sortedPlaces].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
                 } else if (sortBy === 'recent') {
-                    sortedPlaces = [...sortedPlaces].sort((a, b) => 
+                    sortedPlaces = [...sortedPlaces].sort((a, b) =>
                         new Date(b.modifiedDate).getTime() - new Date(a.modifiedDate).getTime()
                     );
                 }
-                
+
                 setPlaces(sortedPlaces);
                 setTotal(data.total || 0);
             } catch (error) {
@@ -66,60 +67,59 @@ const Page: React.FC = () => {
         <PageContainer breadcrumbs={breadcrumbs}>
             <div className="space-y-8">
                 <div>
-                    <h1 className="text-4xl font-bold mb-2">Places</h1>
+                    <h1 className="text-4xl font-bold mb-2">Địa điểm</h1>
                     <p className="text-gray-600">
-                        {total > 0 ? `Showing ${places.length} of ${total} places` : 'No places found'}
+                        {total > 0 ? `Hiển thị ${places.length} trong tổng số ${total} địa điểm` : 'Không tìm thấy địa điểm nào'}
                     </p>
                 </div>
 
                 {/* Filter Bar */}
-                <div className="bg-white border rounded-lg p-4 space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Search */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Search by name</label>
-                            <input
-                                type="text"
-                                placeholder="Search places..."
-                                value={keyword}
-                                onChange={(e) => {
-                                    setKeyword(e.target.value);
-                                    setCurrent(1);
-                                }}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
+                <div className="bg-white rounded-lg p-4 space-y-4">
+                    <Form layout='vertical'>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Search */}
+                            <Form.Item label="Tìm kiếm" className="mb-0">
+                                <Input
+                                    type="text"
+                                    placeholder="Tìm kiếm địa điểm..."
+                                    value={keyword}
+                                    onChange={(e) => {
+                                        setKeyword(e.target.value);
+                                        setCurrent(1);
+                                    }}
+                                    className="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </Form.Item>
+
+                            <Form.Item label="Sắp xếp" name="sortBy" className="mb-0">
+                                <Select
+                                    value={sortBy}
+                                    onChange={(value) => {
+                                        setSortBy(value as 'name' | 'views' | 'recent');
+                                        setCurrent(1);
+                                    }}
+                                    className="w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                                    <Select.Option value="recent">Cập nhật gần đây</Select.Option>
+                                    <Select.Option value="views">Xem nhiều nhất</Select.Option>
+                                    <Select.Option value="name">Tên (A-Z)</Select.Option>
+                                </Select>
+                            </Form.Item>
                         </div>
-                        
-                        {/* Sort */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Sort by</label>
-                            <select
-                                value={sortBy}
-                                onChange={(e) => {
-                                    setSortBy(e.target.value as 'name' | 'views' | 'recent');
-                                    setCurrent(1);
-                                }}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                                <option value="recent">Recently Updated</option>
-                                <option value="views">Most Viewed</option>
-                                <option value="name">Name (A-Z)</option>
-                            </select>
-                        </div>
-                    </div>
+                    </Form>
                 </div>
 
                 {loading ? (
                     <div className="text-center py-12">
-                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                        <p className="mt-4 text-gray-600">Loading places...</p>
+                        <div className="inline-block animate-spin rounded-full h-8 w-8"></div>
+                        <p className="mt-4 text-gray-600">Đang tải địa điểm...</p>
                     </div>
                 ) : places.length > 0 ? (
                     <>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {places.map((place) => (
                                 <Link key={place.id} href={`/place/${place.id}`}>
-                                    <div className="group cursor-pointer overflow-hidden rounded-lg border border-gray-200 transition-all duration-300 hover:shadow-lg hover:border-blue-400">
+                                    <div className="group cursor-pointer bg-white h-full overflow-hidden rounded-lg transition-all duration-300 hover:shadow-lg hover:border-blue-400">
                                         <div className="relative overflow-hidden bg-gray-200 h-48">
                                             {place.thumbnail ? (
                                                 <img

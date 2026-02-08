@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { FacebookFilled, InstagramFilled, LinkedinFilled } from '@ant-design/icons';
 import PageContainer from '@/components/layout/page-container';
-import { apiContactSubmit } from '@/service/contact';
+import { apiContactSubmit } from '@/services/contact';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({

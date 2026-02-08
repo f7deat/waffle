@@ -50,6 +50,10 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
                         c.Thumbnail,
                         c.Description
                     };
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        {
+            query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
+        }
         query = query.OrderByDescending(x => x.ModifiedDate);
         return await ListResult.Success(query, filterOptions);
     }

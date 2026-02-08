@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
-import { apiArticleList } from "@/service/article";
+import { apiArticleList } from "@/services/article";
 import Link from "next/link";
 
 type SearchParams = Promise<{

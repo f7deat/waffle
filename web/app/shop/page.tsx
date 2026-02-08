@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
-import { apiShopeeBaseInfoAndLinks } from "@/service/apps/shopee";
-import { apiProducts } from "@/service/shop/product";
+import { apiShopeeBaseInfoAndLinks } from "@/services/apps/shopee";
+import { apiProducts } from "@/services/shop/product";
 import { SearchOutlined, ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
 import Link from "next/link";
 

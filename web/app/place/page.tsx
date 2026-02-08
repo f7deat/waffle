@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
-import { apiPlaceList } from "@/service/locations/place";
+import { apiPlaceList } from "@/services/locations/place";
 import KolList from "@/components/place/kol-list";
-import { apiKolList } from "@/service/kol/kol";
+import { apiKolList } from "@/services/kol/kol";
 import Link from "next/link";
 import { Metadata } from "next";
+import { SearchOutlined } from "@ant-design/icons";
 
 type SearchParams = Promise<{
 	page?: string;
@@ -31,7 +32,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 	const keyword = (await searchParams).keyword?.trim();
 
 	const [placeResponse, kolResponse] = await Promise.all([
-		apiPlaceList({ current, pageSize, keyword }),
+		apiPlaceList({ current, pageSize, name: keyword }),
 		apiKolList({ current: 1, pageSize: 6 })
 	]);
 
@@ -143,7 +144,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 								type="submit"
 								className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
 							>
-								Tìm kiếm
+								<SearchOutlined /> Tìm kiếm
 							</button>
 						</form>
 					</div>

@@ -1,4 +1,4 @@
-import { apiDistrictList } from "@/service/locations/district";
+import { apiDistrictList } from "@/services/locations/district";
 import Link from "next/link";
 
 const DistrictSection: React.FC = async () => {

@@ -1,5 +1,5 @@
 import PageContainer from "@/components/layout/page-container";
-import { apiPokemonList } from "@/service/apps/pokemon";
+import { apiPokemonList } from "@/services/apps/pokemon";
 import Link from "next/link";
 
 type Params = Promise<{ offset: number, url: { search: string } }>

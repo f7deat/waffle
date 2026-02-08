@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { apiKolBooking } from '@/service/kol/kol';
+import { apiKolBooking } from '@/services/kol/kol';
 
 interface KolListProps {
 	kolList: API.KolListItem[];

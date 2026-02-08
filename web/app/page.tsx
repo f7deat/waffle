@@ -1,17 +1,17 @@
 import Link from "next/link";
 import { DistrictSection } from "./home";
-import { apiArticleList } from "@/service/article";
-import { apiProducts } from "@/service/shop/product";
-import { apiTagRandoms } from "@/service/contents/tag";
-import { apiPlaceList } from "@/service/locations/place";
+import { apiArticleList } from "@/services/article";
+import { apiProducts } from "@/services/shop/product";
+import { apiTagRandoms } from "@/services/contents/tag";
+import { apiPlaceList } from "@/services/locations/place";
 import { EyeFilled } from "@ant-design/icons";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-    return {
-        title: "DefZone.Net - Kênh thông tin giải trí và địa điểm ăn chơi",
-        description: "DefZone.Net - Kênh thông tin giải trí, đánh giá địa điểm ăn chơi, du lịch và mua sắm. Khám phá những trải nghiệm mới và xu hướng hot nhất hiện nay.",
-    };
+  return {
+    title: "DefZone.Net - Kênh thông tin giải trí và địa điểm ăn chơi",
+    description: "DefZone.Net - Kênh thông tin giải trí, đánh giá địa điểm ăn chơi, du lịch và mua sắm. Khám phá những trải nghiệm mới và xu hướng hot nhất hiện nay.",
+  };
 }
 
 export default async function Home() {
@@ -152,13 +152,15 @@ export default async function Home() {
               </div>
               <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {articles.map((item) => (
-                  <Link key={item.id} href={`/article/${item.normalizedName}`} className="group relative overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
+                  <div className="group relative overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
                     <div className="h-48 bg-cover bg-center" style={cardStyle(item.thumbnail || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5')} />
                     <div className="p-4">
                       <p className="text-sm text-slate-500 dark:text-slate-400">Featured</p>
-                      <h3 className="mt-1 text-lg line-clamp-2 font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
+                      <Link key={item.id} href={`/article/${item.normalizedName}`}>
+                        <h3 className="mt-1 text-lg line-clamp-2 font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
+                      </Link>
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             </section>

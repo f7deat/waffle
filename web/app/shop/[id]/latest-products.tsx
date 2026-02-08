@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { apiProducts } from '@/service/shop/product';
+import { apiProducts } from '@/services/shop/product';
 
 const LatestProducts: React.FC = () => {
     const [products, setProducts] = useState<API.ProductListItem[]>([]);

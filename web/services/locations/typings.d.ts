@@ -9,7 +9,7 @@ declare namespace API {
     interface PlaceFilterOptions extends FilterOptions {
         districtId?: number;
         provinceId?: number;
-        keyword?: string;
+        name?: string;
     }
     interface PlaceListItem {
         id: string;

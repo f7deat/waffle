@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ShareAltOutlined, SoundOutlined, PauseOutlined, PlayCircleOutlined, StopOutlined, BookOutlined, HeartOutlined, CheckOutlined, FacebookFilled, TwitterOutlined, TagsOutlined } from "@ant-design/icons";
-import { apiCatalogTags } from "@/service/catalog";
+import { apiCatalogTags } from "@/services/catalog";
 
 interface ArticleActionsProps {
   article: API.ArticleDetail;

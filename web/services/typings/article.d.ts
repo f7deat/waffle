@@ -11,4 +11,7 @@ declare namespace API {
     interface ArticleDetail extends ArticleListItem {
         content: API.BlockEditor;
     }
+    interface ArticleFilterOptions extends FilterOptions {
+        name?: string;
+    }
 }

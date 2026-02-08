@@ -83,6 +83,10 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
         {
             query = query.Where(x => x.DistrictId == filterOptions.DistrictId);
         }
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        {
+            query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
+        }
         query = query.OrderByDescending(x => x.ModifiedDate);
         return await ListResult.Success(query, filterOptions);
     }

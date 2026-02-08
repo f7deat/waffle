@@ -3,46 +3,26 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import PageContainer from "@/components/layout/page-container";
-import { apiPlaceDetail, apiPlaceRandom, apiPlaceList, apiPlaceImages } from '@/service/locations/place';
-import { apiCatalogTags } from '@/service/catalog';
+import { apiPlaceDetail, apiPlaceRandom, apiPlaceList, apiPlaceImages } from '@/services/locations/place';
+import { apiCatalogTags } from '@/services/catalog';
 import { Image, Masonry } from 'antd';
 import Block from '@/components/block';
-import { EnvironmentOutlined, EyeOutlined } from '@ant-design/icons';
+import { CalendarOutlined, EnvironmentOutlined, EyeOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 interface PlaceDetailProps {
-    placeId: string;
+    place: API.PlaceDetail;
 }
 
-const PlaceDetail: React.FC<PlaceDetailProps> = ({ placeId }) => {
-    const [place, setPlace] = useState<API.PlaceDetail | null>(null);
+const PlaceDetail: React.FC<PlaceDetailProps> = ({ place }) => {
     const [randomPlaces, setRandomPlaces] = useState<API.PlaceListItem[]>([]);
     const [relatedPlaces, setRelatedPlaces] = useState<API.PlaceListItem[]>([]);
     const [placeImages, setPlaceImages] = useState<API.PlaceImage[]>([]);
     const [tags, setTags] = useState<API.Tag[]>([]);
-    const [loading, setLoading] = useState(true);
     const [loadingRandom, setLoadingRandom] = useState(false);
     const [loadingRelated, setLoadingRelated] = useState(false);
     const [loadingImages, setLoadingImages] = useState(false);
     const [loadingTags, setLoadingTags] = useState(false);
-
-    useEffect(() => {
-        const fetchPlace = async () => {
-            try {
-                setLoading(true);
-                const data = await apiPlaceDetail(placeId);
-                setPlace(data.data);
-            } catch (error) {
-                console.error('Failed to fetch place:', error);
-                setPlace(null);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (placeId) {
-            fetchPlace();
-        }
-    }, [placeId]);
 
     useEffect(() => {
         const fetchRandomPlaces = async () => {
@@ -126,20 +106,9 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({ placeId }) => {
         fetchTags();
     }, [place?.id]);
 
-    const breadcrumbs = place ? [
-        { label: 'Địa điểm', href: '/place' },
-        { label: place.districtName, href: `/district/${place.districtId}` },
-        { label: place.name, href: '#' },
-    ] : [{ label: 'Địa điểm', href: '/place' }];
-
     return (
-        <PageContainer breadcrumbs={breadcrumbs}>
-            {loading ? (
-                <div className="text-center py-12">
-                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                    <p className="mt-4 text-gray-600">Loading place details...</p>
-                </div>
-            ) : place ? (
+        <div>
+            {place && (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-8">
                         <div className="bg-white p-4 rounded-lg flex gap-4">
@@ -152,16 +121,20 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({ placeId }) => {
                                 <h1 className="text-3xl font-bold mb-3">{place.name}</h1>
                                 <div className="space-y-2 text-sm text-gray-600">
                                     <div className="flex items-center">
-                                        <span className="font-semibold w-24">Địa chỉ:</span>
-                                        <span>{place.address} {place.districtName}, {place.provinceName}</span>
+                                        <span className="font-semibold w-24"><EnvironmentOutlined /> Địa chỉ:</span>
+                                        <span>{place.address} 
+                                            <Link href={`/district/${place.districtId}`} className="ml-1 text-blue-600 hover:underline">{place.districtName}</Link>
+                                            ,
+                                            <Link href={`/place/province/${place.provinceId}`} className="ml-1 text-blue-600 hover:underline">{place.provinceName}</Link>
+                                        </span>
                                     </div>
                                     <div className="flex items-center">
-                                        <span className="font-semibold w-24">Lượt xem:</span>
+                                        <span className="font-semibold w-24"><EyeOutlined /> Lượt xem:</span>
                                         <span>{place.viewCount?.toLocaleString()}</span>
                                     </div>
                                     <div className="flex items-center">
-                                        <span className="font-semibold w-24">Cập nhật:</span>
-                                        <span>{new Date(place.modifiedDate).toLocaleDateString()}</span>
+                                        <span className="font-semibold w-24"><CalendarOutlined /> Cập nhật:</span>
+                                        <span>{dayjs(place.modifiedDate).format('DD-MM-YYYY HH:mm')}</span>
                                     </div>
                                 </div>
                             </div>
@@ -357,12 +330,8 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({ placeId }) => {
                         </div>
                     </aside>
                 </div>
-            ) : (
-                <div className="text-center py-12">
-                    <p className="text-gray-600">Place not found.</p>
-                </div>
             )}
-        </PageContainer>
+        </div>
     );
 };
 

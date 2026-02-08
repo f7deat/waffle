@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
-import { apiCatalogMeta } from "@/service/catalog";
-import { apiProductDetail } from "@/service/shop/product";
+import { apiCatalogMeta } from "@/services/catalog";
+import { apiProductDetail } from "@/services/shop/product";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";

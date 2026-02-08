@@ -1,4 +1,4 @@
-import { apiKlookCoupons } from "@/service/apps/klook";
+import { apiKlookCoupons } from "@/services/apps/klook";
 
 const Page: React.FC = async () => {
 

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IRepositories;
@@ -149,7 +150,11 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
 
     public Task<ListResult> GetRandomAsync(PlaceFilterOptions filterOptions) => _placeRepository.GetRandomAsync(filterOptions);
 
-    public Task<ListResult> ListAsync(PlaceFilterOptions filterOptions) => _placeRepository.ListAsync(filterOptions);
+    public Task<ListResult> ListAsync(PlaceFilterOptions filterOptions)
+    {
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        return _placeRepository.ListAsync(filterOptions);
+    }
 
     public async Task<TResult> UpdateAsync(PlaceUpdateArgs args)
     {
