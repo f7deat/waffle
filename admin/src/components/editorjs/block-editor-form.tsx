@@ -20,6 +20,7 @@ const BlockEditorForm: React.FC = () => {
         },
         onChange: (api) => {
           api.saver.save().then((outputData) => {
+                        console.log('Article data: ', outputData);
             formRef?.setFieldValue('blockEditor', outputData);
           });
         },

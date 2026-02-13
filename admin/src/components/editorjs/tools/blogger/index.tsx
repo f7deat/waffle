@@ -1,5 +1,4 @@
 import { request } from '@umijs/max';
-import '../../style.css';
 import { IAPI, IEditor } from '../../typings';
 
 type BloggerType = {

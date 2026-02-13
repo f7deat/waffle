@@ -1,6 +1,6 @@
 import Embed from '@editorjs/embed';
 import Table from '@editorjs/table';
-import List from '@editorjs/list';
+import EditorjsList from '@editorjs/list';
 import Warning from '@editorjs/warning';
 import Code from '@editorjs/code';
 // @ts-ignore
@@ -24,7 +24,13 @@ import { api3rdUpload } from '@/services/file-service';
 export const EDITOR_JS_TOOLS = {
   embed: Embed,
   table: Table,
-  list: List,
+  list: {
+    class: EditorjsList,
+    inlineToolbar: true,
+    config: {
+      defaultStyle: 'unordered'
+    }
+  },
   warning: Warning,
   code: Code,
   linkTool: {

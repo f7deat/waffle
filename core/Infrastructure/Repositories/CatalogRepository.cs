@@ -130,7 +130,8 @@ public class CatalogRepository(ApplicationDbContext context, IHCAService hcaServ
                         Thumbnail = catalog.Thumbnail,
                         Type = catalog.Type,
                         ViewCount = catalog.ViewCount,
-                        Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower()
+                        Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower(),
+                        CommentCount = _context.Comments.Count(c => c.CatalogId == catalog.Id)
                     };
 
         if (!string.IsNullOrEmpty(filterOptions.Name))

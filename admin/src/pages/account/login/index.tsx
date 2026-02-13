@@ -22,7 +22,6 @@ import logo from '../../../assets/logo.png';
 import '../index.css';
 import { Helmet } from '@umijs/max';
 import Settings from '../../../../config/defaultSetting';
-import '../../../../style.css';
 import ForgotPassword from '../components/forgot-password';
 
 const Login: React.FC = () => {

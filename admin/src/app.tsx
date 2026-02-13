@@ -1,5 +1,5 @@
 import { RequestConfig } from '@umijs/max';
-import '../style.css';
+import '../style.less';
 import logo from './assets/logo.png';
 import { queryCurrentUser } from './services/user';
 import { history } from '@umijs/max';
@@ -8,7 +8,7 @@ import { DefaultFooter } from '@ant-design/pro-components';
 import { GithubOutlined, LinkOutlined } from '@ant-design/icons';
 import { SelectLang } from '@umijs/max';
 import { AvatarDropdown, Question } from './components';
-import { Space, message } from 'antd';
+import { message } from 'antd';
 import { errorConfig } from './requestErrorConfig';
 
 const isDev = process.env.NODE_ENV === 'development';

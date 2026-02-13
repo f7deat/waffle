@@ -1,15 +1,21 @@
 "use client";
 
 import PageContainer from "@/components/layout/page-container"
-import { apiCurrentUser, apiChangePassword } from "@/services/user/user";
-import { LockOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { apiCurrentUser, apiChangePassword, apiChangeAvatar } from "@/services/user/user";
+import { LockOutlined, CameraOutlined } from "@ant-design/icons";
+import { useEffect, useState, useRef } from "react";
 
 const Page: React.FC = () => {
 
     const [user, setUser] = useState<API.User | null>(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const [isAvatarUploading, setIsAvatarUploading] = useState(false);
+    const [avatarError, setAvatarError] = useState("");
+    const [avatarSuccess, setAvatarSuccess] = useState("");
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [passwordForm, setPasswordForm] = useState({
         currentPassword: "",
         newPassword: "",
@@ -104,6 +110,81 @@ const Page: React.FC = () => {
         }
     };
 
+    const handleAvatarButtonClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            // Validate file type
+            if (!file.type.startsWith("image/")) {
+                setAvatarError("Vui lòng chọn một tệp hình ảnh");
+                return;
+            }
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                setAvatarError("Kích thước hình ảnh không được vượt quá 5MB");
+                return;
+            }
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const preview = e.target?.result as string;
+                setAvatarPreview(preview);
+                setIsAvatarModalOpen(true);
+                setAvatarError("");
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleAvatarModalClose = () => {
+        setIsAvatarModalOpen(false);
+        setAvatarPreview(null);
+        setAvatarError("");
+        setAvatarSuccess("");
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
+    const handleAvatarSubmit = async () => {
+        if (!avatarPreview || !fileInputRef.current?.files?.[0]) {
+            setAvatarError("Vui lòng chọn một hình ảnh");
+            return;
+        }
+
+        setIsAvatarUploading(true);
+        setAvatarError("");
+        setAvatarSuccess("");
+
+        try {
+            const formData = new FormData();
+            formData.append("file", fileInputRef.current.files[0]);
+
+            const response = await apiChangeAvatar(formData);
+
+            if (response.succeeded) {
+                setAvatarSuccess("Cập nhật avatar thành công!");
+                // Refresh user data to show new avatar
+                const updatedUser = await apiCurrentUser();
+                setUser(updatedUser);
+                setTimeout(() => {
+                    handleAvatarModalClose();
+                }, 1500);
+            } else {
+                setAvatarError(response.message || "Cập nhật avatar thất bại");
+            }
+        } catch (error: any) {
+            setAvatarError(error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại");
+        } finally {
+            setIsAvatarUploading(false);
+        }
+    };
+
     if (loading) {
         return (
             <PageContainer>
@@ -136,7 +217,7 @@ const Page: React.FC = () => {
                     <div className="px-6 pb-6">
                         <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-16 mb-4">
                             {/* Avatar */}
-                            <div className="relative">
+                            <div className="relative group">
                                 {user.avatar ? (
                                     <img
                                         src={user.avatar}
@@ -150,6 +231,14 @@ const Page: React.FC = () => {
                                         </span>
                                     </div>
                                 )}
+                                {/* Avatar Upload Overlay */}
+                                <button
+                                    onClick={handleAvatarButtonClick}
+                                    className="absolute inset-0 w-32 h-32 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100"
+                                    title="Đổi avatar"
+                                >
+                                    <CameraOutlined className="text-white text-2xl" />
+                                </button>
                             </div>
                             
                             {/* Name and Username */}
@@ -253,6 +342,15 @@ const Page: React.FC = () => {
                 </div>
             </div>
 
+            {/* Hidden File Input */}
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarFileChange}
+                className="hidden"
+            />
+
             {/* Change Password Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
@@ -348,6 +446,73 @@ const Page: React.FC = () => {
                                 </div>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Change Avatar Modal */}
+            {isAvatarModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xl font-bold text-gray-900">Đổi avatar</h3>
+                            <button
+                                onClick={handleAvatarModalClose}
+                                className="text-gray-400 hover:text-gray-600 transition-colors"
+                                disabled={isAvatarUploading}
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            {/* Avatar Preview */}
+                            {avatarPreview && (
+                                <div className="flex justify-center">
+                                    <img
+                                        src={avatarPreview}
+                                        alt="Avatar preview"
+                                        className="w-40 h-40 rounded-full object-cover border-2 border-gray-300"
+                                    />
+                                </div>
+                            )}
+
+                            {/* Error Message */}
+                            {avatarError && (
+                                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                                    {avatarError}
+                                </div>
+                            )}
+
+                            {/* Success Message */}
+                            {avatarSuccess && (
+                                <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+                                    {avatarSuccess}
+                                </div>
+                            )}
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-3 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={handleAvatarModalClose}
+                                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                                    disabled={isAvatarUploading}
+                                >
+                                    Hủy
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleAvatarSubmit}
+                                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={isAvatarUploading}
+                                >
+                                    {isAvatarUploading ? "Đang tải..." : "Cập nhật"}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

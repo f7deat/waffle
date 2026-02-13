@@ -1,0 +1,19 @@
+.cdx-list-unordered {
+    .cdx-list__item-children {
+        .cdx-list__item {
+            &::before {
+                content: '◦';
+            }
+            .cdx-list__item-children {
+                .cdx-list__item {
+                    &::before {
+                        content: '▪';
+                    }
+                }
+            }
+        }
+    }
+    .cdx-list__item-content {
+        padding: 0em;
+    }
+}

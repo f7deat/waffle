@@ -15,3 +15,11 @@ export async function apiCurrentUser() {
 export async function apiChangePassword(data: { currentPassword: string; newPassword: string;  }) {
     return request.put<API.TResult<object>>("user/change-password", data);
 }
+
+export async function apiChangeAvatar(formData: FormData) {
+    return request.put<API.TResult<object>>("user/profile/avatar", formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}

@@ -4,3 +4,5 @@ public record ChangeAvatarArgs(
     Guid UserId,
     IFormFile File
 );
+
+public record ChangeAvatarProfileArgs(IFormFile File);

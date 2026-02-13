@@ -70,4 +70,22 @@ public class TagRepository(ApplicationDbContext context, IHCAService hcaService)
     }
 
     public Task<bool> IsExistsAsync(string name) => _context.Tags.AnyAsync(t => t.NormalizedName == name);
+
+    public async Task<ListResult> ListAsync(TagFilterOptions filterOptions)
+    {
+        var query = from t in _context.Tags
+                    select new
+                    {
+                        t.Id,
+                        t.NormalizedName,
+                        t.Name,
+                        CatalogCount = _context.TagCatalogs.Count(tc => tc.TagId == t.Id)
+                    };
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        {
+            query = query.Where(t => t.NormalizedName.Contains(filterOptions.Name));
+        }
+        query = query.OrderBy(x => x.NormalizedName);
+        return await ListResult.Success(query, filterOptions);
+    }
 }

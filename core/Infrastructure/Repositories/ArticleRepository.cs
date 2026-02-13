@@ -32,7 +32,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
             catalog.ModifiedDate,
             catalog.Thumbnail,
             catalog.ViewCount,
-            Content = workContents != null ? System.Text.Json.JsonSerializer.Deserialize<BlockEditor>(workContents) : new BlockEditor()
+            Content = workContents != null ? System.Text.Json.JsonSerializer.Deserialize<object>(workContents) : new {}
         });
     }
 

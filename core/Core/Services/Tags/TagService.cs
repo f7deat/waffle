@@ -61,14 +61,8 @@ public class TagService(ITagRepository _tagRepository) : ITagService
 
     public async Task<ListResult> ListAsync(TagFilterOptions filterOptions)
     {
-        var query = _tagRepository.Queryable();
-
-        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
-        {
-            query = query.Where(x => x.Name.Contains(filterOptions.Name));
-        }
-
-        return await ListResult.Success(query.Cast<object>(), filterOptions);
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        return await _tagRepository.ListAsync(filterOptions);
     }
 
     public async Task<TResult> UpdateAsync(TagUpdateArgs args)

@@ -12,4 +12,5 @@ public interface ITagRepository : IAsyncRepository<Tag>
     Task<ListResult> GetPlacesByTagAsync(TagPlaceFilterOptions filterOptions);
     Task<IEnumerable<Option>> GetTagOptionsAsync(SelectOptions selectOptions);
     Task<bool> IsExistsAsync(string name);
+    Task<ListResult> ListAsync(TagFilterOptions filterOptions);
 }

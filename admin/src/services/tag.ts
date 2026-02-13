@@ -16,6 +16,7 @@ export interface ITagFilter extends API.IFilter {
 export interface ITagListItem {
     id: string;
     name: string;
+    catalogCount: number;
 }
 
 export async function apiTags(params: ITagFilter) {

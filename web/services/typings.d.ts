@@ -18,7 +18,7 @@ declare namespace API {
         level?: number;
         html?: string;
         code?: string;
-        items?: string[];
+        items?: EditorjsItem[];
         url?: string;
         caption?: string;
         align?: 'left' | 'center' | 'right';
@@ -45,5 +45,9 @@ declare namespace API {
     interface IOption {
         label: string;
         value: string;
+    }
+    interface EditorjsItem {
+        content: string;
+        items?: EditorjsItem[];
     }
 }

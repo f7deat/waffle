@@ -1,6 +1,6 @@
 import { PageContainer, ProTable, ActionType, ProColumns } from '@ant-design/pro-components';
 import { Button, message, Modal, Form, Input, Popconfirm } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import { apiTags, apiTagCreate, apiTagUpdate, apiTagDelete, ITagListItem } from '@/services/tag';
 
@@ -13,10 +13,10 @@ const Index: React.FC = () => {
 
   const columns: ProColumns<ITagListItem>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 200,
-      search: false,
+      title: '#',
+      valueType: 'indexBorder',
+      width: 30,
+      align: 'center'
     },
     {
       title: 'Name',
@@ -26,21 +26,27 @@ const Index: React.FC = () => {
       },
     },
     {
-      title: 'Actions',
+      title: 'Catalog Count',
+      dataIndex: 'catalogCount',
+      search: false,
+    },
+    {
+      title: <SettingOutlined />,
       valueType: 'option',
-      width: 150,
+      align: 'center',
+      width: 60,
       render: (_, record) => [
         <Button
           key="edit"
-          type="link"
+          type="primary"
           icon={<EditOutlined />}
           onClick={() => {
             setCurrentRow(record);
             form.setFieldsValue(record);
             setEditModalOpen(true);
           }}
+          size='small'
         >
-          Edit
         </Button>,
         <Popconfirm
           key="delete"
@@ -57,8 +63,7 @@ const Index: React.FC = () => {
           okText="Yes"
           cancelText="No"
         >
-          <Button type="link" danger icon={<DeleteOutlined />}>
-            Delete
+          <Button type="primary" danger icon={<DeleteOutlined />} size='small'>
           </Button>
         </Popconfirm>,
       ],
@@ -91,27 +96,24 @@ const Index: React.FC = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer extra={<Button
+      key="create"
+      type="primary"
+      icon={<PlusOutlined />}
+      onClick={() => {
+        form.resetFields();
+        setCreateModalOpen(true);
+      }}
+    >
+      New Tag
+    </Button>}>
       <ProTable<ITagListItem>
         headerTitle="Tags"
         actionRef={actionRef}
         rowKey="id"
         search={{
-          labelWidth: 'auto',
+          layout: 'vertical',
         }}
-        toolBarRender={() => [
-          <Button
-            key="create"
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              form.resetFields();
-              setCreateModalOpen(true);
-            }}
-          >
-            New Tag
-          </Button>,
-        ]}
         request={apiTags}
         columns={columns}
         pagination={{

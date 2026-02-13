@@ -32,4 +32,5 @@ public class CatalogListItem : BaseEntity
     public bool Active { get; set; }
     public string Locale { get; set; } = default!;
     public string? Url { get; set; }
+    public int CommentCount { get; set; }
 }

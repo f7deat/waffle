@@ -57,7 +57,9 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
             PhoneNumber = user.PhoneNumber,
             UserName = user.UserName ?? string.Empty,
             Name = user.Name,
-            Roles = await _userManager.GetRolesAsync(user)
+            Roles = await _userManager.GetRolesAsync(user),
+            EmailConfirmed = user.EmailConfirmed,
+            Avatar = user.Avatar
         };
     }
 
@@ -146,23 +148,31 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
     public async Task<TResult> ChangeAvatarAsync(ChangeAvatarArgs args, string host)
     {
         if (args.File is null || args.File.Length == 0) return TResult.Failed("Invalid file.");
-        var user = await _userManager.FindByIdAsync(args.UserId.ToString());
-        if (user is null) return TResult.Failed("User not found!");
-        if (!_hcaService.IsUserInRole(RoleName.Admin) && user.Id != _hcaService.GetUserId()) return TResult.Failed("Unauthoried");
-        var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "avatar", user.Id.ToString());
-        if (Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
-        using var fileStream = new FileStream(Path.Combine(folderPath, args.File.FileName), FileMode.Create);
-        await args.File.CopyToAsync(fileStream);
-        await _context.FileContents.AddAsync(new Entities.Files.FileContent
+        try
         {
-            Name = args.File.FileName,
-            Size = args.File.Length,
-            Type = args.File.ContentType,
-            UploadDate = DateTime.Now,
-            UploadBy = args.UserId,
-            Url = $"{host}/avatar/{user.Id}/{args.File.FileName}"
-        });
-        await _context.SaveChangesAsync();
-        return TResult.Success;
+            var user = await _context.Users.FindAsync(args.UserId);
+            if (user is null) return TResult.Failed("User not found!");
+            if (!_hcaService.IsUserInRole(RoleName.Admin) && user.Id != _hcaService.GetUserId()) return TResult.Failed("Unauthoried");
+            var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "avatar", user.Id.ToString());
+            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+            using var fileStream = new FileStream(Path.Combine(folderPath, args.File.FileName), FileMode.Create);
+            await args.File.CopyToAsync(fileStream);
+            await _context.FileContents.AddAsync(new Entities.Files.FileContent
+            {
+                Name = args.File.FileName,
+                Size = args.File.Length,
+                Type = args.File.ContentType,
+                UploadDate = DateTime.Now,
+                UploadBy = args.UserId,
+                Url = $"{host}/avatar/{user.Id}/{args.File.FileName}"
+            });
+            user.Avatar = $"{host}/avatar/{user.Id}/{args.File.FileName}";
+            await _context.SaveChangesAsync();
+            return TResult.Success;
+        }
+        catch (Exception ex)
+        {
+            return TResult.Failed(ex.ToString());
+        }
     }
 }

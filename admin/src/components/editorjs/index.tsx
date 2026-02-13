@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import { useParams } from '@umijs/max';
 import { getBlockEditor } from '@/services/work-content';
 import { EDITOR_JS_TOOLS } from './tool';
+import './style.less';
 
 type ProEditorBlockProps = {
   onChange: any;

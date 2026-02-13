@@ -53,10 +53,7 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
         if (image is null) return TResult.Failed("Image not found!");
         var uri = new Uri(image.Url);
         var filePath = Path.Combine(_webHostEnvironment.WebRootPath, uri.LocalPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
-        if (File.Exists(filePath))
-        {
-            File.Delete(filePath);
-        }
+        if (File.Exists(filePath)) File.Delete(filePath);
         await _placeRepository.DeleteImageAsync(image);
         return TResult.Success;
     }
