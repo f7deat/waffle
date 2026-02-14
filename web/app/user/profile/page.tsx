@@ -2,11 +2,14 @@
 
 import PageContainer from "@/components/layout/page-container"
 import { apiCurrentUser, apiChangePassword, apiChangeAvatar } from "@/services/user/user";
-import { LockOutlined, CameraOutlined } from "@ant-design/icons";
+import { LockOutlined, CameraOutlined, LogoutOutlined, EditOutlined } from "@ant-design/icons";
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Page: React.FC = () => {
 
+    const router = useRouter();
     const [user, setUser] = useState<API.User | null>(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -185,6 +188,11 @@ const Page: React.FC = () => {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("access_token");
+        router.push("/user/login");
+    };
+
     if (loading) {
         return (
             <PageContainer>
@@ -201,7 +209,7 @@ const Page: React.FC = () => {
                 <div className="flex items-center justify-center min-h-[400px]">
                     <div className="text-center">
                         <h2 className="text-2xl font-bold text-gray-800 mb-2">Không tìm thấy thông tin người dùng</h2>
-                        <p className="text-gray-600">Vui lòng đăng nhập để xem hồ sơ của bạn.</p>
+                        <p className="text-gray-600">Vui lòng <Link href="/user/login" className="text-blue-600 hover:underline">đăng nhập</Link> để xem hồ sơ của bạn.</p>
                     </div>
                 </div>
             </PageContainer>
@@ -266,9 +274,9 @@ const Page: React.FC = () => {
 
                             {/* Action Buttons */}
                             <div className="mt-4 sm:mt-0 flex gap-2">
-                                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                                    Chỉnh sửa hồ sơ
-                                </button>
+                                <Link href="/user/profile/center" className="px-4 hover:text-white py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium inline-block">
+                                    <EditOutlined /> Chỉnh sửa hồ sơ
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -337,6 +345,12 @@ const Page: React.FC = () => {
                             className="w-full sm:w-auto px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                         >
                            <LockOutlined /> Đổi mật khẩu
+                        </button>
+                        <button 
+                            onClick={handleLogout}
+                            className="w-full sm:w-auto px-4 py-2 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors font-medium ml-0 sm:ml-2"
+                        >
+                           <LogoutOutlined /> Đăng xuất
                         </button>
                     </div>
                 </div>

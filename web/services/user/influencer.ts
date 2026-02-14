@@ -7,5 +7,5 @@ export type InfluencerRegisterData = {
 }
 
 export async function apiInfluencerRegister(data: InfluencerRegisterData) {
-    return request.post("user/influencer", data);
+    return request.post<API.TResult<null>>("user/influencer", data);
 }

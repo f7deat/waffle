@@ -44,14 +44,14 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({ articleId, articleSlu
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
+    <div className="bg-white rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xl font-bold">Bình luận</h2>
         <span className="text-sm text-gray-500">{comments.length} bình luận</span>
       </div>
 
       {!token ? (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 mb-4">
           Vui lòng <Link href="/user/login" className="font-semibold underline">đăng nhập</Link> để bình luận.
         </div>
       ) : (

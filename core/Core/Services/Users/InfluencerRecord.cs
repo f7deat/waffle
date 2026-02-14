@@ -7,6 +7,7 @@ public record BecomeInfluencerArgs(
     bool? Gender,
     DateOnly? DateOfBirth,
     string Password,
-    int? districtId
+    int? DistrictId,
+    string UserName
 );
 

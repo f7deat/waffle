@@ -59,19 +59,34 @@ const InfluencerRegisterForm = () => {
 		}
 	}, [selectedProvince]);
 
-	const handleSubmit = async (values: FormData) => {
+	const handleSubmit = async (values: {
+		fullName: string;
+		email: string;
+		phoneNumber: string;
+		gender?: boolean;
+		platforms: string;
+		followers: string;
+		password: string;
+		confirmPassword: string;
+		note: string;
+	}) => {
 		setIsSubmitting(true);
 		setSubmitState("idle");
 		setErrorMessage(null);
-		if (formData.password !== formData.confirmPassword) {
+		if (values.password !== values.confirmPassword) {
 			setSubmitState("error");
 			setErrorMessage("Mật khẩu và xác nhận mật khẩu không khớp.");
 			setIsSubmitting(false);
-			return;
+			return false;
 		}
 
 		try {
-			await apiInfluencerRegister(values);
+			const response = await apiInfluencerRegister(values);
+			if (!response.succeeded) {
+				setSubmitState("error");
+				setErrorMessage(response.message || "Đăng ký không thành công. Vui lòng thử lại.");
+				return;
+			}
 			setSubmitState("success");
 			setFormData(defaultFormData);
 		} catch (error) {
@@ -145,7 +160,7 @@ const InfluencerRegisterForm = () => {
 				</section>
 
 				<section id="register" className="grid gap-6 lg:grid-cols-[1.6fr,1fr]">
-					<div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+					<div className="rounded-xl bg-white p-6">
 						<div className="mb-6 space-y-1">
 							<p className="text-xs uppercase tracking-[0.08em] text-slate-500">Đơn đăng ký</p>
 							<h2 className="text-2xl font-semibold text-slate-900">Thông tin influencer</h2>
@@ -236,7 +251,7 @@ const InfluencerRegisterForm = () => {
 					</div>
 
 					<aside className="space-y-4">
-						<div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+						<div className="rounded-xl bg-white p-4">
 							<h3 className="text-base font-semibold text-slate-900">Yêu cầu tối thiểu</h3>
 							<ul className="mt-3 space-y-2 text-sm text-slate-600">
 								<li>• 10k follower ở nền tảng chính.</li>

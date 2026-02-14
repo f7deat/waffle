@@ -5,7 +5,7 @@ import KolList from "@/components/place/kol-list";
 import { apiKolList } from "@/services/kol/kol";
 import Link from "next/link";
 import { Metadata } from "next";
-import { SearchOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined, EnvironmentOutlined, SearchOutlined } from "@ant-design/icons";
 
 type SearchParams = Promise<{
 	page?: string;
@@ -125,7 +125,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 						</div>
 					</div>
 				</div>
-				<div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+				<div className="flex flex-col gap-4 rounded-xl bg-white p-5 shadow-sm">
 					<div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
 						<div>
 							<p className="text-xs uppercase tracking-[0.08em] text-slate-500">Danh sách địa điểm</p>
@@ -172,7 +172,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 								return (
 									<div
 										key={place.id}
-										className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white/85 backdrop-blur transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg"
+										className="group flex h-full flex-col overflow-hidden rounded-xl bg-white/85 backdrop-blur transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg"
 									>
 										<div className="relative h-44 w-full overflow-hidden bg-gradient-to-br from-indigo-100 via-white to-slate-100">
 											{place.thumbnail ? (
@@ -194,7 +194,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 												<h2 className="text-lg font-semibold text-slate-900 line-clamp-2">{place.name}</h2>
 											</Link>
 											<p className="text-sm text-slate-600 line-clamp-2">
-												{place.address}, {place.districtName}, {place.provinceName}
+												<EnvironmentOutlined /> {place.districtName}, {place.provinceName}
 											</p>
 											<div className="mt-auto flex items-center gap-3 text-xs text-slate-500">
 												<span className="flex items-center gap-1">
@@ -221,14 +221,14 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 										aria-disabled={current === 1}
 										className={`rounded-lg px-3 py-2 font-semibold transition ${current === 1 ? "cursor-not-allowed bg-slate-100 text-slate-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
 									>
-										Trước
+										<ArrowLeftOutlined /> Trước
 									</Link>
 									<Link
 										href={buildPageHref(Math.min(totalPages, current + 1))}
 										aria-disabled={current === totalPages}
-										className={`rounded-lg px-3 py-2 font-semibold transition ${current === totalPages ? "cursor-not-allowed bg-slate-100 text-slate-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+										className={`rounded-lg px-3 py-2 text-white font-semibold transition ${current === totalPages ? "cursor-not-allowed bg-slate-100 text-slate-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
 									>
-										Sau
+										Sau <ArrowRightOutlined />
 									</Link>
 								</div>
 							</div>

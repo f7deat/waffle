@@ -129,10 +129,11 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
                 Name = args.FullName,
                 Email = args.Email,
                 PhoneNumber = args.PhoneNumber,
-                UserName = args.PhoneNumber,
+                UserName = args.UserName,
                 Gender = args.Gender,
                 DateOfBirth = args.DateOfBirth,
-                DistrictId = args.districtId
+                DistrictId = args.DistrictId,
+                CreatedAt = DateTime.UtcNow
             };
             var result = await _userManager.CreateAsync(user, args.Password);
             if (!result.Succeeded) return TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Failed to create influencer account.");

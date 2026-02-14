@@ -4,10 +4,11 @@ import { apiArticleDetail, apiArticleList } from "@/services/article";
 import { Metadata } from "next";
 import Link from "next/link";
 import { apiCatalogMeta } from "@/services/catalog";
-import { EyeFilled } from "@ant-design/icons";
+import { CalendarOutlined, EyeFilled } from "@ant-design/icons";
 import Block from "@/components/block";
 import ArticleActions from "@/components/article/actions";
 import ArticleComments from "@/components/article/comments";
+import dayjs from "dayjs";
 
 type Params = Promise<{
     id: string;
@@ -102,7 +103,7 @@ const Page = async ({ params }: { params: Params }) => {
                             <div className="space-y-4">
                                 {latestArticles.map((item) => {
                                     const updatedAt = item.modifiedDate
-                                        ? new Date(item.modifiedDate).toLocaleDateString("vi-VN")
+                                        ? dayjs(item.modifiedDate).format("DD-MM-YYYY")
                                         : "Chưa cập nhật";
                                     return (
                                         <Link key={item.id} href={`/article/${item.normalizedName}`}>
@@ -122,8 +123,8 @@ const Page = async ({ params }: { params: Params }) => {
                                                     <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
                                                         {item.name}
                                                     </h3>
-                                                    <p className="text-xs text-gray-500">Cập nhật {updatedAt}</p>
-                                                    <p className="text-xs text-gray-500 mt-1"><EyeFilled /> {item.viewCount?.toLocaleString() ?? 0}</p>
+                                                    <span className="text-xs text-gray-500 mr-2"><CalendarOutlined /> {updatedAt}</span>
+                                                    <span className="text-xs text-gray-500 mt-1"><EyeFilled /> {item.viewCount?.toLocaleString() ?? 0}</span>
                                                 </div>
                                             </div>
                                         </Link>
