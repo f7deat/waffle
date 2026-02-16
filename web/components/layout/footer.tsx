@@ -1,8 +1,9 @@
-import { CaretRightFilled, FacebookFilled, GlobalOutlined, InstagramFilled, LinkedinFilled, TikTokFilled } from "@ant-design/icons";
-import { Dropdown } from "antd";
+import { CaretRightFilled, FacebookFilled, InstagramFilled, LinkedinFilled, TikTokFilled } from "@ant-design/icons";
 import Link from "next/link";
+import LanguageSelector from "./language";
 
 const Footer: React.FC = () => {
+
     const year = new Date().getFullYear();
 
     return (
@@ -19,7 +20,7 @@ const Footer: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-4 text-slate-300">
-                        <a href="https://facebook.com/tan.dct" aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
+                        <a href="https://www.facebook.com/somcafe/" aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
                             <FacebookFilled />
                         </a>
                         <a href="https://www.instagram.com/f7deat/" aria-label="Instagram" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
@@ -83,32 +84,7 @@ const Footer: React.FC = () => {
                         <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
                         <a href="/terms" className="hover:text-white transition-colors">Terms</a>
                         <a href="/sitemap" className="hover:text-white transition-colors">Sitemap</a>
-                        <Dropdown menu={{
-                            items: [
-                                {
-                                    label: '🇻🇳 Tiếng việt',
-                                    key: 'vi-VN'
-                                },
-                                {
-                                    label: '🇺🇸 English',
-                                    key: 'en-US'
-                                },
-                                {
-                                    label: '🇨🇳 Chinese',
-                                    key: 'zh-CN'
-                                },
-                                {
-                                    label: '🇯🇵 Japanese',
-                                    key: 'ja-JP'
-                                },
-                                {
-                                    label: '🇰🇷 Korean',
-                                    key: 'ko-KR'
-                                }
-                            ]
-                        }}>
-                            <a href="#" className="hover:text-white transition-colors"><GlobalOutlined /> Language</a>
-                        </Dropdown>
+                        <LanguageSelector />
                     </div>
                 </div>
             </div>

@@ -9,6 +9,7 @@ import Block from "@/components/block";
 import ArticleActions from "@/components/article/actions";
 import ArticleComments from "@/components/article/comments";
 import dayjs from "dayjs";
+import { cookies } from 'next/headers'
 
 type Params = Promise<{
     id: string;
@@ -33,12 +34,12 @@ const Page = async ({ params }: { params: Params }) => {
     const { id } = await params;
     const res = await apiArticleDetail(id);
     const article = res.data;
+    const cookieStore = await cookies();
+    const locale = cookieStore.get("language")?.value || "vi-VN";
 
     // Fetch latest articles for sidebar
-    const latestRes = await apiArticleList({ current: 1, pageSize: 6 });
-    const latestArticles = (latestRes.data || []).sort(
-        (a, b) => new Date(b.modifiedDate).getTime() - new Date(a.modifiedDate).getTime()
-    );
+    const latestRes = await apiArticleList({ current: 1, pageSize: 6, locale });
+    const latestArticles = latestRes.data || [];
 
     const breadcrumbs = [
         { label: "Bài viết", href: "/article" },

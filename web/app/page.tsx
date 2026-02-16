@@ -48,7 +48,9 @@ export default async function Home() {
         <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
           <aside className="space-y-6 lg:sticky lg:top-20 self-start">
             <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">Tags</h3>
+              <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+                <Link href="/tag">Thẻ tag nổi bật</Link>
+              </h3>
               <div className="mt-3 flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <span key={tag} className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200">{tag}</span>
@@ -104,7 +106,7 @@ export default async function Home() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {locations.map((item) => (
-                  <Link key={item.id} href={`/place/${item.normalizedName}`} className="group relative snap-start overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
+                  <Link key={item.id} href={`/place/${item.normalizedName}`} className="group relative snap-start overflow-hidden rounded-lg bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
                     <div className="h-44 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
                     <div className="p-4">
                       <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
@@ -152,7 +154,7 @@ export default async function Home() {
               </div>
               <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {articles.map((item) => (
-                  <div key={item.id} className="group relative overflow-hidden rounded bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
+                  <div key={item.id} className="group relative overflow-hidden rounded-lg bg-white transition hover:-translate-y-1 hover:shadow-lg">
                     <div className="h-48 bg-cover bg-center" style={cardStyle(item.thumbnail || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5')} />
                     <div className="p-4">
                       <p className="text-sm text-slate-500 dark:text-slate-400">Featured</p>

@@ -8,8 +8,11 @@ function createClientRequest(): AxiosInstance {
     instance.interceptors.request.use((config) => {
         config.baseURL = API_BASE_URL;
 
-        // Ensure locale param defaults to vi-VN unless explicitly provided
-        config.params = { locale: "vi-VN", ...(config.params || {}) };
+        // Get locale from localStorage, default to vi-VN
+        const locale = typeof window !== "undefined" ? localStorage.getItem("language") || "vi-VN" : "vi-VN";
+        
+        // Ensure locale param defaults to stored language unless explicitly provided
+        config.params = { locale, ...(config.params || {}) };
 
         // Add access token to header on client only
         const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
@@ -32,6 +35,7 @@ function createServerRequest(): AxiosInstance {
         config.baseURL = API_BASE_URL;
 
         // Ensure locale param defaults to vi-VN unless explicitly provided
+        // For server-side, pass locale via config.params when calling the request
         config.params = { locale: "vi-VN", ...(config.params || {}) };
 
         return config;
@@ -85,6 +89,13 @@ async function delServer<T>(url: string, config?: AxiosRequestConfig) {
     return response.data;
 }
 
+// Helper to get locale from cookies for server-side requests
+export function getLocaleFromCookies(cookieString?: string): string {
+    if (!cookieString) return "vi-VN";
+    const match = cookieString.match(/language=([^;]+)/);
+    return match ? match[1] : "vi-VN";
+}
+
 const request = {
     get,
     post,
@@ -96,6 +107,7 @@ const request = {
         put: putServer,
         delete: delServer,
     },
+    getLocaleFromCookies,
 };
 
 export default request;

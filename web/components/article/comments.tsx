@@ -44,49 +44,53 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({ articleId, articleSlu
   };
 
   return (
-    <div className="bg-white rounded-xl p-4">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xl font-bold">Bình luận</h2>
-        <span className="text-sm text-gray-500">{comments.length} bình luận</span>
+    <div>
+
+      <div className="mb-4 bg-white rounded-md p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xl font-bold">Bình luận</h2>
+          <span className="text-sm text-gray-500">{comments.length} bình luận</span>
+        </div>
+        {!token ? (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 mb-4">
+            Vui lòng <Link href="/user/login" className="font-semibold underline">đăng nhập</Link> để bình luận.
+          </div>
+        ) : (
+          <div className="mb-4">
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Nhập bình luận của bạn..."
+              className="w-full min-h-[96px] rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <div className="mt-2 flex justify-end">
+              <button
+                onClick={addComment}
+                disabled={!text.trim()}
+                className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+              >
+                Gửi bình luận
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {!token ? (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 mb-4">
-          Vui lòng <Link href="/user/login" className="font-semibold underline">đăng nhập</Link> để bình luận.
-        </div>
-      ) : (
-        <div className="mb-4">
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Nhập bình luận của bạn..."
-            className="w-full min-h-[96px] rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <div className="mt-2 flex justify-end">
-            <button
-              onClick={addComment}
-              disabled={!text.trim()}
-              className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
-            >
-              Gửi bình luận
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div className="space-y-3">
-        {comments.map((c) => (
-          <div key={c.id} className="rounded-lg border border-gray-200 p-3">
-            <div className="flex items-center justify-between text-xs text-gray-500">
-              <span>{c.author}</span>
-              <span>{new Date(c.createdAt).toLocaleString("vi-VN")}</span>
+      <div className="bg-white rounded-md p-4">
+        <div className="space-y-3">
+          {comments.map((c) => (
+            <div key={c.id} className="rounded-lg border border-gray-200 p-3">
+              <div className="flex items-center justify-between text-xs text-gray-500">
+                <span>{c.author}</span>
+                <span>{new Date(c.createdAt).toLocaleString("vi-VN")}</span>
+              </div>
+              <p className="mt-1 text-sm text-gray-800 whitespace-pre-wrap">{c.content}</p>
             </div>
-            <p className="mt-1 text-sm text-gray-800 whitespace-pre-wrap">{c.content}</p>
-          </div>
-        ))}
-        {comments.length === 0 && (
-          <Empty description="Chưa có bình luận." />
-        )}
+          ))}
+          {comments.length === 0 && (
+            <Empty description="Chưa có bình luận." />
+          )}
+        </div>
       </div>
     </div>
   );

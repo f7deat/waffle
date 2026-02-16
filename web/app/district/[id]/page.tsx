@@ -118,7 +118,7 @@ const Page: React.FC = () => {
                     <>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {places.map((place) => (
-                                <Link key={place.id} href={`/place/${place.id}`}>
+                                <Link key={place.id} href={`/place/${place.normalizedName}`}>
                                     <div className="group cursor-pointer bg-white h-full overflow-hidden rounded-lg transition-all duration-300 hover:shadow-lg hover:border-blue-400">
                                         <div className="relative overflow-hidden bg-gray-200 h-48">
                                             {place.thumbnail ? (

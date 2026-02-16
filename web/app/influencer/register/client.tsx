@@ -35,7 +35,6 @@ const defaultFormData: FormData = {
 };
 
 const InfluencerRegisterForm = () => {
-	const [formData, setFormData] = useState<FormData>(defaultFormData);
 	const [submitState, setSubmitState] = useState<SubmitState>("idle");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -62,6 +61,7 @@ const InfluencerRegisterForm = () => {
 	const handleSubmit = async (values: {
 		fullName: string;
 		email: string;
+		userName: string;
 		phoneNumber: string;
 		gender?: boolean;
 		platforms: string;
@@ -88,7 +88,6 @@ const InfluencerRegisterForm = () => {
 				return;
 			}
 			setSubmitState("success");
-			setFormData(defaultFormData);
 		} catch (error) {
 			setSubmitState("error");
 			setErrorMessage(error instanceof Error ? error.message : "Không thể gửi reCAPTCHA");
@@ -120,12 +119,11 @@ const InfluencerRegisterForm = () => {
 								>
 									Khám phá địa điểm
 								</Link>
-								<a
-									href="#register"
+								<button type="button"
 									className="inline-flex items-center gap-2 rounded-lg border border-white/50 px-4 py-2 text-sm font-semibold text-white transition hover:border-white hover:bg-white/10"
 								>
 									Đăng ký ngay
-								</a>
+								</button>
 							</div>
 						</div>
 						<div className="hidden md:block">
@@ -167,19 +165,31 @@ const InfluencerRegisterForm = () => {
 							<p className="text-sm text-slate-600">Điền thông tin chi tiết để chúng tôi kết nối cơ hội phù hợp nhất.</p>
 						</div>
 
-						<Form onFinish={handleSubmit} layout="vertical">
+						<Form onFinish={handleSubmit} layout="vertical" hidden={submitState === "success"}>
 							<div className="grid gap-4 md:grid-cols-2">
 								<Form.Item label="Họ và tên" name={"fullName"} required>
-									<Input size="large" />
+									<Input size="large" placeholder="Nhập họ và tên" />
 								</Form.Item>
-								<Form.Item label="Email" name={"email"} required>
-									<Input size="large" />
+								<Form.Item label="Tài khoản" name={"userName"} required>
+									<Input size="large" placeholder="Nhập tài khoản" />
 								</Form.Item>
 							</div>
 
 							<div className="grid gap-4 md:grid-cols-2">
+								<Form.Item label="Email" name={"email"} required>
+									<Input size="large" placeholder="Nhập email" />
+								</Form.Item>
 								<Form.Item label="Số điện thoại" name={"phone"}>
-									<Input size="large" />
+									<Input size="large" placeholder="Nhập số điện thoại" />
+								</Form.Item>
+							</div>
+
+							<div className="grid gap-4 md:grid-cols-3">
+								<Form.Item label="Tỉnh/Thành phố" name={"provinceId"}>
+									<Select size="large" options={provinceOptions} onChange={setSelectedProvince} />
+								</Form.Item>
+								<Form.Item label="Xã/Phường" name={"districtId"}>
+									<Select size="large" options={districtOptions} />
 								</Form.Item>
 								<Form.Item label="Giới tính" name={"gender"}>
 									<Select size="large" options={[
@@ -195,21 +205,12 @@ const InfluencerRegisterForm = () => {
 								</Form.Item>
 							</div>
 
-							<div className="grid gap-4 md:grid-cols-2">
-								<Form.Item label="Tỉnh/Thành phố" name={"provinceId"}>
-									<Select size="large" options={provinceOptions} onChange={setSelectedProvince} />
-								</Form.Item>
-								<Form.Item label="Xã/Phường" name={"districtId"}>
-									<Select size="large" options={districtOptions} />
-								</Form.Item>
-							</div>
-
 							<div className="grid md:grid-cols-2 gap-4">
 								<Form.Item label="Mật khẩu" name={"password"} required>
-									<Input.Password size="large" />
+									<Input.Password size="large" placeholder="Nhập mật khẩu" />
 								</Form.Item>
 								<Form.Item label="Xác nhận mật khẩu" name={"confirmPassword"} required>
-									<Input.Password size="large" />
+									<Input.Password size="large" placeholder="Xác nhận mật khẩu" />
 								</Form.Item>
 							</div>
 

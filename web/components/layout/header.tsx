@@ -23,10 +23,10 @@ const Header: React.FC = () => {
                         <a href="/contact" className="hover:text-slate-900 dark:hover:text-white"><PhoneFilled /> Liên hệ</a>
                     </div>
                     <div className="flex items-center gap-3 text-slate-500 dark:text-slate-300">
-                        <a href="https://facebook.com/tan.dct" aria-label="Facebook" className="hover:text-blue-600">
+                        <a href="https://www.facebook.com/somcafe/" aria-label="Facebook" className="hover:text-blue-600">
                             <FacebookFilled />
                         </a>
-                        <a href="https://www.tiktok.com/@f7deat" aria-label="TikTok" className="hover:text-sky-500">
+                        <a href="https://www.tiktok.com/@dungaixem" aria-label="TikTok" className="hover:text-sky-500">
                             <TikTokFilled />
                         </a>
                         <a href="https://www.instagram.com/f7deat/" aria-label="Instagram" className="hover:text-red-500">

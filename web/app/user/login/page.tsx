@@ -42,29 +42,9 @@ const Page: React.FC = () => {
             ]}
         >
             {contextHolder}
-            <div className="min-h-[70vh] bg-gradient-to-br from-indigo-50 via-white to-slate-50 py-10">
-                <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 lg:grid lg:grid-cols-[1.1fr,0.9fr]">
-                    <section className="space-y-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-700">DefZone.Net Access</p>
-                        <h1 className="text-3xl font-bold text-slate-900 lg:text-4xl">Đăng nhập để theo dõi chiến dịch và booking</h1>
-                        <p className="max-w-2xl text-sm text-slate-600 lg:text-base">
-                            Quản lý hồ sơ influencer, nhận brief mới, theo dõi trạng thái booking và cập nhật hiệu quả nội dung trong một nơi duy nhất.
-                        </p>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                            <div className="rounded-xl border border-indigo-100 bg-white p-4 shadow-sm">
-                                <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Bảo mật</p>
-                                <p className="text-lg font-semibold text-slate-900">Xác thực 2 lớp sẵn sàng</p>
-                                <p className="text-sm text-slate-600">Chúng tôi hỗ trợ OTP và thông báo hoạt động lạ.</p>
-                            </div>
-                            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-                                <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Hỗ trợ</p>
-                                <p className="text-lg font-semibold text-slate-900">Chat nhanh với đội ngũ</p>
-                                <p className="text-sm text-slate-600">Nhận hỗ trợ trong giờ hành chính qua hotline hoặc email.</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section className="rounded-2xl border border-indigo-100 bg-white/90 p-6 backdrop-blur lg:p-8">
+            <div className="py-10">
+                <div className="mx-auto md:flex gap-4 max-w-7xl 2xl:gap-16 items-center">
+                    <section className="rounded-2xl bg-white/90 p-6 backdrop-blur lg:p-8 2xl:px-16">
                         <div className="mb-6 space-y-1 text-center">
                             <p className="text-xs uppercase tracking-[0.12em] text-indigo-600">Welcome back</p>
                             <h2 className="text-2xl font-semibold text-slate-900">Đăng nhập tài khoản</h2>
@@ -121,6 +101,35 @@ const Page: React.FC = () => {
                                 Chưa có tài khoản? <a href="/influencer/register" className="font-semibold text-indigo-600 hover:text-indigo-700">Đăng ký</a>
                             </p>
                         </Form>
+                    </section>
+                    <section className="space-y-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-700">DefZone.Net Access</p>
+                        <h1 className="text-3xl font-bold text-slate-900 lg:text-4xl">Đăng nhập để theo dõi chiến dịch và booking</h1>
+                        <p className="max-w-2xl text-sm text-slate-600 lg:text-base">
+                            Quản lý hồ sơ influencer, nhận brief mới, theo dõi trạng thái booking và cập nhật hiệu quả nội dung trong một nơi duy nhất.
+                        </p>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                            <div className="rounded-xl bg-white p-4">
+                                <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Bảo mật</p>
+                                <p className="text-lg font-semibold text-slate-900">Xác thực 2 lớp sẵn sàng</p>
+                                <p className="text-sm text-slate-600">Chúng tôi hỗ trợ OTP và thông báo hoạt động lạ.</p>
+                            </div>
+                            <div className="rounded-xl bg-white p-4">
+                                <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Hỗ trợ</p>
+                                <p className="text-lg font-semibold text-slate-900">Chat nhanh với đội ngũ</p>
+                                <p className="text-sm text-slate-600">Nhận hỗ trợ trong giờ hành chính qua hotline hoặc email.</p>
+                            </div>
+                            <div className="rounded-xl bg-white p-4">
+                                <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Tính năng</p>
+                                <p className="text-lg font-semibold text-slate-900">Bảng điều khiển chi tiết</p>
+                                <p className="text-sm text-slate-600">Xem lịch sử booking, hiệu quả chiến dịch và quản lý hồ sơ.</p>
+                            </div>
+                            <div className="rounded-xl bg-white p-4">
+                                <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Tiện lợi</p>
+                                <p className="text-lg font-semibold text-slate-900">Truy cập mọi lúc mọi nơi</p>
+                                <p className="text-sm text-slate-600">Giao diện web thân thiện với thiết bị di động để bạn luôn kết nối.</p>
+                            </div>
+                        </div>
                     </section>
                 </div>
             </div>

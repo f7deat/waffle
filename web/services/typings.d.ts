@@ -11,6 +11,7 @@ declare namespace API {
     interface FilterOptions {
         current: number;
         pageSize: number;
+        locale?: 'vi-VN' | 'en-US' | 'zh-CN' | 'ja-JP' | 'ko-KR' | string;
     }
     type BlockType = 'paragraph' | 'header' | 'image' | 'list' | 'quote' | 'code' | 'simpleImage' | 'image';
     interface BlockData {

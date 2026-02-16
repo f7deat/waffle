@@ -2,21 +2,26 @@
 import PageContainer from "@/components/layout/page-container";
 import { apiArticleList } from "@/services/article";
 import Link from "next/link";
+import { cookies } from 'next/headers'
 
 type SearchParams = Promise<{
     page?: string;
     pageSize?: string;
     keyword?: string;
+    locale?: string;
 }>;
 
 const DEFAULT_PAGE_SIZE = 12;
 
 const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
+    const cookieStore = await cookies();
+    const locale = cookieStore.get("language")?.value || "vi-VN";
+
     const current = Math.max(1, Number((await searchParams).page) || 1);
     const pageSize = Math.max(1, Number((await searchParams).pageSize) || DEFAULT_PAGE_SIZE);
     const keyword = (await searchParams).keyword?.trim();
 
-    const response = await apiArticleList({ current, pageSize });
+    const response = await apiArticleList({ current, pageSize, locale });
     const articles = response.data || [];
     const total = response.total || articles.length;
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -26,6 +31,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
         if (keyword) params.set("keyword", keyword);
         if (pageSize !== DEFAULT_PAGE_SIZE) params.set("pageSize", String(pageSize));
         params.set("page", String(page));
+        params.set("locale", locale);
         return `/article?${params.toString()}`;
     };
 
