@@ -36,6 +36,14 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
         });
     }
 
+    public Task<int> GetCurrentMonthAsync(string locale) => _context.Catalogs.CountAsync(c => c.Active && c.Locale == locale && c.Type == CatalogType.Article && c.CreatedDate.Month == DateTime.UtcNow.Month && c.CreatedDate.Year == DateTime.Now.Year);
+
+    public Task<int> GetPreviousMonthAsync(string locale) => _context.Catalogs.CountAsync(c => c.Active && c.Locale == locale && c.Type == CatalogType.Article && c.CreatedDate.Month == DateTime.UtcNow.AddMonths(-1).Month && c.CreatedDate.Year == DateTime.Now.Year);
+
+    public Task<int> GetTotalArticlesAsync(string locale) => _context.Catalogs.CountAsync(c => c.Active && c.Locale == locale && c.Type == CatalogType.Article);
+
+    public Task<int> GetTotalViewCountAsync(string locale) => _context.Catalogs.Where(c => c.Active && c.Locale == locale && c.Type == CatalogType.Article).SumAsync(c => c.ViewCount);
+
     public async Task<ListResult> ListAsync(ArticleFilterOptions filterOptions)
     {
         var query = from c in _context.Catalogs

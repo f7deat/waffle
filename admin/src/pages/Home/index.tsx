@@ -1,4 +1,4 @@
-import { dataPieChart, queryViewCount } from '@/services/catalog';
+import { dataPieChart } from '@/services/catalog';
 import { PageContainer, ProCard, ProForm, ProFormDateRangePicker, ProList } from '@ant-design/pro-components';
 import { Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
@@ -11,14 +11,10 @@ import Lead from './components/lead';
 import { Column, Pie } from '@ant-design/charts';
 
 const HomePage: React.FC = () => {
-  const [viewCount, setViewCount] = useState<number>(0);
   const [dataPie, setDataPie] = useState<any>([]);
   const [dataActivities, setDataActivities] = useState<any[]>([]);
 
   useEffect(() => {
-    queryViewCount().then((response) => {
-      setViewCount(response);
-    });
     dataPieChart().then(response => {
       setDataPie(response);
     });

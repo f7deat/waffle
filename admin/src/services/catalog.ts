@@ -62,7 +62,7 @@ export async function treeDrop(data: any) {
   });
 }
 
-export async function queryViewCount() {
+export async function apiViewCount() {
   return request(`catalog/view-count`);
 }
 

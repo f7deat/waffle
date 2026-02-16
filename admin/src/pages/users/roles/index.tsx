@@ -5,6 +5,7 @@ import { history } from "@umijs/max"
 import { Button } from "antd"
 
 const RolePage: React.FC = () => {
+
     const columns: ProColumns<API.Role>[] = [
         {
             title: '#',
@@ -13,7 +14,22 @@ const RolePage: React.FC = () => {
         },
         {
             title: 'Name',
-            dataIndex: 'name'
+            dataIndex: 'name',
+            copyable: true,
+            width: 150
+        },
+        {
+            title: 'Display Name',
+            dataIndex: 'displayName',
+            copyable: true
+        },
+        {
+            title: 'User Count',
+            dataIndex: 'userCount',
+            valueType: 'digit',
+            width: 90,
+            search: false,
+            align: 'right'
         },
         {
             title: 'Option',
@@ -24,6 +40,7 @@ const RolePage: React.FC = () => {
             width: 50
         }
     ]
+
     return (
         <PageContainer>
             <ProTable request={listRole} columns={columns}

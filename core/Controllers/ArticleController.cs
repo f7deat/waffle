@@ -13,4 +13,7 @@ public class ArticleController(IArticleService _articleService) : BaseController
 
     [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> ListAsync([FromQuery] ArticleFilterOptions filterOptions) => Ok(await _articleService.ListAsync(filterOptions));
+
+    [HttpGet("statistics"), AllowAnonymous]
+    public async Task<IActionResult> GetStatisticsAsync([FromQuery] string locale) => Ok(await _articleService.GetStatisticsAsync(locale));
 }

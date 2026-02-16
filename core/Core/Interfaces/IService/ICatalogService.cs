@@ -2,7 +2,6 @@
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Services.Catalogs.Args;
-using Waffle.Core.Services.Catalogs.Filters;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Entities;
 using Waffle.Models;
@@ -10,7 +9,6 @@ using Waffle.Models.Args.Catalogs;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Common;
 using Waffle.Models.Filters.Catalogs;
-using Waffle.Models.Result;
 using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Interfaces.IService;
@@ -45,7 +43,7 @@ public interface ICatalogService
     Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type, string locale);
     Task<IEnumerable<Guid>> ListTagIdsAsync(Guid id);
     Task<object?> GetStructureByIdAsync(Guid id);
-    Task<int> GetViewCountAsync(string locale);
+    Task<TResult> GetViewCountAsync(string locale);
     Task<object?> GetComponentsAsync(GetComponentsArgs args);
     Task<object?> GetStructureAsync(string normalizedName);
     Task<IdentityResult> DeleteRangeAsync(List<Guid> ids);

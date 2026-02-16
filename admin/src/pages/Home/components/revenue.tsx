@@ -13,7 +13,7 @@ const Revenue: React.FC = () => {
                 suffix="USD"
                 tip="Tổng doanh thu từ tất cả các nguồn"
             />
-            <div className="flex gap-4 mb-4">
+            <div className="flex gap-4 mb-2">
                 <div className="flex gap-2">
                     <span className="text-slate-600">Tháng trước</span>
                     <FormattedNumber value={98765} />

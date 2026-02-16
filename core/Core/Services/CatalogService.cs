@@ -410,7 +410,7 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
 
     public Task<object?> GetStructureByIdAsync(Guid id) => _catalogRepository.GetStructureAsync(id);
 
-    public Task<int> GetViewCountAsync(string locale) => _catalogRepository.GetViewCountAsync(locale);
+    public async Task<TResult> GetViewCountAsync(string locale) => TResult.Ok(await _catalogRepository.GetViewCountAsync(locale));
 
     public async Task<object?> GetComponentsAsync(GetComponentsArgs args)
     {

@@ -10,24 +10,35 @@ using Waffle.Models;
 
 namespace Waffle.Controllers.Users;
 
-public class RoleController(RoleManager<ApplicationRole> roleManager, ApplicationDbContext _context) : BaseController
+public class RoleController(RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : BaseController
 {
     [HttpGet("list")]
-    public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await ListResult<ApplicationRole>.Success(roleManager.Roles, filterOptions));
+    public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions)
+    {
+        var query = from r in _context.Roles
+                    select new
+                    {
+                        r.Id,
+                        r.Name,
+                        r.DisplayName,
+                        UserCount = _context.UserRoles.Count(x => x.RoleId == r.Id)
+                    };
+        return Ok(await ListResult.Success(query, filterOptions));
+    }
 
     [HttpPost("{name}"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> DeleteAsync([FromRoute] string name)
     {
-        var role = await roleManager.FindByNameAsync(name);
+        var role = await _roleManager.FindByNameAsync(name);
         if (role is null) return BadRequest("Role not found!");
-        return Ok(await roleManager.DeleteAsync(role));
+        return Ok(await _roleManager.DeleteAsync(role));
     }
 
     [HttpPost, Authorize(Roles = RoleName.Admin)]
-    public async Task<IActionResult> CreateAsync([FromBody] ApplicationRole role) => Ok(await roleManager.CreateAsync(role));
+    public async Task<IActionResult> CreateAsync([FromBody] ApplicationRole role) => Ok(await _roleManager.CreateAsync(role));
 
     [HttpGet("find-by-id/{id}")]
-    public async Task<IActionResult> FindByIdAsync([FromRoute] string id) => Ok(await roleManager.FindByIdAsync(id));
+    public async Task<IActionResult> FindByIdAsync([FromRoute] string id) => Ok(await _roleManager.FindByIdAsync(id));
 
     [HttpGet("users")]
     public async Task<IActionResult> GetUsersInRoleAsync([FromQuery] RoleUserFilterOptions filterOptions)

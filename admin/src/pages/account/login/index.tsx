@@ -44,18 +44,14 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (values: any) => {
-    try {
-      const msg = await login({ ...values, type });
-      if (!msg.succeeded) {
-        return message.error('Sai tên đăng nhập hoặc mật khẩu!');
-      }
-      localStorage.setItem('wf_token', msg.token);
-      await fetchUserInfo();
-      const urlParams = new URL(window.location.href).searchParams;
-      history.push(urlParams.get('redirect') || '/');
-    } catch (error) {
-      message.error('Đăng nhập thất bại!');
+    const msg = await login({ ...values, type });
+    if (!msg.succeeded) {
+      return message.error('Sai tên đăng nhập hoặc mật khẩu!');
     }
+    localStorage.setItem('wf_token', msg.token);
+    await fetchUserInfo();
+    const urlParams = new URL(window.location.href).searchParams;
+    history.push(urlParams.get('redirect') || '/');
   };
 
   return (

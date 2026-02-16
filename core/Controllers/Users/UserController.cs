@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices.Users;
 using Waffle.Core.Options;
@@ -107,7 +108,7 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
                     succeeded = true
                 });
             }
-            return Ok(result);
+            return Ok(TResult.Failed("Đăng nhập thất bại"));
         }
         catch (Exception ex)
         {
