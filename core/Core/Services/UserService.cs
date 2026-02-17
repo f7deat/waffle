@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
@@ -6,6 +7,7 @@ using Waffle.Core.IServices.Users;
 using Waffle.Core.Services.Users;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Locations;
 using Waffle.Entities.Users;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Users;
@@ -102,6 +104,8 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
         var query = from u in _context.Users
                     join ur in _context.UserRoles on u.Id equals ur.UserId
                     join r in _context.Roles on ur.RoleId equals r.Id
+                    join d in _context.Districts on u.DistrictId equals d.Id
+                    join p in _context.Provinces on d.ProvinceId equals p.Id
                     where r.Name == RoleName.Influencer
                     select new
                     {
@@ -115,7 +119,8 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
                         ReviewCount = 0,
                         Rating = 5,
                         PricePerReview = 0,
-                        u.EmailConfirmed
+                        u.EmailConfirmed,
+                        ProvinceName = p.Name
                     };
         return await ListResult.Success(query, filterOptions);
     }
@@ -175,5 +180,37 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
         {
             return TResult.Failed(ex.ToString());
         }
+    }
+
+    public async Task<TResult> GetByUserNameAsync(string userName)
+    {
+        var user = await _userManager.FindByNameAsync(userName);
+        if (user is null) return TResult.Failed("User not found!");
+        var address = await (from a in _context.Users
+                             join d in _context.Districts on a.DistrictId equals d.Id into ad
+                             from d in ad.DefaultIfEmpty()
+                             join p in _context.Provinces on d.ProvinceId equals p.Id into dp
+                             from p in dp.DefaultIfEmpty()
+                             where a.Id == user.Id
+                             select new
+                             {
+                                 ProvinceName = p != null ? p.Name : string.Empty,
+                                 DistrictName = d != null ? d.Name : string.Empty
+                             }).FirstOrDefaultAsync();
+        return TResult.Ok(new
+        {
+            user.Id,
+            user.UserName,
+            user.Name,
+            user.Avatar,
+            user.EmailConfirmed,
+            user.PhoneNumberConfirmed,
+            user.DateOfBirth,
+            user.Gender,
+            user.CreatedAt,
+            user.DistrictId,
+            address?.ProvinceName,
+            address?.DistrictName
+        });
     }
 }

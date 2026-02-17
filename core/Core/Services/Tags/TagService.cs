@@ -42,6 +42,8 @@ public class TagService(ITagRepository _tagRepository) : ITagService
         return TResult.Ok(tag);
     }
 
+    public Task<TResult> GetByNameAsync(string normalizedName) => _tagRepository.GetByNameAsync(normalizedName);
+
     public Task<ListResult> GetPlacesByTagAsync(TagPlaceFilterOptions filterOptions) => _tagRepository.GetPlacesByTagAsync(filterOptions);
 
     public async Task<TResult> GetRandomsAsync()

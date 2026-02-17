@@ -36,4 +36,7 @@ public class TagController(ITagService _tagService) : BaseController
 
     [HttpGet("places"), AllowAnonymous]
     public async Task<IActionResult> GetPlacesByTagAsync([FromQuery] TagPlaceFilterOptions filterOptions) => Ok(await _tagService.GetPlacesByTagAsync(filterOptions));
+
+    [HttpGet("normalized-name/{normalizedName}"), AllowAnonymous]
+    public async Task<IActionResult> GetByNameAsync([FromRoute] string normalizedName) => Ok(await _tagService.GetByNameAsync(normalizedName));
 }

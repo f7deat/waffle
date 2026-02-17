@@ -12,6 +12,7 @@ public interface ITagService
     Task<TResult> DeleteAsync(Guid id);
     Task<ListResult> GetArticlesByTagAsync(TagArticleFilterOptions filterOptions);
     Task<TResult> GetAsync(Guid id);
+    Task<TResult> GetByNameAsync(string normalizedName);
     Task<ListResult> GetPlacesByTagAsync(TagPlaceFilterOptions filterOptions);
     Task<TResult> GetRandomsAsync();
     Task<IEnumerable<Option>> GetTagOptionsAsync(SelectOptions selectOptions);

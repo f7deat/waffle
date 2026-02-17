@@ -220,17 +220,6 @@ const InfluencerRegisterForm = () => {
 									placeholder="Link portfolio, media kit hoặc yêu cầu đặc biệt."
 								/>
 							</Form.Item>
-
-							{submitState === "success" && (
-								<div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-									Đã gửi đăng ký thành công. Chúng tôi sẽ phản hồi trong 48 giờ.
-								</div>
-							)}
-							{submitState === "error" && (
-								<div className="rounded-lg mb-2 border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-									{errorMessage || "Không gửi được đăng ký. Vui lòng thử lại hoặc liên hệ trực tiếp."}
-								</div>
-							)}
 							<div className="text-xs text-slate-500 mb-2">
 								Bằng việc gửi đơn đăng ký, bạn đồng ý với <Link href="/terms" className="underline">Điều khoản dịch vụ</Link> và <Link href="/privacy" className="underline">Chính sách bảo mật</Link> của chúng tôi.
 							</div>
@@ -243,6 +232,19 @@ const InfluencerRegisterForm = () => {
 								{isSubmitting ? "Đang gửi..." : "Gửi đăng ký"}
 							</button>
 						</Form>
+
+
+						{submitState === "success" && (
+							<div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+								Đã gửi đăng ký thành công. Chúng tôi sẽ phản hồi trong 48 giờ.
+							</div>
+						)}
+						{submitState === "error" && (
+							<div className="rounded-lg mb-2 border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+								{errorMessage || "Không gửi được đăng ký. Vui lòng thử lại hoặc liên hệ trực tiếp."}
+							</div>
+						)}
+
 						<div className="mt-4 text-xs text-slate-400">
 							Chú ý: Chúng tôi sẽ không chia sẻ thông tin của bạn với bên thứ ba mà không có sự đồng ý trước.
 						</div>

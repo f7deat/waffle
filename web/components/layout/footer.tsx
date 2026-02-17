@@ -1,4 +1,4 @@
-import { CaretRightFilled, FacebookFilled, InstagramFilled, LinkedinFilled, TikTokFilled } from "@ant-design/icons";
+import { CaretRightFilled, EnvironmentOutlined, FacebookFilled, InstagramFilled, LinkedinFilled, MailOutlined, PhoneOutlined, TikTokFilled } from "@ant-design/icons";
 import Link from "next/link";
 import LanguageSelector from "./language";
 
@@ -43,15 +43,16 @@ const Footer: React.FC = () => {
                         <Link href="/wiki" className="hover:text-white transition-colors"><CaretRightFilled /> Wiki</Link>
                         <Link href="/shop" className="hover:text-white transition-colors"><CaretRightFilled /> Cửa hàng</Link>
                         <Link href="/contact" className="hover:text-white transition-colors"><CaretRightFilled /> Liên hệ</Link>
+                        <Link href="/influencer" className="hover:text-white transition-colors"><CaretRightFilled /> Influencers</Link>
                     </nav>
                 </div>
 
                 <div className="space-y-3">
                     <h3 className="text-base font-semibold text-white">Liên hệ</h3>
                     <div className="flex flex-col gap-2 text-sm text-slate-300">
-                        <div>Email: <a className="hover:text-white" href="mailto:defzone.net@gmail.com">defzone.net@gmail.com</a></div>
-                        <div>Điện thoại: <a className="hover:text-white" href="tel:+84762559696">+84 762 559 696</a></div>
-                        <div>Địa chỉ: Thiên Hương, Thủy Nguyên, Hải Phòng</div>
+                        <div><MailOutlined className="mr-1" />Email: <a className="hover:text-white" href="mailto:defzone.net@gmail.com">defzone.net@gmail.com</a></div>
+                        <div><PhoneOutlined className="mr-1" />Điện thoại: <a className="hover:text-white" href="tel:+84762559696">+84 762 559 696</a></div>
+                        <div><EnvironmentOutlined className="mr-1" />Địa chỉ: Thiên Hương, Thủy Nguyên, Hải Phòng</div>
                     </div>
                 </div>
 

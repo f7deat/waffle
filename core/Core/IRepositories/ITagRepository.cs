@@ -1,4 +1,5 @@
 ﻿using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Entities.Tags;
 using Waffle.Models;
@@ -9,6 +10,7 @@ namespace Waffle.Core.IRepositories;
 public interface ITagRepository : IAsyncRepository<Tag>
 {
     Task<ListResult> GetArticlesByTagAsync(TagArticleFilterOptions filterOptions);
+    Task<TResult> GetByNameAsync(string normalizedName);
     Task<ListResult> GetPlacesByTagAsync(TagPlaceFilterOptions filterOptions);
     Task<IEnumerable<Option>> GetTagOptionsAsync(SelectOptions selectOptions);
     Task<bool> IsExistsAsync(string name);

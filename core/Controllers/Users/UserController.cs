@@ -276,4 +276,7 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
         await _userManager.ResetPasswordAsync(user, token, args.NewPassword);
         return Ok(TResult.Success);
     }
+
+    [HttpGet("user-name/{userName}"), AllowAnonymous]
+    public async Task<IActionResult> GetByUserNameAsync([FromRoute] string userName) => Ok(await _userService.GetByUserNameAsync(userName));
 }

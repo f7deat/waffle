@@ -21,4 +21,5 @@ public interface IUserService
     Task<ListResult> GetInfluencersAsync(FilterOptions filterOptions);
     Task<TResult> BecomeInfluencerAsync(BecomeInfluencerArgs args);
     Task<TResult> ChangeAvatarAsync(ChangeAvatarArgs args, string host);
+    Task<TResult> GetByUserNameAsync(string userName);
 }

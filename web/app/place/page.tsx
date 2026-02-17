@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
 import { apiPlaceList } from "@/services/locations/place";
-import KolList from "@/components/place/kol-list";
 import { apiKolList } from "@/services/kol/kol";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -54,11 +53,6 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 			breadcrumbs={[{ label: "Địa điểm", href: "/place" }]}
 		>
 			<div className="space-y-6">
-				<KolList 
-					kolList={kols} 
-					placeId="" 
-					placeName="các địa điểm" 
-				/>
 
 				<div className="grid gap-4 rounded-xl bg-gradient-to-br from-indigo-50 via-white to-slate-50 p-5 shadow-sm md:grid-cols-2">
 					<div className="flex flex-col gap-3 rounded-lg border border-indigo-100 bg-white/70 p-4 shadow-sm">
@@ -80,7 +74,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 						</div>
 						<div className="flex flex-wrap gap-2 pt-1">
 							<Link
-								href="/contact"
+								href="/influencer"
 								className="inline-flex hover:text-white items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
 							>
 								Gửi review / đặt lịch

@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.IRepositories;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
+using Waffle.Entities;
 using Waffle.Entities.Tags;
 using Waffle.Models;
 using Waffle.Models.Components.Common;
@@ -17,7 +19,7 @@ public class TagRepository(ApplicationDbContext context, IHCAService hcaService)
         var query = from tc in _context.TagCatalogs
                     join a in _context.Catalogs on tc.CatalogId equals a.Id
                     join t in _context.Tags on tc.TagId equals t.Id
-                    where t.NormalizedName == filterOptions.NormalizedName
+                    where t.NormalizedName == filterOptions.NormalizedName && a.Locale == filterOptions.Locale && a.Type == CatalogType.Article
                     orderby a.ModifiedDate descending
                     select new
                     {
@@ -33,12 +35,27 @@ public class TagRepository(ApplicationDbContext context, IHCAService hcaService)
         return await ListResult.Success(query, filterOptions);
     }
 
+    public async Task<TResult> GetByNameAsync(string normalizedName)
+    {
+        var tag = await _context.Tags
+            .Where(t => t.NormalizedName == normalizedName)
+            .Select(t => new
+            {
+                t.Id,
+                t.Name,
+                t.NormalizedName
+            })
+            .FirstOrDefaultAsync();
+        return TResult.Ok(tag);
+    }
+
     public async Task<ListResult> GetPlacesByTagAsync(TagPlaceFilterOptions filterOptions)
     {
         var query = from tc in _context.TagCatalogs
                     join c in _context.Catalogs on tc.CatalogId equals c.Id
                     join p in _context.Places on c.Id equals p.Id
-                    where tc.TagId == filterOptions.TagId
+                    join t in _context.Tags on tc.TagId equals t.Id
+                    where t.NormalizedName == filterOptions.NormalizedName && c.Locale == filterOptions.Locale && c.Type == CatalogType.Location
                     orderby c.ModifiedDate descending
                     select new
                     {

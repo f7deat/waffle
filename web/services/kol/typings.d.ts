@@ -10,7 +10,8 @@ declare namespace API {
         rating: number;
         reviewCount: number;
         pricePerReview: number;
-        normalizedName: string;
+        userName: string;
+        provinceName: string;
     }
     interface KolDetail extends KolListItem {
         description: string;

@@ -27,3 +27,7 @@ export async function apiChangeAvatar(formData: FormData) {
 export async function apiUpdateProfile(data: { name: string; email: string; phoneNumber: string; }) {
     return request.put<API.TResult<object>>("user/profile", data);
 }
+
+export async function apiGetUserByUserName(userName: string) {
+    return request.get<API.TResult<API.UserBasicInfo>>(`user/user-name/${userName}`);
+}
