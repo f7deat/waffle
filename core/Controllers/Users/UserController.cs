@@ -266,4 +266,14 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
 
     [HttpPut("profile/avatar")]
     public async Task<IActionResult> UpdateProfileAvatarAsync([FromForm] ChangeAvatarProfileArgs args) => Ok(await _userService.ChangeAvatarAsync(new ChangeAvatarArgs(User.GetId(), args.File), $"{Request.Scheme}://{Request.Host.Value}"));
+
+    [HttpPost("reset-password"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordArgs args)
+    {
+        var user = await _userManager.FindByIdAsync(args.UserId.ToString());
+        if (user is null) return BadRequest("User not found!");
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        await _userManager.ResetPasswordAsync(user, token, args.NewPassword);
+        return Ok(TResult.Success);
+    }
 }

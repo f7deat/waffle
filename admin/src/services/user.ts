@@ -54,3 +54,13 @@ export const apiUpdateUser = (data: any) => request(`user/update`, {
   method: 'POST',
   data
 })
+
+export async function apiResetPassword(data: {
+  userId: string;
+  newPassword: string;
+}) {
+  return request(`user/reset-password`, {
+    method: 'POST',
+    data
+  });
+}

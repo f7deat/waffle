@@ -6,3 +6,5 @@ public record ChangeAvatarArgs(
 );
 
 public record ChangeAvatarProfileArgs(IFormFile File);
+
+public record ResetPasswordArgs(Guid UserId, string NewPassword);

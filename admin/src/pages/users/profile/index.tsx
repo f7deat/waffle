@@ -16,6 +16,7 @@ import {
 } from 'antd';
 import { useState } from 'react';
 import ProfileRoles from './role';
+import ResetPassword from './components/reset-password';
 
 const Profile: React.FC = () => {
   const { id } = useParams();
@@ -84,6 +85,11 @@ const Profile: React.FC = () => {
                 key: 'follower',
                 children: <Empty />,
               },
+              {
+                label: 'Reset Password',
+                key: 'reset-password',
+                children: <ResetPassword />,
+              }
             ],
             onChange: (key) => {
               setActiveKey(key);
