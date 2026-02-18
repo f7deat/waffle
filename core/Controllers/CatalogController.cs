@@ -8,6 +8,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.Catalogs.Args;
+using Waffle.Core.Services.Tags.Args;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
 using Waffle.Entities;
@@ -174,7 +175,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     public async Task<IActionResult> ListTagAsync([FromQuery] TagFilterOptions filterOptions) => Ok(await _catalogService.ListTagSelectAsync(filterOptions));
 
     [HttpPost("tag/add-to-catalog")]
-    public async Task<IActionResult> TagAddToCatalogAsync([FromBody] WorkItem args) => Ok(await _catalogService.TagAddToCatalogAsync(args));
+    public async Task<IActionResult> TagAddToCatalogAsync([FromBody] AddTagToCatalogArgs args) => Ok(await _catalogService.TagAddToCatalogAsync(args));
 
     [HttpGet("list-by-tag/{id}")]
     public async Task<IActionResult> ListByTagAsync([FromRoute] Guid id, SearchFilterOptions filterOptions) => Ok(await _catalogService.ListByTagAsync(id, new CatalogFilterOptions

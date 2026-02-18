@@ -1,7 +1,7 @@
 import request from "../request";
 
 export async function apiPasswordSignIn(data: { username: string; password: string; remember?: boolean }) {
-    return request.server.post<{
+    return request.post<{
         succeeded: boolean;
         token: string;
         expiration: string;

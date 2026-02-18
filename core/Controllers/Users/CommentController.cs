@@ -13,10 +13,10 @@ public class CommentController(ICommentService commentService) : BaseController
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] CommentFilterOptions filterOptions) => Ok(await commentService.ListAsync(filterOptions));
 
-    [HttpPost("add")]
+    [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] AddComment addComment) => Ok(await commentService.AddAsync(addComment));
 
-    [HttpPost("delete/{id}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await commentService.DeleteAsync(id));
 
     [HttpPost("remove/{id}")]

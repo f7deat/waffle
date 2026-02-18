@@ -11,7 +11,7 @@ export async function activeComment(commentId: string) {
 }
 
 export async function removeComment(commentId: string) {
-  return request(`comment/delete/${commentId}`, {
-    method: 'POST'
+  return request(`comment/${commentId}`, {
+    method: 'DELETE'
   });
 }

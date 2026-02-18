@@ -24,7 +24,7 @@ const Page: React.FC = () => {
             });
             return;
         }
-        localStorage.setItem("access_token", response.token);
+        document.cookie = `access_token=${response.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
         api.success({
             title: "Đăng nhập thành công",
             description: "Bạn đã đăng nhập thành công vào DefZone.Net.",

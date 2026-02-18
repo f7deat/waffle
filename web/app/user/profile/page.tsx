@@ -189,7 +189,7 @@ const Page: React.FC = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("access_token");
+        document.cookie = "access_token=; path=/; max-age=0; SameSite=Lax";
         router.push("/user/login");
     };
 

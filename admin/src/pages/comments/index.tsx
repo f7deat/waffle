@@ -1,5 +1,5 @@
 import { activeComment, queryComments, removeComment } from "@/services/comment"
-import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
+import { CheckOutlined, DeleteOutlined, SettingOutlined } from "@ant-design/icons";
 import { ActionType, PageContainer, ProColumns, ProTable } from "@ant-design/pro-components"
 import { Button, Popconfirm, message } from "antd";
 import { useRef } from "react";
@@ -32,6 +32,8 @@ const CommentPage: React.FC = () => {
         {
             title: '#',
             valueType: 'indexBorder',
+            width: 30,
+            align: 'center'
         },
         {
             title: 'Content',
@@ -69,7 +71,7 @@ const CommentPage: React.FC = () => {
             width: 80
         },
         {
-            title: '',
+            title: <SettingOutlined />,
             valueType: 'option',
             render: (dom, entity) => [
                 <Button key="publish" icon={<CheckOutlined />} type="primary" hidden={entity.status !== 0} onClick={() => active(entity.id)}></Button>,
@@ -81,6 +83,7 @@ const CommentPage: React.FC = () => {
                     <Button icon={<DeleteOutlined />} type="text" size="small" danger />
                 </Popconfirm>,
             ],
+            width: 60
         },
     ];
 

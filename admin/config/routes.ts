@@ -212,6 +212,7 @@ export default [
         path: '/catalog/overview',
         name: 'overview',
         component: './catalog',
+        hideInMenu: true,
       },
       {
         path: '/catalog/place/:id',

@@ -64,3 +64,9 @@ export async function apiResetPassword(data: {
     data
   });
 }
+
+export async function apiInfluencerOptions(params?: any) {
+  return request(`user/influencer/options`, {
+    params
+  });
+}

@@ -8,6 +8,7 @@ using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.Catalogs.Args;
+using Waffle.Core.Services.Tags.Args;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
 using Waffle.Entities;
@@ -275,28 +276,7 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
             }).Take(20).ToListAsync();
     }
 
-    public async Task<IdentityResult> TagAddToCatalogAsync(WorkItem args)
-    {
-        var tag = await _catalogRepository.FindAsync(args.CatalogId);
-        if (tag is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "Tag not found!"
-            });
-        }
-        var catalog = await _catalogRepository.FindAsync(args.WorkId);
-        if (catalog is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Description = "Catalog not found!"
-            });
-        }
-        await _context.WorkItems.AddAsync(args);
-        await _catalogRepository.SaveChangesAsync();
-        return IdentityResult.Success;
-    }
+    public async Task<TResult> TagAddToCatalogAsync(AddTagToCatalogArgs args) => await _catalogRepository.TagAddToCatalogAsync(args);
 
     public async Task<ListResult<Catalog>> ListByTagsAsync(IEnumerable<Guid> tagIds, CatalogFilterOptions filterOptions)
     {

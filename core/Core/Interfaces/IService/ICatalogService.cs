@@ -2,6 +2,7 @@
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Services.Catalogs.Args;
+using Waffle.Core.Services.Tags.Args;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Entities;
 using Waffle.Models;
@@ -29,7 +30,7 @@ public interface ICatalogService
     Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions);
     Task<List<Catalog>> ListTagByIdAsync(Guid id);
     Task<IEnumerable<Option>> ListTagSelectAsync(TagFilterOptions filterOptions);
-    Task<IdentityResult> TagAddToCatalogAsync(WorkItem args);
+    Task<TResult> TagAddToCatalogAsync(AddTagToCatalogArgs args);
     Task<ListResult<Catalog>> ListByTagsAsync(IEnumerable<Guid> tagIds, CatalogFilterOptions filterOptions);
     Task<ListResult<CatalogListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);
     Task<IEnumerable<Catalog>> ListRandomTagAsync(string locale);

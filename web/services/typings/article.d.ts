@@ -13,5 +13,6 @@ declare namespace API {
     }
     interface ArticleFilterOptions extends FilterOptions {
         name?: string;
+        cookie?: ReadonlyRequestCookies;
     }
 }

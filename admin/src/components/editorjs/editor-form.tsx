@@ -37,7 +37,7 @@ const FormEditor: React.FC<Props> = (props) => {
     }, []);
 
     return (
-        <ProForm.Item {...props}>zxcccccccccccccccccccc
+        <ProForm.Item {...props}>
             <div className='border rounded-md'>
                 <div id="editorjs"> </div>
             </div>

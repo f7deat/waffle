@@ -5,6 +5,7 @@ using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Services.Catalogs.Args;
+using Waffle.Core.Services.Tags.Args;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Tags;
@@ -219,6 +220,17 @@ public class CatalogRepository(ApplicationDbContext context, IHCAService hcaServ
             }));
             await _context.SaveChangesAsync();
         }
+        return TResult.Success;
+    }
+
+    public async Task<TResult> TagAddToCatalogAsync(AddTagToCatalogArgs args)
+    {
+        await _context.TagCatalogs.AddAsync(new TagCatalog
+        {
+            CatalogId = args.CatalogId,
+            TagId = args.TagId
+        });
+        await _context.SaveChangesAsync();
         return TResult.Success;
     }
 

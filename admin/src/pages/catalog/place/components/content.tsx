@@ -8,6 +8,7 @@ import { Col, message, Row, Upload, Image as AntImage, Button, Spin } from "antd
 import { useState, useEffect, useRef } from "react";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import CatalogTag from "@/components/catalog/catalog-tag";
+import { apiInfluencerOptions } from "@/services/user";
 
 const PlaceContent: React.FC = () => {
 
@@ -39,6 +40,10 @@ const PlaceContent: React.FC = () => {
                 {
                     name: 'address',
                     value: data.address
+                },
+                {
+                    name: 'influencerId',
+                    value: data.influencerId
                 }
             ])
         }
@@ -172,12 +177,12 @@ const PlaceContent: React.FC = () => {
                         </div>
                     </Col>
                     <Col md={6} xs={24}>
-                        <ProFormSelect name={"provinceId"} label="Province" initialValue={data?.provinceId}
+                        <ProFormSelect name={"provinceId"} label="Province"
                             showSearch
                             request={apiProvinceOptions}
                             onChange={(value: string) => setSelectedProvinceId(value)}
                         />
-                        <ProFormSelect name="districtId" label="District" initialValue={data?.districtId}
+                        <ProFormSelect name="districtId" label="District"
                             showSearch
                             dependencies={['provinceId']}
                             request={apiDistrictOptions}
@@ -185,8 +190,26 @@ const PlaceContent: React.FC = () => {
                                 provinceId: selectedProvinceId
                             }}
                         />
-                        <ProFormText name={"address"} label="Address" initialValue={data?.address} />
+                        <ProFormText name={"address"} label="Address" />
                         <CatalogTag />
+                        <ProFormSelect name="influencerId" label="Influencer"
+                            showSearch
+                            request={apiInfluencerOptions}
+                            fieldProps={{
+                                optionRender: (ori) => (
+                                    <div className="flex gap-2">
+                                        <div className="w-10">
+                                            <img src={ori.data.avatar} alt={ori.data.label} className="rounded-full object-cover w-10 h-10" />
+                                        </div>
+                                        <div>
+                                            <div className="font-medium">{ori.data.label}</div>
+                                            <div className="text-gray-500">{ori.data.userName}</div>
+                                        </div>
+                                        
+                                    </div>
+                                )
+                            }}
+                        />
                     </Col>
                 </Row>
             </ProForm>

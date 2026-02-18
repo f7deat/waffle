@@ -98,7 +98,8 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
             place.Address,
             DistrictName = district?.Name,
             district?.ProvinceId,
-            ProvinceName = province?.Name
+            ProvinceName = province?.Name,
+            place.InfluencerId
         });
     }
 

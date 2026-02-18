@@ -2,6 +2,7 @@
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.IRepositories;
+using Waffle.Core.Services.Catalogs.Results;
 using Waffle.Core.Services.Locations.Filters;
 using Waffle.Data;
 using Waffle.Entities.Locations;
@@ -29,14 +30,14 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
     {
         if (influencerId is null) return default;
         return await (from u in _context.Users
-                    where u.Id == influencerId
-                    select new
-                    {
-                        u.Id,
-                        u.UserName,
-                        u.Name,
-                        u.Avatar
-                    }).FirstOrDefaultAsync();
+                      where u.Id == influencerId
+                      select new
+                      {
+                          u.Id,
+                          u.UserName,
+                          u.Name,
+                          u.Avatar
+                      }).FirstOrDefaultAsync();
     }
 
     public async Task<ListResult> GetRandomAsync(PlaceFilterOptions filterOptions)
@@ -48,19 +49,18 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
                     join province in _context.Provinces on d.ProvinceId equals province.Id into dp
                     from province in dp.DefaultIfEmpty()
                     where c.Active && c.Locale == filterOptions.Locale
-                    select new
+                    select new PlaceListItem
                     {
-                        p.Id,
-                        c.Name,
-                        c.ViewCount,
-                        c.NormalizedName,
-                        StreetName = c.Name,
-                        c.ModifiedDate,
+                        Id = p.Id,
+                        Name = c.Name,
+                        ViewCount = c.ViewCount,
+                        NormalizedName = c.NormalizedName,
+                        ModifiedDate = c.ModifiedDate,
                         DistrictName = d.Name,
-                        p.DistrictId,
+                        DistrictId = p.DistrictId,
                         ProvinceName = province.Name,
-                        d.ProvinceId,
-                        c.Thumbnail
+                        ProvinceId = d.ProvinceId,
+                        Thumbnail = c.Thumbnail
                     };
         if (filterOptions.DistrictId.HasValue)
         {
