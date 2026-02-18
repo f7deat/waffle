@@ -10,6 +10,7 @@ public class Place : BaseEntity
     public int? DistrictId { get; set; }
     [StringLength(512)]
     public string? Address { get; set; }
+    public Guid? InfluencerId { get; set; }
 
     public virtual District? District { get; set; }
     public virtual ICollection<PlaceImage>? PlaceImages { get; set; }

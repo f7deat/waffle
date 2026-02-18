@@ -7,4 +7,5 @@ public class PlaceUpdateArgs : BaseEntity
     public int? DistrictId { get; set; }
     public string? Address { get; set; }
     public string? Content { get; set; }
+    public Guid? InfluencerId { get; set; }
 }

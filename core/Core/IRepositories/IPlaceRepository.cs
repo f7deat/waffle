@@ -11,6 +11,7 @@ public interface IPlaceRepository : IAsyncRepository<Place>
     Task DeleteImageAsync(PlaceImage image);
     Task<PlaceImage?> GetImageById(Guid imageId);
     Task<IEnumerable<PlaceImage>> GetImagesAsync(Guid id);
+    Task<object?> GetInfluencerAsync(Guid? influencerId);
     Task<ListResult> GetRandomAsync(PlaceFilterOptions filterOptions);
     Task<ListResult> ListAsync(PlaceFilterOptions filterOptions);
 }

@@ -76,4 +76,13 @@ public class RoleController(RoleManager<ApplicationRole> _roleManager, Applicati
         query = query.OrderByDescending(u => u.CreatedAt);
         return Ok(await ListResult<object>.Success(query, filterOptions));
     }
+
+    [HttpPut, Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> UpdateAsync([FromBody] ApplicationRole role)
+    {
+        var existingRole = await _roleManager.FindByIdAsync(role.Id.ToString());
+        if (existingRole is null) return BadRequest("Role not found!");
+        existingRole.DisplayName = role.DisplayName;
+        return Ok(await _roleManager.UpdateAsync(existingRole));
+    }
 }

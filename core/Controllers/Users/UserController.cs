@@ -261,6 +261,9 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
     [HttpPost("influencer"), AllowAnonymous]
     public async Task<IActionResult> BecomeInfluencerAsync([FromBody] BecomeInfluencerArgs args) => Ok(await _userService.BecomeInfluencerAsync(args));
 
+    [HttpGet("influencer/options")]
+    public async Task<IActionResult> GetInfluencerOptionsAsync([FromQuery] SelectOptions selectOptions) => Ok(await _userService.GetInfluencerOptionsAsync(selectOptions));
+
     [HttpPost("change-avatar"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> ChangeAvatarAsync([FromBody] ChangeAvatarArgs args) => Ok(await _userService.ChangeAvatarAsync(args, $"{Request.Scheme}://{Request.Host.Value}"));
 

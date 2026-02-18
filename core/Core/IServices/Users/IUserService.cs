@@ -22,4 +22,5 @@ public interface IUserService
     Task<TResult> BecomeInfluencerAsync(BecomeInfluencerArgs args);
     Task<TResult> ChangeAvatarAsync(ChangeAvatarArgs args, string host);
     Task<TResult> GetByUserNameAsync(string userName);
+    Task<object?> GetInfluencerOptionsAsync(SelectOptions selectOptions);
 }

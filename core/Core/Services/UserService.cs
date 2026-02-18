@@ -7,7 +7,6 @@ using Waffle.Core.IServices.Users;
 using Waffle.Core.Services.Users;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Entities.Locations;
 using Waffle.Entities.Users;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Users;
@@ -170,9 +169,9 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
                 Type = args.File.ContentType,
                 UploadDate = DateTime.Now,
                 UploadBy = args.UserId,
-                Url = $"{host}/avatar/{user.Id}/{args.File.FileName}"
+                Url = $"{host}/avatar/{user.UserName}/{args.File.FileName}"
             });
-            user.Avatar = $"{host}/avatar/{user.Id}/{args.File.FileName}";
+            user.Avatar = $"{host}/avatar/{user.UserName}/{args.File.FileName}";
             await _context.SaveChangesAsync();
             return TResult.Success;
         }
@@ -212,5 +211,26 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
             address?.ProvinceName,
             address?.DistrictName
         });
+    }
+
+    public async Task<object?> GetInfluencerOptionsAsync(SelectOptions selectOptions)
+    {
+        var query = from u in _context.Users
+                    join ur in _context.UserRoles on u.Id equals ur.UserId
+                    join r in _context.Roles on ur.RoleId equals r.Id
+                    where r.Name == RoleName.Influencer
+                    select new
+                    {
+                        u.Id,
+                        u.Name,
+                        u.UserName,
+                        u.Avatar
+                    };
+        if (!string.IsNullOrWhiteSpace(selectOptions.KeyWords))
+        {
+            selectOptions.KeyWords = selectOptions.KeyWords.Trim().ToLower();
+            query = query.Where(x => x.Name.ToLower().Contains(selectOptions.KeyWords) || x.UserName.ToLower().Contains(selectOptions.KeyWords));
+        }
+        return await query.Select(x => new { Label = x.Name, x.Avatar, x.UserName, Value = x.Id }).ToListAsync();
     }
 }

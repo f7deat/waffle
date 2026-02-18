@@ -25,6 +25,20 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
         .OrderByDescending(x => x.UploadedAt)
         .ToListAsync();
 
+    public async Task<object?> GetInfluencerAsync(Guid? influencerId)
+    {
+        if (influencerId is null) return default;
+        return await (from u in _context.Users
+                    where u.Id == influencerId
+                    select new
+                    {
+                        u.Id,
+                        u.UserName,
+                        u.Name,
+                        u.Avatar
+                    }).FirstOrDefaultAsync();
+    }
+
     public async Task<ListResult> GetRandomAsync(PlaceFilterOptions filterOptions)
     {
         var query = from p in _context.Places

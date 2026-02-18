@@ -32,4 +32,5 @@ public class PlaceController(IPlaceService _placeService) : BaseController
 
     [HttpDelete("image/{imageId}")]
     public async Task<IActionResult> DeleteImageAsync([FromRoute] Guid imageId) => Ok(await _placeService.DeleteImageAsync(imageId, $"https://{Request.Host.Value}"));
+
 }
