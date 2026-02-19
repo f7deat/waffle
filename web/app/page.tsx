@@ -18,7 +18,7 @@ export default async function Home() {
   const articlesResponse = await apiArticleList({ current: 1, pageSize: 5 });
   const articles = articlesResponse.data || [];
 
-  const productsResponse = await apiProducts({ current: 1, pageSize: 5 });
+  const productsResponse = await apiProducts({ current: 1, pageSize: 6 });
   const products = productsResponse.data || [];
 
   const tagsResponse = await apiTagRandoms();
@@ -123,7 +123,7 @@ export default async function Home() {
                 <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Sản phẩm gợi ý</h2>
                 <Link href="/shop" className="text-sm font-medium text-blue-600 hover:text-blue-500">Shop now</Link>
               </div>
-              <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-4 2xl:grid-cols-5">
+              <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-4 2xl:grid-cols-6">
                 {products.map((item) => (
                   <Link key={item.id} href={`/shop/${item.normalizedName}`} className="group overflow-hidden rounded-lg bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
                     <div className="h-40 bg-cover bg-center" style={cardStyle(item.thumbnail)} />
@@ -134,7 +134,7 @@ export default async function Home() {
                         <span className="text-sm font-semibold text-blue-600">
                           {
                             item.salePrice || item.price ? (
-                              item.salePrice ? `${item.salePrice?.toLocaleString()}` : `${item.price?.toLocaleString()}`
+                              item.salePrice ? `${item.salePrice?.toLocaleString()}₫` : `${item.price?.toLocaleString()}₫`
                             ) : (
                               "Liên hệ"
                             )
