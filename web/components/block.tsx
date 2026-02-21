@@ -23,7 +23,7 @@ const Block: React.FC<API.Block> = (block) => {
         return (
             <ul className="list-disc list-inside mb-4 ml-4">
                 {block.data.items?.map((item, i) => (
-                    <li key={i} className="mb-1" dangerouslySetInnerHTML={{__html: item.content}}></li>
+                    <li key={i} className="mb-1" dangerouslySetInnerHTML={{__html: item.content || ''}}></li>
                 ))}
             </ul>
         );

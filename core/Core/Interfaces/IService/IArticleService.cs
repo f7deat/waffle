@@ -7,6 +7,7 @@ namespace Waffle.Core.Interfaces.IService;
 public interface IArticleService
 {
     Task<TResult> GetByNameAsync(string normalizedName);
+    Task<TResult> GetRandomsAsync(string locale);
     Task<TResult> GetStatisticsAsync(string locale);
     Task<ListResult> ListAsync(ArticleFilterOptions filterOptions);
 }

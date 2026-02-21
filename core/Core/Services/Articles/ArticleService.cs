@@ -11,6 +11,8 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
 {
     public Task<TResult> GetByNameAsync(string normalizedName) => _articleRepository.GetByNameAsync(normalizedName);
 
+    public Task<TResult> GetRandomsAsync(string locale) => _articleRepository.GetRandomsAsync(locale);
+
     public async Task<TResult> GetStatisticsAsync(string locale)
     {
         return TResult.Ok(new

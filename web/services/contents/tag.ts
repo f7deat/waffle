@@ -5,7 +5,7 @@ export async function apiTagList(params?: API.TagFilterOptions) {
 }
 
 export async function apiTagRandoms() {
-    return request.get<API.TResult<API.TagListItem>>("tag/randoms");
+    return request.get<API.TResult<API.TagListItem[]>>("tag/randoms");
 }
 
 export async function apiGetPlacesByTag(params: API.TagPlacesFilterOptions) {

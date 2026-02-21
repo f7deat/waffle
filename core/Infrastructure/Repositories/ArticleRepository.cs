@@ -40,6 +40,25 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
 
     public Task<int> GetPreviousMonthAsync(string locale) => _context.Catalogs.CountAsync(c => c.Active && c.Locale == locale && c.Type == CatalogType.Article && c.CreatedDate.Month == DateTime.UtcNow.AddMonths(-1).Month && c.CreatedDate.Year == DateTime.Now.Year);
 
+    public async Task<TResult> GetRandomsAsync(string locale)
+    {
+        var query = from c in _context.Catalogs
+                    where c.Active && c.Locale == locale && c.Type == CatalogType.Article
+                    select new
+                    {
+                        c.Id,
+                        c.Name,
+                        c.ViewCount,
+                        c.NormalizedName,
+                        c.ModifiedDate,
+                        c.Thumbnail,
+                        c.Description,
+                        c.CreatedDate
+                    };
+        query = query.OrderBy(x => EF.Functions.Random());
+        return TResult.Ok(await query.Take(5).ToListAsync());
+    }
+
     public Task<int> GetTotalArticlesAsync(string locale) => _context.Catalogs.CountAsync(c => c.Active && c.Locale == locale && c.Type == CatalogType.Article);
 
     public Task<int> GetTotalViewCountAsync(string locale) => _context.Catalogs.Where(c => c.Active && c.Locale == locale && c.Type == CatalogType.Article).SumAsync(c => c.ViewCount);

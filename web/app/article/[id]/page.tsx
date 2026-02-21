@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
-import { apiArticleDetail, apiArticleList } from "@/services/article";
+import { apiArticleDetail, apiArticleList, apiArticleRandoms } from "@/services/article";
 import { Metadata } from "next";
 import Link from "next/link";
 import { apiCatalogMeta } from "@/services/catalog";
@@ -37,9 +37,8 @@ const Page = async ({ params }: { params: Params }) => {
     const cookieStore = await cookies();
     const locale = cookieStore.get("language")?.value || "vi-VN";
 
-    // Fetch latest articles for sidebar
-    const latestRes = await apiArticleList({ current: 1, pageSize: 6, locale });
-    const latestArticles = latestRes.data || [];
+    const randomsRes = await apiArticleRandoms();
+    const randomArticles = randomsRes.data || [];
 
     const breadcrumbs = [
         { label: "Bài viết", href: "/article" },
@@ -97,15 +96,13 @@ const Page = async ({ params }: { params: Params }) => {
 
                 <aside className="space-y-8 lg:sticky lg:top-24">
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Bài viết mới</h2>
-                        {latestArticles.length === 0 ? (
+                        <h2 className="text-xl font-bold mb-4">Bài viết ngẫu nhiên</h2>
+                        {randomArticles.length === 0 ? (
                             <p className="text-sm text-gray-500">Chưa có bài viết.</p>
                         ) : (
                             <div className="space-y-4">
-                                {latestArticles.map((item) => {
-                                    const updatedAt = item.modifiedDate
-                                        ? dayjs(item.modifiedDate).format("DD-MM-YYYY")
-                                        : "Chưa cập nhật";
+                                {randomArticles.map((item) => {
+                                    const updatedAt = item.modifiedDate ? dayjs(item.modifiedDate).format("DD-MM-YYYY") : dayjs(item.createdDate).format("DD-MM-YYYY");
                                     return (
                                         <Link key={item.id} href={`/article/${item.normalizedName}`}>
                                             <div className="group cursor-pointer flex gap-3 p-2 rounded-lg bg-white mb-1">
@@ -124,6 +121,7 @@ const Page = async ({ params }: { params: Params }) => {
                                                     <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
                                                         {item.name}
                                                     </h3>
+                                                    <div className="text-slate-500 text-xs md:text-sm line-clamp-2">{item.description}</div>
                                                     <span className="text-xs text-gray-500 mr-2"><CalendarOutlined /> {updatedAt}</span>
                                                     <span className="text-xs text-gray-500 mt-1"><EyeFilled /> {item.viewCount?.toLocaleString() ?? 0}</span>
                                                 </div>

@@ -10,3 +10,7 @@ export async function apiArticleList(params: API.ArticleFilterOptions, cookie?: 
 export async function apiArticleDetail(normalizedName: string) {
     return request.get<API.TResult<API.ArticleDetail>>(`article/${normalizedName}`);
 }
+
+export async function apiArticleRandoms() {
+    return request.get<API.ListResult<API.ArticleListItem>>("article/randoms");
+}

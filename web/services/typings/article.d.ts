@@ -7,6 +7,7 @@ declare namespace API {
         modifiedDate: string;
         thumbnail?: string;
         viewCount: number;
+        createdDate: string;
     }
     interface ArticleDetail extends ArticleListItem {
         content: API.BlockEditor;

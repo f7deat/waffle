@@ -16,4 +16,7 @@ public class ArticleController(IArticleService _articleService) : BaseController
 
     [HttpGet("statistics"), AllowAnonymous]
     public async Task<IActionResult> GetStatisticsAsync([FromQuery] string locale) => Ok(await _articleService.GetStatisticsAsync(locale));
+
+    [HttpGet("randoms"), AllowAnonymous]
+    public async Task<IActionResult> GetRandomsAsync([FromQuery] string locale) => Ok(await _articleService.GetRandomsAsync(locale));
 }
