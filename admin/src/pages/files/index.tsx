@@ -26,6 +26,7 @@ import { Avatar, Button, Col, Dropdown, message, Modal, Row, Space, Statistic, U
 import { useEffect, useRef, useState } from 'react';
 import FolderForm from './components/folder-form';
 import { formatFileSize } from './utils';
+import FilePreview from './components/preview';
 
 const FilePage: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -34,6 +35,8 @@ const FilePage: React.FC = () => {
   const [count, setCount] = useState<number>(0);
   const [size, setSize] = useState<number>(0);
   const [folderId, setFolderId] = useState<string>('');
+  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+  const [previewFile, setPreviewFile] = useState<API.FileListItem | null>(null);
 
   useEffect(() => {
     countFile().then(response => setCount(response || 0));
@@ -81,18 +84,25 @@ const FilePage: React.FC = () => {
           }}>
             <FolderFilled className='text-orange-500' /> {entity.name}</div>
         }
-        return <div className='text-slate-800'><FileFilled className='text-slate-500' /> {entity.name}</div>
+        return (
+          <div className='text-slate-800 cursor-pointer hover:text-blue-600' onClick={() => {
+            setPreviewFile(entity);
+            setPreviewOpen(true);
+          }}>
+            <FileFilled className='text-slate-500' /> {entity.name}
+          </div>
+        )
       },
     },
     {
-      title: 'Ngày upload',
+      title: 'Uploaded At',
       dataIndex: 'createdDate',
-      valueType: 'fromNow',
+      valueType: 'dateTime',
       search: false,
       width: 160
     },
     {
-      title: 'Size',
+      title: 'File Size',
       dataIndex: 'size',
       search: false,
       render: (_, entity) => {
@@ -101,7 +111,7 @@ const FilePage: React.FC = () => {
         }
         return formatFileSize(entity.size);
       },
-      width: 100
+      width: 90
     },
     {
       title: <SettingOutlined />,
@@ -109,6 +119,16 @@ const FilePage: React.FC = () => {
       render: (dom, entity) => [
         <Dropdown key={"more"} menu={{
           items: [
+            {
+              key: 'preview',
+              label: 'Xem trước',
+              icon: <EyeOutlined />,
+              onClick: () => {
+                setPreviewFile(entity);
+                setPreviewOpen(true);
+              },
+              disabled: entity.isFolder
+            },
             {
               key: 'view',
               label: 'Chi tiết',
@@ -123,7 +143,8 @@ const FilePage: React.FC = () => {
               icon: <DownloadOutlined />,
               onClick: () => {
                 window.open(entity.url, '_blank');
-              }
+              },
+              disabled: entity.isFolder
             },
             {
               key: 'share',
@@ -247,6 +268,7 @@ const FilePage: React.FC = () => {
           </ProCard>
         </Col>
       </Row>
+      <FilePreview open={previewOpen} file={previewFile} onClose={() => setPreviewOpen(false)} />
     </PageContainer>
   );
 };

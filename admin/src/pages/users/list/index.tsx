@@ -1,5 +1,5 @@
 import { createUser, apiUserDelete, listUser } from '@/services/user';
-import { DeleteOutlined, EyeOutlined, ManOutlined, PlusOutlined, WomanOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined, ManOutlined, PlusOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
 import {
   ActionType,
   ModalForm,
@@ -48,6 +48,13 @@ const UserList: React.FC = () => {
       valueType: 'indexBorder',
       width: 30,
       align: 'center'
+    },
+    {
+      title: <UserOutlined />,
+      dataIndex: 'avatar',
+      valueType: 'avatar',
+      width: 30,
+      search: false
     },
     {
       title: 'Tài khoản',

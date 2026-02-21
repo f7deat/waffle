@@ -51,7 +51,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         loginOut();
         return;
       } else if (key === 'profile') {
-        history.push(`/users/profile/${initialState?.currentUser?.id}`);
+        history.push(`/account/profile`);
         return;
       } else if (key === 'settings') {
         history.push(`/users/center/${initialState?.currentUser?.id}`);

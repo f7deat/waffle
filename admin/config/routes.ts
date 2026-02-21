@@ -315,17 +315,6 @@ export default [
         hideInMenu: true,
       },
       {
-        name: 'role',
-        path: '/users/roles',
-        component: './users/roles'
-      },
-      {
-        name: 'roleCenter',
-        path: '/users/roles/:id',
-        component: './users/roles/center',
-        hideInMenu: true
-      },
-      {
         name: 'contact',
         path: '/users/contact',
         component: './users/contact'
@@ -364,6 +353,10 @@ export default [
     name: 'account',
     icon: 'UserOutlined',
     routes: [
+      {
+        path: '/account',
+        redirect: '/account/profile',
+      },
       {
         name: 'profile',
         path: '/account/profile',
@@ -435,6 +428,17 @@ export default [
         name: 'street',
         path: '/settings/country/province/district/:id',
         component: './settings/country/province/district/street',
+        hideInMenu: true
+      },
+      {
+        name: 'role',
+        path: '/settings/roles',
+        component: './users/roles'
+      },
+      {
+        name: 'roleCenter',
+        path: '/settings/roles/:id',
+        component: './users/roles/center',
         hideInMenu: true
       },
       {

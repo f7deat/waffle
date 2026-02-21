@@ -9,6 +9,7 @@ public class ContactService(IContactRepository _contactRepository) : IContactSer
 {
     public async Task<TResult> AddAsync(Contact args)
     {
+        if (await _contactRepository.IsExistAsync(args.PhoneNumber, args.Email)) return TResult.DuplicateRecord;
         args.CreatedDate = DateTime.UtcNow;
         await _contactRepository.AddAsync(args);
         return TResult.Success;

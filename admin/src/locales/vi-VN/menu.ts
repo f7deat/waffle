@@ -1,5 +1,6 @@
 export default {
   'menu.account': 'Tài khoản',
+  'menu.account.profile': 'Hồ sơ',
   'menu.catalog': 'Catalog',
   'menu.catalog.article': 'Bài viết',
   'menu.catalog.center': 'Chi tiết',
@@ -41,6 +42,8 @@ export default {
   'menu.settings.sendGrid': 'SendGrid',
   'menu.settings.google': 'Google',
   'menu.settings.menu': 'Menu',
+  'menu.settings.role': 'Vai trò',
+  'menu.settings.roleCenter': 'Chi tiết vai trò',
   'menu.settings.country': 'Quốc gia',
   'menu.component': 'Component',
   'menu.component.articleLister': 'Article Lister',
@@ -69,7 +72,7 @@ export default {
   'menu.component.lookbook': 'Look book',
   'menu.component.trend': 'Trend',
   'menu.component.videoPlayer': 'Video Player',
-  'menu.component.tag': 'Tag',
+  'menu.settings.tag': 'Tag',
   'menu.component.wordPressLister': 'WordPress Lister',
   'menu.settings.social': 'Social',
   'menu.settings.province': 'Tỉnh/Thành phố',
@@ -79,9 +82,7 @@ export default {
   'menu.users': 'Người dùng',
   'menu.users.profile': 'Hồ sơ',
   'menu.users.center': 'Thông tin cá nhân',
-  'menu.users.role': 'Quyền',
   'menu.users.member': 'Thành viên',
   'menu.users.contact': 'Liên hệ',
-  'menu.users.userCenter': 'Cài đặt',
-  'menu.users.roleCenter': 'Chi tiết quyền',
+  'menu.users.userCenter': 'Cài đặt'
 };

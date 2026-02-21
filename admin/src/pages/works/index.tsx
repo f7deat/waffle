@@ -2,7 +2,7 @@ import WorkSummary from "@/components/works/summary";
 import { getArguments, saveArguments } from "@/services/work-content";
 import { PageContainer, ProCard, ProForm, ProFormInstance, ProFormText } from "@ant-design/pro-components";
 import { history, useParams, useRequest } from "@umijs/max";
-import { Button, Collapse, Empty, message } from "antd";
+import { Button, Empty, message } from "antd";
 import Jumbotron from "./jumbotron";
 import Sponsor from "./sponsor";
 import { FormOutlined, LeftOutlined, SettingOutlined } from "@ant-design/icons";
@@ -54,43 +54,11 @@ const WorkPage: React.FC = () => {
 
     return (
         <PageContainer subTitle={data?.componentName} title={data?.name} loading={loading} extra={<Button icon={<LeftOutlined />} onClick={() => history.back()}>Quay lại</Button>}>
-            <ProCard
-                tabs={{
-                    tabPosition: 'left',
-                    items: [
-                        {
-                            key: 'content',
-                            tabKey: 'content',
-                            icon: <FormOutlined />,
-                            label: 'Content',
-                            children: (
-                                <ProForm formRef={formRef} onFinish={onFinish}>
-                                    <Collapse items={[
-                                        {
-                                            key: 'setting',
-                                            label: 'Nội dung',
-                                            children: (
-                                                <div className="bg-white p-4 rounded">
-                                                    <ProFormText name="className" label="Class Name" initialValue={data?.data?.className} />
-                                                </div>
-                                            ),
-                                            className: 'p-0'
-                                        }
-                                    ]} bordered={false} expandIconPosition="end" className="mb-2" expandIcon={() => <SettingOutlined />} />
-                                    {getChildren()}
-                                </ProForm>
-                            )
-                        },
-                        {
-                            key: 'setting',
-                            tabKey: 'setting',
-                            icon: <SettingOutlined />,
-                            label: 'Setting',
-                            children: <WorkSummary />
-                        }
-                    ]
-                }}
-            />
+            <ProCard title={<><SettingOutlined /> Cấu hình</>} headerBordered>
+                <ProForm formRef={formRef} onFinish={onFinish}>
+                    {getChildren()}
+                </ProForm>
+            </ProCard>
         </PageContainer>
     )
 }

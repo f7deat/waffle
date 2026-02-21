@@ -124,14 +124,13 @@ public class CatalogRepository(ApplicationDbContext context, IHCAService hcaServ
                         Active = catalog.Active,
                         Description = catalog.Description,
                         NormalizedName = catalog.NormalizedName,
-                        CreatedDate = catalog.CreatedDate,
+                        CreatedDate = catalog.ModifiedDate ?? catalog.CreatedDate,
                         Locale = catalog.Locale,
                         ModifiedDate = catalog.ModifiedDate,
                         Name = catalog.Name,
                         Thumbnail = catalog.Thumbnail,
                         Type = catalog.Type,
                         ViewCount = catalog.ViewCount,
-                        Url = catalog.Url ?? $"/{catalog.Type}/{catalog.NormalizedName}".ToLower(),
                         CommentCount = _context.Comments.Count(c => c.CatalogId == catalog.Id)
                     };
 

@@ -1,9 +1,16 @@
 .cdx-list-unordered {
+    .cdx-list__item {
+        &::before {
+            margin-right: 0.5rem;
+        }
+    }
+
     .cdx-list__item-children {
         .cdx-list__item {
             &::before {
                 content: '◦';
             }
+
             .cdx-list__item-children {
                 .cdx-list__item {
                     &::before {
@@ -13,7 +20,45 @@
             }
         }
     }
+
     .cdx-list__item-content {
         padding: 0em;
+    }
+}
+
+.ce-header {
+    font-weight: 600;
+}
+
+h2.ce-header {
+    font-size: 1.1rem;
+}
+
+h3.ce-header {
+    font-size: 1rem;
+}
+
+.ce-block {
+    .cdx-simple-image {
+        .cdx-simple-image__picture {
+            display: flex;
+            justify-content: center;
+        }
+
+        .cdx-simple-image__caption {
+            border: 0;
+            font-style: italic;
+            position: relative;
+            color: gray;
+            text-align: center;
+            margin-top: 0;
+
+            &::before {
+                left: 0;
+                right: 0;
+                position: absolute !important;
+                width: 100%;
+            }
+        }
     }
 }

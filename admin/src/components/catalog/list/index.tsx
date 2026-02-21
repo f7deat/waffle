@@ -67,19 +67,12 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
       },
     },
     {
-      title: 'Created',
+      title: 'Last updated',
       dataIndex: 'createdDate',
-      valueType: 'date',
+      valueType: 'dateTime',
       search: false,
       sorter: true,
-      width: 100
-    },
-    {
-      title: 'Modified',
-      dataIndex: 'modifiedDate',
-      valueType: 'date',
-      search: false,
-      width: 100
+      width: 160
     },
     {
       title: 'View',
