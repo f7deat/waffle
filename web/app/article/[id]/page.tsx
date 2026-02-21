@@ -57,8 +57,8 @@ const Page = async ({ params }: { params: Params }) => {
 
     return (
         <PageContainer breadcrumbs={breadcrumbs}>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-8">
+            <div className="md:flex gap-4">
+                <div className="flex-1 mb-4">
                     <div className="bg-white/70 backdrop-blur p-6 rounded-xl flex gap-4 flex-col md:flex-row">
                         <div>
                             {article.thumbnail && (
@@ -94,7 +94,7 @@ const Page = async ({ params }: { params: Params }) => {
                     <ArticleComments articleId={article.id} articleSlug={article.normalizedName} />
                 </div>
 
-                <aside className="space-y-8 lg:sticky lg:top-24">
+                <aside className="md:w-1/3 mb-4">
                     <div>
                         <h2 className="text-xl font-bold mb-4">Bài viết ngẫu nhiên</h2>
                         {randomArticles.length === 0 ? (
