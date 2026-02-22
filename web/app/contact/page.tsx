@@ -85,7 +85,7 @@ export default function ContactPage() {
                 <div>
                   <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3">Follow Us</p>
                   <div className="flex gap-3">
-                    <a href="https://www.facebook.com/somcafe/" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70 dark:hover:text-blue-400">
+                    <a href="https://www.facebook.com/defzone.net/" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70 dark:hover:text-blue-400">
                       <FacebookFilled />
                     </a>
                     <a href="https://www.linkedin.com/in/f7deat/" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70 dark:hover:text-blue-400">

@@ -6,6 +6,7 @@ import PageContainer from '@/components/layout/page-container';
 import Link from 'next/link';
 import { CalendarOutlined, EnvironmentOutlined, EyeOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import { apiShopeeBaseInfoAndLinks } from '@/services/apps/shopee';
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -59,6 +60,8 @@ const Page: React.FC<Props> = async ({ params }) => {
         { label: place.districtName, href: `/district/${place.districtId}` },
         { label: place.name, href: '#' },
     ] : [{ label: 'Địa điểm', href: '/place' }];
+    
+        const shopeeProducts = await apiShopeeBaseInfoAndLinks({ pageNum: "1", pageSize: 4 });
 
     return (
         <PageContainer breadcrumbs={breadcrumbs}>
@@ -150,6 +153,33 @@ const Page: React.FC<Props> = async ({ params }) => {
                         </div>
                     </div>
                     <PlaceDetail place={place} />
+                    <div className="mb-4">
+                        <h2 className="text-xl font-bold mb-4">Có thể bạn cũng thích</h2>
+                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                            {randomPlaces.map((randomPlace) => (
+                                <Link key={randomPlace.id} href={`/place/${randomPlace.normalizedName}`}>
+                                    <div className="flex flex-col bg-white rounded-lg group cursor-pointer h-full">
+                                        <div className="rounded-t-md bg-gray-200 h-48 overflow-hidden">
+                                            <img
+                                                src={randomPlace.thumbnail}
+                                                alt={randomPlace.name}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            />
+                                        </div>
+                                        <div className="flex-1 min-w-0 p-4">
+                                            <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
+                                                {randomPlace.name}
+                                            </h3>
+                                            <div className='text-slate-500 text-sm'>{randomPlace.description}</div>
+                                            <p className="text-sm text-slate-500">
+                                                <EnvironmentOutlined /> {randomPlace.districtName}, {randomPlace.provinceName} <EyeOutlined /> {randomPlace.viewCount?.toLocaleString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </div>
                 <aside className="space-y-8">
                     {relatedPlaces.length > 0 && (
@@ -180,34 +210,28 @@ const Page: React.FC<Props> = async ({ params }) => {
                             </div>
                         </div>
                     )}
-
-                    {/* Random Places */}
-                    <div className="bg-white rounded-lg p-4">
-                        <h2 className="text-xl font-bold mb-4">More Places to Explore</h2>
-                        <div className="space-y-4">
-                            {randomPlaces.map((randomPlace) => (
-                                <Link key={randomPlace.id} href={`/place/${randomPlace.normalizedName}`}>
-                                    <div className="group cursor-pointer flex gap-3 mb-2">
-                                        <div className="relative flex-shrink-0 w-20 h-20 overflow-hidden rounded-md bg-gray-200">
-                                            <img
-                                                src={randomPlace.thumbnail}
-                                                alt={randomPlace.name}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                            />
+                    <h3 className="text-xl font-bold">Sản phẩm liên quan</h3>
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                            {
+                                shopeeProducts.data.data.landingPageLinkList.linkList.map((link: {
+                                    linkId: string;
+                                    link: string;
+                                    linkName: string;
+                                    image: string;
+                                    linkType: string;
+                                    groupIds: string[];
+                                }) => {
+                                    return (
+                                        <div key={link.linkId} className="bg-white rounded-lg">
+                                            <a href={link.link} target="_blank" rel="noreferrer">
+                                                <img src={link.image} loading="lazy" alt={link.linkName} className="mb-1 transition-transform duration-300 ease-in-out transform hover:scale-105 rounded-t-lg" />
+                                                <div className="hover:text-blue-500 py-1 px-2 font-medium line-clamp-2">{link.linkName}</div>
+                                            </a>
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1 line-clamp-2">
-                                                {randomPlace.name}
-                                            </h3>
-                                            <p className="text-sm text-slate-500">
-                                                <EnvironmentOutlined /> {randomPlace.districtName}, {randomPlace.provinceName} <EyeOutlined /> {randomPlace.viewCount?.toLocaleString()}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                    )
+                                })
+                            }
                         </div>
-                    </div>
                 </aside>
             </div>
         </PageContainer>

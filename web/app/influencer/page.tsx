@@ -49,6 +49,42 @@ const Page: React.FC = async () => {
                 {/* Search and Filters */}
                 <InfluencerFilter />
 
+                {/* Register CTA Section */}
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 mb-8 text-white">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="flex-1">
+                            <h2 className="text-2xl font-bold mb-2">
+                                Bạn là Influencer?
+                            </h2>
+                            <p className="text-blue-100 mb-4">
+                                Đăng ký ngay để kết nối với các thương hiệu và nhận được nhiều cơ hội hợp tác hấp dẫn
+                            </p>
+                            <ul className="space-y-2 text-sm text-blue-50">
+                                <li className="flex items-center gap-2">
+                                    <CheckCircleFilled className="text-white" />
+                                    <span>Tiếp cận hàng ngàn thương hiệu tiềm năng</span>
+                                </li>
+                                <li className="flex items-center gap-2">
+                                    <CheckCircleFilled className="text-white" />
+                                    <span>Quản lý profile và chiến dịch dễ dàng</span>
+                                </li>
+                                <li className="flex items-center gap-2">
+                                    <CheckCircleFilled className="text-white" />
+                                    <span>Nhận thanh toán nhanh chóng và bảo mật</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="flex-shrink-0">
+                            <Link
+                                href="/influencer/register"
+                                className="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors shadow-lg"
+                            >
+                                Đăng ký ngay
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
                     {influencers.map((influencer) => (
                         <Link

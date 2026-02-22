@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-4 text-slate-300">
-                        <a href="https://www.facebook.com/somcafe/" aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
+                        <a href="https://www.facebook.com/defzone.net/" aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
                             <FacebookFilled />
                         </a>
                         <a href="https://www.instagram.com/f7deat/" aria-label="Instagram" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">

@@ -9,7 +9,7 @@ const Page: React.FC = async () => {
 
     const data = await apiShopeeBaseInfoAndLinks({ pageNum: "1", pageSize: 12 });
 
-    const response = await apiProducts({ current: 1, pageSize: 15 });
+    const response = await apiProducts({ current: 1, pageSize: 12 });
     const products = response.data;
 
     const renderPrice = (price?: number, salePrice?: number) => {
@@ -161,7 +161,7 @@ const Page: React.FC = async () => {
                                 })
                             }
                         </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 2xl:grid-cols-5">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 2xl:grid-cols-6">
                             {products.map((product) => (
                                 <div key={product.id} className="bg-white transition duration-300 rounded-lg p-2 flex flex-col hover:shadow-xl">
                                     <img src={product.thumbnail} alt={product.name} className="w-full h-40 md:h-48 object-cover mb-2 rounded-lg" />

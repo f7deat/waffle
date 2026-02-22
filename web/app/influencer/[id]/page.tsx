@@ -49,8 +49,8 @@ const Page = async ({ params }: { params: Params }) => {
     const genderLabel = user.gender === null || user.gender === undefined 
         ? "Chưa cập nhật"
         : user.gender 
-            ? "Nam"
-            : "Nữ";
+            ? "Nữ"
+            : "Nam";
 
     return (
         <PageContainer breadcrumbs={breadcrumbs}>

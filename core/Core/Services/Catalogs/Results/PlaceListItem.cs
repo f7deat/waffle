@@ -12,4 +12,5 @@ public class PlaceListItem
     public string? ProvinceName { get; set; }
     public int? ProvinceId { get; set; }
     public string? Thumbnail { get; set; }
+    public string? Description { get; set; }
 }

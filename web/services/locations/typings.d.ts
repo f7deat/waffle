@@ -23,6 +23,7 @@ declare namespace API {
         viewCount: number;
         modifiedDate: string;
         normalizedName: string;
+        description?: string;
     }
     interface PlaceDetail extends PlaceListItem {
         content: API.BlockEditor;

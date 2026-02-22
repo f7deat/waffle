@@ -60,13 +60,14 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
                         DistrictId = p.DistrictId,
                         ProvinceName = province.Name,
                         ProvinceId = d.ProvinceId,
-                        Thumbnail = c.Thumbnail
+                        Thumbnail = c.Thumbnail,
+                        Description = c.Description
                     };
         if (filterOptions.DistrictId.HasValue)
         {
             query = query.Where(x => x.DistrictId == filterOptions.DistrictId);
         }
-        query = query.OrderBy(r => EF.Functions.Random()).Take(filterOptions.PageSize);
+        query = query.OrderBy(r => Guid.NewGuid()).Take(filterOptions.PageSize);
         return await ListResult.Success(query, filterOptions);
     }
 
