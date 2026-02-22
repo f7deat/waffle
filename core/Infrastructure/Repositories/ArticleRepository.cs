@@ -55,7 +55,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
                         c.Description,
                         c.CreatedDate
                     };
-        query = query.OrderBy(x => EF.Functions.Random());
+        query = query.OrderBy(x => Guid.NewGuid());
         return TResult.Ok(await query.Take(5).ToListAsync());
     }
 
