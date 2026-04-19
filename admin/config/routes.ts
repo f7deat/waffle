@@ -318,6 +318,17 @@ export default [
         name: 'contact',
         path: '/users/contact',
         component: './users/contact'
+      },
+      {
+        name: 'role',
+        path: '/users/roles',
+        component: './users/roles'
+      },
+      {
+        name: 'roleCenter',
+        path: '/users/roles/:id',
+        component: './users/roles/center',
+        hideInMenu: true
       }
     ],
   },
@@ -367,83 +378,72 @@ export default [
   },
   {
     icon: 'SettingOutlined',
-    name: 'settings',
-    path: '/settings',
+    name: 'setting',
+    path: '/setting',
     routes: [
       {
         name: 'general',
-        path: '/settings/general',
+        path: '/setting/general',
         component: './settings',
       },
       {
         name: 'center',
-        path: '/settings/general/center/:id',
+        path: '/setting/general/center/:id',
         component: './settings/center',
         hideInMenu: true
       },
       {
         name: 'component',
-        path: '/settings/component',
+        path: '/setting/component',
         component: './settings/components',
       },
       {
         name: 'componentCenter',
-        path: '/settings/component/center/:id',
+        path: '/setting/component/center/:id',
         component: './settings/components/center',
         hideInMenu: true,
       },
       {
         name: 'style',
-        path: '/settings/css',
+        path: '/setting/css',
         component: './settings/css',
       },
       {
         name: 'localization',
-        path: '/settings/localization',
+        path: '/setting/localization',
         component: './localization',
       },
       {
         name: 'menu',
-        path: '/settings/menu',
+        path: '/setting/menu',
         component: './settings/menu',
       },
       {
         name: 'country',
-        path: '/settings/country',
+        path: '/setting/country',
         component: './settings/country'
       },
       {
         name: 'province',
-        path: '/settings/country/:id',
+        path: '/setting/country/:id',
         component: './settings/country/province',
         hideInMenu: true
       },
       {
         name: 'district',
-        path: '/settings/country/province/:id',
+        path: '/setting/country/province/:id',
         component: './settings/country/province/district',
         hideInMenu: true
       },
       {
         name: 'street',
-        path: '/settings/country/province/district/:id',
+        path: '/setting/country/province/district/:id',
         component: './settings/country/province/district/street',
         hideInMenu: true
       },
       {
-        name: 'role',
-        path: '/settings/roles',
-        component: './users/roles'
-      },
-      {
-        name: 'roleCenter',
-        path: '/settings/roles/:id',
-        component: './users/roles/center',
-        hideInMenu: true
-      },
-      {
         name: 'tag',
-        path: '/settings/tag',
+        path: '/setting/tag',
         component: './tag',
       }
     ],

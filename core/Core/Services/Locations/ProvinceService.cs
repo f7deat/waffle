@@ -19,6 +19,26 @@ public class ProvinceService(IProvinceRepository _provinceRepository) : IProvinc
         return TResult.Success;
     }
 
+    public async Task<TResult> UpdateAsync(Province args)
+    {
+        var province = await _provinceRepository.FindAsync(args.Id);
+        if (province is null) return TResult.Failed("Province not found!");
+        
+        province.Name = args.Name;
+        province.CountryId = args.CountryId;
+        await _provinceRepository.UpdateAsync(province);
+        return TResult.Success;
+    }
+
+    public async Task<TResult> DeleteAsync(int id)
+    {
+        var province = await _provinceRepository.FindAsync(id);
+        if (province is null) return TResult.Failed("Province not found!");
+        
+        await _provinceRepository.DeleteAsync(province);
+        return TResult.Success;
+    }
+
     public async Task<TResult> GetByIdAsync(int id)
     {
         var province = await _provinceRepository.FindAsync(id);

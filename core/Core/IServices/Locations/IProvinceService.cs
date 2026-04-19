@@ -8,6 +8,8 @@ namespace Waffle.Core.IServices.Locations;
 public interface IProvinceService
 {
     Task<TResult> CreateAsync(Province args);
+    Task<TResult> UpdateAsync(Province args);
+    Task<TResult> DeleteAsync(int id);
     Task<TResult> GetByIdAsync(int id);
     Task<ListResult> GetListAsync(ProvinceFilterOptions filterOptions);
     Task<object> GetOptionsAsync(ProvinceSelectOptions selecOptions);

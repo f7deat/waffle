@@ -17,6 +17,25 @@ public class CountryService(ICountryRepository _countryRepository) : ICountrySer
         return TResult.Success;
     }
 
+    public async Task<TResult> UpdateAsync(Country args)
+    {
+        var country = await _countryRepository.FindAsync(args.Id);
+        if (country is null) return TResult.Failed("Country not found!");
+        
+        country.Name = args.Name;
+        await _countryRepository.UpdateAsync(country);
+        return TResult.Success;
+    }
+
+    public async Task<TResult> DeleteAsync(int id)
+    {
+        var country = await _countryRepository.FindAsync(id);
+        if (country is null) return TResult.Failed("Country not found!");
+        
+        await _countryRepository.DeleteAsync(country);
+        return TResult.Success;
+    }
+
     public async Task<TResult> GetByIdAsync(int id)
     {
         var country = await _countryRepository.FindAsync(id);

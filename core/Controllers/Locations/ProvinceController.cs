@@ -15,6 +15,12 @@ public class ProvinceController(IProvinceService _provinceService) : BaseControl
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] Province args) => Ok(await _provinceService.CreateAsync(args));
 
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateAsync([FromBody] Province args) => Ok(await _provinceService.UpdateAsync(args));
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> DeleteAsync(int id) => Ok(await _provinceService.DeleteAsync(id));
+
     [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> GetListAsync([FromQuery] ProvinceFilterOptions filterOptions) => Ok(await _provinceService.GetListAsync(filterOptions));
 
