@@ -38,6 +38,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     #region Job
     public DbSet<JobOpportunity> JobOpportunities { get; set; } = default!;
     public DbSet<JobApplication> JobApplications { get; set; } = default!;
+    public DbSet<InfluencerJob> InfluencerJobs { get; set; } = default!;
+    public DbSet<InfluencerJobApplication> InfluencerJobApplications { get; set; } = default!;
     #endregion
 
     #region Notifications

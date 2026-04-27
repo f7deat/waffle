@@ -59,6 +59,7 @@ declare namespace API {
         createdDate: string;
         modifiedDate?: string;
         status: number;
+        rating: number;
         userName?: string;
         catalogName?: string;
         userAvatar?: string;

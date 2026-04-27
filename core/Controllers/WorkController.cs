@@ -18,7 +18,7 @@ using Column = Waffle.Models.Components.Column;
 
 namespace Waffle.Controllers;
 
-public class WorkController(ApplicationDbContext _context, IWorkService _workService, IComponentService _componentService, ICatalogService _catalogService, ILogService _logService) : BaseController
+public class WorkController(ApplicationDbContext _context, IWorkService _workService, IComponentService _componentService, ILogService _logService) : BaseController
 {
     [HttpPost("add")]
     public async Task<IActionResult> AddAsync([FromBody] AddWorkContentModel args)
@@ -218,53 +218,6 @@ public class WorkController(ApplicationDbContext _context, IWorkService _workSer
 
     [HttpGet("block-editor/{id}")]
     public async Task<IActionResult> GetBlockEditorAsync([FromRoute] Guid id) => Ok(await _workService.GetAsync<List<BlockEditorBlock>>(id));
-
-    [HttpGet("block-editor/fetch-url")]
-    public async Task<IActionResult> BlockEditorFetchUrlAsync([FromQuery] string url)
-    {
-        if (string.IsNullOrWhiteSpace(url))
-        {
-            return Ok(new
-            {
-                success = false
-            });
-        }
-        if (url.Contains(Request.Host.Value, StringComparison.OrdinalIgnoreCase))
-        {
-            var normalizedName = url[(url.LastIndexOf("/") + 1)..];
-            var catalog = await _catalogService.GetByNameAsync(normalizedName);
-            if (catalog is null)
-            {
-                return Ok(new
-                {
-                    success = false
-                });
-            }
-            return Ok(new
-            {
-                success = true,
-                link = $"/{catalog.Type.ToString().ToLower()}/{normalizedName}",
-                meta = new
-                {
-                    title = catalog.Name,
-                    description = catalog.Description,
-                    image = new
-                    {
-                        url = catalog.Thumbnail
-                    }
-                }
-            });
-        }
-        return Ok(new
-        {
-            success = true,
-            link = url,
-            meta = new
-            {
-                title = url,
-            }
-        });
-    }
 
     [HttpPost("block-editor/save")]
     public async Task<IActionResult> SaveBlockEditorAsync([FromBody] BlockEditor model)

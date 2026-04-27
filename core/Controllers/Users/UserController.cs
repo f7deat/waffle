@@ -119,14 +119,19 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
     [HttpPost("create")]
     public async Task<IActionResult> CreateAsync([FromBody] CreateUserModel model) => Ok(await _userService.CreateAsync(model));
 
-    [HttpPost("create-member")]
+    [HttpPost("create-member"), AllowAnonymous]
     public async Task<IActionResult> CreateMemberAsync([FromBody] CreateUserModel args)
     {
+        if (string.IsNullOrWhiteSpace(args.UserName)) return BadRequest("Tên đăng nhập không được để trống.");
+        if (string.IsNullOrWhiteSpace(args.Password)) return BadRequest("Mật khẩu không được để trống.");
+
         var user = new ApplicationUser
         {
-            UserName = args.UserName
+            UserName = args.UserName,
+            Email = args.Email,
+            PhoneNumber = args.PhoneNumber
         };
-        var result = await _userManager.CreateAsync(user);
+        var result = await _userManager.CreateAsync(user, args.Password);
         if (!result.Succeeded) return Ok(result);
         result = await _userManager.AddToRoleAsync(user, RoleName.Member);
         return Ok(result);
@@ -266,6 +271,19 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
 
     [HttpPost("change-avatar"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> ChangeAvatarAsync([FromBody] ChangeAvatarArgs args) => Ok(await _userService.ChangeAvatarAsync(args, $"{Request.Scheme}://{Request.Host.Value}"));
+
+    [HttpPut("profile")]
+    public async Task<IActionResult> UpdateProfileAsync([FromBody] UpdateProfileModel model)
+    {
+        var user = await _userManager.FindByIdAsync(User.GetId().ToString());
+        if (user is null) return BadRequest("User not found!");
+        user.Name = model.Name;
+        user.Email = model.Email;
+        user.PhoneNumber = model.PhoneNumber;
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded) return Ok(result);
+        return Ok(TResult.Success);
+    }
 
     [HttpPut("profile/avatar")]
     public async Task<IActionResult> UpdateProfileAvatarAsync([FromForm] ChangeAvatarProfileArgs args) => Ok(await _userService.ChangeAvatarAsync(new ChangeAvatarArgs(User.GetId(), args.File), $"{Request.Scheme}://{Request.Host.Value}"));

@@ -25,7 +25,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const [initializing, setInitializing] = useState(true);
 
     const fetchUser = useCallback(async () => {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
         if (!token) {
             setUser(null);
             return;
@@ -48,7 +48,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     const logout = useCallback(() => {
         if (typeof window !== "undefined") {
-            localStorage.removeItem("token");
+            localStorage.removeItem("access_token");
         }
         setUser(null);
     }, []);

@@ -18,6 +18,8 @@ public class Comment : BaseEntity
     public Guid? ParentId { get; set; }
     [JsonPropertyName("status")]
     public CommentStatus Status { get; set; }
+    [JsonPropertyName("rating")]
+    public int Rating { get; set; }
 }
 
 public enum CommentStatus

@@ -12,6 +12,28 @@ interface PlaceCommentsProps {
 
 const PAGE_SIZE = 10;
 
+const StarRating: React.FC<{ value: number; onChange?: (v: number) => void; readonly?: boolean }> = ({ value, onChange, readonly }) => {
+    const [hovered, setHovered] = useState(0);
+    return (
+        <div className="flex gap-0.5">
+            {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                    key={star}
+                    type="button"
+                    disabled={readonly}
+                    onClick={() => onChange?.(star)}
+                    onMouseEnter={() => !readonly && setHovered(star)}
+                    onMouseLeave={() => !readonly && setHovered(0)}
+                    className="text-xl focus:outline-none disabled:cursor-default"
+                    aria-label={`${star} sao`}
+                >
+                    <span className={(hovered || value) >= star ? "text-yellow-400" : "text-gray-300"}>★</span>
+                </button>
+            ))}
+        </div>
+    );
+};
+
 const PlaceComments: React.FC<PlaceCommentsProps> = ({ placeId }) => {
     const [comments, setComments] = useState<API.CommentListItem[]>([]);
     const [total, setTotal] = useState(0);
@@ -19,6 +41,7 @@ const PlaceComments: React.FC<PlaceCommentsProps> = ({ placeId }) => {
     const [loading, setLoading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [text, setText] = useState("");
+    const [rating, setRating] = useState(5);
     const [error, setError] = useState<string | null>(null);
 
     const { user, isAuthenticated, hasRole, logout, refreshUser } = useAppContext();
@@ -47,10 +70,11 @@ const PlaceComments: React.FC<PlaceCommentsProps> = ({ placeId }) => {
         setSubmitting(true);
         setError(null);
         try {
-            await apiAddComment({ catalogId: placeId, message: text.trim() });
+            await apiAddComment({ catalogId: placeId, message: text.trim(), rating });
             // The apiAddComment function doesn't return a response, so we can't check for success/failure
             // In a real application, you would want to handle the response from the API
             setText("");
+            setRating(5);
             // Reload page 1 to show new comment
                 if (page === 1) {
                     await fetchComments(1);
@@ -65,13 +89,26 @@ const PlaceComments: React.FC<PlaceCommentsProps> = ({ placeId }) => {
     };
 
     const totalPages = Math.ceil(total / PAGE_SIZE);
+    const ratedComments = comments.filter((c) => c.rating > 0);
+    const avgRating = ratedComments.length > 0
+        ? ratedComments.reduce((sum, c) => sum + c.rating, 0) / ratedComments.length
+        : 0;
 
     return (
         <div>
             <div className="mb-4 bg-white rounded-md p-4">
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-xl font-bold">Bình luận</h2>
-                    <span className="text-sm text-gray-500">{total} bình luận</span>
+                    <div className="flex items-center gap-3">
+                        {avgRating > 0 && (
+                            <div className="flex items-center gap-1">
+                                <StarRating value={Math.round(avgRating)} readonly />
+                                <span className="text-sm font-semibold text-yellow-500">{avgRating.toFixed(1)}</span>
+                                <span className="text-xs text-gray-400">({ratedComments.length} đánh giá)</span>
+                            </div>
+                        )}
+                        <span className="text-sm text-gray-500">{total} bình luận</span>
+                    </div>
                 </div>
 
                 {!isAuthenticated ? (
@@ -84,6 +121,11 @@ const PlaceComments: React.FC<PlaceCommentsProps> = ({ placeId }) => {
                     </div>
                 ) : (
                     <div className="mb-4">
+                        <div className="mb-2 flex items-center gap-3">
+                            <span className="text-sm text-gray-600 font-medium">Đánh giá của bạn:</span>
+                            <StarRating value={rating} onChange={setRating} />
+                            <span className="text-sm text-yellow-500 font-semibold">{rating}/5</span>
+                        </div>
                         <textarea
                             value={text}
                             onChange={(e) => setText(e.target.value)}
@@ -135,6 +177,7 @@ const PlaceComments: React.FC<PlaceCommentsProps> = ({ placeId }) => {
                                             </div>
                                         )}
                                         <span className="font-medium text-gray-700 text-sm">{c.userName ?? "Ẩn danh"}</span>
+                                        {c.rating > 0 && <StarRating value={c.rating} readonly />}
                                     </div>
                                     <span className="text-xs text-gray-500">{dayjs(c.createdDate).format("DD/MM/YYYY HH:mm")}</span>
                                 </div>

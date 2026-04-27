@@ -10,6 +10,7 @@ public class ListResult
     public IEnumerable<object> Data { get; set; } = [];
     public int Total { get; set; }
     public bool Succeeded { get; }
+    public string? Message { get; private set; }
     private IFilterOptions FilterOptions { get; set; }
     public bool HasNextPage => Total > FilterOptions.Current * FilterOptions.PageSize;
     public bool HasPreviousPage => FilterOptions.Current > 1;
@@ -38,6 +39,9 @@ public class ListResult
     {
         return new ListResult(query, query.Count(), filterOptions);
     }
+
+    public static ListResult Failed() => new();
+    public static ListResult Failed(string message) => new() { Message = message };
 }
 
 public class ListResult<T> where T : class
@@ -45,6 +49,7 @@ public class ListResult<T> where T : class
     public IEnumerable<T> Data { get; set; } = [];
     public int Total { get; set; }
     public bool Succeeded { get; }
+    public string? Message { get; private set; }
     private IFilterOptions FilterOptions { get; set; }
     public bool HasNextPage => Total > FilterOptions.Current * FilterOptions.PageSize;
     public bool HasPreviousPage => FilterOptions.Current > 1;
@@ -82,4 +87,7 @@ public class ListResult<T> where T : class
     {
         return new ListResult<T>(query, query.Count(), filterOptions);
     }
+
+    public static ListResult<T> Failed() => new();
+    public static ListResult<T> Failed(string message) => new() { Message = message };
 }

@@ -2,6 +2,8 @@
 
 import PageContainer from "@/components/layout/page-container"
 import { apiCurrentUser, apiChangePassword, apiChangeAvatar } from "@/services/user/user";
+import { apiInfluencerMyApplications } from "@/services/kol/kol";
+import { apiMyOrders } from "@/services/shop/order";
 import { LockOutlined, CameraOutlined, LogoutOutlined, EditOutlined } from "@ant-design/icons";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -27,6 +29,29 @@ const Page: React.FC = () => {
     const [passwordError, setPasswordError] = useState("");
     const [passwordSuccess, setPasswordSuccess] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [myOrders, setMyOrders] = useState<API.MyOrderItem[]>([]);
+    const [myOrdersLoading, setMyOrdersLoading] = useState(true);
+    const [appliedJobs, setAppliedJobs] = useState<API.MyAppliedInfluencerJobItem[]>([]);
+    const [appliedJobsLoading, setAppliedJobsLoading] = useState(true);
+
+    const formatMoney = (value: number) => new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+    }).format(value);
+
+    const getApplicationStatus = (status: API.InfluencerJobApplicationStatus | number) => {
+        if (status === "Approved" || status === 1) return { text: "Đã duyệt", className: "bg-green-100 text-green-700" };
+        if (status === "Rejected" || status === 2) return { text: "Từ chối", className: "bg-red-100 text-red-700" };
+        return { text: "Chờ duyệt", className: "bg-yellow-100 text-yellow-700" };
+    };
+
+    const getOrderStatus = (status: API.MyOrderStatus) => {
+        if (status === "Confirmed" || status === 1) return { text: "Đã xác nhận", className: "bg-blue-100 text-blue-700" };
+        if (status === "Paid" || status === 2) return { text: "Đã thanh toán", className: "bg-green-100 text-green-700" };
+        if (status === "Refunded" || status === 3) return { text: "Đã hoàn tiền", className: "bg-slate-100 text-slate-700" };
+        if (status === "Cancelled" || status === 4) return { text: "Đã hủy", className: "bg-red-100 text-red-700" };
+        return { text: "Mới tạo", className: "bg-yellow-100 text-yellow-700" };
+    };
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -40,6 +65,34 @@ const Page: React.FC = () => {
             }
         };
         fetchUser();
+    }, []);
+
+    useEffect(() => {
+        const fetchMyOrders = async () => {
+            try {
+                const response = await apiMyOrders({ current: 1, pageSize: 6 });
+                setMyOrders(response.data || []);
+            } catch (error) {
+                console.error("Failed to fetch my orders:", error);
+            } finally {
+                setMyOrdersLoading(false);
+            }
+        };
+        fetchMyOrders();
+    }, []);
+
+    useEffect(() => {
+        const fetchAppliedJobs = async () => {
+            try {
+                const response = await apiInfluencerMyApplications({ current: 1, pageSize: 6 });
+                setAppliedJobs(response.data || []);
+            } catch (error) {
+                console.error("Failed to fetch applied jobs:", error);
+            } finally {
+                setAppliedJobsLoading(false);
+            }
+        };
+        fetchAppliedJobs();
     }, []);
 
     const handleOpenModal = () => {
@@ -218,7 +271,7 @@ const Page: React.FC = () => {
 
     return (
         <PageContainer>
-            <div className="max-w-4xl mx-auto py-8 px-4">
+            <div className="mx-auto py-8 px-4">
                 {/* Header */}
                 <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                     <div className="bg-gradient-to-r from-blue-600 to-blue-800 h-32"></div>
@@ -282,8 +335,12 @@ const Page: React.FC = () => {
                     </div>
                 </div>
 
+                {/* 2-column grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Left column */}
+                <div className="flex flex-col gap-6">
                 {/* Profile Information */}
-                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div className="bg-white rounded-lg shadow-md p-6">
                     <h2 className="text-xl font-bold text-gray-900 mb-4 border-b pb-2">
                         Thông tin cá nhân
                     </h2>
@@ -354,6 +411,126 @@ const Page: React.FC = () => {
                         </button>
                     </div>
                 </div>
+                </div>{/* end left column */}
+
+                {/* Right column */}
+                <div className="flex flex-col gap-6">
+                <div className="bg-white rounded-lg shadow-md p-6">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4 border-b pb-2">
+                        Đơn hàng của tôi
+                    </h2>
+
+                    {myOrdersLoading ? (
+                        <div className="space-y-3">
+                            {Array.from({ length: 3 }).map((_, idx) => (
+                                <div key={idx} className="h-16 rounded-lg bg-gray-100 animate-pulse" />
+                            ))}
+                        </div>
+                    ) : myOrders.length === 0 ? (
+                        <div className="text-center py-8 rounded-lg border border-dashed border-gray-300 bg-gray-50">
+                            <p className="text-gray-600">Bạn chưa có đơn hàng nào.</p>
+                            <Link
+                                href="/shop"
+                                className="inline-block mt-3 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+                            >
+                                Mua sắm ngay
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="space-y-3">
+                            {myOrders.map((order) => {
+                                const status = getOrderStatus(order.status);
+                                return (
+                                    <div key={order.id} className="rounded-lg border border-gray-200 p-4">
+                                        <div className="flex flex-wrap items-start justify-between gap-3">
+                                            <div>
+                                                <h3 className="font-semibold text-gray-900">Đơn hàng #{order.number}</h3>
+                                                <p className="text-sm text-gray-500 mt-1">
+                                                    Ngày tạo: {new Date(order.createdDate).toLocaleDateString("vi-VN")}
+                                                </p>
+                                                {order.note && (
+                                                    <p className="mt-2 text-sm text-gray-700 bg-gray-50 rounded-md px-3 py-2">
+                                                        Ghi chú: {order.note}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${status.className}`}>
+                                                {status.text}
+                                            </span>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+
+                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <div className="flex items-center justify-between mb-4 border-b pb-2 gap-3">
+                        <h2 className="text-xl font-bold text-gray-900">
+                            Job đã ứng tuyển
+                        </h2>
+                        <Link
+                            href="/influencer/job"
+                            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                        >
+                            Tìm thêm job
+                        </Link>
+                    </div>
+
+                    {appliedJobsLoading ? (
+                        <div className="space-y-3">
+                            {Array.from({ length: 3 }).map((_, idx) => (
+                                <div key={idx} className="h-20 rounded-lg bg-gray-100 animate-pulse" />
+                            ))}
+                        </div>
+                    ) : appliedJobs.length === 0 ? (
+                        <div className="text-center py-8 rounded-lg border border-dashed border-gray-300 bg-gray-50">
+                            <p className="text-gray-600">Bạn chưa ứng tuyển job nào.</p>
+                            <Link
+                                href="/influencer/job"
+                                className="inline-block mt-3 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+                            >
+                                Xem danh sách job
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="space-y-3">
+                            {appliedJobs.map((job) => {
+                                const status = getApplicationStatus(job.applicationStatus);
+                                return (
+                                    <div key={job.id} className="rounded-lg border border-gray-200 p-4">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div>
+                                                <h3 className="font-semibold text-gray-900">{job.title}</h3>
+                                                <p className="text-sm text-gray-500 mt-1">
+                                                    Đăng bởi {job.postedByName}
+                                                    {job.brand ? ` • ${job.brand}` : ""}
+                                                </p>
+                                            </div>
+                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${status.className}`}>
+                                                {status.text}
+                                            </span>
+                                        </div>
+                                        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600">
+                                            <span>Ngân sách: {formatMoney(job.budget)}{job.budgetMax ? ` - ${formatMoney(job.budgetMax)}` : ""}</span>
+                                            <span>Ngày ứng tuyển: {new Date(job.appliedDate).toLocaleDateString("vi-VN")}</span>
+                                            {job.deadline && <span>Hạn: {new Date(job.deadline).toLocaleDateString("vi-VN")}</span>}
+                                        </div>
+                                        {job.message && (
+                                            <p className="mt-2 text-sm text-gray-700 bg-gray-50 rounded-md px-3 py-2">
+                                                Lời nhắn: {job.message}
+                                            </p>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+
+                </div>{/* end right column */}
+                </div>{/* end 2-column grid */}
             </div>
 
             {/* Hidden File Input */}

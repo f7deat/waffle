@@ -6,6 +6,7 @@ import Footer from "@/components/layout/footer";
 import { ConfigProvider } from "antd";
 import Header from "@/components/layout/header";
 import { AppProvider } from "@/contexts/app-context";
+import { CartProvider } from "@/contexts/cart-context";
 
 const quicksand = Quicksand({
   subsets: ['latin'],
@@ -54,9 +55,11 @@ export default async function RootLayout({
           }}
         >
           <AppProvider>
-            <Header />
-            {children}
-            <Footer />
+            <CartProvider>
+              <Header />
+              {children}
+              <Footer />
+            </CartProvider>
           </AppProvider>
         </ConfigProvider>
       </body>

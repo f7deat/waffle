@@ -20,6 +20,13 @@ public class CreateUserModel : LoginModel
     public string? PhoneNumber { get; set; }
 }
 
+public class UpdateProfileModel
+{
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
+}
+
 public class AddToRoleModel : BaseEntity
 {
     public string? RoleName { get; set; }

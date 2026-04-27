@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
+import AddToCartButton from "@/components/shop/add-to-cart-button";
 import { apiCatalogMeta } from "@/services/catalog";
 import { apiProductDetail } from "@/services/shop/product";
 import { Metadata } from "next";
@@ -177,6 +178,18 @@ const Page = async ({ params }: PageProps) => {
                                     </span>
                                     <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition group-hover:translate-x-full group-hover:duration-1000"></div>
                                 </a>
+                            ) : product.price ? (
+                                <AddToCartButton
+                                    item={{
+                                        productId: product.id,
+                                        name: product.name,
+                                        thumbnail: product.thumbnail,
+                                        normalizedName: product.normalizedName,
+                                        price: product.price,
+                                        salePrice: product.salePrice,
+                                    }}
+                                    className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-5 text-center text-lg font-bold text-white shadow-xl transition hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] dark:from-blue-500 dark:to-indigo-500"
+                                />
                             ) : (
                                 <button
                                     disabled

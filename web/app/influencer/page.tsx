@@ -49,6 +49,20 @@ const Page: React.FC = async () => {
                 {/* Search and Filters */}
                 <InfluencerFilter />
 
+                {/* Job CTA */}
+                <div className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-lg px-5 py-4 mb-6">
+                    <div>
+                        <p className="font-semibold text-blue-800">Tìm kiếm việc làm Influencer?</p>
+                        <p className="text-sm text-blue-600 mt-0.5">Thương hiệu đang tuyển influencer — ứng tuyển ngay hôm nay!</p>
+                    </div>
+                    <Link
+                        href="/influencer/job"
+                        className="shrink-0 inline-block bg-blue-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                    >
+                        Xem việc làm →
+                    </Link>
+                </div>
+
                 {/* Register CTA Section */}
                 <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 mb-8 text-white">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6">

@@ -32,7 +32,8 @@ public class CommentRepository : EfRepository<Comment>, ICommentRepository
                         ParentId = comment.ParentId,
                         Status = comment.Status,
                         UserName = user.UserName,
-                        UserAvatar = user.Avatar
+                        UserAvatar = user.Avatar,
+                        Rating = comment.Rating
                     };
         return await ListResult<CommentListItem>.Success(query, filterOptions);
     }

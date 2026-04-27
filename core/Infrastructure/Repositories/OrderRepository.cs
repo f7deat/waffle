@@ -25,6 +25,14 @@ public class OrderRepository(ApplicationDbContext context, IHCAService hcaServic
         return await ListResult<Order>.Success(query, filterOptions);
     }
 
+    public async Task<ListResult<Order>> ListByUserAsync(Guid userId, IFilterOptions filterOptions)
+    {
+        var query = _context.Orders
+            .Where(x => x.UserId == userId)
+            .OrderByDescending(x => x.CreatedDate);
+        return await ListResult<Order>.Success(query, filterOptions);
+    }
+
     public async Task<IEnumerable<OrderDetail>> ListOrderDetails(Guid orderId) => await _context.OrderDetails.Where(x => x.OrderId == orderId).ToListAsync();
 
     public void RemoveRange(IEnumerable<OrderDetail> orderDetails) => _context.OrderDetails.RemoveRange(orderDetails);

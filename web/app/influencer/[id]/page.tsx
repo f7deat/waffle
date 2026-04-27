@@ -117,14 +117,17 @@ const Page = async ({ params }: { params: Params }) => {
                 </div>
 
                 {/* Contact Form Section */}
-                <div className="max-w-2xl mx-auto w-full">
+                <div className="mx-auto w-full">
                     <div className="rounded-xl bg-white p-6 shadow-sm">
                         <div className="mb-6">
-                            <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Liên hệ</p>
-                            <h2 className="text-2xl font-bold text-slate-900">Gửi tin nhắn cho Influencer</h2>
-                            <p className="text-sm text-slate-600 mt-1">Điền form dưới đây để gửi lời chào hoặc thắc mắc của bạn.</p>
+                            <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Thuê Influencer</p>
+                            <h2 className="text-2xl font-bold text-slate-900">Gửi yêu cầu hợp tác</h2>
+                            <p className="text-sm text-slate-600 mt-1">Member có thể gửi brief thuê influencer, ngân sách và timeline ngay tại đây.</p>
                         </div>
-                        <ContactForm influencerName={user.name || user.userName} />
+                        <ContactForm
+                            influencerName={user.name || user.userName}
+                            influencerUserName={user.userName}
+                        />
                     </div>
                 </div>
             </div>

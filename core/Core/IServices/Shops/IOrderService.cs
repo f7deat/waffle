@@ -8,6 +8,7 @@ namespace Waffle.Core.IServices.Shops;
 public interface IOrderService
 {
     Task<ListResult<Order>> ListAsync(IFilterOptions filterOptions);
+    Task<ListResult<Order>> ListByUserAsync(Guid userId, IFilterOptions filterOptions);
     Task<IdentityResult> AddAsync(Order order);
     Task<Order?> FindAsync(Guid id);
     Task DeleteAsync(Order order);

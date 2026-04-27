@@ -1,11 +1,13 @@
 "use client";
 
 import { BlockOutlined, BookOutlined, EnvironmentOutlined, FacebookFilled, InstagramFilled, LinkedinFilled, MailOutlined, PhoneFilled, ShopOutlined, TikTokFilled, UserOutlined } from "@ant-design/icons";
+import { useCartContext } from "@/contexts/cart-context";
 import Link from "next/link";
 import { useState } from "react";
 
 const Header: React.FC = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { totalItems } = useCartContext();
 
     const navItems = [
         { label: "Bài viết", href: "/article", icon: <BlockOutlined /> },
@@ -86,15 +88,23 @@ const Header: React.FC = () => {
                     </nav>
 
                     <div className="flex items-center justify-end gap-3">
-                        <button
+                        <Link
+                            href="/shop/cart"
                             className="hidden h-10 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 md:flex dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
                             aria-label="Cart"
                         >
+                            <span className="relative inline-flex">
                             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
                                 <path d="M7 20a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM5.2 4l.6 3H21l-1.8 8H7.4l-.3-1.5H4.2L5 17a2 2 0 0 0 2 1.6h11.5a2 2 0 0 0 2-1.6l2-9a1 1 0 0 0-1-1.2H7.3L6.7 4H2V2h3.2a1 1 0 0 1 1 .8Z" />
                             </svg>
+                                {totalItems > 0 && (
+                                    <span className="absolute -right-2 -top-2 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold leading-none text-white">
+                                        {totalItems}
+                                    </span>
+                                )}
+                            </span>
                             Giỏ hàng
-                        </button>
+                        </Link>
 
                         <Link
                             href="/user/profile"
@@ -179,14 +189,20 @@ const Header: React.FC = () => {
                                 >
                                     <UserOutlined />
                                 </Link>
-                                <button
+                                <Link
+                                    href="/shop/cart"
                                     aria-label="Cart"
-                                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+                                    className="relative flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
                                 >
                                     <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
                                         <path d="M7 20a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM5.2 4l.6 3H21l-1.8 8H7.4l-.3-1.5H4.2L5 17a2 2 0 0 0 2 1.6h11.5a2 2 0 0 0 2-1.6l2-9a1 1 0 0 0-1-1.2H7.3L6.7 4H2V2h3.2a1 1 0 0 1 1 .8Z" />
                                     </svg>
-                                </button>
+                                    {totalItems > 0 && (
+                                        <span className="absolute -right-1 -top-1 inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold leading-none text-white">
+                                            {totalItems}
+                                        </span>
+                                    )}
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -49,4 +49,56 @@ declare namespace API {
         category?: string;
         keyword?: string;
     }
+    type InfluencerJobContentType = 'Photo' | 'Video' | 'Story' | 'Reel' | 'Mixed';
+    type InfluencerJobStatus = 'Open' | 'InProgress' | 'Completed' | 'Cancelled';
+    type InfluencerJobApplicationStatus = 'Pending' | 'Approved' | 'Rejected';
+    interface InfluencerJobListItem {
+        id: string;
+        title: string;
+        description: string;
+        budget: number;
+        budgetMax?: number;
+        contentType: InfluencerJobContentType;
+        category?: string;
+        deadline?: string;
+        requiredFollowers?: number;
+        brand?: string;
+        status: InfluencerJobStatus;
+        createdDate: string;
+        createdByName: string;
+        createdByAvatar?: string;
+        applicationCount: number;
+    }
+    interface CreateInfluencerJobRequest {
+        title: string;
+        description: string;
+        budget: number;
+        budgetMax?: number;
+        contentType: number;
+        category?: string;
+        deadline?: string;
+        requiredFollowers?: number;
+        brand?: string;
+    }
+    interface InfluencerJobFilterOptions extends FilterOptions {
+        status?: string;
+        category?: string;
+    }
+    interface MyAppliedInfluencerJobItem {
+        id: string;
+        jobId: string;
+        appliedDate: string;
+        message?: string;
+        applicationStatus: InfluencerJobApplicationStatus | number;
+        title: string;
+        brand?: string;
+        budget: number;
+        budgetMax?: number;
+        contentType: InfluencerJobContentType | number;
+        category?: string;
+        deadline?: string;
+        jobStatus: InfluencerJobStatus | number;
+        createdDate: string;
+        postedByName: string;
+    }
 }

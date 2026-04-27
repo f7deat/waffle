@@ -90,4 +90,6 @@ public class OrderSerivce : IOrderService
     public Task<Order?> FindAsync(Guid id) => _orderRepository.FindAsync(id);
 
     public async Task<ListResult<Order>> ListAsync(IFilterOptions filterOptions) => await _orderRepository.ListAsync(filterOptions);
+
+    public async Task<ListResult<Order>> ListByUserAsync(Guid userId, IFilterOptions filterOptions) => await _orderRepository.ListByUserAsync(userId, filterOptions);
 }

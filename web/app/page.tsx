@@ -4,6 +4,7 @@ import { apiArticleList, apiArticleRandoms } from "@/services/article";
 import { apiProducts } from "@/services/shop/product";
 import { apiTagRandoms } from "@/services/contents/tag";
 import { apiPlaceList } from "@/services/locations/place";
+import { apiKolList } from "@/services/kol/kol";
 import { EyeFilled } from "@ant-design/icons";
 import { Metadata } from "next";
 
@@ -26,6 +27,11 @@ export default async function Home() {
 
   const placesResponse = await apiPlaceList({ current: 1, pageSize: 6 });
   const locations = (placesResponse.data || []).slice(0, 5);
+
+  const influencersResponse = await apiKolList({ current: 1, pageSize: 12 });
+  const randomInfluencers = [...(influencersResponse.data || [])]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 6);
 
   const categories = ["Huong dan", "Phan tich", "Danh gia", "Tin tuc", "Thu thuat"];
 
@@ -143,6 +149,30 @@ export default async function Home() {
                           }
                         </span>
                       </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            <section>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Influencer ngẫu nhiên</h2>
+                <Link href="/influencer" className="text-sm font-medium text-blue-600 hover:text-blue-500">Xem tất cả</Link>
+              </div>
+              <div className="grid gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+                {randomInfluencers.map((item) => (
+                  <Link key={item.id} href={`/influencer/${item.userName}`} className="group overflow-hidden rounded-lg bg-white transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+                    <div className="h-36 bg-slate-100 dark:bg-slate-800">
+                      {item.avatar ? (
+                        <div className="h-full w-full bg-cover bg-center" style={cardStyle(item.avatar)} />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center text-3xl text-slate-400">👤</div>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <h3 className="text-sm font-semibold line-clamp-1 text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">{item.name}</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{item.provinceName}</p>
                     </div>
                   </Link>
                 ))}

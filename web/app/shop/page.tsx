@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
+import AddToCartButton from "@/components/shop/add-to-cart-button";
 import { apiShopeeBaseInfoAndLinks } from "@/services/apps/shopee";
 import { apiProducts } from "@/services/shop/product";
-import { SearchOutlined, ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
+import { SearchOutlined, StarFilled } from "@ant-design/icons";
 import Link from "next/link";
 
 const Page: React.FC = async () => {
@@ -175,9 +176,17 @@ const Page: React.FC = async () => {
                                         <div className="text-yellow-500 text-sm md:text-base font-bold">
                                             5<StarFilled />
                                         </div>
-                                        <button className="hover:bg-blue-100 transition duration-300 border font-medium text-sm px-2 md:px-6 py-1 md:py-2 rounded-full hover:text-blue-600">
-                                            <ShoppingCartOutlined /> Thêm vào giỏ
-                                        </button>
+                                        <AddToCartButton
+                                            item={{
+                                                productId: product.id,
+                                                name: product.name,
+                                                thumbnail: product.thumbnail,
+                                                normalizedName: product.normalizedName,
+                                                price: product.price,
+                                                salePrice: product.salePrice,
+                                            }}
+                                            className="hover:bg-blue-100 transition duration-300 border font-medium text-sm px-2 md:px-6 py-1 md:py-2 rounded-full hover:text-blue-600"
+                                        />
                                     </div>
                                 </div>
                             ))}

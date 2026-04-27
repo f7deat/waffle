@@ -19,6 +19,9 @@ public class OrderController(IOrderService _orderService, ITelegramService _tele
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync(BasicFilterOptions filterOptions) => Ok(await _orderService.ListAsync(filterOptions));
 
+    [HttpGet("my-orders")]
+    public async Task<IActionResult> ListMyOrdersAsync(BasicFilterOptions filterOptions) => Ok(await _orderService.ListByUserAsync(User.GetId(), filterOptions));
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _orderService.GetDetailsAsync(id));
 

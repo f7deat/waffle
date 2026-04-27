@@ -72,7 +72,8 @@ public class CommentService(ICatalogRepository catalogRepository, ILogger<Commen
             Status = CommentStatus.Active,
             CatalogId = addComment.CatalogId,
             Content = addComment.Message,
-            ParentId = addComment.ParrentId
+            ParentId = addComment.ParrentId,
+            Rating = addComment.Rating
         };
         await _commentRepository.AddAsync(comment);
         return IdentityResult.Success;

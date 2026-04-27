@@ -78,6 +78,7 @@ public static class ServiceCollectionExtensions
 
         #region Careers
         services.AddScoped<IJobOpportunityService, JobOpportunityService>();
+        services.AddScoped<IInfluencerJobService, InfluencerJobService>();
         #endregion
 
         services.AddScoped<IRouteDataService, RouteDataService>();
