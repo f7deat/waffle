@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { CalendarOutlined, EnvironmentOutlined, EyeOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { apiShopeeBaseInfoAndLinks } from '@/services/apps/shopee';
+import PlaceComments from '@/components/place/place-comments';
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -153,6 +154,7 @@ const Page: React.FC<Props> = async ({ params }) => {
                         </div>
                     </div>
                     <PlaceDetail place={place} />
+                    <PlaceComments placeId={place.id} />
                     <div className="mb-4">
                         <h2 className="text-xl font-bold mb-4">Có thể bạn cũng thích</h2>
                         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

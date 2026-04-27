@@ -31,7 +31,8 @@ public class CommentRepository : EfRepository<Comment>, ICommentRepository
                         ModifiedDate = comment.ModifiedDate,
                         ParentId = comment.ParentId,
                         Status = comment.Status,
-                        UserName = user.UserName
+                        UserName = user.UserName,
+                        UserAvatar = user.Avatar
                     };
         return await ListResult<CommentListItem>.Success(query, filterOptions);
     }

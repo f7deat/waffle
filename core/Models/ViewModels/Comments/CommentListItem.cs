@@ -6,4 +6,5 @@ public class CommentListItem : Comment
 {
     public string? UserName { get; set; } = default!;
     public string? CatalogName { get; set; }
+    public string? UserAvatar { get; set; }
 }

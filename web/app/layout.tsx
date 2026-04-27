@@ -5,6 +5,7 @@ import Script from "next/script";
 import Footer from "@/components/layout/footer";
 import { ConfigProvider } from "antd";
 import Header from "@/components/layout/header";
+import { AppProvider } from "@/contexts/app-context";
 
 const quicksand = Quicksand({
   subsets: ['latin'],
@@ -52,9 +53,11 @@ export default async function RootLayout({
             }
           }}
         >
-          <Header />
-          {children}
-          <Footer />
+          <AppProvider>
+            <Header />
+            {children}
+            <Footer />
+          </AppProvider>
         </ConfigProvider>
       </body>
     </html>

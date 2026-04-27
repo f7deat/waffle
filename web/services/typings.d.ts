@@ -51,4 +51,16 @@ declare namespace API {
         content: string;
         items?: EditorjsItem[];
     }
+    interface CommentListItem {
+        id: string;
+        catalogId: string;
+        userId: string;
+        content: string;
+        createdDate: string;
+        modifiedDate?: string;
+        status: number;
+        userName?: string;
+        catalogName?: string;
+        userAvatar?: string;
+    }
 }
