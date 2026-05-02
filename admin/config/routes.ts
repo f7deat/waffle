@@ -352,6 +352,11 @@ export default [
         component: './files',
       },
       {
+        name: 'imageLibrary',
+        path: '/files/image-library',
+        component: './image-library',
+      },
+      {
         name: 'fileCenter',
         path: '/files/center/:id',
         component: './files/center',

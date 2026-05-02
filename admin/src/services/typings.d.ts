@@ -90,6 +90,21 @@ declare namespace API {
     url: string;
   };
 
+  type ImageAlbum = BaseEntity & {
+    name: string;
+    description?: string;
+    normalizedName: string;
+    imageCount?: number;
+  };
+
+  type ImageLibraryItem = BaseEntity & {
+    albumId: string;
+    name: string;
+    url: string;
+    type: string;
+    uploadedAt: string;
+  };
+
   type FileItem = {
     fileId: string;
     itemId: string;

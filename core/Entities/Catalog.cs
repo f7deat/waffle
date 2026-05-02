@@ -47,8 +47,6 @@ public enum CatalogType
     Entry = 4,
     [Description("Địa điểm")]
     Location = 5,
-    [Description("Album ảnh")]
-    Album = 8,
     [Description("Tag")]
     Tag = 9,
     [Description("Video")]
