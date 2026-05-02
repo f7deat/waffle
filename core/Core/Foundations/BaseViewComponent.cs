@@ -24,10 +24,7 @@ public abstract class BaseViewComponent<T>(IWorkService workService) : ViewCompo
         var work = await _workService.GetAsync<T>(workId);
         if (work is null)
         {
-            return View(Empty.DefaultView, new ErrorViewModel
-            {
-                RequestId = workId.ToString()
-            });
+            return View();
         }
         if (work is IComponent component)
         {

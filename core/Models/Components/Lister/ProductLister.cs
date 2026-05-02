@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using Waffle.Core.Constants;
+﻿using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Product lister", Prompt = "product-lister", GroupName = GroupName.Lister)]
 public class ProductLister : AbstractComponent
 {
     [JsonPropertyName("title")]

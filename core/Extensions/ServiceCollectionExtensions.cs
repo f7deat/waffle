@@ -20,7 +20,6 @@ using Waffle.Core.Services.Files;
 using Waffle.Core.Services.Locations;
 using Waffle.Core.Services.Shop;
 using Waffle.Core.Services.Tags;
-using Waffle.Data.ContentGenerators;
 using Waffle.Infrastructure.Repositories;
 using Waffle.Infrastructure.Repositories.Catalogs;
 using Waffle.Infrastructure.Repositories.Locations;
@@ -84,9 +83,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRouteDataService, RouteDataService>();
         services.AddScoped<ICollectionService, CollectionService>();
         services.AddScoped<ICollectionRepository, CollectionRepository>();
-
-        services.AddScoped<IGenerator, ComponentGenerator>();
-        services.AddScoped<IGenerator, RoleGenerator>();
 
         #region Notification
         services.AddScoped<INotificationService, NotificationService>();

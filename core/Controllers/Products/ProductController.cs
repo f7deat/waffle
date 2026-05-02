@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
@@ -10,7 +8,6 @@ using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
-using Waffle.Models.Result;
 
 namespace Waffle.Controllers.Products;
 
@@ -44,29 +41,6 @@ public class ProductController(ICatalogService _catalogService, IWorkService wor
 
     [HttpPost("image/save")]
     public async Task<IActionResult> AddImageAsync([FromBody] SaveImageModel args) => Ok(await _workService.SaveProductImageAsync(args));
-
-    [HttpPost("cart-items/{type}"), AllowAnonymous]
-    public async Task<IActionResult> GetCartItemsAsync([FromRoute] string type, [FromBody] List<CartItem> args)
-    {
-        if (args is null || args.Count == 0)
-        {
-            return View(PartialViewName.Empty, new ErrorViewModel
-            {
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
-            });
-        }
-        foreach (var item in args)
-        {
-            item.Catalog = await _catalogService.FindAsync(item.ProductId);
-            var result = await _productService.GetByCatalogIdAsync(item.ProductId);
-            item.Product = result.Data;
-        }
-        if ("checkout".Equals(type))
-        {
-            return View($"/Pages/{CatalogType.Product}/Checkout/_Products.cshtml", args);
-        }
-        return View($"/Pages/{CatalogType.Product}/Cart/_Products.cshtml", args);
-    }
 
     [HttpPost("brand/save")]
     public async Task<IActionResult> SaveBrandAsync([FromBody] SaveBrandModel args) => Ok(await _productService.SaveBrandAsync(args));

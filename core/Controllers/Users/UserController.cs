@@ -204,8 +204,6 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
             SameSite = SameSiteMode.Strict
         };
 
-        Response.Cookies.Append(CookieKey.Token, generatedToken, cookieOptions);
-
         var props = new AuthenticationProperties
         {
             IsPersistent = false

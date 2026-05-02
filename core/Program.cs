@@ -1,33 +1,39 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
-using Waffle.Core.Constants;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Options;
 using Waffle.Core.Services;
 using Waffle.Data;
 using Waffle.Entities.Users;
 using Waffle.Extensions;
+using Waffle.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+    options.UseSeeding((context, _) => WebContextSeed.Seed(context.GetInfrastructure()));
+    options.UseAsyncSeeding((context, _, cancellationToken) => WebContextSeed.SeedAsync(context.GetInfrastructure(), cancellationToken));
+});
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services
-    .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddRoles<ApplicationRole>()
+    .AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<IHCAService, HCAService>();
 builder.Services.AddServices();
 builder.Services.AddHttpClients();
-builder.Services.AddTransient<IHCAService, HCAService>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
@@ -45,18 +51,6 @@ builder.Services
     {
         options.SaveToken = true;
         options.RequireHttpsMetadata = false;
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                var token = context.HttpContext.Request.Cookies[CookieKey.Token];
-                if (!string.IsNullOrEmpty(token))
-                {
-                    context.Token = token;
-                }
-                return Task.CompletedTask;
-            }
-        };
         options.TokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuerSigningKey = true,

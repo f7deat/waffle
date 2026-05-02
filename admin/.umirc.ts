@@ -1,7 +1,6 @@
 import { defineConfig } from "@umijs/max";
 import defaultSettings from "./config/defaultSetting";
 import routes from "./config/routes";
-const { API_BASE_URL } = process.env;
 
 export default defineConfig({
   antd: {
@@ -31,7 +30,9 @@ export default defineConfig({
   esbuildMinifyIIFE: true,
   headScripts: [{ src: "/scripts/loading.js", async: true }],
   define: {
-    API_BASE_URL: API_BASE_URL || "https://defzone.net/api/",
+    "process.env": {
+      API_URL: process.env.API_URL
+    },
   },
   mako: {},
   tailwindcss: {},

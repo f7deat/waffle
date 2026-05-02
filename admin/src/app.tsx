@@ -104,7 +104,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 };
 
 export const request: RequestConfig = {
-  baseURL: 'https://api.defzone.net/api/',
+  baseURL: process.env.API_URL + '/api/',
   ...errorConfig,
   responseInterceptors: [
     (response: any) => {

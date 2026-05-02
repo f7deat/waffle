@@ -1,11 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using Waffle.Core.Constants;
+﻿using System.Text.Json.Serialization;
 using Waffle.Core.Foundations;
 
 namespace Waffle.Models.Components;
 
-[Display(Name = "Column", GroupName = GroupName.Grid, Prompt = "column", AutoGenerateFilter = true)]
 public class Column : AbstractComponent
 {
     [JsonPropertyName("name")]

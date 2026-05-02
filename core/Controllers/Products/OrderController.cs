@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.IServices.Shops;
-using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Users;
 using Waffle.Extensions;
@@ -34,7 +34,7 @@ public class OrderController(IOrderService _orderService, ITelegramService _tele
         var order = await _orderService.FindAsync(id);
         if (order is null) return BadRequest("Order not found!");
         await _orderService.DeleteAsync(order);
-        return Ok(IdentityResult.Success);
+        return Ok(TResult.Success);
     }
 
     [HttpPost("place-order"), AllowAnonymous]
@@ -65,7 +65,7 @@ public class OrderController(IOrderService _orderService, ITelegramService _tele
                 var result = await _userManager.CreateAsync(customer);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(customer, RoleName.Customer);
+                    await _userManager.AddToRoleAsync(customer, RoleName.Member);
                 }
             }
         }
@@ -78,6 +78,6 @@ public class OrderController(IOrderService _orderService, ITelegramService _tele
         await _orderService.AddAsync(order);
         await _orderService.AddOrderDetailsAsync(order.Id, args.OrderDetails);
         await _telegramService.SendMessageAsync($"New order [{order.Number}]: \nName: {args.Name}\nPhone: {args.PhoneNumber}\nAddress: {args.Address}\nNote: {args.Note}");
-        return Ok($"/{CatalogType.Product}/checkout/finish");
+        return Ok(TResult.Success);
     }
 }

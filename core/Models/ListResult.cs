@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using Waffle.Core.Constants;
 using Waffle.Models.Components;
 
 namespace Waffle.Models;
@@ -55,7 +53,6 @@ public class ListResult<T> where T : class
     public bool HasPreviousPage => FilterOptions.Current > 1;
     public bool HasData => Data.Any();
 
-    [UIHint(UIHint.Pagination)]
     public Pagination Pagination { get; set; } = new();
 
     public ListResult()

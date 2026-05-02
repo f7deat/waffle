@@ -47,29 +47,7 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
             query = query.Where(x => x.FolderId == filterOptions.FolderId);
         }
 
-        var total = await query.CountAsync();
-        var data = await query.OrderByDescending(x => x.UploadDate)
-            .Skip((filterOptions.Current - 1) * filterOptions.PageSize)
-            .Take(filterOptions.PageSize)
-            .Select(x => new
-            {
-                x.Id,
-                x.Name,
-                x.Url,
-                x.Type,
-                x.Size,
-                x.UploadDate,
-                x.FolderId
-            })
-            .ToListAsync();
-
-        return Ok(new
-        {
-            data,
-            total,
-            filterOptions.Current,
-            filterOptions.PageSize
-        });
+        return Ok(await ListResult.Success(query, filterOptions));
     }
 
     [HttpPost("images/upload")]

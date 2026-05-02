@@ -1,50 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
 using System.Net;
-using Waffle.Core.Constants;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
-using Waffle.Core.Options;
-using Waffle.Data;
-using Waffle.Data.ContentData;
 using Waffle.Entities;
 using Waffle.Models;
 
 namespace Waffle.Core.Services;
 
-public class LocalizationService : ILocalizationService
+public class LocalizationService(IRouteDataService _routeDataService, ILocalizationRepository _localizationRepository, IMemoryCache _memoryCache) : ILocalizationService
 {
-    private readonly ILocalizationRepository _localizationRepository;
-    private readonly IMemoryCache _memoryCache;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly SettingOptions Options;
-    private readonly IRouteDataService _routeDataService;
-    private readonly ApplicationDbContext _context;
-
-    public LocalizationService(ApplicationDbContext context, IRouteDataService routeDataService, ILocalizationRepository localizationRepository, IMemoryCache memoryCache, IHttpContextAccessor httpContextAccessor, IOptions<SettingOptions> options)
-    {
-        _localizationRepository = localizationRepository;
-        _memoryCache = memoryCache;
-        _httpContextAccessor = httpContextAccessor;
-        Options = options.Value;
-        _routeDataService = routeDataService;
-        _context = context;
-    }
-
-    public string CurrentLocale()
-    {
-        var cookies = _httpContextAccessor.HttpContext?.Request.Cookies;
-
-        if (cookies != null && cookies.ContainsKey(CookieKey.Locale))
-        {
-            return cookies[CookieKey.Locale] ?? "vi-VN";
-        }
-        return "vi-VN";
-    }
-
     public async Task<IdentityResult> AddAsync(Localization args)
     {
         if (await _localizationRepository.IsExistAsync(args.Language, args.Key))
@@ -126,23 +92,4 @@ public class LocalizationService : ILocalizationService
         await _localizationRepository.SaveChangesAsync();
         return IdentityResult.Success;
     }
-
-    private async Task TranslateAsync(Dictionary<string, Dictionary<string, string>> keys)
-    {
-        var translations = await _context.Localizations.Where(x => string.IsNullOrEmpty(x.Value)).ToListAsync();
-        foreach (var key in keys)
-        {
-            var translationKeys = translations.Where(x => x.Key == key.Key).ToList();
-            foreach (var item in key.Value)
-            {
-                var translation = translationKeys.FirstOrDefault(x => x.Language == item.Key);
-                if (translation is null) continue;
-                translation.Value = item.Value;
-                _context.Localizations.Update(translation);
-            }
-        }
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task InitialAsync() => await TranslateAsync(LocaleData.Values);
 }
