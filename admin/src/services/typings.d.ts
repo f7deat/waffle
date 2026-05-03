@@ -5,6 +5,10 @@ declare namespace API {
     data: T;
   };
 
+  type TResult = {
+    message: string;
+  };
+
   type BaseEntity = {
     id?: string;
   };

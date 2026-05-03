@@ -2,6 +2,7 @@
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Articles.Args;
 using Waffle.Core.Services.Articles.Filters;
 using Waffle.Entities;
 using Waffle.Models;
@@ -31,25 +32,37 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
         return _articleRepository.ListAsync(filterOptions);
     }
 
-    public async Task<TResult> AddAsync(Article article)
+    public async Task<TResult> AddAsync(CreateArticleArgs args, string locale)
     {
         try
         {
-            article.NormalizedName = SeoHelper.ToSeoFriendly(article.Name);
+            var article = new Article
+            {
+                Name = args.Name,
+                Description = args.Description,
+                Locale = locale,
+                NormalizedName = SeoHelper.ToSeoFriendly(args.Name)
+            };
             var result = await _articleRepository.AddAsync(article);
             await _articleRepository.SaveChangesAsync();
-            return TResult.Ok(result);
+            return TResult.Ok(result.Id);
         }
         catch (Exception ex)
         {
-            return TResult.Failed(ex.Message);
+            return TResult.Failed(ex.ToString());
         }
     }
 
-    public async Task<TResult> UpdateAsync(Article article)
+    public async Task<TResult> UpdateAsync(UpdateArticleArgs args)
     {
         try
         {
+            var article = new Article
+            {
+                Id = args.Id,
+                Name = args.Name,
+                Description = args.Description
+            };
             article.NormalizedName = SeoHelper.ToSeoFriendly(article.Name);
             var result = await _articleRepository.UpdateAsync(article);
             await _articleRepository.SaveChangesAsync();
@@ -57,7 +70,7 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
         }
         catch (Exception ex)
         {
-            return TResult.Failed(ex.Message);
+            return TResult.Failed(ex.ToString());
         }
     }
 
@@ -75,7 +88,7 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
         }
         catch (Exception ex)
         {
-            return TResult.Failed(ex.Message);
+            return TResult.Failed(ex.ToString());
         }
     }
 

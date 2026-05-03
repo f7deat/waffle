@@ -4,7 +4,6 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.Articles.Args;
 using Waffle.Core.Services.Articles.Filters;
-using Waffle.Entities;
 
 namespace Waffle.Controllers;
 
@@ -26,35 +25,10 @@ public class ArticleController(IArticleService _articleService) : BaseController
     public async Task<IActionResult> GetRandomsAsync([FromQuery] string locale) => Ok(await _articleService.GetRandomsAsync(locale));
 
     [HttpPost("add"), Authorize]
-    public async Task<IActionResult> AddAsync([FromBody] CreateArticleArgs args)
-    {
-        var article = new Article
-        {
-            Name = args.Name,
-            Description = args.Description,
-            Content = args.Content,
-            Thumbnail = args.Thumbnail,
-            Locale = args.Locale,
-            PublishedAt = args.PublishedAt
-        };
-        return Ok(await _articleService.AddAsync(article));
-    }
+    public async Task<IActionResult> AddAsync([FromBody] CreateArticleArgs args, [FromQuery] string locale) => Ok(await _articleService.AddAsync(args, locale));
 
     [HttpPost("update"), Authorize]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateArticleArgs args)
-    {
-        var article = new Article
-        {
-            Id = args.Id,
-            Name = args.Name,
-            Description = args.Description,
-            Content = args.Content,
-            Thumbnail = args.Thumbnail,
-            Locale = args.Locale,
-            PublishedAt = args.PublishedAt
-        };
-        return Ok(await _articleService.UpdateAsync(article));
-    }
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateArticleArgs args) => Ok(await _articleService.UpdateAsync(args));
 
     [HttpDelete("delete/{id}"), Authorize]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _articleService.DeleteAsync(id));
