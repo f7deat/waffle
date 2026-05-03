@@ -14,10 +14,11 @@ namespace Waffle.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
 {
-    public DbSet<AppLog> AppLogs { get; set; } = default!;
-    public DbSet<AppSetting> AppSettings { get; set; } = default!;
-    public DbSet<Catalog> Catalogs { get; set; } = default!;
-    public DbSet<Comment> Comments { get; set; } = default!;
+    public DbSet<AppLog> AppLogs { get; set; }
+    public DbSet<AppSetting> AppSettings { get; set; }
+    public DbSet<Article> Articles { get; set; }
+    public DbSet<Catalog> Catalogs { get; set; }
+    public DbSet<Comment> Comments { get; set; }
     public DbSet<Component> Components { get; set; } = default!;
     public DbSet<FileContent> FileContents { get; set; } = default!;
     public DbSet<ImageAlbum> ImageAlbums { get; set; } = default!;

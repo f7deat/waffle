@@ -2,14 +2,14 @@ import { CatalogType } from "@/constants";
 import { apiTopView } from "@/services/catalog";
 import { EyeOutlined } from "@ant-design/icons";
 import { ProCard, ProList } from "@ant-design/pro-components"
-import { FormattedMessage, Link } from "@umijs/max";
+import { Link } from "@umijs/max";
 import moment from "moment";
 import { useEffect, useState } from "react"
 
 const TopView: React.FC = () => {
 
     const [dataSource, setDataSource] = useState<API.Catalog[]>([]);
-    const [activeKey, setActiveKey] = useState<string>(CatalogType.Article.toString());
+    const [activeKey, setActiveKey] = useState<string>(CatalogType.Product.toString());
 
     useEffect(() => {
         apiTopView(activeKey).then(response => {
@@ -40,11 +40,6 @@ const TopView: React.FC = () => {
                 activeKey: activeKey,
                 onChange: (actKey) => setActiveKey(actKey),
                 items: [
-                    {
-                        label: <FormattedMessage id='menu.catalog.article' />,
-                        key: CatalogType.Article.toString(),
-                        children: <Children />,
-                    },
                     {
                         label: 'Product',
                         key: CatalogType.Product.toString(),

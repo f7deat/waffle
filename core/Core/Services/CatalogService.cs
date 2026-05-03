@@ -367,10 +367,6 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
 
     public Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize)
     {
-        if (pageData.Type == CatalogType.Entry || pageData.Type == CatalogType.Tag || pageData.Type == CatalogType.Leaf)
-        {
-            pageData.Type = CatalogType.Article;
-        }
         return _catalogRepository.ListSpotlightAsync(pageData, pageSize);
     }
 

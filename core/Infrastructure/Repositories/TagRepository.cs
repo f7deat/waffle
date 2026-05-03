@@ -19,7 +19,7 @@ public class TagRepository(ApplicationDbContext context, IHCAService hcaService)
         var query = from tc in _context.TagCatalogs
                     join a in _context.Catalogs on tc.CatalogId equals a.Id
                     join t in _context.Tags on tc.TagId equals t.Id
-                    where t.NormalizedName == filterOptions.NormalizedName && a.Locale == filterOptions.Locale && a.Type == CatalogType.Article
+                    where t.NormalizedName == filterOptions.NormalizedName && a.Locale == filterOptions.Locale
                     orderby a.ModifiedDate descending
                     select new
                     {

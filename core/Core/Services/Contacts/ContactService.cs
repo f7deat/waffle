@@ -5,14 +5,22 @@ using Waffle.Entities;
 
 namespace Waffle.Core.Services.Contacts;
 
-public class ContactService(IContactRepository _contactRepository) : IContactService
+public class ContactService(IContactRepository _contactRepository, ILogService _logService) : IContactService
 {
     public async Task<TResult> AddAsync(Contact args)
     {
-        if (await _contactRepository.IsExistAsync(args.PhoneNumber, args.Email)) return TResult.DuplicateRecord;
-        args.CreatedDate = DateTime.UtcNow;
-        await _contactRepository.AddAsync(args);
-        return TResult.Success;
+        try
+        {
+            if (await _contactRepository.IsExistAsync(args.PhoneNumber, args.Email)) return TResult.DuplicateRecord;
+            args.CreatedDate = DateTime.Now;
+            await _contactRepository.AddAsync(args);
+            return TResult.Success;
+        }
+        catch (Exception ex)
+        {
+            await _logService.ExceptionAsync(ex);
+            return TResult.Failed(ex.ToString());
+        }
     }
 
     public async Task<TResult> DeleteAsync(Guid id)

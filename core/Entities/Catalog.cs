@@ -39,8 +39,6 @@ public enum CatalogType
 {
     [Description("Trang")]
     Leaf = 0,
-    [Description("Tin tức")]
-    Article = 1,
     [Description("Sản phẩm")]
     Product = 2,
     [Description("Entry")]

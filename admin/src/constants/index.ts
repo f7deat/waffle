@@ -1,9 +1,8 @@
 export const DEFAULT_NAME = 'Umi Max';
 
 export enum CatalogType {
-  Default,
-  Article,
-  Product,
+  Default = 0,
+  Product = 1,
   Setting,
   Entry,
   Location,

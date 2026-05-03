@@ -1,6 +1,5 @@
 import { RequestConfig } from '@umijs/max';
 import '../style.less';
-import logo from './assets/logo.png';
 import { queryCurrentUser } from './services/user';
 import { history } from '@umijs/max';
 import { RunTimeLayoutConfig } from '@umijs/max';
@@ -45,7 +44,7 @@ export async function getInitialState(): Promise<{
 }
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
-    logo: logo,
+    logo: `${process.env.API_URL}/imgs/logo-icon.png`,
     menu: {
       locale: true,
     },

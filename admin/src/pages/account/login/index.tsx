@@ -18,7 +18,6 @@ import { history, useModel } from '@umijs/max';
 import { Button, message, Space, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
-import logo from '../../../assets/logo.png';
 import '../index.css';
 import { Helmet } from '@umijs/max';
 import Settings from '../../../../config/defaultSetting';
@@ -65,7 +64,7 @@ const Login: React.FC = () => {
       <div className="flex items-center relative h-full flex-col justify-center">
         <div>
           <LoginForm
-            logo={<img alt="logo" src={logo} />}
+            logo={<img alt="logo" src={`${process.env.API_URL}/imgs/logo-icon.png`} />}
             title="Waffle"
             subTitle={intl.formatMessage({ id: 'pages.login.subTitle' })}
             initialValues={{

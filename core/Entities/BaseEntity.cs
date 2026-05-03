@@ -16,7 +16,7 @@ public interface IBaseEntity<T>
 
 public interface ISoftDelete
 {
-    bool IsDeleted { get; set; }
+    DateTime? DeletedAt { get; set; }
 }
 
 public class BaseEntity : IBaseEntity

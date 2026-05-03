@@ -6,7 +6,7 @@ using Waffle.Models;
 
 namespace Waffle.Core.Interfaces.IRepository;
 
-public interface IArticleRepository : IAsyncRepository<Catalog>
+public interface IArticleRepository : IAsyncRepository<Article>
 {
     Task<TResult> GetByNameAsync(string normalizedName);
     Task<int> GetCurrentMonthAsync(string locale);
