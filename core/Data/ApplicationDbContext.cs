@@ -21,8 +21,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Component> Components { get; set; } = default!;
     public DbSet<FileContent> FileContents { get; set; } = default!;
-    public DbSet<ImageAlbum> ImageAlbums { get; set; } = default!;
-    public DbSet<ImageLibraryItem> ImageLibraryItems { get; set; } = default!;
+    public DbSet<Album> Albums { get; set; } = default!;
+    public DbSet<Photo> Photos { get; set; } = default!;
     public DbSet<WorkContent> WorkContents { get; set; } = default!;
     public DbSet<WorkItem> WorkItems { get; set; } = default!;
     public DbSet<Contact> Contacts { get; set; } = default!;
@@ -63,8 +63,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         builder.Entity<Localization>().HasIndex(l => new { l.Language, l.Key }).HasDatabaseName("idx_Localizations_Language_Key");
         builder.Entity<Catalog>().HasIndex(c => c.Id).HasDatabaseName("IDX_Catalog_Id");
-        builder.Entity<ImageAlbum>().HasIndex(x => x.NormalizedName).HasDatabaseName("IDX_ImageAlbum_NormalizedName");
-        builder.Entity<ImageLibraryItem>().HasIndex(x => x.AlbumId).HasDatabaseName("IDX_ImageLibraryItem_AlbumId");
+        builder.Entity<Album>().HasIndex(x => x.NormalizedName).HasDatabaseName("IDX_ImageAlbum_NormalizedName");
+        builder.Entity<Photo>().HasIndex(x => x.AlbumId).HasDatabaseName("IDX_ImageLibraryItem_AlbumId");
         builder.Entity<WorkItem>().HasIndex(w => w.CatalogId).HasDatabaseName("IDX_WorkItem_CatalogId");
         builder.Entity<WorkItem>().HasIndex(w => w.WorkId).HasDatabaseName("IDX_WorkItem_WorkId");
         builder.Entity<WorkContent>().HasIndex(wc => wc.Id).HasDatabaseName("IDX_WorkContent_Id");
@@ -74,9 +74,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<NotificationUser>().HasKey(k => new { k.NotificationId, k.UserId });
         builder.Entity<TagCatalog>().HasKey(tc => new { tc.CatalogId, tc.TagId });
 
-        builder.Entity<ImageLibraryItem>()
-            .HasOne(x => x.ImageAlbum)
-            .WithMany(x => x.Images)
+        builder.Entity<Photo>()
+            .HasOne(x => x.Album)
+            .WithMany(x => x.Photos)
             .HasForeignKey(x => x.AlbumId)
             .OnDelete(DeleteBehavior.Cascade);
 

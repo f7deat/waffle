@@ -205,13 +205,14 @@ export default [
         redirect: '/files/list',
       },
       {
+        name: 'Files',
         path: '/files/list',
         component: './files',
       },
       {
-        name: 'imageLibrary',
-        path: '/files/image-library',
-        component: './image-library',
+        name: 'album',
+        path: '/files/album',
+        component: './files/album',
       },
       {
         name: 'fileCenter',

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Waffle.Entities.Files;
 
-public class ImageAlbum : BaseEntity
+public class Album : BaseEntity
 {
     [StringLength(200)]
     public string Name { get; set; } = default!;
@@ -11,5 +11,5 @@ public class ImageAlbum : BaseEntity
     [StringLength(200)]
     public string NormalizedName { get; set; } = default!;
 
-    public virtual ICollection<ImageLibraryItem>? Images { get; set; }
+    public virtual ICollection<Photo>? Photos { get; set; }
 }

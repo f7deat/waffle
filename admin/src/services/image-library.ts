@@ -1,41 +1,39 @@
 import { request } from '@umijs/max';
 
-export async function apiImageAlbumList(params?: { current?: number; pageSize?: number; keyword?: string }) {
-  return request('imagelibrary/albums', {
-    method: 'GET',
+export async function apiImageAlbumList(params?: any) {
+  return request('album/list', {
     params,
   });
 }
 
 export async function apiImageAlbumCreate(data: { name: string; description?: string }) {
-  return request('imagelibrary/album', {
+  return request('album', {
     method: 'POST',
     data,
   });
 }
 
-export async function apiImageAlbumUpdate(id: string, data: { name: string; description?: string }) {
-  return request(`imagelibrary/album/${id}`, {
+export async function apiImageAlbumUpdate(data: any) {
+  return request(`album`, {
     method: 'PUT',
     data,
   });
 }
 
 export async function apiImageAlbumDelete(id: string) {
-  return request(`imagelibrary/album/${id}`, {
+  return request(`album/${id}`, {
     method: 'DELETE',
   });
 }
 
-export async function apiAlbumImageList(albumId: string, params?: { current?: number; pageSize?: number }) {
-  return request(`imagelibrary/album/${albumId}/images`, {
-    method: 'GET',
+export async function apiAlbumImageList(params: any) {
+  return request(`album/photos`, {
     params,
   });
 }
 
 export async function apiAlbumImageUpload(albumId: string, data: FormData) {
-  return request(`imagelibrary/album/${albumId}/images`, {
+  return request(`album/photos/${albumId}`, {
     method: 'POST',
     data,
     headers: {
@@ -45,7 +43,7 @@ export async function apiAlbumImageUpload(albumId: string, data: FormData) {
 }
 
 export async function apiAlbumImageDelete(imageId: string) {
-  return request(`imagelibrary/image/${imageId}`, {
+  return request(`album/photo/${imageId}`, {
     method: 'DELETE',
   });
 }

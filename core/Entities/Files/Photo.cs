@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Waffle.Entities.Files;
 
-public class ImageLibraryItem : BaseEntity
+public class Photo : BaseEntity
 {
-    [ForeignKey(nameof(ImageAlbum))]
+    [ForeignKey(nameof(Album))]
     public Guid AlbumId { get; set; }
     [StringLength(260)]
     public string Name { get; set; } = default!;
@@ -15,5 +15,5 @@ public class ImageLibraryItem : BaseEntity
     public string Type { get; set; } = default!;
     public DateTime UploadedAt { get; set; }
 
-    public virtual ImageAlbum? ImageAlbum { get; set; }
+    public virtual Album? Album { get; set; }
 }

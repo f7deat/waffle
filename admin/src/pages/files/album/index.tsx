@@ -40,7 +40,7 @@ const ImageLibraryPage: React.FC = () => {
 
     try {
       setLoadingImages(true);
-      const response = await apiAlbumImageList(albumId, { current: 1, pageSize: 100 });
+      const response = await apiAlbumImageList({ current: 1, pageSize: 100, albumId });
       setImages(response?.data || []);
     } finally {
       setLoadingImages(false);
@@ -69,7 +69,7 @@ const ImageLibraryPage: React.FC = () => {
   const saveAlbum = async () => {
     const values = await albumForm.validateFields();
     if (editingAlbum?.id) {
-      await apiImageAlbumUpdate(editingAlbum.id, values);
+      await apiImageAlbumUpdate(values);
       message.success('Đã cập nhật album');
     } else {
       await apiImageAlbumCreate(values);
@@ -187,24 +187,7 @@ const ImageLibraryPage: React.FC = () => {
             rowKey="id"
             search={{ layout: 'vertical' }}
             columns={columns}
-            request={async (params) => {
-              const response = await apiImageAlbumList({
-                current: params.current,
-                pageSize: params.pageSize,
-                keyword: params.keyword,
-              });
-
-              const data = response?.data || [];
-              if (!selectedAlbum?.id && data.length > 0) {
-                setSelectedAlbum(data[0]);
-              }
-
-              return {
-                data,
-                success: true,
-                total: response?.total || 0,
-              };
-            }}
+            request={apiImageAlbumList}
             toolBarRender={() => [
               <Button key="new" type="primary" icon={<PlusOutlined />} onClick={openCreateModal}>
                 Thêm album

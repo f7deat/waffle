@@ -10,11 +10,8 @@ public class WebContextSeed
     {
         using var scope = serviceProvider.CreateScope();
         var scopedServices = scope.ServiceProvider;
-        var log = scopedServices.GetRequiredService<ILogger<WebContextSeed>>();
         var roleManager = scopedServices.GetRequiredService<RoleManager<ApplicationRole>>();
         var userManager = scopedServices.GetRequiredService<UserManager<ApplicationUser>>();
-
-        log.LogTrace("Context Seed is runing!");
 
         var roles = new[] { RoleName.Admin, RoleName.Member, RoleName.Influencer };
         foreach (var roleName in roles)

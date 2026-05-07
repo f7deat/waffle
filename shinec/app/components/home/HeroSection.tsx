@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { siteInfo } from "@/app/data/site-content";
-import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLeaf,
@@ -11,24 +10,28 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { apiGetAlbumPhotos } from "@/app/services/album";
 
-const heroSlides = [
-  {
-    src: "/images/hero-esg.svg",
-    alt: "Toan canh cum cong nghiep sinh thai theo dinh huong ESG",
-  },
-  {
-    src: "/images/news-infra.svg",
-    alt: "He thong ha tang ky thuat dong bo trong cum cong nghiep",
-  },
-  {
-    src: "/images/map-cover.svg",
-    alt: "Ban do ket noi vi tri cum cong nghiep Dak Doa",
-  },
-];
+type AlbumPhoto = {
+  url: string;
+}
 
 export function HeroSection() {
   const [slideIndex, setSlideIndex] = useState(0);
+  const [heroSlides, setHeroSlides] = useState<AlbumPhoto[]>([]);
+
+  useEffect(() => {
+    const fetchSlides = async () => {
+      try {
+        const photos = await apiGetAlbumPhotos();
+        setHeroSlides(photos.data);
+      } catch (error) {
+        console.error("Lỗi khi tải ảnh cho hero slider:", error);
+      }
+    };
+
+    fetchSlides();
+  }, []);
 
   const openContactForm = () => {
     const formAnchor = document.getElementById("contact-form-anchor");
@@ -108,14 +111,13 @@ export function HeroSection() {
               style={{ transform: `translateX(-${slideIndex * 100}%)` }}
             >
               {heroSlides.map((slide, index) => (
-                <div className="hero-slide" key={slide.src}>
-                  <Image
-                    src={slide.src}
-                    alt={slide.alt}
+                <div className="hero-slide" key={index}>
+                  <img
+                    src={slide.url}
+                    alt={"IMAGE"}
                     width={1200}
                     height={760}
                     className="h-44 w-full object-cover"
-                    priority={index === 0}
                   />
                 </div>
               ))}
@@ -142,7 +144,7 @@ export function HeroSection() {
               {heroSlides.map((slide, index) => (
                 <button
                   type="button"
-                  key={slide.src}
+                  key={index}
                   className={`hero-slider-dot ${index === slideIndex ? "hero-slider-dot-active" : ""}`}
                   onClick={() => setSlideIndex(index)}
                   aria-label={`Chon anh ${index + 1}`}
