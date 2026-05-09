@@ -1,36 +1,43 @@
-import { PageContainer, ProColumns, ProTable } from "@ant-design/pro-components";
+import { ActionType, PageContainer, ProColumns, ProTable } from "@ant-design/pro-components";
 import {
   Button,
   Popconfirm,
   Space,
 } from "antd";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   listArticles,
 } from "@/services/article";
 import ArticleForm from "@/components/ArticleForm";
 import dayjs from "dayjs";
+import { Link } from "@umijs/max";
 
 const ArticlePage: React.FC = () => {
 
+  const actionRef = useRef<ActionType>(null);
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | undefined>();
 
   const columns: ProColumns<any>[] = [
     {
+      title: '#',
+      valueType: 'indexBorder',
+      width: 30,
+      align: 'center'
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: 200,
-      ellipsis: true,
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-      width: 250,
-      ellipsis: true,
+      minWidth: 200,
+      render: (dom, record) => (
+        <Link to={`/article/${record.id}`}>
+          <div className="font-medium text-blue-600 hover:underline">
+            {record.name}
+          </div>
+        </Link>
+      )
     },
     {
       title: "View Count",
@@ -67,8 +74,8 @@ const ArticlePage: React.FC = () => {
     {
       title: "Actions",
       key: "actions",
-      width: 120,
-      fixed: "right" as const,
+      width: 60,
+      valueType: "option",
       render: (_: any, record: any) => (
         <Space size="small">
           <Button
@@ -119,12 +126,13 @@ const ArticlePage: React.FC = () => {
         search={{
           layout: "vertical"
         }}
+        actionRef={actionRef}
       />
 
       <ArticleForm
         open={open}
-        articleId={editingId}
         onOpenChange={setOpen}
+        onSuccess={() => actionRef.current?.reload()}
       />
     </PageContainer>
   );

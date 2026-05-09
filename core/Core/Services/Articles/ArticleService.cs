@@ -32,6 +32,11 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
         return _articleRepository.ListAsync(filterOptions);
     }
 
+    public Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions)
+    {
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        return _articleRepository.GetPublishedListAsync(filterOptions);
+    }
     public async Task<TResult> AddAsync(CreateArticleArgs args, string locale)
     {
         try
@@ -57,13 +62,15 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
     {
         try
         {
-            var article = new Article
-            {
-                Id = args.Id,
-                Name = args.Name,
-                Description = args.Description
-            };
+            var article = await _articleRepository.FindAsync(args.Id);
+            if (article is null) return TResult.Failed("Article not found");
             article.NormalizedName = SeoHelper.ToSeoFriendly(article.Name);
+            article.Name = args.Name;
+            article.Description = args.Description;
+            article.Thumbnail = args.Thumbnail;
+            article.Content = args.Content;
+            article.PublishedAt = args.PublishedAt;
+            article.ModifiedDate = DateTime.Now;
             var result = await _articleRepository.UpdateAsync(article);
             await _articleRepository.SaveChangesAsync();
             return TResult.Ok(result);

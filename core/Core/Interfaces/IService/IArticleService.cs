@@ -15,4 +15,5 @@ public interface IArticleService
     Task<TResult> UpdateAsync(UpdateArticleArgs args);
     Task<TResult> DeleteAsync(Guid id);
     Task<TResult> GetByIdAsync(Guid id);
+    Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions);
 }

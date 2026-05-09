@@ -27,13 +27,33 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
             article.ViewCount,
             article.PublishedAt,
             article.CreatedDate,
-            Content = !string.IsNullOrEmpty(article.Content) ? System.Text.Json.JsonSerializer.Deserialize<object>(article.Content) : new {}
+            Content = !string.IsNullOrEmpty(article.Content) ? System.Text.Json.JsonSerializer.Deserialize<object>(article.Content) : new { }
         });
     }
 
     public Task<int> GetCurrentMonthAsync(string locale) => _context.Articles.CountAsync(a => a.PublishedAt != null && a.Locale == locale && a.PublishedAt.Value.Month == DateTime.UtcNow.Month && a.PublishedAt.Value.Year == DateTime.Now.Year);
 
     public Task<int> GetPreviousMonthAsync(string locale) => _context.Articles.CountAsync(a => a.PublishedAt != null && a.Locale == locale && a.PublishedAt.Value.Month == DateTime.UtcNow.AddMonths(-1).Month && a.PublishedAt.Value.Year == DateTime.Now.Year);
+
+    public async Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions)
+    {
+        var query = from a in _context.Articles
+                    where a.PublishedAt != null && a.Locale == filterOptions.Locale
+                    select new
+                    {
+                        a.Id,
+                        a.Name,
+                        a.ViewCount,
+                        a.NormalizedName,
+                        a.ModifiedDate,
+                        a.Thumbnail,
+                        a.Description,
+                        a.CreatedDate,
+                        a.PublishedAt
+                    };
+        query = query.OrderBy(x => x.PublishedAt);
+        return await ListResult.Success(query, filterOptions);
+    }
 
     public async Task<TResult> GetRandomsAsync(string locale)
     {
@@ -63,7 +83,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
     {
         var query = from a in _context.Articles
                     join u in _context.Users on a.CreatedBy equals u.Id
-                    where a.PublishedAt != null && a.Locale == filterOptions.Locale
+                    where a.Locale == filterOptions.Locale
                     select new
                     {
                         a.Id,

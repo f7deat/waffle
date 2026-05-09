@@ -15,8 +15,11 @@ public class ArticleController(IArticleService _articleService) : BaseController
     [HttpGet("id/{id}"), AllowAnonymous]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id) => Ok(await _articleService.GetByIdAsync(id));
 
-    [HttpGet("list"), AllowAnonymous]
+    [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] ArticleFilterOptions filterOptions) => Ok(await _articleService.ListAsync(filterOptions));
+
+    [HttpGet("published-list"), AllowAnonymous]
+    public async Task<IActionResult> GetPublishedListAsync([FromQuery] ArticleFilterOptions filterOptions) => Ok(await _articleService.GetPublishedListAsync(filterOptions));
 
     [HttpGet("statistics"), AllowAnonymous]
     public async Task<IActionResult> GetStatisticsAsync([FromQuery] string locale) => Ok(await _articleService.GetStatisticsAsync(locale));
@@ -24,12 +27,12 @@ public class ArticleController(IArticleService _articleService) : BaseController
     [HttpGet("randoms"), AllowAnonymous]
     public async Task<IActionResult> GetRandomsAsync([FromQuery] string locale) => Ok(await _articleService.GetRandomsAsync(locale));
 
-    [HttpPost("add"), Authorize]
+    [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] CreateArticleArgs args, [FromQuery] string locale) => Ok(await _articleService.AddAsync(args, locale));
 
-    [HttpPost("update"), Authorize]
+    [HttpPut]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateArticleArgs args) => Ok(await _articleService.UpdateAsync(args));
 
-    [HttpDelete("delete/{id}"), Authorize]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _articleService.DeleteAsync(id));
 }

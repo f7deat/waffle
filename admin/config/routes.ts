@@ -28,6 +28,12 @@ export default [
         path: '/article/list',
         component: './article',
         hideInMenu: true
+      },
+      {
+        name: 'center',
+        path: '/article/:id',
+        component: './article/center',
+        hideInMenu: true
       }
     ]
   },

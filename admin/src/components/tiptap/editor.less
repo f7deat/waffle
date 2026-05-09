@@ -1,0 +1,77 @@
+.tiptap-wrapper {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.tiptap-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.tiptap-content {
+  min-height: 360px;
+  padding: 12px;
+}
+
+.tiptap-content .ProseMirror {
+  min-height: 336px;
+  outline: none;
+}
+
+.tiptap-content .ProseMirror p.is-editor-empty:first-child::before {
+  color: #bfbfbf;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap-content .ProseMirror h1,
+.tiptap-content .ProseMirror h2,
+.tiptap-content .ProseMirror h3 {
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.tiptap-content .ProseMirror p,
+.tiptap-content .ProseMirror ul,
+.tiptap-content .ProseMirror ol,
+.tiptap-content .ProseMirror blockquote {
+  margin: 8px 0;
+}
+
+.tiptap-content .ProseMirror blockquote {
+  border-left: 3px solid #d9d9d9;
+  padding-left: 12px;
+  color: #595959;
+}
+
+.tiptap-content .ProseMirror a {
+  color: #1677ff;
+  text-decoration: underline;
+}
+
+.tiptap-content .ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.tiptap-content .ProseMirror th,
+.tiptap-content .ProseMirror td {
+  border: 1px solid #d9d9d9;
+  padding: 8px;
+  vertical-align: top;
+}
+
+.tiptap-content .ProseMirror th {
+  background: #fafafa;
+  font-weight: 600;
+}

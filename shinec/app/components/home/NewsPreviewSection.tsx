@@ -4,13 +4,32 @@ import { newsItems } from "@/app/data/site-content";
 import { SectionHeading } from "@/app/components/site/SectionHeading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { getPublishedArticles } from "@/app/services/article.service";
 
-export function NewsPreviewSection() {
+export async function NewsPreviewSection() {
+  const fallbackItems = newsItems.slice(0, 3);
+
+  const items = await getPublishedArticles({ current: 1, pageSize: 3, locale: "vi-VN" })
+    .then((data) => {
+      if (!data.length) {
+        return fallbackItems;
+      }
+
+      return data.map((item, index) => ({
+        slug: item.slug || fallbackItems[index]?.slug || "tin-tuc",
+        title: item.title || fallbackItems[index]?.title || "Tin tức",
+        excerpt: item.excerpt || fallbackItems[index]?.excerpt || "",
+        category: fallbackItems[index]?.category || "Tin tức",
+        image: item.image || fallbackItems[index]?.image || "/images/news-esg.svg",
+      }));
+    })
+    .catch(() => fallbackItems);
+
   return (
     <section id="tin-tuc" className="section-block" data-animate="reveal">
       <SectionHeading eyebrow="Tin tức" title="Cập nhật xu hướng phát triển và hoạt động nổi bật" />
       <div className="mt-8 grid gap-5 md:grid-cols-3">
-        {newsItems.map((item, index) => (
+        {items.map((item, index) => (
           <article
             key={item.slug}
             className="news-card"

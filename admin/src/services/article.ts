@@ -41,7 +41,6 @@ export async function getArticleStatistics(locale: string) {
 
 export async function getRandomArticles(locale: string) {
   return request<API.TResult<object>>('article/randoms', {
-    method: 'GET',
     params: { locale },
   });
 }
@@ -50,7 +49,7 @@ export async function addArticle(data: {
   name: string;
   description?: string;
 }) {
-  return request<API.TResult<object>>('article/add', {
+  return request<API.TResult<object>>('article', {
     method: 'POST',
     data,
   });
@@ -62,17 +61,16 @@ export async function updateArticle(data: {
   description?: string;
   content?: string;
   thumbnail?: string;
-  locale: string;
   publishedAt?: string;
 }) {
-  return request<API.TResult<object>>('article/update', {
-    method: 'POST',
+  return request<API.TResult<object>>('article', {
+    method: 'PUT',
     data,
   });
 }
 
 export async function deleteArticle(id: string) {
-  return request<API.TResult<object>>(`article/delete/${id}`, {
+  return request<API.TResult<object>>(`article/${id}`, {
     method: 'DELETE',
   });
 }
