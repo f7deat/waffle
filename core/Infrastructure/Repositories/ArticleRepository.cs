@@ -16,6 +16,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
     {
         var article = await _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName);
         if (article is null) return TResult.Failed("Article not found");
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == article.CreatedBy);
         return TResult.Ok(new
         {
             article.Id,
@@ -27,7 +28,12 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
             article.ViewCount,
             article.PublishedAt,
             article.CreatedDate,
-            Content = !string.IsNullOrEmpty(article.Content) ? System.Text.Json.JsonSerializer.Deserialize<object>(article.Content) : new { }
+            article.Locale,
+            article.CreatedBy,
+            article.Content,
+            CreatorName = user?.Name,
+            CreatorAvatar = user?.Avatar,
+            CreatorUserName = user?.UserName
         });
     }
 
@@ -51,7 +57,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
                         a.CreatedDate,
                         a.PublishedAt
                     };
-        query = query.OrderBy(x => x.PublishedAt);
+        query = query.OrderByDescending(x => x.PublishedAt);
         return await ListResult.Success(query, filterOptions);
     }
 
@@ -103,7 +109,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
         {
             query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
         }
-        query = query.OrderByDescending(x => x.ModifiedDate);
+        query = query.OrderByDescending(x => x.CreatedDate);
         return await ListResult.Success(query, filterOptions);
     }
 }

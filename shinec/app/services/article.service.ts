@@ -8,9 +8,25 @@ type PublishedArticleApiItem = {
   publishedAt?: string;
 };
 
+type ArticleDetailApiItem = {
+  id?: string;
+  name?: string;
+  normalizedName?: string;
+  description?: string;
+  thumbnail?: string;
+  publishedAt?: string;
+  content?: string;
+};
+
 type ListResultResponse<T> = {
   data?: T[];
   total?: number;
+};
+
+type ResultResponse<T> = {
+  data?: T;
+  succeeded?: boolean;
+  message?: string;
 };
 
 export type PublishedArticle = {
@@ -19,6 +35,15 @@ export type PublishedArticle = {
   excerpt: string;
   image: string;
   publishedAt: string;
+};
+
+export type ArticleDetail = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  image: string;
+  publishedAt: string;
+  content: string;
 };
 
 export async function getPublishedArticles(params?: {
@@ -43,4 +68,23 @@ export async function getPublishedArticles(params?: {
     image: item.thumbnail ?? "",
     publishedAt: item.publishedAt ?? "",
   }));
+}
+
+export async function getArticleBySlug(slug: string): Promise<ArticleDetail | null> {
+  const response = await request.get<ResultResponse<ArticleDetailApiItem> | ArticleDetailApiItem>(`/article/${slug}`);
+  const rawData = response.data;
+  const item = (rawData as ResultResponse<ArticleDetailApiItem>)?.data ?? (rawData as ArticleDetailApiItem);
+
+  if (!item?.normalizedName) {
+    return null;
+  }
+
+  return {
+    title: item.name ?? "Tin tức",
+    slug: item.normalizedName,
+    excerpt: item.description ?? "",
+    image: item.thumbnail ?? "/images/news-esg.svg",
+    publishedAt: item.publishedAt ?? "",
+    content: item.content ?? "",
+  };
 }

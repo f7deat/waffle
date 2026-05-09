@@ -4,7 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/app/components/site/SiteFooter";
 import { SiteHeader } from "@/app/components/site/SiteHeader";
-import { getNewsBySlug, newsItems } from "@/app/data/site-content";
+import { getPublishedArticles, getArticleBySlug } from "@/app/services/article.service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -15,12 +15,13 @@ type NewsDetailProps = {
 };
 
 export async function generateStaticParams() {
-  return newsItems.map((item) => ({ slug: item.slug }));
+  const items = await getPublishedArticles({ current: 1, pageSize: 20, locale: "vi-VN" }).catch(() => []);
+  return items.filter((item) => item.slug).map((item) => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({ params }: NewsDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getNewsBySlug(slug);
+  const article = await getArticleBySlug(slug).catch(() => null);
 
   if (!article) {
     return {
@@ -44,7 +45,7 @@ export async function generateMetadata({ params }: NewsDetailProps): Promise<Met
 
 export default async function NewsDetailPage({ params }: NewsDetailProps) {
   const { slug } = await params;
-  const article = getNewsBySlug(slug);
+  const article = await getArticleBySlug(slug).catch(() => null);
 
   if (!article) {
     notFound();
@@ -80,25 +81,24 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
           data-animate="reveal"
         >
           <div className="mb-5 overflow-hidden rounded-xl border border-[var(--line)]">
-            <Image
+            <img
               src={article.image}
               alt={article.title}
               width={960}
               height={620}
               className="h-56 w-full object-cover"
-              priority
             />
           </div>
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">{article.category}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Tin tức</p>
           <h1 className="mt-3 text-3xl font-black leading-tight text-[var(--primary-deep)] sm:text-4xl">
             {article.title}
           </h1>
           <p className="mt-2 text-sm text-[var(--text-muted)]">Ngày đăng: {article.publishedAt}</p>
 
           <div className="mt-6 space-y-5 text-sm leading-8 text-[var(--text-muted)] sm:text-base">
-            {article.content.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+            <div className="prose max-w-none">
+              <div dangerouslySetInnerHTML={{ __html: article.content }} />
+            </div>
           </div>
 
           <div className="mt-8">

@@ -37,7 +37,7 @@ export async function NewsPreviewSection() {
             data-animate="reveal"
           >
             <div className="overflow-hidden rounded-xl border border-[var(--line)]">
-              <Image
+              <img
                 src={item.image}
                 alt={item.title}
                 width={960}

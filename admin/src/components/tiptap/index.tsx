@@ -1,5 +1,6 @@
 import { AlignCenterOutlined, AlignLeftOutlined, AlignRightOutlined, BoldOutlined, ClearOutlined, ItalicOutlined, LinkOutlined, LoadingOutlined, OrderedListOutlined, PictureOutlined, StrikethroughOutlined, TableOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { uploadRcFile } from '@/services/file-service';
+import HeadingDropdown from './extensions/heading-dropdown';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -116,6 +117,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
         <div className="tiptap-wrapper">
             <div className="tiptap-toolbar">
                 <Space wrap>
+                    <HeadingDropdown editor={editor} />
                     <Button
                         size="small"
                         type={editor.isActive('bold') ? 'primary' : 'default'}
