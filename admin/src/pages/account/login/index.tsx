@@ -23,6 +23,8 @@ import { Helmet } from '@umijs/max';
 import Settings from '../../../../config/defaultSetting';
 import ForgotPassword from '../components/forgot-password';
 
+const companyName = process.env.COMPANY_NAME || 'DefZone.Net';
+
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -65,7 +67,7 @@ const Login: React.FC = () => {
         <div>
           <LoginForm
             logo={<img alt="logo" src={`${process.env.API_URL}/imgs/logo-icon.png`} />}
-            title="Waffle"
+            title={companyName}
             subTitle={intl.formatMessage({ id: 'pages.login.subTitle' })}
             initialValues={{
               autoLogin: true,

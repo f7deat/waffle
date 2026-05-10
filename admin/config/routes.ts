@@ -229,23 +229,6 @@ export default [
     ],
   },
   {
-    path: '/account',
-    name: 'account',
-    icon: 'UserOutlined',
-    routes: [
-      {
-        path: '/account',
-        redirect: '/account/profile',
-      },
-      {
-        name: 'profile',
-        path: '/account/profile',
-        component: './account/profile',
-        hideInMenu: true
-      }
-    ],
-  },
-  {
     icon: 'SettingOutlined',
     name: 'setting',
     path: '/setting',
@@ -254,6 +237,11 @@ export default [
         name: 'general',
         path: '/setting/general',
         component: './settings',
+      },
+      {
+        name: 'account',
+        path: '/setting/account',
+        component: './settings/account'
       },
       {
         name: 'center',

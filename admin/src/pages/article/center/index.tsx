@@ -1,7 +1,7 @@
 import TiptapEditor from '@/components/tiptap';
 import { getArticleById, updateArticle } from '@/services/article';
 import { uploadRcFile } from '@/services/file-service';
-import { LeftOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import {
     PageContainer,
     ProCard,
@@ -20,8 +20,10 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 const Index: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const formRef = useRef<ProFormInstance>(null);
+    const [form] = ProForm.useForm();
     const thumbnailInputRef = useRef<HTMLInputElement>(null);
     const [thumbnailUploading, setThumbnailUploading] = useState(false);
+    const thumbnail = ProForm.useWatch('thumbnail', form);
 
     const { data: detailResponse, loading } = useRequest(
         () => getArticleById(id as string),
@@ -101,7 +103,7 @@ const Index: React.FC = () => {
             onBack={() => history.back()}
         >
             <ProCard>
-                <ProForm formRef={formRef} onFinish={onFinish} submitter={{ searchConfig: { submitText: 'Luu thay doi' } }}>
+                <ProForm form={form} formRef={formRef} onFinish={onFinish} submitter={{ searchConfig: { submitText: 'Luu thay doi' } }}>
                     <Row gutter={16}>
                         <Col xs={24} md={16}>
 
@@ -122,7 +124,9 @@ const Index: React.FC = () => {
                             </ProForm.Item>
                         </Col>
                         <Col xs={24} md={8}>
-
+                            <div className="border rounded p-1 mb-2">
+                                <img src={formRef.current?.getFieldValue('thumbnail')} alt="Thumbnail" className="w-full h-64 rounded object-cover" />
+                            </div>
                             <ProFormText name="thumbnail" label="Thumbnail URL"
                                 fieldProps={{
                                     suffix: (

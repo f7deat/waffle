@@ -31,7 +31,8 @@ export default defineConfig({
   headScripts: [{ src: "/scripts/loading.js", async: true }],
   define: {
     "process.env": {
-      API_URL: process.env.API_URL
+      API_URL: process.env.API_URL,
+      COMPANY_NAME: process.env.COMPANY_NAME
     },
   },
   mako: {},

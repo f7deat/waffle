@@ -1,6 +1,5 @@
 export default {
-  'pages.login.subTitle':
-    'Waffle is the most influential web design specification in Hai Phong',
+  'pages.login.subTitle': 'The best management system for your website',
   'pages.login.forgotPassword': 'Quên mật khẩu?',
   'pages.login.rememberMe': 'Nhớ mật khẩu?',
   'pages.login.orLoginWith': 'Hoặc đăng nhập với',
