@@ -60,6 +60,7 @@ export default {
   'menu.settings.localization': 'Localization',
   'menu.settings.menu': 'Menu',
   'menu.settings.sendGrid': 'SendGrid',
+  'menu.setting.category': 'Category',
   'menu.users': 'Users',
   'menu.users.list': 'Users List',
   'menu.users.contact': 'Contact',

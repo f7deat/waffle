@@ -56,6 +56,7 @@ export default {
   'menu.settings.componentCenter': 'Component center',
   'menu.settings.localization': '语言',
   'menu.settings.sendGrid': 'SendGrid',
+  'menu.setting.category': 'Category',
   'menu.users': '用户',
   'menu.users.contact': '接触',
   'menu.users.member': '成员',

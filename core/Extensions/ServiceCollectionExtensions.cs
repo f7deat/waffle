@@ -14,6 +14,7 @@ using Waffle.Core.Services;
 using Waffle.Core.Services.Affiliates;
 using Waffle.Core.Services.Articles;
 using Waffle.Core.Services.Careers;
+using Waffle.Core.Services.Categories;
 using Waffle.Core.Services.Contacts;
 using Waffle.Core.Services.Ecommerces;
 using Waffle.Core.Services.Files;
@@ -60,6 +61,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IArticleService, ArticleService>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<ITagService, TagService>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<ICategoryService, CategoryService>();
 
         #region Products
         services.AddScoped<IProductRepository, ProductRepository>();

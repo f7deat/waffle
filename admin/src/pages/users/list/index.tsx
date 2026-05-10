@@ -5,11 +5,12 @@ import {
   ModalForm,
   PageContainer,
   ProColumns,
+  ProFormSelect,
   ProFormText,
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl, history, Link } from '@umijs/max';
-import { Badge, Button, message, Popconfirm, Space } from 'antd';
+import { Badge, Button, Col, message, Popconfirm, Row, Space } from 'antd';
 import { useRef, useState } from 'react';
 
 const UserList: React.FC = () => {
@@ -175,39 +176,61 @@ const UserList: React.FC = () => {
         })}
         onFinish={onFinish}
       >
-        <ProFormText name="userName" label="User Name" rules={[
-          {
-            required: true
-          }
-        ]} />
-        <ProFormText
-          name="email"
-          label="Email"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        />
-        <ProFormText name="phoneNumber" label="Phone Number" />
-        <ProFormText.Password
-          name="password"
-          label="Password"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        />
-        <ProFormText.Password
-          name="confirmPassword"
-          label="Confirm password"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        />
+        <Row gutter={16}>
+          <Col md={12} xs={24}>
+            <ProFormText name="name" label="Name" />
+          </Col>
+          <Col md={12} xs={24}>
+            <ProFormText name="userName" label="User Name" rules={[
+              {
+                required: true
+              }
+            ]} />
+          </Col>
+          <Col md={4} xs={24}>
+            <ProFormSelect name="gender" label="Gender" options={[
+              {
+                label: 'Nam',
+                value: false
+              },
+              {
+                label: 'Nữ',
+                value: true
+              }
+            ]} />
+          </Col>
+          <Col md={10} xs={24}>
+            <ProFormText
+              name="email"
+              label="Email"
+            />
+          </Col>
+          <Col md={10} xs={24}>
+            <ProFormText name="phoneNumber" label="Phone Number" />
+          </Col>
+          <Col md={12} xs={24}>
+            <ProFormText.Password
+              name="password"
+              label="Password"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            />
+          </Col>
+          <Col md={12} xs={24}>
+            <ProFormText.Password
+              name="confirmPassword"
+              label="Confirm password"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            />
+          </Col>
+        </Row>
       </ModalForm>
     </PageContainer>
   );

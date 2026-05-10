@@ -23,9 +23,6 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
     {
         var product = await _productRepository.FindAsync(args.ProductId);
         if (product is null) return TResult.Failed("Product not found!");
-        var catalog = await _catalogRepository.FindAsync(product.CatalogId);
-        if (catalog is null) return TResult.Failed("Catalog not found!");
-        catalog.ModifiedDate = DateTime.Now;
         await _productLinkRepository.AddAsync(new ProductLink
         {
             CreatedDate = DateTime.Now,
@@ -46,12 +43,6 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
         if (productLink is null) return TResult.Failed("Product link not found!");
         await _productLinkRepository.DeleteAsync(productLink);
         return TResult.Success;
-    }
-
-    public async Task<TResult<Product?>> GetByCatalogIdAsync(Guid catalogId)
-    {
-        var product = await _productRepository.FindByCatalogAsync(catalogId);
-        return TResult<Product?>.Ok(product);
     }
 
     public Task<TResult> GetByNameAsync(string normalizedName) => _productRepository.GetByNameAsync(normalizedName);
@@ -92,18 +83,22 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
 
     public async Task<IdentityResult> SaveAsync(Product args)
     {
-        var product = await _productRepository.FindByCatalogAsync(args.CatalogId);
+        var product = await _productRepository.FindAsync(args.Id);
         if (product is null)
         {
             product = new Product
             {
-                CatalogId = args.CatalogId,
                 Price = args.Price,
                 SKU = args.SKU,
                 UnitInStock = args.UnitInStock,
                 SalePrice = args.SalePrice,
                 AffiliateLink = args.AffiliateLink,
-                Content = args.Content
+                Content = args.Content,
+                Name = args.Name,
+                Description = args.Description,
+                Thumbnail = args.Thumbnail,
+                NormalizedName = SeoHelper.ToSeoFriendly(args.Name),
+                CategoryId = args.CategoryId
             };
             await _productRepository.AddAsync(product);
         }
@@ -115,6 +110,10 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
             product.SalePrice = args.SalePrice;
             product.AffiliateLink = args.AffiliateLink;
             product.Content = args.Content;
+            product.Name = args.Name;
+            product.Description = args.Description;
+            product.Thumbnail = args.Thumbnail;
+            product.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
             await _productRepository.SaveChangesAsync();
         }
         return IdentityResult.Success;

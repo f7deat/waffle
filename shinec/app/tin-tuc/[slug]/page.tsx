@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/app/components/site/SiteFooter";
 import { SiteHeader } from "@/app/components/site/SiteHeader";
 import { getPublishedArticles, getArticleBySlug } from "@/app/services/article.service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { Breadcrumb } from "@/app/components/site/Breadcrumb";
 
 type NewsDetailProps = {
   params: Promise<{
@@ -76,6 +76,13 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
       <SiteHeader currentPage="news" />
 
       <main className="mx-auto w-full max-w-4xl px-4 pb-20 pt-28 sm:px-6 sm:pt-32">
+        <Breadcrumb
+          items={[
+            { label: "Trang chủ", href: "/" },
+            { label: "Tin tức", href: "/tin-tuc" },
+            { label: article.title },
+          ]}
+        />
         <article
           className="rounded-2xl border border-[var(--line)] bg-white p-5 shadow-[0_14px_30px_rgba(0,107,29,0.08)] sm:p-8"
           data-animate="reveal"

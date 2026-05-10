@@ -5,7 +5,6 @@ using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
-using Waffle.Models.Result;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.IServices.Shops;
@@ -14,7 +13,6 @@ public interface IProductService
 {
     Task<IdentityResult> SaveAsync(Product args);
     Task<int> CountAsync();
-    Task<TResult<Product?>> GetByCatalogIdAsync(Guid catalogId);
     Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions);
     Task<IdentityResult> SaveBrandAsync(SaveBrandModel args);
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions catalogFilterOptions);

@@ -41,6 +41,7 @@ export default {
   'menu.setting.role': 'Vai trò',
   'menu.setting.roleCenter': 'Chi tiết vai trò',
   'menu.setting.country': 'Quốc gia',
+  'menu.setting.category': 'Danh mục',
   'menu.setting.tag': 'Tag',
   'menu.setting.account': 'Tài khoản',
   'menu.component': 'Component',

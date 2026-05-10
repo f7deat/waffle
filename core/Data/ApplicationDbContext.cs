@@ -7,6 +7,7 @@ using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
 using Waffle.Entities.Locations;
 using Waffle.Entities.Notifications;
+using Waffle.Entities.Settings;
 using Waffle.Entities.Tags;
 using Waffle.Entities.Users;
 
@@ -36,6 +37,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<AffiliateLink> AffiliateLinks { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Collection> Collections { get; set; }
+    public DbSet<Category> Categories { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<TagCatalog> TagCatalogs { get; set; }
     #region Job

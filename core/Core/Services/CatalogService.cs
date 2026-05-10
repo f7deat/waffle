@@ -41,8 +41,7 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
     {
         await _context.Products.AddAsync(new Product
         {
-            Id = catalogId,
-            CatalogId = catalogId
+            Id = catalogId
         });
         await _context.SaveChangesAsync();
     }

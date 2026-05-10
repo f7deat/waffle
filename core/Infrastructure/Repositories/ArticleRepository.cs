@@ -17,6 +17,9 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
         var article = await _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName);
         if (article is null) return TResult.Failed("Article not found");
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == article.CreatedBy);
+        article.ViewCount++;
+        _context.Articles.Update(article);
+        await _context.SaveChangesAsync();
         return TResult.Ok(new
         {
             article.Id,

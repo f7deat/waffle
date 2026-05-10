@@ -15,9 +15,6 @@ public class ProductController(ICatalogService _catalogService, IWorkService wor
 {
     private readonly IWorkService _workService = workService;
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _productService.GetByCatalogIdAsync(id));
-
     [HttpGet("by-name/{normalizedName}"), AllowAnonymous]
     public async Task<IActionResult> GetByNameAsync([FromRoute] string normalizedName) => Ok(await _productService.GetByNameAsync(normalizedName));
 
@@ -28,13 +25,7 @@ public class ProductController(ICatalogService _catalogService, IWorkService wor
     public async Task<IActionResult> CountAsync() => Ok(TResult.Ok(await _productService.CountAsync()));
 
     [HttpPost("save")]
-    public async Task<IActionResult> SaveAsync([FromBody] Product args)
-    {
-        var catalog  = await _catalogService.FindAsync(args.CatalogId);
-        if (catalog is null) return BadRequest("Catalog not found!");
-        if (args.Price != null && args.Price < 1) return BadRequest("Price is not valid!");
-        return Ok(await _productService.SaveAsync(args));
-    }
+    public async Task<IActionResult> SaveAsync([FromBody] Product args) => Ok(await _productService.SaveAsync(args));
 
     [HttpGet("image/{id}")]
     public async Task<IActionResult> GetProductImageAsync([FromRoute] Guid id) => Ok(await _catalogService.GetProductImageAsync(id));

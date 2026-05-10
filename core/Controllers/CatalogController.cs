@@ -91,7 +91,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
         }
     }
 
-    [HttpPost("delete/{id}"), Authorize(Roles = RoleName.Admin)]
+    [HttpDelete("{id}"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         try
@@ -102,12 +102,6 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
             if (await _catalogService.HasChildAsync(catalog.Id)) return BadRequest("Please remove child catalog!");
 
             if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id)) return BadRequest("Please remove work item!");
-
-            var products = await _context.Products.Where(x => x.CatalogId == catalog.Id).ToListAsync();
-            if (products.Count > 0)
-            {
-                _context.Products.RemoveRange(products);
-            }
 
             var tags = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
             if (tags.Count > 0)

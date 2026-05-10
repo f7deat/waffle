@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Waffle.Core.Foundations.Interfaces;
+using Waffle.Entities.Settings;
 
 namespace Waffle.Entities;
 
@@ -19,4 +21,9 @@ public class Article : AuditEntity, ISoftDelete, ILocale
     [StringLength(10)]
     public string Locale { get; set; } = "vi-VN";
     public DateTime? PublishedAt { get; set; }
+
+    [ForeignKey(nameof(Category))]
+    public int? CategoryId { get; set; }
+
+    public Category? Category { get; set; }
 }

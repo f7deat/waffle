@@ -281,6 +281,11 @@ export default [
         component: './settings/country'
       },
       {
+        name: 'category',
+        path: '/setting/category',
+        component: './settings/category'
+      },
+      {
         name: 'province',
         path: '/setting/country/:id',
         component: './settings/country/province',
