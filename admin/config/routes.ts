@@ -311,6 +311,18 @@ export default [
     ],
   },
   {
+    name: 'tool',
+    path: '/tool',
+    icon: 'ToolOutlined',
+    routes: [
+      {
+        name: 'shortLink',
+        path: '/tool/short-link',
+        component: './tool/short-link',
+      }
+    ]
+  },
+  {
     icon: 'InfoCircleOutlined',
     name: 'help',
     path: '/help',

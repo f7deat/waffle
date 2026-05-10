@@ -35,6 +35,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Folder> Folders { get; set; }
     public DbSet<ProductLink> ProductLinks { get; set; }
     public DbSet<AffiliateLink> AffiliateLinks { get; set; }
+    public DbSet<ShortLink> ShortLinks { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Collection> Collections { get; set; }
     public DbSet<Category> Categories { get; set; }

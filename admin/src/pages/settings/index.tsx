@@ -3,49 +3,39 @@ import { EditOutlined, SyncOutlined } from '@ant-design/icons';
 import {
   ActionType,
   PageContainer,
+  ProCard,
   ProList,
 } from '@ant-design/pro-components';
+import { useRequest } from '@umijs/max';
 import { history } from '@umijs/max';
 import { Button, message } from 'antd';
-import { useRef } from 'react';
+
+type SettingItem = {
+  id: string;
+  name: string;
+  value: string;
+};
 
 const SettingPage: React.FC = () => {
 
-  const actionRef = useRef<ActionType>();
+  const { data, loading } = useRequest(listSetting);
 
   return (
     <PageContainer extra={<Button type='primary' icon={<SyncOutlined />} onClick={async () => {
       await apiSyncSetting();
       message.success('Sync setting successfully');
-      actionRef.current?.reload();
     }}>Sync Setting</Button>}>
-      <ProList
-        grid={{ gutter: 16, column: 2, xxl: 4 }}
-        actionRef={actionRef}
-        ghost
-        search={false}
-        metas={{
-          title: {
-            dataIndex: 'name'
-          },
-          description: {
-            dataIndex: 'description'
-          },
-          actions: {
-            render: (text, record) => [
-              <Button
-                key="edit"
-                type="primary"
-                size="small"
-                icon={<EditOutlined />}
-                onClick={() => history.push(`/settings/general/center/${record.id}`)}
-              >
-                Edit
-              </Button>,
-            ],
-          }
-        }}
-        request={listSetting} rowKey="id" />
+      <div className='grid md:grid-cols-4 grid-cols-1 gap-4'>
+        {
+          data?.map((item: SettingItem) => (
+            <ProCard loading={loading} key={item.id} 
+            headerBordered size='small'
+            title={item.name} actions={[<EditOutlined onClick={() => history.push(`/setting/${item.id}`)} />] }>
+              <div className='text-sm text-gray-500'>{item.value}</div>
+            </ProCard>
+          ))
+        }
+      </div>
     </PageContainer>
   );
 };

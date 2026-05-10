@@ -59,6 +59,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICityService, CityService>();
         services.AddScoped<IArticleRepository, ArticleRepository>();
         services.AddScoped<IArticleService, ArticleService>();
+        services.AddScoped<IShortLinkService, ShortLinkService>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<ITagService, TagService>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
