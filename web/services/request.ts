@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-const API_BASE_URL = "https://api.defzone.net/api/";
+const API_BASE_URL = `${process.env.API_URL}/api/`;
 
 function createServerRequest(): AxiosInstance {
     const instance = axios.create();

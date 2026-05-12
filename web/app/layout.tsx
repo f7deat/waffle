@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import { Quicksand } from 'next/font/google'
 import Script from "next/script";
 import Footer from "@/components/layout/footer";
@@ -7,6 +6,8 @@ import { ConfigProvider } from "antd";
 import Header from "@/components/layout/header";
 import { AppProvider } from "@/contexts/app-context";
 import { CartProvider } from "@/contexts/cart-context";
+import { ShinecHeader } from "@/components/layout/shinec/header";
+import "./globals.css";
 
 const quicksand = Quicksand({
   subsets: ['latin'],
@@ -24,6 +25,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const header = () => {
+    switch (process.env.THEME) {
+      case "SHINEC":
+        return <ShinecHeader currentPage="home" />;
+      default:
+        return <Header />;
+    }
+  }
 
   return (
     <html lang="en">
@@ -56,7 +66,7 @@ export default async function RootLayout({
         >
           <AppProvider>
             <CartProvider>
-              <Header />
+              {header()}
               {children}
               <Footer />
             </CartProvider>

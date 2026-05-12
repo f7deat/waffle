@@ -1,7 +1,7 @@
 import request from "./request";
 
 export async function apiArticleList(params: API.ArticleFilterOptions, cookie?: string) {
-    return request.get<API.ListResult<API.ArticleListItem>>("article/list", {
+    return request.get<API.ListResult<API.ArticleListItem>>("article/published-list", {
         params,
         cookie
     });
