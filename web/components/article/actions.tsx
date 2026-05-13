@@ -72,20 +72,12 @@ const ArticleActions: React.FC<ArticleActionsProps> = ({ article }) => {
   };
 
   const textToRead = useMemo(() => {
-    const blocks = article?.content?.blocks ?? [];
-    const parts: string[] = [];
-    blocks.forEach(b => {
-      if (b.type === "header" && b.data?.text) parts.push(b.data.text);
-      else if (b.type === "paragraph" && b.data?.text) parts.push(b.data.text);
-      else if (b.type === "list" && Array.isArray(b.data?.items)) parts.push((b.data.items || []).join(". "));
-      else if (b.type === "quote" && b.data?.text) parts.push(b.data.text);
-    });
-    return parts.join(". ");
-  }, [article?.content?.blocks]);
+    return article?.content;
+  }, [article?.content]);
 
   const speak = useCallback(() => {
     if (typeof window === "undefined") return;
-    if (!textToRead.trim()) return;
+    if (!article?.content?.trim()) return;
     if (speechSynthesis.speaking) speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(textToRead);
     utter.lang = "vi-VN";

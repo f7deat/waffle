@@ -1,4 +1,4 @@
 export const THEME = {
-    DEFAULT: 'Default',
-    SHINEC: 'Shinec',
+    DEFAULT: 'DEFAULT',
+    SHINEC: 'SHINEC',
 }

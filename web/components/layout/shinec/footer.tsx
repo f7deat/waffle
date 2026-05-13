@@ -1,4 +1,4 @@
-export function SiteFooter() {
+export function ShinecFooter() {
   return (
     <footer className="border-t border-[var(--line)] bg-white py-8">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 text-center text-xs text-[var(--text-muted)] sm:flex-row sm:px-6 sm:text-sm">

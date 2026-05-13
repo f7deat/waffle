@@ -20,12 +20,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     const res = await apiCatalogMeta(id);
     const article = res.data;
     return {
-        title: `${article.title} - DefZone.Net`,
-        description: article.description,
+        title: `${article?.title} - ${process.env.SITE_NAME}`,
+        description: article?.description,
         openGraph: {
-            title: article.title,
-            description: article.description,
-            images: article.thumbnail ? [{ url: article.thumbnail }] : [],
+            title: article?.title,
+            description: article?.description,
+            images: article?.thumbnail ? [{ url: article?.thumbnail }] : [],
         },
     };
 }
@@ -34,8 +34,6 @@ const Page = async ({ params }: { params: Params }) => {
     const { id } = await params;
     const res = await apiArticleDetail(id);
     const article = res.data;
-    const cookieStore = await cookies();
-    const locale = cookieStore.get("language")?.value || "vi-VN";
 
     const randomsRes = await apiArticleRandoms();
     const randomArticles = randomsRes.data || [];
@@ -88,7 +86,7 @@ const Page = async ({ params }: { params: Params }) => {
                     </div>
 
                     <div className="prose prose-lg max-w-none bg-white rounded-lg p-4">
-                        {article.content?.blocks?.map((block: API.Block, index: number) => <Block key={index} {...block} />)}
+                        <div dangerouslySetInnerHTML={{ __html: article.content }} />
                     </div>
 
                     <ArticleComments articleId={article.id} articleSlug={article.normalizedName} />

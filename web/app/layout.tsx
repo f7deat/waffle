@@ -8,6 +8,8 @@ import { AppProvider } from "@/contexts/app-context";
 import { CartProvider } from "@/contexts/cart-context";
 import { ShinecHeader } from "@/components/layout/shinec/header";
 import "./globals.css";
+import { THEME } from "@/config/theme";
+import { ShinecFooter } from "@/components/layout/shinec/footer";
 
 const quicksand = Quicksand({
   subsets: ['latin'],
@@ -28,10 +30,19 @@ export default async function RootLayout({
 
   const header = () => {
     switch (process.env.THEME) {
-      case "SHINEC":
+      case THEME.SHINEC:
         return <ShinecHeader currentPage="home" />;
       default:
         return <Header />;
+    }
+  }
+
+  const footer = () => {
+    switch (process.env.THEME) {
+      case THEME.SHINEC:
+        return <ShinecFooter />;
+      default:
+        return <Footer />;
     }
   }
 
@@ -68,7 +79,7 @@ export default async function RootLayout({
             <CartProvider>
               {header()}
               {children}
-              <Footer />
+              {footer()}
             </CartProvider>
           </AppProvider>
         </ConfigProvider>

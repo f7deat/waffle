@@ -10,7 +10,7 @@ declare namespace API {
         createdDate: string;
     }
     interface ArticleDetail extends ArticleListItem {
-        content: API.BlockEditor;
+        content: string;
     }
     interface ArticleFilterOptions extends FilterOptions {
         name?: string;

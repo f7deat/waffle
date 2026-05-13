@@ -7,6 +7,8 @@ import { apiPlaceList } from "@/services/locations/place";
 import { apiKolList } from "@/services/kol/kol";
 import { EyeFilled } from "@ant-design/icons";
 import { Metadata } from "next";
+import ShinecHome from "@/components/home/shinec";
+import { THEME } from "@/config/theme";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -47,6 +49,10 @@ export default async function Home() {
   const cardStyle = (url: string) => ({
     backgroundImage: `url(${url})`,
   });
+
+  if (process.env.THEME === THEME.SHINEC) {
+    return <ShinecHome articles={articles} />;
+  }
 
   return (
     <main className="dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
@@ -125,7 +131,6 @@ export default async function Home() {
               </div>
             </section>
             <DistrictSection />
-
             <section>
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Sản phẩm gợi ý</h2>

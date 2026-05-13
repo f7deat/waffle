@@ -1,12 +1,15 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-const API_BASE_URL = `${process.env.API_URL}/api/`;
+const resolvedApiHost = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
+const API_URL = resolvedApiHost ? `${resolvedApiHost.replace(/\/+$/, "")}/api/` : undefined;
 
 function createServerRequest(): AxiosInstance {
     const instance = axios.create();
 
     instance.interceptors.request.use((config) => {
-        config.baseURL = API_BASE_URL;
+        if (API_URL) {
+            config.baseURL = API_URL;
+        }
 
          // Get locale from localStorage, default to vi-VN
         const locale = typeof window !== "undefined" ? getLocaleFromCookies(document.cookie) || "vi-VN" : "vi-VN";
