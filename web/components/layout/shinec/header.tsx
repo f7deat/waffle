@@ -147,7 +147,7 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
 
           <div className="hidden items-center gap-2 md:flex">
             <Link
-              href="/tin-tuc"
+              href="/article"
               className="rounded-full border border-white/35 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/10"
             >
               <span className="inline-flex items-center gap-1.5">
@@ -155,7 +155,7 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
               </span>
             </Link>
             <Link
-              href="/lien-he"
+              href="/contact"
               className="rounded-full bg-white px-3 py-1.5 text-xs font-bold text-[var(--primary)] hover:bg-white/90"
             >
               <span className="inline-flex items-center gap-1.5">

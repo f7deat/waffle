@@ -8,7 +8,9 @@ import { apiKolList } from "@/services/kol/kol";
 import { EyeFilled } from "@ant-design/icons";
 import { Metadata } from "next";
 import ShinecHome from "@/components/home/shinec";
-import { THEME } from "@/config/theme";
+import { THEME_NAME } from "@/config/theme";
+
+const { THEME } = process.env;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -50,7 +52,7 @@ export default async function Home() {
     backgroundImage: `url(${url})`,
   });
 
-  if (process.env.THEME === THEME.SHINEC) {
+  if (THEME === THEME_NAME.SHINEC) {
     return <ShinecHome articles={articles} />;
   }
 

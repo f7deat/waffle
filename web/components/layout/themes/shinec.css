@@ -29,6 +29,7 @@ html {
 }
 
 body {
+  padding-top: 4rem;
   margin: 0;
   background: var(--bg-soft);
   color: var(--text-strong);

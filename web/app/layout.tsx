@@ -6,10 +6,7 @@ import { ConfigProvider } from "antd";
 import Header from "@/components/layout/header";
 import { AppProvider } from "@/contexts/app-context";
 import { CartProvider } from "@/contexts/cart-context";
-import { ShinecHeader } from "@/components/layout/shinec/header";
 import "./globals.css";
-import { THEME } from "@/config/theme";
-import { ShinecFooter } from "@/components/layout/shinec/footer";
 
 const quicksand = Quicksand({
   subsets: ['latin'],
@@ -27,24 +24,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  const header = () => {
-    switch (process.env.THEME) {
-      case THEME.SHINEC:
-        return <ShinecHeader currentPage="home" />;
-      default:
-        return <Header />;
-    }
-  }
-
-  const footer = () => {
-    switch (process.env.THEME) {
-      case THEME.SHINEC:
-        return <ShinecFooter />;
-      default:
-        return <Footer />;
-    }
-  }
 
   return (
     <html lang="en">
@@ -77,9 +56,9 @@ export default async function RootLayout({
         >
           <AppProvider>
             <CartProvider>
-              {header()}
+              <Header />
               {children}
-              {footer()}
+              <Footer />
             </CartProvider>
           </AppProvider>
         </ConfigProvider>

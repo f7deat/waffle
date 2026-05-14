@@ -3,6 +3,7 @@
 import { apiGetAlbumPhotos } from "@/services/album";
 import { apiContactSubmit } from "@/services/contact";
 import { AlbumPhoto } from "@/typings/album";
+import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
@@ -215,8 +216,6 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                         </span>
                         <h1 className="text-balance text-3xl font-black leading-tight text-[var(--primary-deep)] sm:text-4xl lg:text-5xl">
                             Cụm công nghiệp số 2 Đak Đoa
-                            <br />
-                            Công ty Cổ phần Shinec Gia Lai
                         </h1>
                         <p className="max-w-xl text-base leading-8 text-[var(--text-muted)] sm:text-lg">
                             Mô hình cụm công nghiệp phát triển theo định hướng ESG, gắn liền với hình ảnh cụm công nghiệp sinh thái,
@@ -264,6 +263,7 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                                 aria-label="Anh truoc"
                                 onClick={showPrevSlide}
                             >
+                                <LeftCircleOutlined />
                             </button>
                             <button
                                 type="button"
@@ -271,6 +271,7 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                                 aria-label="Anh tiep theo"
                                 onClick={showNextSlide}
                             >
+                                <RightCircleOutlined />
                             </button>
 
                             <div className="hero-slider-dots">
