@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -11,7 +11,6 @@ using Waffle.ExternalAPI.Models;
 using Waffle.Models;
 using Waffle.Models.Components;
 using Waffle.Models.Settings;
-using WFSendGrid = Waffle.ExternalAPI.SendGrids.SendGrid;
 
 namespace Waffle.Controllers;
 
@@ -20,20 +19,14 @@ public class SettingController(ApplicationDbContext _context, ISettingService _s
     private readonly ITelegramService _telegramService = telegramService;
     private readonly IWorkService _workService = workService;
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _settingService.GetAsync(id));
-
-    [HttpGet("unix/{normalizedName}")]
+    [HttpGet("{normalizedName}"), AllowAnonymous]
     public async Task<IActionResult> GetAsync([FromRoute] string normalizedName) => Ok(await _settingService.GetAsync<object>(normalizedName));
 
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _settingService.ListAsync(filterOptions));
 
-    [HttpPost("save/{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> SaveAsync([FromRoute] Guid id, [FromBody] object args) => Ok(await _settingService.SaveAsync(id, args));
-
-    [HttpPost("unix/save/{normalizedName}")]
-    public async Task<IActionResult> SaveAsync([FromRoute] string normalizedName, [FromBody] object args) => Ok(await _settingService.SaveAsync(normalizedName, args));
 
     [HttpGet("info")]
     public IActionResult GetInfo()

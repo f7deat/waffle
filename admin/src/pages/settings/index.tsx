@@ -1,41 +1,85 @@
-import { apiSyncSetting, listSetting } from '@/services/setting';
-import { EditOutlined, SyncOutlined } from '@ant-design/icons';
+import { apiSaveSetting, apiSyncSetting, listSetting } from '@/services/setting';
+import { EditOutlined, SettingOutlined, SyncOutlined } from '@ant-design/icons';
 import {
   ActionType,
+  DrawerForm,
   PageContainer,
-  ProCard,
-  ProList,
+  ProFormInstance,
+  ProTable,
 } from '@ant-design/pro-components';
-import { useRequest } from '@umijs/max';
-import { history } from '@umijs/max';
 import { Button, message } from 'antd';
-
-type SettingItem = {
-  id: string;
-  name: string;
-  value: string;
-};
+import { useEffect, useRef, useState } from 'react';
+import SiteSettings from './components/site';
 
 const SettingPage: React.FC = () => {
 
-  const { data, loading } = useRequest(listSetting);
+  const [open, setOpen] = useState(false);
+  const formRef = useRef<ProFormInstance>(null);
+  const actionRef = useRef<ActionType>(null);
+  const [selected, setSelected] = useState<any>();
+
+  useEffect(() => {
+    if (selected && open) {
+      formRef.current?.setFieldsValue({
+        ...JSON.parse((selected.value || '{}') as string)
+      });
+    } else {
+      formRef.current?.resetFields();
+    }
+  }, [selected, open]);
+
+  const onFinish = async (values: any) => {
+    await apiSaveSetting(selected?.id, values);
+    message.success('Save setting successfully');
+    actionRef.current?.reload();
+    return true;
+  }
 
   return (
-    <PageContainer extra={<Button type='primary' icon={<SyncOutlined />} onClick={async () => {
-      await apiSyncSetting();
-      message.success('Sync setting successfully');
-    }}>Sync Setting</Button>}>
-      <div className='grid md:grid-cols-4 grid-cols-1 gap-4'>
-        {
-          data?.map((item: SettingItem) => (
-            <ProCard loading={loading} key={item.id} 
-            headerBordered size='small'
-            title={item.name} actions={[<EditOutlined onClick={() => history.push(`/setting/${item.id}`)} />] }>
-              <div className='text-sm text-gray-500'>{item.value}</div>
-            </ProCard>
-          ))
-        }
-      </div>
+    <PageContainer>
+      <ProTable 
+      actionRef={actionRef}
+      request={listSetting}
+        columns={[
+          {
+            title: '#',
+            valueType: 'indexBorder',
+            width: 30,
+            align: 'center'
+          },
+          {
+            title: 'Name',
+            dataIndex: 'name',
+          },
+          {
+            title: 'Normalized Name',
+            dataIndex: 'normalizedName',
+          },
+          {
+            title: <SettingOutlined />,
+            valueType: 'option',
+            render: (text, record) => [
+              <Button key='edit' type='primary' size='small' icon={<EditOutlined />} onClick={() => {
+                setSelected(record);
+                setOpen(true);
+              }} />
+            ],
+            width: 30,
+            align: 'center'
+          }
+        ]}
+        search={{
+          layout: 'vertical',
+        }}
+      />
+      <DrawerForm
+        title="Edit Setting"
+        open={open}
+        onOpenChange={setOpen}
+        formRef={formRef} onFinish={onFinish}
+      >
+        <SiteSettings />
+      </DrawerForm>
     </PageContainer>
   );
 };

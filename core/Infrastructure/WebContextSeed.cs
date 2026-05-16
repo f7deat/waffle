@@ -83,10 +83,13 @@ public class WebContextSeed
                 Value = JsonSerializer.Serialize(new SiteSetting
                 {
                     Name = "Waffle",
-                    Logo = "https://api.defzone.net/imgs/logo.png"
+                    Logo = "https://api.defzone.net/imgs/logo.png",
+                    Title = "Waffle - A blogging platform built with ASP.NET Core",
+                    Description = "Waffle is a modern blogging platform built with ASP.NET Core, designed to provide a seamless and efficient blogging experience. With its user-friendly interface and powerful features, Waffle allows bloggers to create and manage their content effortlessly. Whether you're a seasoned blogger or just starting out, Waffle offers the tools you need to share your stories with the world."
                 }),
                 Description = "Site settings"
             }, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

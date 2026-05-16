@@ -244,12 +244,6 @@ export default [
         component: './settings/account'
       },
       {
-        name: 'center',
-        path: '/setting/general/center/:id',
-        component: './settings/center',
-        hideInMenu: true
-      },
-      {
         name: 'component',
         path: '/setting/component',
         component: './settings/components',

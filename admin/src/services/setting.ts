@@ -68,9 +68,9 @@ export async function querySetting(normalizedName: string) {
   return request(`setting/unix/${normalizedName}`);
 }
 
-export async function saveSetting(id: string | undefined, data: any) {
-  return request(`setting/save/${id}`, {
-    method: 'POST',
+export async function apiSaveSetting(id: string | undefined, data: any) {
+  return request(`setting/${id}`, {
+    method: 'PUT',
     data,
   });
 }

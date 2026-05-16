@@ -5,6 +5,7 @@ import { apiProducts } from "@/services/shop/product";
 import { apiTagRandoms } from "@/services/contents/tag";
 import { apiPlaceList } from "@/services/locations/place";
 import { apiKolList } from "@/services/kol/kol";
+import { apiGetSiteSetting } from "@/services/setting";
 import { EyeFilled } from "@ant-design/icons";
 import { Metadata } from "next";
 import ShinecHome from "@/components/home/shinec";
@@ -13,10 +14,19 @@ import { THEME_NAME } from "@/config/theme";
 const { THEME } = process.env;
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "DefZone.Net - Kênh thông tin giải trí và địa điểm ăn chơi",
-    description: "DefZone.Net - Kênh thông tin giải trí, đánh giá địa điểm ăn chơi, du lịch và mua sắm. Khám phá những trải nghiệm mới và xu hướng hot nhất hiện nay.",
-  };
+  try {
+    const settings = await apiGetSiteSetting();
+    return {
+      title: settings?.title || "DefZone.Net",
+      description: settings?.description || "DefZone.Net - Kênh thông tin giải trí và địa điểm ăn chơi",
+    };
+  } catch (error) {
+    // Fallback to defaults if API call fails
+    return {
+      title: "DefZone.Net",
+      description: "DefZone.Net - Kênh thông tin giải trí và địa điểm ăn chơi",
+    };
+  }
 }
 
 export default async function Home() {
