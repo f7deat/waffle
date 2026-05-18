@@ -13,6 +13,10 @@
   --line: #d5e8d9;
 }
 
+a:hover {
+  color: var(--primary-light);
+}
+
 @theme inline {
   --color-background: var(--bg-soft);
   --color-foreground: var(--text-strong);
@@ -157,8 +161,6 @@ h4 {
 
 .section-block {
   margin-inline: auto;
-  width: 100%;
-  max-width: 80rem;
   padding: 4.25rem 1rem;
   scroll-margin-top: 5rem;
 }
@@ -174,10 +176,8 @@ h4 {
 
 .eyebrow {
   margin: 0;
-  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--accent-navy);
   font-weight: 800;
 }
 

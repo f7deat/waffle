@@ -125,7 +125,7 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/20 bg-primary backdrop-blur-md">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto container w-full px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="text-sm font-black tracking-[0.15em] text-white sm:text-base">
             <img src="https://api.shinecgialai.vn/imgs/logo-white.png" alt="Shinec Logo" className="h-6 w-auto" />
