@@ -3,10 +3,11 @@
 import { apiGetAlbumPhotos } from "@/services/album";
 import { apiContactSubmit } from "@/services/contact";
 import { AlbumPhoto } from "@/typings/album";
-import { ArrowRightOutlined, DownOutlined, LeftCircleOutlined, RightCircleOutlined, UpOutlined } from "@ant-design/icons";
+import { ArrowRightOutlined, DownOutlined, LeftCircleOutlined, PlayCircleOutlined, RightCircleOutlined, UpOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import ReactECharts from 'echarts-for-react';
+import { Modal } from "antd";
 
 type LandUseItem = {
     label: string;
@@ -72,6 +73,8 @@ const partnerLogos: string[] = [
 const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
     const [slideIndex, setSlideIndex] = useState(0);
     const [heroSlides, setHeroSlides] = useState<AlbumPhoto[]>([]);
+    const [openVideo, setOpenVideo] = useState(false);
+
     useEffect(() => {
         const fetchSlides = async () => {
             try {
@@ -124,13 +127,17 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
         { label: "Đất kỹ thuật", value: "1,67 Ha" },
     ];
 
+    const EyebrowIcon = () => (
+        <svg className="w-5 h-5 inline" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+            <path d="M512.1 376.7C457 513.4 325 430.7 325 430.7C284.5 512.5 217.6 565.1 140.4 565.4C124.3 565.4 123.8 541 140.4 541C204.8 540.7 260.9 498.3 297.6 430.9C256.5 446.8 179 458.8 136 348.7C245 303.8 295.1 359.9 314.3 394.2C324.2 369.8 331.3 343.3 335.9 314.5C335.9 314.5 196.2 336.4 186.4 216.4C305.5 168.5 339 293.1 339 293.1C340.6 276.4 342.3 240.5 342.3 239.7C342.3 239.7 236 166 304.2 74.5C428.8 117.5 365.6 236.9 365.6 236.9C366.1 238.5 366.1 260.7 365.6 270.3C365.6 270.3 410.8 181.3 502 212.8C497.8 346.8 360.1 319.2 360.1 319.2C355.7 346.6 348.9 372.6 340.1 396.7C340.1 396.7 423.1 304.9 512.1 376.7z" />
+        </svg>
+    );
+
     function SectionHeading({ eyebrow, title }: SectionHeadingProps) {
         return (
             <div className="section-header">
                 <p className="eyebrow text-green-700 font-bold text-sm">
-                    <svg className="w-5 h-5 inline" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                        <path d="M512.1 376.7C457 513.4 325 430.7 325 430.7C284.5 512.5 217.6 565.1 140.4 565.4C124.3 565.4 123.8 541 140.4 541C204.8 540.7 260.9 498.3 297.6 430.9C256.5 446.8 179 458.8 136 348.7C245 303.8 295.1 359.9 314.3 394.2C324.2 369.8 331.3 343.3 335.9 314.5C335.9 314.5 196.2 336.4 186.4 216.4C305.5 168.5 339 293.1 339 293.1C340.6 276.4 342.3 240.5 342.3 239.7C342.3 239.7 236 166 304.2 74.5C428.8 117.5 365.6 236.9 365.6 236.9C366.1 238.5 366.1 260.7 365.6 270.3C365.6 270.3 410.8 181.3 502 212.8C497.8 346.8 360.1 319.2 360.1 319.2C355.7 346.6 348.9 372.6 340.1 396.7C340.1 396.7 423.1 304.9 512.1 376.7z" /></svg>
-
+                    <EyebrowIcon />
                     {eyebrow}</p>
                 <h2>{title}</h2>
             </div>
@@ -212,6 +219,9 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                 id="hero"
                 className="relative overflow-hidden border-b border-[var(--line)] pt-28 pb-16 sm:pt-32"
                 data-animate="reveal"
+                style={{
+                    backgroundImage: `url('https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/2024/02/home-four-1.jpg')`
+                }}
             >
                 <div className="hero-aura pointer-events-none" />
                 <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
@@ -219,10 +229,10 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                         <span className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--primary)]">
                             Cụm công nghiệp sinh thái định hướng ESG
                         </span>
-                        <h1 className="text-balance text-3xl font-black leading-tight text-[var(--primary-deep)] sm:text-4xl lg:text-5xl">
+                        <h1 className="text-balance text-3xl font-black leading-tight text-white sm:text-4xl lg:text-5xl">
                             Cụm công nghiệp số 2 Đak Đoa
                         </h1>
-                        <p className="max-w-xl text-base leading-8 text-[var(--text-muted)] sm:text-lg">
+                        <p className="max-w-xl text-base leading-8 text-white sm:text-lg">
                             Mô hình cụm công nghiệp phát triển theo định hướng ESG, gắn liền với hình ảnh cụm công nghiệp sinh thái,
                             chuỗi kinh tế tuần hoàn và thân thiện với môi trường.
                         </p>
@@ -244,324 +254,256 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                     </div>
 
                     <aside className="glass-card animate-float">
-                        <div className="hero-slider mb-4" data-animate="reveal">
-                            <div
-                                className="hero-slider-track"
-                                style={{ transform: `translateX(-${slideIndex * 100}%)` }}
-                            >
-                                {heroSlides.map((slide, index) => (
-                                    <div className="hero-slide" key={index}>
-                                        <img
-                                            src={slide.url}
-                                            alt={"IMAGE"}
-                                            width={1200}
-                                            height={760}
-                                            className="h-44 w-full object-cover"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
+                        <div id="contact-form-anchor">
+                            <form onSubmit={onSubmit} className="rounded-2xl">
+                                <h3 className="text-base font-extrabold text-[var(--primary-deep)] sm:text-lg">Gửi thông tin tư vấn</h3>
+                                <p className="mt-1 text-sm text-[var(--text-muted)]">Vui lòng để lại thông tin, đội ngũ Shinec Gia Lai sẽ phản hồi sớm.</p>
 
-                            <button
-                                type="button"
-                                className="hero-slider-control left-2"
-                                aria-label="Anh truoc"
-                                onClick={showPrevSlide}
-                            >
-                                <LeftCircleOutlined />
-                            </button>
-                            <button
-                                type="button"
-                                className="hero-slider-control right-2"
-                                aria-label="Anh tiep theo"
-                                onClick={showNextSlide}
-                            >
-                                <RightCircleOutlined />
-                            </button>
-
-                            <div className="hero-slider-dots">
-                                {heroSlides.map((slide, index) => (
-                                    <button
-                                        type="button"
-                                        key={index}
-                                        className={`hero-slider-dot ${index === slideIndex ? "hero-slider-dot-active" : ""}`}
-                                        onClick={() => setSlideIndex(index)}
-                                        aria-label={`Chon anh ${index + 1}`}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                        <h2 className="text-lg font-extrabold text-[var(--primary-deep)]">Thông tin nhanh</h2>
-                        <ul className="mt-4 space-y-4 text-sm">
-                            <li>
-                                <p className="font-semibold text-[var(--primary)]">
-                                    <span className="inline-flex items-center gap-2">
-                                        Vị trí
-                                    </span>
-                                </p>
-                            </li>
-                            <li>
-                                <p className="font-semibold text-[var(--primary)]">Định hướng phát triển</p>
-                                <p className="text-[var(--text-muted)]">Cụm công nghiệp sinh thái, chuỗi kinh tế tuần hoàn</p>
-                            </li>
-                            <li>
-                                <p className="font-semibold text-[var(--primary)]">Trọng tâm kết nối</p>
-                                <p className="text-[var(--text-muted)]">Hạ tầng đồng bộ, thu hút đầu tư linh hoạt</p>
-                            </li>
-                        </ul>
-                    </aside>
-                </div>
-            </section>
-            <section id="gioi-thieu" className="section-block container" data-animate="reveal">
-                <div className="section-header">
-                    <p className="eyebrow">Giới thiệu tổng quan</p>
-                    <h2>Quỹ đất được quy hoạch bài bản, ưu tiên phát triển bền vững</h2>
-                </div>
-
-            </section>
-            <section id="loi-the" className="section-block container" data-animate="reveal">
-                <SectionHeading
-                    eyebrow="Lợi thế đầu tư"
-                    title="Gia tăng hiệu quả đầu tư bằng hệ sinh thái hỗ trợ toàn diện"
-                />
-                <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {advantages.map((item, index) => (
-                        <article
-                            key={item}
-                            className="feature-card"
-                            style={{ animationDelay: `${index * 80}ms` }}
-                            data-animate="reveal"
-                        >
-                            <span className="feature-index">0{index + 1}</span>
-                            <p className="mt-4 text-base font-semibold text-[var(--primary-deep)]">{item}</p>
-                        </article>
-                    ))}
-                </div>
-            </section>
-            <section id="ha-tang" className="section-block container" data-animate="reveal">
-                <SectionHeading eyebrow="Hạ tầng kỹ thuật" title="Hệ thống kỹ thuật đồng bộ và hiện đại" />
-                <div className="mt-8 grid gap-3 lg:grid-cols-2">
-                    {infrastructures.map((item, index) => (
-                        <div
-                            key={item}
-                            className="infra-item"
-                            style={{ animationDelay: `${index * 60}ms` }}
-                            data-animate="reveal"
-                        >
-                            <span className="mt-1 h-2.5 w-2.5 rounded-full bg-[var(--primary)]" />
-                            <p className="text-sm leading-7 text-[var(--text-muted)] sm:text-base">{item}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
-            <section id="doi-tac" className="section-block container" data-animate="reveal">
-                <SectionHeading eyebrow="Logo các công ty" title="Mạng lưới ngành nghề có thể kết nối trong cụm" />
-                <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                    {partnerLogos.map((item) => (
-                        <div key={item} className="logo-chip" data-animate="reveal">
-                            <span>{item}</span>
-                        </div>
-                    ))}
-                </div>
-            </section>
-            <section id="ban-do" className="section-block pt-0 container" data-animate="reveal">
-                <section id="lien-he" className="section-block pb-20 container" data-animate="reveal">
-                    <div className="contact-wrap" data-animate="reveal">
-                        <div className="space-y-3">
-                            <SectionHeading
-                                eyebrow="Liên hệ"
-                                title="Cùng xây dựng nền công nghiệp xanh tại Gia Lai"
-                            />
-                            <p className="text-sm leading-7 text-[var(--text-muted)] sm:text-base">
-                                Đội ngũ Shinec Gia Lai luôn sẵn sàng hỗ trợ doanh nghiệp khảo sát, tư vấn và kết nối đầu tư.
-                            </p>
-                            <a className="contact-item" href={`mailto:congtyshinecgialai@gmail.com`}>
-                                Email: congtyshinecgialai@gmail.com
-                            </a>
-                            <a className="contact-item" href={`tel:02696333456`}>
-                                SĐT: 02696333456
-                            </a>
-                            <a
-                                className="contact-item"
-                                href={"https://www.facebook.com/shinecgialai"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Facebook: facebook.com/shinecgialai
-                            </a>
-                            <Link
-                                href="/lien-he"
-                                className="inline-flex items-center gap-2 text-sm font-bold text-[var(--accent-deep)] hover:underline"
-                            >
-                                Truy cập trang liên hệ chi tiết
-                            </Link>
-                        </div>
-
-                        <div className="grid gap-4 text-sm sm:text-base">
-
-                            <div id="contact-form-anchor">
-                                <form onSubmit={onSubmit} className="rounded-2xl border border-[var(--line)] bg-white p-4 shadow-[0_10px_28px_rgba(0,107,29,0.08)] sm:p-5">
-                                    <h3 className="text-base font-extrabold text-[var(--primary-deep)] sm:text-lg">Gửi thông tin tư vấn</h3>
-                                    <p className="mt-1 text-sm text-[var(--text-muted)]">Vui lòng để lại thông tin, đội ngũ Shinec Gia Lai sẽ phản hồi sớm.</p>
-
-                                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                                        <label className="grid gap-1 text-sm text-[var(--text-strong)]">
-                                            Họ và tên *
-                                            <input
-                                                type="text"
-                                                value={values.name}
-                                                onChange={(event) => onChange("name", event.target.value)}
-                                                className="h-11 rounded-xl border border-[var(--line)] px-3 outline-none transition focus:border-[var(--primary)]"
-                                                placeholder="Nguyễn Văn A"
-                                                maxLength={100}
-                                                required
-                                            />
-                                        </label>
-
-                                        <label className="grid gap-1 text-sm text-[var(--text-strong)]">
-                                            Email *
-                                            <input
-                                                type="email"
-                                                value={values.email}
-                                                onChange={(event) => onChange("email", event.target.value)}
-                                                className="h-11 rounded-xl border border-[var(--line)] px-3 outline-none transition focus:border-[var(--primary)]"
-                                                placeholder="example@company.com"
-                                                maxLength={100}
-                                                required
-                                            />
-                                        </label>
-
-                                        <label className="grid gap-1 text-sm text-[var(--text-strong)]">
-                                            Số điện thoại
-                                            <input
-                                                type="text"
-                                                value={values.phoneNumber}
-                                                onChange={(event) => onChange("phoneNumber", event.target.value)}
-                                                className="h-11 rounded-xl border border-[var(--line)] px-3 outline-none transition focus:border-[var(--primary)]"
-                                                placeholder="0900 000 000"
-                                                maxLength={20}
-                                            />
-                                        </label>
-
-                                        <label className="grid gap-1 text-sm text-[var(--text-strong)]">
-                                            Địa chỉ
-                                            <input
-                                                type="text"
-                                                value={values.address}
-                                                onChange={(event) => onChange("address", event.target.value)}
-                                                className="h-11 rounded-xl border border-[var(--line)] px-3 outline-none transition focus:border-[var(--primary)]"
-                                                placeholder="Gia Lai"
-                                                maxLength={200}
-                                            />
-                                        </label>
-                                    </div>
-
-                                    <label className="mt-3 grid gap-1 text-sm text-[var(--text-strong)]">
-                                        Nội dung liên hệ
-                                        <textarea
-                                            value={values.note}
-                                            onChange={(event) => onChange("note", event.target.value)}
-                                            className="min-h-28 rounded-xl border border-[var(--line)] px-3 py-2 outline-none transition focus:border-[var(--primary)]"
-                                            placeholder="Nhu cầu đầu tư, ngành nghề quan tâm, thời gian khảo sát..."
-                                            maxLength={500}
+                                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                                    <label className="grid gap-1 text-sm text-[var(--text-strong)]">
+                                        Họ và tên *
+                                        <input
+                                            type="text"
+                                            value={values.name}
+                                            onChange={(event) => onChange("name", event.target.value)}
+                                            className="h-11 rounded-xl border border-[var(--line)] px-3 outline-none transition focus:border-[var(--primary)]"
+                                            placeholder="Nguyễn Văn A"
+                                            maxLength={100}
+                                            required
                                         />
                                     </label>
 
-                                    {error && (
-                                        <p className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
-                                    )}
+                                    <label className="grid gap-1 text-sm text-[var(--text-strong)]">
+                                        Email *
+                                        <input
+                                            type="email"
+                                            value={values.email}
+                                            onChange={(event) => onChange("email", event.target.value)}
+                                            className="h-11 rounded-xl border border-[var(--line)] px-3 outline-none transition focus:border-[var(--primary)]"
+                                            placeholder="example@company.com"
+                                            maxLength={100}
+                                            required
+                                        />
+                                    </label>
 
-                                    {successMessage && (
-                                        <p className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{successMessage}</p>
-                                    )}
+                                    <label className="grid gap-1 text-sm text-[var(--text-strong)]">
+                                        Số điện thoại
+                                        <input
+                                            type="text"
+                                            value={values.phoneNumber}
+                                            onChange={(event) => onChange("phoneNumber", event.target.value)}
+                                            className="h-11 rounded-xl border border-[var(--line)] px-3 outline-none transition focus:border-[var(--primary)]"
+                                            placeholder="0900 000 000"
+                                            maxLength={20}
+                                        />
+                                    </label>
 
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className="mt-4 inline-flex h-11 items-center justify-center rounded-full bg-[var(--primary)] px-5 text-sm font-bold text-white transition hover:bg-[var(--primary-mid)] disabled:cursor-not-allowed disabled:opacity-70"
-                                    >
-                                        {isSubmitting ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}
-                                    </button>
-                                </form>
+                                    <label className="grid gap-1 text-sm text-[var(--text-strong)]">
+                                        Địa chỉ
+                                        <input
+                                            type="text"
+                                            value={values.address}
+                                            onChange={(event) => onChange("address", event.target.value)}
+                                            className="h-11 rounded-xl border border-[var(--line)] px-3 outline-none transition focus:border-[var(--primary)]"
+                                            placeholder="Gia Lai"
+                                            maxLength={200}
+                                        />
+                                    </label>
+                                </div>
+
+                                <label className="mt-3 grid gap-1 text-sm text-[var(--text-strong)]">
+                                    Nội dung liên hệ
+                                    <textarea
+                                        value={values.note}
+                                        onChange={(event) => onChange("note", event.target.value)}
+                                        className="min-h-28 rounded-xl border border-[var(--line)] px-3 py-2 outline-none transition focus:border-[var(--primary)]"
+                                        placeholder="Nhu cầu đầu tư, ngành nghề quan tâm, thời gian khảo sát..."
+                                        maxLength={500}
+                                    />
+                                </label>
+
+                                {error && (
+                                    <p className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+                                )}
+
+                                {successMessage && (
+                                    <p className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{successMessage}</p>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="mt-4 inline-flex h-11 items-center justify-center rounded-full bg-[var(--primary)] px-5 text-sm font-bold text-white transition hover:bg-[var(--primary-mid)] disabled:cursor-not-allowed disabled:opacity-70"
+                                >
+                                    {isSubmitting ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}
+                                </button>
+                            </form>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <section id="about">
+                <div className="container max-w-7xl mx-auto py-20">
+                    <div className="md:flex gap-4">
+                        <div className="md:w-1/2 rounded-2xl overflow-hidden">
+                            <div className="text-[var(--primary)] font-bold"><EyebrowIcon /> Giới thiệu</div>
+                            <div className="text-2xl 2xl:text-4xl font-bold text-[var(--primary-deep)] mb-4">Cụm công nghiệp sinh thái định hướng ESG</div>
+                            <div className="flex shadow bg-white mb-4">
+                                <div className="w-20 flex items-center justify-center">
+                                    <img src="https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/elementor/thumbs/lawn-mower-2-qj5mxeqekc1zf1wajy6ytx7bivvwjkz94lqppee4xg.png" alt="IMG" />
+                                </div>
+                                <div className="flex-1 bg-white p-6 flex flex-col gap-4">
+                                    <div className="text-xl">Bất động sản công nghiệp</div>
+                                    <p className="text-sm text-[var(--text-muted)]">Shinec Gia Lai là khu công nghiệp sinh thái được quy hoạch bài bản theo định hướng ESG, tích hợp các giải pháp phát triển bền vững và thân thiện với môi trường.</p>
+                                </div>
+                            </div>
+                            <div className="flex shadow bg-white mb-4">
+                                <div className="w-20 flex items-center justify-center">
+                                    <img src="https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/elementor/thumbs/shovels-1-qj5mxgm2y04k29tk8z07ywq8pnmmyz6psv1onybcl0.png" alt="IMG" />
+                                </div>
+                                <div className="flex-1 bg-white p-6 flex flex-col gap-4">
+                                    <div className="text-xl">Thuê nhà xưởng & kho hàng</div>
+                                    <p className="text-sm text-[var(--text-muted)]">
+                                        Cung cấp giải pháp nhà xưởng và kho hàng cho thuê linh hoạt, đáp ứng nhu cầu đa dạng của doanh nghiệp với tiêu chuẩn cao về hạ tầng và dịch vụ.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex shadow bg-white mb-4">
+                                <div className="w-20 flex items-center justify-center">
+                                    <img src="https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/elementor/thumbs/lawn-mower-2-qj5mxeqekc1zf1wajy6ytx7bivvwjkz94lqppee4xg.png" alt="IMG" />
+                                </div>
+                                <div className="flex-1 bg-white p-6 flex flex-col gap-4">
+                                    <div className="text-xl">Thuê văn phòng</div>
+                                    <p className="text-sm text-[var(--text-muted)]">
+                                        Cung cấp không gian văn phòng hiện đại, tiện nghi trong khuôn viên cụm công nghiệp, tạo môi trường làm việc chuyên nghiệp và thuận tiện cho doanh nghiệp.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="md:w-1/2 mt-10 md:mt-0 flex items-center justify-center">
+                            <div className="p-10 relative">
+                                <div className="absolute -inset-1 rounded-full bg-[var(--primary)] w-28 h-28 flex items-center justify-center text-white font-bold text-2xl">
+                                    <div className="border-2 bg-[var(--primary)] w-24 h-24 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                                        ESG
+                                    </div>
+                                </div>
+                                <img src="https://shinec.com.vn/wp-content/uploads/2025/01/dak-doa.jpg" alt="Shinec Gia Lai" className="rounded w-full object-cover aspect-[4/3] max-w-xl border-4 border-[var(--primary)] p-1" />
+                                <div className="text-center mt-4 text-slate-900 font-bold">Phối cảnh 3D dự án</div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
+
             </section>
 
-            <section className="relative bg-cover bg-center p-40" style={{
+            <section className="relative bg-cover bg-no-repeat py-20" style={{
+                backgroundImage: "url('https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/2024/02/why-choose-bg-img.jpg')",
+            }}>
+                <div className="bg-left bg-no-repeat absolute inset-0" style={{
+                    backgroundImage: "url('https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/2024/02/grass-left.png')",
+                }} />
+                <div className="container max-w-7xl mx-auto relative text-white md:flex gap-4 items-center">
+                    <div className="md:w-2/3">
+                        <div className="text-green-500 font-bold mb-2">Tại sao chọn Shinec Gia Lai?</div>
+                        <div className="text-2xl 2xl:text-4xl font-bold">Điểm đến tin cậy</div>
+                        <div className="text-2xl 2xl:text-4xl font-bold text-green-600 mb-2">Cho các nhà đầu tư công nghiệp xanh</div>
+                        <div className="text-white mb-2">
+                            Shinec Gia Lai là lựa chọn hàng đầu cho các doanh nghiệp tìm kiếm môi trường đầu tư công nghiệp bền vững, với hạ tầng hiện đại, chính sách ưu đãi hấp dẫn và cam kết phát triển xanh.
+                        </div>
+                        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            {advantages.map((item, index) => (
+                                <article
+                                    key={item}
+                                    className="feature-card"
+                                    style={{ animationDelay: `${index * 80}ms` }}
+                                    data-animate="reveal"
+                                >
+                                    <span className="feature-index">0{index + 1}</span>
+                                    <p className="mt-4 text-base font-semibold text-[var(--primary-deep)]">{item}</p>
+                                </article>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="md:w-1/3 flex items-center justify-center mt-10 md:mt-0 h-full">
+                        <button className="inline-flex h-16 w-16 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-bold text-white transition-transform duration-300 hover:-translate-y-0.5 hover:bg-[var(--primary-mid)]" onClick={() => setOpenVideo(true)}>
+                            <PlayCircleOutlined className="text-3xl text-[var(--primary)]" />
+                        </button>
+                        <Modal centered open={openVideo} onCancel={() => setOpenVideo(false)} footer={null} width={600}>
+                            <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1293416822400552%2F&show_text=false&width=560&t=0" width="560" height="314" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen></iframe>
+                        </Modal>
+                    </div>
+                </div>
+            </section>
+
+            <section className="relative bg-cover bg-center pt-20 pb-40" style={{
                 backgroundImage: "url('https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/revslider/slider-1/banner-3.jpg')",
             }}>
                 <div className="bg-repeat-x inset-0 bg-bottom absolute opacity-[0.06] bg-[229px]" style={{ backgroundImage: "url('https://wordpress.zozothemes.com/garland/wp-content/uploads/sites/15/2023/10/shap-3-1.png')" }} />
-                
+
                 <div className="text-center mb-6 2xl:mb-10">
                     <div className="text-[#2a7d2e] font-bold mb-2">Giới thiệu tổng quan</div>
                     <div className="text-2xl 2xl:text-4xl font-bold">Quỹ đất được quy hoạch bài bản <span className="text-[#2a7d2e]">ưu tiên phát triển bền vững</span></div>
                 </div>
                 <div className="container mx-auto relative text-center text-white">
                     <div className="mt-8 grid gap-8 lg:grid-cols-2">
-                    {/* Pie Chart */}
-                    <div className="flex items-center justify-center rounded-2xl p-6">
-                        <ReactECharts
-                            option={{
-                                tooltip: {
-                                    trigger: 'item',
-                                    formatter: '{b}: {c} Ha ({d}%)'
-                                },
-                                legend: {
-                                    orient: 'vertical',
-                                    left: 'left',
-                                    textStyle: {
-                                        color: 'var(--text-strong)'
-                                    }
-                                },
-                                color: ['#006B1D', '#00A833', '#4FD45F', '#A8E6B8', '#D4F1DB'],
-                                series: [
-                                    {
-                                        name: 'Diện tích',
-                                        type: 'pie',
-                                        radius: '50%',
-                                        data: landUse.map(item => ({
-                                            value: parseFloat(item.value.replace(/,/g, '.').replace(' Ha', '')),
-                                            name: item.label
-                                        })),
-                                        emphasis: {
-                                            itemStyle: {
-                                                shadowBlur: 10,
-                                                shadowOffsetX: 0,
-                                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        {/* Pie Chart */}
+                        <div className="flex items-center justify-center rounded-2xl p-6">
+                            <ReactECharts
+                                option={{
+                                    tooltip: {
+                                        trigger: 'item',
+                                        formatter: '{b}: {c} Ha ({d}%)'
+                                    },
+                                    legend: {
+                                        orient: 'vertical',
+                                        left: 'left',
+                                        textStyle: {
+                                            color: 'var(--text-strong)'
+                                        }
+                                    },
+                                    color: ['#006B1D', '#00A833', '#4FD45F', '#A8E6B8', '#D4F1DB'],
+                                    series: [
+                                        {
+                                            name: 'Diện tích',
+                                            type: 'pie',
+                                            radius: '50%',
+                                            data: landUse.map(item => ({
+                                                value: parseFloat(item.value.replace(/,/g, '.').replace(' Ha', '')),
+                                                name: item.label
+                                            })),
+                                            emphasis: {
+                                                itemStyle: {
+                                                    shadowBlur: 10,
+                                                    shadowOffsetX: 0,
+                                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                                }
                                             }
                                         }
-                                    }
-                                ]
-                            }}
-                            style={{ width: '100%', height: '400px' }}
-                            opts={{ renderer: 'svg' }}
-                        />
-                    </div>
+                                    ]
+                                }}
+                                style={{ width: '100%', height: '400px' }}
+                                opts={{ renderer: 'svg' }}
+                            />
+                        </div>
 
-                    {/* Data Cards */}
-                    <div className="grid gap-4">
-                        {landUse.map((item, index) => (
-                            <div
-                                key={item.label}
-                                className="rounded-xl border border-[var(--line)] bg-white p-4 shadow-[0_2px_8px_rgba(0,107,29,0.04)] transition hover:shadow-[0_10px_28px_rgba(0,107,29,0.08)]"
-                                style={{ animationDelay: `${index * 80}ms` }}
-                                data-animate="reveal"
-                            >
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm font-semibold text-[var(--primary)]">{item.label}</p>
-                                    <p className="text-lg font-black text-[var(--primary-deep)]">{item.value}</p>
-                                </div>
-                                <div className="mt-2 h-1 w-full rounded-full bg-[var(--line)]"></div>
-                                <div
-                                    className="mt-2 h-1 rounded-full bg-gradient-to-r from-[#006B1D] to-[#00A833]"
-                                    style={{ width: `${(parseFloat(item.value.replace(/,/g, '.')) / 74.8) * 100}%` }}
-                                ></div>
+                        {/* Data Cards */}
+                        <div className="grid gap-4">
+                            <div className="mt-8 grid gap-3 lg:grid-cols-2">
+                                {infrastructures.map((item, index) => (
+                                    <div
+                                        key={item}
+                                        className="infra-item"
+                                        style={{ animationDelay: `${index * 60}ms` }}
+                                        data-animate="reveal"
+                                    >
+                                        <span className="mt-1 h-2.5 w-2.5 rounded-full bg-[var(--primary)]" />
+                                        <p className="text-sm leading-7 text-[var(--text-muted)] sm:text-base">{item}</p>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
+                        </div>
                     </div>
-                </div>
                 </div>
             </section>
 

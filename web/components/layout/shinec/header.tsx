@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import "../themes/shinec.css";
-import { BarsOutlined, CloseOutlined } from "@ant-design/icons";
+import { BarsOutlined, CalendarOutlined, CloseOutlined, FacebookOutlined, LinkedinFilled, MailOutlined, TikTokFilled } from "@ant-design/icons";
 
 type SiteHeaderProps = {
   currentPage: "home" | "news" | "contact";
@@ -13,7 +13,7 @@ const sectionItems = [
   { id: "gioi-thieu", label: "Giới thiệu" },
   { id: "loi-the", label: "Lợi thế" },
   { id: "ha-tang", label: "Hạ tầng" },
-  { id: "tin-tuc", label: "Tin tức" },
+  { id: "article", label: "Tin tức" },
   { id: "hinh-anh", label: "Hình ảnh" },
   { id: "lien-he", label: "Liên hệ" },
 ];
@@ -24,7 +24,7 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
   const drawerRef = useRef<HTMLElement | null>(null);
 
   const sectionHref = (id: string) => {
-    return currentPage === "home" ? `#${id}` : `/#${id}`;
+    return currentPage === "home" ? `/${id}` : `/#${id}`;
   };
 
   const closeDrawer = () => setIsDrawerOpen(false);
@@ -124,16 +124,39 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
   }, [currentPage]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/20 bg-primary backdrop-blur-md">
+    <header className="bg-white">
+      <div className="bg-[var(--primary)]">
+        <div className="container mx-auto px-4 sm:px-6 text-white py-1 flex items-center gap-4">
+          <div className="flex-1 hidden md:block">
+            <MailOutlined /> <a href="mailto:congtyshinecgialai@gmail.com" className="hover:underline">
+              congtyshinecgialai@gmail.com
+            </a>
+          </div>
+          <div className="flex-1 text-center text-sm md:text-base">
+            Mon - Fri: 9.00 am - 6.00 pm
+          </div>
+          <div className="flex-1 text-right">
+            <a href="https://www.facebook.com/shinecgialai" target="_blank" rel="noopener noreferrer" className="hover:underline">
+              <FacebookOutlined />
+            </a>
+            <a href="#" className="ml-4 hover:underline">
+              <LinkedinFilled />
+            </a>
+            <a href="#" className="ml-4 hover:underline">
+              <TikTokFilled />
+            </a>
+          </div>
+        </div>
+      </div>
       <div className="mx-auto container w-full px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="text-sm font-black tracking-[0.15em] text-white sm:text-base">
-            <img src="https://api.shinecgialai.vn/imgs/logo-white.png" alt="Shinec Logo" className="h-6 w-auto" />
+        <div className="flex h-20 items-center justify-between">
+          <Link href="/" className="text-sm font-black tracking-[0.15em] sm:text-base">
+            <img src="https://api.shinecgialai.vn/imgs/logo.png" alt="Shinec Logo" className="h-10 w-auto" />
           </Link>
 
-          <nav className="hidden items-center gap-6 text-sm text-white/90 md:flex">
+          <nav className="hidden items-center gap-6 md:flex font-bold">
             {sectionItems.map((item) => (
-              <a
+              <Link
                 key={item.id}
                 className={`nav-link ${isActive(item.id) ? "nav-link-active" : ""}`}
                 href={sectionHref(item.id)}
@@ -141,32 +164,22 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
                 <span className="inline-flex items-center gap-2">
                   {item.label}
                 </span>
-              </a>
+              </Link>
             ))}
           </nav>
 
           <div className="hidden items-center gap-2 md:flex">
             <Link
-              href="/article"
-              className="rounded-full border border-white/35 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/10"
-            >
-              <span className="inline-flex items-center gap-1.5">
-                Trang Tin tức
-              </span>
-            </Link>
-            <Link
               href="/contact"
-              className="rounded-full bg-white px-3 py-1.5 text-xs font-bold text-[var(--primary)] hover:bg-white/90"
+              className="bg-[var(--primary)] rounded-md px-8 py-3 font-bold text-white hover:text-white"
             >
-              <span className="inline-flex items-center gap-1.5">
-                Trang Liên hệ
-              </span>
+              Liên hệ <CalendarOutlined />
             </Link>
           </div>
 
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/35 text-white md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/35 md:hidden"
             aria-label="Mở menu"
             onClick={() => setIsDrawerOpen(true)}
           >
@@ -176,16 +189,14 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
       </div>
 
       <div
-        className={`fixed inset-0 z-[60] bg-black/45 backdrop-blur-[1.5px] transition-opacity duration-300 md:hidden ${
-          isDrawerOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        className={`fixed inset-0 z-[60] bg-black/45 backdrop-blur-[1.5px] transition-opacity duration-300 md:hidden ${isDrawerOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          }`}
         onClick={closeDrawer}
       />
 
       <aside
-        className={`fixed right-0 top-0 z-[70] h-screen w-[86%] max-w-[350px] border-l border-[var(--line)] bg-white p-5 shadow-2xl transition-[transform,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)] md:hidden ${
-          isDrawerOpen ? "translate-x-0" : "translate-x-full"
-        } ${isDrawerOpen ? "drawer-open" : ""}`}
+        className={`fixed right-0 top-0 z-[70] h-screen w-[86%] max-w-[350px] border-l border-[var(--line)] bg-white p-5 shadow-2xl transition-[transform,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)] md:hidden ${isDrawerOpen ? "translate-x-0" : "translate-x-full"
+          } ${isDrawerOpen ? "drawer-open" : ""}`}
         aria-hidden={!isDrawerOpen}
         role="dialog"
         aria-label="Menu điều hướng"
@@ -208,9 +219,8 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
             <a
               key={item.id}
               href={sectionHref(item.id)}
-              className={`drawer-item inline-flex items-center gap-3 rounded-xl border border-[var(--line)] px-3 py-2.5 text-sm font-semibold text-[var(--primary-deep)] ${
-                isActive(item.id) ? "drawer-link-active" : ""
-              }`}
+              className={`drawer-item inline-flex items-center gap-3 rounded-xl border border-[var(--line)] px-3 py-2.5 text-sm font-semibold text-[var(--primary-deep)] ${isActive(item.id) ? "drawer-link-active" : ""
+                }`}
               onClick={closeDrawer}
               style={{ transitionDelay: `${80 + index * 45}ms` }}
             >
@@ -234,7 +244,7 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
             onClick={closeDrawer}
             style={{ transitionDelay: "360ms" }}
           >
-            Trang Liên hệ
+            Liên hệ <CalendarOutlined />
           </Link>
         </div>
       </aside>

@@ -24,30 +24,6 @@ a:hover {
   --font-mono: var(--font-sora);
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  padding-top: 4rem;
-  margin: 0;
-  background: var(--bg-soft);
-  color: var(--text-strong);
-  font-family: var(--font-manrope), "Segoe UI", sans-serif;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-sora), "Segoe UI", sans-serif;
-  letter-spacing: -0.02em;
-}
-
 .nav-link {
   transition: opacity 220ms ease;
 }
@@ -62,7 +38,6 @@ h4 {
 
 .nav-link-active {
   opacity: 1;
-  color: #ffffff;
   text-shadow: 0 0 0.65px currentColor;
 }
 
