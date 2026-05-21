@@ -154,10 +154,6 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
             if (args.File is null) return BadRequest("File not found!");
             if (args.File.Length > 10 * 1024 * 1024) return BadRequest("File size exceeds the limit of 10 MB.");
 
-            var uploadSetting = await _settingService.GetAsync<UploadSetting>(nameof(UploadSetting));
-            if (uploadSetting is null) return BadRequest("Upload setting not found!");
-            if (uploadSetting.Type == UploadSettingType.HPUNI) return Ok(await _fileService.UploadToHPUNIAsync(args.File));
-
             var folder = Guid.NewGuid().ToString();
             var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files", folder);
 
