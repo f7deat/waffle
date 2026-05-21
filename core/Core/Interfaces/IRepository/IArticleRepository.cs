@@ -8,6 +8,7 @@ namespace Waffle.Core.Interfaces.IRepository;
 
 public interface IArticleRepository : IAsyncRepository<Article>
 {
+    Task<Article?> FindByNameAsync(string normalizedName);
     Task<TResult> GetByNameAsync(string normalizedName);
     Task<int> GetCurrentMonthAsync(string locale);
     Task<int> GetPreviousMonthAsync(string locale);

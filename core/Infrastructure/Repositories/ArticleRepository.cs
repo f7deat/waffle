@@ -12,6 +12,8 @@ namespace Waffle.Infrastructure.Repositories;
 
 public class ArticleRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Article>(context, hcaService), IArticleRepository
 {
+    public Task<Article?> FindByNameAsync(string normalizedName) => _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName);
+
     public async Task<TResult> GetByNameAsync(string normalizedName)
     {
         var article = await _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName);

@@ -120,4 +120,17 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
             article.ModifiedDate
         });
     }
+
+    public async Task<TResult> GetMetaAsync(string normalizedName)
+    {
+        var article = await _articleRepository.FindByNameAsync(normalizedName);
+        if (article is null) return TResult.Failed("Article not found");
+        return TResult.Ok(new
+        {
+            article.Id,
+            Title = article.Name,
+            Descriptions = article.Description,
+            Images = string.IsNullOrEmpty(article.Thumbnail) ? null : new[] { article.Thumbnail }
+        });
+    }
 }

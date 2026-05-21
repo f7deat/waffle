@@ -35,4 +35,7 @@ public class ArticleController(IArticleService _articleService) : BaseController
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _articleService.DeleteAsync(id));
+
+    [HttpGet("meta/{normalizedName}"), AllowAnonymous]
+    public async Task<IActionResult> GetMetaAsync([FromRoute] string normalizedName) => Ok(await _articleService.GetMetaAsync(normalizedName));
 }

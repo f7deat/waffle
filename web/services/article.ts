@@ -1,3 +1,4 @@
+import { ArticleMeta } from "@/typings/article";
 import request from "./request";
 
 export async function apiArticleList(params: API.ArticleFilterOptions, cookie?: string) {
@@ -13,4 +14,8 @@ export async function apiArticleDetail(normalizedName: string) {
 
 export async function apiArticleRandoms() {
     return request.get<API.ListResult<API.ArticleListItem>>("article/randoms");
+}
+
+export async function apiArticleMeta(normalizedName: string) {
+    return request.get<API.TResult<ArticleMeta>>(`article/meta/${normalizedName}`);
 }

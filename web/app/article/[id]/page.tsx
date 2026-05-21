@@ -1,15 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
-import { apiArticleDetail, apiArticleList, apiArticleRandoms } from "@/services/article";
+import { apiArticleDetail, apiArticleMeta, apiArticleRandoms } from "@/services/article";
 import { Metadata } from "next";
 import Link from "next/link";
-import { apiCatalogMeta } from "@/services/catalog";
 import { CalendarOutlined, EyeFilled } from "@ant-design/icons";
-import Block from "@/components/block";
 import ArticleActions from "@/components/article/actions";
 import ArticleComments from "@/components/article/comments";
 import dayjs from "dayjs";
-import { cookies } from 'next/headers'
 
 type Params = Promise<{
     id: string;
@@ -17,15 +14,16 @@ type Params = Promise<{
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
     const { id } = await params;
-    const res = await apiCatalogMeta(id);
+    const res = await apiArticleMeta(id);
     const article = res.data;
+    if (!article) return {};
     return {
-        title: `${article?.title} - ${process.env.SITE_NAME}`,
-        description: article?.description,
+        title: `${article.title} - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+        description: article.description,
         openGraph: {
-            title: article?.title,
-            description: article?.description,
-            images: article?.thumbnail ? [{ url: article?.thumbnail }] : [],
+            title: article.title,
+            description: article.description,
+            images: article.images
         },
     };
 }
