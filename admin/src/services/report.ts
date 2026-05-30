@@ -1,3 +1,8 @@
 import { request } from "@umijs/max";
 
-export const apiGetReportActivity = () => request(`report/activity`);
+type ReportActivityParams = {
+	fromDate?: string;
+	toDate?: string;
+};
+
+export const apiGetReportActivity = (params?: ReportActivityParams) => request(`report/activity`, { params });

@@ -1,9 +1,9 @@
-import FileExplorer from '@/components/file-explorer';
+import ImageLibraryPicker from '@/components/image-library/picker';
 import {
   getHeader,
   saveSetting,
 } from '@/services/setting';
-import { FolderAddOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import {
   PageContainer,
   ProCard,
@@ -19,7 +19,6 @@ import { useEffect, useRef, useState } from 'react';
 const Header: React.FC = () => {
   const { id } = useParams();
   const formRef = useRef<ProFormInstance>();
-  const [open, setOpen] = useState<boolean>(false);
   const [options, setOptions] = useState<any>([]);
 
   useEffect(() => {
@@ -67,14 +66,15 @@ const Header: React.FC = () => {
           <ProFormText name="logo" label="Logo"
             addonAfter={
               <Space>
-                <Button type='primary' icon={<FolderAddOutlined />} onClick={() => setOpen(true)}>File Explorer</Button>
                 <Button icon={<UploadOutlined />}>Upload</Button>
+                <ImageLibraryPicker
+                  onChange={(url) => formRef.current?.setFieldValue('logo', url)}
+                />
               </Space>
             }
           />
         </ProForm>
       </ProCard>
-      <FileExplorer open={open} onOpenChange={setOpen} />
     </PageContainer>
   );
 };

@@ -1,4 +1,5 @@
 import TiptapEditor from '@/components/tiptap';
+import ImageLibraryPicker from '@/components/image-library/picker';
 import { getArticleById, updateArticle } from '@/services/article';
 import { uploadRcFile } from '@/services/file-service';
 import { UploadOutlined } from '@ant-design/icons';
@@ -125,17 +126,23 @@ const Index: React.FC = () => {
                         </Col>
                         <Col xs={24} md={8}>
                             <div className="border rounded p-1 mb-2">
-                                <img src={formRef.current?.getFieldValue('thumbnail')} alt="Thumbnail" className="w-full h-64 rounded object-cover" />
+                                <img src={thumbnail} alt="Thumbnail" className="w-full h-64 rounded object-cover" />
                             </div>
                             <ProFormText name="thumbnail" label="Thumbnail URL"
                                 fieldProps={{
                                     suffix: (
-                                        <Button
-                                            size="small"
-                                            icon={<UploadOutlined />}
-                                            loading={thumbnailUploading}
-                                            onClick={() => thumbnailInputRef.current?.click()}
-                                        >Upload</Button>
+                                        <div className="flex gap-1">
+                                            <Button
+                                                size="small"
+                                                icon={<UploadOutlined />}
+                                                loading={thumbnailUploading}
+                                                onClick={() => thumbnailInputRef.current?.click()}
+                                            >Upload</Button>
+                                            <ImageLibraryPicker
+                                                value={thumbnail}
+                                                onChange={(url) => formRef.current?.setFieldValue('thumbnail', url)}
+                                            />
+                                        </div>
                                     )
                                 }}
                             />

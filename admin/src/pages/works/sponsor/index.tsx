@@ -1,3 +1,4 @@
+import ImageLibraryPicker from '@/components/image-library/picker';
 import { saveArguments } from "@/services/work-content";
 import { uuidv4 } from "@/utils/common";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
@@ -135,7 +136,17 @@ const Sponsor: React.FC<Props> = ({ data }) => {
             <ModalForm onFinish={onFinish} open={open} formRef={formRef} onOpenChange={setOpen} title={<FormattedMessage id="menu.component.sponsor" />}>
                 <ProFormText name="id" label="Id" disabled />
                 <ProFormText name="name" label="Name" />
-                <ProFormText name="logo" label="Logo" />
+                <ProFormText
+                    name="logo"
+                    label="Logo"
+                    fieldProps={{
+                        addonAfter: (
+                            <ImageLibraryPicker
+                                onChange={(url) => formRef.current?.setFieldValue('logo', url)}
+                            />
+                        ),
+                    }}
+                />
                 <ProFormText name="url" label="Url" />
             </ModalForm>
 

@@ -6,6 +6,7 @@ public class JobOpportunity : BaseEntity
 {
     [StringLength(256)]
     public string? JobRequirements { get; set; }
+    public string? JobDetail { get; set; }
     [StringLength(256)]
     public string? SalaryRange { get; set; }
     [StringLength(256)]

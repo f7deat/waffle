@@ -36,3 +36,8 @@ public class RemoveFromRoleModel : BaseEntity
 {
     public string? RoleName { get; set; }
 }
+
+public class GoogleSignInModel
+{
+    public string? Credential { get; set; }
+}

@@ -44,6 +44,7 @@ public class JobOpportunityService(ApplicationDbContext _context, IHCAService _h
         if (job is null) return TResult.Success;
         if (await _context.JobApplications.AnyAsync(x => x.JobId == id)) return TResult.Failed("Job opportunity has applications!");
         _context.JobOpportunities.Remove(job);
+        await _context.SaveChangesAsync();
         return TResult.Success;
     }
 
@@ -70,6 +71,16 @@ public class JobOpportunityService(ApplicationDbContext _context, IHCAService _h
         return await ListResult<JobApplicationListItem>.Success(query, filterOptions);
     }
 
+    public async Task<TResult> UpdateApplicationStatusAsync(Guid id, JobApplicationStatus status)
+    {
+        var application = await _context.JobApplications.FindAsync(id);
+        if (application is null) return TResult.Failed("Job application not found!");
+        application.Status = status;
+        application.ModifiedDate = DateTime.Now;
+        await _context.SaveChangesAsync();
+        return TResult.Success;
+    }
+
     public async Task<ListResult<object>> ListAsync(BasicFilterOptions filterOptions)
     {
         var query = from a in _context.JobOpportunities
@@ -77,6 +88,7 @@ public class JobOpportunityService(ApplicationDbContext _context, IHCAService _h
                     {
                         a.Id,
                         a.JobRequirements,
+                        a.JobDetail,
                         a.SalaryRange,
                         a.JobLocation,
                         a.JobType,
@@ -97,10 +109,12 @@ public class JobOpportunityService(ApplicationDbContext _context, IHCAService _h
             var job = await _context.JobOpportunities.FirstOrDefaultAsync(x => x.Id == args.Id);
             if (job is null)
             {
+                var jobId = args.Id == Guid.Empty ? Guid.NewGuid() : args.Id;
                 job = new JobOpportunity
                 {
-                    Id = args.Id,
+                    Id = jobId,
                     JobRequirements = args.JobRequirements,
+                    JobDetail = args.JobDetail,
                     SalaryRange = args.SalaryRange,
                     JobLocation = args.JobLocation,
                     JobType = args.JobType,
@@ -112,6 +126,7 @@ public class JobOpportunityService(ApplicationDbContext _context, IHCAService _h
                 return TResult.Success;
             }
             job.JobRequirements = args.JobRequirements;
+            job.JobDetail = args.JobDetail;
             job.SalaryRange = args.SalaryRange;
             job.JobLocation = args.JobLocation;
             job.JobType = args.JobType;

@@ -38,77 +38,6 @@ export default [
     ]
   },
   {
-    name: 'component',
-    path: '/works',
-    hideInMenu: true,
-    routes: [
-      {
-        name: 'block',
-        path: '/works/:id',
-        component: './works',
-        hideInMenu: true,
-      },
-      {
-        name: 'block',
-        path: '/works/block/:id',
-        component: './works/block',
-        hideInMenu: true,
-      },
-      {
-        name: 'blockEditor',
-        path: '/works/blockeditor/:id',
-        component: './works/block-editor',
-        hideInMenu: true,
-      }
-    ],
-  },
-  {
-    name: 'catalog',
-    path: '/catalog',
-    icon: 'SlackOutlined',
-    routes: [
-      {
-        path: '/catalog',
-        redirect: '/catalog/overview',
-      },
-      {
-        path: '/catalog/overview',
-        name: 'overview',
-        component: './catalog',
-        hideInMenu: true,
-      },
-      {
-        path: '/catalog/place/:id',
-        name: 'placeCenter',
-        component: './catalog/place',
-        hideInMenu: true,
-      }
-    ]
-  },
-  {
-    name: 'catalogCenter',
-    path: '/catalog/center/:id',
-    component: './catalog/center',
-    hideInMenu: true
-  },
-  {
-    name: 'catalogList',
-    path: '/catalog/list/:id',
-    component: './catalog/list',
-    hideInMenu: true
-  },
-  {
-    path: '/catalog/:id',
-    component: './catalog',
-    hideInMenu: true
-  },
-  {
-    name: 'tagCenter',
-    path: '/catalog/tag/:id',
-    component: './tag/center',
-    hideInMenu: true,
-  },
-  {
     icon: 'ShoppingCartOutlined',
     name: 'shop',
     path: '/shop',
@@ -144,10 +73,37 @@ export default [
     ],
   },
   {
+    name: 'place',
+    icon: 'EnvironmentOutlined',
+    path: '/place',
+    routes: [
+      {
+        name: 'overview',
+        path: '/place/overview',
+        component: './place'
+      },
+      {
+        name: 'center',
+        path: '/place/center/:id',
+        component: './place/detail',
+        hideInMenu: true
+      }
+    ]
+  },
+  {
     icon: 'SolutionOutlined',
     name: 'career',
     path: '/career',
     routes: [
+      {
+        path: '/career',
+        redirect: '/career/job',
+      },
+      {
+        name: 'job',
+        path: '/career/job',
+        component: './career/job'
+      },
       {
         name: 'application',
         path: '/career/application',
@@ -160,6 +116,12 @@ export default [
     name: 'users',
     path: '/users',
     routes: [
+      {
+        name: 'notification',
+        path: '/users/notification',
+        component: './users/notification/index',
+        hideInMenu: true,
+      },
       {
         name: 'member',
         path: '/users/member',

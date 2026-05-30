@@ -2,24 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
-using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices.Shops;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
-using Waffle.Models.Params.Products;
 
 namespace Waffle.Controllers.Products;
 
-public class ProductController(ICatalogService _catalogService, IWorkService workService, IProductService _productService) : BaseController
+public class ProductController(IProductService _productService) : BaseController
 {
-    private readonly IWorkService _workService = workService;
-
     [HttpGet("by-name/{normalizedName}"), AllowAnonymous]
     public async Task<IActionResult> GetByNameAsync([FromRoute] string normalizedName) => Ok(await _productService.GetByNameAsync(normalizedName));
 
     [HttpPost]
-    public async Task<IActionResult> CreateAsync([FromBody] Catalog args, [FromQuery] string locale) => Ok(await _productService.CreateAsync(args, locale));
+    public async Task<IActionResult> CreateAsync([FromBody] Product args) => Ok(await _productService.CreateAsync(args));
 
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync() => Ok(TResult.Ok(await _productService.CountAsync()));
@@ -27,14 +23,11 @@ public class ProductController(ICatalogService _catalogService, IWorkService wor
     [HttpPost("save")]
     public async Task<IActionResult> SaveAsync([FromBody] Product args) => Ok(await _productService.SaveAsync(args));
 
-    [HttpGet("image/{id}")]
-    public async Task<IActionResult> GetProductImageAsync([FromRoute] Guid id) => Ok(await _catalogService.GetProductImageAsync(id));
+    [HttpGet("{id}")]
+    public async Task<IActionResult> DetailAsync([FromRoute] Guid id) => Ok(await _productService.DetailAsync(id));
 
-    [HttpPost("image/save")]
-    public async Task<IActionResult> AddImageAsync([FromBody] SaveImageModel args) => Ok(await _workService.SaveProductImageAsync(args));
-
-    [HttpPost("brand/save")]
-    public async Task<IActionResult> SaveBrandAsync([FromBody] SaveBrandModel args) => Ok(await _productService.SaveBrandAsync(args));
+    [HttpPost("delete/{id}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _productService.DeleteAsync(id));
 
     [HttpPost("add-link")]
     public async Task<IActionResult> AddLinkAsync([FromBody] ProductLink args) => Ok(await _productService.AddLinkAsync(args));

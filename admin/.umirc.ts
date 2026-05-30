@@ -32,7 +32,8 @@ export default defineConfig({
   define: {
     "process.env": {
       API_URL: process.env.API_URL,
-      COMPANY_NAME: process.env.COMPANY_NAME
+      COMPANY_NAME: process.env.COMPANY_NAME,
+      GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     },
   },
   mako: {},

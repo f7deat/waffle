@@ -1,5 +1,6 @@
 import { apiGetUser, apiUpdateUser } from "@/services/user"
-import { ProForm, ProFormDatePicker, ProFormInstance, ProFormSelect, ProFormText } from "@ant-design/pro-components"
+import { ProForm, ProFormInstance } from "@ant-design/pro-components"
+import UserFormFields from "../../components/user-form-fields";
 import { useParams, useRequest } from "@umijs/max"
 import { message } from "antd";
 import dayjs from "dayjs";
@@ -8,7 +9,7 @@ import { useEffect, useRef } from "react";
 const Basic: React.FC = () => {
 
     const { id } = useParams();
-    const formRef = useRef<ProFormInstance>();
+    const formRef = useRef<ProFormInstance | undefined>(undefined);
 
     const { data, loading } = useRequest(() => apiGetUser(id));
 
@@ -42,28 +43,14 @@ const Basic: React.FC = () => {
 
     return (
         <ProForm loading={loading} onFinish={onFinish} formRef={formRef}>
-            <ProFormText name="id" hidden />
-            <div className="flex gap-4">
-                <div className="flex-1">
-                    <ProFormText label="Name" name="name" rules={[
-                        {
-                            required: true
-                        }
-                    ]} />
-                </div>
-                <ProFormDatePicker label="Ngày sinh" name="dateOfBirth" />
-                <ProFormSelect label="Giới tính" name="gender" options={[
-                    {
-                        label: 'Nam',
-                        value: false as any
-                    },
-                    {
-                        label: 'Nữ',
-                        value: true as any
-                    }
-                ]} />
-            </div>
-            <ProFormText name="address" label="Địa chỉ" />
+            <UserFormFields
+                includeId
+                includeAddress
+                includeDateOfBirth
+                includeUserName={false}
+                includeEmail={false}
+                includePhoneNumber={false}
+            />
         </ProForm>
     )
 }

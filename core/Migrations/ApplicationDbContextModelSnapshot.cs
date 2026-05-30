@@ -432,6 +432,9 @@ namespace Waffle.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("JobDetail")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("JobLocation")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -1199,6 +1202,10 @@ namespace Waffle.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasJsonPropertyName("id");
+
+                    b.Property<string>("ActionUrl")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");

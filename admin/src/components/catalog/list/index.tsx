@@ -61,7 +61,7 @@ const CatalogList: React.FC<CatalogListProps> = (props) => {
       dataIndex: 'name',
       render: (text, record) => {
         if (id === '5') {
-          return <Link to={`/catalog/place/${record.id}`}>{text}</Link>;
+          return <Link to={`/place/center/${record.id}`}>{text}</Link>;
         }
         return <Link to={`/catalog/center/${record.id}`}>{text}</Link>;
       },

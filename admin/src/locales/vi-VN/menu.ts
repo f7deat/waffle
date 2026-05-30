@@ -10,6 +10,7 @@ export default {
   'menu.catalogCenter': 'Chi tiết',
   'menu.catalog.placeCenter': 'Chi tiết địa điểm',
   'menu.career': 'Tuyển dụng',
+  'menu.career.job': 'Việc làm',
   'menu.career.application': 'Đơn ứng tuyển',
   'menu.comments': 'Bình luận',
   'menu.article': 'Bài viết',

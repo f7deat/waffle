@@ -1,5 +1,6 @@
 import { apiCatalogDetail, saveCatalog } from '@/services/catalog';
-import { FolderOutlined, UploadOutlined } from '@ant-design/icons';
+import ImageLibraryPicker from '@/components/image-library/picker';
+import { UploadOutlined } from '@ant-design/icons';
 import {
   ProForm,
   ProFormInstance,
@@ -11,7 +12,6 @@ import { useParams, getAllLocales } from '@umijs/max';
 import { Button, Col, Row, Space, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import FormCatalogType from '@/components/form/catalog-type';
-import FileExplorer from '@/components/file-explorer';
 import FormCatalogList from '@/components/form/catalog-list';
 import WfUpload from '@/components/file-explorer/upload';
 
@@ -24,7 +24,6 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
   const { id } = useParams();
 
   const formRef = useRef<ProFormInstance>();
-  const [open, setOpen] = useState<boolean>(false);
   const [upload, setUpload] = useState<boolean>(false);
 
   useEffect(() => {
@@ -43,11 +42,6 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
       reload?.();
     }
   };
-
-  const onSelect = (values: API.FileContent) => {
-    formRef.current?.setFieldValue('thumbnail', values.url);
-    setOpen(false);
-  }
 
   return (
     <div>
@@ -98,11 +92,12 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
         <ProFormText name="thumbnail" label="Thumbnail" fieldProps={{
           addonAfter: <Space>
             <Button type='text' size='small' icon={<UploadOutlined />} onClick={() => setUpload(true)}>Upload</Button>
-            <Button type='text' size='small' icon={<FolderOutlined />} onClick={() => setOpen(true)}>File explorer</Button>
+            <ImageLibraryPicker
+              onChange={(url) => formRef.current?.setFieldValue('thumbnail', url)}
+            />
           </Space>
         }} />
       </ProForm>
-      <FileExplorer open={open} onOpenChange={setOpen} onSelect={onSelect} />
       <WfUpload open={upload} onCancel={setUpload} onFinish={() => { }} />
     </div>
   );

@@ -113,41 +113,9 @@ export async function dataPieChart() {
   return request(`catalog/pie-chart`)
 }
 
-export async function saveProductImage(urls: string[], catalogId?: string | string[]) {
-  return request(`/product/image/save`, {
-    method: 'POST',
-    data: {
-      urls,
-      catalogId
-    }
-  })
-}
-
-export async function queryProductImage(catalogId?: string | string[]) {
-  return request(`/product/image/${catalogId}`)
-}
-
 export async function queryCatalogSelect(params: any) {
   return request(`/catalog/form-select`, {
     params
-  });
-}
-
-export async function saveProduct(data: any) {
-  return request(`/product/save`, {
-    method: 'POST',
-    data
-  })
-}
-
-export async function queryProduct(catalogId?: string | string[]) {
-  return request(`/product/${catalogId}`);
-}
-
-export async function saveBrand(data: any) {
-  return request(`/product/brand/save`, {
-    method: 'POST',
-    data
   });
 }
 

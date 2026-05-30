@@ -1,4 +1,5 @@
 export const DEFAULT_NAME = 'Umi Max';
+export const NOTIFICATION_UPDATED_EVENT = 'notification:updated';
 
 export enum CatalogType {
   Default = 0,

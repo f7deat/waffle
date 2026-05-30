@@ -10,6 +10,13 @@ export async function queryOrder(id?: string | string[]) {
   return request(`order/${id}`);
 }
 
+export async function placeOrder(data: any) {
+  return request(`order/place-order`, {
+    method: 'POST',
+    data,
+  });
+}
+
 export async function deleteOrder(id?: string | string []) {
   return request(`order/delete/${id}`, {
     method: 'POST'

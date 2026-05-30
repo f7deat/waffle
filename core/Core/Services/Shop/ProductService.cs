@@ -4,19 +4,16 @@ using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.IServices.Shops;
-using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
-using Waffle.Models.Result;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Services.Ecommerces;
 
-public class ProductService(IProductRepository productRepository, ICatalogRepository catalogRepository, IProductLinkRepository productLinkRepository) : IProductService
+public class ProductService(IProductRepository productRepository, IProductLinkRepository productLinkRepository) : IProductService
 {
     private readonly IProductRepository _productRepository = productRepository;
-    private readonly ICatalogRepository _catalogRepository = catalogRepository;
     private readonly IProductLinkRepository _productLinkRepository = productLinkRepository;
 
     public async Task<TResult> AddLinkAsync(ProductLink args)
@@ -33,9 +30,13 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
         return TResult.Success;
     }
 
-    public Task<int> CountAsync() => _catalogRepository.CountAsync(CatalogType.Product);
+    public Task<int> CountAsync() => _productRepository.CountAsync();
 
-    public Task<TResult> CreateAsync(Catalog args, string locale) => _productRepository.CreateAsync(args, locale);
+    public Task<TResult> CreateAsync(Product args) => _productRepository.CreateAsync(args);
+
+    public Task<TResult> DeleteAsync(Guid id) => _productRepository.DeleteAsync(id);
+
+    public Task<Product?> DetailAsync(Guid id) => _productRepository.DetailAsync(id);
 
     public async Task<TResult> DeleteLinkAsync(Guid id)
     {
@@ -119,5 +120,4 @@ public class ProductService(IProductRepository productRepository, ICatalogReposi
         return IdentityResult.Success;
     }
 
-    public Task<IdentityResult> SaveBrandAsync(SaveBrandModel args) => _productRepository.SaveBrandAsync(args);
 }

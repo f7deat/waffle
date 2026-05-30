@@ -9,6 +9,13 @@ namespace Waffle.Controllers.Locations;
 
 public class PlaceController(IPlaceService _placeService) : BaseController
 {
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromBody] PlaceCreateArgs args, [FromQuery] string? locale)
+    {
+        if (!string.IsNullOrWhiteSpace(locale)) args.Locale = locale;
+        return Ok(await _placeService.CreateAsync(args));
+    }
+
     [HttpGet("details/{id}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id) => Ok(await _placeService.GetByIdAsync(id));
 
@@ -32,5 +39,8 @@ public class PlaceController(IPlaceService _placeService) : BaseController
 
     [HttpDelete("image/{imageId}")]
     public async Task<IActionResult> DeleteImageAsync([FromRoute] Guid imageId) => Ok(await _placeService.DeleteImageAsync(imageId, $"https://{Request.Host.Value}"));
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _placeService.DeleteAsync(id, $"https://{Request.Host.Value}"));
 
 }

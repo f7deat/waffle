@@ -12,7 +12,6 @@ using Waffle.Models;
 using Waffle.Models.Args;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Common;
-using Waffle.Models.Params.Products;
 
 namespace Waffle.Core.Services;
 
@@ -423,43 +422,6 @@ public class WorkService : IWorkService
         {
             data = await query.ToListAsync()
         };
-    }
-
-    public async Task<IdentityResult> SaveProductImageAsync(SaveImageModel args)
-    {
-        var component = await _componentRepository.FindByNameAsync(nameof(ProductImage));
-        if (component is null)
-        {
-            _logger.LogError("Component {Name} not found", nameof(ProductImage));
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = HttpStatusCode.NoContent.ToString(),
-                Description = "Component not found!"
-            });
-        }
-        var work = await _workRepository.FindByCatalogAsync(args.CatalogId, component.Id);
-        var productImage = new ProductImage
-        {
-            Images = args.Urls
-        };
-        if (work != null)
-        {
-            work.Arguments = JsonSerializer.Serialize(productImage);
-            await _workRepository.SaveChangesAsync();
-            return IdentityResult.Success;
-        }
-        work = new WorkContent
-        {
-            Active = true,
-            ComponentId = component.Id,
-            Name = string.Empty,
-            Arguments = JsonSerializer.Serialize(productImage)
-        };
-        await _workRepository.AddAsync(work);
-
-        await _workRepository.AddItemAsync(args.CatalogId, work.Id);
-
-        return IdentityResult.Success;
     }
 
     public async Task<IEnumerable<WorkListItem>> GetComponentsInColumnAsync(Guid workId)

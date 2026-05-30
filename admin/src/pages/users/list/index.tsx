@@ -1,22 +1,24 @@
-import { createUser, apiUserDelete, listUser } from '@/services/user';
-import { DeleteOutlined, EyeOutlined, ManOutlined, PlusOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
+import { apiGetUser, apiUpdateUser, createUser, apiUserDelete, listUser } from '@/services/user';
+import { DeleteOutlined, EditOutlined, EyeOutlined, ManOutlined, PlusOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
 import {
   ActionType,
   ModalForm,
   PageContainer,
   ProColumns,
-  ProFormSelect,
-  ProFormText,
   ProTable,
 } from '@ant-design/pro-components';
+import UserFormFields from '../components/user-form-fields';
 import { FormattedMessage, useIntl, history, Link } from '@umijs/max';
-import { Badge, Button, Col, message, Popconfirm, Row, Space } from 'antd';
+import { Badge, Button, message, Popconfirm, Space } from 'antd';
 import { useRef, useState } from 'react';
 
 const UserList: React.FC = () => {
   const intl = useIntl();
-  const actionRef = useRef<ActionType>();
+  const actionRef = useRef<ActionType | undefined>(undefined);
   const [open, setOpen] = useState<boolean>(false);
+  const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [updating, setUpdating] = useState<boolean>(false);
+  const [editData, setEditData] = useState<any>();
 
   const onFinish = async (values: any) => {
     if (values.password !== values.confirmPassword) {
@@ -42,6 +44,26 @@ const UserList: React.FC = () => {
     message.success('Deleted');
     actionRef.current?.reload();
   }
+
+  const openEditModal = async (id?: string) => {
+    if (!id) return;
+    setUpdating(true);
+    try {
+      const response = await apiGetUser(id);
+      setEditData(response);
+      setEditOpen(true);
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const onUpdate = async (values: any) => {
+    await apiUpdateUser(values);
+    message.success('Updated');
+    setEditOpen(false);
+    actionRef.current?.reload();
+    return true;
+  };
 
   const columns: ProColumns<API.User>[] = [
     {
@@ -130,6 +152,14 @@ const UserList: React.FC = () => {
       valueType: 'option',
       render: (dom, entity) => [
         <Button
+          type="default"
+          icon={<EditOutlined />}
+          key={0}
+          size='small'
+          loading={updating}
+          onClick={() => openEditModal(entity.id)}
+        />,
+        <Button
           type="primary"
           icon={<EyeOutlined />}
           key={1}
@@ -142,7 +172,7 @@ const UserList: React.FC = () => {
           <Button type="primary" icon={<DeleteOutlined />} size='small' danger />
         </Popconfirm>,
       ],
-      width: 80
+      width: 120
     },
   ];
 
@@ -176,61 +206,17 @@ const UserList: React.FC = () => {
         })}
         onFinish={onFinish}
       >
-        <Row gutter={16}>
-          <Col md={12} xs={24}>
-            <ProFormText name="name" label="Name" />
-          </Col>
-          <Col md={12} xs={24}>
-            <ProFormText name="userName" label="User Name" rules={[
-              {
-                required: true
-              }
-            ]} />
-          </Col>
-          <Col md={4} xs={24}>
-            <ProFormSelect name="gender" label="Gender" options={[
-              {
-                label: 'Nam',
-                value: false
-              },
-              {
-                label: 'Nữ',
-                value: true
-              }
-            ]} />
-          </Col>
-          <Col md={10} xs={24}>
-            <ProFormText
-              name="email"
-              label="Email"
-            />
-          </Col>
-          <Col md={10} xs={24}>
-            <ProFormText name="phoneNumber" label="Phone Number" />
-          </Col>
-          <Col md={12} xs={24}>
-            <ProFormText.Password
-              name="password"
-              label="Password"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            />
-          </Col>
-          <Col md={12} xs={24}>
-            <ProFormText.Password
-              name="confirmPassword"
-              label="Confirm password"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            />
-          </Col>
-        </Row>
+        <UserFormFields includePassword />
+      </ModalForm>
+
+      <ModalForm
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        title="Edit user"
+        onFinish={onUpdate}
+        initialValues={editData}
+      >
+        <UserFormFields includeId includeAddress />
       </ModalForm>
     </PageContainer>
   );

@@ -23,12 +23,9 @@ public class FileRepository(ApplicationDbContext context, IHCAService hcaService
             Name = x.Name,
             Size = _context.FileContents.Where(s => s.FolderId == x.Id).Sum(s => s.Size),
             CreatedDate = x.CreatedDate,
+            ParentId = x.ParentId,
             IsFolder = true,
         });
-        if (filterOptions.FolderId.HasValue)
-        {
-            folderQuery = folderQuery.Where(x => x.Id == filterOptions.FolderId);
-        }
 
         var folders = await folderQuery.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();
         total = await folderQuery.CountAsync();
@@ -44,6 +41,7 @@ public class FileRepository(ApplicationDbContext context, IHCAService hcaService
                 Name = x.Name,
                 Size = x.Size,
                 CreatedDate = x.UploadDate,
+                ParentId = x.FolderId,
                 IsFolder = false,
                 Url = x.Url
             });

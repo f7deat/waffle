@@ -1,9 +1,8 @@
-import { ProCard, ProForm, ProFormDigit, ProFormInstance, ProFormSwitch, ProFormText } from "@ant-design/pro-components"
+import { ProCard, ProForm, ProFormDigit, ProFormInstance, ProFormText } from "@ant-design/pro-components"
 import { useParams } from "@umijs/max"
-import { queryProduct, saveProduct } from "@/services/catalog";
+import { apiProductDetail, apiProductSave } from "@/services/products/product";
 import { Col, Row, message } from "antd";
 import { useEffect, useRef } from "react";
-import ProductImage from "./image";
 
 const ProductDetail: React.FC = () => {
 
@@ -11,7 +10,7 @@ const ProductDetail: React.FC = () => {
     const formRef = useRef<ProFormInstance>();
 
     useEffect(() => {
-        queryProduct(id).then(response => {
+        apiProductDetail(id).then(response => {
             if (response) {
                 formRef.current?.setFields([
                     {
@@ -44,11 +43,11 @@ const ProductDetail: React.FC = () => {
     }, []);
 
     const onFinish = async (values: any) => {
-        values.catalogId = id;
-        const response = await saveProduct(values);
-        if (response.succeeded) {
-            message.success('Saved');
-        }
+        await apiProductSave({
+            id,
+            ...values,
+        });
+        message.success('Saved');
     }
 
     return (
@@ -74,7 +73,6 @@ const ProductDetail: React.FC = () => {
                     </Row>
                 </ProForm>
             </ProCard>
-            <ProductImage />
         </>
     )
 }

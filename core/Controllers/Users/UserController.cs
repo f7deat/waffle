@@ -214,6 +214,68 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
         return Redirect("/");
     }
 
+    [HttpPost("google-signin-token"), AllowAnonymous]
+    public async Task<IActionResult> GoogleSignInTokenAsync([FromBody] GoogleSignInModel model)
+    {
+        if (string.IsNullOrWhiteSpace(model.Credential)) return BadRequest("Credential is required!");
+
+        var userCredential = await GoogleApiHelper.GetUserCredential(model.Credential);
+        if (userCredential is null) return Ok(TResult.Failed("Google credential is invalid."));
+
+        var user = await _userManager.FindByNameAsync(userCredential.Email);
+        if (user is null)
+        {
+            user = new ApplicationUser
+            {
+                Email = userCredential.Email,
+                UserName = userCredential.Email,
+                EmailConfirmed = userCredential.EmailVerified
+            };
+
+            var createResult = await _userManager.CreateAsync(user);
+            if (!createResult.Succeeded)
+            {
+                _logger.LogTrace("Create user {Email} failed!", user.Email);
+                return Ok(TResult.Failed("Create user failed."));
+            }
+        }
+
+        if (string.IsNullOrEmpty(user.UserName)) return Ok(TResult.Failed("User name is empty!"));
+
+        var authClaims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String),
+            new(ClaimTypes.Name, user.UserName, ClaimValueTypes.String),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        };
+
+        var userRoles = await _userManager.GetRolesAsync(user);
+        foreach (var userRole in userRoles)
+        {
+            authClaims.Add(new Claim(ClaimTypes.Role, userRole, ClaimValueTypes.String));
+        }
+
+        var secret = _configuration["JWT:Secret"];
+        if (string.IsNullOrEmpty(secret)) return BadRequest("Secret key is empty!");
+
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+
+        var token = new JwtSecurityToken(
+            expires: DateTime.Now.AddDays(7),
+            claims: authClaims,
+            signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+            );
+
+        var generatedToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return Ok(new
+        {
+            token = generatedToken,
+            expiration = token.ValidTo,
+            succeeded = true
+        });
+    }
+
     [HttpPost("subscribe")]
     public async Task<IActionResult> SubscribeAsync(SubscribeArgs args)
     {

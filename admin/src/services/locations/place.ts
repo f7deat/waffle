@@ -1,5 +1,48 @@
 import { request } from "@umijs/max";
 
+export interface IPlaceFilter extends API.IFilter {
+    name?: string;
+    districtId?: number;
+}
+
+export interface IPlaceListItem {
+    id: string;
+    name: string;
+    address?: string;
+    districtId?: number;
+    districtName?: string;
+    provinceId?: number;
+    provinceName?: string;
+    modifiedDate?: string;
+    thumbnail?: string;
+}
+
+export async function apiPlaceList(params: IPlaceFilter) {
+    return request<API.ListResult<IPlaceListItem>>(`place/list`, { params });
+}
+
+export interface IPlaceCreate {
+    name: string;
+    description?: string;
+    active: boolean;
+}
+
+export async function apiPlaceCreate(data: IPlaceCreate, locale?: string) {
+    return request(`place`, {
+        method: 'POST',
+        params: {
+            locale,
+        },
+        data
+    });
+}
+
+export async function apiPlaceDelete(id: string) {
+    return request(`place/${id}`, {
+        method: 'DELETE'
+    });
+}
+
 export async function apiPlaceDetails(id?: string) {
     return request(`place/details/${id}`);
 }

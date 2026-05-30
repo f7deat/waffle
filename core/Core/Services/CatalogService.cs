@@ -12,7 +12,6 @@ using Waffle.Core.Services.Tags.Args;
 using Waffle.Core.Services.Tags.Filters;
 using Waffle.Data;
 using Waffle.Entities;
-using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Locations;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
@@ -37,15 +36,6 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
 
     private async Task<bool> IsExistAsync(string normalizedName) => await _context.Catalogs.AnyAsync(x => x.NormalizedName.Equals(normalizedName));
 
-    private async Task AddProductAsync(Guid catalogId)
-    {
-        await _context.Products.AddAsync(new Product
-        {
-            Id = catalogId
-        });
-        await _context.SaveChangesAsync();
-    }
-
     public async Task<TResult> AddAsync(Catalog args)
     {
         var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
@@ -67,9 +57,6 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
         {
             case CatalogType.Room:
                 await _roomService.InitAsync(catalog.Id);
-                break;
-            case CatalogType.Product:
-                await AddProductAsync(catalog.Id);
                 break;
             case CatalogType.Location:
                 await _context.Places.AddAsync(new Place
@@ -349,15 +336,6 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
             }).ToListAsync();
     }
 
-    public async Task<ProductImage?> GetProductImageAsync(Guid catalogId)
-    {
-        var component = await _componentRepository.FindByNameAsync(nameof(ProductImage));
-        if (component is null) return default;
-        var work = await _workRepository.FindByCatalogAsync(catalogId, component.Id);
-        if (work is null || string.IsNullOrEmpty(work.Arguments)) return default;
-        return JsonSerializer.Deserialize<ProductImage?>(work.Arguments);
-    }
-
     public async Task<IEnumerable<Option>> GetFormSelectAsync(SelectOptions filterOptions)
     {
         filterOptions.KeyWords = SeoHelper.ToSeoFriendly(filterOptions.KeyWords);
@@ -414,28 +392,49 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
         return IdentityResult.Success;
     }
 
-    public async Task<object?> GetActivityAsync(string locale)
+    public async Task<object?> GetActivityAsync(string locale, DateTime? fromDate = null, DateTime? toDate = null)
     {
-        var query = await _context.Catalogs.Where(x => x.Locale == locale).Where(x => x.CreatedDate.Year == DateTime.Now.Year)
+        var now = DateTime.Now;
+        var startDate = (fromDate ?? new DateTime(now.Year, 1, 1)).Date;
+        var endDate = (toDate ?? now.Date).Date;
+
+        if (startDate > endDate)
+        {
+            (startDate, endDate) = (endDate, startDate);
+        }
+
+        var endExclusive = endDate.AddDays(1);
+        var query = await _context.Catalogs
+            .Where(x => x.Locale == locale)
+            .Where(x => x.CreatedDate >= startDate && x.CreatedDate < endExclusive)
             .Select(x => new
             {
                 x.Id,
+                x.CreatedDate.Year,
                 x.CreatedDate.Month
-            }).GroupBy(x => x.Month)
+            })
+            .GroupBy(x => new { x.Year, x.Month })
             .Select(x => new
             {
-                x.Key,
+                x.Key.Year,
+                x.Key.Month,
                 Count = x.Count()
             }).ToListAsync();
+
         var result = new List<dynamic>();
-        for (var i = 1; i < 13; i++)
+
+        var cursor = new DateTime(startDate.Year, startDate.Month, 1);
+        var endCursor = new DateTime(endDate.Year, endDate.Month, 1);
+        while (cursor <= endCursor)
         {
             result.Add(new
             {
-                month = new DateTime(DateTime.Now.Year, i, 1).ToString("MMM"),
-                value = query.FirstOrDefault(x => x.Key == i)?.Count ?? 0
+                month = cursor.ToString("MM/yyyy"),
+                value = query.FirstOrDefault(x => x.Year == cursor.Year && x.Month == cursor.Month)?.Count ?? 0
             });
+            cursor = cursor.AddMonths(1);
         }
+
         return result;
     }
 

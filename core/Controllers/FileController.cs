@@ -244,6 +244,57 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
         }
     }
 
+    [HttpPost("update")]
+    public async Task<IActionResult> UpdateAsync([FromBody] FileUpdateArgs args)
+    {
+        if (!args.Id.HasValue) return BadRequest("File id is required!");
+
+        var fileContent = await _context.FileContents.FindAsync(args.Id.Value);
+        if (fileContent is null) return BadRequest("File not found!");
+
+        if (args.FolderId.HasValue)
+        {
+            var folder = await _context.Folders.FindAsync(args.FolderId.Value);
+            if (folder is null) return BadRequest("Folder not found!");
+        }
+
+        var updatedName = string.IsNullOrWhiteSpace(args.Name)
+            ? fileContent.Name
+            : Path.GetFileName(args.Name.Trim());
+
+        var currentPhysicalPath = GetPhysicalFilePath(fileContent);
+        var (targetUploadPath, targetUrlPrefix) = await ResolveUploadLocationAsync(args.FolderId);
+
+        if (!Directory.Exists(targetUploadPath))
+        {
+            Directory.CreateDirectory(targetUploadPath);
+        }
+
+        var targetPhysicalPath = Path.Combine(targetUploadPath, updatedName);
+        var targetUrl = targetUrlPrefix + updatedName;
+
+        if (!string.Equals(currentPhysicalPath, targetPhysicalPath, StringComparison.OrdinalIgnoreCase) &&
+            System.IO.File.Exists(targetPhysicalPath))
+        {
+            return BadRequest("File already exists in target folder!");
+        }
+
+        if (System.IO.File.Exists(currentPhysicalPath) &&
+            !string.Equals(currentPhysicalPath, targetPhysicalPath, StringComparison.OrdinalIgnoreCase))
+        {
+            System.IO.File.Move(currentPhysicalPath, targetPhysicalPath);
+        }
+
+        fileContent.Name = updatedName;
+        fileContent.FolderId = args.FolderId;
+        fileContent.Url = targetUrl;
+
+        _context.FileContents.Update(fileContent);
+        await _context.SaveChangesAsync();
+
+        return Ok(IdentityResult.Success);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.FileContents.FindAsync(id));
 

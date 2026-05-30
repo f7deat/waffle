@@ -85,6 +85,7 @@ declare namespace API {
     type: string;
     url: string;
     isFolder: boolean;
+    parentId?: string;
   };
 
   type FileContent = BaseEntity & {
@@ -212,6 +213,16 @@ declare namespace API {
       componentName: string;
       data: any
   }
+
+  type NotificationListItem = BaseEntity & {
+    title: string;
+    content?: string;
+    type: number;
+    actionUrl?: string;
+    createdDate: string;
+    isRead: boolean;
+  }
+
   interface CatalogTag extends BaseEntity {
     name: string;
     normalizedName: string;

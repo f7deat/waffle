@@ -8,7 +8,9 @@ namespace Waffle.Core.IServices.Locations;
 
 public interface IPlaceService
 {
+    Task<TResult> CreateAsync(PlaceCreateArgs args);
     Task<TResult> AddImageAsync(PlaceAddImageArgs args, string host);
+    Task<TResult> DeleteAsync(Guid id, string host);
     Task<TResult> DeleteImageAsync(Guid imageId, string host);
     Task<TResult> GetByIdAsync(Guid id);
     Task<TResult> GetByNormalizedNameAsync(string normalizedName);

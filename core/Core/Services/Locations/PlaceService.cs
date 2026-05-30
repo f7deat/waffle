@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
@@ -9,14 +10,67 @@ using Waffle.Core.IServices.Locations;
 using Waffle.Core.IServices.Users;
 using Waffle.Core.Services.Locations.Args;
 using Waffle.Core.Services.Locations.Filters;
+using Waffle.Data;
+using Waffle.Entities;
 using Waffle.Entities.Locations;
 using Waffle.Models;
 using Waffle.Models.Components;
 
 namespace Waffle.Core.Services.Locations;
 
-public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, IProvinceRepository _provinceRepository, IDistrictRepository _districtRepository, ICatalogService _catalogService) : IPlaceService
+public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, IProvinceRepository _provinceRepository, IDistrictRepository _districtRepository, ICatalogService _catalogService, ApplicationDbContext _context) : IPlaceService
 {
+    public async Task<TResult> CreateAsync(PlaceCreateArgs args)
+    {
+        if (string.IsNullOrWhiteSpace(args.Name)) return TResult.Failed("Please enter place name!");
+
+        var locale = string.IsNullOrWhiteSpace(args.Locale) ? "vi-VN" : args.Locale;
+        if (!LocaleHelper.IsAvailable(locale)) locale = "vi-VN";
+
+        var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
+        if (await _context.Catalogs.AnyAsync(x => x.NormalizedName == normalizedName && x.Locale == locale))
+        {
+            return TResult.Failed("Place was existed!");
+        }
+
+        var placeId = Guid.NewGuid();
+        using var transaction = _placeRepository.BeginTransaction();
+        try
+        {
+            await _context.Catalogs.AddAsync(new Catalog
+            {
+                Id = placeId,
+                Name = args.Name,
+                Description = args.Description,
+                NormalizedName = normalizedName,
+                Active = args.Active,
+                Locale = locale,
+                Type = CatalogType.Location,
+                ViewCount = 0,
+                CreatedBy = _hcaService.GetUserId(),
+                CreatedDate = DateTime.Now
+            });
+
+            await _context.Places.AddAsync(new Place
+            {
+                Id = placeId,
+                DistrictId = args.DistrictId,
+                Address = args.Address,
+                InfluencerId = args.InfluencerId,
+                Content = args.Content
+            });
+
+            await _context.SaveChangesAsync();
+            transaction.Commit();
+            return TResult.Ok(new { id = placeId });
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            return TResult.Failed(ex.Message);
+        }
+    }
+
     public async Task<TResult> AddImageAsync(PlaceAddImageArgs args, string host)
     {
         if (args.Images is null || args.Images.Count == 0) return TResult.Failed("No images provided!");
@@ -56,6 +110,35 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
         var filePath = Path.Combine(_webHostEnvironment.WebRootPath, uri.LocalPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
         if (File.Exists(filePath)) File.Delete(filePath);
         await _placeRepository.DeleteImageAsync(image);
+        return TResult.Success;
+    }
+
+    public async Task<TResult> DeleteAsync(Guid id, string host)
+    {
+        var place = await _placeRepository.FindAsync(id);
+        if (place is null) return TResult.Failed("Place not found!");
+
+        var images = await _placeRepository.GetImagesAsync(id);
+        foreach (var image in images)
+        {
+            await DeleteImageAsync(image.Id, host);
+        }
+
+        await _placeRepository.DeleteAsync(place);
+
+        var catalog = await _context.Catalogs.FindAsync(id);
+        if (catalog is not null)
+        {
+            var deleteCatalogResult = await _catalogService.DeleteAsync(catalog);
+            if (!deleteCatalogResult.Succeeded) return deleteCatalogResult;
+        }
+
+        var placeFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "places", id.ToString());
+        if (Directory.Exists(placeFolder))
+        {
+            Directory.Delete(placeFolder, true);
+        }
+
         return TResult.Success;
     }
 

@@ -4,7 +4,6 @@ using Waffle.Models;
 using Waffle.Models.Args;
 using Waffle.Models.Components;
 using Waffle.Models.Components.Common;
-using Waffle.Models.Params.Products;
 
 namespace Waffle.Core.Interfaces.IService;
 
@@ -37,7 +36,6 @@ public interface IWorkService
     IEnumerable<T?> ListAsync<T>(List<string> list);
     Task<ListResult<WorkListItem>> ListBySettingIdAsync(Guid id);
     Task<object?> GetListUnuseAsync(BasicFilterOptions filterOptions);
-    Task<IdentityResult> SaveProductImageAsync(SaveImageModel args);
     Task<IEnumerable<WorkListItem>> GetComponentsInColumnAsync(Guid workId);
     IAsyncEnumerable<Column> ListColumnAsync(Guid rowId);
     Task<IEnumerable<Guid>> ListChildIdAsync(Guid parentId);

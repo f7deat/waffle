@@ -36,7 +36,6 @@ public interface ICatalogService
     Task<IEnumerable<Catalog>> ListRandomTagAsync(string locale);
     Task<ListResult<TagListItem>> ListTagAsync(TagFilterOptions filterOptions);
     Task<object?> PieChartAsync(string locale);
-    Task<ProductImage?> GetProductImageAsync(Guid catalogId);
     Task<IEnumerable<Option>> GetFormSelectAsync(SelectOptions filterOptions);
     Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize);
     Task<TResult> DeleteAsync(Catalog catalog);
@@ -48,7 +47,7 @@ public interface ICatalogService
     Task<object?> GetComponentsAsync(GetComponentsArgs args);
     Task<object?> GetStructureAsync(string normalizedName);
     Task<IdentityResult> DeleteRangeAsync(List<Guid> ids);
-    Task<object?> GetActivityAsync(string locale);
+    Task<object?> GetActivityAsync(string locale, DateTime? fromDate = null, DateTime? toDate = null);
     Task<PageData> GetEntryPageDataAsync(string normalizedName);
     Task<IdentityResult> SaveSettingAsync(Catalog catalog);
     Task<PageData?> GetPageDataAsync(string? normalizedName);

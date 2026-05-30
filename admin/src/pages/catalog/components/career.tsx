@@ -1,4 +1,5 @@
 import { apiSaveJobOpportunity } from "@/services/careers/job";
+import TiptapEditor from "@/components/tiptap";
 import { ProForm, ProFormSelect, ProFormText, ProFormTextArea } from "@ant-design/pro-components";
 import { useParams } from "@umijs/max";
 import { message } from "antd";
@@ -41,7 +42,10 @@ const CareerSetting: React.FC = () => {
                         message: 'Vui lòng chọn loại hình công việc'
                     }
                 ]} initialValue={0} />
-                <ProFormTextArea name="JobRequirements" label="Yêu cầu công việc" />
+                <ProForm.Item name="jobDetail" label="Chi tiết công việc">
+                    <TiptapEditor placeholder="Nhập chi tiết công việc..." />
+                </ProForm.Item>
+                <ProFormTextArea name="jobRequirements" label="Yêu cầu công việc" />
             </ProForm>
         </>
     )

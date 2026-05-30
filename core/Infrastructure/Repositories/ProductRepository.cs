@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Net;
+﻿using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
@@ -19,26 +17,53 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
 {
     public async Task<bool> AnyAsync(Guid productId) => await _context.Products.AnyAsync(x => x.Id == productId);
 
-    public async Task<TResult> CreateAsync(Catalog args, string locale)
+    public async Task<TResult> CreateAsync(Product args)
     {
         var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
-        if (await _context.Catalogs.AnyAsync(x => x.NormalizedName == normalizedName && x.Type == CatalogType.Product)) return TResult.Failed("Product with the same name already exists!");
+        if (await _context.Products.AnyAsync(x => x.NormalizedName == normalizedName && x.Locale == args.Locale))
+        {
+            return TResult.Failed("Product with the same name already exists!");
+        }
+
         args.NormalizedName = normalizedName;
-        args.Type = CatalogType.Product;
-        args.CreatedDate = DateTime.Now;
-        args.CreatedBy = _hcaService.GetUserId();
-        args.Locale = locale;
-        args.Id = Guid.NewGuid();
-        await _context.Catalogs.AddAsync(args);
+        if (string.IsNullOrWhiteSpace(args.Locale))
+        {
+            args.Locale = "vi-VN";
+        }
+
         await _context.Products.AddAsync(new Product
         {
             Name = args.Name,
-            NormalizedName = SeoHelper.ToSeoFriendly(args.Name),
-            Locale = locale
+            Description = args.Description,
+            Thumbnail = args.Thumbnail,
+            Price = args.Price,
+            SalePrice = args.SalePrice,
+            SKU = args.SKU,
+            UnitInStock = args.UnitInStock,
+            AffiliateLink = args.AffiliateLink,
+            Content = args.Content,
+            CategoryId = args.CategoryId,
+            NormalizedName = normalizedName,
+            Locale = args.Locale
         });
         await _context.SaveChangesAsync();
         return TResult.Success;
     }
+
+    public async Task<TResult> DeleteAsync(Guid id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product is null)
+        {
+            return TResult.Failed("Product not found!");
+        }
+
+        _context.Products.Remove(product);
+        await _context.SaveChangesAsync();
+        return TResult.Success;
+    }
+
+    public async Task<Product?> DetailAsync(Guid id) => await _context.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
     public async Task<TResult> GetByNameAsync(string normalizedName)
     {
@@ -169,32 +194,4 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         return await query.ToListAsync();
     }
 
-    public async Task<IdentityResult> SaveBrandAsync(SaveBrandModel args)
-    {
-        var product = await _context.Catalogs.FindAsync(args.ProductId);
-        if (product is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = HttpStatusCode.NoContent.ToString(),
-                Description = "Product not found!"
-            });
-        }
-        var brand = await _context.Catalogs.FindAsync(args.BrandId);
-        if (brand is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = HttpStatusCode.NoContent.ToString(),
-                Description = "Brand not found!"
-            });
-        }
-        if (!product.NormalizedName.Contains('/'))
-        {
-            product.NormalizedName = $"{brand.NormalizedName}/{product.NormalizedName}";
-        }
-        product.ParentId = args.BrandId;
-        await _context.SaveChangesAsync();
-        return IdentityResult.Success;
-    }
 }

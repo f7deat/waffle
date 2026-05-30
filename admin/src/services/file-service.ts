@@ -73,6 +73,17 @@ export async function totalFileSize() {
   return request(`file/total-size`);
 }
 
+export async function updateFileContent(data: {
+  id?: string;
+  name?: string;
+  folderId?: string;
+}) {
+  return request(`file/update`, {
+    method: 'POST',
+    data,
+  });
+}
+
 export const apiMultiUpload = (data: FormData) => request(`file/muti-upload`, {
   method: 'POST',
   data,

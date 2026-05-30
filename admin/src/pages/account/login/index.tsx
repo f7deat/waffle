@@ -1,4 +1,4 @@
-import { login } from '@/services/user';
+import { googleSignIn, login } from '@/services/user';
 import {
   FacebookFilled,
   GithubFilled,
@@ -16,7 +16,7 @@ import {
 import { FormattedHTMLMessage, SelectLang, useIntl } from '@umijs/max';
 import { history, useModel } from '@umijs/max';
 import { Button, message, Space, Tabs } from 'antd';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
 import '../index.css';
 import { Helmet } from '@umijs/max';
@@ -25,6 +25,33 @@ import ForgotPassword from '../components/forgot-password';
 
 const companyName = process.env.COMPANY_NAME || 'DefZone.Net';
 
+const GOOGLE_GSI_SCRIPT = 'https://accounts.google.com/gsi/client';
+
+const loadGoogleGsiScript = () => {
+  if ((window as any).google?.accounts?.id) {
+    return Promise.resolve();
+  }
+
+  return new Promise<void>((resolve, reject) => {
+    const existingScript = document.querySelector(`script[src="${GOOGLE_GSI_SCRIPT}"]`);
+    if (existingScript) {
+      existingScript.addEventListener('load', () => resolve(), { once: true });
+      existingScript.addEventListener('error', () => reject(new Error('Google SDK failed to load.')), {
+        once: true,
+      });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = GOOGLE_GSI_SCRIPT;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Google SDK failed to load.'));
+    document.head.appendChild(script);
+  });
+};
+
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -32,7 +59,7 @@ const Login: React.FC = () => {
 
   const intl = useIntl();
 
-  const fetchUserInfo = async () => {
+  const fetchUserInfo = useCallback(async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
       flushSync(() => {
@@ -42,18 +69,56 @@ const Login: React.FC = () => {
         }));
       });
     }
-  };
+  }, [initialState, setInitialState]);
+
+  const completeLogin = useCallback(async (token: string) => {
+    localStorage.setItem('wf_token', token);
+    await fetchUserInfo();
+    const urlParams = new URL(window.location.href).searchParams;
+    history.push(urlParams.get('redirect') || '/');
+  }, [fetchUserInfo]);
 
   const handleSubmit = async (values: any) => {
     const msg = await login({ ...values, type });
     if (!msg.succeeded) {
       return message.error('Sai tên đăng nhập hoặc mật khẩu!');
     }
-    localStorage.setItem('wf_token', msg.token);
-    await fetchUserInfo();
-    const urlParams = new URL(window.location.href).searchParams;
-    history.push(urlParams.get('redirect') || '/');
+    await completeLogin(msg.token);
   };
+
+  const handleGoogleCredential = useCallback(async (response: any) => {
+    if (!response?.credential) {
+      message.error('Google credential không hợp lệ');
+      return;
+    }
+
+    const msg = await googleSignIn(response.credential);
+    if (!msg?.succeeded || !msg?.token) {
+      message.error('Đăng nhập Google thất bại');
+      return;
+    }
+
+    await completeLogin(msg.token);
+  }, [completeLogin]);
+
+  useEffect(() => {
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    if (!clientId) return;
+
+    loadGoogleGsiScript()
+      .then(() => {
+        const google = (window as any).google;
+        if (!google?.accounts?.id) return;
+
+        google.accounts.id.initialize({
+          client_id: clientId,
+          callback: handleGoogleCredential,
+        });
+      })
+      .catch(() => {
+        message.error('Không thể tải Google SDK');
+      });
+  }, [handleGoogleCredential]);
 
   return (
     <div className='h-screen'>
@@ -79,7 +144,27 @@ const Login: React.FC = () => {
               <div className="text-center" key={3}>
                 <Space align="center">
                   <Button icon={<FacebookFilled />} shape='circle' size='large' type='primary'></Button>
-                  <Button icon={<GoogleCircleFilled />} shape='circle' size='large' type='primary' danger></Button>
+                  <Button
+                    icon={<GoogleCircleFilled />}
+                    shape='circle'
+                    size='large'
+                    type='primary'
+                    danger
+                    onClick={() => {
+                      if (!process.env.GOOGLE_CLIENT_ID) {
+                        message.warning('Thiếu GOOGLE_CLIENT_ID');
+                        return;
+                      }
+
+                      const google = (window as any).google;
+                      if (!google?.accounts?.id) {
+                        message.error('Google SDK chưa sẵn sàng');
+                        return;
+                      }
+
+                      google.accounts.id.prompt();
+                    }}
+                  ></Button>
                   <Button icon={<GithubFilled />} shape='circle' size='large'></Button>
                 </Space>
               </div>,

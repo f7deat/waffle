@@ -13,8 +13,8 @@ public class FolderService(ApplicationDbContext _context, IHCAService _hcaServic
 {
     public async Task<TResult> AddAsync(Folder args, string locale)
     {
-        if (await _context.Folders.AnyAsync(x => x.Name == args.Name && x.Locale == locale)) return TResult.Failed("Folder existed!");
-        if (args.ParentId != null && !await _context.Folders.AnyAsync(x => x.ParentId == args.ParentId)) return TResult.Failed("Parent folder not found!");
+        if (await _context.Folders.AnyAsync(x => x.Name == args.Name && x.Locale == locale && x.ParentId == args.ParentId)) return TResult.Failed("Folder existed!");
+        if (args.ParentId != null && !await _context.Folders.AnyAsync(x => x.Id == args.ParentId)) return TResult.Failed("Parent folder not found!");
         args.CreatedDate = DateTime.Now;
         args.Locale = locale;
         args.CreatedBy = _hcaService.GetUserId();
@@ -65,8 +65,17 @@ public class FolderService(ApplicationDbContext _context, IHCAService _hcaServic
     {
         var folder = await _context.Folders.FindAsync(args.Id);
         if (folder is null) return TResult.Failed("Folder not found!");
-        if (await _context.Folders.AnyAsync(x => x.Name == args.Name)) return TResult.Failed("Folder existed!");
+
+        if (args.ParentId == folder.Id) return TResult.Failed("Parent folder is invalid!");
+        if (args.ParentId != null && !await _context.Folders.AnyAsync(x => x.Id == args.ParentId)) return TResult.Failed("Parent folder not found!");
+
+        if (await _context.Folders.AnyAsync(x => x.Id != folder.Id && x.Name == args.Name && x.ParentId == args.ParentId && x.Locale == folder.Locale))
+        {
+            return TResult.Failed("Folder existed!");
+        }
+
         folder.Name = args.Name;
+        folder.ParentId = args.ParentId;
         folder.NormalizedName = _lookupNormalizer.NormalizeName(folder.Name).ToLower().Replace(" ", "-");
         folder.ModifiedBy = _hcaService.GetUserId();
         folder.ModifiedDate = DateTime.Now;

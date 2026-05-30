@@ -1,5 +1,11 @@
 import { request } from "@umijs/max";
 
+export async function apiProductList(params: any) {
+    return request(`product/list`, {
+        params,
+    });
+}
+
 export async function apiListLinkByProductId(params: any, productId: string | undefined) {
     return request(`product/list-link/${productId}`);
 }
@@ -31,6 +37,12 @@ export async function apiProductSave(data: any) {
     return request(`product/save`, {
         method: 'POST',
         data
+    });
+}
+
+export async function apiProductDelete(id?: string) {
+    return request(`product/delete/${id}`, {
+        method: 'POST',
     });
 }
 

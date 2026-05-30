@@ -1,6 +1,8 @@
 export default {
   'menu.dashboard': 'Dashboard',
   'menu.career': 'Career',
+  'menu.career.job': 'Jobs',
+  'menu.career.application': 'Applications',
   'menu.catalog.article': 'Article',
   'menu.catalog.tag': 'Tag',
   'menu.catalog.tagCenter': 'Tag center',

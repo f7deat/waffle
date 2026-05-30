@@ -6,17 +6,27 @@ import { useState } from "react";
 
 type Props = {
     reload?: any;
+    parentId?: string;
 }
 
-const FolderForm: React.FC<Props> = ({ reload }) => {
+const FolderForm: React.FC<Props> = ({ reload, parentId }) => {
 
     const [open, setOpen] = useState<boolean>(false);
 
     const onFinish = async (values: any) => {
-        await apiAddFolder(values);
-        message.success('Succeeded!');
-        setOpen(false);
-        reload?.();
+        try {
+            await apiAddFolder({
+                ...values,
+                parentId: parentId || null
+            });
+            message.success('Succeeded!');
+            setOpen(false);
+            reload?.();
+            return true;
+        } catch (error: any) {
+            message.error(error?.data?.message || 'Failed!');
+            return false;
+        }
     }
 
     return (

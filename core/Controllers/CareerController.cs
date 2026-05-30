@@ -7,6 +7,7 @@ using Waffle.Entities.Careers;
 using Waffle.Entities.Users;
 using Waffle.Extensions;
 using Waffle.Models;
+using Waffle.Modules.Jobs.Models;
 
 namespace Waffle.Controllers;
 
@@ -51,10 +52,26 @@ public class CareerController(IJobOpportunityService _jobOpportunityService, IWe
     [HttpGet("list-application")]
     public async Task<IActionResult> ListApplicationAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _jobOpportunityService.ListApplicationAsync(filterOptions));
 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _jobOpportunityService.DeleteAsync(id);
+        if (!result.Succeeded) return BadRequest(result.Message);
+        return Ok(result);
+    }
+
     [HttpPost("delete-application/{id}")]
     public async Task<IActionResult> DeleteApplicationAsync([FromRoute] Guid id)
     {
         var result = await _jobOpportunityService.DeleteApplicationAsync(id);
+        if (!result.Succeeded) return BadRequest(result.Message);
+        return Ok(result);
+    }
+
+    [HttpPut("application/{id}/status")]
+    public async Task<IActionResult> UpdateApplicationStatusAsync([FromRoute] Guid id, [FromBody] JobApplicationStatusUpdateArgs args)
+    {
+        var result = await _jobOpportunityService.UpdateApplicationStatusAsync(id, args.Status);
         if (!result.Succeeded) return BadRequest(result.Message);
         return Ok(result);
     }

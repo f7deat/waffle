@@ -7,6 +7,15 @@ export async function login(data: any) {
   });
 }
 
+export async function googleSignIn(credential: string) {
+  return request(`user/google-signin-token`, {
+    method: 'POST',
+    data: {
+      credential,
+    },
+  });
+}
+
 export async function queryCurrentUser() {
   return request(`user`);
 }
@@ -69,4 +78,8 @@ export async function apiInfluencerOptions(params?: any) {
   return request(`user/influencer/options`, {
     params
   });
+}
+
+export async function apiUserOptions() {
+  return request(`user/options`);
 }
