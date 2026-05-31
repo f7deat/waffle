@@ -44,6 +44,7 @@ const DefaultFooter: React.FC = () => {
                         <Link href="/shop" className="hover:text-white transition-colors"><CaretRightFilled /> Cửa hàng</Link>
                         <Link href="/contact" className="hover:text-white transition-colors"><CaretRightFilled /> Liên hệ</Link>
                         <Link href="/influencer" className="hover:text-white transition-colors"><CaretRightFilled /> Influencers</Link>
+                        <Link href="/album" className="hover:text-white transition-colors"><CaretRightFilled /> Album</Link>
                     </nav>
                 </div>
 

@@ -1,9 +1,33 @@
 "use client";
 
 import PageContainer from "@/components/layout/page-container";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Checkbox, Form, Input, notification } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { apiPasswordSignIn } from "@/services/user/user";
+import { GoogleOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
+import Script from "next/script";
+import { apiGoogleSignInToken, apiPasswordSignIn } from "@/services/user/user";
+
+type GoogleCredentialResponse = {
+    credential?: string;
+};
+
+type GoogleAccounts = {
+    id: {
+        initialize: (options: {
+            client_id: string;
+            callback: (response: GoogleCredentialResponse) => void;
+        }) => void;
+        renderButton: (element: HTMLElement, options?: Record<string, unknown>) => void;
+    };
+};
+
+declare global {
+    interface Window {
+        google?: {
+            accounts: GoogleAccounts;
+        };
+    }
+}
 
 type LoginValues = {
     username: string;
@@ -14,6 +38,87 @@ type LoginValues = {
 const Page: React.FC = () => {
     const [form] = Form.useForm<LoginValues>();
     const [api, contextHolder] = notification.useNotification();
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+    const googleButtonRef = useRef<HTMLDivElement>(null);
+    const googleInitializedRef = useRef(false);
+    const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
+    const persistAuthToken = (token: string) => {
+        localStorage.setItem("access_token", token);
+        document.cookie = `access_token=${token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+    };
+
+    const navigateAfterSignIn = () => {
+        window.location.href = "/";
+    };
+
+    const handleGoogleSignIn = useCallback(async (credential?: string) => {
+        if (!credential) {
+            api.error({
+                title: "Đăng nhập Google thất bại",
+                description: "Không nhận được thông tin xác thực từ Google.",
+            });
+            return;
+        }
+
+        setIsGoogleLoading(true);
+        try {
+            const response = await apiGoogleSignInToken({ credential });
+            if (!response.succeeded || !response.token) {
+                api.error({
+                    title: "Đăng nhập Google thất bại",
+                    description: response.message || "Không thể đăng nhập bằng Google. Vui lòng thử lại.",
+                });
+                return;
+            }
+
+            persistAuthToken(response.token);
+            api.success({
+                title: "Đăng nhập thành công",
+                description: "Bạn đã đăng nhập bằng Google thành công.",
+            });
+            navigateAfterSignIn();
+        } catch {
+            api.error({
+                title: "Đăng nhập Google thất bại",
+                description: "Có lỗi xảy ra trong quá trình đăng nhập bằng Google.",
+            });
+        } finally {
+            setIsGoogleLoading(false);
+        }
+    }, [api]);
+
+    const initGoogleSignIn = useCallback(() => {
+        if (!googleClientId || !googleButtonRef.current || !window.google || googleInitializedRef.current) {
+            return;
+        }
+
+        window.google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: (response) => {
+                void handleGoogleSignIn(response.credential);
+            },
+        });
+
+        googleButtonRef.current.innerHTML = "";
+        window.google.accounts.id.renderButton(googleButtonRef.current, {
+            type: "standard",
+            theme: "outline",
+            text: "continue_with",
+            shape: "rectangular",
+            size: "large",
+            width: "360",
+            locale: "vi",
+        });
+
+        googleInitializedRef.current = true;
+    }, [googleClientId, handleGoogleSignIn]);
+
+    useEffect(() => {
+        if (!googleInitializedRef.current) {
+            initGoogleSignIn();
+        }
+    }, [initGoogleSignIn]);
 
     const handleFinish = async (values: LoginValues) => {
         const response = await apiPasswordSignIn(values);
@@ -24,13 +129,12 @@ const Page: React.FC = () => {
             });
             return;
         }
-        localStorage.setItem("access_token", response.token);
-        document.cookie = `access_token=${response.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+        persistAuthToken(response.token);
         api.success({
             title: "Đăng nhập thành công",
             description: "Bạn đã đăng nhập thành công vào DefZone.Net.",
         });
-        window.location.href = "/";
+        navigateAfterSignIn();
     };
 
     return (
@@ -42,6 +146,11 @@ const Page: React.FC = () => {
                 }
             ]}
         >
+            <Script
+                src="https://accounts.google.com/gsi/client"
+                strategy="afterInteractive"
+                onLoad={initGoogleSignIn}
+            />
             {contextHolder}
             <div className="py-10">
                 <div className="mx-auto md:flex gap-4 max-w-7xl 2xl:gap-16 items-center">
@@ -97,6 +206,34 @@ const Page: React.FC = () => {
                                     Đăng nhập
                                 </Button>
                             </Form.Item>
+
+                            <div className="my-4 flex items-center gap-3 text-xs uppercase tracking-[0.08em] text-slate-400">
+                                <span className="h-px flex-1 bg-slate-200" />
+                                <span>Hoặc</span>
+                                <span className="h-px flex-1 bg-slate-200" />
+                            </div>
+
+                            <div className="space-y-2">
+                                {isGoogleLoading ? (
+                                    <Button
+                                        size="large"
+                                        block
+                                        loading
+                                        icon={<GoogleOutlined />}
+                                        className="rounded-lg"
+                                    >
+                                        Đang xác thực Google...
+                                    </Button>
+                                ) : (
+                                    <div ref={googleButtonRef} className="flex justify-center" />
+                                )}
+
+                                {!googleClientId && (
+                                    <p className="text-center text-xs text-amber-600">
+                                        Thiếu cấu hình NEXT_PUBLIC_GOOGLE_CLIENT_ID để hiển thị đăng nhập Google.
+                                    </p>
+                                )}
+                            </div>
 
                             <p className="text-center text-sm text-slate-600">
                                 Chưa có tài khoản? <a href="/influencer/register" className="font-semibold text-indigo-600 hover:text-indigo-700">Đăng ký</a>

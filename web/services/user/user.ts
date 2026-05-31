@@ -8,6 +8,15 @@ export async function apiPasswordSignIn(data: { username: string; password: stri
     }>("user/password-sign-in", data);
 }
 
+export async function apiGoogleSignInToken(data: { credential: string }) {
+    return request.post<{
+        succeeded: boolean;
+        token?: string;
+        expiration?: string;
+        message?: string;
+    }>("user/google-signin-token", data);
+}
+
 export async function apiCurrentUser() {
     return request.get<API.User>(`user`);
 }
