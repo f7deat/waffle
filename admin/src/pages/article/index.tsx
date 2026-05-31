@@ -1,12 +1,14 @@
 import { ActionType, PageContainer, ProColumns, ProTable } from "@ant-design/pro-components";
 import {
   Button,
+  message,
   Popconfirm,
   Space,
 } from "antd";
 import { useRef, useState } from "react";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import {
+  deleteArticle,
   listArticles,
 } from "@/services/article";
 import ArticleForm from "@/components/ArticleForm";
@@ -18,6 +20,20 @@ const ArticlePage: React.FC = () => {
   const actionRef = useRef<ActionType>(null);
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | undefined>();
+  const [deletingId, setDeletingId] = useState<string | undefined>();
+
+  const handleDelete = async (id: string) => {
+    try {
+      setDeletingId(id);
+      await deleteArticle(id);
+      message.success("Delete article successfully");
+      actionRef.current?.reload();
+    } catch (error) {
+      message.error("Delete article failed");
+    } finally {
+      setDeletingId(undefined);
+    }
+  };
 
   const columns: ProColumns<any>[] = [
     {
@@ -92,11 +108,13 @@ const ArticlePage: React.FC = () => {
             description="Are you sure you want to delete this article?"
             okText="Yes"
             cancelText="No"
+            onConfirm={() => handleDelete(record.id)}
           >
             <Button
               danger
               size="small"
               icon={<DeleteOutlined />}
+              loading={deletingId === record.id}
             />
           </Popconfirm>
         </Space>

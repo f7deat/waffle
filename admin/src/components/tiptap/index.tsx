@@ -11,7 +11,7 @@ import TableRow from '@tiptap/extension-table-row';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import StarterKit from '@tiptap/starter-kit';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { EditorContent, JSONContent, useEditor } from '@tiptap/react';
 import { Button, Space, message } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import { useEffect, useRef, useState } from 'react';
@@ -20,12 +20,14 @@ import './editor.less';
 type TiptapEditorProps = {
     value?: string;
     onChange?: (value: string) => void;
+    onDocumentChange?: (doc: JSONContent, html: string) => void;
     placeholder?: string;
 };
 
 const TiptapEditor: React.FC<TiptapEditorProps> = ({
     value,
     onChange,
+    onDocumentChange,
     placeholder = 'Nhap noi dung bai viet...',
 }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -54,7 +56,9 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
         ],
         content: value || '',
         onUpdate: ({ editor: currentEditor }) => {
-            onChange?.(currentEditor.getHTML());
+            const html = currentEditor.getHTML();
+            onChange?.(html);
+            onDocumentChange?.(currentEditor.getJSON(), html);
         },
     });
 

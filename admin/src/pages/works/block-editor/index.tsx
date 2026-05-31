@@ -1,4 +1,4 @@
-import ProEditorBlock from '@/components/editorjs';
+import ProEditorBlock from '@/components/tiptap/pro-editor-block';
 import WorkSummary from '@/components/works/summary';
 import { saveBlockEditor } from '@/services/work-content';
 import { ArrowLeftOutlined, SaveOutlined } from '@ant-design/icons';

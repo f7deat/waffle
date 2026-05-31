@@ -1,5 +1,5 @@
 import { useParams } from "@umijs/max";
-import BlockEditorForm from "@/components/editorjs/block-editor-form";
+import BlockEditorForm from "@/components/tiptap/block-editor-form";
 import { saveArguments } from "@/services/work-content";
 import { ProCard, ProForm } from "@ant-design/pro-components";
 import { Col, Row, message } from "antd";

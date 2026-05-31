@@ -1,4 +1,4 @@
-import FormEditor from "@/components/editorjs/editor-form";
+import FormEditor from "@/components/tiptap/form-editor";
 import { apiDistrictOptions } from "@/services/locations/district";
 import {
     apiPlaceAddImages,
@@ -42,7 +42,7 @@ const parseContent = (value: any) => {
 
 const PlaceDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const formRef = useRef<ProFormInstance>();
+    const formRef = useRef<ProFormInstance>(null);
     const [selectedProvinceId, setSelectedProvinceId] = useState<number | undefined>(undefined);
     const [images, setImages] = useState<any[]>([]);
     const [uploading, setUploading] = useState(false);
