@@ -37,8 +37,8 @@ export function ShinecFooter() {
           </div>
           <div>
               <h3 className="text-lg font-bold text-white mb-4">Liên hệ</h3>
-              <p className="text-gray-400">Địa chỉ: 123 Đường ABC, Thành phố XYZ, Tỉnh Gia Lai</p>
-              <p className="text-gray-400">Email: info@shinec-gialai.com</p>
+              <p className="text-gray-400">Địa chỉ: 14 Trần Hưng Đạo, Phường Tây Sơn, TP.Pleiku, Gia Lai</p>
+              <p className="text-gray-400">Email: congtyshinecgialai@gmail.com</p>
               <p className="text-gray-400">Điện thoại: +(84) 269-633-3456</p>
           </div>
           <div>

@@ -404,6 +404,12 @@ a:hover {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
+}
+
 @media (min-width: 640px) {
   .section-block {
     padding-inline: 1.5rem;

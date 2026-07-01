@@ -3,7 +3,9 @@
 import { apiGetAlbumPhotos } from "@/services/album";
 import { apiContactSubmit } from "@/services/contact";
 import { AlbumPhoto } from "@/typings/album";
-import { ArrowRightOutlined, DownOutlined, LeftCircleOutlined, PlayCircleOutlined, RightCircleOutlined, UpOutlined } from "@ant-design/icons";
+import { ArrowRightOutlined, DownOutlined, PlayCircleOutlined, UpOutlined } from "@ant-design/icons";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import ReactECharts from 'echarts-for-react';
@@ -61,15 +63,6 @@ type ShinecHomeProps = {
     articles?: API.ArticleListItem[];
 }
 
-const partnerLogos: string[] = [
-    "Nông nghiệp công nghệ cao",
-    "Chế biến thực phẩm",
-    "Vật liệu xanh",
-    "Logistics thông minh",
-    "Năng lượng tái tạo",
-    "Cơ khí phụ trợ",
-];
-
 const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
     const [slideIndex, setSlideIndex] = useState(0);
     const [heroSlides, setHeroSlides] = useState<AlbumPhoto[]>([]);
@@ -86,6 +79,48 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
         };
 
         fetchSlides();
+    }, []);
+
+    useEffect(() => {
+        const revealElements = gsap.utils.toArray<HTMLElement>("[data-animate='reveal']");
+
+        if (!revealElements.length) {
+            return;
+        }
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            gsap.set(revealElements, { autoAlpha: 1, y: 0 });
+            return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        const ctx = gsap.context(() => {
+            revealElements.forEach((element, index) => {
+                gsap.fromTo(
+                    element,
+                    {
+                        autoAlpha: 0,
+                        y: 24,
+                    },
+                    {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 1,
+                        ease: "power3.out",
+                        delay: Math.min(index * 0.04, 0.2),
+                        scrollTrigger: {
+                            trigger: element,
+                            start: "top 82%",
+                            toggleActions: "play none none none",
+                            once: true,
+                        },
+                    }
+                );
+            });
+        });
+
+        return () => ctx.revert();
     }, []);
 
     const openContactForm = () => {
