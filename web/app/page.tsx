@@ -11,8 +11,6 @@ import { Metadata } from "next";
 import ShinecHome from "@/components/home/shinec";
 import { THEME_NAME } from "@/config/theme";
 
-const { NEXT_PUBLIC_THEME } = process.env;
-
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const settings = await apiGetSiteSetting();
@@ -62,7 +60,7 @@ export default async function Home() {
     backgroundImage: `url(${url})`,
   });
 
-  if (NEXT_PUBLIC_THEME === THEME_NAME.SHINEC) {
+  if (process.env.NEXT_PUBLIC_THEME === THEME_NAME.SHINEC) {
     return <ShinecHome articles={articles} />;
   }
 
