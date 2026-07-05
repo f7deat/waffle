@@ -162,6 +162,7 @@ declare namespace API {
     emailConfirmed: boolean;
     phoneNumberConfirmed: boolean;
     gender?: boolean;
+    name: string;
   };
 
   type UpgradeListItem = {

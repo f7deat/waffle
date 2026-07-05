@@ -7,7 +7,7 @@ import { apiProductCount } from '@/services/products/product';
 import { apiGetReportActivity } from '@/services/report';
 import { Column, Pie } from '@ant-design/charts';
 import { PageContainer, ProCard, ProList } from '@ant-design/pro-components';
-import { ArrowDownOutlined, ArrowUpOutlined, FileTextOutlined, OrderedListOutlined, ShoppingOutlined, TagsOutlined } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined, FileOutlined, FileTextOutlined, OrderedListOutlined, ShoppingOutlined, TagsOutlined } from '@ant-design/icons';
 import { Col, DatePicker, Row, Segmented, Skeleton, Space, Statistic, Tag, Typography } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -262,7 +262,7 @@ const HomePage: React.FC = () => {
             <Typography.Text type="secondary">Tổng sản phẩm đang quản lý</Typography.Text>
           </ProCard>
 
-          <ProCard bordered title="Kho tệp" extra={<TagsOutlined />} loading={staticLoading}>
+          <ProCard title="Kho tệp" extra={<FileOutlined />} loading={staticLoading}>
             <Statistic value={summary.fileCount} suffix="tệp" />
             <Typography.Text type="secondary">Dung lượng: {formatFileSize(summary.totalFileSize)}</Typography.Text>
           </ProCard>

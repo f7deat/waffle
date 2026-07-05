@@ -1,5 +1,5 @@
+import FormEditor from "@/components/editorjs/form-editor";
 import ImageLibraryPicker from "@/components/image-library/picker";
-import TiptapEditor from "@/components/tiptap";
 import { uploadRcFile } from "@/services/file-service";
 import { apiProductDetail, apiProductSave } from "@/services/products/product";
 import { LeftOutlined, UploadOutlined } from "@ant-design/icons";
@@ -88,18 +88,7 @@ const Index: React.FC = () => {
                                     <ProForm form={form} formRef={formRef} onFinish={onFinish} submitter={{ searchConfig: { submitText: "Lưu thay đổi" } }}>
                                         <Row gutter={16}>
                                             <Col md={18}>
-                                                <ProForm.Item
-                                                    name="content"
-                                                    label="Nội dung"
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: "Vui lòng nhập nội dung"
-                                                        }
-                                                    ]}
-                                                >
-                                                    <TiptapEditor placeholder="Nhập chi tiết sản phẩm..." />
-                                                </ProForm.Item>
+                                                <FormEditor name="content" initialValue={product?.content} />
                                             </Col>
                                             <Col md={6}>
                                                 <div className="border rounded p-1 mb-2">

@@ -10,6 +10,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import ReactECharts from 'echarts-for-react';
 import { Modal } from "antd";
+import { ArticleListItem } from "@/services/typings/article";
 
 type LandUseItem = {
     label: string;
@@ -60,7 +61,7 @@ const infrastructures: string[] = [
 ];
 
 type ShinecHomeProps = {
-    articles?: API.ArticleListItem[];
+    articles?: ArticleListItem[];
 }
 
 const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {

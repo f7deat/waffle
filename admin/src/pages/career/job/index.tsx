@@ -1,5 +1,5 @@
+import FormEditor from "@/components/editorjs/form-editor";
 import { apiDeleteJobOpportunity, apiJobOpportunityList, apiSaveJobOpportunity } from "@/services/careers/job";
-import TiptapEditor from "@/components/tiptap";
 import { DeleteOutlined, EditOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import {
     ActionType,
@@ -190,12 +190,7 @@ const Index: React.FC = () => {
                     options={jobTypeOptions}
                     rules={[{ required: true, message: "Vui long chon loai hinh cong viec" }]}
                 />
-                <ProForm.Item
-                    name="jobDetail"
-                    label="Chi tiet cong viec"
-                >
-                    <TiptapEditor placeholder="Nhap chi tiet cong viec..." />
-                </ProForm.Item>
+                <FormEditor name="jobDetail" initialValue={job?.jobDetail} />
                 <ProFormTextArea name="jobRequirements" label="Yeu cau cong viec" />
             </ModalForm>
         </PageContainer>

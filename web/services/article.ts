@@ -1,19 +1,20 @@
 import { ArticleMeta } from "@/typings/article";
 import request from "./request";
+import { ArticleDetail, ArticleFilterOptions } from "./typings/article";
 
-export async function apiArticleList(params: API.ArticleFilterOptions, cookie?: string) {
-    return request.get<API.ListResult<API.ArticleListItem>>("article/published-list", {
+export async function apiArticleList(params: ArticleFilterOptions, cookie?: string) {
+    return request.get<API.ListResult<ArticleDetail>>("article/published-list", {
         params,
         cookie
     });
 }
 
 export async function apiArticleDetail(normalizedName: string) {
-    return request.get<API.TResult<API.ArticleDetail>>(`article/${normalizedName}`);
+    return request.get<API.TResult<ArticleDetail>>(`article/${normalizedName}`);
 }
 
 export async function apiArticleRandoms() {
-    return request.get<API.ListResult<API.ArticleListItem>>("article/randoms");
+    return request.get<API.ListResult<ArticleDetail>>("article/randoms");
 }
 
 export async function apiArticleMeta(normalizedName: string) {

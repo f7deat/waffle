@@ -4,7 +4,12 @@ const resolvedApiHost = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
 const API_URL = resolvedApiHost ? `${resolvedApiHost.replace(/\/+$/, "")}/api/` : undefined;
 
 function createServerRequest(): AxiosInstance {
-    const instance = axios.create();
+    const instance = axios.create({
+        adapter: 'fetch',
+        fetchOptions: {
+            cache: 'no-store', // Disable caching for server-side requests
+        }
+    });
 
     instance.interceptors.request.use((config) => {
         if (API_URL) {

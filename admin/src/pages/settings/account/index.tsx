@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useModel, history } from '@umijs/max';
+import { useModel, history, Link } from '@umijs/max';
 import { PageContainer, ProCard, ProDescriptions } from '@ant-design/pro-components';
 import {
     Avatar,
@@ -77,7 +77,7 @@ const Index: React.FC = () => {
                                 />
                             </div>
                             <Typography.Title level={3} className="!text-white !mb-1">
-                                {currentUser?.userName || 'Người dùng hiện tại'}
+                                {currentUser?.name || 'Người dùng hiện tại'}
                             </Typography.Title>
                             <Typography.Text className="text-slate-300">
                                 {currentUser?.email || 'Chưa có email được liên kết'}
@@ -89,9 +89,11 @@ const Index: React.FC = () => {
                                     </Tag>
                                 ))}
                             </Space>
+                            <Link to={`/user/center`}>
                             <Button type="primary" icon={<EditOutlined />} className="mt-5">
                                 Chỉnh sửa hồ sơ
                             </Button>
+                            </Link>
                         </div>
                         <Divider className="!my-0 border-white/10" />
                         <div className="grid grid-cols-3 gap-3 px-1 py-4 text-center">
@@ -133,7 +135,7 @@ const Index: React.FC = () => {
                 </Col>
 
                 <Col xs={24} lg={16}>
-                    <Row gutter={[16, 16]}>
+                    <Row gutter={[16, 16]} className="mb-4">
                         <Col xs={24} md={8}>
                             <ProCard bordered={false}>
                                 <Statistic title="Tài khoản" value={currentUser?.userName || 'Guest'} prefix={<UserOutlined />} />
@@ -151,61 +153,7 @@ const Index: React.FC = () => {
                         </Col>
                     </Row>
 
-                    <ProCard bordered={false} className="mt-4" title="Chỉnh sửa thông tin">
-                        <Form layout="vertical" initialValues={{
-                            userName: currentUser?.userName,
-                            email: currentUser?.email,
-                            phoneNumber: currentUser?.phoneNumber,
-                            language: 'vi-VN',
-                            timezone: 'Asia/Ho_Chi_Minh',
-                        }}>
-                            <Row gutter={16}>
-                                <Col xs={24} md={12}>
-                                    <Form.Item label="Họ và tên" name="userName">
-                                        <Input prefix={<UserOutlined />} placeholder="Nhập tên hiển thị" />
-                                    </Form.Item>
-                                </Col>
-                                <Col xs={24} md={12}>
-                                    <Form.Item label="Email" name="email">
-                                        <Input prefix={<MailOutlined />} placeholder="Nhập email" />
-                                    </Form.Item>
-                                </Col>
-                                <Col xs={24} md={12}>
-                                    <Form.Item label="Số điện thoại" name="phoneNumber">
-                                        <Input prefix={<PhoneOutlined />} placeholder="Nhập số điện thoại" />
-                                    </Form.Item>
-                                </Col>
-                                <Col xs={24} md={12}>
-                                    <Form.Item label="Ngôn ngữ" name="language">
-                                        <Select
-                                            options={[
-                                                { label: 'Tiếng Việt', value: 'vi-VN' },
-                                                { label: 'English', value: 'en-US' },
-                                            ]}
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col xs={24}>
-                                    <Form.Item label="Múi giờ" name="timezone">
-                                        <Select
-                                            options={[
-                                                { label: 'Asia/Ho_Chi_Minh', value: 'Asia/Ho_Chi_Minh' },
-                                                { label: 'UTC', value: 'UTC' },
-                                            ]}
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Space>
-                                <Button type="primary" icon={<EditOutlined />}>
-                                    Lưu thay đổi
-                                </Button>
-                                <Button>Hủy</Button>
-                            </Space>
-                        </Form>
-                    </ProCard>
-
-                    <Row gutter={[16, 16]} className="mt-0">
+                    <Row gutter={[16, 16]}>
                         <Col xs={24} md={12}>
                             <ProCard bordered={false} title="Quyền hạn hiện tại">
                                 <Space size={[8, 8]} wrap>

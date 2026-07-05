@@ -1,4 +1,3 @@
-import TiptapEditor from '@/components/tiptap';
 import ImageLibraryPicker from '@/components/image-library/picker';
 import { getArticleById, updateArticle } from '@/services/article';
 import { uploadRcFile } from '@/services/file-service';
@@ -17,6 +16,7 @@ import { Button, Col, message, Row } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import FormEditor from '@/components/editorjs/form-editor';
 
 const Index: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -86,12 +86,10 @@ const Index: React.FC = () => {
     const onFinish = async (values: any) => {
         if (!id) return false;
         await updateArticle({
+            ...values,
+            content: JSON.stringify(values.content),
             id,
-            name: values.name,
-            description: values.description,
-            thumbnail: values.thumbnail,
-            content: values.content,
-            publishedAt: values.publishedAt ? dayjs(values.publishedAt).format('YYYY-MM-DDTHH:mm:ssZ') : undefined,
+            publishedAt: values.publishedAt ? dayjs(values.publishedAt).toISOString() : null,
         });
         message.success('Cap nhat bai viet thanh cong');
         return true;
@@ -104,7 +102,7 @@ const Index: React.FC = () => {
             onBack={() => history.back()}
         >
             <ProCard>
-                <ProForm form={form} formRef={formRef} onFinish={onFinish} submitter={{ searchConfig: { submitText: 'Luu thay doi' } }}>
+                <ProForm loading={loading} form={form} formRef={formRef} onFinish={onFinish} submitter={{ searchConfig: { submitText: 'Luu thay doi' } }}>
                     <Row gutter={16}>
                         <Col xs={24} md={16}>
 
@@ -115,14 +113,7 @@ const Index: React.FC = () => {
                             />
 
                             <ProFormTextArea name="description" label="Mo ta" />
-
-                            <ProForm.Item
-                                name="content"
-                                label="Noi dung"
-                                rules={[{ required: true, message: 'Vui long nhap noi dung' }]}
-                            >
-                                <TiptapEditor />
-                            </ProForm.Item>
+                            <FormEditor name="content" label="Nội dung" initialValue={detailResponse?.content} />
                         </Col>
                         <Col xs={24} md={8}>
                             <div className="border rounded p-1 mb-2">

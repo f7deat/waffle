@@ -1,19 +1,21 @@
-declare namespace API {
-    interface ArticleListItem {
-        id: string;
-        name: string;
-        description: string;
-        normalizedName: string;
-        modifiedDate: string;
-        thumbnail?: string;
-        viewCount: number;
-        createdDate: string;
-    }
-    interface ArticleDetail extends ArticleListItem {
-        content: string;
-    }
-    interface ArticleFilterOptions extends FilterOptions {
-        name?: string;
-        cookie?: ReadonlyRequestCookies;
-    }
+import { EditorJSType } from "./editorjs";
+
+export type ArticleListItem = {
+    id: string;
+    name: string;
+    description: string;
+    normalizedName: string;
+    modifiedDate: string;
+    thumbnail?: string;
+    viewCount: number;
+    createdDate: string;
+}
+
+export type ArticleDetail = ArticleListItem & {
+    content: EditorJSType;
+}
+
+export type ArticleFilterOptions = FilterOptions & {
+    name?: string;
+    cookie?: ReadonlyRequestCookies;
 }

@@ -7,6 +7,8 @@ import { CalendarOutlined, EyeFilled } from "@ant-design/icons";
 import ArticleActions from "@/components/article/actions";
 import ArticleComments from "@/components/article/comments";
 import dayjs from "dayjs";
+import { JSX } from "react/jsx-dev-runtime";
+import { EditorJSBlock, EditorJSCodeData, EditorJSHeaderData, EditorJSImageData, EditorJSListData, EditorJSParagraphData, EditorJSQuoteData } from "@/services/typings/editorjs";
 
 type Params = Promise<{
     id: string;
@@ -84,7 +86,69 @@ const Page = async ({ params }: { params: Params }) => {
                     </div>
 
                     <div className="prose prose-lg max-w-none bg-white rounded-lg p-4">
-                        <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                        {
+                            article.content?.blocks?.map((block: EditorJSBlock, index: number) => {
+                                switch (block.type) {
+                                    case 'paragraph': {
+                                        const data = block.data as EditorJSParagraphData;
+                                        return <p key={index} dangerouslySetInnerHTML={{ __html: data.text }} className="mb-1" />;
+                                    }
+                                    case 'header': {
+                                        const data = block.data as EditorJSHeaderData;
+                                        const HeaderTag = `h${data.level}` as keyof JSX.IntrinsicElements;
+                                        return <HeaderTag key={index} dangerouslySetInnerHTML={{ __html: data.text }} className="font-bold text-xl mt-4 mb-2" />;
+                                    }
+                                    case 'list': {
+                                        const data = block.data as EditorJSListData;
+                                        if (data.style === 'ordered') {
+                                            return (
+                                                <ol key={index} className="list-decimal list-inside">
+                                                    {data.items.map((item, itemIndex: number) => (
+                                                        <li key={itemIndex} dangerouslySetInnerHTML={{ __html: item.content }} />
+                                                    ))}
+                                                </ol>);
+                                        } else {
+                                            return (
+                                                <ul key={index} className="list-disc list-inside">
+                                                    {data.items.map((item, itemIndex: number) => (
+                                                        <li key={itemIndex} dangerouslySetInnerHTML={{ __html: item.content }} />
+                                                    ))}
+                                                </ul>);
+                                        }
+                                    }
+                                    case 'image': {
+                                        const data = block.data as EditorJSImageData;
+                                        return (
+                                            <div key={index} className="my-4">
+                                                <img src={data.file?.url} alt={data.caption || 'Image'} className="max-w-full h-auto" />
+                                                {data.caption && <p className="text-sm text-gray-500 mt-2">{data.caption}</p>}
+                                            </div>
+                                        );
+                                    }
+                                    case 'quote': {
+                                        const data = block.data as EditorJSQuoteData;
+                                        return (
+                                            <blockquote key={index} className="border-l-4 border-gray-300 pl-4 italic my-4">
+                                                <p dangerouslySetInnerHTML={{ __html: data.text }} />
+                                                {data.caption && <cite className="block text-sm text-gray-500 mt-2">{data.caption}</cite>}
+                                            </blockquote>
+                                        );
+                                    }
+                                    case 'code': {
+                                        const data = block.data as EditorJSCodeData;
+                                        return (
+                                            <pre key={index} className="bg-gray-100 p-4 rounded my-4 overflow-x-auto">
+                                                <code dangerouslySetInnerHTML={{ __html: data.code }} />
+                                            </pre>
+                                        );
+                                    }
+                                    case 'delimiter':
+                                        return <hr key={index} className="my-4" />;
+                                    default:
+                                        return null;
+                                }
+                            })
+                        }
                     </div>
 
                     <ArticleComments articleId={article.id} articleSlug={article.normalizedName} />

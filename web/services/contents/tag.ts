@@ -1,4 +1,5 @@
 import request from "../request";
+import { ArticleListItem } from "../typings/article";
 
 export async function apiTagList(params?: API.TagFilterOptions) {
     return request.get<API.ListResult<API.TagListItem>>("tag/list", { params });
@@ -13,7 +14,7 @@ export async function apiGetPlacesByTag(params: API.TagPlacesFilterOptions) {
 }
 
 export async function apiGetArticlesByTag(params: API.TagArticlesFilterOptions) {
-    return request.get<API.ListResult<API.ArticleListItem>>("tag/articles", { params });
+    return request.get<API.ListResult<ArticleListItem>>("tag/articles", { params });
 }
 
 export async function apiGetTagByName(name: string) {

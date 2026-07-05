@@ -1,4 +1,4 @@
-import FormEditor from "@/components/tiptap/form-editor";
+import FormEditor from "@/components/editorjs/form-editor";
 import { apiDistrictOptions } from "@/services/locations/district";
 import {
     apiPlaceAddImages,

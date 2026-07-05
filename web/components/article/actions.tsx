@@ -2,11 +2,12 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ShareAltOutlined, SoundOutlined, PauseOutlined, PlayCircleOutlined, StopOutlined, BookOutlined, HeartOutlined, CheckOutlined, FacebookFilled, TwitterOutlined, TagsOutlined } from "@ant-design/icons";
+import { SoundOutlined, PauseOutlined, PlayCircleOutlined, StopOutlined, BookOutlined, HeartOutlined, CheckOutlined, FacebookFilled, TwitterOutlined, TagsOutlined } from "@ant-design/icons";
 import { apiCatalogTags } from "@/services/catalog";
+import { ArticleDetail } from "@/services/typings/article";
 
 interface ArticleActionsProps {
-  article: API.ArticleDetail;
+  article: ArticleDetail;
 }
 
 const ArticleActions: React.FC<ArticleActionsProps> = ({ article }) => {
@@ -72,12 +73,23 @@ const ArticleActions: React.FC<ArticleActionsProps> = ({ article }) => {
   };
 
   const textToRead = useMemo(() => {
-    return article?.content;
+    if (!article?.content?.blocks) return "";
+    return article.content.blocks
+      .map((block) => {
+        const data = block.data as Record<string, unknown>;
+        if (block.type === "list") {
+          return (data.items as string[])?.map((item) => item.replace(/<[^>]+>/g, "")).join(". ") ?? "";
+        }
+        const text = typeof data.text === "string" ? data.text : typeof data.code === "string" ? data.code : "";
+        return text.replace(/<[^>]+>/g, "");
+      })
+      .filter(Boolean)
+      .join(". ");
   }, [article?.content]);
 
   const speak = useCallback(() => {
     if (typeof window === "undefined") return;
-    if (!article?.content?.trim()) return;
+    if (!textToRead?.trim()) return;
     if (speechSynthesis.speaking) speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(textToRead);
     utter.lang = "vi-VN";

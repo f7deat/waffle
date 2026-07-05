@@ -297,7 +297,7 @@ const Login: React.FC = () => {
             </div>
           </LoginForm>
         </div>
-        <div className='text-sm text-slate-800 text-capitalize'>&copy; 2025 {window.location.host}</div>
+        <div className='text-sm text-slate-800 text-capitalize'>&copy; 2025 {process.env.COMPANY_NAME}</div>
       </div>
       <ForgotPassword open={open} onOpenChange={setOpen} />
     </div>

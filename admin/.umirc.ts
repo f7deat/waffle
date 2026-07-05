@@ -38,4 +38,5 @@ export default defineConfig({
   },
   mako: {},
   tailwindcss: {},
+  devtool: false
 });

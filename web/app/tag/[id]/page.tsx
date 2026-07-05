@@ -3,6 +3,7 @@ import PageContainer from "@/components/layout/page-container";
 import { apiGetTagByName, apiGetArticlesByTag, apiGetPlacesByTag } from "@/services/contents/tag";
 import Link from "next/link";
 import { cookies } from 'next/headers'
+import { ArticleListItem } from "@/services/typings/article";
 
 type Params = Promise<{
     id: string;
@@ -25,7 +26,7 @@ const Page = async ({ params }: { params: Params }) => {
     }
 
     // Fetch articles by tag
-    let articles: API.ArticleListItem[] = [];
+    let articles: ArticleListItem[] = [];
     let articlesTotal = 0;
     try {
         const articlesRes = await apiGetArticlesByTag({ 

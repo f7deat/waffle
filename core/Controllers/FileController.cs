@@ -356,4 +356,18 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
 
         return Path.Combine(_webHostEnvironment.WebRootPath, "files", fileContent.Name);
     }
+
+    [HttpPost("upload-from-url")]
+    public IActionResult UploadFromUrl([FromBody] UploadFromUrlArgs args)
+    {
+        if (string.IsNullOrWhiteSpace(args.Url)) return BadRequest("URL is required!");
+        try
+        {
+            return Ok(args.Url);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.ToString());
+        }
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
@@ -35,7 +36,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
             article.CreatedDate,
             article.Locale,
             article.CreatedBy,
-            article.Content,
+            Content = JsonSerializer.Deserialize<object>(article.Content ?? "{}"),
             CreatorName = user?.Name,
             CreatorAvatar = user?.Avatar,
             CreatorUserName = user?.UserName
