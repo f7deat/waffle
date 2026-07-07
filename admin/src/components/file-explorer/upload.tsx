@@ -20,27 +20,6 @@ const WfUpload: React.FC<WfUploadProps> = (props) => {
     const [url, setUrl] = useState<string>('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-    function isValidHttpsUrl(input: string) {
-        let url;
-        try {
-            url = new URL(input);
-        } catch (_) {
-            return false;
-        }
-        return url.protocol === "https:";
-    }
-
-    const fromUrl = async (url: string) => {
-        if (!isValidHttpsUrl(url)) {
-            message.error('Sorry, URL failed to upload.')
-            return;
-        }
-        const response = await uploadFromUrl(url);
-        if (response.succeeded) {
-            message.success('Uploaded!');
-        }
-    };
-
     const onOk = async () => {
         if (!fileList || fileList.length === 0) {
             message.warning('Please choose file.')
@@ -51,7 +30,7 @@ const WfUpload: React.FC<WfUploadProps> = (props) => {
     }
 
     return (
-        <Modal open={props.open} onCancel={() => props.onCancel()} centered title="Upload" onOk={onOk}>
+        <Modal open={props.open} destroyOnHidden={true} onCancel={() => props.onCancel()} centered title="Upload" onOk={onOk}>
             <div className="mb-4">
                 <Dragger
                     maxCount={maxCount}

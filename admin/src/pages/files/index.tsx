@@ -20,6 +20,7 @@ import {
   FileImageOutlined,
   FilePdfOutlined,
   FileTextOutlined,
+  FolderAddOutlined,
   FolderFilled,
   MoreOutlined,
   SettingOutlined,
@@ -54,7 +55,6 @@ import {
   Space,
   Statistic,
   Tag,
-  Tooltip,
   Typography,
   UploadFile,
 } from 'antd';
@@ -62,6 +62,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import FolderForm from './components/folder-form';
 import { formatFileSize } from './utils';
 import FilePreview from './components/preview';
+import { RcFile } from 'antd/lib/upload';
 
 type FolderPathItem = {
   id: string;
@@ -669,15 +670,6 @@ const FilePage: React.FC = () => {
           <Button icon={<ArrowUpOutlined />} onClick={goBackOneFolder} disabled={folderTrail.length === 0}>
             Up
           </Button>
-          <Button
-            icon={<ArrowUpOutlined />}
-            type="primary"
-            onClick={() => setOpen(true)}
-            loading={isUploading}
-            disabled={isBusy}
-          >
-            Upload
-          </Button>
         </Space>
       }
     >
@@ -720,35 +712,11 @@ const FilePage: React.FC = () => {
           </Col>
         </Row>
       </Card>
-
-      <Breadcrumb className='mb-4' items={[
-        {
-          title: <a
-            onClick={() => goToFolderByTrailIndex(-1)}
-            onDragOver={(event) => {
-              event.preventDefault();
-              setDropFolderId('root');
-            }}
-            onDragLeave={() => {
-              if (dropFolderId === 'root') {
-                setDropFolderId('');
-              }
-            }}
-            onDrop={async (event) => {
-              event.preventDefault();
-              await handleDropToRoot();
-            }}
-            className={dropFolderId === 'root' ? 'bg-blue-100 px-2 py-1 rounded' : ''}
-          >Root</a>
-        },
-        ...folderTrail.map((item, index) => ({
-          title: <a onClick={() => goToFolderByTrailIndex(index)}>{item.name}</a>
-        }))
-      ]} />
       <WfUpload open={open}
         multiple
-        onCancel={() => setOpen(false)} onFinish={async (files: UploadFile[]) => {
+        onCancel={() => setOpen(false)} onFinish={async (files: RcFile[]) => {
           setIsUploading(true);
+          debugger;
           const validFiles: File[] = [];
           const formData = new FormData();
           try {
@@ -757,8 +725,8 @@ const FilePage: React.FC = () => {
                 message.error(`File ${file.name} exceeds the size limit.`);
                 return;
               }
-              if (file.originFileObj) {
-                validFiles.push(file.originFileObj as File);
+              if (file) {
+                validFiles.push(file);
               }
             });
 
@@ -847,6 +815,32 @@ const FilePage: React.FC = () => {
           >
             Drop vào thư mục hiện tại: <b>{folderTrail.length > 0 ? folderTrail[folderTrail.length - 1].name : 'Root'}</b>
           </div>
+
+
+          <Breadcrumb className='mb-4' items={[
+            {
+              title: <a
+                onClick={() => goToFolderByTrailIndex(-1)}
+                onDragOver={(event) => {
+                  event.preventDefault();
+                  setDropFolderId('root');
+                }}
+                onDragLeave={() => {
+                  if (dropFolderId === 'root') {
+                    setDropFolderId('');
+                  }
+                }}
+                onDrop={async (event) => {
+                  event.preventDefault();
+                  await handleDropToRoot();
+                }}
+                className={dropFolderId === 'root' ? 'bg-blue-100 px-2 py-1 rounded' : ''}
+              >Root</a>
+            },
+            ...folderTrail.map((item, index) => ({
+              title: <a onClick={() => goToFolderByTrailIndex(index)}>{item.name}</a>
+            }))
+          ]} />
           <ProTable
             rowSelection={{
               selectedRowKeys,
@@ -866,6 +860,23 @@ const FilePage: React.FC = () => {
               defaultPageSize: 8
             }}
             headerTitle={<Space>
+              <Dropdown menu={{
+                items: [
+                  {
+                    key: 'new-folder',
+                    label: 'New Folder',
+                    icon: <FolderAddOutlined />,
+                  },
+                  {
+                    key: 'upload',
+                    label: 'Upload',
+                    icon: <ArrowUpOutlined />,
+                    onClick: () => setOpen(true)
+                  }
+                ]
+              }}>
+                <Button icon={<MoreOutlined />}>Actions</Button>
+              </Dropdown>
               <FolderForm
                 parentId={currentFolderId}
                 reload={() => {
@@ -894,9 +905,6 @@ const FilePage: React.FC = () => {
                   { label: 'Images', value: 'images' },
                 ]}
               />,
-              <Tooltip key="refresh" title="Refresh data">
-                <Button onClick={reloadData} disabled={isBusy || isUploading}>Refresh</Button>
-              </Tooltip>,
             ]}
             request={async (params) => {
               const response = await listFile(params, []);

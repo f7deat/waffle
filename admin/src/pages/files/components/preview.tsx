@@ -16,6 +16,7 @@ const FilePreview: React.FC<Props> = (props) => {
               <ProDescriptions.Item label="Tên tệp">{props.file?.name}</ProDescriptions.Item>
               <ProDescriptions.Item label="Kích thước">{props.file ? formatFileSize(props.file.size) : 'N/A'}</ProDescriptions.Item>
               <ProDescriptions.Item label="Loại tệp">{props.file?.type || 'N/A'}</ProDescriptions.Item>
+              <ProDescriptions.Item copyable label="Đường dẫn">{props.file?.url || 'N/A'}</ProDescriptions.Item>
             </ProDescriptions>
         </Drawer>
     )
