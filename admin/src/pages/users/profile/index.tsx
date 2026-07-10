@@ -31,7 +31,7 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <PageContainer extra={<Button icon={<LeftOutlined />} onClick={() => history.back()}>Back</Button>} title={data?.name}>
+    <PageContainer onBack={() => history.back()}>
       <Row gutter={16}>
         <Col span={6}>
           <ProCard
@@ -48,7 +48,10 @@ const Profile: React.FC = () => {
                 <Button icon={<EditOutlined />} size='small' type='text' className='absolute right-0 z-10' />
                 <Image src={data?.avatar} width={200} height={200} alt='Avatar' className='rounded-full' />
               </div>
-              <div className='mb-2'><Typography.Title level={4}>{data?.userName}</Typography.Title></div>
+              <div className='mb-4 text-center'>
+                <div className='text-lg font-semibold'>{data?.name}</div>
+                <div className='text-sm text-gray-500'>{data?.userName}</div>
+              </div>
               <div className='flex gap-2 justify-center'>
                 <Button type='primary' icon={<UserAddOutlined />}>Follow</Button>
                 <Button icon={<MessageOutlined />}>Message</Button>

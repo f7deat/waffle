@@ -2,6 +2,7 @@
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
+using Waffle.Core.Interfaces.IRepository.Careers;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IRepositories;
@@ -22,6 +23,7 @@ using Waffle.Core.Services.Locations;
 using Waffle.Core.Services.Shop;
 using Waffle.Core.Services.Tags;
 using Waffle.Infrastructure.Repositories;
+using Waffle.Infrastructure.Repositories.Careers;
 using Waffle.Infrastructure.Repositories.Catalogs;
 using Waffle.Infrastructure.Repositories.Locations;
 
@@ -80,6 +82,7 @@ public static class ServiceCollectionExtensions
         #endregion
 
         #region Careers
+        services.AddScoped<IJobOpportunityRepository, JobOpportunityRepository>();
         services.AddScoped<IJobOpportunityService, JobOpportunityService>();
         services.AddScoped<IInfluencerJobService, InfluencerJobService>();
         #endregion

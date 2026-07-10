@@ -1,21 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
-using Waffle.Core.Interfaces;
+using Waffle.Core.Helpers;
+using Waffle.Core.Interfaces.IRepository.Careers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities.Careers;
 using Waffle.Models;
-using Waffle.Models.Result;
 using Waffle.Modules.Jobs.Models;
 
 namespace Waffle.Core.Services.Careers;
 
-public class JobOpportunityService(ApplicationDbContext _context, IHCAService _hcaService, ILogService _logService) : IJobOpportunityService
+public class JobOpportunityService(ApplicationDbContext _context, IJobOpportunityRepository _jobOpportunityRepository, IHCAService _hcaService, ILogService _logService) : IJobOpportunityService
 {
     public async Task<TResult> ApplyAsync(JobApplication args)
     {
-        var job = await _context.JobOpportunities.FindAsync(args.JobId);
+        var job = await _jobOpportunityRepository.FindAsync(args.JobId);
         if (job is null) return TResult.Failed("Job opportunity not found!");
         var application = new JobApplication
         {
@@ -88,7 +89,6 @@ public class JobOpportunityService(ApplicationDbContext _context, IHCAService _h
                     {
                         a.Id,
                         a.JobRequirements,
-                        a.JobDetail,
                         a.SalaryRange,
                         a.JobLocation,
                         a.JobType,
@@ -96,39 +96,30 @@ public class JobOpportunityService(ApplicationDbContext _context, IHCAService _h
                         a.CreatedBy,
                         a.ModifiedDate,
                         a.ModifiedBy,
-                        ApplicationCount = _context.JobApplications.Count(x => x.JobId == a.Id)
+                        ApplicationCount = _context.JobApplications.Count(x => x.JobId == a.Id),
+                        a.ViewCount,
+                        a.Title,
+                        a.Description,
+                        a.Status
                     };
-        query = query.OrderByDescending(x => x.CreatedDate);
+        query = query.OrderByDescending(x => x.ModifiedDate);
         return await ListResult<object>.Success(query, filterOptions);
     }
 
-    public async Task<TResult> SaveAsync(JobOpportunity args)
+    public async Task<TResult> UpdateAsync(JobOpportunity args)
     {
 		try
 		{
             var job = await _context.JobOpportunities.FirstOrDefaultAsync(x => x.Id == args.Id);
-            if (job is null)
-            {
-                var jobId = args.Id == Guid.Empty ? Guid.NewGuid() : args.Id;
-                job = new JobOpportunity
-                {
-                    Id = jobId,
-                    JobRequirements = args.JobRequirements,
-                    JobDetail = args.JobDetail,
-                    SalaryRange = args.SalaryRange,
-                    JobLocation = args.JobLocation,
-                    JobType = args.JobType,
-                    CreatedDate = DateTime.Now,
-                    CreatedBy = _hcaService.GetUserId()
-                };
-                await _context.JobOpportunities.AddAsync(job);
-                await _context.SaveChangesAsync();
-                return TResult.Success;
-            }
+            if (job is null) return TResult.Failed("Job opportunity not found!");
+            if (string.IsNullOrWhiteSpace(args.JobDetail)) return TResult.Failed("Job opportunity detail is required!");
+            job.NormalizedName = SeoHelper.ToSeoFriendly(args.Title);
+            if (!await _jobOpportunityRepository.IsExistAsync(job.NormalizedName, job.Id)) return TResult.Failed("Job opportunity title already exists!");
             job.JobRequirements = args.JobRequirements;
-            job.JobDetail = args.JobDetail;
-            job.SalaryRange = args.SalaryRange;
-            job.JobLocation = args.JobLocation;
+            job.JobDetail = JsonSerializer.Serialize(args.JobDetail);
+            job.Description = args.Description;
+            job.Status = args.Status;
+            job.Title = args.Title;
             job.JobType = args.JobType;
             job.ModifiedDate = DateTime.Now;
             job.ModifiedBy = _hcaService.GetUserId();
@@ -140,5 +131,37 @@ public class JobOpportunityService(ApplicationDbContext _context, IHCAService _h
             await _logService.ExceptionAsync(ex);
             return TResult.Failed(ex.ToString());
 		}
+    }
+
+    public async Task<TResult> AddAsync(JobOpportunity args)
+    {
+        var normalizedName = SeoHelper.ToSeoFriendly(args.Title);
+        if (await _jobOpportunityRepository.IsExistAsync(normalizedName)) return TResult.Failed("Job opportunity title already exists!");
+        await _jobOpportunityRepository.AddAsync(new JobOpportunity
+        {
+            CreatedBy = _hcaService.GetUserId(),
+            CreatedDate = DateTime.Now,
+            Title = args.Title,
+            NormalizedName = normalizedName,
+            JobType = args.JobType,
+            Description = args.Description,
+            Status = JobStatus.Draft
+        });
+        return TResult.Success;
+    }
+
+    public async Task<TResult> GetByIdAsync(Guid id)
+    {
+        var job = await _jobOpportunityRepository.FindAsync(id);
+        if (job is null) return TResult.Failed("Data not found!");
+        return TResult.Ok(new
+        {
+            job.Id,
+            job.Title,
+            job.Description,
+            Detail = string.IsNullOrEmpty(job.JobDetail) ? null : JsonSerializer.Deserialize<object>(job.JobDetail),
+            job.JobType,
+            job.Status,
+        });
     }
 }

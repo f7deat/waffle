@@ -13,13 +13,11 @@ namespace Waffle.Controllers;
 
 public class CareerController(IJobOpportunityService _jobOpportunityService, IWebHostEnvironment _webHostEnvironment, UserManager<ApplicationUser> _userManager, ILogService _logService) : BaseController
 {
-    [HttpPost("save")]
-    public async Task<IActionResult> SaveAsync([FromBody] JobOpportunity args)
-    {
-        var result = await _jobOpportunityService.SaveAsync(args);
-        if (!result.Succeeded) return BadRequest(result.Message);
-        return Ok(result);
-    }
+    [HttpPost]
+    public async Task<IActionResult> AddAsync([FromBody] JobOpportunity args) => Ok(await _jobOpportunityService.AddAsync(args));
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateAsync([FromBody] JobOpportunity args) => Ok(await _jobOpportunityService.UpdateAsync(args));
 
     [HttpPost("apply"), AllowAnonymous]
     public async Task<IActionResult> ApplyAsync(JobApplication args, IFormFile? resumeFile)
@@ -53,12 +51,7 @@ public class CareerController(IJobOpportunityService _jobOpportunityService, IWe
     public async Task<IActionResult> ListApplicationAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _jobOpportunityService.ListApplicationAsync(filterOptions));
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
-    {
-        var result = await _jobOpportunityService.DeleteAsync(id);
-        if (!result.Succeeded) return BadRequest(result.Message);
-        return Ok(result);
-    }
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _jobOpportunityService.DeleteAsync(id));
 
     [HttpPost("delete-application/{id}")]
     public async Task<IActionResult> DeleteApplicationAsync([FromRoute] Guid id)
@@ -69,10 +62,8 @@ public class CareerController(IJobOpportunityService _jobOpportunityService, IWe
     }
 
     [HttpPut("application/{id}/status")]
-    public async Task<IActionResult> UpdateApplicationStatusAsync([FromRoute] Guid id, [FromBody] JobApplicationStatusUpdateArgs args)
-    {
-        var result = await _jobOpportunityService.UpdateApplicationStatusAsync(id, args.Status);
-        if (!result.Succeeded) return BadRequest(result.Message);
-        return Ok(result);
-    }
+    public async Task<IActionResult> UpdateApplicationStatusAsync([FromRoute] Guid id, [FromBody] JobApplicationStatusUpdateArgs args) => Ok(await _jobOpportunityService.UpdateApplicationStatusAsync(id, args.Status));
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id) => Ok(await _jobOpportunityService.GetByIdAsync(id));
 }

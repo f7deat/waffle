@@ -12,6 +12,7 @@ export default {
   'menu.career': 'Tuyển dụng',
   'menu.career.job': 'Việc làm',
   'menu.career.application': 'Đơn ứng tuyển',
+  'menu.career.jobCenter': 'Chi tiết việc làm',
   'menu.comments': 'Bình luận',
   'menu.article': 'Bài viết',
   'menu.article.list': 'Danh sách',
@@ -67,5 +68,6 @@ export default {
   'menu.users.center': 'Thông tin cá nhân',
   'menu.users.member': 'Thành viên',
   'menu.users.contact': 'Liên hệ',
-  'menu.users.userCenter': 'Cài đặt'
+  'menu.users.userCenter': 'Cài đặt',
+  'menu.users.roles': 'Quyền'
 };

@@ -1,5 +1,4 @@
-import FormEditor from "@/components/editorjs/form-editor";
-import { apiDeleteJobOpportunity, apiJobOpportunityList, apiSaveJobOpportunity } from "@/services/careers/job";
+import { apiDeleteJobOpportunity, apiJobOpportunityAdd, apiJobOpportunityList } from "@/services/careers/job";
 import { DeleteOutlined, EditOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import {
     ActionType,
@@ -13,7 +12,10 @@ import {
     ProTable
 } from "@ant-design/pro-components";
 import { Button, message, Popconfirm } from "antd";
+import dayjs from "dayjs";
 import { useRef, useState } from "react";
+import { JOB_STATUS_OPTIONS } from "../utils/constants";
+import { Link } from "@umijs/max";
 
 interface JobOpportunityItem {
     id: string;
@@ -22,7 +24,8 @@ interface JobOpportunityItem {
     jobType: number;
     jobRequirements?: string;
     jobDetail?: string;
-    createdDate?: string;
+    createdDate: string;
+    modifiedDate?: string;
     applicationCount: number;
 }
 
@@ -43,7 +46,6 @@ const jobTypeValueEnum = {
 const Index: React.FC = () => {
     const actionRef = useRef<ActionType>(null);
     const [openForm, setOpenForm] = useState<boolean>(false);
-    const [job, setJob] = useState<JobOpportunityItem | null>(null);
 
     const handleDelete = async (id: string) => {
         await apiDeleteJobOpportunity(id);
@@ -59,11 +61,16 @@ const Index: React.FC = () => {
             align: "center"
         },
         {
-            title: "Noi lam viec",
-            dataIndex: "jobLocation"
+            title: "Công việc",
+            dataIndex: "title",
+            render: (dom, record) => (
+                <Link to={`/career/job/center/${record.id}`} className="font-semibold text-blue-500 hover:text-blue-700">
+                    {dom}
+                </Link>
+            )
         },
         {
-            title: "Loai hinh",
+            title: "Loại hình",
             dataIndex: "jobType",
             valueType: "select",
             valueEnum: jobTypeValueEnum,
@@ -72,21 +79,36 @@ const Index: React.FC = () => {
             }
         },
         {
-            title: "Muc luong",
-            dataIndex: "salaryRange",
-            search: false
-        },
-        {
-            title: "So don",
+            title: "Số đơn",
             dataIndex: "applicationCount",
             search: false,
-            align: "center"
+            valueType: "digit"
         },
         {
-            title: "Ngay tao",
+            title: 'Lượt xem',
+            dataIndex: 'viewCount',
+            search: false,
+            align: 'center',
+            valueType: 'digit'
+        },
+        {
+            title: "Cập nhật cuối",
             dataIndex: "createdDate",
             valueType: "dateTime",
-            search: false
+            search: false,
+            render: (_, record) => (
+                <div>
+                    {dayjs(record.modifiedDate || record.createdDate).format("DD-MM-YYYY HH:mm")}
+                </div>
+            )
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'status',
+            valueType: 'select',
+            fieldProps: {
+                options: JOB_STATUS_OPTIONS
+            }
         },
         {
             title: <SettingOutlined />,
@@ -100,7 +122,6 @@ const Index: React.FC = () => {
                     icon={<EditOutlined />}
                     size="small"
                     onClick={() => {
-                        setJob(record);
                         setOpenForm(true);
                     }}
                 />,
@@ -122,11 +143,10 @@ const Index: React.FC = () => {
                     type="primary"
                     icon={<PlusOutlined />}
                     onClick={() => {
-                        setJob(null);
                         setOpenForm(true);
                     }}
                 >
-                    Them viec lam
+                    Tạo mới
                 </Button>
             }
         >
@@ -141,57 +161,31 @@ const Index: React.FC = () => {
             />
             <ModalForm
                 open={openForm}
-                onOpenChange={(visible) => {
-                    setOpenForm(visible);
-                    if (!visible) {
-                        setJob(null);
-                    }
-                }}
-                title={job?.id ? "Cap nhat viec lam" : "Them viec lam"}
-                initialValues={
-                    job
-                        ? {
-                            id: job.id,
-                            salaryRange: job.salaryRange,
-                            jobLocation: job.jobLocation,
-                            jobType: job.jobType,
-                            jobRequirements: job.jobRequirements,
-                            jobDetail: job.jobDetail
-                        }
-                        : {
-                            jobType: 0
-                        }
-                }
+                onOpenChange={setOpenForm}
+                title="Thêm việc làm"
                 onFinish={async (values) => {
-                    await apiSaveJobOpportunity({
-                        ...values,
-                        id: job?.id
-                    });
-                    message.success(job?.id ? "Cap nhat viec lam thanh cong" : "Them viec lam thanh cong");
+                    await apiJobOpportunityAdd(values);
+                    message.success("Thêm việc làm thành công!");
                     actionRef.current?.reload();
-                    setJob(null);
                     return true;
                 }}
             >
-                <ProFormText name="id" hidden />
                 <ProFormText
-                    name="salaryRange"
-                    label="Muc luong"
-                    rules={[{ required: true, message: "Vui long nhap muc luong" }]}
+                    name="title"
+                    label="Tên công việc"
+                    rules={[{ required: true }]}
                 />
-                <ProFormText
-                    name="jobLocation"
-                    label="Noi lam viec"
-                    rules={[{ required: true, message: "Vui long nhap noi lam viec" }]}
+                <ProFormTextArea
+                    name="description"
+                    label="Mô tả công việc"
+                    rules={[{ required: true }]}
                 />
                 <ProFormSelect
                     name="jobType"
-                    label="Loai hinh cong viec"
+                    label="Loại hình công việc"
                     options={jobTypeOptions}
-                    rules={[{ required: true, message: "Vui long chon loai hinh cong viec" }]}
+                    rules={[{ required: true }]}
                 />
-                <FormEditor name="jobDetail" initialValue={job?.jobDetail} />
-                <ProFormTextArea name="jobRequirements" label="Yeu cau cong viec" />
             </ModalForm>
         </PageContainer>
     );

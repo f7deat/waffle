@@ -108,6 +108,12 @@ export default [
         name: 'application',
         path: '/career/application',
         component: './career'
+      },
+      {
+        name: 'jobCenter',
+        path: '/career/job/center/:id',
+        component: './career/job/center',
+        hideInMenu: true
       }
     ]
   },

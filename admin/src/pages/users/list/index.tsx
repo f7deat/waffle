@@ -11,6 +11,7 @@ import UserFormFields from '../components/user-form-fields';
 import { FormattedMessage, useIntl, history, Link } from '@umijs/max';
 import { Badge, Button, message, Popconfirm, Space } from 'antd';
 import { useRef, useState } from 'react';
+import UserEditForm from '../components/edit-form';
 
 const UserList: React.FC = () => {
   const intl = useIntl();
@@ -44,26 +45,6 @@ const UserList: React.FC = () => {
     message.success('Deleted');
     actionRef.current?.reload();
   }
-
-  const openEditModal = async (id?: string) => {
-    if (!id) return;
-    setUpdating(true);
-    try {
-      const response = await apiGetUser(id);
-      setEditData(response);
-      setEditOpen(true);
-    } finally {
-      setUpdating(false);
-    }
-  };
-
-  const onUpdate = async (values: any) => {
-    await apiUpdateUser(values);
-    message.success('Updated');
-    setEditOpen(false);
-    actionRef.current?.reload();
-    return true;
-  };
 
   const columns: ProColumns<API.User>[] = [
     {
@@ -137,8 +118,8 @@ const UserList: React.FC = () => {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
       search: false,
-      valueType: 'fromNow',
-      width: 120
+      valueType: 'dateTime',
+      width: 160
     },
     {
       title: 'Amount',
@@ -157,7 +138,10 @@ const UserList: React.FC = () => {
           key={0}
           size='small'
           loading={updating}
-          onClick={() => openEditModal(entity.id)}
+          onClick={() => {
+            setEditData(entity);
+            setEditOpen(true);
+          }}
         />,
         <Button
           type="primary"
@@ -208,16 +192,7 @@ const UserList: React.FC = () => {
       >
         <UserFormFields includePassword />
       </ModalForm>
-
-      <ModalForm
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        title="Edit user"
-        onFinish={onUpdate}
-        initialValues={editData}
-      >
-        <UserFormFields includeId includeAddress />
-      </ModalForm>
+      <UserEditForm open={editOpen} onOpenChange={setEditOpen} userId={editData?.id} reload={() => actionRef.current?.reload()} />
     </PageContainer>
   );
 };
