@@ -22,15 +22,18 @@ const Index: React.FC = () => {
                 title: data.title,
                 description: data.description,
                 jobType: data.jobType,
-                status: data.status
+                status: data.status,
+                jobDetail: data.detail
             })
         }
     }, [data]);
 
     const onFinish = async (values: any) => {
-        await apiJobOpportunityUpdate(values);
+        await apiJobOpportunityUpdate({
+            ...values,
+            jobDetail: JSON.stringify(values.jobDetail)
+        });
         message.success("Cập nhật thành công");
-        return true;
     }
 
     return (
@@ -40,7 +43,9 @@ const Index: React.FC = () => {
                     <ProFormText name="id" hidden />
                     <ProFormText name="title" label="Tiêu đề" />
                     <ProFormTextArea name="description" label="Mô tả" />
-                    <FormEditor name="jobDetail" label="Chi tiết công việc" initialValue={data?.detail} />
+                    {
+                        data && <FormEditor name="jobDetail" label="Chi tiết công việc" initialValue={data.detail} />
+                    }
                     <ProFormSelect name="jobType" label="Loại công việc" options={JOB_TYPE_OPTIONS} />
                     <ProFormSelect name="status" label="Trạng thái" options={JOB_STATUS_OPTIONS} />
                 </ProForm>

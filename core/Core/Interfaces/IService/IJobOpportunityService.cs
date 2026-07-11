@@ -17,4 +17,6 @@ public interface IJobOpportunityService
     Task<ListResult<object>> ListAsync(BasicFilterOptions filterOptions);
     Task<TResult> AddAsync(JobOpportunity args);
     Task<TResult> GetByIdAsync(Guid id);
+    Task<ListResult> ListPublishedAsync(BasicFilterOptions filterOptions);
+    Task<TResult> GetByNameAsync(string normalizedName);
 }

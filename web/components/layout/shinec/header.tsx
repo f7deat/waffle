@@ -10,11 +10,11 @@ type SiteHeaderProps = {
 };
 
 const sectionItems = [
-  { id: "gioi-thieu", label: "Giới thiệu" },
+  { id: "/", label: "Trang chủ" },
   { id: "loi-the", label: "Lợi thế" },
   { id: "ha-tang", label: "Hạ tầng" },
   { id: "article", label: "Tin tức" },
-  { id: "hinh-anh", label: "Hình ảnh" },
+  { id: "career", label: "Tuyển dụng" },
   { id: "lien-he", label: "Liên hệ" },
 ];
 

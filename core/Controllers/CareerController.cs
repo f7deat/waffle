@@ -47,6 +47,9 @@ public class CareerController(IJobOpportunityService _jobOpportunityService, IWe
     [HttpGet("list-opportunity")]
     public async Task<IActionResult> ListOpportunityAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _jobOpportunityService.ListAsync(filterOptions));
 
+    [HttpGet("list-published-opportunity"), AllowAnonymous]
+    public async Task<IActionResult> ListPublishedOpportunityAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _jobOpportunityService.ListPublishedAsync(filterOptions));
+
     [HttpGet("list-application")]
     public async Task<IActionResult> ListApplicationAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _jobOpportunityService.ListApplicationAsync(filterOptions));
 
@@ -66,4 +69,7 @@ public class CareerController(IJobOpportunityService _jobOpportunityService, IWe
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id) => Ok(await _jobOpportunityService.GetByIdAsync(id));
+
+    [HttpGet("opportunity/{normalizedName}"), AllowAnonymous]
+    public async Task<IActionResult> GetByNameAsync([FromRoute] string normalizedName) => Ok(await _jobOpportunityService.GetByNameAsync(normalizedName));
 }

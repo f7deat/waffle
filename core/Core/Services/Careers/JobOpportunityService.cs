@@ -51,6 +51,29 @@ public class JobOpportunityService(ApplicationDbContext _context, IJobOpportunit
 
     public async Task<JobOpportunity?> GetAsync(Guid id) => await _context.JobOpportunities.FindAsync(id);
 
+    public async Task<TResult> GetByNameAsync(string normalizedName)
+    {
+        var data = await _context.JobOpportunities.FirstOrDefaultAsync(x => x.NormalizedName == normalizedName && x.Status != JobStatus.Draft);
+        if (data is null) return TResult.Failed("Job opportunity not found!");
+        data.ViewCount++;
+        await _context.SaveChangesAsync();
+        return TResult.Ok(new
+        {
+            data.Id,
+            data.Title,
+            data.Description,
+            Detail = string.IsNullOrEmpty(data.JobDetail) ? null : JsonSerializer.Deserialize<object>(data.JobDetail),
+            data.JobType,
+            data.Status,
+            data.JobRequirements,
+            data.ModifiedBy,
+            data.ModifiedDate,
+            data.CreatedBy,
+            data.CreatedDate,
+            data.ViewCount
+        });
+    }
+
     public async Task<ListResult<JobApplicationListItem>> ListApplicationAsync(BasicFilterOptions filterOptions)
     {
         var query = from a in _context.JobApplications
@@ -106,6 +129,32 @@ public class JobOpportunityService(ApplicationDbContext _context, IJobOpportunit
         return await ListResult<object>.Success(query, filterOptions);
     }
 
+    public async Task<ListResult> ListPublishedAsync(BasicFilterOptions filterOptions)
+    {
+        var query = from a in _context.JobOpportunities
+                    where a.Status != JobStatus.Draft
+                    select new
+                    {
+                        a.Id,
+                        a.JobRequirements,
+                        a.SalaryRange,
+                        a.JobLocation,
+                        a.JobType,
+                        a.CreatedDate,
+                        a.CreatedBy,
+                        a.ModifiedDate,
+                        a.ModifiedBy,
+                        ApplicationCount = _context.JobApplications.Count(x => x.JobId == a.Id),
+                        a.ViewCount,
+                        a.Title,
+                        a.Description,
+                        a.Status,
+                        a.NormalizedName
+                    };
+        query = query.OrderByDescending(x => x.ModifiedDate);
+        return await ListResult.Success(query, filterOptions);
+    }
+
     public async Task<TResult> UpdateAsync(JobOpportunity args)
     {
 		try
@@ -114,9 +163,9 @@ public class JobOpportunityService(ApplicationDbContext _context, IJobOpportunit
             if (job is null) return TResult.Failed("Job opportunity not found!");
             if (string.IsNullOrWhiteSpace(args.JobDetail)) return TResult.Failed("Job opportunity detail is required!");
             job.NormalizedName = SeoHelper.ToSeoFriendly(args.Title);
-            if (!await _jobOpportunityRepository.IsExistAsync(job.NormalizedName, job.Id)) return TResult.Failed("Job opportunity title already exists!");
+            if (await _jobOpportunityRepository.IsExistAsync(job.NormalizedName, job.Id)) return TResult.Failed("Job opportunity title already exists!");
             job.JobRequirements = args.JobRequirements;
-            job.JobDetail = JsonSerializer.Serialize(args.JobDetail);
+            job.JobDetail = args.JobDetail;
             job.Description = args.Description;
             job.Status = args.Status;
             job.Title = args.Title;
