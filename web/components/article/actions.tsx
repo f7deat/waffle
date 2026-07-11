@@ -5,6 +5,7 @@ import Link from "next/link";
 import { SoundOutlined, PauseOutlined, PlayCircleOutlined, StopOutlined, BookOutlined, HeartOutlined, CheckOutlined, FacebookFilled, TwitterOutlined, TagsOutlined } from "@ant-design/icons";
 import { apiCatalogTags } from "@/services/catalog";
 import { ArticleDetail } from "@/services/typings/article";
+import { EditorJSListData, EditorJSParagraphData } from "@/services/typings/editorjs";
 
 interface ArticleActionsProps {
   article: ArticleDetail;
@@ -76,12 +77,14 @@ const ArticleActions: React.FC<ArticleActionsProps> = ({ article }) => {
     if (!article?.content?.blocks) return "";
     return article.content.blocks
       .map((block) => {
-        const data = block.data as Record<string, unknown>;
+        const data = block.data;
         if (block.type === "list") {
-          return (data.items as string[])?.map((item) => item.replace(/<[^>]+>/g, "")).join(". ") ?? "";
+          return (data as EditorJSListData).items.map((item) => item.content.replace(/<[^>]+>/g, "")).join(". ") ?? "";
         }
-        const text = typeof data.text === "string" ? data.text : typeof data.code === "string" ? data.code : "";
-        return text.replace(/<[^>]+>/g, "");
+        if (block.type === "paragraph") {
+          return (data as EditorJSParagraphData).text.replace(/<[^>]+>/g, "") ?? "";
+        }
+        return "";
       })
       .filter(Boolean)
       .join(". ");

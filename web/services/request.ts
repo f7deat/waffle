@@ -5,10 +5,7 @@ const API_URL = resolvedApiHost ? `${resolvedApiHost.replace(/\/+$/, "")}/api/` 
 
 function createServerRequest(): AxiosInstance {
     const instance = axios.create({
-        adapter: 'fetch',
-        fetchOptions: {
-            cache: 'no-store', // Disable caching for server-side requests
-        }
+        adapter: 'fetch'
     });
 
     instance.interceptors.request.use((config) => {
