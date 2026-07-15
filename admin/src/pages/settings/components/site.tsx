@@ -1,12 +1,23 @@
 import ImageLibraryPicker from '@/components/image-library/picker';
-import { ProForm, ProFormText } from '@ant-design/pro-components';
+import { ProForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
+import { Col, Row } from 'antd';
 
 const SiteSettings: React.FC = () => {
   const form = ProForm.useFormInstance();
 
   return (
     <>
-      <ProFormText name="name" label="Site Name" />
+      <Row gutter={16}>
+        <Col span={18}>
+          <ProFormText name="name" label="Site Name" />
+        </Col>
+        <Col span={6}>
+          <ProFormSelect name="theme" label="Site Theme" initialValue={"DEFAULT"} allowClear={false} options={[
+            { label: 'Default', value: 'DEFAULT' },
+            { label: 'Shinec', value: 'SHINEC' },
+          ]} />
+        </Col>
+      </Row>
       <ProFormText
         name="logo"
         label="Site Logo"
@@ -19,7 +30,16 @@ const SiteSettings: React.FC = () => {
         }}
       />
       <ProFormText name="title" label="Site Title" />
-      <ProFormText name="description" label="Site Description" />
+      <ProFormTextArea name="description" label="Site Description" />
+      <Row gutter={16}>
+        <Col span={12}>
+          <ProFormText name="phoneNumber" label="Phone Number" />
+        </Col>
+        <Col span={12}>
+          <ProFormText name="email" label="Email" />
+        </Col>
+      </Row>
+      <ProFormText name="address" label="Address" />
     </>
   );
 };

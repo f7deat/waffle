@@ -54,6 +54,7 @@ const SettingPage: React.FC = () => {
           {
             title: 'Normalized Name',
             dataIndex: 'normalizedName',
+            search: false,
           },
           {
             title: <SettingOutlined />,
