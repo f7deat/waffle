@@ -12,6 +12,7 @@ import { Col, DatePicker, Row, Segmented, Skeleton, Space, Statistic, Tag, Typog
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import TopView from './components/top-view';
+import { useRequest } from '@umijs/max';
 
 type PieChartItem = {
   label: string;
@@ -141,6 +142,7 @@ const HomePage: React.FC = () => {
     totalFileSize: 0,
   });
   const [contributionData, setContributionData] = useState<ContributionItem[]>([]);
+  const { data: articleStats } = useRequest(apiArticleStatistics);
 
   useEffect(() => {
     const fetchStaticDashboardData = async () => {
@@ -238,8 +240,8 @@ const HomePage: React.FC = () => {
     <PageContainer>
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mb-4'>
           <ProCard bordered title="Tổng bài viết" extra={<FileTextOutlined />} loading={staticLoading}>
-            <Statistic value={summary.article.totalArticles} suffix="bài" />
-            <Typography.Text type="secondary">Tháng này: {summary.article.currentMonth.toLocaleString()}</Typography.Text>
+            <Statistic value={articleStats?.totalArticles} suffix="bài" />
+            <Typography.Text type="secondary">Lượt xem: {articleStats?.viewCount}</Typography.Text>
           </ProCard>
 
           <ProCard bordered title="Lượt xem bài viết" extra={<ArrowUpOutlined />} loading={staticLoading}>

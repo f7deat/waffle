@@ -7,7 +7,6 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IRepositories;
 using Waffle.Core.IServices.Locations;
-using Waffle.Core.IServices.Users;
 using Waffle.Core.Services.Locations.Args;
 using Waffle.Core.Services.Locations.Filters;
 using Waffle.Data;

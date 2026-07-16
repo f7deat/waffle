@@ -1,5 +1,5 @@
 import { apiGetUser, apiUpdateUser, createUser, apiUserDelete, listUser } from '@/services/user';
-import { DeleteOutlined, EditOutlined, EyeOutlined, ManOutlined, PlusOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined, EditOutlined, EyeOutlined, ManOutlined, MoreOutlined, PlusOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
 import {
   ActionType,
   ModalForm,
@@ -9,7 +9,7 @@ import {
 } from '@ant-design/pro-components';
 import UserFormFields from '../components/user-form-fields';
 import { FormattedMessage, useIntl, history, Link } from '@umijs/max';
-import { Badge, Button, message, Popconfirm, Space } from 'antd';
+import { Badge, Button, Dropdown, message, Popconfirm, Space } from 'antd';
 import { useRef, useState } from 'react';
 import UserEditForm from '../components/edit-form';
 
@@ -72,12 +72,12 @@ const UserList: React.FC = () => {
       title: 'Name',
       dataIndex: 'name',
       render: (dom, entity) => (
-        <Space>
+        <Space size={'small'}>
           {
-            entity.gender === true && <WomanOutlined className='text-red-500' />
+            entity.gender === true && <WomanOutlined className='text-red-700' />
           }
           {
-            entity.gender === false && <ManOutlined className='text-blue-500' />
+            entity.gender === false && <ManOutlined className='text-blue-700' />
           }
           {dom}
         </Space>
@@ -87,19 +87,20 @@ const UserList: React.FC = () => {
       title: 'Email',
       dataIndex: 'email',
       render: (dom, entity) => (
-        <Space>
-          <Badge color={entity.emailConfirmed ? 'green' : 'red'} /> {dom}
-        </Space>
+        <span className={entity.emailConfirmed ? 'text-green-700' : 'text-red-700'}>
+          {dom}
+        </span>
       ),
-      width: 200
+      width: 200,
+      minWidth: 200
     },
     {
       title: <FormattedMessage id='general.phoneNumber' />,
       dataIndex: 'phoneNumber',
       render: (dom, entity) => (
-        <Space>
-          <Badge color={entity.phoneNumberConfirmed ? 'green' : 'red'} /> {dom}
-        </Space>
+        <span className={entity.phoneNumberConfirmed ? 'text-green-700' : 'text-red-700'}>
+          {dom}
+        </span>
       )
     },
     {
@@ -119,7 +120,7 @@ const UserList: React.FC = () => {
       dataIndex: 'createdAt',
       search: false,
       valueType: 'dateTime',
-      width: 160
+      width: 170
     },
     {
       title: 'Amount',
@@ -132,31 +133,36 @@ const UserList: React.FC = () => {
       title: 'Tác vụ',
       valueType: 'option',
       render: (dom, entity) => [
-        <Button
-          type="default"
-          icon={<EditOutlined />}
-          key={0}
-          size='small'
-          loading={updating}
-          onClick={() => {
-            setEditData(entity);
-            setEditOpen(true);
-          }}
-        />,
-        <Button
-          type="primary"
-          icon={<EyeOutlined />}
-          key={1}
-          size='small'
-          onClick={() => {
-            history.push(`/users/profile/${entity.id}`);
-          }}
-        />,
+        <Dropdown key="more" menu={{
+          items: [
+            {
+              key: 'view',
+              label: 'View Profile',
+              icon: <EyeOutlined />,
+              onClick: () => {
+                history.push(`/users/profile/${entity.id}`);
+              }
+            },
+            {
+              key: 'edit',
+              label: 'Edit',
+              icon: <EditOutlined />,
+              onClick: () => {
+                setEditData(entity);
+                setEditOpen(true);
+              }
+            }
+          ]
+        }}>
+          <Button type="dashed" size='small'>
+            <MoreOutlined />
+          </Button>
+        </Dropdown>,
         <Popconfirm title="Are you sure?" key={2} onConfirm={() => onConfirm(entity.id)}>
           <Button type="primary" icon={<DeleteOutlined />} size='small' danger />
         </Popconfirm>,
       ],
-      width: 120
+      width: 80
     },
   ];
 
@@ -174,6 +180,7 @@ const UserList: React.FC = () => {
     >
       <ProTable<API.User>
         rowSelection={{}}
+        size="small"
         rowKey="id"
         request={listUser}
         columns={columns}

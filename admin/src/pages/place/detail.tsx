@@ -21,6 +21,7 @@ import {
 import { useParams, useRequest } from "@umijs/max";
 import { Button, Col, message, Row, Spin, Upload } from "antd";
 import { useEffect, useRef, useState } from "react";
+import CatalogSetting from "../catalog/setting";
 
 const EMPTY_CONTENT = {
     blocks: [],
@@ -135,129 +136,130 @@ const PlaceDetail: React.FC = () => {
     return (
         <PageContainer
             title={data?.name || "Place detail"}
-            loading={loading}
-            extra={<Button onClick={() => history.back()} icon={<LeftOutlined />}>Back</Button>}
+            onBack={() => history.back()}
         >
-            <ProCard>
-                <ProForm
-                    onFinish={onFinish}
-                    formRef={formRef}
-                    submitter={{
-                        searchConfig: {
-                            submitText: "Save",
-                        },
-                    }}
-                >
-                    <Row gutter={16}>
-                        <Col md={18} xs={24}>
-                            {!loading && (
-                                <FormEditor
-                                    name="content"
-                                    label="Content"
-                                    rules={[{ required: true, message: "Please enter content" }]}
-                                    initialValue={parseContent(data?.content)}
-                                />
-                            )}
-
-                            <div className="mb-4">
-                                <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>
-                                    Images
-                                </label>
-                                <Spin spinning={loadingImages}>
-                                    <div style={{ marginBottom: "16px" }}>
-                                        <Row gutter={[8, 8]}>
-                                            {images?.map((image) => (
-                                                <Col key={image.id} xs={12} sm={8}>
-                                                    <div className="relative">
-                                                        <img
-                                                            src={image.url}
-                                                            alt={image.name}
-                                                            className="object-cover h-64 w-full"
-                                                        />
-                                                        <Button
-                                                            type="dashed"
-                                                            danger
-                                                            size="small"
-                                                            icon={<DeleteOutlined />}
-                                                            onClick={() => handleDeleteImage(image.id)}
-                                                            style={{
-                                                                position: "absolute",
-                                                                top: 0,
-                                                                right: 0,
-                                                            }}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            ))}
-                                            <Col xs={12} sm={8}>
-                                                <Upload
-                                                    beforeUpload={handleUpload as any}
-                                                    accept="image/*"
-                                                    multiple
-                                                    disabled={uploading}
-                                                    showUploadList={false}
-                                                    className="h-64 block w-full border-dashed hover:border-blue-500 cursor-pointer border-2 border-gray-300 rounded flex items-center justify-center"
-                                                >
-                                                    <div className="flex gap-2 font-medium">
-                                                        <UploadOutlined />
-                                                        Upload Images
-                                                    </div>
-                                                </Upload>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </Spin>
-                            </div>
-                        </Col>
-
-                        <Col md={6} xs={24}>
-                            <ProFormText
-                                name="name"
-                                label="Name"
-                                rules={[{ required: true, message: "Please enter place name" }]}
-                            />
-                            <ProFormText name="description" label="Description" />
-                            <ProFormSelect
-                                name="active"
-                                label="Status"
-                                options={[
-                                    { label: "Published", value: true as any },
-                                    { label: "Draft", value: false as any },
-                                ]}
-                                allowClear={false}
-                            />
-                            <ProFormSelect
-                                name="provinceId"
-                                label="Province"
-                                showSearch
-                                request={apiProvinceOptions}
-                                fieldProps={{
-                                    onChange: (value) => {
-                                        const parsed = Number(value);
-                                        setSelectedProvinceId(Number.isNaN(parsed) ? undefined : parsed);
+            <ProCard tabs={{
+                type: "card",
+                items: [
+                    {
+                        key: 'details',
+                        label: 'Details',
+                        children: (
+                            <ProForm
+                                onFinish={onFinish}
+                                formRef={formRef}
+                                submitter={{
+                                    searchConfig: {
+                                        submitText: "Save",
                                     },
                                 }}
-                            />
-                            <ProFormSelect
-                                name="districtId"
-                                label="District"
-                                showSearch
-                                request={apiDistrictOptions}
-                                params={{
-                                    provinceId: selectedProvinceId,
-                                }}
-                            />
-                            <ProFormText name="address" label="Address" />
-                            <ProFormSelect
-                                name="influencerId"
-                                label="Influencer"
-                                showSearch
-                                request={apiInfluencerOptions}
-                            />
-                        </Col>
-                    </Row>
-                </ProForm>
-            </ProCard>
+                            >
+                                <Row gutter={16}>
+                                    <Col md={18} xs={24}>
+                                        {!loading && (
+                                            <FormEditor
+                                                name="content"
+                                                label="Content"
+                                                rules={[{ required: true, message: "Please enter content" }]}
+                                                initialValue={parseContent(data?.content)}
+                                            />
+                                        )}
+
+                                        <div className="mb-4">
+                                            <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>
+                                                Images
+                                            </label>
+                                            <Spin spinning={loadingImages}>
+                                                <div style={{ marginBottom: "16px" }}>
+                                                    <Row gutter={[8, 8]}>
+                                                        {images?.map((image) => (
+                                                            <Col key={image.id} xs={12} sm={8}>
+                                                                <div className="relative">
+                                                                    <img
+                                                                        src={image.url}
+                                                                        alt={image.name}
+                                                                        className="object-cover h-64 w-full"
+                                                                    />
+                                                                    <Button
+                                                                        type="dashed"
+                                                                        danger
+                                                                        size="small"
+                                                                        icon={<DeleteOutlined />}
+                                                                        onClick={() => handleDeleteImage(image.id)}
+                                                                        style={{
+                                                                            position: "absolute",
+                                                                            top: 0,
+                                                                            right: 0,
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </Col>
+                                                        ))}
+                                                        <Col xs={12} sm={8}>
+                                                            <Upload
+                                                                beforeUpload={handleUpload as any}
+                                                                accept="image/*"
+                                                                multiple
+                                                                disabled={uploading}
+                                                                showUploadList={false}
+                                                                className="h-64 block w-full border-dashed hover:border-blue-500 cursor-pointer border-2 border-gray-300 rounded flex items-center justify-center"
+                                                            >
+                                                                <div className="flex gap-2 font-medium">
+                                                                    <UploadOutlined />
+                                                                    Upload Images
+                                                                </div>
+                                                            </Upload>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
+                                            </Spin>
+                                        </div>
+                                    </Col>
+
+                                    <Col md={6} xs={24}>
+                                        <ProFormSelect
+                                            name="provinceId"
+                                            label="Province"
+                                            showSearch
+                                            request={apiProvinceOptions}
+                                            fieldProps={{
+                                                onChange: (value) => {
+                                                    const parsed = Number(value);
+                                                    setSelectedProvinceId(Number.isNaN(parsed) ? undefined : parsed);
+                                                },
+                                            }}
+                                        />
+                                        <ProFormSelect
+                                            name="districtId"
+                                            label="District"
+                                            showSearch
+                                            request={apiDistrictOptions}
+                                            params={{
+                                                provinceId: selectedProvinceId,
+                                            }}
+                                        />
+                                        <ProFormText name="address" label="Address" />
+                                        <ProFormSelect
+                                            name="influencerId"
+                                            label="Influencer"
+                                            showSearch
+                                            request={apiInfluencerOptions}
+                                        />
+                                    </Col>
+                                </Row>
+                            </ProForm>
+                        )
+                    },
+                    {
+                        key: 'settings',
+                        label: 'Settings',
+                        children: (
+                            <CatalogSetting />
+                        )
+                    }
+                ]
+            }} />
+
         </PageContainer>
     );
 };

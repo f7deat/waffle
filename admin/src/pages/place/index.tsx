@@ -3,7 +3,7 @@ import { apiPlaceCreate, apiPlaceDelete, apiPlaceDetails, apiPlaceList, apiPlace
 import { apiProvinceOptions } from "@/services/locations/province";
 import { apiInfluencerOptions } from "@/services/user";
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
-import { ActionType, ModalForm, PageContainer, ProColumns, ProFormInstance, ProFormSelect, ProFormText, ProTable } from "@ant-design/pro-components"
+import { ActionType, ModalForm, PageContainer, ProColumns, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea, ProTable } from "@ant-design/pro-components"
 import { Link } from "@umijs/max";
 import { Button, Popconfirm, message } from "antd";
 import { useEffect, useRef, useState } from "react";
@@ -189,7 +189,7 @@ const Index: React.FC = () => {
                     label="Name"
                     rules={[{ required: true, message: 'Please enter place name' }]}
                 />
-                <ProFormText name="description" label="Description" />
+                <ProFormTextArea name="description" label="Description" />
                 <ProFormSelect
                     name="active"
                     label="Status"

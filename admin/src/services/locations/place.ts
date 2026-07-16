@@ -27,12 +27,9 @@ export interface IPlaceCreate {
     active: boolean;
 }
 
-export async function apiPlaceCreate(data: IPlaceCreate, locale?: string) {
+export async function apiPlaceCreate(data: IPlaceCreate) {
     return request(`place`, {
         method: 'POST',
-        params: {
-            locale,
-        },
         data
     });
 }

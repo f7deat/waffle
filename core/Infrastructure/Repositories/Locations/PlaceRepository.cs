@@ -73,36 +73,43 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
 
     public async Task<ListResult> ListAsync(PlaceFilterOptions filterOptions)
     {
-        var query = from p in _context.Places
-                    join c in _context.Catalogs on p.Id equals c.Id
-                    join d in _context.Districts on p.DistrictId equals d.Id into sd
-                    from d in sd.DefaultIfEmpty()
-                    join province in _context.Provinces on d.ProvinceId equals province.Id into dp
-                    from province in dp.DefaultIfEmpty()
-                    where c.Active && c.Locale == filterOptions.Locale
-                    select new
-                    {
-                        p.Id,
-                        c.Name,
-                        c.ViewCount,
-                        c.NormalizedName,
-                        StreetName = c.Name,
-                        c.ModifiedDate,
-                        DistrictName = d.Name,
-                        p.DistrictId,
-                        ProvinceName = province.Name,
-                        d.ProvinceId,
-                        c.Thumbnail
-                    };
-        if (filterOptions.DistrictId.HasValue)
+        try
         {
-            query = query.Where(x => x.DistrictId == filterOptions.DistrictId);
+            var query = from p in _context.Places
+                        join c in _context.Catalogs on p.Id equals c.Id
+                        join d in _context.Districts on p.DistrictId equals d.Id into sd
+                        from d in sd.DefaultIfEmpty()
+                        join province in _context.Provinces on d.ProvinceId equals province.Id into dp
+                        from province in dp.DefaultIfEmpty()
+                        where c.Active && c.Locale == filterOptions.Locale
+                        select new
+                        {
+                            c.Id,
+                            c.Name,
+                            c.ViewCount,
+                            c.NormalizedName,
+                            StreetName = c.Name,
+                            c.ModifiedDate,
+                            DistrictName = d.Name,
+                            p.DistrictId,
+                            ProvinceName = province.Name,
+                            d.ProvinceId,
+                            c.Thumbnail
+                        };
+            if (filterOptions.DistrictId.HasValue)
+            {
+                query = query.Where(x => x.DistrictId == filterOptions.DistrictId);
+            }
+            if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+            {
+                query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
+            }
+            query = query.OrderByDescending(x => x.ModifiedDate);
+            return await ListResult.Success(query, filterOptions);
         }
-        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        catch (Exception ex)
         {
-            query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
+            return ListResult.Failed($"An error occurred while retrieving the list of places: {ex}");
         }
-        query = query.OrderByDescending(x => x.ModifiedDate);
-        return await ListResult.Success(query, filterOptions);
     }
 }
