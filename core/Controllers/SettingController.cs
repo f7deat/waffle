@@ -146,7 +146,4 @@ public class SettingController(ApplicationDbContext _context, ISettingService _s
         if (google is null) return BadRequest();
         return Ok(google.Bloggers);
     }
-
-    [HttpGet("init")]
-    public async Task<IActionResult> InitAsync() => Ok(await _settingService.InitAsync());
 }

@@ -1,14 +1,15 @@
-"use server";
+"use client";
 
 import { THEME_NAME } from "@/config/theme";
 import { ShinecFooter } from "./shinec/footer";
 import DefaultFooter from "./default/footer";
+import { useAppContext } from "@/contexts/app-context";
 
-const NEXT_PUBLIC_THEME = process.env.NEXT_PUBLIC_THEME;
+const Footer: React.FC = () => {
 
-const Footer: React.FC = async () => {
+    const { settings } = useAppContext();
 
-    if (NEXT_PUBLIC_THEME === THEME_NAME.SHINEC) {
+    if (settings?.theme === THEME_NAME.SHINEC) {
         return <ShinecFooter />;
     }
     return <DefaultFooter />

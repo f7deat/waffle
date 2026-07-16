@@ -2,6 +2,8 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { apiCurrentUser } from "@/services/user/user";
+import { SiteSetting } from "@/typings/setting";
+import { apiGetSiteSetting } from "@/services/setting";
 
 export interface AppState {
     /** Thông tin user hiện tại, null nếu chưa đăng nhập */
@@ -16,13 +18,16 @@ export interface AppState {
     refreshUser: () => Promise<void>;
     /** Đăng xuất: xóa token và reset state */
     logout: () => void;
+    settings?: SiteSetting;
 }
 
 const AppContext = createContext<AppState | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
+
     const [user, setUser] = useState<API.User | null>(null);
     const [initializing, setInitializing] = useState(true);
+    const [settings, setSettings] = useState<SiteSetting | undefined>(undefined);
 
     const fetchUser = useCallback(async () => {
         const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
@@ -38,9 +43,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
+    const fetchSettings = useCallback(async () => {
+        try {
+            const res = await apiGetSiteSetting();
+            setSettings(res);
+        } catch (error) {
+            console.error("Failed to fetch site settings:", error);
+        }
+    }, []);
+
     useEffect(() => {
         fetchUser().finally(() => setInitializing(false));
-    }, [fetchUser]);
+        fetchSettings();
+    }, [fetchUser, fetchSettings]);
 
     const refreshUser = useCallback(async () => {
         await fetchUser();
@@ -67,6 +82,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 hasRole,
                 refreshUser,
                 logout,
+                settings,
             }}
         >
             {children}

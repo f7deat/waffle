@@ -1,13 +1,15 @@
-"use server";
+"use client";
 
 import { THEME_NAME } from "@/config/theme";
 import { ShinecHeader } from "./shinec/header";
 import DefaultHeader from "./default/header";
+import { useAppContext } from "@/contexts/app-context";
 
-const NEXT_PUBLIC_THEME = process.env.NEXT_PUBLIC_THEME;
+const Header: React.FC = () => {
 
-const Header: React.FC = async () => {
-    if (NEXT_PUBLIC_THEME === THEME_NAME.SHINEC) {
+    const { settings } = useAppContext();
+
+    if (settings?.theme === THEME_NAME.SHINEC) {
         return <ShinecHeader currentPage="home" />
     }
     return <DefaultHeader />

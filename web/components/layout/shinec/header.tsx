@@ -15,7 +15,7 @@ const sectionItems = [
   { id: "ha-tang", label: "Hạ tầng" },
   { id: "article", label: "Tin tức" },
   { id: "career", label: "Tuyển dụng" },
-  { id: "lien-he", label: "Liên hệ" },
+  { id: "contact", label: "Liên hệ" },
 ];
 
 export function ShinecHeader({ currentPage }: SiteHeaderProps) {

@@ -3,4 +3,8 @@ export type SiteSetting = {
     logo: string;
     title: string;
     description: string;
+    phoneNumber?: string;
+    email?: string;
+    address?: string;
+    theme: 'DEFAULT' | 'SHINEC'
 }
