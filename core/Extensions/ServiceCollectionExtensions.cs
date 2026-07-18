@@ -17,7 +17,6 @@ using Waffle.Core.Services.Articles;
 using Waffle.Core.Services.Careers;
 using Waffle.Core.Services.Categories;
 using Waffle.Core.Services.Contacts;
-using Waffle.Core.Services.Ecommerces;
 using Waffle.Core.Services.Files;
 using Waffle.Core.Services.Locations;
 using Waffle.Core.Services.Shop;

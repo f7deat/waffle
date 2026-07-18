@@ -72,12 +72,6 @@ const ProductPage: React.FC = () => {
             ),
         },
         {
-            title: "Mô tả",
-            dataIndex: "description",
-            search: false,
-            ellipsis: true,
-        },
-        {
             title: "Giá",
             dataIndex: "price",
             search: false,
@@ -89,7 +83,14 @@ const ProductPage: React.FC = () => {
             dataIndex: "modifiedDate",
             width: 180,
             search: false,
-            render: (_, record) => record.modifiedDate ? dayjs(record.modifiedDate).format("YYYY-MM-DD HH:mm") : "-",
+            render: (_, record) => dayjs(record.modifiedDate ?? record.createdDate).format("YYYY-MM-DD HH:mm"),
+        },
+        {
+            title: 'Lượt xem',
+            dataIndex: 'viewCount',
+            width: 120,
+            search: false,
+            render: (_, record) => record.viewCount ?? 0
         },
         {
             title: "",

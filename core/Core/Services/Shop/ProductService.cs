@@ -6,10 +6,9 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.IServices.Shops;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
-using Waffle.Models.Params.Products;
 using Waffle.Models.ViewModels.Products;
 
-namespace Waffle.Core.Services.Ecommerces;
+namespace Waffle.Core.Services.Shop;
 
 public class ProductService(IProductRepository productRepository, IProductLinkRepository productLinkRepository) : IProductService
 {
@@ -36,7 +35,28 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
 
     public Task<TResult> DeleteAsync(Guid id) => _productRepository.DeleteAsync(id);
 
-    public Task<Product?> DetailAsync(Guid id) => _productRepository.DetailAsync(id);
+    public async Task<TResult> DetailAsync(Guid id)
+    {
+        var product = await _productRepository.DetailAsync(id);
+        if (product is null) return TResult.Failed("Product not found!");
+        return TResult.Ok(new
+        {
+            product.Id,
+            product.Name,
+            product.Description,
+            product.Thumbnail,
+            product.Price,
+            product.SalePrice,
+            product.SKU,
+            product.UnitInStock,
+            product.AffiliateLink,
+            product.Content,
+            product.NormalizedName,
+            product.CategoryId,
+            product.CreatedDate,
+            product.ModifiedDate
+        });
+    }
 
     public async Task<TResult> DeleteLinkAsync(Guid id)
     {

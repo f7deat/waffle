@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.IServices.Shops;
-using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 

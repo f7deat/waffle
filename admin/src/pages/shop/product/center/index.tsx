@@ -1,5 +1,6 @@
 import FormEditor from "@/components/editorjs/form-editor";
 import ImageLibraryPicker from "@/components/image-library/picker";
+import CatalogSetting from "@/pages/catalog/setting";
 import { uploadRcFile } from "@/services/file-service";
 import { apiProductDetail, apiProductSave } from "@/services/products/product";
 import { LeftOutlined, UploadOutlined } from "@ant-design/icons";
@@ -75,54 +76,72 @@ const Index: React.FC = () => {
 
     return (
         <PageContainer title={product?.name || 'Chi tiết sản phẩm'} onBack={() => history.back()}>
-            <ProCard loading={loading}>
-                <ProForm formRef={formRef} onFinish={onFinish} submitter={{ searchConfig: { submitText: "Lưu thay đổi" } }}>
-                    <Row gutter={16}>
-                        <Col md={18}>
-                            <ProFormText name={"name"} label="Tên sản phẩm" rules={[{ required: true }]} />
-                            <ProFormTextArea name={"description"} label="Mô tả ngắn" />
-                            <FormEditor name="content" initialValue={product?.content} />
-                        </Col>
-                        <Col md={6}>
-                            <div className="border rounded p-1 mb-2">
-                                <img src={thumbnail} alt="Thumbnail" className="w-full h-64 rounded object-cover" />
-                            </div>
-                            <ProFormText
-                                name={"thumbnail"}
-                                label="Thumbnail URL"
-                                fieldProps={{
-                                    suffix: (
-                                        <div className="flex gap-1">
-                                            <Button
-                                                size="small"
-                                                icon={<UploadOutlined />}
-                                                loading={thumbnailUploading}
-                                                onClick={() => thumbnailInputRef.current?.click()}
-                                            >Upload</Button>
-                                            <ImageLibraryPicker
-                                                value={thumbnail}
-                                                onChange={(url) => formRef.current?.setFieldValue("thumbnail", url)}
-                                            />
+            <ProCard tabs={{
+                type: 'card',
+                items: [
+                    {
+                        key: 'details',
+                        label: 'Chi tiết sản phẩm',
+                        children: (
+                            <ProForm formRef={formRef} onFinish={onFinish} submitter={{ searchConfig: { submitText: "Lưu thay đổi" } }}>
+                                <Row gutter={16}>
+                                    <Col md={18}>
+                                        <ProFormText name={"name"} label="Tên sản phẩm" rules={[{ required: true }]} />
+                                        <ProFormTextArea name={"description"} label="Mô tả ngắn" />
+                                        <FormEditor name="content" initialValue={product?.content} />
+                                    </Col>
+                                    <Col md={6}>
+                                        <div className="border rounded p-1 mb-2">
+                                            <img src={thumbnail} alt="Thumbnail" className="w-full h-64 rounded object-cover" />
                                         </div>
-                                    )
-                                }}
-                            />
-                            <input
-                                ref={thumbnailInputRef}
-                                type="file"
-                                accept="image/*"
-                                style={{ display: "none" }}
-                                onChange={onThumbnailSelected}
-                            />
-                            <ProFormDigit name={"price"} label="Giá bán" />
-                            <ProFormDigit name="salePrice" label="Giá khuyến mãi" />
-                            <ProFormDigit name="unitInStock" label="Số lượng trong kho" />
-                            <ProFormText name={"sku"} label="SKU" />
-                            <ProFormText name={"affiliateLink"} label="Affiliate Link" />
-                        </Col>
-                    </Row>
-                </ProForm>
-            </ProCard>
+                                        <ProFormText
+                                            name={"thumbnail"}
+                                            label="Thumbnail URL"
+                                            fieldProps={{
+                                                suffix: (
+                                                    <div className="flex gap-1">
+                                                        <Button
+                                                            size="small"
+                                                            icon={<UploadOutlined />}
+                                                            loading={thumbnailUploading}
+                                                            onClick={() => thumbnailInputRef.current?.click()}
+                                                        >Upload</Button>
+                                                        <ImageLibraryPicker
+                                                            value={thumbnail}
+                                                            onChange={(url) => {
+                                                                formRef.current?.setFieldValue("thumbnail", url);
+                                                                setThumbnail(url);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                )
+                                            }}
+                                        />
+                                        <input
+                                            ref={thumbnailInputRef}
+                                            type="file"
+                                            accept="image/*"
+                                            style={{ display: "none" }}
+                                            onChange={onThumbnailSelected}
+                                        />
+                                        <ProFormDigit name={"price"} label="Giá bán" />
+                                        <ProFormDigit name="salePrice" label="Giá khuyến mãi" />
+                                        <ProFormDigit name="unitInStock" label="Số lượng trong kho" />
+                                        <ProFormText name={"sku"} label="SKU" />
+                                        <ProFormText name={"affiliateLink"} label="Affiliate Link" />
+                                    </Col>
+                                </Row>
+                            </ProForm>
+                        )
+                    },
+                    {
+                        key: 'settings',
+                        label: 'Cài đặt',
+                        children: <CatalogSetting />
+                    }
+                ]
+            }} />
+
         </PageContainer>
     )
 }

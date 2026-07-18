@@ -25,6 +25,6 @@ public interface IProductService
     Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions);
     Task<TResult> CreateAsync(Product args);
     Task<TResult> DeleteAsync(Guid id);
-    Task<Product?> DetailAsync(Guid id);
+    Task<TResult> DetailAsync(Guid id);
     Task<TResult> GetByNameAsync(string normalizedName);
 }
