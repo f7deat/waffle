@@ -1,11 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-const resolvedApiHost = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
+const resolvedApiHost = process.env.NEXT_PUBLIC_API_URL;
 const API_URL = resolvedApiHost ? `${resolvedApiHost.replace(/\/+$/, "")}/api/` : undefined;
 
 function createServerRequest(): AxiosInstance {
     const instance = axios.create({
-        adapter: 'fetch'
+        // adapter: 'fetch'
     });
 
     instance.interceptors.request.use((config) => {

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Waffle.Core.Foundations;
+﻿using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
@@ -102,42 +101,22 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
 
     public Task<object> OptionsAsync(SelectOptions selectOptions) => _productRepository.OptionsAsync(selectOptions);
 
-    public async Task<IdentityResult> SaveAsync(Product args)
+    public async Task<TResult> SaveAsync(Product args)
     {
         var product = await _productRepository.FindAsync(args.Id);
-        if (product is null)
-        {
-            product = new Product
-            {
-                Price = args.Price,
-                SKU = args.SKU,
-                UnitInStock = args.UnitInStock,
-                SalePrice = args.SalePrice,
-                AffiliateLink = args.AffiliateLink,
-                Content = args.Content,
-                Name = args.Name,
-                Description = args.Description,
-                Thumbnail = args.Thumbnail,
-                NormalizedName = SeoHelper.ToSeoFriendly(args.Name),
-                CategoryId = args.CategoryId
-            };
-            await _productRepository.AddAsync(product);
-        }
-        else
-        {
-            product.Price = args.Price;
-            product.SKU = args.SKU;
-            product.UnitInStock = args.UnitInStock;
-            product.SalePrice = args.SalePrice;
-            product.AffiliateLink = args.AffiliateLink;
-            product.Content = args.Content;
-            product.Name = args.Name;
-            product.Description = args.Description;
-            product.Thumbnail = args.Thumbnail;
-            product.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
-            await _productRepository.SaveChangesAsync();
-        }
-        return IdentityResult.Success;
+        if (product is null) return TResult.Failed("Product not found!");
+        product.Price = args.Price;
+        product.SKU = args.SKU;
+        product.UnitInStock = args.UnitInStock;
+        product.SalePrice = args.SalePrice;
+        product.AffiliateLink = args.AffiliateLink;
+        product.Content = args.Content;
+        product.Name = args.Name;
+        product.Description = args.Description;
+        product.Thumbnail = args.Thumbnail;
+        product.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
+        await _productRepository.SaveChangesAsync();
+        return TResult.Success;
     }
 
 }

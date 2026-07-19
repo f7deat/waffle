@@ -11,7 +11,7 @@ declare namespace API {
         normalizedName: string;
     }
     interface ProductDetail extends ProductListItem {
-        content?: string;
+        content?: API.BlockEditor;
         unitInStock?: number;
         affiliateLink?: string;
     }

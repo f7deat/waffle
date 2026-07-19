@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { apiProducts } from '@/services/shop/product';
+import { ProductItemType } from '@/typings/shop/product';
 
 const LatestProducts: React.FC = () => {
-    const [products, setProducts] = useState<API.ProductListItem[]>([]);
+    const [products, setProducts] = useState<ProductItemType[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -54,20 +55,20 @@ const LatestProducts: React.FC = () => {
                     Discover our newest arrivals and trending items
                 </p>
             </div>
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
                 {products.map((product) => {
-                    const hasDiscount = product.salePrice && product.salePrice < product.price;
-                    const discountPercent = hasDiscount 
-                        ? Math.round(((product.price - product.salePrice!) / product.price) * 100)
+                    const hasDiscount = product.salePrice && product.salePrice < (product.price || 0);
+                    const discountPercent = hasDiscount
+                        ? Math.round((((product.price || 0) - product.salePrice!) / (product.price || 1)) * 100)
                         : 0;
 
                     return (
-                        <Link 
-                            key={product.id} 
+                        <Link
+                            key={product.id}
                             href={`/shop/${product.normalizedName}`}
-                            className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md transition hover:shadow-2xl hover:scale-[1.02] hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700"
+                            className="group overflow-hidden rounded bg-white shadow transition hover:shadow-2xl hover:scale-[1.02] hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700"
                         >
-                            <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900">
+                            <div className="relative aspect-square h-64 w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900">
                                 {product.thumbnail ? (
                                     <img
                                         src={product.thumbnail}

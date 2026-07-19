@@ -1,17 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Waffle.Core.Foundations;
+﻿using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
-using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
-using Waffle.Models.Params.Products;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.IServices.Shops;
 
 public interface IProductService
 {
-    Task<IdentityResult> SaveAsync(Product args);
+    Task<TResult> SaveAsync(Product args);
     Task<int> CountAsync();
     Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions catalogFilterOptions);

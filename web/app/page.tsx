@@ -28,6 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
+
   const settings = await apiGetSiteSetting();
   const articlesResponse = await apiArticleList({ current: 1, pageSize: 5 });
   const articles = articlesResponse.data || [];
@@ -61,7 +62,7 @@ export default async function Home() {
     backgroundImage: `url(${url})`,
   });
 
-  if (settings?.theme === THEME_NAME.SHINEC) {
+  if (settings.theme === THEME_NAME.SHINEC) {
     return <ShinecHome articles={articles} />;
   }
 

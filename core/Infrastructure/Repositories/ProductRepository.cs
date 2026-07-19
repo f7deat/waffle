@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
@@ -69,24 +70,28 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
     {
         var query = from p in _context.Products
                     where p.NormalizedName == normalizedName
-                    select new
-                    {
-                        p.Id,
-                        p.Name,
-                        p.NormalizedName,
-                        p.Thumbnail,
-                        p.CreatedDate,
-                        p.ModifiedDate,
-                        p.ViewCount,
-                        p.Price,
-                        p.SalePrice,
-                        p.Description,
-                        p.SKU,
-                        p.Content,
-                        p.UnitInStock,
-                        p.AffiliateLink
-                    };
-        return TResult.Ok(await query.FirstOrDefaultAsync());
+                    select p;
+        var product = await query.FirstOrDefaultAsync();
+        if (product is null) return TResult.Failed("Product not found!");
+        product.ViewCount++;
+        await _context.SaveChangesAsync();
+        return TResult.Ok(new
+        {
+            product.Id,
+            product.Name,
+            product.NormalizedName,
+            product.Thumbnail,
+            product.CreatedDate,
+            product.ModifiedDate,
+            product.ViewCount,
+            product.Price,
+            product.SalePrice,
+            product.Description,
+            product.SKU,
+            Content = JsonSerializer.Deserialize<object>(product.Content ?? "{}"),
+            product.UnitInStock,
+            product.AffiliateLink
+        });
     }
 
     public async Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
@@ -127,7 +132,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                         Id = product.Id,
                         Name = product.Name,
                         Thumbnail = product.Thumbnail,
-                        Price= product.Price,
+                        Price = product.Price,
                         SalePrice = product.SalePrice,
                         Category = product.NormalizedName
                     };

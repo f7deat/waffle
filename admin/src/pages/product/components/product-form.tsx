@@ -47,12 +47,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm" }]}
             />
             <ProFormTextArea name="description" label="Mô tả" />
-            <ProFormText name="thumbnail" label="Thumbnail URL" />
-            <ProFormDigit name="price" label="Giá bán" min={0} />
-            <ProFormDigit name="salePrice" label="Giá khuyến mãi" min={0} />
-            <ProFormText name="sku" label="SKU" />
-            <ProFormDigit name="unitInStock" label="Số lượng trong kho" min={0} />
-            <ProFormText name="affiliateLink" label="Affiliate Link" />
         </ModalForm>
     );
 };

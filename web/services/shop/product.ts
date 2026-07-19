@@ -1,7 +1,8 @@
+import { ProductItemType } from "@/typings/shop/product";
 import request from "../request";
 
 export async function apiProducts(params: API.ProductFilterOptions) {
-    return request.get<API.ListResult<API.ProductListItem>>('product/list', { params });
+    return request.get<API.ListResult<ProductItemType>>('product/list', { params });
 }
 
 export async function apiProductDetail(id: string) {

@@ -3,7 +3,7 @@ import ImageLibraryPicker from "@/components/image-library/picker";
 import CatalogSetting from "@/pages/catalog/setting";
 import { uploadRcFile } from "@/services/file-service";
 import { apiProductDetail, apiProductSave } from "@/services/products/product";
-import { LeftOutlined, UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 import { PageContainer, ProCard, ProForm, ProFormDigit, ProFormInstance, ProFormText, ProFormTextArea } from "@ant-design/pro-components"
 import { history, useParams, useRequest } from "@umijs/max";
 import { Button, Col, message, Row } from "antd";
@@ -27,6 +27,7 @@ const Index: React.FC = () => {
                 ...product,
                 content: product.content || ""
             });
+            setThumbnail(product.thumbnail);
         }
     }, [product]);
 
@@ -68,7 +69,7 @@ const Index: React.FC = () => {
         await apiProductSave({
             id,
             ...values,
-            content: values.content || ""
+            content: JSON.stringify(values.content),
         });
         message.success('Lưu sản phẩm thành công');
         return true;
@@ -88,7 +89,9 @@ const Index: React.FC = () => {
                                     <Col md={18}>
                                         <ProFormText name={"name"} label="Tên sản phẩm" rules={[{ required: true }]} />
                                         <ProFormTextArea name={"description"} label="Mô tả ngắn" />
-                                        <FormEditor name="content" initialValue={product?.content} />
+                                        {product?.content && (
+                                            <FormEditor name="content" label="Nội dung chi tiết" initialValue={product.content} />
+                                        )}
                                     </Col>
                                     <Col md={6}>
                                         <div className="border rounded p-1 mb-2">

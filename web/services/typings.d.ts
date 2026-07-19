@@ -30,8 +30,9 @@ declare namespace API {
         data: BlockData;
     }
     interface BlockEditor {
-        version: string;
-        blocks: Block[];
+        version?: string;
+        blocks?: Block[];
+        time?: number;
     }
     interface Meta {
         title: string;

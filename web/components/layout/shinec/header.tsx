@@ -11,8 +11,7 @@ type SiteHeaderProps = {
 
 const sectionItems = [
   { id: "/", label: "Trang chủ" },
-  { id: "loi-the", label: "Lợi thế" },
-  { id: "ha-tang", label: "Hạ tầng" },
+  { id: "shop", label: "Sản phẩm - Dịch vụ" },
   { id: "article", label: "Tin tức" },
   { id: "career", label: "Tuyển dụng" },
   { id: "contact", label: "Liên hệ" },
@@ -124,9 +123,9 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
   }, [currentPage]);
 
   return (
-    <header className="bg-white">
+    <header className="bg-white border-b">
       <div className="bg-[var(--primary)]">
-        <div className="container mx-auto px-4 sm:px-6 text-white py-1 flex items-center gap-4">
+        <div className="container mx-auto px-4 sm:px-6 text-white text-sm py-1 flex items-center gap-4">
           <div className="flex-1 hidden md:block">
             <MailOutlined /> <a href="mailto:congtyshinecgialai@gmail.com" className="hover:underline">
               congtyshinecgialai@gmail.com
