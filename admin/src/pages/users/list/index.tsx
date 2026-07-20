@@ -9,7 +9,7 @@ import {
 } from '@ant-design/pro-components';
 import UserFormFields from '../components/user-form-fields';
 import { FormattedMessage, useIntl, history, Link } from '@umijs/max';
-import { Badge, Button, Dropdown, message, Popconfirm, Space } from 'antd';
+import { Button, Dropdown, message, Popconfirm, Space } from 'antd';
 import { useRef, useState } from 'react';
 import UserEditForm from '../components/edit-form';
 
@@ -18,7 +18,6 @@ const UserList: React.FC = () => {
   const actionRef = useRef<ActionType | undefined>(undefined);
   const [open, setOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
-  const [updating, setUpdating] = useState<boolean>(false);
   const [editData, setEditData] = useState<any>();
 
   const onFinish = async (values: any) => {
@@ -28,11 +27,7 @@ const UserList: React.FC = () => {
     }
     const response = await createUser(values);
     if (response.succeeded) {
-      message.success(
-        intl.formatMessage({
-          id: 'general.saved',
-        }),
-      );
+      message.success("Tạo tài khoản thành công!");
       setOpen(false);
       actionRef.current?.reload();
     } else {
@@ -65,7 +60,7 @@ const UserList: React.FC = () => {
       dataIndex: 'userName',
       width: 200,
       render: (dom, entity) => (
-        <Link to={`/users/profile/${entity.id}`}>{dom}</Link>
+        <Link to={`/user/profile/${entity.id}`}>{dom}</Link>
       )
     },
     {
@@ -87,9 +82,10 @@ const UserList: React.FC = () => {
       title: 'Email',
       dataIndex: 'email',
       render: (dom, entity) => (
-        <span className={entity.emailConfirmed ? 'text-green-700' : 'text-red-700'}>
+        <>
+          <span className={`${entity.emailConfirmed ? 'text-green-700' : 'text-red-700'} mr-1`}>&bull;</span>
           {dom}
-        </span>
+        </>
       ),
       width: 200,
       minWidth: 200
@@ -98,9 +94,10 @@ const UserList: React.FC = () => {
       title: <FormattedMessage id='general.phoneNumber' />,
       dataIndex: 'phoneNumber',
       render: (dom, entity) => (
-        <span className={entity.phoneNumberConfirmed ? 'text-green-700' : 'text-red-700'}>
+        <>
+          <span className={`${entity.phoneNumberConfirmed ? 'text-green-700' : 'text-red-700'} mr-1`}>&bull;</span>
           {dom}
-        </span>
+        </>
       )
     },
     {
@@ -109,11 +106,6 @@ const UserList: React.FC = () => {
       valueType: 'date',
       search: false,
       width: 120
-    },
-    {
-      title: 'Địa chỉ',
-      dataIndex: 'address',
-      search: false
     },
     {
       title: 'Ngày tạo',
@@ -132,7 +124,7 @@ const UserList: React.FC = () => {
     {
       title: 'Tác vụ',
       valueType: 'option',
-      render: (dom, entity) => [
+      render: (_, entity) => [
         <Dropdown key="more" menu={{
           items: [
             {
@@ -140,7 +132,7 @@ const UserList: React.FC = () => {
               label: 'View Profile',
               icon: <EyeOutlined />,
               onClick: () => {
-                history.push(`/users/profile/${entity.id}`);
+                history.push(`/user/profile/${entity.id}`);
               }
             },
             {
@@ -199,7 +191,10 @@ const UserList: React.FC = () => {
       >
         <UserFormFields includePassword />
       </ModalForm>
-      <UserEditForm open={editOpen} onOpenChange={setEditOpen} userId={editData?.id} reload={() => actionRef.current?.reload()} />
+      <UserEditForm open={editOpen} onOpenChange={setEditOpen} userId={editData?.id} reload={() => {
+        actionRef.current?.reload();
+        setEditData(undefined);
+      }} />
     </PageContainer>
   );
 };

@@ -32,7 +32,7 @@ const NotificationBell: React.FC = () => {
             await markNotificationAsRead(item.id);
         }
         window.dispatchEvent(new Event(NOTIFICATION_UPDATED_EVENT));
-        history.push(item.actionUrl || "/users/notification");
+        history.push(item.actionUrl || "/user/notification");
     }
 
     useEffect(() => {
@@ -74,14 +74,14 @@ const NotificationBell: React.FC = () => {
                 )}
             />
             <div className="text-right mt-2">
-                <Link to="/users/notification">Xem tất cả</Link>
+                <Link to="/user/notification">Xem tất cả</Link>
             </div>
         </div>
     );
 
     return (
         <Popover trigger="hover" placement="bottomRight" content={content} onOpenChange={(open) => open && loadUnreadList()}>
-            <Link to={`/users/notification`}>
+            <Link to={`/user/notification`}>
                 <Badge count={unreadCount} size="small" overflowCount={99}>
                     <BellOutlined className="text-lg" />
                 </Badge>

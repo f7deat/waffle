@@ -24,7 +24,7 @@ using Waffle.Models.Params;
 
 namespace Waffle.Controllers.Users;
 
-public class UserController(IUserService _userService, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, ILogger<UserController> _logger, IConfiguration _configuration, ITelegramService _telegramService, ICatalogService _catalogService, IOptions<SettingOptions> options) : BaseController
+public class UserController(IUserService _userService, IFileService _fileService, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, ILogger<UserController> _logger, IConfiguration _configuration, ITelegramService _telegramService, ICatalogService _catalogService, IOptions<SettingOptions> options) : BaseController
 {
     private readonly SettingOptions _options = options.Value;
     [HttpGet("list")]
@@ -145,6 +145,10 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user is null) return BadRequest("User not found!");
+        if (!string.IsNullOrWhiteSpace(user.Avatar))
+        {
+            await _fileService.DeletePathAsync(user.Avatar);
+        }
         return Ok(await _userManager.DeleteAsync(user));
     }
 
@@ -330,7 +334,7 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
     public async Task<IActionResult> GetInfluencerOptionsAsync([FromQuery] SelectOptions selectOptions) => Ok(await _userService.GetInfluencerOptionsAsync(selectOptions));
 
     [HttpPost("change-avatar"), Authorize(Roles = RoleName.Admin)]
-    public async Task<IActionResult> ChangeAvatarAsync([FromBody] ChangeAvatarArgs args) => Ok(await _userService.ChangeAvatarAsync(args, $"{Request.Scheme}://{Request.Host.Value}"));
+    public async Task<IActionResult> ChangeAvatarAsync([FromForm] ChangeAvatarArgs args) => Ok(await _userService.ChangeAvatarAsync(args, $"{Request.Scheme}://{Request.Host.Value}"));
 
     [HttpPut("profile")]
     public async Task<IActionResult> UpdateProfileAsync([FromBody] UpdateProfileModel model)

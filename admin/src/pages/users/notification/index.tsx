@@ -132,7 +132,7 @@ const NotificationPage: React.FC = () => {
 
   const getActionUrl = (item: API.NotificationListItem) => {
     if (item.actionUrl) return item.actionUrl;
-    if (item.type === 1) return '/users/member';
+    if (item.type === 1) return '/user/member';
     return '/home';
   };
 
@@ -263,7 +263,7 @@ const NotificationPage: React.FC = () => {
             <ProFormText
               name="actionUrl"
               label="Đường dẫn điều hướng"
-              placeholder="Ví dụ: /users/member hoặc /shop/order"
+              placeholder="Ví dụ: /user/member hoặc /shop/order"
             />
             <ProFormSelect
               name="type"

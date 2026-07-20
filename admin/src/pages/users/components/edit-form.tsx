@@ -1,7 +1,7 @@
 import { apiGetUser, apiUpdateUser } from "@/services/user";
 import { GENDER_OPTIONS } from "@/utils/constants";
 import { DrawerForm, DrawerFormProps, ProFormDatePicker, ProFormInstance, ProFormSelect, ProFormText } from "@ant-design/pro-components"
-import { message } from "antd";
+import { Col, message, Row } from "antd";
 import { useEffect, useRef } from "react";
 
 type Props = DrawerFormProps & {
@@ -29,7 +29,7 @@ const UserEditForm: React.FC<Props> = ({ userId, reload, ...rest }) => {
     }
 
     return (
-        <DrawerForm {...rest} onFinish={onFinish} title="Chỉnh sửa thành viên" formRef={formRef} drawerProps={{ destroyOnClose: true }}>
+        <DrawerForm {...rest} onFinish={onFinish} title="Chỉnh sửa thành viên" formRef={formRef} drawerProps={{ destroyOnHidden: true }}>
             <ProFormText name="id" hidden />
             <ProFormText
                 name="name"
@@ -40,10 +40,20 @@ const UserEditForm: React.FC<Props> = ({ userId, reload, ...rest }) => {
                     },
                 ]}
             />
-            <ProFormDatePicker name="dateOfBirth" label="Ngày sinh" />
-            <ProFormSelect name="gender" label="Gender" options={GENDER_OPTIONS} />
-            <ProFormText name="email" label="Email" />
-            <ProFormText name="phoneNumber" label="Phone Number" />
+            <Row gutter={16}>
+                <Col span={12}>
+                    <ProFormDatePicker name="dateOfBirth" label="Ngày sinh" width="lg" />
+                </Col>
+                <Col span={12}>
+                    <ProFormSelect name="gender" label="Gender" options={GENDER_OPTIONS} />
+                </Col>
+                <Col span={12}>
+                    <ProFormText name="email" label="Email" />
+                </Col>
+                <Col span={12}>
+                    <ProFormText name="phoneNumber" label="Phone Number" />
+                </Col>
+            </Row>
         </DrawerForm>
     )
 }

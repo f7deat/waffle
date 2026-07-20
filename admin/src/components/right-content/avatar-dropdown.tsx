@@ -54,7 +54,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         history.push(`/setting/account`);
         return;
       } else if (key === 'settings') {
-        history.push(`/users/center/${initialState?.currentUser?.id}`);
+        history.push(`/user/center/${initialState?.currentUser?.id}`);
         return;
       }
       history.push(`/account/${key}`);
@@ -89,7 +89,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
           key: 'profile',
           icon: <UserOutlined />,
           label: intl.formatMessage({
-            id: 'menu.users.profile',
+            id: 'menu.user.profile',
           }),
         },
         {

@@ -16,4 +16,5 @@ public interface IFileService
     Task<FileContent?> FindAsync(Guid id);
     Task<decimal> GetTotalSizeAsync();
     Task<TResult> UploadToHPUNIAsync(IFormFile file);
+    Task<TResult> DeletePathAsync(string path);
 }

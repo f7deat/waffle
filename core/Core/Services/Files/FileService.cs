@@ -15,12 +15,25 @@ using Waffle.Models.Result;
 
 namespace Waffle.Core.Services.Files;
 
-public class FileService(ApplicationDbContext context, IFileRepository _fileRepository, IOptions<SettingOptions> options, IHCAService _hcaService) : IFileService
+public class FileService(ApplicationDbContext context, IFileRepository _fileRepository, IWebHostEnvironment _env, IOptions<SettingOptions> options, IHCAService _hcaService) : IFileService
 {
     private readonly ApplicationDbContext _context = context;
     private readonly SettingOptions _options = options.Value;
 
     public async Task<int> CountAsync() => await _fileRepository.CountAsync();
+
+    public async Task<TResult> DeletePathAsync(string path)
+    {
+        var domain = path.Split("/").FirstOrDefault();
+        var pathWithoutDomain = path.Replace($"{domain}/", "");
+        var file = Path.Combine(_env.WebRootPath, pathWithoutDomain);
+        if (File.Exists(file))
+        {
+            File.Delete(file);
+            return TResult.Success;
+        }
+        return TResult.Failed("File not found!");
+    }
 
     public Task<FileContent?> FindAsync(Guid id) => _fileRepository.FindAsync(id);
 

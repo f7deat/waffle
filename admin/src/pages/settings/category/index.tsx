@@ -185,7 +185,7 @@ const Index: React.FC = () => {
                 <ProFormDigit name="id" hidden />
                 <ProFormText
                     name="name"
-                    label="Category Name"
+                    label="Tên danh mục"
                     rules={[
                         {
                             required: true,
@@ -195,44 +195,10 @@ const Index: React.FC = () => {
                 />
                 <ProFormTextArea name="description" label="Description" fieldProps={{ rows: 4 }} />
                 <ProFormSelect
-                    name="type"
-                    label="Type"
-                    options={[
-                        { label: 'Article', value: 1 },
-                        { label: 'Product', value: 2 },
-                    ]}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please select category type',
-                        },
-                    ]}
-                />
-                <ProFormText
-                    name="locale"
-                    label="Locale"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please enter locale',
-                        },
-                    ]}
-                />
-                <ProFormSelect
                     name="parentId"
                     label="Parent Category"
-                    allowClear
-                    request={async ({ keyWords }) => {
-                        const type = formRef.current?.getFieldValue('type');
-                        const locale = formRef.current?.getFieldValue('locale');
-                        const excludeId = formRef.current?.getFieldValue('id');
-                        return apiCategoryOptions({
-                            keyWords,
-                            type,
-                            locale,
-                            excludeId,
-                        });
-                    }}
+                    showSearch
+                    request={apiCategoryOptions}
                 />
             </ModalForm>
         </PageContainer>

@@ -59,6 +59,16 @@ export async function apiConfirmEmail(id?: string | string[]) {
   });
 }
 
+export async function apiChangeAvatar(data: FormData) {
+  return request(`user/change-avatar`, {
+    method: 'POST',
+    data,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
 export const apiUpdateUser = (data: any) => request(`user/update`, {
   method: 'POST',
   data

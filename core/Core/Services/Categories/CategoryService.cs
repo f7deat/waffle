@@ -13,15 +13,22 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
 
     public async Task<TResult> CreateAsync(Category args, string locale)
     {
-        await _categoryRepository.AddAsync(new Category
+        try
         {
-            Name = args.Name,
-            Description = args.Description,
-            ParentId = args.ParentId,
-            Type = args.Type,
-            Locale = locale
-        });
-        return TResult.Success;
+            await _categoryRepository.AddAsync(new Category
+            {
+                Name = args.Name,
+                Description = args.Description,
+                ParentId = args.ParentId,
+                Type = args.Type,
+                Locale = locale
+            });
+            return TResult.Success;
+        }
+        catch (Exception ex)
+        {
+            return TResult.Failed(ex.ToString());
+        }
     }
 
     public async Task<TResult> UpdateAsync(Category args)

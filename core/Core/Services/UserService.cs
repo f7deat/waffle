@@ -158,7 +158,7 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
             var user = await _context.Users.FindAsync(args.UserId);
             if (user is null) return TResult.Failed("User not found!");
             if (!_hcaService.IsUserInRole(RoleName.Admin) && user.Id != _hcaService.GetUserId()) return TResult.Failed("Unauthoried");
-            var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "avatar", user.Id.ToString());
+            var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "avatar", user.UserName ?? user.Id.ToString());
             if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
             using var fileStream = new FileStream(Path.Combine(folderPath, args.File.FileName), FileMode.Create);
             await args.File.CopyToAsync(fileStream);

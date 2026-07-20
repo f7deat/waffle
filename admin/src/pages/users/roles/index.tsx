@@ -35,7 +35,7 @@ const RolePage: React.FC = () => {
             title: 'Option',
             valueType: 'option',
             render: (dom, entity) => [
-                <Button type="primary" icon={<FolderOutlined />} size="small" key="detail" onClick={() => history.push(`/users/roles/${entity.name}`)} />
+                <Button type="primary" icon={<FolderOutlined />} size="small" key="detail" onClick={() => history.push(`/user/roles/${entity.name}`)} />
             ],
             width: 50
         }

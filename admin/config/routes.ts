@@ -119,45 +119,45 @@ export default [
   },
   {
     icon: 'TeamOutlined',
-    name: 'users',
-    path: '/users',
+    name: 'user',
+    path: '/user',
     routes: [
       {
         name: 'notification',
-        path: '/users/notification',
+        path: '/user/notification',
         component: './users/notification/index',
         hideInMenu: true,
       },
       {
         name: 'member',
-        path: '/users/member',
+        path: '/user/member',
         component: './users/list',
       },
       {
         name: 'profile',
-        path: '/users/profile/:id',
+        path: '/user/profile/:id',
         component: './users/profile',
         hideInMenu: true,
       },
       {
         name: 'userCenter',
-        path: '/users/center/:id',
+        path: '/user/center/:id',
         component: './users/center',
         hideInMenu: true,
       },
       {
         name: 'contact',
-        path: '/users/contact',
+        path: '/user/contact',
         component: './users/contact'
       },
       {
         name: 'role',
-        path: '/users/roles',
+        path: '/user/roles',
         component: './users/roles'
       },
       {
         name: 'roleCenter',
-        path: '/users/roles/:id',
+        path: '/user/roles/:id',
         component: './users/roles/center',
         hideInMenu: true
       }
