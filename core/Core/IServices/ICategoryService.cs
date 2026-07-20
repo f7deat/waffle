@@ -13,4 +13,5 @@ public interface ICategoryService
     Task<TResult> GetByIdAsync(int id);
     Task<ListResult> GetListAsync(CategoryFilterOptions filterOptions);
     Task<IEnumerable<object>> GetOptionsAsync(CategoryOptionFilterOptions filterOptions);
+    Task<TResult> GetRandomsAsync(string locale);
 }

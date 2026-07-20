@@ -102,8 +102,7 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
     public async Task<TResult> GetByIdAsync(Guid id)
     {
         var article = await _articleRepository.FindAsync(id);
-        if (article is null)
-            return TResult.Failed("Article not found");
+        if (article is null) return TResult.Failed("Article not found");
 
         return TResult.Ok(new
         {
@@ -123,14 +122,21 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
 
     public async Task<TResult> GetMetaAsync(string normalizedName)
     {
-        var article = await _articleRepository.FindByNameAsync(normalizedName);
-        if (article is null) return TResult.Failed("Article not found");
-        return TResult.Ok(new
+        try
         {
-            article.Id,
-            Title = article.Name,
-            Descriptions = article.Description,
-            Images = string.IsNullOrEmpty(article.Thumbnail) ? null : new[] { article.Thumbnail }
-        });
+            var article = await _articleRepository.FindByNameAsync(normalizedName);
+            if (article is null) return TResult.Failed("Article not found");
+            return TResult.Ok(new
+            {
+                article.Id,
+                Title = article.Name,
+                article.Description,
+                Images = string.IsNullOrEmpty(article.Thumbnail) ? null : new[] { article.Thumbnail }
+            });
+        }
+        catch (Exception ex)
+        {
+            return TResult.Failed(ex.ToString());
+        }
     }
 }

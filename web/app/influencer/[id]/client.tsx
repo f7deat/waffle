@@ -279,7 +279,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ influencerName, influencerUse
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="flex-1 rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 btn btn-primary"
                 >
                     {isLoading ? 'Đang gửi...' : 'Gửi yêu cầu thuê'}
                 </button>

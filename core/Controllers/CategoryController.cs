@@ -29,4 +29,7 @@ public class CategoryController(ICategoryService categoryService) : BaseControll
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetByIdAsync(int id) => Ok(await _categoryService.GetByIdAsync(id));
+
+    [HttpGet("randoms"), AllowAnonymous]
+    public async Task<IActionResult> GetRandomsAsync([FromQuery] string locale) => Ok(await _categoryService.GetRandomsAsync(locale));
 }

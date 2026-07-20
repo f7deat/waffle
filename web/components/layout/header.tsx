@@ -4,6 +4,7 @@ import { THEME_NAME } from "@/config/theme";
 import { ShinecHeader } from "./shinec/header";
 import DefaultHeader from "./default/header";
 import { useAppContext } from "@/contexts/app-context";
+import '../../components/layout/themes/default.css';
 
 const Header: React.FC = () => {
 

@@ -68,4 +68,6 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
     public Task<ListResult> GetListAsync(CategoryFilterOptions filterOptions) => _categoryRepository.GetListAsync(filterOptions);
 
     public Task<IEnumerable<object>> GetOptionsAsync(CategoryOptionFilterOptions filterOptions) => _categoryRepository.GetOptionsAsync(filterOptions);
+
+    public Task<TResult> GetRandomsAsync(string locale) => _categoryRepository.GetRandomsAsync(locale);
 }

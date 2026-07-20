@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Services.Categories.Filters;
 using Waffle.Data;
@@ -89,5 +90,15 @@ public class CategoryRepository(ApplicationDbContext context, IHCAService hcaSer
                 value = c.Id
             })
             .ToListAsync<object>();
+    }
+
+    public async Task<TResult> GetRandomsAsync(string locale)
+    {
+        locale = string.IsNullOrWhiteSpace(locale) ? "vi-VN" : locale;
+        return TResult.Ok(await _context.Categories.Where(x => x.DeletedAt == null && x.Locale == locale).OrderBy(x => Guid.NewGuid()).Select(x => new
+        {
+            x.Name,
+            x.Id
+        }).ToListAsync());
     }
 }

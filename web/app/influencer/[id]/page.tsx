@@ -3,10 +3,33 @@ import PageContainer from "@/components/layout/page-container";
 import { apiGetUserByUserName } from "@/services/user/user";
 import Link from "next/link";
 import ContactForm from "./client";
+import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 
 type Params = Promise<{
     id: string;
 }>;
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+    const { id } = await params;
+    try {
+        const res = await apiGetUserByUserName(id);
+        const user = res.data;
+        if (!user) return {};
+        return {
+            title: `${user.name} - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+            description: user.name,
+
+            openGraph: {
+                title: user.name,
+                description: user.name,
+                images: user.avatar ? [user.avatar] : []
+            },
+        };
+    }
+    catch (error) {
+        return {};
+    }
+}
 
 const Page = async ({ params }: { params: Params }) => {
     const { id: userName } = await params;
@@ -31,8 +54,8 @@ const Page = async ({ params }: { params: Params }) => {
                     <div className="text-4xl mb-3">👤</div>
                     <p className="font-semibold text-slate-700">Influencer không tồn tại.</p>
                     <p className="mt-1 text-sm text-slate-500">Influencer này có thể đã bị xóa hoặc không tồn tại.</p>
-                    <Link 
-                        href="/influencer" 
+                    <Link
+                        href="/influencer"
                         className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
                     >
                         Quay lại danh sách Influencer
@@ -46,71 +69,73 @@ const Page = async ({ params }: { params: Params }) => {
         ? new Date(user.createdAt).toLocaleDateString("vi-VN")
         : "Chưa có thông tin";
 
-    const genderLabel = user.gender === null || user.gender === undefined 
+    const genderLabel = user.gender === null || user.gender === undefined
         ? "Chưa cập nhật"
-        : user.gender 
+        : user.gender
             ? "Nữ"
             : "Nam";
 
     return (
         <PageContainer breadcrumbs={breadcrumbs}>
-            <div className="space-y-8">
+            <div className="md:flex flex-reverse gap-4">
                 {/* Influencer Info */}
-                <div className="rounded-xl bg-white p-6 shadow-sm">
-                    <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
-                        {/* Avatar */}
-                        <div className="flex flex-col items-center gap-4 md:items-start">
-                            {user.avatar ? (
-                                <img
-                                    src={user.avatar}
-                                    alt={user.name || user.userName}
-                                    className="h-32 w-32 rounded-full border-4 border-indigo-100 object-cover"
-                                />
-                            ) : (
-                                <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 border-indigo-100 bg-gradient-to-br from-indigo-100 to-indigo-50">
-                                    <span className="text-4xl">👤</span>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Info */}
-                        <div className="flex-1 space-y-4 text-center md:text-left">
-                            <div>
-                                <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Thông tin Influencer</p>
-                                <h1 className="text-3xl font-bold text-slate-900">{user.name || user.userName}</h1>
-                                <p className="text-sm text-slate-600">@{user.userName}</p>
-                            </div>
-
-                            {/* Basic Info Grid */}
-                            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-                                <div className="rounded-lg bg-slate-50 p-3">
-                                    <p className="text-xs text-slate-500">Giới tính</p>
-                                    <p className="text-sm font-semibold text-slate-900">{genderLabel}</p>
-                                </div>
-                                <div className="rounded-lg bg-slate-50 p-3">
-                                    <p className="text-xs text-slate-500">Gia nhập</p>
-                                    <p className="text-sm font-semibold text-slate-900">{joinedDate}</p>
-                                </div>
-                                {user.districtName && user.provinceName && (
-                                    <div className="rounded-lg bg-slate-50 p-3">
-                                        <p className="text-xs text-slate-500">Địa chỉ</p>
-                                        <p className="text-sm font-semibold text-slate-900">{user.districtName}, {user.provinceName}</p>
+                <div className="md:w-96">
+                    <div className="rounded-xl bg-white p-6 shadow-sm">
+                        <div className="flex flex-col items-center gap-6 justify-center">
+                            {/* Avatar */}
+                            <div className="flex flex-col items-center gap-4 md:items-start">
+                                {user.avatar ? (
+                                    <img
+                                        src={user.avatar}
+                                        alt={user.name || user.userName}
+                                        className="h-32 w-32 rounded-full border-4 border-indigo-100 object-cover"
+                                    />
+                                ) : (
+                                    <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 border-indigo-100 bg-gradient-to-br from-indigo-100 to-indigo-50">
+                                        <span className="text-4xl">👤</span>
                                     </div>
                                 )}
                             </div>
 
-                            {/* Verification Badges */}
-                            <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                                {user.emailConfirmed && (
-                                    <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700 border border-green-200">
-                                        ✓ Email xác thực
-                                    </span>
-                                )}
-                                {user.phoneNumberConfirmed && (
-                                    <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700 border border-green-200">
-                                        ✓ Số điện thoại xác thực
-                                    </span>
-                                )}
+                            {/* Info */}
+                            <div className="flex-1 space-y-4 text-center">
+                                <div>
+                                    <p className="text-xs uppercase tracking-[0.08em] text-slate-500">Thông tin Influencer</p>
+                                    <h1 className="text-3xl font-bold text-slate-900">{user.name || user.userName}</h1>
+                                    <p className="text-sm text-slate-600">@{user.userName}</p>
+                                </div>
+
+                                {/* Basic Info Grid */}
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div className="rounded-lg bg-slate-50 p-3">
+                                        <p className="text-xs text-slate-500">Giới tính</p>
+                                        <p className="text-sm font-semibold text-slate-900">{genderLabel}</p>
+                                    </div>
+                                    <div className="rounded-lg bg-slate-50 p-3">
+                                        <p className="text-xs text-slate-500">Gia nhập</p>
+                                        <p className="text-sm font-semibold text-slate-900">{joinedDate}</p>
+                                    </div>
+                                    {user.districtName && user.provinceName && (
+                                        <div className="rounded-lg bg-slate-50 p-3">
+                                            <p className="text-xs text-slate-500">Địa chỉ</p>
+                                            <p className="text-sm font-semibold text-slate-900">{user.districtName}, {user.provinceName}</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Verification Badges */}
+                                <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                                    {user.emailConfirmed && (
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700 border border-green-200">
+                                            ✓ Email xác thực
+                                        </span>
+                                    )}
+                                    {user.phoneNumberConfirmed && (
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700 border border-green-200">
+                                            ✓ Số điện thoại xác thực
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

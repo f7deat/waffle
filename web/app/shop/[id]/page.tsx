@@ -7,6 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import LatestProducts from "./latest-products";
 import BlockRender from "@/components/editor/block-render";
+import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -68,9 +69,9 @@ const Page = async ({ params }: PageProps) => {
                     <div className="absolute bottom-4 left-1/3 h-44 w-44 rounded-full bg-orange-300/10 blur-3xl" />
                 </div>
 
-                <div className="grid gap-10 lg:grid-cols-[1.15fr,1fr] xl:gap-14">
+                <div className="md:flex gap-4">
                     {/* Product Image */}
-                    <div className="group relative overflow-hidden rounded-[2rem] border border-slate-300/80 bg-white/90 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/75">
+                    <div className="group md:w-96 relative overflow-hidden rounded-[2rem] border border-slate-300/80 bg-white/90 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/75">
                         <div className="absolute left-5 top-5 z-20 flex flex-wrap gap-2">
                             <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 backdrop-blur dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200">
                                 Detail View
@@ -109,40 +110,40 @@ const Page = async ({ params }: PageProps) => {
                     </div>
 
                     {/* Product Info */}
-                    <div className="flex flex-col gap-7">
-                        <div className="space-y-5">
+                    <div className="flex flex-col gap-4 flex-1">
+                        <div className="space-y-4">
                             <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-xs font-semibold text-amber-800 dark:border-amber-700/70 dark:bg-amber-900/20 dark:text-amber-300">
                                 <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
                                 </svg>
                                 Featured Product
                             </div>
-                            <h1 className="text-4xl font-black leading-[1.1] text-slate-900 dark:text-slate-100 lg:text-5xl">
+                            <h1 className="text-2xl font-semibold text-slate-900">
                                 {product.name}
                             </h1>
                             {product.description && (
-                                <p className="max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-400 lg:text-lg">
+                                <p className="text-sm md:text-base text-slate-600">
                                     {product.description}
                                 </p>
                             )}
                         </div>
 
                         {/* Price */}
-                        <div className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-amber-50/50 p-6 dark:border-slate-700 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800/80">
+                        <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-amber-50/50 p-4">
                             <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-amber-300/20 blur-2xl" />
                             <div className="flex flex-col gap-2">
                                 <span className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Giá</span>
                                 {hasDiscount ? (
                                     <div className="flex items-baseline gap-4">
-                                        <span className="bg-gradient-to-r from-slate-800 to-amber-700 bg-clip-text text-4xl font-black text-transparent sm:text-5xl dark:from-slate-100 dark:to-amber-300">
+                                        <span className="bg-gradient-to-r from-slate-800 to-amber-700 bg-clip-text text-xl font-black text-transparent sm:text-5xl dark:from-slate-100 dark:to-amber-300">
                                             {localePrice(product.salePrice)}
                                         </span>
-                                        <span className="text-xl font-medium text-slate-400 line-through sm:text-2xl">
+                                        <span className="text-lg font-medium text-slate-400 line-through sm:text-xl">
                                             {localePrice(product.price)}
                                         </span>
                                     </div>
                                 ) : (
-                                    <span className="text-4xl font-black text-slate-900 sm:text-5xl dark:text-slate-100">
+                                    <span className="text-xl font-black text-slate-900">
                                         {localePrice(product.price)}
                                     </span>
                                 )}
@@ -192,14 +193,9 @@ const Page = async ({ params }: PageProps) => {
                                     href={product.affiliateLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-800 to-slate-700 px-8 py-5 text-center text-lg font-bold text-white transition hover:-translate-y-0.5 hover:from-slate-900 hover:to-slate-800 active:scale-[0.98] dark:border-slate-500 dark:from-slate-100 dark:to-slate-300 dark:text-slate-900 dark:hover:from-white dark:hover:to-slate-200"
+                                    className="group relative overflow-hidden btn btn-primary text-center"
                                 >
-                                    <span className="relative z-10 flex items-center justify-center gap-2">
-                                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                        Buy Now
-                                    </span>
+                                    <ShoppingCartOutlined /> Mua ngay
                                     <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition group-hover:translate-x-full group-hover:duration-1000"></div>
                                 </a>
                             ) : product.price ? (
@@ -224,36 +220,29 @@ const Page = async ({ params }: PageProps) => {
                             )}
                             <Link
                                 href="/shop"
-                                className="group rounded-2xl border-2 border-slate-300 bg-white px-8 py-5 text-center text-lg font-semibold text-slate-700 transition hover:border-amber-500 hover:bg-amber-50 hover:text-amber-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-amber-500 dark:hover:bg-amber-950/30 dark:hover:text-amber-300"
+                                className="group rounded-lg border border-slate-300 bg-white px-8 py-2 text-center font-semibold text-slate-700 transition hover:border-amber-500 hover:bg-amber-50 hover:text-amber-700"
                             >
                                 <span className="flex items-center justify-center gap-2">
-                                    <svg className="h-5 w-5 transition group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                    </svg>
+                                    <ArrowLeftOutlined />
                                     Xem thêm sản phẩm khác
                                 </span>
                             </Link>
                         </div>
 
                         {/* Meta Info */}
-                        <div className="space-y-3 rounded-[1.75rem] border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 dark:border-slate-700 dark:from-slate-800 dark:to-slate-900">
-                            <div className="flex items-center justify-between border-b border-slate-200 pb-3 dark:border-slate-700">
+                        <div className="space-y-2 rounded-lg border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 dark:border-slate-700 dark:from-slate-800 dark:to-slate-900">
+                            <div className="flex items-center justify-between border-b border-slate-200 pb-2 dark:border-slate-700">
                                 <span className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                    </svg>
+                                    <EyeOutlined />
                                     Lượt xem
                                 </span>
                                 <span className="text-base font-bold text-slate-900 dark:text-slate-100">
                                     {product.viewCount?.toLocaleString()}
                                 </span>
                             </div>
-                            <div className="flex items-center justify-between border-b border-slate-200 pb-3 dark:border-slate-700">
+                            <div className="flex items-center justify-between border-b border-slate-200 pb-2 dark:border-slate-700">
                                 <span className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
+                                    <CalendarOutlined />
                                     Ngày cập nhật
                                 </span>
                                 <span className="text-base font-bold text-slate-900 dark:text-slate-100">

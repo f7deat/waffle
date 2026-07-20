@@ -89,11 +89,11 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
                             c.ViewCount,
                             c.NormalizedName,
                             StreetName = c.Name,
-                            c.ModifiedDate,
+                            ModifiedDate = c.ModifiedDate ?? c.CreatedDate,
                             DistrictName = d.Name,
                             p.DistrictId,
                             ProvinceName = province.Name,
-                            d.ProvinceId,
+                            ProvinceId = (int?)d.ProvinceId,
                             c.Thumbnail
                         };
             if (filterOptions.DistrictId.HasValue)

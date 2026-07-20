@@ -15,7 +15,7 @@ type SearchParams = Promise<{
 const DEFAULT_PAGE_SIZE = 12;
 
 export async function generateMetadata(): Promise<Metadata> {
-    return {
+	return {
 		title: 'Địa điểm - DefZone.Net',
 		description: 'Khám phá các địa điểm thú vị cùng KOLs và người ảnh hưởng.',
 		openGraph: {
@@ -188,7 +188,8 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 												<h2 className="text-lg font-semibold text-slate-900 line-clamp-2">{place.name}</h2>
 											</Link>
 											<p className="text-sm text-slate-600 line-clamp-2">
-												<EnvironmentOutlined /> {place.districtName}, {place.provinceName}
+												<EnvironmentOutlined className="mr-1" />
+												<Link href={`/district/${place.districtId}`}>{place.districtName}</Link>, {place.provinceName}
 											</p>
 											<div className="mt-auto flex items-center gap-3 text-xs text-slate-500">
 												<span className="flex items-center gap-1">

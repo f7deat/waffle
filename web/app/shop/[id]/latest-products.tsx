@@ -55,7 +55,7 @@ const LatestProducts: React.FC = () => {
                     Discover our newest arrivals and trending items
                 </p>
             </div>
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
                 {products.map((product) => {
                     const hasDiscount = product.salePrice && product.salePrice < (product.price || 0);
                     const discountPercent = hasDiscount

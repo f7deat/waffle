@@ -1,4 +1,5 @@
 using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Services.Categories.Filters;
 using Waffle.Entities.Settings;
 using Waffle.Models;
@@ -9,4 +10,5 @@ public interface ICategoryRepository : IAsyncRepository<Category>
 {
     Task<ListResult> GetListAsync(CategoryFilterOptions filterOptions);
     Task<IEnumerable<object>> GetOptionsAsync(CategoryOptionFilterOptions filterOptions);
+    Task<TResult> GetRandomsAsync(string locale);
 }

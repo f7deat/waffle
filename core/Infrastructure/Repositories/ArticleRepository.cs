@@ -15,6 +15,19 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
 {
     public Task<Article?> FindByNameAsync(string normalizedName) => _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName);
 
+    private static object GetArticleContent(string? content)
+    {
+        if (string.IsNullOrWhiteSpace(content)) return new { };
+        try
+        {
+            return JsonSerializer.Deserialize<object>(content ?? "{}") ?? new { };
+        }
+        catch
+        {
+            return new { };
+        }
+    }
+
     public async Task<TResult> GetByNameAsync(string normalizedName)
     {
         var article = await _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName);
@@ -36,7 +49,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
             article.CreatedDate,
             article.Locale,
             article.CreatedBy,
-            Content = JsonSerializer.Deserialize<object>(article.Content ?? "{}"),
+            Content = GetArticleContent(article.Content),
             CreatorName = user?.Name,
             CreatorAvatar = user?.Avatar,
             CreatorUserName = user?.UserName

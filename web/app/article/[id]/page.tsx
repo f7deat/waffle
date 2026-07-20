@@ -16,18 +16,23 @@ type Params = Promise<{
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
     const { id } = await params;
-    const res = await apiArticleMeta(id);
-    const article = res.data;
-    if (!article) return {};
-    return {
-        title: `${article.title} - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
-        description: article.description,
-        openGraph: {
-            title: article.title,
+    try {
+        const res = await apiArticleMeta(id);
+        const article = res.data;
+        if (!article) return {};
+        return {
+            title: `${article.title} - ${process.env.NEXT_PUBLIC_SITE_NAME}`,
             description: article.description,
-            images: article.images
-        },
-    };
+            openGraph: {
+                title: article.title,
+                description: article.description,
+                images: article.images
+            },
+        };
+    }
+    catch (error) {
+        return {};
+    }
 }
 
 const Page = async ({ params }: { params: Params }) => {
