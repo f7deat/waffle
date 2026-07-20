@@ -134,7 +134,7 @@ const ArticlePage: React.FC = () => {
         icon={<PlusOutlined />}
         onClick={handleOpenForm}
       >
-        Create Article
+        Tạo mới
       </Button>
     }>
       <ProTable

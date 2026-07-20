@@ -1,4 +1,5 @@
-﻿using Waffle.Core.Foundations;
+﻿using System.Text.Json;
+using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
@@ -49,7 +50,7 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
             product.SKU,
             product.UnitInStock,
             product.AffiliateLink,
-            product.Content,
+            Content = JsonSerializer.Deserialize<object>(product.Content ?? "{}"),
             product.NormalizedName,
             product.CategoryId,
             product.CreatedDate,

@@ -1,7 +1,7 @@
 import { addArticle } from '@/services/article';
-import { DrawerForm, DrawerFormProps, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
+import { ModalForm, ModalFormProps, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 
-interface ArticleFormProps extends DrawerFormProps {
+interface ArticleFormProps extends ModalFormProps {
   open: boolean;
   onSuccess?: () => void;
 }
@@ -18,8 +18,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ onSuccess, ...drawerFormProps
   }
 
   return (
-    <DrawerForm
-      title='Create Article'
+    <ModalForm
+      title='Tạo mới'
       onFinish={handleSubmit}
       {...drawerFormProps}
     >
@@ -30,7 +30,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ onSuccess, ...drawerFormProps
         label="Description"
       />
 
-    </DrawerForm>
+    </ModalForm>
   );
 };
 

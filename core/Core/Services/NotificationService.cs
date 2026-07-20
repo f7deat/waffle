@@ -106,11 +106,18 @@ public class NotificationService(ApplicationDbContext _context, IHCAService _hca
 
     public async Task<TResult<int>> GetUnreadCountAsync()
     {
-        var userId = _hcaService.GetUserId();
-        if (userId == Guid.Empty) return TResult<int>.Failed("User not found!");
+        try
+        {
+            var userId = _hcaService.GetUserId();
+            if (userId == Guid.Empty) return TResult<int>.Failed("User not found!");
 
-        var count = await _context.NotificationUsers.CountAsync(x => x.UserId == userId && !x.IsRead);
-        return TResult<int>.Ok(count);
+            var count = await _context.NotificationUsers.CountAsync(x => x.UserId == userId && !x.IsRead);
+            return TResult<int>.Ok(count);
+        }
+        catch (Exception ex)
+        {
+            return TResult<int>.Failed($"An error occurred while retrieving unread notification count: {ex.Message}");
+        }
     }
 
     public async Task<TResult> MarkAsReadAsync(Guid id)
