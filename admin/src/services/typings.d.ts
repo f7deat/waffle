@@ -163,7 +163,44 @@ declare namespace API {
     phoneNumberConfirmed: boolean;
     gender?: boolean;
     name: string;
+    amount?: number;
   };
+
+  type UserTopupTransaction = BaseEntity & {
+    userId: string;
+    amount: number;
+    balanceBefore: number;
+    balanceAfter: number;
+    invoiceNumber: string;
+    note?: string;
+    createdBy: string;
+    createdByName?: string;
+    createdAt: string;
+  }
+
+  type UserTopupStats = {
+    userId: string;
+    currentBalance: number;
+    totalTopup: number;
+    thisMonthTopup: number;
+    topupCount: number;
+    lastTopupAt?: string;
+  }
+
+  type UserTopupInvoice = {
+    transactionId: string;
+    invoiceNumber: string;
+    userId: string;
+    userName?: string;
+    userEmail?: string;
+    amount: number;
+    balanceBefore: number;
+    balanceAfter: number;
+    note?: string;
+    createdAt: string;
+    createdBy: string;
+    createdByName?: string;
+  }
 
   type UpgradeListItem = {
     name: string;

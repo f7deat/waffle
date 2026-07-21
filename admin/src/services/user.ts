@@ -93,3 +93,28 @@ export async function apiInfluencerOptions(params?: any) {
 export async function apiUserOptions() {
   return request(`user/options`);
 }
+
+export async function apiTopupUser(data: {
+  userId: string;
+  amount: number;
+  note?: string;
+}) {
+  return request(`user/topup`, {
+    method: 'POST',
+    data,
+  });
+}
+
+export async function apiTopupHistory(id: string, params?: API.IFilter) {
+  return request(`user/topup-history/${id}`, {
+    params,
+  });
+}
+
+export async function apiTopupStats(id: string) {
+  return request(`user/topup-stats/${id}`);
+}
+
+export async function apiTopupInvoice(transactionId: string) {
+  return request(`user/topup-invoice/${transactionId}`);
+}

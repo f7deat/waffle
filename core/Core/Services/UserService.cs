@@ -60,7 +60,8 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
             Name = user.Name,
             Roles = await _userManager.GetRolesAsync(user),
             EmailConfirmed = user.EmailConfirmed,
-            Avatar = user.Avatar
+            Avatar = user.Avatar,
+            Amount = user.Amount
         };
     }
 
@@ -232,5 +233,126 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
             query = query.Where(x => x.Name.ToLower().Contains(selectOptions.KeyWords) || x.UserName.ToLower().Contains(selectOptions.KeyWords));
         }
         return await query.Select(x => new { Label = x.Name, x.Avatar, x.UserName, Value = x.Id }).ToListAsync();
+    }
+
+    private async Task<TResult> TopupInternalAsync(Guid userId, decimal amount, string? note, Guid createdBy)
+    {
+        if (amount <= 0) return TResult.Failed("Số tiền nạp phải lớn hơn 0.");
+
+        var user = await _context.Users.FindAsync(userId);
+        if (user is null) return TResult.Failed("User not found!");
+
+        var balanceBefore = user.Amount;
+        user.Amount += amount;
+
+        var transaction = new UserTopupTransaction
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            Amount = amount,
+            BalanceBefore = balanceBefore,
+            BalanceAfter = user.Amount,
+            InvoiceNumber = $"INV-{DateTime.UtcNow:yyyyMMddHHmmss}-{Random.Shared.Next(100, 999)}",
+            Note = string.IsNullOrWhiteSpace(note) ? null : note.Trim(),
+            CreatedBy = createdBy,
+            CreatedAt = DateTime.UtcNow,
+        };
+
+        await _context.UserTopupTransactions.AddAsync(transaction);
+        await _context.SaveChangesAsync();
+
+        return TResult.Ok(new
+        {
+            transaction.Id,
+            transaction.InvoiceNumber,
+            transaction.Amount,
+            transaction.BalanceBefore,
+            transaction.BalanceAfter,
+            transaction.CreatedAt
+        });
+    }
+
+    public async Task<TResult> TopupAsync(AdminTopupArgs args, Guid adminId)
+    {
+        return await TopupInternalAsync(args.UserId, args.Amount, args.Note, adminId);
+    }
+
+    public async Task<TResult> TopupProfileAsync(Guid userId, ProfileTopupArgs args)
+    {
+        return await TopupInternalAsync(userId, args.Amount, args.Note, userId);
+    }
+
+    public async Task<ListResult<UserTopupTransactionViewModel>> GetTopupHistoryAsync(Guid userId, BasicFilterOptions filterOptions)
+    {
+        var query = from t in _context.UserTopupTransactions
+                    join a in _context.Users on t.CreatedBy equals a.Id into adminJoin
+                    from admin in adminJoin.DefaultIfEmpty()
+                    where t.UserId == userId
+                    orderby t.CreatedAt descending
+                    select new UserTopupTransactionViewModel
+                    {
+                        Id = t.Id,
+                        UserId = t.UserId,
+                        Amount = t.Amount,
+                        BalanceBefore = t.BalanceBefore,
+                        BalanceAfter = t.BalanceAfter,
+                        InvoiceNumber = t.InvoiceNumber,
+                        Note = t.Note,
+                        CreatedBy = t.CreatedBy,
+                        CreatedByName = admin != null ? (admin.Name ?? admin.UserName) : null,
+                        CreatedAt = t.CreatedAt,
+                    };
+
+        return await ListResult<UserTopupTransactionViewModel>.Success(query, filterOptions);
+    }
+
+    public async Task<TResult> GetTopupStatsAsync(Guid userId)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        if (user is null) return TResult.Failed("User not found!");
+
+        var query = _context.UserTopupTransactions.Where(x => x.UserId == userId);
+        var now = DateTime.UtcNow;
+        var monthStart = new DateTime(now.Year, now.Month, 1);
+
+        var stats = new UserTopupStatsViewModel
+        {
+            UserId = userId,
+            CurrentBalance = user.Amount,
+            TotalTopup = await query.SumAsync(x => x.Amount),
+            ThisMonthTopup = await query.Where(x => x.CreatedAt >= monthStart).SumAsync(x => x.Amount),
+            TopupCount = await query.CountAsync(),
+            LastTopupAt = await query.OrderByDescending(x => x.CreatedAt).Select(x => (DateTime?)x.CreatedAt).FirstOrDefaultAsync(),
+        };
+
+        return TResult.Ok(stats);
+    }
+
+    public async Task<TResult> GetTopupInvoiceAsync(Guid transactionId)
+    {
+        var query = from t in _context.UserTopupTransactions
+                    join u in _context.Users on t.UserId equals u.Id
+                    join a in _context.Users on t.CreatedBy equals a.Id into adminJoin
+                    from admin in adminJoin.DefaultIfEmpty()
+                    where t.Id == transactionId
+                    select new UserTopupInvoiceViewModel
+                    {
+                        TransactionId = t.Id,
+                        InvoiceNumber = t.InvoiceNumber,
+                        UserId = u.Id,
+                        UserName = u.Name ?? u.UserName,
+                        UserEmail = u.Email,
+                        Amount = t.Amount,
+                        BalanceBefore = t.BalanceBefore,
+                        BalanceAfter = t.BalanceAfter,
+                        Note = t.Note,
+                        CreatedAt = t.CreatedAt,
+                        CreatedBy = t.CreatedBy,
+                        CreatedByName = admin != null ? (admin.Name ?? admin.UserName) : null,
+                    };
+
+        var invoice = await query.FirstOrDefaultAsync();
+        if (invoice is null) return TResult.Failed("Hóa đơn không tồn tại.");
+        return TResult.Ok(invoice);
     }
 }

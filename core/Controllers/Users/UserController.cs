@@ -352,6 +352,9 @@ public class UserController(IUserService _userService, IFileService _fileService
     [HttpPut("profile/avatar")]
     public async Task<IActionResult> UpdateProfileAvatarAsync([FromForm] ChangeAvatarProfileArgs args) => Ok(await _userService.ChangeAvatarAsync(new ChangeAvatarArgs(User.GetId(), args.File), $"{Request.Scheme}://{Request.Host.Value}"));
 
+    [HttpPost("profile/topup")]
+    public async Task<IActionResult> TopupProfileAsync([FromBody] ProfileTopupArgs args) => Ok(await _userService.TopupProfileAsync(User.GetId(), args));
+
     [HttpPost("reset-password"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordArgs args)
     {
@@ -361,6 +364,18 @@ public class UserController(IUserService _userService, IFileService _fileService
         await _userManager.ResetPasswordAsync(user, token, args.NewPassword);
         return Ok(TResult.Success);
     }
+
+    [HttpPost("topup"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> TopupAsync([FromBody] AdminTopupArgs args) => Ok(await _userService.TopupAsync(args, User.GetId()));
+
+    [HttpGet("topup-history/{id}"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> TopupHistoryAsync([FromRoute] Guid id, [FromQuery] BasicFilterOptions filterOptions) => Ok(await _userService.GetTopupHistoryAsync(id, filterOptions));
+
+    [HttpGet("topup-stats/{id}"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> TopupStatsAsync([FromRoute] Guid id) => Ok(await _userService.GetTopupStatsAsync(id));
+
+    [HttpGet("topup-invoice/{transactionId}"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> TopupInvoiceAsync([FromRoute] Guid transactionId) => Ok(await _userService.GetTopupInvoiceAsync(transactionId));
 
     [HttpGet("user-name/{userName}"), AllowAnonymous]
     public async Task<IActionResult> GetByUserNameAsync([FromRoute] string userName) => Ok(await _userService.GetByUserNameAsync(userName));

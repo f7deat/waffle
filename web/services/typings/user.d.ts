@@ -7,6 +7,7 @@ declare namespace API {
         phoneNumber?: string;
         name?: string;
         avatar?: string;
+        amount?: number;
         roles: string[];
     }
     interface UserBasicInfo {

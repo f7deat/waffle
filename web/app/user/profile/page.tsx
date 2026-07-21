@@ -1,7 +1,7 @@
 "use client";
 
 import PageContainer from "@/components/layout/page-container"
-import { apiCurrentUser, apiChangePassword, apiChangeAvatar } from "@/services/user/user";
+import { apiCurrentUser, apiChangePassword, apiChangeAvatar, apiTopupProfile } from "@/services/user/user";
 import { apiInfluencerMyApplications } from "@/services/kol/kol";
 import { apiMyOrders } from "@/services/shop/order";
 import { LockOutlined, CameraOutlined, LogoutOutlined, EditOutlined } from "@ant-design/icons";
@@ -29,6 +29,11 @@ const Page: React.FC = () => {
     const [passwordError, setPasswordError] = useState("");
     const [passwordSuccess, setPasswordSuccess] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isTopupModalOpen, setIsTopupModalOpen] = useState(false);
+    const [topupForm, setTopupForm] = useState({ amount: "", note: "" });
+    const [topupError, setTopupError] = useState("");
+    const [topupSuccess, setTopupSuccess] = useState("");
+    const [isTopupSubmitting, setIsTopupSubmitting] = useState(false);
     const [myOrders, setMyOrders] = useState<API.MyOrderItem[]>([]);
     const [myOrdersLoading, setMyOrdersLoading] = useState(true);
     const [appliedJobs, setAppliedJobs] = useState<API.MyAppliedInfluencerJobItem[]>([]);
@@ -246,6 +251,56 @@ const Page: React.FC = () => {
         router.push("/user/login");
     };
 
+    const handleOpenTopupModal = () => {
+        setIsTopupModalOpen(true);
+        setTopupError("");
+        setTopupSuccess("");
+        setTopupForm({ amount: "", note: "" });
+    };
+
+    const handleCloseTopupModal = () => {
+        if (isTopupSubmitting) return;
+        setIsTopupModalOpen(false);
+        setTopupError("");
+        setTopupSuccess("");
+        setTopupForm({ amount: "", note: "" });
+    };
+
+    const handleSubmitTopup = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setTopupError("");
+        setTopupSuccess("");
+
+        const amount = Number(topupForm.amount);
+        if (!Number.isFinite(amount) || amount <= 0) {
+            setTopupError("Vui lòng nhập số tiền nạp hợp lệ");
+            return;
+        }
+
+        setIsTopupSubmitting(true);
+        try {
+            const response = await apiTopupProfile({
+                amount,
+                note: topupForm.note.trim() || undefined,
+            });
+
+            if (response?.succeeded) {
+                const updatedUser = await apiCurrentUser();
+                setUser(updatedUser);
+                setTopupSuccess("Nạp tiền thành công!");
+                setTimeout(() => {
+                    handleCloseTopupModal();
+                }, 1200);
+            } else {
+                setTopupError(response?.message || "Nạp tiền thất bại");
+            }
+        } catch (error: any) {
+            setTopupError(error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại");
+        } finally {
+            setIsTopupSubmitting(false);
+        }
+    };
+
     if (loading) {
         return (
             <PageContainer>
@@ -346,6 +401,19 @@ const Page: React.FC = () => {
                     </h2>
                     
                     <div className="space-y-4">
+                        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <p className="text-sm text-blue-700">Số dư tài khoản</p>
+                                <p className="text-2xl font-bold text-blue-900">{formatMoney(Number(user.amount || 0))}</p>
+                            </div>
+                            <button
+                                onClick={handleOpenTopupModal}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                            >
+                                Nạp tiền
+                            </button>
+                        </div>
+
                         {/* Email */}
                         <div className="flex flex-col sm:flex-row sm:items-center">
                             <div className="w-full sm:w-1/3 text-gray-600 font-medium mb-1 sm:mb-0">
@@ -704,6 +772,88 @@ const Page: React.FC = () => {
                                 </button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Topup Modal */}
+            {isTopupModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xl font-bold text-gray-900">Nạp tiền tài khoản</h3>
+                            <button
+                                onClick={handleCloseTopupModal}
+                                className="text-gray-400 hover:text-gray-600 transition-colors"
+                                disabled={isTopupSubmitting}
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleSubmitTopup} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Số tiền nạp (VND)
+                                </label>
+                                <input
+                                    type="number"
+                                    min={1000}
+                                    step={1000}
+                                    value={topupForm.amount}
+                                    onChange={(e) => setTopupForm(prev => ({ ...prev, amount: e.target.value }))}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Ví dụ: 100000"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Ghi chú (tuỳ chọn)
+                                </label>
+                                <textarea
+                                    value={topupForm.note}
+                                    onChange={(e) => setTopupForm(prev => ({ ...prev, note: e.target.value }))}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Nhập ghi chú giao dịch"
+                                    rows={3}
+                                    maxLength={300}
+                                />
+                            </div>
+
+                            {topupError && (
+                                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                                    {topupError}
+                                </div>
+                            )}
+
+                            {topupSuccess && (
+                                <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+                                    {topupSuccess}
+                                </div>
+                            )}
+
+                            <div className="flex gap-3 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={handleCloseTopupModal}
+                                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                                    disabled={isTopupSubmitting}
+                                >
+                                    Hủy
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={isTopupSubmitting}
+                                >
+                                    {isTopupSubmitting ? "Đang xử lý..." : "Xác nhận nạp"}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

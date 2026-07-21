@@ -41,6 +41,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Category> Categories { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<TagCatalog> TagCatalogs { get; set; }
+    public DbSet<UserTopupTransaction> UserTopupTransactions { get; set; } = default!;
     #region Job
     public DbSet<JobOpportunity> JobOpportunities { get; set; } = default!;
     public DbSet<JobApplication> JobApplications { get; set; } = default!;
