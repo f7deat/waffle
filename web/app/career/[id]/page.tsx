@@ -170,7 +170,7 @@ const Page = async ({ params }: { params: Params }) => {
                 </section>
 
                 <aside id="apply" className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <h2 className="text-xl font-bold text-slate-900">Ung tuyen vi tri nay</h2>
+                    <h2 className="text-xl font-bold text-slate-900">Ứng tuyển vị trí này</h2>
                     <p className="mt-2 text-sm text-slate-600">Gui CV de ung tuyen nhanh. He thong se luu va chuyen den bo phan tuyen dung.</p>
                     <div className="mt-4">
                         <ApplyForm jobId={job.id} />

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import LatestProducts from "./latest-products";
 import BlockRender from "@/components/editor/block-render";
-import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, FireFilled, ShoppingCartOutlined } from "@ant-design/icons";
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -71,10 +71,10 @@ const Page = async ({ params }: PageProps) => {
 
                 <div className="md:flex gap-4">
                     {/* Product Image */}
-                    <div className="group md:w-96 relative overflow-hidden rounded-[2rem] border border-slate-300/80 bg-white/90 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/75">
+                    <div className="group md:w-96 relative overflow-hidden rounded-[2rem] border border-slate-300/80 bg-white/90 backdrop-blur-sm flex">
                         <div className="absolute left-5 top-5 z-20 flex flex-wrap gap-2">
                             <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 backdrop-blur dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200">
-                                Detail View
+                                Đang Hot <FireFilled className="text-orange-500" />
                             </span>
                             {product.unitInStock !== undefined && product.unitInStock > 0 && (
                                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
@@ -83,7 +83,7 @@ const Page = async ({ params }: PageProps) => {
                             )}
                         </div>
 
-                        <div className="aspect-square w-full bg-gradient-to-br from-slate-50 via-white to-amber-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800/80">
+                        <div className="aspect-square">
                             {product.thumbnail ? (
                                 <img
                                     src={product.thumbnail}

@@ -4,6 +4,7 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import { apiCurrentUser } from "@/services/user/user";
 import { SiteSetting } from "@/typings/setting";
 import { apiGetSiteSetting } from "@/services/setting";
+import { getThemeKey } from "@/config/theme";
 
 export interface AppState {
     /** Thông tin user hiện tại, null nếu chưa đăng nhập */
@@ -19,15 +20,23 @@ export interface AppState {
     /** Đăng xuất: xóa token và reset state */
     logout: () => void;
     settings?: SiteSetting;
+    themeKey: string;
 }
 
 const AppContext = createContext<AppState | undefined>(undefined);
 
-export function AppProvider({ children }: { children: React.ReactNode }) {
+export function AppProvider({
+    children,
+    initialSettings,
+}: {
+    children: React.ReactNode;
+    initialSettings?: SiteSetting;
+}) {
 
     const [user, setUser] = useState<API.User | null>(null);
     const [initializing, setInitializing] = useState(true);
-    const [settings, setSettings] = useState<SiteSetting | undefined>(undefined);
+    const [settings, setSettings] = useState<SiteSetting | undefined>(initialSettings);
+    const themeKey = getThemeKey(settings?.theme);
 
     const fetchUser = useCallback(async () => {
         const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
@@ -83,6 +92,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 refreshUser,
                 logout,
                 settings,
+                themeKey,
             }}
         >
             {children}

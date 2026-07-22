@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import "../themes/shinec.css";
 import { BarsOutlined, CalendarOutlined, CloseOutlined, FacebookOutlined, LinkedinFilled, MailOutlined, TikTokFilled } from "@ant-design/icons";
 
 type SiteHeaderProps = {
@@ -124,10 +123,11 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
 
   return (
     <header className="bg-white border-b">
-      <div className="bg-[var(--primary)]">
+      <div className="bg-primary">
         <div className="container mx-auto px-4 sm:px-6 text-white text-sm py-1 flex items-center gap-4">
-          <div className="flex-1 hidden md:block">
-            <MailOutlined /> <a href="mailto:congtyshinecgialai@gmail.com" className="hover:underline">
+          <div className="flex-1 hidden md:flex items-center gap-1">
+            <MailOutlined />
+            <a href="mailto:congtyshinecgialai@gmail.com" className="hover:underline text-white hover:text-white">
               congtyshinecgialai@gmail.com
             </a>
           </div>
@@ -135,13 +135,13 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
             Mon - Fri: 9.00 am - 6.00 pm
           </div>
           <div className="flex-1 text-right">
-            <a href="https://www.facebook.com/shinecgialai" target="_blank" rel="noopener noreferrer" className="hover:underline">
+            <a href="https://www.facebook.com/shinecgialai" target="_blank" rel="noopener noreferrer" className="hover:underline text-white hover:text-white">
               <FacebookOutlined />
             </a>
-            <a href="#" className="ml-4 hover:underline">
+            <a href="#" className="ml-4 hover:underline text-white hover:text-white">
               <LinkedinFilled />
             </a>
-            <a href="#" className="ml-4 hover:underline">
+            <a href="#" className="ml-4 hover:underline text-white hover:text-white">
               <TikTokFilled />
             </a>
           </div>
@@ -170,7 +170,7 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
           <div className="hidden items-center gap-2 md:flex">
             <Link
               href="/contact"
-              className="bg-[var(--primary)] rounded-md px-8 py-3 font-bold text-white hover:text-white"
+              className="bg-primary rounded-md px-8 py-3 font-bold text-white hover:text-white"
             >
               Liên hệ <CalendarOutlined />
             </Link>
@@ -239,7 +239,7 @@ export function ShinecHeader({ currentPage }: SiteHeaderProps) {
           </Link>
           <Link
             href="/lien-he"
-            className="drawer-item inline-flex items-center justify-between rounded-xl bg-[var(--primary)] px-3 py-2.5 text-sm font-bold text-white"
+            className="drawer-item inline-flex items-center justify-between rounded-xl bg-primary px-3 py-2.5 text-sm font-bold text-white"
             onClick={closeDrawer}
             style={{ transitionDelay: "360ms" }}
           >

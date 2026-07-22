@@ -9,7 +9,7 @@ import { apiGetSiteSetting } from "@/services/setting";
 import { EyeFilled } from "@ant-design/icons";
 import { Metadata } from "next";
 import ShinecHome from "@/components/home/shinec";
-import { THEME_NAME } from "@/config/theme";
+import { getThemeKey, THEME_NAME } from "@/config/theme";
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -28,8 +28,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
+  const settings = await apiGetSiteSetting();;
 
-  const settings = await apiGetSiteSetting();
   const articlesResponse = await apiArticleList({ current: 1, pageSize: 5 });
   const articles = articlesResponse.data || [];
 
@@ -62,12 +62,12 @@ export default async function Home() {
     backgroundImage: `url(${url})`,
   });
 
-  if (settings.theme === THEME_NAME.SHINEC) {
+  if (getThemeKey(settings?.theme) === THEME_NAME.SHINEC) {
     return <ShinecHome articles={articles} />;
   }
 
   return (
-    <main className="dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <main className="bg-slate-100">
       <div className="mx-auto px-4 py-10">
         <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
           <aside className="space-y-6 lg:sticky lg:top-20 self-start">

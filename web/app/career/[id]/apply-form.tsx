@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 type Props = {
@@ -69,7 +70,7 @@ const ApplyForm: React.FC<Props> = ({ jobId }) => {
                 disabled={isSubmitting}
                 className={`w-full rounded-lg px-4 py-2 text-sm font-semibold text-white transition ${isSubmitting ? "cursor-not-allowed bg-slate-400" : "bg-orange-500 hover:bg-orange-600"}`}
             >
-                {isSubmitting ? "Dang gui..." : "Ung tuyen ngay"}
+                {isSubmitting ? "Đang gửi..." : "Ứng tuyển ngay"}
             </button>
 
             {message && (
@@ -77,6 +78,10 @@ const ApplyForm: React.FC<Props> = ({ jobId }) => {
                     {message}
                 </p>
             )}
+
+            <Link href="/user/login" className="btn btn-primary block text-center">
+                Đăng nhập
+            </Link>
         </form>
     );
 };

@@ -60,7 +60,8 @@ const ArticlePage: React.FC = () => {
       dataIndex: "viewCount",
       key: "viewCount",
       width: 100,
-      search: false
+      search: false,
+      valueType: "digit"
     },
     {
       title: "Published",

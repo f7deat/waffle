@@ -158,7 +158,7 @@ const Page: React.FC = () => {
                         <div className="mb-6 space-y-1 text-center">
                             <p className="text-xs uppercase tracking-[0.12em] text-indigo-600">Welcome back</p>
                             <h2 className="text-2xl font-semibold text-slate-900">Đăng nhập tài khoản</h2>
-                            <p className="text-sm text-slate-600">Tiếp tục quản lý hành trình của bạn tại DefZone.Net.</p>
+                            <p className="text-sm text-slate-600">Tiếp tục quản lý hành trình của bạn.</p>
                         </div>
 
                         <Form
@@ -202,9 +202,9 @@ const Page: React.FC = () => {
                             </div>
 
                             <Form.Item>
-                                <Button type="primary" htmlType="submit" size="large" block className="rounded-lg">
+                                <button type="submit" className="rounded-lg px-4 py-2 btn btn-primary w-full text-center">
                                     Đăng nhập
-                                </Button>
+                                </button>
                             </Form.Item>
 
                             <div className="my-4 flex items-center gap-3 text-xs uppercase tracking-[0.08em] text-slate-400">
@@ -213,7 +213,7 @@ const Page: React.FC = () => {
                                 <span className="h-px flex-1 bg-slate-200" />
                             </div>
 
-                            <div className="space-y-2">
+                            <div className="space-y-2 mb-4">
                                 {isGoogleLoading ? (
                                     <Button
                                         size="large"
@@ -241,7 +241,7 @@ const Page: React.FC = () => {
                         </Form>
                     </section>
                     <section className="space-y-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-700">DefZone.Net Access</p>
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-700">Truy cập tài khoản</p>
                         <h1 className="text-3xl font-bold text-slate-900 lg:text-4xl">Đăng nhập để theo dõi chiến dịch và booking</h1>
                         <p className="max-w-2xl text-sm text-slate-600 lg:text-base">
                             Quản lý hồ sơ influencer, nhận brief mới, theo dõi trạng thái booking và cập nhật hiệu quả nội dung trong một nơi duy nhất.

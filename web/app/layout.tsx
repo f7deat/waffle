@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Quicksand } from 'next/font/google'
 import Script from "next/script";
-import Footer from "@/components/layout/footer";
-import { ConfigProvider } from "antd";
-import Header from "@/components/layout/header";
-import { AppProvider } from "@/contexts/app-context";
-import { CartProvider } from "@/contexts/cart-context";
 import "./globals.css";
+import { AppProvider } from "@/contexts/app-context";
+import AppShell from "@/components/layout/app-shell";
+import { apiGetSiteSetting } from "@/services/setting";
+import { getThemeKey, getThemeStylesheetHref } from "@/config/theme";
 
 const quicksand = Quicksand({
   subsets: ['latin'],
@@ -24,10 +23,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialSettings = await apiGetSiteSetting();
+
+  const initialThemeKey = getThemeKey(initialSettings?.theme);
+  const initialThemeStylesheetHref = getThemeStylesheetHref(initialThemeKey);
 
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en" data-scroll-behavior="smooth" data-theme={initialThemeKey.toLowerCase()}>
       <head>
+        <link id="app-theme-css" rel="stylesheet" href={initialThemeStylesheetHref} data-theme-link="true" />
         <Script
           strategy="afterInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1430352774694606"
@@ -35,33 +39,10 @@ export default async function RootLayout({
           async
         />
       </head>
-      <body style={quicksand.style} className="bg-slate-100">
-        <ConfigProvider
-          theme={{
-            components: {
-              Input: {
-                colorBorder: '#e2e8f0'
-              },
-              Button: {
-                borderRadius: 0
-              },
-              Select: {
-                colorBorder: '#e2e8f0'
-              }
-            },
-            token: {
-              fontFamily: "'Quicksand', sans-serif"
-            }
-          }}
-        >
-          <AppProvider>
-            <CartProvider>
-              <Header />
-              {children}
-              <Footer />
-            </CartProvider>
-          </AppProvider>
-        </ConfigProvider>
+      <body style={quicksand.style}>
+        <AppProvider initialSettings={initialSettings}>
+          <AppShell>{children}</AppShell>
+        </AppProvider>
       </body>
     </html>
   );

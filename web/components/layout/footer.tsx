@@ -7,9 +7,9 @@ import { useAppContext } from "@/contexts/app-context";
 
 const Footer: React.FC = () => {
 
-    const { settings } = useAppContext();
+    const { themeKey } = useAppContext();
 
-    if (settings?.theme === THEME_NAME.SHINEC) {
+    if (themeKey === THEME_NAME.SHINEC) {
         return <ShinecFooter />;
     }
     return <DefaultFooter />

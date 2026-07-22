@@ -8,10 +8,27 @@ html {
 
 a {
   cursor: pointer;
+  color: var(--color-primary);
+  text-decoration: none;
 }
 
 input {
   outline: none;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.btn-primary {
+  color: white;
+  background-color: var(--color-primary);
 }
 
 .prose ul, .prose ol {

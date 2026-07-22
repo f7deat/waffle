@@ -7,9 +7,9 @@ import { THEME_NAME } from "@/config/theme";
 
 const ProductList: React.FC<{ products: ProductItemType[] }> = ({ products }) => {
 
-    const { settings } = useAppContext();
+    const { themeKey } = useAppContext();
 
-    if (settings?.theme === THEME_NAME.SHINEC) {
+    if (themeKey === THEME_NAME.SHINEC) {
         return (
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {products.map((product) => (

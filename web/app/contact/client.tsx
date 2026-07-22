@@ -179,7 +179,7 @@ const ContactClient: React.FC = () => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full rounded-lg bg-[var(--primary)] px-6 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-600 dark:hover:bg-blue-700"
+                            className="w-full rounded-lg bg-primary px-6 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-600 dark:hover:bg-blue-700"
                         >
                             {isSubmitting ? 'Sending...' : 'Send Message'}
                         </button>

@@ -66,9 +66,9 @@ const LatestProducts: React.FC = () => {
                         <Link
                             key={product.id}
                             href={`/shop/${product.normalizedName}`}
-                            className="group overflow-hidden rounded bg-white shadow transition hover:shadow-2xl hover:scale-[1.02] hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700"
+                            className="group overflow-hidden rounded-lg bg-white shadow transition hover:shadow-2xl hover:scale-[1.02] hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700"
                         >
-                            <div className="relative aspect-square h-64 w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900">
+                            <div className="relative aspect-square h-64 w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50">
                                 {product.thumbnail ? (
                                     <img
                                         src={product.thumbnail}

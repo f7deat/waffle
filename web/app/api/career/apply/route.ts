@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
         const accessToken = request.cookies.get("access_token")?.value;
         if (!accessToken) {
-            return NextResponse.json({ succeeded: false, message: "Vui long dang nhap de ung tuyen." }, { status: 401 });
+            return NextResponse.json({ succeeded: false, message: "Vui lòng đăng nhập để ứng tuyển." }, { status: 401 });
         }
 
         const sourceForm = await request.formData();
@@ -22,11 +22,11 @@ export async function POST(request: NextRequest) {
         const resumeFile = sourceForm.get("resumeFile");
 
         if (!jobId) {
-            return NextResponse.json({ succeeded: false, message: "Thieu ma cong viec." }, { status: 400 });
+            return NextResponse.json({ succeeded: false, message: "Thiếu mã công việc." }, { status: 400 });
         }
 
         if (!(resumeFile instanceof File) || resumeFile.size === 0) {
-            return NextResponse.json({ succeeded: false, message: "Vui long tai len CV." }, { status: 400 });
+            return NextResponse.json({ succeeded: false, message: "Vui lòng tải lên CV." }, { status: 400 });
         }
 
         const backendForm = new FormData();

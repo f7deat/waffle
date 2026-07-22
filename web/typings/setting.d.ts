@@ -6,5 +6,5 @@ export type SiteSetting = {
     phoneNumber?: string;
     email?: string;
     address?: string;
-    theme: 'DEFAULT' | 'SHINEC'
+    theme: string;
 }

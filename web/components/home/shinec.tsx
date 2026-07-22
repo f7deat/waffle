@@ -276,7 +276,7 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                             <button
                                 type="button"
                                 onClick={openContactForm}
-                                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[var(--primary)] px-6 text-sm font-bold text-white transition-transform duration-300 hover:-translate-y-0.5 hover:bg-[var(--primary-mid)]"
+                                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-white transition-transform duration-300 hover:-translate-y-0.5 hover:bg-[var(--primary-mid)]"
                             >
                                 Nhận tư vấn đầu tư
                             </button>
@@ -369,7 +369,7 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="mt-4 inline-flex h-11 items-center justify-center rounded-full bg-[var(--primary)] px-5 text-sm font-bold text-white transition hover:bg-[var(--primary-mid)] disabled:cursor-not-allowed disabled:opacity-70"
+                                    className="mt-4 inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-bold text-white transition hover:bg-[var(--primary-mid)] disabled:cursor-not-allowed disabled:opacity-70"
                                 >
                                     {isSubmitting ? "Đang gửi..." : "Gửi yêu cầu tư vấn"}
                                 </button>
@@ -419,12 +419,12 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                         </div>
                         <div className="md:w-1/2 mt-10 md:mt-0 flex items-center justify-center">
                             <div className="p-10 relative">
-                                <div className="absolute -inset-1 rounded-full bg-[var(--primary)] w-28 h-28 flex items-center justify-center text-white font-bold text-2xl">
-                                    <div className="border-2 bg-[var(--primary)] w-24 h-24 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                                <div className="absolute -inset-1 rounded-full bg-primary w-28 h-28 flex items-center justify-center text-white font-bold text-2xl">
+                                    <div className="border-2 bg-primary w-24 h-24 rounded-full flex items-center justify-center text-white font-bold text-2xl">
                                         ESG
                                     </div>
                                 </div>
-                                <img src="https://shinec.com.vn/wp-content/uploads/2025/01/dak-doa.jpg" alt="Shinec Gia Lai" className="rounded w-full object-cover aspect-[4/3] max-w-xl border-4 border-[var(--primary)] p-1" />
+                                <img src="https://shinec.com.vn/wp-content/uploads/2025/01/dak-doa.jpg" alt="Shinec Gia Lai" className="rounded w-full object-cover aspect-[4/3] max-w-xl border-4 border-primary p-1" />
                                 <div className="text-center mt-4 text-slate-900 font-bold">Phối cảnh 3D dự án</div>
                             </div>
                         </div>
@@ -533,7 +533,7 @@ const ShinecHome: React.FC<ShinecHomeProps> = ({ articles }) => {
                                         style={{ animationDelay: `${index * 60}ms` }}
                                         data-animate="reveal"
                                     >
-                                        <span className="mt-1 h-2.5 w-2.5 rounded-full bg-[var(--primary)]" />
+                                        <span className="mt-1 h-2.5 w-2.5 rounded-full bg-primary" />
                                         <p className="text-sm leading-7 text-[var(--text-muted)] sm:text-base">{item}</p>
                                     </div>
                                 ))}
