@@ -41,6 +41,20 @@ public class ProductController(IProductService _productService) : BaseController
         return Ok(new { data, total = data.Count() });
     }
 
+    [HttpGet("{id}/variants")]
+    public async Task<IActionResult> ListVariantsAsync([FromRoute] Guid id) => Ok(await _productService.GetVariantsAsync(id));
+
+    [HttpPost("save-variants/{id}")]
+    public async Task<IActionResult> SaveVariantsAsync([FromRoute] Guid id, [FromBody] IEnumerable<ProductVariant> variants)
+        => Ok(await _productService.SaveVariantsAsync(id, variants));
+
+    [HttpGet("{id}/tags")]
+    public async Task<IActionResult> ListTagsAsync([FromRoute] Guid id) => Ok(await _productService.GetTagsAsync(id));
+
+    [HttpPost("save-tags/{id}")]
+    public async Task<IActionResult> SaveTagsAsync([FromRoute] Guid id, [FromBody] IEnumerable<Guid> tagIds)
+        => Ok(await _productService.SaveTagsAsync(id, tagIds));
+
     [HttpPost("go-to-product-link/{id}"), AllowAnonymous]
     public async Task<IActionResult> GoToProductLinkAsync([FromRoute] Guid id) => Ok(await _productService.GoToProductLinkAsync(id));
 

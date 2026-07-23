@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Waffle.Data;
 
@@ -11,9 +12,11 @@ using Waffle.Data;
 namespace Waffle.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260723085539_AddProductVariantTable")]
+    partial class AddProductVariantTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -854,22 +857,6 @@ namespace Waffle.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductLinks");
-                });
-
-            modelBuilder.Entity("Waffle.Entities.Ecommerces.ProductTag", b =>
-                {
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ProductId", "TagId");
-
-                    b.HasIndex("TagId")
-                        .HasDatabaseName("IDX_ProductTag_TagId");
-
-                    b.ToTable("ProductTags");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Ecommerces.ProductVariant", b =>
@@ -1807,25 +1794,6 @@ namespace Waffle.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Waffle.Entities.Ecommerces.ProductTag", b =>
-                {
-                    b.HasOne("Waffle.Entities.Ecommerces.Product", "Product")
-                        .WithMany("ProductTags")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Waffle.Entities.Tags.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("Waffle.Entities.Ecommerces.ProductVariant", b =>
                 {
                     b.HasOne("Waffle.Entities.Ecommerces.Product", "Product")
@@ -1974,8 +1942,6 @@ namespace Waffle.Migrations
 
             modelBuilder.Entity("Waffle.Entities.Ecommerces.Product", b =>
                 {
-                    b.Navigation("ProductTags");
-
                     b.Navigation("Variants");
                 });
 

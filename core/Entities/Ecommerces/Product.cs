@@ -30,5 +30,10 @@ public class Product : AuditEntity
     [StringLength(10)]
     public string Locale { get; set; } = "vi-VN";
 
+    [NotMapped]
+    public IEnumerable<Guid>? TagIds { get; set; }
+
     public Category? Category { get; set; }
+    public ICollection<ProductVariant>? Variants { get; set; }
+    public ICollection<ProductTag>? ProductTags { get; set; }
 }

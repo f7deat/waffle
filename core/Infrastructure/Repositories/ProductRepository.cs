@@ -45,7 +45,27 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
             Content = args.Content,
             CategoryId = args.CategoryId,
             NormalizedName = normalizedName,
-            Locale = args.Locale
+            Locale = args.Locale,
+            Variants = args.Variants?.Where(x => !string.IsNullOrWhiteSpace(x.Name)
+                || !string.IsNullOrWhiteSpace(x.SKU)
+                || x.Price != null
+                || x.SalePrice != null
+                || x.UnitInStock != null
+                || !string.IsNullOrWhiteSpace(x.Thumbnail))
+                .Select((x, index) => new ProductVariant
+                {
+                    Name = x.Name,
+                    SKU = x.SKU,
+                    Price = x.Price,
+                    SalePrice = x.SalePrice,
+                    UnitInStock = x.UnitInStock,
+                    Thumbnail = x.Thumbnail,
+                    SortOrder = index
+                }).ToList(),
+            ProductTags = args.TagIds?.Distinct().Select(tagId => new ProductTag
+            {
+                TagId = tagId
+            }).ToList()
         });
         await _context.SaveChangesAsync();
         return TResult.Success;
@@ -75,6 +95,27 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         if (product is null) return TResult.Failed("Product not found!");
         product.ViewCount++;
         await _context.SaveChangesAsync();
+        var variants = await _context.ProductVariants
+            .Where(x => x.ProductId == product.Id)
+            .OrderBy(x => x.SortOrder)
+            .Select(x => new
+            {
+                x.Id,
+                x.ProductId,
+                x.Name,
+                x.SKU,
+                x.Price,
+                x.SalePrice,
+                x.UnitInStock,
+                x.Thumbnail,
+                x.SortOrder
+            })
+            .ToListAsync();
+        var tagIds = await _context.ProductTags
+            .Where(x => x.ProductId == product.Id)
+            .Select(x => x.TagId)
+            .ToListAsync();
+
         return TResult.Ok(new
         {
             product.Id,
@@ -90,7 +131,9 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
             product.SKU,
             Content = JsonSerializer.Deserialize<object>(product.Content ?? "{}"),
             product.UnitInStock,
-            product.AffiliateLink
+            product.AffiliateLink,
+            TagIds = tagIds,
+            Variants = variants
         });
     }
 

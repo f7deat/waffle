@@ -2,13 +2,58 @@ import FormEditor from "@/components/editorjs/form-editor";
 import ImageLibraryPicker from "@/components/image-library/picker";
 import CatalogSetting from "@/pages/catalog/setting";
 import { uploadRcFile } from "@/services/file-service";
+import { apiTagOptions } from "@/services/tag";
 import { apiProductDetail, apiProductSave } from "@/services/products/product";
 import { UploadOutlined } from "@ant-design/icons";
-import { PageContainer, ProCard, ProForm, ProFormDigit, ProFormInstance, ProFormText, ProFormTextArea } from "@ant-design/pro-components"
+import { PageContainer, ProCard, ProForm, ProFormDigit, ProFormInstance, ProFormList, ProFormSelect, ProFormText, ProFormTextArea } from "@ant-design/pro-components"
 import { history, useParams, useRequest } from "@umijs/max";
 import { Button, Col, message, Row } from "antd";
 import type { RcFile } from "antd/lib/upload";
 import { useEffect, useRef, useState } from "react";
+
+type ProductVariant = {
+    name?: string;
+    sku?: string;
+    price?: number;
+    salePrice?: number;
+    unitInStock?: number;
+    thumbnail?: string;
+};
+
+const EMPTY_EDITOR_CONTENT = {
+    blocks: [],
+    time: Date.now(),
+    version: "2.28.2"
+};
+
+const parseContent = (content: any) => {
+    if (!content) return undefined;
+    if (typeof content === "string") {
+        try {
+            return JSON.parse(content);
+        } catch {
+            return undefined;
+        }
+    }
+    return content;
+};
+
+const extractEditorContent = (content: any) => {
+    const parsed = parseContent(content);
+    if (parsed?.editorData && Array.isArray(parsed.editorData.blocks)) {
+        return parsed.editorData;
+    }
+    if (Array.isArray(parsed?.blocks)) {
+        return parsed;
+    }
+    return EMPTY_EDITOR_CONTENT;
+};
+
+const extractVariants = (content: any): ProductVariant[] => {
+    const parsed = parseContent(content);
+    if (!Array.isArray(parsed?.variants)) return [];
+    return parsed.variants;
+};
 
 const Index: React.FC = () => {
 
@@ -25,7 +70,9 @@ const Index: React.FC = () => {
         if (product) {
             formRef.current?.setFieldsValue({
                 ...product,
-                content: product.content || ""
+                content: extractEditorContent(product.content),
+                tags: product.tagIds || product.tags?.map((x: any) => x.id),
+                variants: product.variants || extractVariants(product.content)
             });
             setThumbnail(product.thumbnail);
         }
@@ -66,10 +113,16 @@ const Index: React.FC = () => {
     };
 
     const onFinish = async (values: any) => {
+        const variants = (values.variants || []).filter((item: ProductVariant) => {
+            return !!(item?.name || item?.sku || item?.price || item?.salePrice || item?.unitInStock || item?.thumbnail);
+        });
+
         await apiProductSave({
             id,
             ...values,
-            content: JSON.stringify(values.content),
+            tagIds: values.tags || [],
+            variants,
+            content: JSON.stringify(extractEditorContent(values.content)),
         });
         message.success('Lưu sản phẩm thành công');
         return true;
@@ -89,9 +142,48 @@ const Index: React.FC = () => {
                                     <Col md={18}>
                                         <ProFormText name={"name"} label="Tên sản phẩm" rules={[{ required: true }]} />
                                         <ProFormTextArea name={"description"} label="Mô tả ngắn" />
-                                        {product?.content && (
-                                            <FormEditor name="content" label="Nội dung chi tiết" initialValue={product.content} />
-                                        )}
+                                        <ProFormSelect
+                                            name="tags"
+                                            label="Tags"
+                                            mode="multiple"
+                                            request={apiTagOptions}
+                                            showSearch
+                                        />
+                                        <ProFormList
+                                            name="variants"
+                                            label="Biến thể sản phẩm"
+                                            creatorButtonProps={{
+                                                creatorButtonText: "Thêm biến thể"
+                                            }}
+                                            copyIconProps={false}
+                                            itemRender={({ listDom }, { index }) => (
+                                                <ProCard key={index} type="inner" className="mb-3" title={`Biến thể #${index + 1}`}>
+                                                    {listDom}
+                                                </ProCard>
+                                            )}
+                                        >
+                                            <Row gutter={12}>
+                                                <Col span={24}>
+                                                    <ProFormText name="name" label="Tên biến thể" placeholder="Ví dụ: Màu đỏ / Size M" />
+                                                </Col>
+                                                <Col md={12} xs={24}>
+                                                    <ProFormText name="sku" label="SKU biến thể" />
+                                                </Col>
+                                                <Col md={12} xs={24}>
+                                                    <ProFormText name="thumbnail" label="Ảnh biến thể" placeholder="https://..." />
+                                                </Col>
+                                                <Col md={8} xs={24}>
+                                                    <ProFormDigit name="price" label="Giá" />
+                                                </Col>
+                                                <Col md={8} xs={24}>
+                                                    <ProFormDigit name="salePrice" label="Giá khuyến mãi" />
+                                                </Col>
+                                                <Col md={8} xs={24}>
+                                                    <ProFormDigit name="unitInStock" label="Tồn kho" />
+                                                </Col>
+                                            </Row>
+                                        </ProFormList>
+                                        <FormEditor name="content" label="Nội dung chi tiết" initialValue={extractEditorContent(product?.content)} />
                                     </Col>
                                     <Col md={6}>
                                         <div className="border rounded p-1 mb-2">
@@ -101,6 +193,7 @@ const Index: React.FC = () => {
                                             name={"thumbnail"}
                                             label="Thumbnail URL"
                                             fieldProps={{
+                                                onChange: (event) => setThumbnail(event.target.value),
                                                 suffix: (
                                                     <div className="flex gap-1">
                                                         <Button

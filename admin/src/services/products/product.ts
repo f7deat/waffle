@@ -49,3 +49,25 @@ export async function apiProductDelete(id?: string) {
 export async function apiProductDetail(id?: string) {
     return request(`product/${id}`);
 }
+
+export async function apiProductVariants(id?: string) {
+    return request(`product/${id}/variants`);
+}
+
+export async function apiProductSaveVariants(id: string, data: any[]) {
+    return request(`product/save-variants/${id}`, {
+        method: 'POST',
+        data,
+    });
+}
+
+export async function apiProductTags(id?: string) {
+    return request(`product/${id}/tags`);
+}
+
+export async function apiProductSaveTags(id: string, tagIds: string[]) {
+    return request(`product/save-tags/${id}`, {
+        method: 'POST',
+        data: tagIds,
+    });
+}

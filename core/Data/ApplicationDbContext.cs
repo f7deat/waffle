@@ -31,9 +31,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Order> Orders { get; set; } = default!;
     public DbSet<OrderDetail> OrderDetails { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<ProductTag> ProductTags { get; set; }
     public DbSet<Menu> Menus { get; set; }
     public DbSet<Folder> Folders { get; set; }
     public DbSet<ProductLink> ProductLinks { get; set; }
+    public DbSet<ProductVariant> ProductVariants { get; set; }
     public DbSet<AffiliateLink> AffiliateLinks { get; set; }
     public DbSet<ShortLink> ShortLinks { get; set; }
     public DbSet<Room> Rooms { get; set; }
@@ -72,16 +74,37 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<WorkItem>().HasIndex(w => w.CatalogId).HasDatabaseName("IDX_WorkItem_CatalogId");
         builder.Entity<WorkItem>().HasIndex(w => w.WorkId).HasDatabaseName("IDX_WorkItem_WorkId");
         builder.Entity<WorkContent>().HasIndex(wc => wc.Id).HasDatabaseName("IDX_WorkContent_Id");
+        builder.Entity<ProductVariant>().HasIndex(x => x.ProductId).HasDatabaseName("IDX_ProductVariant_ProductId");
+        builder.Entity<ProductTag>().HasIndex(x => x.TagId).HasDatabaseName("IDX_ProductTag_TagId");
 
         builder.Entity<WorkItem>().HasKey(k => new { k.WorkId, k.CatalogId });
         builder.Entity<Collection>().HasKey(k => new { k.CatalogId, k.CollectionId });
         builder.Entity<NotificationUser>().HasKey(k => new { k.NotificationId, k.UserId });
         builder.Entity<TagCatalog>().HasKey(tc => new { tc.CatalogId, tc.TagId });
+        builder.Entity<ProductTag>().HasKey(k => new { k.ProductId, k.TagId });
 
         builder.Entity<Photo>()
             .HasOne(x => x.Album)
             .WithMany(x => x.Photos)
             .HasForeignKey(x => x.AlbumId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ProductVariant>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.Variants)
+            .HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ProductTag>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.ProductTags)
+            .HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ProductTag>()
+            .HasOne(x => x.Tag)
+            .WithMany()
+            .HasForeignKey(x => x.TagId)
             .OnDelete(DeleteBehavior.Cascade);
 
         base.OnModelCreating(builder);

@@ -10,10 +10,12 @@ using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Services.Shop;
 
-public class ProductService(IProductRepository productRepository, IProductLinkRepository productLinkRepository) : IProductService
+public class ProductService(IProductRepository productRepository, IProductLinkRepository productLinkRepository, IProductVariantRepository productVariantRepository, IProductTagRepository productTagRepository) : IProductService
 {
     private readonly IProductRepository _productRepository = productRepository;
     private readonly IProductLinkRepository _productLinkRepository = productLinkRepository;
+    private readonly IProductVariantRepository _productVariantRepository = productVariantRepository;
+    private readonly IProductTagRepository _productTagRepository = productTagRepository;
 
     public async Task<TResult> AddLinkAsync(ProductLink args)
     {
@@ -39,6 +41,14 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
     {
         var product = await _productRepository.DetailAsync(id);
         if (product is null) return TResult.Failed("Product not found!");
+
+        var variants = (await _productVariantRepository.ListByProductIdAsync(id)).ToList();
+        if (variants.Count == 0)
+        {
+            variants = GetLegacyVariants(product.Content, id).ToList();
+        }
+        var tags = (await _productTagRepository.ListByProductIdAsync(id)).ToList();
+
         return TResult.Ok(new
         {
             product.Id,
@@ -54,7 +64,26 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
             product.NormalizedName,
             product.CategoryId,
             product.CreatedDate,
-            product.ModifiedDate
+            product.ModifiedDate,
+            TagIds = tags.Select(x => x.TagId),
+            Tags = tags.Select(x => new
+            {
+                Id = x.TagId,
+                x.Tag?.Name,
+                x.Tag?.NormalizedName
+            }),
+            Variants = variants.Select(x => new
+            {
+                x.Id,
+                x.ProductId,
+                x.Name,
+                x.SKU,
+                x.Price,
+                x.SalePrice,
+                x.UnitInStock,
+                x.Thumbnail,
+                x.SortOrder
+            })
         });
     }
 
@@ -67,6 +96,28 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
     }
 
     public Task<TResult> GetByNameAsync(string normalizedName) => _productRepository.GetByNameAsync(normalizedName);
+
+    public async Task<IEnumerable<object>> GetTagsAsync(Guid productId)
+    {
+        if (!await _productRepository.AnyAsync(productId)) return [];
+        return (await _productTagRepository.ListByProductIdAsync(productId)).Select(x => new
+        {
+            Id = x.TagId,
+            x.Tag?.Name,
+            x.Tag?.NormalizedName
+        });
+    }
+
+    public async Task<IEnumerable<ProductVariant>> GetVariantsAsync(Guid productId)
+    {
+        if (!await _productRepository.AnyAsync(productId)) return [];
+
+        var variants = (await _productVariantRepository.ListByProductIdAsync(productId)).ToList();
+        if (variants.Count > 0) return variants;
+
+        var product = await _productRepository.DetailAsync(productId);
+        return product is null ? [] : GetLegacyVariants(product.Content, productId);
+    }
 
     public Task<IEnumerable<ProductLink>> GetLinksAsync(Guid productId)
     {
@@ -116,8 +167,72 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
         product.Description = args.Description;
         product.Thumbnail = args.Thumbnail;
         product.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
+
+        if (args.Variants is not null)
+        {
+            await _productVariantRepository.SyncAsync(args.Id, args.Variants);
+        }
+        if (args.TagIds is not null)
+        {
+            await _productTagRepository.SyncAsync(args.Id, args.TagIds);
+        }
+
         await _productRepository.SaveChangesAsync();
         return TResult.Success;
+    }
+
+    public async Task<TResult> SaveVariantsAsync(Guid productId, IEnumerable<ProductVariant> variants)
+    {
+        if (!await _productRepository.AnyAsync(productId)) return TResult.Failed("Product not found!");
+        await _productVariantRepository.SyncAsync(productId, variants);
+        return TResult.Success;
+    }
+
+    public async Task<TResult> SaveTagsAsync(Guid productId, IEnumerable<Guid> tagIds)
+    {
+        if (!await _productRepository.AnyAsync(productId)) return TResult.Failed("Product not found!");
+        await _productTagRepository.SyncAsync(productId, tagIds);
+        return TResult.Success;
+    }
+
+    private static IEnumerable<ProductVariant> GetLegacyVariants(string? content, Guid productId)
+    {
+        if (string.IsNullOrWhiteSpace(content)) return [];
+        try
+        {
+            var parsed = JsonSerializer.Deserialize<LegacyProductContent>(content);
+            if (parsed?.Variants is null || parsed.Variants.Count == 0) return [];
+            return parsed.Variants.Select((x, index) => new ProductVariant
+            {
+                ProductId = productId,
+                Name = x.Name,
+                SKU = x.SKU,
+                Price = x.Price,
+                SalePrice = x.SalePrice,
+                UnitInStock = x.UnitInStock,
+                Thumbnail = x.Thumbnail,
+                SortOrder = index
+            }).ToList();
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
+    private class LegacyProductContent
+    {
+        public List<LegacyProductVariant> Variants { get; set; } = [];
+    }
+
+    private class LegacyProductVariant
+    {
+        public string? Name { get; set; }
+        public string? SKU { get; set; }
+        public decimal? Price { get; set; }
+        public decimal? SalePrice { get; set; }
+        public int? UnitInStock { get; set; }
+        public string? Thumbnail { get; set; }
     }
 
 }

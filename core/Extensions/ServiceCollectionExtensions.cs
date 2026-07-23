@@ -71,6 +71,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProductService, ProductService>();
 
         services.AddScoped<IProductLinkRepository, ProductLinkRepository>();
+        services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
+        services.AddScoped<IProductTagRepository, ProductTagRepository>();
 
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderService, OrderSerivce>();

@@ -24,4 +24,8 @@ public interface IProductService
     Task<TResult> DeleteAsync(Guid id);
     Task<TResult> DetailAsync(Guid id);
     Task<TResult> GetByNameAsync(string normalizedName);
+    Task<IEnumerable<ProductVariant>> GetVariantsAsync(Guid productId);
+    Task<TResult> SaveVariantsAsync(Guid productId, IEnumerable<ProductVariant> variants);
+    Task<IEnumerable<object>> GetTagsAsync(Guid productId);
+    Task<TResult> SaveTagsAsync(Guid productId, IEnumerable<Guid> tagIds);
 }
