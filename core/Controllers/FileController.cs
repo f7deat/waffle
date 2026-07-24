@@ -9,11 +9,10 @@ using Waffle.Data;
 using Waffle.Entities.Files;
 using Waffle.Extensions;
 using Waffle.Models;
-using Waffle.Models.Settings;
 
 namespace Waffle.Controllers;
 
-public class FileController(IWebHostEnvironment _webHostEnvironment, ApplicationDbContext _context, IFileService _fileService, ISettingService _settingService) : BaseController
+public class FileController(IWebHostEnvironment _webHostEnvironment, ApplicationDbContext _context, IFileService _fileService) : BaseController
 {
     private const long MaxImageSize = 10 * 1024 * 1024;
     private static readonly string[] SupportedImageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".svg"];

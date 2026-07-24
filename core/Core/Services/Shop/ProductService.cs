@@ -157,6 +157,7 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
     {
         var product = await _productRepository.FindAsync(args.Id);
         if (product is null) return TResult.Failed("Product not found!");
+        if (args.CategoryId.HasValue && !await _productRepository.CategoryExistsAsync(args.CategoryId.Value)) return TResult.Failed("Category not found!");
         product.Price = args.Price;
         product.SKU = args.SKU;
         product.UnitInStock = args.UnitInStock;
@@ -166,6 +167,7 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
         product.Name = args.Name;
         product.Description = args.Description;
         product.Thumbnail = args.Thumbnail;
+        product.CategoryId = args.CategoryId;
         product.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
 
         if (args.Variants is not null)

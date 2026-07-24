@@ -11,30 +11,16 @@ namespace Waffle.Core.Services;
 
 public class LogService(IHCAService _hcaService, ILogRepository _logRepository, ITelegramService _telegramService) : ILogService
 {
-    public async Task AddAsync(string message, Guid catalogId)
+    public async Task AddAsync(string message)
     {
         await _logRepository.AddAsync(new AppLog
         {
             Message = message,
-            CatalogId = catalogId,
             CreatedDate = DateTime.Now,
             UserId = _hcaService.GetUserId(),
             Level = LogLevel.Trace
         });
     }
-
-    public async Task TraceAsync(string message, Guid catalogId)
-    {
-        await _logRepository.TraceAsync(new AppLog
-        {
-            Message = message,
-            CatalogId = catalogId,
-            CreatedDate = DateTime.Now,
-            UserId = _hcaService.GetUserId(),
-            Level = LogLevel.Trace
-        });
-    }
-
 
     public Task<TResult> DeleteAllAsync() => _logRepository.DeleteAllAsync();
 

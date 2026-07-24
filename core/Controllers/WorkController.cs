@@ -89,7 +89,7 @@ public class WorkController(ApplicationDbContext _context, IWorkService _workSer
         var result = await _workService.ItemDeleteAsync(args);
         if (result.Succeeded)
         {
-            await _logService.AddAsync("Delete work", args.CatalogId);
+            await _logService.AddAsync("Delete work");
         }
         return Ok(result);
     }

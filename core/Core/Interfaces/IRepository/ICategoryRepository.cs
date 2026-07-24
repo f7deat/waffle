@@ -11,4 +11,5 @@ public interface ICategoryRepository : IAsyncRepository<Category>
     Task<ListResult> GetListAsync(CategoryFilterOptions filterOptions);
     Task<IEnumerable<object>> GetOptionsAsync(CategoryOptionFilterOptions filterOptions);
     Task<TResult> GetRandomsAsync(string locale);
+    Task<bool> IsExistsAsync(string normalizedName, int id);
 }

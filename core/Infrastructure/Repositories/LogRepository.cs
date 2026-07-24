@@ -21,17 +21,14 @@ public class LogRepository(ApplicationDbContext context, IHCAService hcaService)
     public async Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions)
     {
         var query = from log in _context.AppLogs
-                    join catalog in _context.Catalogs on log.CatalogId equals catalog.Id
                     join user in _context.Users on log.UserId equals user.Id
                     select new AppLogListItem
                     {
-                        CatalogId = catalog.Id,
                         Id = log.Id,
                         CreatedDate = log.CreatedDate,
                         Message = log.Message,
                         UserId = user.Id,
-                        UserName = user.UserName,
-                        CatalogName = catalog.Name
+                        UserName = user.UserName
                     };
         if (!string.IsNullOrWhiteSpace(filterOptions.SearchTerm))
         {

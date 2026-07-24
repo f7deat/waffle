@@ -1,13 +1,22 @@
 import { ESortOrder } from '@/constants';
+import { ArticleListItem } from '@/typings/article';
 import { request } from '@umijs/max';
 import { SortOrder } from 'antd/lib/table/interface';
 
 export async function getArticleById(id: string) {
-  return request<API.TResult<API.Article>>(`article/id/${id}`);
+  return request<API.TResult<ArticleListItem>>(`article/id/${id}`);
 }
 
 export async function getArticleByName(name: string) {
-  return request<API.TResult<API.Article>>(`article/${name}`);
+  return request<API.TResult<ArticleListItem>>(`article/${name}`);
+}
+
+export async function apiGetArticleChartData() {
+  return request('article/chart-data');
+}
+
+export async function apiGetMostViewedArticles() {
+  return request<API.TResult<ArticleListItem[]>>('article/most-viewed');
 }
 
 export async function listArticles(
@@ -19,7 +28,7 @@ export async function listArticles(
   },
   sort: Record<string, SortOrder>
 ) {
-  return request<API.ListResult<API.Article>>('article/list', {
+  return request<API.ListResult<ArticleListItem>>('article/list', {
     method: 'GET',
     params: {
       modifiedDate: sort.modifiedDate

@@ -1,5 +1,7 @@
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices;
 using Waffle.Core.Services.Categories.Filters;
 using Waffle.Entities.Settings;
@@ -7,21 +9,21 @@ using Waffle.Models;
 
 namespace Waffle.Core.Services.Categories;
 
-public class CategoryService(ICategoryRepository categoryRepository) : ICategoryService
+public class CategoryService(ICategoryRepository _categoryRepository, ILogService _logService) : ICategoryService
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository;
-
     public async Task<TResult> CreateAsync(Category args, string locale)
     {
         try
         {
+            await _logService.AddAsync($"Create category: {args.Name}");
             await _categoryRepository.AddAsync(new Category
             {
                 Name = args.Name,
                 Description = args.Description,
                 ParentId = args.ParentId,
                 Type = args.Type,
-                Locale = locale
+                Locale = locale,
+                NormalizedName = SeoHelper.ToSeoFriendly(args.Name)
             });
             return TResult.Success;
         }
@@ -35,13 +37,16 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
     {
         var category = await _categoryRepository.FindAsync(args.Id);
         if (category is null || category.DeletedAt.HasValue) return TResult.Failed("Category not found!");
-
+        category.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
+        if (await _categoryRepository.IsExistsAsync(category.NormalizedName, category.Id))
+        {
+            return TResult.Failed("Category with the same name already exists!");
+        }
         category.Name = args.Name;
         category.Description = args.Description;
         category.ParentId = args.ParentId;
         category.Type = args.Type;
-        category.Locale = string.IsNullOrWhiteSpace(args.Locale) ? category.Locale : args.Locale;
-
+        await _logService.AddAsync($"Update category: {category.Name}");
         await _categoryRepository.UpdateAsync(category);
         return TResult.Success;
     }
@@ -51,7 +56,8 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
         var category = await _categoryRepository.FindAsync(id);
         if (category is null || category.DeletedAt.HasValue) return TResult.Failed("Category not found!");
 
-        category.DeletedAt = DateTime.UtcNow;
+        category.DeletedAt = DateTime.Now;
+        await _logService.AddAsync($"Delete category: {category.Name}");
         await _categoryRepository.UpdateAsync(category);
         return TResult.Success;
     }
@@ -68,7 +74,8 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
             category.Description,
             category.ParentId,
             category.Type,
-            category.Locale
+            category.Locale,
+            category.NormalizedName
         });
     }
 

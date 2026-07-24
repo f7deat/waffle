@@ -131,4 +131,38 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
         query = query.OrderByDescending(x => x.CreatedDate);
         return await ListResult.Success(query, filterOptions);
     }
+
+    public async Task<TResult> GetChartDataAsync(string locale)
+    {
+        var query = from a in _context.Articles
+                    where a.PublishedAt != null && a.PublishedAt.Value.Year == DateTime.Now.Year && a.Locale == locale
+                    group a by a.PublishedAt!.Value.Month into g
+                    orderby g.Key
+                    select new
+                    {
+                        Month = g.Key,
+                        Count = g.Count()
+                    };
+        return TResult.Ok(await query.ToListAsync());
+    }
+
+    public async Task<ListResult> GetMostViewedAsync(string locale)
+    {
+        var query = from a in _context.Articles
+                    where a.PublishedAt != null && a.Locale == locale
+                    orderby a.ViewCount descending
+                    select new
+                    {
+                        a.Id,
+                        a.Name,
+                        a.ViewCount,
+                        a.NormalizedName,
+                        a.ModifiedDate,
+                        a.Thumbnail,
+                        a.Description,
+                        a.CreatedDate,
+                        a.PublishedAt
+                    };
+        return await ListResult.Success(query, new ArticleFilterOptions { Locale = locale });
+    }
 }

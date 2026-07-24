@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
@@ -15,7 +14,6 @@ using Waffle.Entities;
 using Waffle.Entities.Locations;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
-using Waffle.Models.Components;
 using Waffle.Models.Components.Common;
 using Waffle.Models.Filters.Catalogs;
 using Waffle.Models.List;
@@ -23,7 +21,7 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Core.Services;
 
-public class CatalogService(ApplicationDbContext _context, IHCAService _hcaService, ICatalogRepository _catalogRepository, IComponentRepository _componentRepository, IWorkContentRepository _workRepository, ILogService _logService, ILocalizationService _localizationService, IRoomService _roomService, IJobOpportunityService _jobOpportunityService) : ICatalogService
+public class CatalogService(ApplicationDbContext _context, IHCAService _hcaService, ICatalogRepository _catalogRepository, IWorkContentRepository _workRepository, ILogService _logService, ILocalizationService _localizationService, IRoomService _roomService, IJobOpportunityService _jobOpportunityService) : ICatalogService
 {
     public async Task<TResult> ActiveAsync(Guid id)
     {
@@ -386,7 +384,7 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
             var catalog = await _catalogRepository.FindAsync(id);
             if (catalog is null) continue;
             await _catalogRepository.DeleteAsync(catalog);
-            await _logService.AddAsync($"Delete {catalog.Name}", catalog.Id);
+            await _logService.AddAsync($"Delete {catalog.Name}");
         }
         await _context.SaveChangesAsync();
         return IdentityResult.Success;

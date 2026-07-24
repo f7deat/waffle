@@ -17,4 +17,6 @@ public interface IArticleService
     Task<TResult> GetByIdAsync(Guid id);
     Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions);
     Task<TResult> GetMetaAsync(string normalizedName);
+    Task<TResult> GetChartDataAsync(string locale);
+    Task<ListResult> GetMostViewedAsync(string locale);
 }

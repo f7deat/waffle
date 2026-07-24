@@ -139,4 +139,8 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
             return TResult.Failed(ex.ToString());
         }
     }
+
+    public Task<TResult> GetChartDataAsync(string locale) => _articleRepository.GetChartDataAsync(locale);
+
+    public Task<ListResult> GetMostViewedAsync(string locale) => _articleRepository.GetMostViewedAsync(locale);
 }

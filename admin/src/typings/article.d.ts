@@ -4,4 +4,5 @@ export type ArticleListItem = {
     description?: string;
     thumbnail?: string;
     publishedAt?: string;
+    viewCount: number;
 }

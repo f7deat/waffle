@@ -9,7 +9,6 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
-using Waffle.Models.Params.Products;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Infrastructure.Repositories;
@@ -17,6 +16,8 @@ namespace Waffle.Infrastructure.Repositories;
 public class ProductRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Product>(context, hcaService), IProductRepository
 {
     public async Task<bool> AnyAsync(Guid productId) => await _context.Products.AnyAsync(x => x.Id == productId);
+
+    public Task<bool> CategoryExistsAsync(int categoryId) => _context.Categories.AnyAsync(x => x.Id == categoryId);
 
     public async Task<TResult> CreateAsync(Product args)
     {

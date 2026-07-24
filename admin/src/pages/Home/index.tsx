@@ -4,7 +4,6 @@ import { apiArticleStatistics } from '@/services/catalogs/article';
 import { countFile, totalFileSize } from '@/services/file-service';
 import { apiTotalOrder } from '@/services/order';
 import { apiProductCount } from '@/services/products/product';
-import { apiGetReportActivity } from '@/services/report';
 import { Column, Pie } from '@ant-design/charts';
 import { PageContainer, ProCard, ProList } from '@ant-design/pro-components';
 import { ArrowDownOutlined, ArrowUpOutlined, FileOutlined, FileTextOutlined, OrderedListOutlined, ShoppingOutlined, TagsOutlined } from '@ant-design/icons';
@@ -13,22 +12,11 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import TopView from './components/top-view';
 import { useRequest } from '@umijs/max';
+import { apiGetArticleChartData, apiGetMostViewedArticles } from '@/services/article';
 
 type PieChartItem = {
   label: string;
   value: number;
-};
-
-type ActivityItem = {
-  month: string;
-  value: number;
-};
-
-type ContributionItem = {
-  id: string;
-  name: string;
-  count: number;
-  type: string;
 };
 
 type ArticleStatistics = {
@@ -129,11 +117,11 @@ const getDateRangeByPreset = (preset: ActivityPreset): DateRangeValue => {
 
 const HomePage: React.FC = () => {
   const [staticLoading, setStaticLoading] = useState<boolean>(false);
-  const [activityLoading, setActivityLoading] = useState<boolean>(false);
   const [dataPie, setDataPie] = useState<PieChartItem[]>([]);
-  const [dataActivities, setDataActivities] = useState<ActivityItem[]>([]);
+  const { data: articleChartData } = useRequest(apiGetArticleChartData);
   const [activityPreset, setActivityPreset] = useState<ActivityPreset>('month');
   const [dateRange, setDateRange] = useState<DateRangeValue>(getDateRangeByPreset('month'));
+  const { data: mostViewedArticles } = useRequest(apiGetMostViewedArticles);
   const [summary, setSummary] = useState<DashboardSummary>({
     article: defaultArticleStats,
     orderCount: 0,
@@ -141,7 +129,6 @@ const HomePage: React.FC = () => {
     fileCount: 0,
     totalFileSize: 0,
   });
-  const [contributionData, setContributionData] = useState<ContributionItem[]>([]);
   const { data: articleStats } = useRequest(apiArticleStatistics);
 
   useEffect(() => {
@@ -181,17 +168,6 @@ const HomePage: React.FC = () => {
         const topProduct = Array.isArray(topProductResponse) ? topProductResponse : [];
         const topTag = Array.isArray(topTagResponse) ? topTagResponse : [];
 
-        const topContributors = [...topProduct, ...topTag]
-          .map((item: API.Catalog) => ({
-            id: item.id || item.normalizedName,
-            name: item.name,
-            count: Number(item.viewCount || 0),
-            type: item.type?.toString() || 'Catalog',
-          }))
-          .sort((a, b) => b.count - a.count)
-          .slice(0, 8);
-
-        setContributionData(topContributors);
       } finally {
         setStaticLoading(false);
       }
@@ -199,25 +175,6 @@ const HomePage: React.FC = () => {
 
     fetchStaticDashboardData();
   }, []);
-
-  useEffect(() => {
-    const fetchActivityData = async () => {
-      setActivityLoading(true);
-      try {
-        const [fromDate, toDate] = dateRange;
-        const activityResponse = await apiGetReportActivity({
-          fromDate: fromDate.format('YYYY-MM-DD'),
-          toDate: toDate.format('YYYY-MM-DD'),
-        });
-
-        setDataActivities(Array.isArray(activityResponse) ? activityResponse : []);
-      } finally {
-        setActivityLoading(false);
-      }
-    };
-
-    fetchActivityData();
-  }, [dateRange]);
 
   const articleTrend = calcTrend(summary.article.currentMonth, summary.article.previousMonth);
   const isTrendUp = articleTrend >= 0;
@@ -239,149 +196,138 @@ const HomePage: React.FC = () => {
   return (
     <PageContainer>
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mb-4'>
-          <ProCard bordered title="Tổng bài viết" extra={<FileTextOutlined />} loading={staticLoading}>
-            <Statistic value={articleStats?.totalArticles} suffix="bài" />
-            <Typography.Text type="secondary">Lượt xem: {articleStats?.viewCount}</Typography.Text>
-          </ProCard>
+        <ProCard bordered title="Tổng bài viết" extra={<FileTextOutlined />} loading={staticLoading}>
+          <Statistic value={articleStats?.totalArticles} suffix="bài" />
+          <Typography.Text type="secondary">Lượt xem: {articleStats?.viewCount}</Typography.Text>
+        </ProCard>
 
-          <ProCard bordered title="Lượt xem bài viết" extra={<ArrowUpOutlined />} loading={staticLoading}>
-            <Statistic value={summary.article.viewCount} />
-            <Space size={8}>
-              <Tag color={isTrendUp ? 'success' : 'error'}>
-                {isTrendUp ? <ArrowUpOutlined /> : <ArrowDownOutlined />} {Math.abs(articleTrend).toFixed(1)}%
-              </Tag>
-              <Typography.Text type="secondary">So với tháng trước</Typography.Text>
-            </Space>
-          </ProCard>
+        <ProCard bordered title="Lượt xem bài viết" extra={<ArrowUpOutlined />} loading={staticLoading}>
+          <Statistic value={summary.article.viewCount} />
+          <Space size={8}>
+            <Tag color={isTrendUp ? 'success' : 'error'}>
+              {isTrendUp ? <ArrowUpOutlined /> : <ArrowDownOutlined />} {Math.abs(articleTrend).toFixed(1)}%
+            </Tag>
+            <Typography.Text type="secondary">So với tháng trước</Typography.Text>
+          </Space>
+        </ProCard>
 
-          <ProCard bordered title="Đơn hàng" extra={<OrderedListOutlined />} loading={staticLoading}>
-            <Statistic value={summary.orderCount} suffix="đơn" />
-            <Typography.Text type="secondary">Tổng đơn hiện có trong hệ thống</Typography.Text>
-          </ProCard>
+        <ProCard bordered title="Đơn hàng" extra={<OrderedListOutlined />} loading={staticLoading}>
+          <Statistic value={summary.orderCount} suffix="đơn" />
+          <Typography.Text type="secondary">Tổng đơn hiện có trong hệ thống</Typography.Text>
+        </ProCard>
 
-          <ProCard bordered title="Sản phẩm" extra={<ShoppingOutlined />} loading={staticLoading}>
-            <Statistic value={summary.productCount} suffix="sản phẩm" />
-            <Typography.Text type="secondary">Tổng sản phẩm đang quản lý</Typography.Text>
-          </ProCard>
+        <ProCard bordered title="Sản phẩm" extra={<ShoppingOutlined />} loading={staticLoading}>
+          <Statistic value={summary.productCount} suffix="sản phẩm" />
+          <Typography.Text type="secondary">Tổng sản phẩm đang quản lý</Typography.Text>
+        </ProCard>
 
-          <ProCard title="Kho tệp" extra={<FileOutlined />} loading={staticLoading}>
-            <Statistic value={summary.fileCount} suffix="tệp" />
-            <Typography.Text type="secondary">Dung lượng: {formatFileSize(summary.totalFileSize)}</Typography.Text>
-          </ProCard>
+        <ProCard title="Kho tệp" extra={<FileOutlined />} loading={staticLoading}>
+          <Statistic value={summary.fileCount} suffix="tệp" />
+          <Typography.Text type="secondary">Dung lượng: {formatFileSize(summary.totalFileSize)}</Typography.Text>
+        </ProCard>
       </div>
 
       <Row gutter={[16, 16]} className='mb-4'>
-          <Col xs={24} xl={16}>
-            <ProCard
-              title="Hoạt động tạo mới theo tháng"
-              headerBordered
-              extra={(
-                <Space wrap>
-                  <Segmented
-                    size="small"
-                    value={activityPreset}
-                    options={[
-                      { label: '30 ngày', value: '30d' },
-                      { label: 'Tháng này', value: 'month' },
-                      { label: 'Quý này', value: 'quarter' },
-                      { label: 'Năm nay', value: 'year' },
-                      { label: 'Tùy chỉnh', value: 'custom' },
-                    ]}
-                    onChange={handlePresetChange}
-                  />
-                  <DatePicker.RangePicker
-                    value={dateRange}
-                    allowClear={false}
-                    format="DD/MM/YYYY"
-                    onChange={handleDateRangeChange}
-                  />
-                </Space>
+        <Col xs={24} xl={16}>
+          <ProCard
+            title="Hoạt động tạo mới theo tháng"
+            headerBordered
+            extra={(
+              <Space wrap>
+                <Segmented
+                  size="small"
+                  value={activityPreset}
+                  options={[
+                    { label: '30 ngày', value: '30d' },
+                    { label: 'Tháng này', value: 'month' },
+                    { label: 'Quý này', value: 'quarter' },
+                    { label: 'Năm nay', value: 'year' },
+                    { label: 'Tùy chỉnh', value: 'custom' },
+                  ]}
+                  onChange={handlePresetChange}
+                />
+                <DatePicker.RangePicker
+                  value={dateRange}
+                  allowClear={false}
+                  format="DD/MM/YYYY"
+                  onChange={handleDateRangeChange}
+                />
+              </Space>
+            )}
+          >
+            <Column
+              xField="key"
+              yField='count'
+              data={articleChartData || []}
+              autoFit
+              height={ACTIVITY_CHART_HEIGHT}
+              label={{
+                position: 'middle',
+                style: {
+                  fill: '#FFFFFF',
+                  opacity: 0.8,
+                }
+              }}
+              color="#1677ff"
+              sizeField={60}
+            />
+          </ProCard>
+        </Col>
+        <Col xs={24} xl={8}>
+          <ProCard title="Top đóng góp theo lượt xem" headerBordered>
+            <div style={{ minHeight: CONTRIBUTION_LIST_HEIGHT }}>
+              {staticLoading ? (
+                <Skeleton active paragraph={{ rows: 9 }} />
+              ) : (
+                <ProList
+                  ghost
+                  rowKey="id"
+                  dataSource={mostViewedArticles || []}
+                  locale={{
+                    emptyText: 'Không có dữ liệu'
+                  }}
+                  metas={{
+                    avatar: {
+                      valueType: 'indexBorder',
+                    },
+                    title: {
+                      dataIndex: 'name',
+                    },
+                  }}
+                />
               )}
-            >
-              <div style={{ height: ACTIVITY_CHART_HEIGHT }}>
-                {activityLoading ? (
-                  <Skeleton active paragraph={{ rows: 10 }} />
-                ) : (
-                  <Column
-                    xField="month"
-                    yField='value'
-                    data={dataActivities}
-                    autoFit
-                    height={ACTIVITY_CHART_HEIGHT}
-                    label={{
-                      position: 'middle',
-                      style: {
-                        fill: '#FFFFFF',
-                        opacity: 0.8,
-                      }
-                    }}
-                    color="#1677ff"
-                  />
-                )}
-              </div>
-            </ProCard>
-          </Col>
-          <Col xs={24} xl={8}>
-            <ProCard title="Top đóng góp theo lượt xem" headerBordered>
-              <div style={{ minHeight: CONTRIBUTION_LIST_HEIGHT }}>
-                {staticLoading ? (
-                  <Skeleton active paragraph={{ rows: 9 }} />
-                ) : (
-                  <ProList
-                    ghost
-                    rowKey="id"
-                    dataSource={contributionData}
-                    locale={{
-                      emptyText: 'Không có dữ liệu'
-                    }}
-                    metas={{
-                      avatar: {
-                        valueType: 'indexBorder',
-                      },
-                      title: {
-                        dataIndex: 'name',
-                      },
-                      description: {
-                        render: (_, row) => <Tag>{row.type}</Tag>
-                      },
-                      actions: {
-                        render: (_, row) => [<Typography.Text key="view" strong>{row.count.toLocaleString()}</Typography.Text>],
-                      }
-                    }}
-                  />
-                )}
-              </div>
-            </ProCard>
-          </Col>
+            </div>
+          </ProCard>
+        </Col>
       </Row>
 
       <Row gutter={[16, 16]}>
-          <Col xs={24} xl={12}>
-            <ProCard title="Phân bổ Catalog" headerBordered className='h-full'>
-              <div style={{ height: PIE_CHART_HEIGHT }}>
-                {staticLoading ? (
-                  <Skeleton active paragraph={{ rows: 10 }} />
-                ) : (
-                  <Pie
-                    angleField='value'
-                    colorField='label'
-                    radius={0.95}
-                    innerRadius={0.6}
-                    height={PIE_CHART_HEIGHT}
-                    data={dataPie}
-                    legend={{
-                      position: 'right'
-                    }}
-                  />
-                )}
-              </div>
-            </ProCard>
-          </Col>
-          <Col xs={24} xl={12}>
-            <div className='h-full'>
-              <TopView />
+        <Col xs={24} xl={12}>
+          <ProCard title="Phân bổ Catalog" headerBordered className='h-full'>
+            <div style={{ height: PIE_CHART_HEIGHT }}>
+              {staticLoading ? (
+                <Skeleton active paragraph={{ rows: 10 }} />
+              ) : (
+                <Pie
+                  angleField='value'
+                  colorField='label'
+                  radius={0.95}
+                  innerRadius={0.6}
+                  height={PIE_CHART_HEIGHT}
+                  data={dataPie}
+                  legend={{
+                    position: 'right'
+                  }}
+                />
+              )}
             </div>
-          </Col>
+          </ProCard>
+        </Col>
+        <Col xs={24} xl={12}>
+          <div className='h-full'>
+            <TopView />
+          </div>
+        </Col>
       </Row>
     </PageContainer>
   );

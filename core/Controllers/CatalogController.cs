@@ -113,7 +113,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
             {
                 _context.Rooms.Remove(room);
             }
-            await logService.AddAsync($"Delete catalog: {catalog.Name}", id);
+            await logService.AddAsync($"Delete catalog: {catalog.Name}");
             await _catalogService.DeleteAsync(catalog);
 
             return Ok(IdentityResult.Success);

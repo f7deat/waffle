@@ -38,4 +38,10 @@ public class ArticleController(IArticleService _articleService) : BaseController
 
     [HttpGet("meta/{normalizedName}"), AllowAnonymous]
     public async Task<IActionResult> GetMetaAsync([FromRoute] string normalizedName) => Ok(await _articleService.GetMetaAsync(normalizedName));
+
+    [HttpGet("chart-data")]
+    public async Task<IActionResult> GetChartDataAsync([FromQuery] string locale) => Ok(await _articleService.GetChartDataAsync(locale));
+
+    [HttpGet("most-viewed")]
+    public async Task<IActionResult> GetMostViewedAsync([FromQuery] string locale) => Ok(await _articleService.GetMostViewedAsync(locale));
 }

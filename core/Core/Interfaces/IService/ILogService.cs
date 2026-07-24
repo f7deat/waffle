@@ -6,7 +6,7 @@ namespace Waffle.Core.Interfaces.IService;
 
 public interface ILogService
 {
-    Task AddAsync(string message, Guid catalogId);
+    Task AddAsync(string message);
     Task<TResult> DeleteAllAsync();
     Task<TResult> DeleteAsync(Guid id);
     Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions);

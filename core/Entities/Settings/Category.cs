@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Waffle.Entities.Ecommerces;
 
 namespace Waffle.Entities.Settings;
 
@@ -6,6 +7,8 @@ public class Category : BaseEntity<int>, ISoftDelete
 {
     [StringLength(256)]
     public string Name { get; set; } = null!;
+    [StringLength(256)]
+    public string? NormalizedName { get; set; }
     [StringLength(512)]
     public string? Description { get; set; }
     public int? ParentId { get; set; }
@@ -15,6 +18,7 @@ public class Category : BaseEntity<int>, ISoftDelete
     public string Locale { get; set; } = "vi-VN";
 
     public ICollection<Article>? Articles { get; set; }
+    public ICollection<Product>? Products { get; set; }
 }
 
 public enum CategoryType

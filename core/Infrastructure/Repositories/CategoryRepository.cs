@@ -101,4 +101,9 @@ public class CategoryRepository(ApplicationDbContext context, IHCAService hcaSer
             x.Id
         }).ToListAsync());
     }
+
+    public async Task<bool> IsExistsAsync(string normalizedName, int id)
+    {
+        return await _context.Categories.AnyAsync(c => c.NormalizedName == normalizedName && c.Id != id);
+    }
 }

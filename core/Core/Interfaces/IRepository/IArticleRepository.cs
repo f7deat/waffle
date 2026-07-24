@@ -10,7 +10,9 @@ public interface IArticleRepository : IAsyncRepository<Article>
 {
     Task<Article?> FindByNameAsync(string normalizedName);
     Task<TResult> GetByNameAsync(string normalizedName);
+    Task<TResult> GetChartDataAsync(string locale);
     Task<int> GetCurrentMonthAsync(string locale);
+    Task<ListResult> GetMostViewedAsync(string locale);
     Task<int> GetPreviousMonthAsync(string locale);
     Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions);
     Task<TResult> GetRandomsAsync(string locale);
