@@ -64,7 +64,7 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({ place }) => {
                 {/* Gallery */}
                 <div className="bg-white rounded-lg p-4">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-2xl font-bold">Photo Gallery</h2>
+                        <h2 className="text-2xl font-bold">Thư viện ảnh</h2>
                         {!loadingImages && placeImages.length > 0 && (
                             <span className="text-sm text-gray-500">{placeImages.length} photos</span>
                         )}

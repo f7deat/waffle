@@ -134,7 +134,9 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
             product.UnitInStock,
             product.AffiliateLink,
             TagIds = tagIds,
-            Variants = variants
+            Variants = variants,
+            product.CategoryId,
+            category = product.CategoryId.HasValue ? await _context.Categories.FindAsync(product.CategoryId) : null
         });
     }
 

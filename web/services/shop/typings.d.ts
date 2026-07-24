@@ -9,6 +9,7 @@ declare namespace API {
         createdDate: string;
         thumbnail: string;
         normalizedName: string;
+        categoryId?: number;
     }
     interface ProductDetail extends ProductListItem {
         content?: API.BlockEditor;

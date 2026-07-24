@@ -63,6 +63,7 @@ const Page = async ({ params }: PageProps) => {
             }
         ]}>
             <div className="relative mx-auto max-w-7xl px-4 py-12 sm:py-14 lg:py-16">
+                {product.categoryId}
                 <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
                     <div className="absolute -left-24 top-6 h-56 w-56 rounded-full bg-amber-300/10 blur-3xl" />
                     <div className="absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-slate-300/20 blur-3xl dark:bg-slate-500/20" />

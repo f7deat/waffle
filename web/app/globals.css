@@ -31,6 +31,11 @@ input {
   background-color: var(--color-primary);
 }
 
+.btn-primary:hover {
+  color: white;
+  background-color: var(--color-primary-hover);
+}
+
 .prose ul, .prose ol {
   padding-left: 1rem;
 }
