@@ -25,6 +25,7 @@ public interface IUserService
     Task<object?> GetInfluencerOptionsAsync(SelectOptions selectOptions);
     Task<TResult> TopupAsync(AdminTopupArgs args, Guid adminId);
     Task<TResult> TopupProfileAsync(Guid userId, ProfileTopupArgs args);
+    Task<TResult> WithdrawProfileAsync(Guid userId, ProfileWithdrawArgs args);
     Task<ListResult<UserTopupTransactionViewModel>> GetTopupHistoryAsync(Guid userId, BasicFilterOptions filterOptions);
     Task<TResult> GetTopupStatsAsync(Guid userId);
     Task<TResult> GetTopupInvoiceAsync(Guid transactionId);

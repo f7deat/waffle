@@ -71,3 +71,10 @@ export async function apiProductSaveTags(id: string, tagIds: string[]) {
         data: tagIds,
     });
 }
+
+export async function apiProductAdd(data: any) {
+    return request(`product`, {
+        method: 'POST',
+        data
+    });
+}

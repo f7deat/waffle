@@ -41,6 +41,10 @@ export async function apiTopupProfile(data: { amount: number; note?: string; }) 
     return request.post<API.TResult<object>>("user/profile/topup", data);
 }
 
+export async function apiWithdrawProfile(data: { amount: number; note?: string; }) {
+    return request.post<API.TResult<object>>("user/profile/withdraw", data);
+}
+
 export async function apiGetUserByUserName(userName: string) {
     return request.get<API.TResult<API.UserBasicInfo>>(`user/user-name/${userName}`);
 }

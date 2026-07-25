@@ -41,11 +41,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 const Page = async ({ params }: PageProps) => {
     const { id } = await params;
     const response = await apiProductDetail(id);
-
     if (!response.succeeded || !response.data) {
         notFound();
     }
-
     const product = response.data;
     const hasDiscount = product.salePrice && product.salePrice < product.price;
     const discountPercent = hasDiscount
@@ -63,7 +61,6 @@ const Page = async ({ params }: PageProps) => {
             }
         ]}>
             <div className="relative mx-auto max-w-7xl px-4 py-12 sm:py-14 lg:py-16">
-                {product.categoryId}
                 <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
                     <div className="absolute -left-24 top-6 h-56 w-56 rounded-full bg-amber-300/10 blur-3xl" />
                     <div className="absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-slate-300/20 blur-3xl dark:bg-slate-500/20" />
@@ -253,8 +250,7 @@ const Page = async ({ params }: PageProps) => {
                         </div>
                     </div>
                 </div>
-
-                <div className="mt-12 rounded-[1.75rem] border border-slate-200 bg-white/90 p-6 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/70 sm:p-8">
+                <div className="mt-12 rounded-lg p-4 bg-white backdrop-blur">
                     <BlockRender {...product.content} />
                 </div>
 

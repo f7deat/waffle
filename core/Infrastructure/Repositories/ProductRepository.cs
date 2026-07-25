@@ -19,54 +19,21 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
 
     public Task<bool> CategoryExistsAsync(int categoryId) => _context.Categories.AnyAsync(x => x.Id == categoryId);
 
-    public async Task<TResult> CreateAsync(Product args)
+    public async Task<TResult> CreateAsync(Product args, string locale)
     {
         var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
-        if (await _context.Products.AnyAsync(x => x.NormalizedName == normalizedName && x.Locale == args.Locale))
+        if (await _context.Products.AnyAsync(x => x.NormalizedName == normalizedName && x.Locale == locale))
         {
             return TResult.Failed("Product with the same name already exists!");
         }
-
-        args.NormalizedName = normalizedName;
-        if (string.IsNullOrWhiteSpace(args.Locale))
-        {
-            args.Locale = "vi-VN";
-        }
-
         await _context.Products.AddAsync(new Product
         {
             Name = args.Name,
             Description = args.Description,
-            Thumbnail = args.Thumbnail,
-            Price = args.Price,
-            SalePrice = args.SalePrice,
-            SKU = args.SKU,
-            UnitInStock = args.UnitInStock,
-            AffiliateLink = args.AffiliateLink,
-            Content = args.Content,
-            CategoryId = args.CategoryId,
+            Locale = locale,
             NormalizedName = normalizedName,
-            Locale = args.Locale,
-            Variants = args.Variants?.Where(x => !string.IsNullOrWhiteSpace(x.Name)
-                || !string.IsNullOrWhiteSpace(x.SKU)
-                || x.Price != null
-                || x.SalePrice != null
-                || x.UnitInStock != null
-                || !string.IsNullOrWhiteSpace(x.Thumbnail))
-                .Select((x, index) => new ProductVariant
-                {
-                    Name = x.Name,
-                    SKU = x.SKU,
-                    Price = x.Price,
-                    SalePrice = x.SalePrice,
-                    UnitInStock = x.UnitInStock,
-                    Thumbnail = x.Thumbnail,
-                    SortOrder = index
-                }).ToList(),
-            ProductTags = args.TagIds?.Distinct().Select(tagId => new ProductTag
-            {
-                TagId = tagId
-            }).ToList()
+            CreatedDate = DateTime.Now,
+            CreatedBy = _hcaService.GetUserId()
         });
         await _context.SaveChangesAsync();
         return TResult.Success;
@@ -116,6 +83,8 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
             .Where(x => x.ProductId == product.Id)
             .Select(x => x.TagId)
             .ToListAsync();
+        
+        var category = product.CategoryId.HasValue ? await _context.Categories.FindAsync(product.CategoryId) : null;
 
         return TResult.Ok(new
         {
@@ -136,7 +105,12 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
             TagIds = tagIds,
             Variants = variants,
             product.CategoryId,
-            category = product.CategoryId.HasValue ? await _context.Categories.FindAsync(product.CategoryId) : null
+            category = new
+            {
+                category?.Id,
+                category?.Name,
+                category?.NormalizedName
+            }
         });
     }
 

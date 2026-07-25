@@ -33,7 +33,7 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
 
     public Task<int> CountAsync() => _productRepository.CountAsync();
 
-    public Task<TResult> CreateAsync(Product args) => _productRepository.CreateAsync(args);
+    public Task<TResult> CreateAsync(Product args, string locale) => _productRepository.CreateAsync(args, locale);
 
     public Task<TResult> DeleteAsync(Guid id) => _productRepository.DeleteAsync(id);
 

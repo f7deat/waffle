@@ -1,7 +1,7 @@
 "use client";
 
 import PageContainer from "@/components/layout/page-container"
-import { apiCurrentUser, apiChangePassword, apiChangeAvatar, apiTopupProfile } from "@/services/user/user";
+import { apiCurrentUser, apiChangePassword, apiChangeAvatar, apiTopupProfile, apiWithdrawProfile } from "@/services/user/user";
 import { apiInfluencerMyApplications } from "@/services/kol/kol";
 import { apiMyOrders } from "@/services/shop/order";
 import { LockOutlined, CameraOutlined, LogoutOutlined, EditOutlined } from "@ant-design/icons";
@@ -34,6 +34,11 @@ const Page: React.FC = () => {
     const [topupError, setTopupError] = useState("");
     const [topupSuccess, setTopupSuccess] = useState("");
     const [isTopupSubmitting, setIsTopupSubmitting] = useState(false);
+    const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+    const [withdrawForm, setWithdrawForm] = useState({ amount: "", note: "" });
+    const [withdrawError, setWithdrawError] = useState("");
+    const [withdrawSuccess, setWithdrawSuccess] = useState("");
+    const [isWithdrawSubmitting, setIsWithdrawSubmitting] = useState(false);
     const [myOrders, setMyOrders] = useState<API.MyOrderItem[]>([]);
     const [myOrdersLoading, setMyOrdersLoading] = useState(true);
     const [appliedJobs, setAppliedJobs] = useState<API.MyAppliedInfluencerJobItem[]>([]);
@@ -247,8 +252,62 @@ const Page: React.FC = () => {
     };
 
     const handleLogout = () => {
-        document.cookie = "access_token=; path=/; max-age=0; SameSite=Lax";
         router.push("/user/login");
+    };
+
+    const handleOpenWithdrawModal = () => {
+        setIsWithdrawModalOpen(true);
+        setWithdrawError("");
+        setWithdrawSuccess("");
+        setWithdrawForm({ amount: "", note: "" });
+    };
+
+    const handleCloseWithdrawModal = () => {
+        if (isWithdrawSubmitting) return;
+        setIsWithdrawModalOpen(false);
+        setWithdrawError("");
+        setWithdrawSuccess("");
+        setWithdrawForm({ amount: "", note: "" });
+    };
+
+    const handleSubmitWithdraw = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setWithdrawError("");
+        setWithdrawSuccess("");
+
+        const amount = Number(withdrawForm.amount);
+        if (!Number.isFinite(amount) || amount <= 0) {
+            setWithdrawError("Vui lòng nhập số tiền rút hợp lệ");
+            return;
+        }
+
+        if (user && amount > Number(user.amount || 0)) {
+            setWithdrawError("Số dư không đủ để thực hiện rút tiền");
+            return;
+        }
+
+        setIsWithdrawSubmitting(true);
+        try {
+            const response = await apiWithdrawProfile({
+                amount,
+                note: withdrawForm.note.trim() || undefined,
+            });
+
+            if (response?.succeeded) {
+                const updatedUser = await apiCurrentUser();
+                setUser(updatedUser);
+                setWithdrawSuccess("Rút tiền thành công!");
+                setTimeout(() => {
+                    handleCloseWithdrawModal();
+                }, 1200);
+            } else {
+                setWithdrawError(response?.message || "Rút tiền thất bại");
+            }
+        } catch (error: any) {
+            setWithdrawError(error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại");
+        } finally {
+            setIsWithdrawSubmitting(false);
+        }
     };
 
     const handleOpenTopupModal = () => {
@@ -406,12 +465,20 @@ const Page: React.FC = () => {
                                 <p className="text-sm text-blue-700">Số dư tài khoản</p>
                                 <p className="text-2xl font-bold text-blue-900">{formatMoney(Number(user.amount || 0))}</p>
                             </div>
-                            <button
-                                onClick={handleOpenTopupModal}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                            >
-                                Nạp tiền
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={handleOpenTopupModal}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                                >
+                                    Nạp tiền
+                                </button>
+                                <button
+                                    onClick={handleOpenWithdrawModal}
+                                    className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
+                                >
+                                    Rút tiền
+                                </button>
+                            </div>
                         </div>
 
                         {/* Email */}
@@ -851,6 +918,92 @@ const Page: React.FC = () => {
                                     disabled={isTopupSubmitting}
                                 >
                                     {isTopupSubmitting ? "Đang xử lý..." : "Xác nhận nạp"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Withdraw Modal */}
+            {isWithdrawModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xl font-bold text-gray-900">Rút tiền tài khoản</h3>
+                            <button
+                                onClick={handleCloseWithdrawModal}
+                                className="text-gray-400 hover:text-gray-600 transition-colors"
+                                disabled={isWithdrawSubmitting}
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleSubmitWithdraw} className="space-y-4">
+                            <div className="rounded-lg bg-orange-50 border border-orange-100 px-4 py-3">
+                                <p className="text-sm text-orange-700">Số dư hiện tại: <span className="font-bold">{formatMoney(Number(user.amount || 0))}</span></p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Số tiền rút (VND)
+                                </label>
+                                <input
+                                    type="number"
+                                    min={1000}
+                                    step={1000}
+                                    value={withdrawForm.amount}
+                                    onChange={(e) => setWithdrawForm(prev => ({ ...prev, amount: e.target.value }))}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="Ví dụ: 100000"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Ghi chú (tuỳ chọn)
+                                </label>
+                                <textarea
+                                    value={withdrawForm.note}
+                                    onChange={(e) => setWithdrawForm(prev => ({ ...prev, note: e.target.value }))}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="Nhập ghi chú giao dịch"
+                                    rows={3}
+                                    maxLength={300}
+                                />
+                            </div>
+
+                            {withdrawError && (
+                                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                                    {withdrawError}
+                                </div>
+                            )}
+
+                            {withdrawSuccess && (
+                                <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+                                    {withdrawSuccess}
+                                </div>
+                            )}
+
+                            <div className="flex gap-3 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={handleCloseWithdrawModal}
+                                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                                    disabled={isWithdrawSubmitting}
+                                >
+                                    Hủy
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={isWithdrawSubmitting}
+                                >
+                                    {isWithdrawSubmitting ? "Đang xử lý..." : "Xác nhận rút"}
                                 </button>
                             </div>
                         </form>

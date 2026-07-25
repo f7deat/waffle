@@ -20,7 +20,7 @@ public interface IProductService
     Task<TResult> GoToProductLinkAsync(Guid id);
     Task<object> OptionsAsync(SelectOptions selectOptions);
     Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions);
-    Task<TResult> CreateAsync(Product args);
+    Task<TResult> CreateAsync(Product args, string locale);
     Task<TResult> DeleteAsync(Guid id);
     Task<TResult> DetailAsync(Guid id);
     Task<TResult> GetByNameAsync(string normalizedName);

@@ -10,11 +10,11 @@ namespace Waffle.Controllers.Products;
 
 public class ProductController(IProductService _productService) : BaseController
 {
-    [HttpGet("by-name/{normalizedName}"), AllowAnonymous]
+    [HttpGet("detail/{normalizedName}"), AllowAnonymous]
     public async Task<IActionResult> GetByNameAsync([FromRoute] string normalizedName) => Ok(await _productService.GetByNameAsync(normalizedName));
 
     [HttpPost]
-    public async Task<IActionResult> CreateAsync([FromBody] Product args) => Ok(await _productService.CreateAsync(args));
+    public async Task<IActionResult> CreateAsync([FromBody] Product args, [FromQuery] string locale) => Ok(await _productService.CreateAsync(args, locale));
 
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync() => Ok(TResult.Ok(await _productService.CountAsync()));

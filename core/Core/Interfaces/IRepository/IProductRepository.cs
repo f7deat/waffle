@@ -17,7 +17,7 @@ public interface IProductRepository : IAsyncRepository<Product>
     Task<bool> AnyAsync(Guid productId);
     Task<object> OptionsAsync(SelectOptions selectOptions);
     Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions);
-    Task<TResult> CreateAsync(Product args);
+    Task<TResult> CreateAsync(Product args, string locale);
     Task<TResult> DeleteAsync(Guid id);
     Task<Product?> DetailAsync(Guid id);
     Task<TResult> GetByNameAsync(string normalizedName);

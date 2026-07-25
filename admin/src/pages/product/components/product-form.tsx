@@ -1,9 +1,12 @@
+import { apiProductAdd } from "@/services/products/product";
 import {
     ModalForm,
+    ModalFormProps,
     ProFormDigit,
     ProFormText,
     ProFormTextArea,
 } from "@ant-design/pro-components";
+import { message } from "antd";
 
 export type ProductCatalogForm = {
     id?: string;
@@ -17,28 +20,28 @@ export type ProductCatalogForm = {
     affiliateLink?: string;
 }
 
-type ProductFormProps = {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    editingRow?: ProductCatalogForm;
-    onFinish: (values: ProductCatalogForm) => Promise<boolean>;
+type ProductFormProps = ModalFormProps & {
+    reload?: () => void;
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({
-    open,
-    onOpenChange,
-    editingRow,
-    onFinish,
+    reload, ...props
 }) => {
+
+    const onFinish = async (values: any) => {
+        await apiProductAdd(values);
+        message.success("Tạo sản phẩm thành công");
+        reload?.();
+        return true;
+    }
+
     return (
-        <ModalForm<ProductCatalogForm>
-            title={editingRow?.id ? "Cập nhật sản phẩm" : "Tạo sản phẩm"}
-            open={open}
-            onOpenChange={onOpenChange}
+        <ModalForm
+            title="Tạo sản phẩm"
+            {...props}
             onFinish={onFinish}
-            initialValues={editingRow || { active: false }}
             modalProps={{
-                destroyOnClose: true,
+                destroyOnHidden: true,
             }}
         >
             <ProFormText

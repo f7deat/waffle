@@ -272,6 +272,45 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
         });
     }
 
+    public async Task<TResult> WithdrawProfileAsync(Guid userId, ProfileWithdrawArgs args)
+    {
+        if (args.Amount <= 0) return TResult.Failed("Số tiền rút phải lớn hơn 0.");
+
+        var user = await _context.Users.FindAsync(userId);
+        if (user is null) return TResult.Failed("User not found!");
+
+        if (user.Amount < args.Amount) return TResult.Failed("Số dư không đủ để thực hiện rút tiền.");
+
+        var balanceBefore = user.Amount;
+        user.Amount -= args.Amount;
+
+        var transaction = new UserTopupTransaction
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            Amount = -args.Amount,
+            BalanceBefore = balanceBefore,
+            BalanceAfter = user.Amount,
+            InvoiceNumber = $"WD-{DateTime.UtcNow:yyyyMMddHHmmss}-{Random.Shared.Next(100, 999)}",
+            Note = string.IsNullOrWhiteSpace(args.Note) ? null : args.Note.Trim(),
+            CreatedBy = userId,
+            CreatedAt = DateTime.UtcNow,
+        };
+
+        await _context.UserTopupTransactions.AddAsync(transaction);
+        await _context.SaveChangesAsync();
+
+        return TResult.Ok(new
+        {
+            transaction.Id,
+            transaction.InvoiceNumber,
+            transaction.Amount,
+            transaction.BalanceBefore,
+            transaction.BalanceAfter,
+            transaction.CreatedAt
+        });
+    }
+
     public async Task<TResult> TopupAsync(AdminTopupArgs args, Guid adminId)
     {
         return await TopupInternalAsync(args.UserId, args.Amount, args.Note, adminId);

@@ -355,6 +355,9 @@ public class UserController(IUserService _userService, IFileService _fileService
     [HttpPost("profile/topup")]
     public async Task<IActionResult> TopupProfileAsync([FromBody] ProfileTopupArgs args) => Ok(await _userService.TopupProfileAsync(User.GetId(), args));
 
+    [HttpPost("profile/withdraw")]
+    public async Task<IActionResult> WithdrawProfileAsync([FromBody] ProfileWithdrawArgs args) => Ok(await _userService.WithdrawProfileAsync(User.GetId(), args));
+
     [HttpPost("reset-password"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordArgs args)
     {

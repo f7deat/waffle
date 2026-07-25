@@ -148,22 +148,7 @@ const ProductPage: React.FC = () => {
                 }}
             />
 
-            <ProductForm
-                open={openForm}
-                editingRow={editingRow}
-                onOpenChange={(nextOpen) => {
-                    setOpenForm(nextOpen);
-                    if (!nextOpen) {
-                        setEditingRow(undefined);
-                    }
-                }}
-                onFinish={async (values) => {
-                    if (editingRow?.id) {
-                        return handleUpdate(values);
-                    }
-                    return handleCreate(values);
-                }}
-            />
+            <ProductForm open={openForm} reload={() => actionRef.current?.reload()} onOpenChange={setOpenForm} />
         </PageContainer>
     )
 }
