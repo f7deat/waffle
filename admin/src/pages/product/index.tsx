@@ -11,6 +11,7 @@ import { Button, Popconfirm, Space, message } from "antd";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
 import ProductForm, { ProductCatalogForm } from "./components/product-form";
+import { apiCategoryOptions } from "@/services/settings/category";
 
 const ProductPage: React.FC = () => {
     const actionRef = useRef<ActionType>(null);
@@ -62,21 +63,39 @@ const ProductPage: React.FC = () => {
             search: false,
         },
         {
+            title: 'Ảnh',
+            dataIndex: 'thumbnail',
+            width: 80,
+            search: false,
+            render: (_, record) => (
+                <img src={record.thumbnail} alt="Thumbnail" style={{ width: 60, height: 60, objectFit: "cover" }} />
+            )
+        },
+        {
             title: "Tên sản phẩm",
             dataIndex: "name",
             minWidth: 240,
             render: (_, record) => (
-                <Link to={`/shop/product/center/${record.id}`} className="font-medium text-blue-600 hover:underline">
-                    {record.name}
-                </Link>
+                <>
+                    <Link to={`/shop/product/center/${record.id}`} className="font-medium text-blue-600 hover:underline">
+                        {record.name}
+                    </Link>
+                    <div className="text-gray-500 text-xs">
+                        {record.description}
+                    </div>
+                </>
             ),
         },
         {
-            title: "Giá",
-            dataIndex: "price",
-            search: false,
+            title: "Danh mục",
+            dataIndex: "categoryId",
             width: 120,
-            render: (_, record) => record.price ? Number(record.price).toLocaleString("vi-VN") : "-",
+            valueType: "select",
+            request: apiCategoryOptions,
+            fieldProps: {
+                showSearch: true
+            },
+            render: (_, record) => record.categoryName ?? "-",
         },
         {
             title: "Cập nhật",

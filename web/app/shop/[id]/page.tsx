@@ -7,7 +7,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import LatestProducts from "./latest-products";
 import BlockRender from "@/components/editor/block-render";
-import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, FireFilled, ShoppingCartOutlined } from "@ant-design/icons";
+import ProductGallery from "./product-gallery";
+import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -45,6 +46,10 @@ const Page = async ({ params }: PageProps) => {
         notFound();
     }
     const product = response.data;
+    const imageSources = Array.from(new Set([
+        ...(Array.isArray(product.images) ? product.images.map((x) => x.url).filter(Boolean) : []),
+        product.thumbnail,
+    ].filter((x): x is string => !!x)));
     const hasDiscount = product.salePrice && product.salePrice < product.price;
     const discountPercent = hasDiscount
         ? Math.round(((product.price - product.salePrice!) / product.price) * 100)
@@ -68,44 +73,13 @@ const Page = async ({ params }: PageProps) => {
                 </div>
 
                 <div className="md:flex gap-4">
-                    {/* Product Image */}
-                    <div className="group md:w-96 relative overflow-hidden rounded-[2rem] border border-slate-300/80 bg-white/90 backdrop-blur-sm flex">
-                        <div className="absolute left-5 top-5 z-20 flex flex-wrap gap-2">
-                            <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 backdrop-blur dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200">
-                                Đang Hot <FireFilled className="text-orange-500" />
-                            </span>
-                            {product.unitInStock !== undefined && product.unitInStock > 0 && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
-                                    Ready Stock
-                                </span>
-                            )}
-                        </div>
-
-                        <div className="aspect-square">
-                            {product.thumbnail ? (
-                                <img
-                                    src={product.thumbnail}
-                                    alt={product.name}
-                                    className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
-                                />
-                            ) : (
-                                <div className="flex h-full items-center justify-center bg-slate-100 dark:bg-slate-800">
-                                    <span className="rounded-full border border-dashed border-slate-300 px-4 py-2 text-sm font-medium text-slate-500 dark:border-slate-600 dark:text-slate-400">
-                                        No image available
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-
-                        {hasDiscount && (
-                            <div className="absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-gradient-to-r from-rose-500 to-orange-500 px-4 py-2 text-sm font-bold text-white ring-1 ring-white/70 dark:ring-white/30">
-                                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                -{discountPercent}%
-                            </div>
-                        )}
-                    </div>
+                    <ProductGallery
+                        imageSources={imageSources}
+                        productName={product.name}
+                        unitInStock={product.unitInStock}
+                        hasDiscount={!!hasDiscount}
+                        discountPercent={discountPercent}
+                    />
 
                     {/* Product Info */}
                     <div className="flex flex-col gap-4 flex-1">

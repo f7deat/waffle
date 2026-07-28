@@ -194,7 +194,44 @@ export default [
         component: './files/center',
         hideInMenu: true,
       },
+      {
+        name: 'video',
+        path: '/files/video',
+        component: './files/video'
+      }
     ],
+  },
+  {
+    title: 'financial',
+    icon: 'DollarOutlined',
+    name: 'financial',
+    path: '/financial',
+    routes: [
+      {
+        path: '/financial',
+        redirect: '/financial/overview',
+      },
+      {
+        name: 'overview',
+        path: '/financial/overview',
+        component: './financial'
+      },
+      {
+        name: 'transaction',
+        path: '/financial/transaction',
+        component: './financial/transaction'
+      },
+      {
+        name: 'withdraw',
+        path: '/financial/withdraw',
+        component: './financial/withdraw'
+      },
+      {
+        name: 'deposit',
+        path: '/financial/deposit',
+        component: './financial/deposit'
+      }
+    ]
   },
   {
     icon: 'SettingOutlined',

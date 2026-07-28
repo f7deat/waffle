@@ -6,6 +6,8 @@ public class ProductListItem : PageData
 {
     public decimal? Price { get; set; }
     public decimal? SalePrice { get; set; }
+    public string? CategoryName { get; set; }
+    public int? CategoryId { get; set; }
 
     public decimal Discount => 100 - Math.Round((SalePrice / Price ?? 1) * 100);
 }

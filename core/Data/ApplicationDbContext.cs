@@ -24,6 +24,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<FileContent> FileContents { get; set; } = default!;
     public DbSet<Album> Albums { get; set; } = default!;
     public DbSet<Photo> Photos { get; set; } = default!;
+    public DbSet<Video> Videos { get; set; } = default!;
     public DbSet<WorkContent> WorkContents { get; set; } = default!;
     public DbSet<WorkItem> WorkItems { get; set; } = default!;
     public DbSet<Contact> Contacts { get; set; } = default!;
@@ -36,6 +37,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Folder> Folders { get; set; }
     public DbSet<ProductLink> ProductLinks { get; set; }
     public DbSet<ProductVariant> ProductVariants { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
     public DbSet<AffiliateLink> AffiliateLinks { get; set; }
     public DbSet<ShortLink> ShortLinks { get; set; }
     public DbSet<Room> Rooms { get; set; }
@@ -71,10 +73,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<Catalog>().HasIndex(c => c.Id).HasDatabaseName("IDX_Catalog_Id");
         builder.Entity<Album>().HasIndex(x => x.NormalizedName).HasDatabaseName("IDX_ImageAlbum_NormalizedName");
         builder.Entity<Photo>().HasIndex(x => x.AlbumId).HasDatabaseName("IDX_ImageLibraryItem_AlbumId");
+        builder.Entity<Video>().HasIndex(x => x.SourceType).HasDatabaseName("IDX_Video_SourceType");
+        builder.Entity<Video>().HasIndex(x => x.CreatedDate).HasDatabaseName("IDX_Video_CreatedDate");
         builder.Entity<WorkItem>().HasIndex(w => w.CatalogId).HasDatabaseName("IDX_WorkItem_CatalogId");
         builder.Entity<WorkItem>().HasIndex(w => w.WorkId).HasDatabaseName("IDX_WorkItem_WorkId");
         builder.Entity<WorkContent>().HasIndex(wc => wc.Id).HasDatabaseName("IDX_WorkContent_Id");
         builder.Entity<ProductVariant>().HasIndex(x => x.ProductId).HasDatabaseName("IDX_ProductVariant_ProductId");
+        builder.Entity<ProductImage>().HasIndex(x => x.ProductId).HasDatabaseName("IDX_ProductImage_ProductId");
         builder.Entity<ProductTag>().HasIndex(x => x.TagId).HasDatabaseName("IDX_ProductTag_TagId");
 
         builder.Entity<WorkItem>().HasKey(k => new { k.WorkId, k.CatalogId });
@@ -105,6 +110,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasOne(x => x.Tag)
             .WithMany()
             .HasForeignKey(x => x.TagId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ProductImage>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.Images)
+            .HasForeignKey(x => x.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
 
         base.OnModelCreating(builder);

@@ -47,8 +47,7 @@ public class CatalogFilterOptions : FilterOptions
 public class ProductFilterOptions : FilterOptions
 {
     public string? Name { get; set; }
-    public bool? Active { get; set; }
-    public Guid? ParentId { get; set; }
+    public int? CategoryId { get; set; }
 }
 
 public class SearchFilterOptions : FilterOptions

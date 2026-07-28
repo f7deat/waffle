@@ -48,6 +48,13 @@ public class ProductController(IProductService _productService) : BaseController
     public async Task<IActionResult> SaveVariantsAsync([FromRoute] Guid id, [FromBody] IEnumerable<ProductVariant> variants)
         => Ok(await _productService.SaveVariantsAsync(id, variants));
 
+    [HttpGet("{id}/images")]
+    public async Task<IActionResult> ListImagesAsync([FromRoute] Guid id) => Ok(await _productService.GetImagesAsync(id));
+
+    [HttpPost("save-images/{id}")]
+    public async Task<IActionResult> SaveImagesAsync([FromRoute] Guid id, [FromBody] IEnumerable<ProductImage> images)
+        => Ok(await _productService.SaveImagesAsync(id, images));
+
     [HttpGet("{id}/tags")]
     public async Task<IActionResult> ListTagsAsync([FromRoute] Guid id) => Ok(await _productService.GetTagsAsync(id));
 

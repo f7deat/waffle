@@ -61,6 +61,17 @@ export async function apiProductSaveVariants(id: string, data: any[]) {
     });
 }
 
+export async function apiProductImages(id?: string) {
+    return request(`product/${id}/images`);
+}
+
+export async function apiProductSaveImages(id: string, data: any[]) {
+    return request(`product/save-images/${id}`, {
+        method: 'POST',
+        data,
+    });
+}
+
 export async function apiProductTags(id?: string) {
     return request(`product/${id}/tags`);
 }

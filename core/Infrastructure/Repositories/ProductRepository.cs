@@ -79,6 +79,17 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                 x.SortOrder
             })
             .ToListAsync();
+        var images = await _context.ProductImages
+            .Where(x => x.ProductId == product.Id)
+            .OrderBy(x => x.SortOrder)
+            .Select(x => new
+            {
+                x.Id,
+                x.ProductId,
+                x.Url,
+                x.SortOrder
+            })
+            .ToListAsync();
         var tagIds = await _context.ProductTags
             .Where(x => x.ProductId == product.Id)
             .Select(x => x.TagId)
@@ -104,6 +115,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
             product.AffiliateLink,
             TagIds = tagIds,
             Variants = variants,
+            Images = images,
             product.CategoryId,
             category = new
             {
@@ -117,6 +129,8 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
     public async Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
     {
         var query = from product in _context.Products
+                    join category in _context.Categories on product.CategoryId equals category.Id into categoryGroup
+                    from category in categoryGroup.DefaultIfEmpty()
                     select new ProductListItem
                     {
                         Id = product.Id,
@@ -129,7 +143,9 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                         Description = product.Description,
                         Type = CatalogType.Product,
                         ModifiedDate = product.ModifiedDate ?? product.CreatedDate,
-                        Locale = product.Locale
+                        Locale = product.Locale,
+                        CategoryId = product.CategoryId,
+                        CategoryName = category.Name
                     };
         if (!string.IsNullOrWhiteSpace(filterOptions.Name))
         {
@@ -138,6 +154,10 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         if (!string.IsNullOrEmpty(filterOptions.Locale))
         {
             query = query.Where(x => x.Locale == filterOptions.Locale);
+        }
+        if (filterOptions.CategoryId.HasValue)
+        {
+            query = query.Where(x => x.CategoryId == filterOptions.CategoryId);
         }
         query = query.OrderByDescending(x => x.ModifiedDate);
         return await ListResult<ProductListItem>.Success(query, filterOptions);

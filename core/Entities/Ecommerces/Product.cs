@@ -36,4 +36,5 @@ public class Product : AuditEntity
     public Category? Category { get; set; }
     public ICollection<ProductVariant>? Variants { get; set; }
     public ICollection<ProductTag>? ProductTags { get; set; }
+    public ICollection<ProductImage>? Images { get; set; }
 }

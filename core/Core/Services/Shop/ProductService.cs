@@ -10,12 +10,13 @@ using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Services.Shop;
 
-public class ProductService(IProductRepository productRepository, IProductLinkRepository productLinkRepository, IProductVariantRepository productVariantRepository, IProductTagRepository productTagRepository) : IProductService
+public class ProductService(IProductRepository productRepository, IProductLinkRepository productLinkRepository, IProductVariantRepository productVariantRepository, IProductTagRepository productTagRepository, IProductImageRepository productImageRepository) : IProductService
 {
     private readonly IProductRepository _productRepository = productRepository;
     private readonly IProductLinkRepository _productLinkRepository = productLinkRepository;
     private readonly IProductVariantRepository _productVariantRepository = productVariantRepository;
     private readonly IProductTagRepository _productTagRepository = productTagRepository;
+    private readonly IProductImageRepository _productImageRepository = productImageRepository;
 
     public async Task<TResult> AddLinkAsync(ProductLink args)
     {
@@ -47,6 +48,7 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
         {
             variants = GetLegacyVariants(product.Content, id).ToList();
         }
+        var images = (await _productImageRepository.ListByProductIdAsync(id)).ToList();
         var tags = (await _productTagRepository.ListByProductIdAsync(id)).ToList();
 
         return TResult.Ok(new
@@ -83,6 +85,13 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
                 x.UnitInStock,
                 x.Thumbnail,
                 x.SortOrder
+            }),
+            Images = images.Select(x => new
+            {
+                x.Id,
+                x.ProductId,
+                x.Url,
+                x.SortOrder
             })
         });
     }
@@ -106,6 +115,12 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
             x.Tag?.Name,
             x.Tag?.NormalizedName
         });
+    }
+
+    public async Task<IEnumerable<ProductImage>> GetImagesAsync(Guid productId)
+    {
+        if (!await _productRepository.AnyAsync(productId)) return [];
+        return await _productImageRepository.ListByProductIdAsync(productId);
     }
 
     public async Task<IEnumerable<ProductVariant>> GetVariantsAsync(Guid productId)
@@ -174,6 +189,10 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
         {
             await _productVariantRepository.SyncAsync(args.Id, args.Variants);
         }
+        if (args.Images is not null)
+        {
+            await _productImageRepository.SyncAsync(args.Id, args.Images);
+        }
         if (args.TagIds is not null)
         {
             await _productTagRepository.SyncAsync(args.Id, args.TagIds);
@@ -187,6 +206,13 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
     {
         if (!await _productRepository.AnyAsync(productId)) return TResult.Failed("Product not found!");
         await _productVariantRepository.SyncAsync(productId, variants);
+        return TResult.Success;
+    }
+
+    public async Task<TResult> SaveImagesAsync(Guid productId, IEnumerable<ProductImage> images)
+    {
+        if (!await _productRepository.AnyAsync(productId)) return TResult.Failed("Product not found!");
+        await _productImageRepository.SyncAsync(productId, images);
         return TResult.Success;
     }
 

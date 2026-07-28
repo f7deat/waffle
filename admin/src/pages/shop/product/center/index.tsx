@@ -20,6 +20,10 @@ type ProductVariant = {
     thumbnail?: string;
 };
 
+type ProductImage = {
+    url?: string;
+};
+
 const EMPTY_EDITOR_CONTENT = {
     blocks: [],
     time: Date.now(),
@@ -55,6 +59,18 @@ const extractVariants = (content: any): ProductVariant[] => {
     return parsed.variants;
 };
 
+const extractImages = (product: any): ProductImage[] => {
+    if (Array.isArray(product?.images) && product.images.length > 0) {
+        return product.images
+            .map((item: any) => ({ url: item?.url }))
+            .filter((item: ProductImage) => !!item.url);
+    }
+    if (typeof product?.thumbnail === "string" && product.thumbnail.trim()) {
+        return [{ url: product.thumbnail.trim() }];
+    }
+    return [];
+};
+
 const Index: React.FC = () => {
 
     const { id } = useParams<{ id: string }>();
@@ -63,7 +79,9 @@ const Index: React.FC = () => {
     });
     const formRef = useRef<ProFormInstance>(null);
     const thumbnailInputRef = useRef<HTMLInputElement>(null);
+    const imageInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
     const [thumbnailUploading, setThumbnailUploading] = useState(false);
+    const [imageUploadingIndex, setImageUploadingIndex] = useState<number | null>(null);
     const [thumbnail, setThumbnail] = useState<string | undefined>(product?.thumbnail);
 
     useEffect(() => {
@@ -72,7 +90,8 @@ const Index: React.FC = () => {
                 ...product,
                 content: extractEditorContent(product.content),
                 tags: product.tagIds || product.tags?.map((x: any) => x.id),
-                variants: product.variants || extractVariants(product.content)
+                variants: product.variants || extractVariants(product.content),
+                images: extractImages(product)
             });
             setThumbnail(product.thumbnail);
         }
@@ -112,16 +131,51 @@ const Index: React.FC = () => {
         }
     };
 
+    const onProductImageSelected = async (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        try {
+            setImageUploadingIndex(index);
+            const response = await uploadRcFile(file as RcFile);
+            const imageUrl = resolveUploadedUrl(response);
+
+            if (!imageUrl) {
+                message.error("Khong lay duoc URL sau khi upload");
+                return;
+            }
+
+            formRef.current?.setFieldValue(["images", index, "url"], imageUrl);
+            message.success("Upload ảnh sản phẩm thành công");
+        } catch (error) {
+            message.error("Upload ảnh sản phẩm thất bại");
+        } finally {
+            setImageUploadingIndex(null);
+            const imageInput = imageInputRefs.current[index];
+            if (imageInput) {
+                imageInput.value = "";
+            }
+        }
+    };
+
     const onFinish = async (values: any) => {
         const variants = (values.variants || []).filter((item: ProductVariant) => {
             return !!(item?.name || item?.sku || item?.price || item?.salePrice || item?.unitInStock || item?.thumbnail);
         });
 
+        const images = (values.images || [])
+            .map((item: ProductImage) => ({ url: item?.url?.trim() }))
+            .filter((item: ProductImage) => !!item.url);
+
+        const thumbnailUrl = values.thumbnail?.trim() || images?.[0]?.url;
+
         await apiProductSave({
             id,
             ...values,
+            thumbnail: thumbnailUrl,
             tagIds: values.tags || [],
             variants,
+            images,
             content: JSON.stringify(extractEditorContent(values.content)),
         });
         message.success('Lưu sản phẩm thành công');
@@ -143,6 +197,48 @@ const Index: React.FC = () => {
                                 request={apiTagOptions}
                                 showSearch
                             />
+                            <ProFormList
+                                name="images"
+                                label="Hình ảnh sản phẩm"
+                                creatorButtonProps={{
+                                    creatorButtonText: "Thêm hình ảnh"
+                                }}
+                                copyIconProps={false}
+                                itemRender={({ listDom }, { index }) => (
+                                    <ProCard key={index} type="inner" className="mb-3" title={`Ảnh #${index + 1}`}>
+                                        {listDom}
+                                        <div className="mt-2 flex gap-2">
+                                            <Button
+                                                size="small"
+                                                icon={<UploadOutlined />}
+                                                loading={imageUploadingIndex === index}
+                                                onClick={() => imageInputRefs.current[index]?.click()}
+                                            >Upload nhanh</Button>
+                                            <ImageLibraryPicker
+                                                value={formRef.current?.getFieldValue(["images", index, "url"])}
+                                                onChange={(url) => {
+                                                    formRef.current?.setFieldValue(["images", index, "url"], url);
+                                                }}
+                                            />
+                                            <input
+                                                ref={(element) => {
+                                                    imageInputRefs.current[index] = element;
+                                                }}
+                                                type="file"
+                                                accept="image/*"
+                                                style={{ display: "none" }}
+                                                onChange={(event) => onProductImageSelected(index, event)}
+                                            />
+                                        </div>
+                                    </ProCard>
+                                )}
+                            >
+                                <ProFormText
+                                    name="url"
+                                    label="URL hình ảnh"
+                                    placeholder="https://..."
+                                />
+                            </ProFormList>
                             <ProFormList
                                 name="variants"
                                 label="Biến thể sản phẩm"

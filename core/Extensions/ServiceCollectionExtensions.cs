@@ -7,6 +7,7 @@ using Waffle.Core.Interfaces.IRepository.Catalogs;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IRepositories;
 using Waffle.Core.IServices;
+using Waffle.Core.IServices.Financials;
 using Waffle.Core.IServices.Locations;
 using Waffle.Core.IServices.Shops;
 using Waffle.Core.IServices.Users;
@@ -17,6 +18,7 @@ using Waffle.Core.Services.Articles;
 using Waffle.Core.Services.Careers;
 using Waffle.Core.Services.Categories;
 using Waffle.Core.Services.Contacts;
+using Waffle.Core.Services.Financials;
 using Waffle.Core.Services.Files;
 using Waffle.Core.Services.Locations;
 using Waffle.Core.Services.Shop;
@@ -72,6 +74,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IProductLinkRepository, ProductLinkRepository>();
         services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
+        services.AddScoped<IProductImageRepository, ProductImageRepository>();
         services.AddScoped<IProductTagRepository, ProductTagRepository>();
 
         services.AddScoped<IOrderRepository, OrderRepository>();
@@ -91,6 +94,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRouteDataService, RouteDataService>();
         services.AddScoped<ICollectionService, CollectionService>();
         services.AddScoped<ICollectionRepository, CollectionRepository>();
+        services.AddScoped<IFinancialService, FinancialService>();
 
         #region Notification
         services.AddScoped<INotificationService, NotificationService>();

@@ -40,6 +40,45 @@ declare namespace API {
         createdBy: string;
         createdByName?: string;
     }
+
+    type FinancialOverview = {
+        totalDeposit: number;
+        totalWithdraw: number;
+        netFlow: number;
+        transactionCount: number;
+        depositCount: number;
+        withdrawCount: number;
+        activeUserCount: number;
+        currentBalanceTotal: number;
+        todayDeposit: number;
+        todayWithdraw: number;
+        thisMonthDeposit: number;
+        thisMonthWithdraw: number;
+    }
+
+    type FinancialTransaction = {
+        id: string;
+        userId: string;
+        userName?: string;
+        userEmail?: string;
+        amount: number;
+        absoluteAmount: number;
+        transactionType: 'deposit' | 'withdraw';
+        balanceBefore: number;
+        balanceAfter: number;
+        invoiceNumber: string;
+        note?: string;
+        createdBy: string;
+        createdByName?: string;
+        createdAt: string;
+    }
+
+    type FinancialUserOption = {
+        label: string;
+        value: string;
+        email?: string;
+        balance: number;
+    }
     interface ListResult<T> {
         data: T[];
         total: number;

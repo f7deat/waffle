@@ -26,6 +26,8 @@ public interface IProductService
     Task<TResult> GetByNameAsync(string normalizedName);
     Task<IEnumerable<ProductVariant>> GetVariantsAsync(Guid productId);
     Task<TResult> SaveVariantsAsync(Guid productId, IEnumerable<ProductVariant> variants);
+    Task<IEnumerable<ProductImage>> GetImagesAsync(Guid productId);
+    Task<TResult> SaveImagesAsync(Guid productId, IEnumerable<ProductImage> images);
     Task<IEnumerable<object>> GetTagsAsync(Guid productId);
     Task<TResult> SaveTagsAsync(Guid productId, IEnumerable<Guid> tagIds);
 }

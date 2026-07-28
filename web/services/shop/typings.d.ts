@@ -15,6 +15,13 @@ declare namespace API {
         content?: API.BlockEditor;
         unitInStock?: number;
         affiliateLink?: string;
+        images?: ProductImageItem[];
+    }
+    interface ProductImageItem {
+        id?: string;
+        productId?: string;
+        url: string;
+        sortOrder?: number;
     }
     interface ProductFilterOptions extends FilterOptions {
         name?: string;
