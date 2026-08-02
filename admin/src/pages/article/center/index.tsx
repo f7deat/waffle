@@ -146,7 +146,7 @@ const Index: React.FC = () => {
                                 onChange={onThumbnailSelected}
                             />
 
-                            <ProFormDateTimePicker name="publishedAt" label="Ngay xuat ban" />
+                            <ProFormDateTimePicker name="publishedAt" label="Ngày xuất bản" width="xl" />
                         </Col>
                     </Row>
                 </ProForm>

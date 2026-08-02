@@ -1,19 +1,15 @@
 import { addArticle } from '@/services/article';
 import { ModalForm, ModalFormProps, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
+import { history } from '@umijs/max';
 
-interface ArticleFormProps extends ModalFormProps {
-  open: boolean;
-  onSuccess?: () => void;
-}
-
-const ArticleForm: React.FC<ArticleFormProps> = ({ onSuccess, ...drawerFormProps }) => {
+const ArticleForm: React.FC<ModalFormProps> = (props) => {
 
   const handleSubmit = async (values: any) => {
-    await addArticle({
+    const response = await addArticle({
       name: values.name,
       description: values.description
     });
-    onSuccess?.();
+    history.push(`/article/${response.data.id}`);
     return true;
   }
 
@@ -21,7 +17,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ onSuccess, ...drawerFormProps
     <ModalForm
       title='Tạo mới'
       onFinish={handleSubmit}
-      {...drawerFormProps}
+      {...props}
     >
       <ProFormText name="name" label="Name" rules={[{ required: true }]} />
 

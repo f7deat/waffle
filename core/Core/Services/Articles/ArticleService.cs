@@ -1,4 +1,5 @@
-﻿using Waffle.Core.Foundations.Models;
+﻿using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
@@ -9,7 +10,7 @@ using Waffle.Models;
 
 namespace Waffle.Core.Services.Articles;
 
-public class ArticleService(IArticleRepository _articleRepository) : IArticleService
+public class ArticleService(IArticleRepository _articleRepository, IHCAService _hcaService, ILogService _logService) : IArticleService
 {
     public Task<TResult> GetByNameAsync(string normalizedName) => _articleRepository.GetByNameAsync(normalizedName);
 
@@ -37,20 +38,24 @@ public class ArticleService(IArticleRepository _articleRepository) : IArticleSer
         filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
         return _articleRepository.GetPublishedListAsync(filterOptions);
     }
+
     public async Task<TResult> AddAsync(CreateArticleArgs args, string locale)
     {
         try
         {
             var article = new Article
             {
+                Id = Guid.NewGuid(),
                 Name = args.Name,
                 Description = args.Description,
                 Locale = locale,
-                NormalizedName = SeoHelper.ToSeoFriendly(args.Name)
+                NormalizedName = SeoHelper.ToSeoFriendly(args.Name),
+                CreatedDate = DateTime.Now,
+                CreatedBy = _hcaService.GetUserId()
             };
-            var result = await _articleRepository.AddAsync(article);
-            await _articleRepository.SaveChangesAsync();
-            return TResult.Ok(result.Id);
+            await _logService.AddAsync($"Tạo bài viết mới: {article.Name}");
+            await _articleRepository.AddAsync(article);
+            return TResult.Ok(article.Id);
         }
         catch (Exception ex)
         {

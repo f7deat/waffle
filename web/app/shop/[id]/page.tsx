@@ -8,7 +8,8 @@ import { notFound } from "next/navigation";
 import LatestProducts from "./latest-products";
 import BlockRender from "@/components/editor/block-render";
 import ProductGallery from "./product-gallery";
-import { ArrowLeftOutlined, CalendarOutlined, EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -50,9 +51,9 @@ const Page = async ({ params }: PageProps) => {
         ...(Array.isArray(product.images) ? product.images.map((x) => x.url).filter(Boolean) : []),
         product.thumbnail,
     ].filter((x): x is string => !!x)));
-    const hasDiscount = product.salePrice && product.salePrice < product.price;
+    const hasDiscount = product.salePrice && product.salePrice < (product.price || 0);
     const discountPercent = hasDiscount
-        ? Math.round(((product.price - product.salePrice!) / product.price) * 100)
+        ? Math.round(((product.price || 0) - product.salePrice!) / (product.price || 0) * 100)
         : 0;
 
     const localePrice = (value?: number | null) =>
@@ -63,6 +64,10 @@ const Page = async ({ params }: PageProps) => {
             {
                 href: '/shop',
                 label: 'Sản phẩm'
+            },
+            {
+                href: `/shop/category/${product.category?.normalizedName}`,
+                label: product.category?.name
             }
         ]}>
             <div className="relative mx-auto max-w-7xl px-4 py-12 sm:py-14 lg:py-16">
@@ -80,7 +85,6 @@ const Page = async ({ params }: PageProps) => {
                         hasDiscount={!!hasDiscount}
                         discountPercent={discountPercent}
                     />
-
                     {/* Product Info */}
                     <div className="flex flex-col gap-4 flex-1">
                         <div className="space-y-4">
@@ -200,32 +204,18 @@ const Page = async ({ params }: PageProps) => {
                                 </span>
                             </Link>
                         </div>
-
-                        {/* Meta Info */}
-                        <div className="space-y-2 rounded-lg border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 dark:border-slate-700 dark:from-slate-800 dark:to-slate-900">
-                            <div className="flex items-center justify-between border-b border-slate-200 pb-2 dark:border-slate-700">
-                                <span className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-                                    <EyeOutlined />
-                                    Lượt xem
-                                </span>
-                                <span className="text-base font-bold text-slate-900 dark:text-slate-100">
-                                    {product.viewCount?.toLocaleString()}
-                                </span>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-slate-200 pb-2 dark:border-slate-700">
-                                <span className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-400">
-                                    <CalendarOutlined />
-                                    Ngày cập nhật
-                                </span>
-                                <span className="text-base font-bold text-slate-900 dark:text-slate-100">
-                                    {new Date(product.createdDate).toLocaleDateString("vi-VN")}
-                                </span>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div className="mt-12 rounded-lg p-4 bg-white backdrop-blur">
                     <BlockRender {...product.content} />
+                    <div className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                        <div>
+                            Ngày cập nhật: {dayjs(product.modifiedDate || product.createdDate).format("DD/MM/YYYY HH:mm")}
+                        </div>
+                        <div>
+                            Lượt xem: {product.viewCount?.toLocaleString()}
+                        </div>
+                        </div>
                 </div>
 
                 {/* Latest Products */}

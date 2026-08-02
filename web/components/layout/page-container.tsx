@@ -2,7 +2,7 @@ import Breadcrumb from "./breadcrumb";
 
 type Props = {
     children?: React.ReactNode;
-    breadcrumbs?: { label: string; href: string }[];
+    breadcrumbs?: { label?: string; href: string }[];
     fluid?: boolean;
 }
 

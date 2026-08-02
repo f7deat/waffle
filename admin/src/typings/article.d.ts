@@ -5,4 +5,13 @@ export type ArticleListItem = {
     thumbnail?: string;
     publishedAt?: string;
     viewCount: number;
+    creatorName?: string;
+    creatorAvatar?: string;
+    creatorId?: string;
+    modifiedDate?: string;
+    createdDate: string;
+}
+
+export type ArticleDetailType = ArticleListItem & {
+    content: string;
 }

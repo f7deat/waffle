@@ -1,10 +1,10 @@
 import { ESortOrder } from '@/constants';
-import { ArticleListItem } from '@/typings/article';
+import { ArticleDetailType, ArticleListItem } from '@/typings/article';
 import { request } from '@umijs/max';
 import { SortOrder } from 'antd/lib/table/interface';
 
 export async function getArticleById(id: string) {
-  return request<API.TResult<ArticleListItem>>(`article/id/${id}`);
+  return request<API.TResult<ArticleDetailType>>(`article/id/${id}`);
 }
 
 export async function getArticleByName(name: string) {
@@ -58,7 +58,7 @@ export async function addArticle(data: {
   name: string;
   description?: string;
 }) {
-  return request<API.TResult<object>>('article', {
+  return request<API.TResult<{ id: string }>>('article', {
     method: 'POST',
     data,
   });

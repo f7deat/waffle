@@ -3,10 +3,11 @@ import {
   Button,
   message,
   Popconfirm,
-  Space,
+  Image,
+  Avatar,
 } from "antd";
 import { useRef, useState } from "react";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import {
   deleteArticle,
   listArticles,
@@ -14,12 +15,12 @@ import {
 import ArticleForm from "@/components/ArticleForm";
 import dayjs from "dayjs";
 import { Link } from "@umijs/max";
+import { ArticleListItem } from "@/typings/article";
 
 const ArticlePage: React.FC = () => {
 
   const actionRef = useRef<ActionType>(null);
   const [open, setOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | undefined>();
   const [deletingId, setDeletingId] = useState<string | undefined>();
 
   const handleDelete = async (id: string) => {
@@ -35,7 +36,7 @@ const ArticlePage: React.FC = () => {
     }
   };
 
-  const columns: ProColumns<any>[] = [
+  const columns: ProColumns<ArticleListItem>[] = [
     {
       title: '#',
       valueType: 'indexBorder',
@@ -43,23 +44,39 @@ const ArticlePage: React.FC = () => {
       align: 'center'
     },
     {
+      title: "Ảnh",
+      dataIndex: "thumbnail",
+      key: "thumbnail",
+      width: 100,
+      search: false,
+      render: (_, record) => (
+        <Image src={record.thumbnail} alt={record.name} width={80} height={80} className="rounded object-cover" />
+      )
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
       minWidth: 200,
       render: (dom, record) => (
-        <Link to={`/article/${record.id}`}>
-          <div className="font-medium text-blue-600 hover:underline">
-            {record.name}
+        <div>
+          <Link to={`/article/${record.id}`}>
+            <div className="font-medium">
+              {record.name}
+            </div>
+          </Link>
+          <div className="text-xs text-slate-500">
+            <div className="line-clamp-2 mb-1">{record.description}</div>
+            <Avatar size="small" src={record.creatorAvatar} /> {record.creatorName} | {dayjs(record.createdDate).format("YYYY-MM-DD HH:mm")}
           </div>
-        </Link>
+        </div>
       )
     },
     {
-      title: "View Count",
+      title: <EyeOutlined />,
       dataIndex: "viewCount",
       key: "viewCount",
-      width: 100,
+      width: 80,
       search: false,
       valueType: "digit"
     },
@@ -73,13 +90,6 @@ const ArticlePage: React.FC = () => {
       search: false
     },
     {
-      title: "Creator",
-      dataIndex: "creatorName",
-      key: "creatorName",
-      width: 120,
-      search: false
-    },
-    {
       title: "Modified",
       dataIndex: "modifiedDate",
       key: "modifiedDate",
@@ -89,51 +99,37 @@ const ArticlePage: React.FC = () => {
       search: false
     },
     {
-      title: "Actions",
+      title: <SettingOutlined />,
       key: "actions",
-      width: 60,
+      width: 30,
+      align: "center",
       valueType: "option",
-      render: (_: any, record: any) => (
-        <Space size="small">
+      render: (_: any, record: any) => [
+        <Popconfirm
+          title="Delete Article"
+          description="Are you sure you want to delete this article?"
+          okText="Yes"
+          key={"remove"}
+          cancelText="No"
+          onConfirm={() => handleDelete(record.id)}
+        >
           <Button
-            type="primary"
+            danger
             size="small"
-            icon={<EditOutlined />}
-            onClick={() => {
-              setEditingId(record.id);
-              setOpen(true);
-            }}
+            icon={<DeleteOutlined />}
+            loading={deletingId === record.id}
           />
-          <Popconfirm
-            title="Delete Article"
-            description="Are you sure you want to delete this article?"
-            okText="Yes"
-            cancelText="No"
-            onConfirm={() => handleDelete(record.id)}
-          >
-            <Button
-              danger
-              size="small"
-              icon={<DeleteOutlined />}
-              loading={deletingId === record.id}
-            />
-          </Popconfirm>
-        </Space>
-      ),
+        </Popconfirm>
+      ]
     },
   ];
-
-  const handleOpenForm = () => {
-    setEditingId(undefined);
-    setOpen(true);
-  };
 
   return (
     <PageContainer extra={
       <Button
         type="primary"
         icon={<PlusOutlined />}
-        onClick={handleOpenForm}
+        onClick={() => setOpen(true)}
       >
         Tạo mới
       </Button>
@@ -146,13 +142,10 @@ const ArticlePage: React.FC = () => {
           layout: "vertical"
         }}
         actionRef={actionRef}
+        size="small"
       />
 
-      <ArticleForm
-        open={open}
-        onOpenChange={setOpen}
-        onSuccess={() => actionRef.current?.reload()}
-      />
+      <ArticleForm open={open} onOpenChange={setOpen} />
     </PageContainer>
   );
 };

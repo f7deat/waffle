@@ -35,13 +35,12 @@ const Index: React.FC = () => {
     useEffect(() => {
         if (category?.id) {
             apiCategoryGet(category.id).then((response) => {
+                const data = response.data;
                 formRef.current?.setFieldsValue({
-                    id: response.id,
-                    name: response.name,
-                    description: response.description,
-                    parentId: response.parentId,
-                    type: response.type,
-                    locale: response.locale,
+                    id: data.id,
+                    name: data.name,
+                    description: data.description,
+                    parentId: data.parentId
                 });
             });
             return;

@@ -107,7 +107,8 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
     public async Task<ListResult> ListAsync(ArticleFilterOptions filterOptions)
     {
         var query = from a in _context.Articles
-                    join u in _context.Users on a.CreatedBy equals u.Id
+                    join u in _context.Users on a.CreatedBy equals u.Id into userJoin
+                    from u in userJoin.DefaultIfEmpty()
                     where a.Locale == filterOptions.Locale
                     select new
                     {
@@ -122,7 +123,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
                         a.PublishedAt,
                         CreatorName = u.Name,
                         CreatorAvatar = u.Avatar,
-                        CreatorId = u.Id
+                        CreatorId = (Guid?)u.Id
                     };
         if (!string.IsNullOrWhiteSpace(filterOptions.Name))
         {

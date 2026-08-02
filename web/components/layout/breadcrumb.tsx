@@ -3,7 +3,7 @@ import "./breadcrumb.css";
 import { HomeFilled } from "@ant-design/icons";
 
 type Props = {
-    items?: { label: string; href: string }[];
+    items?: { label?: string; href: string }[];
 };
 
 const Breadcrumb: React.FC<Props> = ({ items = [] }) => {
@@ -27,7 +27,7 @@ const Breadcrumb: React.FC<Props> = ({ items = [] }) => {
                     </Link>
                     <meta itemProp="position" content="1" />
                 </li>
-                {items.map((item, index) => (
+                {items.filter((item) => !!item.label).map((item, index) => (
                     <li
                         key={item.href}
                         className="flex items-center gap-1 rounded-md px-2 py-1 text-slate-600 hover:bg-slate-50"
