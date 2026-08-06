@@ -27,6 +27,19 @@ declare namespace API {
         name?: string;
     }
 
+    interface ProductCategoryFilterOptions extends FilterOptions {
+        name?: string;
+    }
+
+    interface ProductCategoryItem {
+        id: number;
+        name: string;
+        normalizedName: string;
+        description?: string;
+        thumbnail?: string;
+        productCount: number;
+    }
+
     interface PlaceOrderDetail {
         productId: string;
         quantity: number;

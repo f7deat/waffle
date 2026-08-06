@@ -10,7 +10,9 @@ public interface IProductService
 {
     Task<TResult> SaveAsync(Product args);
     Task<int> CountAsync();
+    Task<ListResult<ProductCategoryListItem>> ListCategoriesAsync(ProductCategoryFilterOptions filterOptions);
     Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions);
+    Task<ListResult<ProductListItem>> ListByCategoryAsync(string normalizedName, ProductFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions catalogFilterOptions);
     Task<IEnumerable<ProductListItem>> ListRelatedAsync(PageData pageData);
     Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds, string locale);

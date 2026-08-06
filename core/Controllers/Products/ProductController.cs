@@ -71,6 +71,14 @@ public class ProductController(IProductService _productService) : BaseController
     [HttpGet("new-arrivals"), AllowAnonymous]
     public async Task<IActionResult> NewArrivalsAsync([FromQuery] ProductFilterOptions filterOptions) => Ok(await _productService.NewArrivalsAsync(filterOptions));
 
+    [HttpGet("categories"), AllowAnonymous]
+    public async Task<IActionResult> ListCategoriesAsync([FromQuery] ProductCategoryFilterOptions filterOptions)
+        => Ok(await _productService.ListCategoriesAsync(filterOptions));
+
     [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> ListAsync([FromQuery] ProductFilterOptions filterOptions) => Ok(await _productService.ListAsync(filterOptions));
+
+    [HttpGet("category/{normalizedName}"), AllowAnonymous]
+    public async Task<IActionResult> ListByCategoryAsync([FromRoute] string normalizedName, [FromQuery] ProductFilterOptions filterOptions)
+        => Ok(await _productService.ListByCategoryAsync(normalizedName, filterOptions));
 }

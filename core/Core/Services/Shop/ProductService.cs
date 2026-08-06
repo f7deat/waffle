@@ -34,6 +34,12 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
 
     public Task<int> CountAsync() => _productRepository.CountAsync();
 
+    public Task<ListResult<ProductCategoryListItem>> ListCategoriesAsync(ProductCategoryFilterOptions filterOptions)
+    {
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        return _productRepository.ListCategoriesAsync(filterOptions);
+    }
+
     public Task<TResult> CreateAsync(Product args, string locale) => _productRepository.CreateAsync(args, locale);
 
     public Task<TResult> DeleteAsync(Guid id) => _productRepository.DeleteAsync(id);
@@ -152,6 +158,12 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
     {
         filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
         return _productRepository.ListAsync(filterOptions);
+    }
+
+    public Task<ListResult<ProductListItem>> ListByCategoryAsync(string normalizedName, ProductFilterOptions filterOptions)
+    {
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        return _productRepository.ListByCategoryAsync(normalizedName, filterOptions);
     }
 
     public Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions)

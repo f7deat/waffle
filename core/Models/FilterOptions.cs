@@ -50,6 +50,11 @@ public class ProductFilterOptions : FilterOptions
     public int? CategoryId { get; set; }
 }
 
+public class ProductCategoryFilterOptions : FilterOptions
+{
+    public string? Name { get; set; }
+}
+
 public class SearchFilterOptions : FilterOptions
 {
     public string? SearchTerm { get; set; }
