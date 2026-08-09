@@ -8,29 +8,14 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
+using Waffle.ExternalAPI.Telegrams.Models;
 using Waffle.Models;
-using Waffle.Models.Result;
 using Waffle.Models.Settings;
 
 namespace Waffle.Core.Services;
 
-public class SettingService : ISettingService
+public class SettingService(ApplicationDbContext _context, ILogService _logService, IMemoryCache _memoryCache, ISettingRepository _settingRepository) : ISettingService
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ILogger<SettingService> _logger;
-    private readonly ILookupNormalizer _lookupNormalizer;
-    private readonly IMemoryCache _memoryCache;
-    private readonly ISettingRepository _settingRepository;
-
-    public SettingService(ApplicationDbContext context, ILogger<SettingService> logger, ILookupNormalizer lookupNormalizer, IMemoryCache memoryCache, ISettingRepository settingRepository)
-    {
-        _context = context;
-        _logger = logger;
-        _lookupNormalizer = lookupNormalizer;
-        _memoryCache = memoryCache;
-        _settingRepository = settingRepository;
-    }
-
     public async Task<AppSetting> EnsureSettingAsync(string name)
     {
         var appSetting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.Equals(name));
@@ -127,7 +112,6 @@ public class SettingService : ISettingService
         var setting = await _settingRepository.FindAsync(id);
         if (setting is null)
         {
-            _logger.LogError("Data not found");
             return IdentityResult.Failed(new IdentityError
             {
                 Description = "Data not found"
@@ -152,24 +136,51 @@ public class SettingService : ISettingService
         return IdentityResult.Success;
     }
 
+    private async Task<bool> IsExistAsync(string normalizedName)
+    {
+        var setting = await _settingRepository.FindByNameAsync(normalizedName);
+        return setting is not null;
+    }
+
     public async Task<TResult> InitAsync()
     {
-        var upload = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName == nameof(UploadSetting));
-        if (upload is null)
+        if (!await IsExistAsync(nameof(UploadSetting)))
         {
-            upload = new AppSetting
+            await _context.AppSettings.AddAsync(new AppSetting
             {
-                NormalizedName = nameof(UploadSetting),
+                NormalizedName = "UPLOAD",
                 Name = "Upload",
                 Value = JsonSerializer.Serialize(new UploadSetting
                 {
                     Type = UploadSettingType.LOCAL
                 }),
                 Locale = "vi-VN"
-            };
-            await _context.AppSettings.AddAsync(upload);
-            await _context.SaveChangesAsync();
+            });
         }
+        if (!await IsExistAsync("TELEGRAM"))
+        {
+            await _context.AppSettings.AddAsync(new AppSetting
+            {
+                NormalizedName = "TELEGRAM",
+                Name = "Telegram",
+                Value = JsonSerializer.Serialize(new TelegramSetting
+                {
+                    BotToken = string.Empty,
+                    ChatId = string.Empty
+                }),
+                Locale = "vi-VN"
+            });
+        }
+        await _context.SaveChangesAsync();
+        return TResult.Success;
+    }
+
+    public async Task<TResult> DeleteAsync(Guid id)
+    {
+        var setting = await _settingRepository.FindAsync(id);
+        if (setting is null) return TResult.Failed("Data not found");
+        await _logService.AddAsync($"Delete setting {setting.Name} ({setting.Id})");
+        await _settingRepository.DeleteAsync(setting);
         return TResult.Success;
     }
 }

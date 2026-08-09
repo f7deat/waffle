@@ -90,6 +90,14 @@ export async function queryThemeOptions() {
   return request(`setting/themes/options`);
 }
 
-export async function apiSyncSetting() {
-  return request(`setting/init`);
+export async function apiInitializeSettings() {
+  return request(`setting/initialize`, {
+    method: 'POST',
+  });
+}
+
+export async function apiDeleteSetting(id: string) {
+  return request(`setting/${id}`, {
+    method: 'DELETE',
+  });
 }

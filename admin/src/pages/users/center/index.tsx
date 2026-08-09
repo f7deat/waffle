@@ -1,4 +1,4 @@
-import { PageContainer, ProCard } from '@ant-design/pro-components';
+import { PageContainer, ProCard, ProFormSwitch } from '@ant-design/pro-components';
 import { Empty } from 'antd';
 import { useState } from 'react';
 import SecuriryCenter from './components/security';
@@ -32,7 +32,14 @@ const UserCenter: React.FC = () => {
             {
               label: 'Thông báo',
               key: 'tab4',
-              children: <Empty />,
+              children: (
+                <>
+                  <ProFormSwitch
+                    name="emailNotifications"
+                    label="Nhận thông báo qua Email"
+                  />
+                </>
+              ),
             },
           ],
           onChange: (key) => {

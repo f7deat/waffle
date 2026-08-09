@@ -39,8 +39,8 @@ import {
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ProfileRoles from './role';
 import ResetPassword from './components/reset-password';
+import ProfileRoles from './role';
 
 const Profile: React.FC = () => {
   const { id } = useParams();
@@ -452,7 +452,7 @@ const Profile: React.FC = () => {
                   loading={isAvatarUploading}
                   onClick={onAvatarButtonClick}
                 />
-                <Image src={data?.avatar} width={200} height={200} alt='Avatar' className='rounded-full' />
+                <Image src={data?.avatar} width={200} height={200} alt='Avatar' className='rounded-full object-cover' />
               </div>
               <div className='mb-4 text-center'>
                 <div className='text-lg font-semibold'>{data?.name}</div>
@@ -473,10 +473,7 @@ const Profile: React.FC = () => {
                 <span className='font-semibold text-green-600'>{formatMoney(data?.amount)}</span>
               </Descriptions.Item>
             </Descriptions>
-            <Divider />
-            {
-              data && <ProfileRoles roles={data?.roles} />
-            }
+            <ProfileRoles />
           </ProCard>
         </Col>
         <Col span={18}>

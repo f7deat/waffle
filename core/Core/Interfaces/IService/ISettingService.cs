@@ -9,6 +9,7 @@ namespace Waffle.Core.Interfaces.IService;
 
 public interface ISettingService
 {
+    Task<TResult> DeleteAsync(Guid id);
     Task<AppSetting> EnsureSettingAsync(string name);
     Task<object> GetAsync(Guid id);
     Task<T?> GetAsync<T>(string normalizedName, string locale = "vi-VN");

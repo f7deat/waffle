@@ -1,15 +1,20 @@
-import { ArrowLeftOutlined, DeleteOutlined, PlusOutlined, UserOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, DeleteOutlined, PlusOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { ActionType, ModalForm, PageContainer, ProColumns, ProFormSelect, ProTable } from "@ant-design/pro-components"
 import { FormattedMessage, history, useParams } from "@umijs/max"
 import { Button, Space, Tag, Avatar, message, Popconfirm } from "antd";
-import { apiRoleUsers, apiAddUserToRole, apiRemoveUserFromRole } from "@/services/role";
+import { apiRoleUsers, apiAddUserToRole, apiRemoveUserFromRole, apiRoleByName } from "@/services/role";
 import { listUser } from "@/services/user";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
+import { useRequest } from "@umijs/max";
+import { RoleUserListItem } from "@/typings/role";
 
 const RoleCenter: React.FC = () => {
 
     const { id } = useParams();
+
+    const { data } = useRequest(() => apiRoleByName(id));
+
     const roleName = id;
     const actionRef = useRef<ActionType>(null);
     const [openForm, setOpenForm] = useState<boolean>(false);
@@ -42,7 +47,7 @@ const RoleCenter: React.FC = () => {
         }
     };
 
-    const columns: ProColumns<API.RoleUserListItem>[] = [
+    const columns: ProColumns<RoleUserListItem>[] = [
         {
             title: '#',
             valueType: 'indexBorder',
@@ -59,7 +64,7 @@ const RoleCenter: React.FC = () => {
             search: false
         },
         {
-            title: <FormattedMessage id='general.username' defaultMessage='Username' />,
+            title: 'Tài khoản',
             dataIndex: 'userName',
             key: 'userName',
             width: 150,
@@ -108,9 +113,9 @@ const RoleCenter: React.FC = () => {
             ),
         },
         {
-            title: 'Actions',
+            title: <SettingOutlined />,
             valueType: 'option',
-            width: 80,
+            width: 40,
             align: 'center',
             render: (dom, record) => [
                 <Popconfirm
@@ -125,7 +130,7 @@ const RoleCenter: React.FC = () => {
     ];
 
     return (
-        <PageContainer
+        <PageContainer title={data?.displayName}
             onBack={() => history.back()}
             extra={
                 <Button 
@@ -137,28 +142,11 @@ const RoleCenter: React.FC = () => {
                 </Button>
             }
         >
-            <ProTable<API.RoleUserListItem>
+            <ProTable<RoleUserListItem>
                 actionRef={actionRef}
                 columns={columns}
-                request={async (params) => {
-                    try {
-                        const response = await apiRoleUsers({
-                            roleName: roleName || '',
-                            name: params.name,
-                            userName: params.userName,
-                        });
-                        return {
-                            data: response.data || [],
-                            success: true,
-                            total: response.total || 0,
-                        };
-                    } catch (error) {
-                        return {
-                            data: [],
-                            success: false,
-                        };
-                    }
-                }}
+                request={apiRoleUsers}
+                params={{ roleName: roleName }}
                 rowKey="id"
                 search={{
                     layout: 'vertical'

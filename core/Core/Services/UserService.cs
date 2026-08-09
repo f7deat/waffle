@@ -61,7 +61,9 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
             Roles = await _userManager.GetRolesAsync(user),
             EmailConfirmed = user.EmailConfirmed,
             Avatar = user.Avatar,
-            Amount = user.Amount
+            Amount = user.Amount,
+            Gender = user.Gender,
+            DateOfBirth = user.DateOfBirth
         };
     }
 
@@ -393,5 +395,43 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
         var invoice = await query.FirstOrDefaultAsync();
         if (invoice is null) return TResult.Failed("Hóa đơn không tồn tại.");
         return TResult.Ok(invoice);
+    }
+
+    public async Task<TResult> GetDetailAsync(Guid id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user is null) return TResult.Failed("User not found!");
+
+        return TResult.Ok(new
+        {
+            user.Id,
+            user.UserName,
+            user.Name,
+            user.Email,
+            user.PhoneNumber,
+            user.Avatar,
+            user.Gender,
+            user.DateOfBirth,
+            user.Address,
+            user.Amount,
+            user.DistrictId,
+            user.CreatedAt,
+            user.EmailConfirmed,
+            user.PhoneNumberConfirmed
+        });
+    }
+
+    public async Task<TResult> GetRolesAsync(Guid userId)
+    {
+        var query = from ur in _context.UserRoles
+                    join r in _context.Roles on ur.RoleId equals r.Id
+                    where ur.UserId == userId
+                    select new
+                    {
+                        r.Id,
+                        r.Name,
+                        r.DisplayName
+                    };
+        return TResult.Ok(await query.ToListAsync());
     }
 }

@@ -29,4 +29,6 @@ public interface IUserService
     Task<ListResult<UserTopupTransactionViewModel>> GetTopupHistoryAsync(Guid userId, BasicFilterOptions filterOptions);
     Task<TResult> GetTopupStatsAsync(Guid userId);
     Task<TResult> GetTopupInvoiceAsync(Guid transactionId);
+    Task<TResult> GetDetailAsync(Guid id);
+    Task<TResult> GetRolesAsync(Guid userId);
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations.Interfaces;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
@@ -69,21 +70,21 @@ public class CommentService(ICatalogRepository catalogRepository, ILogService _l
 
     public async Task<bool> AnyAsync(Guid id) => await _commentRepository.Queryable().AnyAsync(x => x.Id == id);
 
-    public async Task<IdentityResult> DeleteAsync(Guid id)
+    public async Task<TResult> DeleteAsync(Guid id)
     {
-        var comment = await _commentRepository.FindAsync(id);
-        if (comment is null)
+        try
         {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = "error.dataNotFound",
-                Description = "Data not found!"
-            });
+            var comment = await _commentRepository.FindAsync(id);
+            if (comment is null)return TResult.Failed("Data not found!");
+            await _commentRepository.DeleteAsync(comment);
+            await _logService.AddAsync($"Delete comment {id}");
+            return TResult.Success;
         }
-        await _commentRepository.DeleteAsync(comment);
-        await _logService.AddAsync($"Delete comment {id}");
-
-        return IdentityResult.Success;
+        catch (Exception ex)
+        {
+            await _logService.ExceptionAsync(ex);
+            return TResult.Failed(ex.Message);
+        }
     }
 
     public async Task<ListResult<CommentListItem>> ListAsync(CommentFilterOptions filterOptions)

@@ -1,3 +1,4 @@
+import { RoleListType } from '@/typings/role';
 import { request } from '@umijs/max';
 
 export async function login(data: any) {
@@ -117,4 +118,8 @@ export async function apiTopupStats(id: string) {
 
 export async function apiTopupInvoice(transactionId: string) {
   return request(`user/topup-invoice/${transactionId}`);
+}
+
+export async function apiGetUserRoles(id?: string) {
+  return request<API.TResult<RoleListType[]>>(`user/roles/${id}`);
 }

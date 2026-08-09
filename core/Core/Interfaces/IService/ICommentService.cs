@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Waffle.Core.Foundations.Models;
 using Waffle.Models;
 using Waffle.Models.Filters;
 using Waffle.Models.Params;
@@ -10,7 +11,7 @@ public interface ICommentService
 {
     Task<IdentityResult> AddAsync(AddComment addComment);
     Task<bool> AnyAsync(Guid id);
-    Task<IdentityResult> DeleteAsync(Guid id);
+    Task<TResult> DeleteAsync(Guid id);
     Task<IdentityResult> RemoveAsync(Guid id);
     Task<ListResult<CommentListItem>> ListAsync(CommentFilterOptions filterOptions);
     Task<ListResult<CommentListItem>> ListInCatalogAsync(CommentFilterOptions filterOptions);

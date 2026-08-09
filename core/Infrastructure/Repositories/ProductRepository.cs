@@ -300,10 +300,14 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         var query = from p in _context.Products
                     select new
                     {
-                        label = p.Name,
-                        value = p.Id
+                        p.Name,
+                        p.Id
                     };
-        return await query.ToListAsync();
+        if (!string.IsNullOrWhiteSpace(selectOptions.KeyWords))
+        {
+            query = query.Where(x => x.Name.ToLower().Contains(selectOptions.KeyWords.ToLower()));
+        }
+        return await query.Select(x => new { label = x.Name, value = x.Id }).ToListAsync();
     }
 
 }

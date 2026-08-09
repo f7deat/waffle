@@ -3,6 +3,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices.Shops;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
@@ -10,14 +11,8 @@ using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Services.Shop;
 
-public class ProductService(IProductRepository productRepository, IProductLinkRepository productLinkRepository, IProductVariantRepository productVariantRepository, IProductTagRepository productTagRepository, IProductImageRepository productImageRepository) : IProductService
+public class ProductService(IProductRepository _productRepository, IProductLinkRepository _productLinkRepository, ILogService _logService, IProductVariantRepository _productVariantRepository, IProductTagRepository _productTagRepository, IProductImageRepository _productImageRepository) : IProductService
 {
-    private readonly IProductRepository _productRepository = productRepository;
-    private readonly IProductLinkRepository _productLinkRepository = productLinkRepository;
-    private readonly IProductVariantRepository _productVariantRepository = productVariantRepository;
-    private readonly IProductTagRepository _productTagRepository = productTagRepository;
-    private readonly IProductImageRepository _productImageRepository = productImageRepository;
-
     public async Task<TResult> AddLinkAsync(ProductLink args)
     {
         var product = await _productRepository.FindAsync(args.ProductId);
@@ -178,7 +173,18 @@ public class ProductService(IProductRepository productRepository, IProductLinkRe
 
     public Task<ListResult<object>> NewArrivalsAsync(ProductFilterOptions filterOptions) => _productRepository.NewArrivalsAsync(filterOptions);
 
-    public Task<object> OptionsAsync(SelectOptions selectOptions) => _productRepository.OptionsAsync(selectOptions);
+    public async Task<object> OptionsAsync(SelectOptions selectOptions)
+    {
+        try
+        {
+            return await _productRepository.OptionsAsync(selectOptions);
+        }
+        catch (Exception ex)
+        {
+            await _logService.ExceptionAsync(ex);
+            throw;
+        }
+    }
 
     public async Task<TResult> SaveAsync(Product args)
     {

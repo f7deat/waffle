@@ -36,12 +36,7 @@ public class UserController(IUserService _userService, IFileService _fileService
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> FindByIdAsync([FromRoute] Guid id)
-    {
-        var data = await _userService.GetCurrentUserAsync(id);
-        if (data is null) return BadRequest("User not found!");
-        return Ok(new { data });
-    }
+    public async Task<IActionResult> FindByIdAsync([FromRoute] Guid id) => Ok(await _userService.GetDetailAsync(id));
 
     [HttpGet]
     public async Task<IActionResult> GetCurrentUserAsync() => Ok(await _userService.GetCurrentUserAsync(User.GetId()));
@@ -56,7 +51,7 @@ public class UserController(IUserService _userService, IFileService _fileService
         return Ok(await _userService.AddToRoleAsync(model.Id, model.RoleName));
     }
 
-    [HttpPost("remove-from-role")]
+    [HttpPost("remove-from-role"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> RemoveFromRoleAsync([FromBody] RemoveFromRoleModel args)
     {
         if (string.IsNullOrWhiteSpace(args.RoleName)) return BadRequest("Role name is required!");
@@ -382,4 +377,7 @@ public class UserController(IUserService _userService, IFileService _fileService
 
     [HttpGet("user-name/{userName}"), AllowAnonymous]
     public async Task<IActionResult> GetByUserNameAsync([FromRoute] string userName) => Ok(await _userService.GetByUserNameAsync(userName));
+
+    [HttpGet("roles/{userId}")]
+    public async Task<IActionResult> GetRolesAsync([FromRoute] Guid userId) => Ok(await _userService.GetRolesAsync(userId));
 }

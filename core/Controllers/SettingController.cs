@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
@@ -146,4 +147,10 @@ public class SettingController(ApplicationDbContext _context, ISettingService _s
         if (google is null) return BadRequest();
         return Ok(google.Bloggers);
     }
+
+    [HttpPost("initialize"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> InitializeAsync() => Ok(await _settingService.InitAsync());
+
+    [HttpDelete("{id}"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> DeleteSettingAsync([FromRoute] Guid id) => Ok(await _settingService.DeleteAsync(id));
 }

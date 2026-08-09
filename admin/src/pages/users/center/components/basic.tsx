@@ -1,8 +1,7 @@
 import { apiGetUser, apiUpdateUser } from "@/services/user"
-import { ProForm, ProFormInstance } from "@ant-design/pro-components"
-import UserFormFields from "../../components/user-form-fields";
+import { ProForm, ProFormDatePicker, ProFormInstance, ProFormSelect, ProFormText } from "@ant-design/pro-components"
 import { useParams, useRequest } from "@umijs/max"
-import { message } from "antd";
+import { Col, message, Row } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useRef } from "react";
 
@@ -43,14 +42,29 @@ const Basic: React.FC = () => {
 
     return (
         <ProForm loading={loading} onFinish={onFinish} formRef={formRef}>
-            <UserFormFields
-                includeId
-                includeAddress
-                includeDateOfBirth
-                includeUserName={false}
-                includeEmail={false}
-                includePhoneNumber={false}
-            />
+            <ProFormText name="id" hidden />
+            <ProFormText name="name" label="Họ và tên" rules={[
+                {
+                    required: true
+                }
+            ]} />
+            <Row gutter={16}>
+                <Col md={6}>
+                    <ProFormDatePicker name="dateOfBirth" label="Ngày sinh" width="xl" />
+                </Col>
+                <Col md={18}>
+                    <ProFormSelect name="gender" label="Giới tính" options={[
+                        {
+                            label: 'Nam',
+                            value: false
+                        },
+                        {
+                            label: 'Nữ',
+                            value: true
+                        }
+                    ]} />
+                </Col>
+            </Row>
         </ProForm>
     )
 }

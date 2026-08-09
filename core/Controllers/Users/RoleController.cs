@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Services.Users.Filters;
 using Waffle.Data;
 using Waffle.Entities.Users;
@@ -38,7 +39,46 @@ public class RoleController(RoleManager<ApplicationRole> _roleManager, Applicati
     public async Task<IActionResult> CreateAsync([FromBody] ApplicationRole role) => Ok(await _roleManager.CreateAsync(role));
 
     [HttpGet("find-by-id/{id}")]
-    public async Task<IActionResult> FindByIdAsync([FromRoute] string id) => Ok(await _roleManager.FindByIdAsync(id));
+    public async Task<IActionResult> FindByIdAsync([FromRoute] string id)
+    {
+        try
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+            if (role is null) return BadRequest("Role not found!");
+            return Ok(TResult.Ok(new
+            {
+                role.Id,
+                role.Name,
+                role.DisplayName,
+                role.NormalizedName
+            }));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("find-by-name/{name}")]
+    public async Task<IActionResult> FindByNameAsync([FromRoute] string name)
+    {
+        try
+        {
+            var role = await _roleManager.FindByNameAsync(name);
+            if (role is null) return BadRequest("Role not found!");
+            return Ok(TResult.Ok(new
+            {
+                role.Id,
+                role.Name,
+                role.DisplayName,
+                role.NormalizedName
+            }));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
     [HttpGet("users")]
     public async Task<IActionResult> GetUsersInRoleAsync([FromQuery] RoleUserFilterOptions filterOptions)

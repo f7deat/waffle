@@ -1,3 +1,4 @@
+import { RoleDetailType, RoleUserListItem } from "@/typings/role";
 import { request } from "@umijs/max";
 
 export async function listRole(params: any) {
@@ -6,8 +7,8 @@ export async function listRole(params: any) {
     })
 }
 
-export async function apiRoleUsers(params: { roleName: string; name?: string; userName?: string; }) {
-    return request<API.ListResult<API.RoleUserListItem>>(`role/users`, {
+export async function apiRoleUsers(params: any) {
+    return request<API.ListResult<RoleUserListItem>>(`role/users`, {
         params
     })
 }
@@ -24,4 +25,12 @@ export async function apiRemoveUserFromRole(data: { id: string; roleName: string
         method: 'POST',
         data
     })
+}
+
+export async function apiRoleDetail(id?: string) {
+    return request<API.TResult<RoleDetailType>>(`role/find-by-id/${id}`);
+}
+
+export async function apiRoleByName(name?: string) {
+    return request<API.TResult<RoleDetailType>>(`role/find-by-name/${name}`);
 }

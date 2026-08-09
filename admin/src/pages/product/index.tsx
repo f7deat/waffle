@@ -159,6 +159,7 @@ const ProductPage: React.FC = () => {
         >
             <ProTable
                 actionRef={actionRef}
+                scroll={{ x: true }}
                 rowKey="id"
                 request={(params) => apiProductList(params)}
                 columns={columns}
