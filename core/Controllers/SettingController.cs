@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.ExternalAPI.Interfaces;
@@ -15,9 +16,8 @@ using Waffle.Models.Settings;
 
 namespace Waffle.Controllers;
 
-public class SettingController(ApplicationDbContext _context, ISettingService _settingService, IConfiguration _configuration, IFacebookService _facebookService, ITelegramService telegramService, IWorkService workService) : BaseController
+public class SettingController(ApplicationDbContext _context, ISettingService _settingService, IConfiguration _configuration, IFacebookService _facebookService, ILogService _logService, IWorkService workService) : BaseController
 {
-    private readonly ITelegramService _telegramService = telegramService;
     private readonly IWorkService _workService = workService;
 
     [HttpGet("{normalizedName}"), AllowAnonymous]
@@ -101,21 +101,6 @@ public class SettingController(ApplicationDbContext _context, ISettingService _s
 
     [HttpPost("telegram/save/{id}")]
     public async Task<IActionResult> SaveTelegramAsync([FromRoute] Guid id, [FromBody] Telegram args) => Ok(await _settingService.SaveTelegramAsync(id, args));
-
-    [HttpPost("telegram/test")]
-    public async Task<IActionResult> TestTelegramAsync([FromBody] TelegramMessage message)
-    {
-        var telegram = await _settingService.GetAsync<Telegram>(nameof(Telegram));
-        if (telegram is null)
-        {
-            return Ok(IdentityResult.Failed(new IdentityError
-            {
-                Description = "Config not found"
-            }));
-        }
-        var response = await _telegramService.SendMessageAsync(telegram.Token, telegram.ChatId, message.Message);
-        return Ok(IdentityResult.Success);
-    }
 
     [HttpPost("social/save")]
     public async Task<IActionResult> SaveSocialLinkAsync([FromBody] Social args)

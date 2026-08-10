@@ -6,7 +6,7 @@ using Waffle.Core.IServices.Shops;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 
-namespace Waffle.Controllers.Products;
+namespace Waffle.Controllers.Shops;
 
 public class ProductController(IProductService _productService) : BaseController
 {

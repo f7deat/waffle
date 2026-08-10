@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Waffle.Entities.Users;
 
@@ -11,6 +12,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public string? Address { get; set; }
     public DateOnly? DateOfBirth { get; set; }
     public bool? Gender { get; set; }
+    [Column(TypeName = "money")]
     public decimal Amount { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     [StringLength(2058)]

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices.Users;
 using Waffle.Core.Services.Users;
 using Waffle.Data;
@@ -13,7 +14,7 @@ using Waffle.Models.ViewModels.Users;
 
 namespace Waffle.Core.Services;
 
-public class UserService(UserManager<ApplicationUser> _userManager, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : IUserService
+public class UserService(UserManager<ApplicationUser> _userManager, IFileService _fileService, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : IUserService
 {
     private async Task<ApplicationUser?> FindAsync(Guid id) => await _context.Users.FindAsync(id);
 
@@ -433,5 +434,16 @@ public class UserService(UserManager<ApplicationUser> _userManager, IHCAService 
                         r.DisplayName
                     };
         return TResult.Ok(await query.ToListAsync());
+    }
+
+    public async Task<TResult> DeleteAsync(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null) return TResult.Failed("User not found!");
+        if (!string.IsNullOrWhiteSpace(user.Avatar))
+        {
+            await _fileService.DeletePathAsync(user.Avatar);
+        }
+        return TResult.Success;
     }
 }

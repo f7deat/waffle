@@ -18,13 +18,12 @@ using Waffle.Core.Services.Users;
 using Waffle.Entities.Users;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Googles;
-using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Models.Params;
 
 namespace Waffle.Controllers.Users;
 
-public class UserController(IUserService _userService, IFileService _fileService, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, ILogger<UserController> _logger, IConfiguration _configuration, ITelegramService _telegramService, ICatalogService _catalogService, IOptions<SettingOptions> options) : BaseController
+public class UserController(IUserService _userService, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, IConfiguration _configuration, ICatalogService _catalogService, IOptions<SettingOptions> options) : BaseController
 {
     private readonly SettingOptions _options = options.Value;
     [HttpGet("list")]
@@ -136,16 +135,7 @@ public class UserController(IUserService _userService, IFileService _fileService
     public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordModel model) => Ok(await _userService.ChangePasswordAsync(model));
 
     [HttpDelete("{id}"), Authorize(Roles = RoleName.Admin)]
-    public async Task<IActionResult> DeleteAsync([FromRoute] string id)
-    {
-        var user = await _userManager.FindByIdAsync(id);
-        if (user is null) return BadRequest("User not found!");
-        if (!string.IsNullOrWhiteSpace(user.Avatar))
-        {
-            await _fileService.DeletePathAsync(user.Avatar);
-        }
-        return Ok(await _userManager.DeleteAsync(user));
-    }
+    public async Task<IActionResult> DeleteAsync([FromRoute] string id) => Ok(await _userService.DeleteAsync(id));
 
     [HttpPost("google-signin"), AllowAnonymous]
     public async Task<IActionResult> GoogleSignUpAsync([FromForm] string? credential)
@@ -167,7 +157,6 @@ public class UserController(IUserService _userService, IFileService _fileService
             var result = await _userManager.CreateAsync(user);
             if (!result.Succeeded)
             {
-                _logger.LogTrace("Create user {Email} failed!", user.Email);
                 return Redirect(signinFailedPage.GetUrl());
             }
         }
@@ -234,7 +223,6 @@ public class UserController(IUserService _userService, IFileService _fileService
             var createResult = await _userManager.CreateAsync(user);
             if (!createResult.Succeeded)
             {
-                _logger.LogTrace("Create user {Email} failed!", user.Email);
                 return Ok(TResult.Failed("Create user failed."));
             }
         }
@@ -289,7 +277,6 @@ public class UserController(IUserService _userService, IFileService _fileService
             };
             await _userManager.CreateAsync(user);
         }
-        await _telegramService.SendMessageAsync($"{args.Email} started following website!");
         var catalog = await _catalogService.EnsureDataAsync("thank-to-subscribe", "vi-VN");
         return Redirect(catalog.GetUrl());
     }

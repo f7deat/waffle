@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Googles.Models;
@@ -8,24 +7,8 @@ using Waffle.ExternalAPI.Models.GoogleAggregate;
 
 namespace Waffle.ExternalAPI.Services;
 
-public class GoogleService(HttpClient _http, IRouteDataService _routeDataService, ILogService _logService) : IGoogleService
+public class GoogleService(HttpClient _http, ILogService _logService) : IGoogleService
 {
-    public async Task<Trend?> GetDailyTrendingAsync()
-    {
-        try
-        {
-            var locale = _routeDataService.GetLocale();
-            var geo = locale.Split('-').Last();
-            var response = await _http.GetStreamAsync($"https://trends.google.com.vn/trending/rss?geo={geo}");
-            return XmlHelper.Deserialize<Trend>(response);
-        }
-        catch (Exception ex)
-        {
-            await _logService.ExceptionAsync(ex);
-            return default;
-        }
-    }
-
     public async Task<BloggerListResult<BloggerItem>?> BloggerSearchAsync(string blogId, string apiKey, string searchTerm)
     {
         var url = $"https://www.googleapis.com/blogger/v3/blogs/{blogId}/posts/search?q={searchTerm}&key={apiKey}";

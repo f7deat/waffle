@@ -12,7 +12,7 @@ public class LogController(ILogService _logService) : BaseController
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _logService.ListAsync(filterOptions));
 
-    [HttpPost("delete/{id}"), Authorize(Roles = RoleName.Admin)]
+    [HttpDelete("{id}"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _logService.DeleteAsync(id);

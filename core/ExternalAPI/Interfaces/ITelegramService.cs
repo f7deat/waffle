@@ -1,9 +1,8 @@
-﻿namespace Waffle.ExternalAPI.Interfaces
+﻿namespace Waffle.ExternalAPI.Interfaces;
+
+public interface ITelegramService
 {
-    public interface ITelegramService
-    {
-        Task<bool> SendMessageAsync(string token, string? chatId, string message);
-        Task<bool> SendMessageAsync(string message);
-        Task<bool> SendErrorAsync(string message);
-    }
+    Task<bool> SendMessageAsync(string token, string? chatId, string message);
+    Task<bool> SendMessageAsync(string message);
+    Task<bool> SendErrorAsync(string message);
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices.Shops;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Users;
@@ -12,7 +13,7 @@ using Waffle.ExternalAPI.Interfaces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
 
-namespace Waffle.Controllers.Products;
+namespace Waffle.Controllers.Shops;
 
 public class OrderController(IOrderService _orderService, ITelegramService _telegramService, UserManager<ApplicationUser> _userManager) : BaseController
 {

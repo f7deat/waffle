@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Caching.Memory;
 using System.Net;
-using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Entities;
@@ -9,7 +7,7 @@ using Waffle.Models;
 
 namespace Waffle.Core.Services;
 
-public class LocalizationService(IRouteDataService _routeDataService, ILocalizationRepository _localizationRepository, IMemoryCache _memoryCache) : ILocalizationService
+public class LocalizationService(ILocalizationRepository _localizationRepository) : ILocalizationService
 {
     public async Task<IdentityResult> AddAsync(Localization args)
     {
@@ -40,25 +38,7 @@ public class LocalizationService(IRouteDataService _routeDataService, ILocalizat
 
     public async Task<string> GetAsync(string key)
     {
-        var locale = _routeDataService.GetLocale();
-        var cacheKey = $"{nameof(Localization)}-{key}-{locale}";
-        if (!_memoryCache.TryGetValue($"{cacheKey}", out string? cacheValue))
-        {
-            var i18n = await _localizationRepository.FindAsync(key, locale);
-            if (i18n is null)
-            {
-                i18n = new Localization
-                {
-                    Key = key,
-                    Language = locale,
-                };
-                await _localizationRepository.AddAsync(i18n);
-            }
-            cacheValue = i18n.Value ?? key;
-            var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(1));
-            _memoryCache.Set(cacheKey, cacheValue, cacheEntryOptions);
-        }
-        return cacheValue ?? key;
+        return key;
     }
 
     public async Task<Localization?> GetAsync(Guid id) => await _localizationRepository.FindAsync(id);

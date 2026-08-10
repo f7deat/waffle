@@ -91,7 +91,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IInfluencerJobService, InfluencerJobService>();
         #endregion
 
-        services.AddScoped<IRouteDataService, RouteDataService>();
         services.AddScoped<ICollectionService, CollectionService>();
         services.AddScoped<ICollectionRepository, CollectionRepository>();
         services.AddScoped<IFinancialService, FinancialService>();

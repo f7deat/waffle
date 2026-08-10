@@ -9,7 +9,7 @@ using Waffle.Models.ViewModels.Logs;
 
 namespace Waffle.Core.Services;
 
-public class LogService(IHCAService _hcaService, ILogRepository _logRepository, ITelegramService _telegramService) : ILogService
+public class LogService(IHCAService _hcaService, ILogRepository _logRepository) : ILogService
 {
     public async Task AddAsync(string message)
     {
@@ -52,5 +52,5 @@ public class LogService(IHCAService _hcaService, ILogRepository _logRepository, 
 
     public Task<ListResult<AppLogListItem>> ListAsync(SearchFilterOptions filterOptions) => _logRepository.ListAsync(filterOptions);
 
-    public async Task MessageAsync(string text) => await _telegramService.SendMessageAsync(text);
+    public async Task MessageAsync(string text) => throw new NotImplementedException();
 }
