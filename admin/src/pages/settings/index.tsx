@@ -1,5 +1,5 @@
 import { apiDeleteSetting, apiInitializeSettings, apiSaveSetting, listSetting } from '@/services/setting';
-import { DeleteOutlined, EditOutlined, SettingOutlined, SyncOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, HomeOutlined, SendOutlined, SettingOutlined, SyncOutlined } from '@ant-design/icons';
 import {
   ActionType,
   DrawerForm,
@@ -10,6 +10,7 @@ import {
 import { Button, message, Popconfirm } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import SiteSettings from './components/site';
+import TelegramSettings from './components/telegram';
 
 const SettingPage: React.FC = () => {
 
@@ -35,60 +36,58 @@ const SettingPage: React.FC = () => {
     return true;
   }
 
+  const SETTINGS = [
+    {
+      name: 'Site Settings',
+      normalizedName: 'SITE',
+      description: 'Manage site settings like site name, logo, favicon, etc.',
+      component: <SiteSettings />,
+      icon: <HomeOutlined className="text-2xl text-gray-500" />,
+    },
+    {
+      name: 'Telegram',
+      normalizedName: 'TELEGRAM',
+      description: 'Manage Telegram settings like bot token, chat id, etc.',
+      component: <TelegramSettings />,
+      icon: <SendOutlined className="text-2xl text-gray-500" />,
+    }
+  ]
+
   return (
-    <PageContainer extra={<Button type='primary' icon={<SyncOutlined />} onClick={apiInitializeSettings}>
-      Initialize Settings
-    </Button>}>
-      <ProTable 
-      actionRef={actionRef}
-      request={listSetting}
-        columns={[
-          {
-            title: '#',
-            valueType: 'indexBorder',
-            width: 30,
-            align: 'center'
-          },
-          {
-            title: 'Name',
-            dataIndex: 'name',
-          },
-          {
-            title: 'Normalized Name',
-            dataIndex: 'normalizedName',
-            search: false,
-          },
-          {
-            title: <SettingOutlined />,
-            valueType: 'option',
-            render: (text, record) => [
-              <Button key='edit' type='primary' size='small' icon={<EditOutlined />} onClick={() => {
-                setSelected(record);
+    <PageContainer>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-4">
+        {
+          SETTINGS.map(setting => (
+            <div key={setting.normalizedName} className='mb-4'>
+              <div className="bg-white rounded p-4 border border-transparent cursor-pointer hover:border-blue-500" onClick={() => {
+                setSelected(setting);
                 setOpen(true);
-              }} />,
-              <Popconfirm key='delete' title='Are you sure to delete this setting?' onConfirm={async () => {
-                await apiDeleteSetting(record.id);
-                message.success('Delete setting successfully');
-                actionRef.current?.reload();
               }}>
-                <Button type='primary' danger size='small' icon={<DeleteOutlined />}></Button>
-              </Popconfirm>
-            ],
-            width: 30,
-            align: 'center'
-          }
-        ]}
-        search={{
-          layout: 'vertical',
-        }}
-      />
+                <div className="flex justify-between items-center gap-4">
+                  <div className="flex items-center gap-2 w-20 h-20 justify-center bg-gray-100 rounded-lg">
+                    {setting.icon}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-lg font-semibold">{setting.name}</div>
+                    <div className="text-sm text-gray-500">{setting.description}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      
       <DrawerForm
         title="Edit Setting"
         open={open}
         onOpenChange={setOpen}
         formRef={formRef} onFinish={onFinish}
+        drawerProps={{
+          destroyOnHidden: true
+        }}
       >
-        <SiteSettings />
+        {selected?.component}
       </DrawerForm>
     </PageContainer>
   );
