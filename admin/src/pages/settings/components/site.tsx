@@ -1,9 +1,16 @@
 import ImageLibraryPicker from '@/components/image-library/picker';
 import { ProForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { Col, Row } from 'antd';
+import { useEffect } from 'react';
+import { SettingProps } from './typing';
 
-const SiteSettings: React.FC = () => {
-  const form = ProForm.useFormInstance();
+const SiteSettings: React.FC<SettingProps> = ({ value }) => {
+
+    const form = ProForm.useFormInstance();
+
+    useEffect(() => {
+        form.setFieldsValue(value);
+    }, [value]);
 
   return (
     <>

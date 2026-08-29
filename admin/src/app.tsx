@@ -1,4 +1,5 @@
 import { RequestConfig } from '@umijs/max';
+import '../tailwind.css';
 import '../style.less';
 import { queryCurrentUser } from './services/user';
 import { history } from '@umijs/max';

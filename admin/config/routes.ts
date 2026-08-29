@@ -170,6 +170,12 @@ export default [
     component: './comments'
   },
   {
+    icon: 'TeamOutlined',
+    name: 'partner',
+    path: '/partner',
+    component: './partner',
+  },
+  {
     icon: 'FolderOutlined',
     name: 'fileManager',
     path: '/files',
@@ -318,6 +324,11 @@ export default [
         name: 'shortLink',
         path: '/tool/short-link',
         component: './tool/short-link',
+      },
+      {
+        name: 'websiteBuilder',
+        path: '/tool/website-builder',
+        component: './website-builder',
       }
     ]
   },

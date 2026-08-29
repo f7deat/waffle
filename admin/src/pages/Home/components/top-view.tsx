@@ -3,7 +3,7 @@ import { apiTopView } from "@/services/catalog";
 import { EyeOutlined } from "@ant-design/icons";
 import { ProCard, ProList } from "@ant-design/pro-components"
 import { Link } from "@umijs/max";
-import moment from "moment";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react"
 
 const TopView: React.FC = () => {
@@ -27,7 +27,7 @@ const TopView: React.FC = () => {
             },
             description: {
                 render: (dom, entity) => (
-                    <>{moment(entity.modifiedDate).format('DD/MM/YYYY hh:mm')} | <EyeOutlined /> {entity.viewCount.toLocaleString()}</>
+                    <>{dayjs(entity.modifiedDate).format('DD/MM/YYYY hh:mm')} | <EyeOutlined /> {entity.viewCount.toLocaleString()}</>
                 )
             }
         }}

@@ -10,6 +10,8 @@ import { EyeFilled } from "@ant-design/icons";
 import { Metadata } from "next";
 import ShinecHome from "@/components/home/shinec";
 import { getThemeKey, THEME_NAME } from "@/config/theme";
+import WebsitePageRenderer from "@/components/website-builder/page-renderer";
+import { apiGetPublishedHomePage } from "@/services/website-page";
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -29,6 +31,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const settings = await apiGetSiteSetting();;
+  const builderPage = await apiGetPublishedHomePage().catch(() => null);
+
+  if (builderPage?.isPublished && builderPage.content?.blocks?.some((block) => !block.hidden)) {
+    return <WebsitePageRenderer document={builderPage.content} />;
+  }
 
   const articlesResponse = await apiArticleList({ current: 1, pageSize: 5 });
   const articles = articlesResponse.data || [];

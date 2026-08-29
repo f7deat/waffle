@@ -17,6 +17,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<AppLog> AppLogs { get; set; }
     public DbSet<AppSetting> AppSettings { get; set; }
+    public DbSet<WebsitePage> WebsitePages { get; set; } = default!;
     public DbSet<Article> Articles { get; set; }
     public DbSet<Catalog> Catalogs { get; set; }
     public DbSet<Comment> Comments { get; set; }
@@ -45,6 +46,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Category> Categories { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<TagCatalog> TagCatalogs { get; set; }
+    public DbSet<Partner> Partners { get; set; }
     public DbSet<UserTopupTransaction> UserTopupTransactions { get; set; } = default!;
     #region Job
     public DbSet<JobOpportunity> JobOpportunities { get; set; } = default!;
@@ -87,6 +89,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<NotificationUser>().HasKey(k => new { k.NotificationId, k.UserId });
         builder.Entity<TagCatalog>().HasKey(tc => new { tc.CatalogId, tc.TagId });
         builder.Entity<ProductTag>().HasKey(k => new { k.ProductId, k.TagId });
+        builder.Entity<WebsitePage>().HasIndex(x => x.PageKey).IsUnique();
 
         builder.Entity<Photo>()
             .HasOne(x => x.Album)

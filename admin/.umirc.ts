@@ -26,7 +26,7 @@ export default defineConfig({
     type: "hash",
   },
   routes,
-  npmClient: "npm",
+  npmClient: "pnpm",
   esbuildMinifyIIFE: true,
   headScripts: [{ src: "/scripts/loading.js", async: true }],
   define: {
@@ -37,6 +37,6 @@ export default defineConfig({
     },
   },
   mako: {},
+  devtool: false,
   tailwindcss: {},
-  devtool: false
 });

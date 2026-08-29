@@ -1,12 +1,12 @@
-import { apiDeleteSetting, apiGetSettingByName, apiInitializeSettings, apiSaveSetting, listSetting } from '@/services/setting';
-import { DeleteOutlined, EditOutlined, HomeOutlined, SendOutlined, SettingOutlined, SyncOutlined } from '@ant-design/icons';
+import { apiGetSettingByName, apiInitializeSettings, apiSaveSetting } from '@/services/setting';
+import { HomeOutlined, SendOutlined, SyncOutlined } from '@ant-design/icons';
 import {
   ActionType,
   DrawerForm,
   PageContainer,
   ProFormInstance,
 } from '@ant-design/pro-components';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import SiteSettings from './components/site';
 import TelegramSettings from './components/telegram';
@@ -20,15 +20,12 @@ const SettingPage: React.FC = () => {
   const [value, setValue] = useState<any>();
 
   useEffect(() => {
-    if (selected && open) {
+    if (open) {
       apiGetSettingByName(selected.normalizedName).then((response) => {
         setValue(response);
-        console.log('response', response);
       });
-    } else {
-      formRef.current?.resetFields();
     }
-  }, [selected, open]);
+  }, [open]);
 
   const onFinish = async (values: any) => {
     if (!selected) {
@@ -49,14 +46,12 @@ const SettingPage: React.FC = () => {
       name: 'Site Settings',
       normalizedName: 'SITE',
       description: 'Manage site settings like site name, logo, favicon, etc.',
-      component: <SiteSettings />,
       icon: <HomeOutlined className="text-2xl text-gray-500" />,
     },
     {
       name: 'Telegram',
       normalizedName: 'TELEGRAM',
       description: 'Manage Telegram settings like bot token, chat id, etc.',
-      component: <TelegramSettings value={value} />,
       icon: <SendOutlined className="text-2xl text-gray-500" />,
     }
   ]
@@ -101,7 +96,12 @@ const SettingPage: React.FC = () => {
           destroyOnHidden: true
         }}
       >
-        {selected?.component}
+        {
+          selected?.normalizedName === 'SITE' && <SiteSettings value={value} />
+        }
+        {
+          selected?.normalizedName === 'TELEGRAM' && <TelegramSettings value={value} />
+        }
       </DrawerForm>
     </PageContainer>
   );
