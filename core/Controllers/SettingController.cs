@@ -7,6 +7,7 @@ using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Settings.Args;
 using Waffle.Data;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
@@ -16,18 +17,15 @@ using Waffle.Models.Settings;
 
 namespace Waffle.Controllers;
 
-public class SettingController(ApplicationDbContext _context, ISettingService _settingService, IConfiguration _configuration, IFacebookService _facebookService, ILogService _logService, IWorkService workService) : BaseController
+public class SettingController(ApplicationDbContext _context, ISettingService _settingService, ITelegramService _telegramService, IConfiguration _configuration, IFacebookService _facebookService, ILogService _logService, IWorkService workService) : BaseController
 {
     private readonly IWorkService _workService = workService;
-
-    [HttpGet("{normalizedName}"), AllowAnonymous]
-    public async Task<IActionResult> GetAsync([FromRoute] string normalizedName) => Ok(await _settingService.GetAsync<object>(normalizedName));
 
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] SearchFilterOptions filterOptions) => Ok(await _settingService.ListAsync(filterOptions));
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> SaveAsync([FromRoute] Guid id, [FromBody] object args) => Ok(await _settingService.SaveAsync(id, args));
+    [HttpPut]
+    public async Task<IActionResult> SaveAsync([FromBody] SettingUpdateArgs args) => Ok(await _settingService.SaveAsync(args));
 
     [HttpGet("info")]
     public IActionResult GetInfo()
@@ -99,8 +97,8 @@ public class SettingController(ApplicationDbContext _context, ISettingService _s
         return Ok(await _facebookService.GetLongLivedUserAccessTokenAsync(app.AppId, app.AppSecret, shortLiveToken));
     }
 
-    [HttpPost("telegram/save/{id}")]
-    public async Task<IActionResult> SaveTelegramAsync([FromRoute] Guid id, [FromBody] Telegram args) => Ok(await _settingService.SaveTelegramAsync(id, args));
+    [HttpGet("telegram/updates"), AllowAnonymous]
+    public async Task<IActionResult> GetTelegramUpdatesAsync() => Ok(await _telegramService.GetUpdatesAsync());
 
     [HttpPost("social/save")]
     public async Task<IActionResult> SaveSocialLinkAsync([FromBody] Social args)
@@ -138,4 +136,7 @@ public class SettingController(ApplicationDbContext _context, ISettingService _s
 
     [HttpDelete("{id}"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> DeleteSettingAsync([FromRoute] Guid id) => Ok(await _settingService.DeleteAsync(id));
+
+    [HttpGet("{normalizedName}"), AllowAnonymous]
+    public async Task<IActionResult> GetAsync([FromRoute] string normalizedName) => Ok(await _settingService.GetAsync<object>(normalizedName));
 }

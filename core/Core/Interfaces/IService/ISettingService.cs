@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Services.Settings.Args;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
-using Waffle.Models.Result;
 
 namespace Waffle.Core.Interfaces.IService;
 
@@ -15,7 +15,7 @@ public interface ISettingService
     Task<T?> GetAsync<T>(string normalizedName, string locale = "vi-VN");
     Task<TResult> InitAsync();
     Task<ListResult<AppSetting>> ListAsync(SearchFilterOptions filterOptions);
-    Task<IdentityResult> SaveAsync(Guid id, object args);
+    Task<TResult> SaveAsync(SettingUpdateArgs args);
     Task<IdentityResult> SaveAsync(string normalizedName, object args);
     Task<IdentityResult> SaveTelegramAsync(Guid id, Telegram model);
 }

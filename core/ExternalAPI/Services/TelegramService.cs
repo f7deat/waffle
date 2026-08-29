@@ -1,4 +1,6 @@
 using System.Text.Json;
+using Waffle.Core.Constants;
+using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.ExternalAPI.Interfaces;
 using Waffle.ExternalAPI.Models;
@@ -13,9 +15,26 @@ public class TelegramService : ITelegramService
 
     public TelegramService(HttpClient httpClient, ISettingService appService, ILogger<TelegramService> logger)
     {
+        httpClient.BaseAddress = new Uri("https://api.telegram.org/");
         _httpClient = httpClient;
         _appService = appService;
         _logger = logger;
+    }
+
+    public async Task<TResult> GetUpdatesAsync()
+    {
+        try
+        {
+            var setting = await _appService.GetAsync<Telegram>(SettingName.TELEGRAM);
+            if (setting is null) return TResult.Failed("Setting not found!");
+            var endpoint = $"/bot{setting.Token}/getUpdates";
+            using var response = await _httpClient.GetStreamAsync(endpoint);
+            return TResult.Ok(await JsonSerializer.DeserializeAsync<object>(response));
+        }
+        catch (Exception ex)
+        {
+            return TResult.Failed(ex.ToString());
+        }
     }
 
     public async Task<bool> SendErrorAsync(string message)

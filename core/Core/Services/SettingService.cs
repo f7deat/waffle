@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.Services.Settings.Args;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.ExternalAPI.Models;
@@ -57,16 +59,9 @@ public class SettingService(ApplicationDbContext _context, ILogService _logServi
 
     public async Task<T?> GetAsync<T>(string normalizedName, string locale = "vi-VN")
     {
-        if (string.IsNullOrEmpty(normalizedName)) throw new ArgumentNullException(nameof(normalizedName));
-
-        var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.ToLower().Equals(normalizedName));
-        if (setting is null)
-        {
-            setting = new AppSetting { Name = normalizedName, NormalizedName = normalizedName };
-            await _settingRepository.AddAsync(setting);
-        }
+        var setting = await _context.AppSettings.FirstOrDefaultAsync(x => x.NormalizedName.ToUpper().Equals(normalizedName.ToUpper()));
+        if (setting is null) return default;
         if (string.IsNullOrEmpty(setting.Value)) return default;
-
         return JsonSerializer.Deserialize<T>(setting.Value);
     }
 
@@ -90,21 +85,14 @@ public class SettingService(ApplicationDbContext _context, ILogService _logServi
         return await ListResult<AppSetting>.Success(query, filterOptions);
     }
 
-    public async Task<IdentityResult> SaveAsync(Guid id, object args)
+    public async Task<TResult> SaveAsync(SettingUpdateArgs args)
     {
-        var data = await _settingRepository.FindAsync(id);
-        if (data is null)
-        {
-            return IdentityResult.Failed(new IdentityError
-            {
-                Code = "dataNotFound",
-                Description = "Data not found"
-            });
-        }
-        data.Value = JsonSerializer.Serialize(args);
+        var data = await _settingRepository.FindByNameAsync(args.Name);
+        if (data is null) return TResult.Failed("Data not found");
+        data.Value = JsonSerializer.Serialize(args.Value);
         await _context.SaveChangesAsync();
         RemoveCache(data.NormalizedName);
-        return IdentityResult.Success;
+        return TResult.Success;
     }
 
     public async Task<IdentityResult> SaveTelegramAsync(Guid id, Telegram args)
@@ -144,28 +132,15 @@ public class SettingService(ApplicationDbContext _context, ILogService _logServi
 
     public async Task<TResult> InitAsync()
     {
-        if (!await IsExistAsync(nameof(UploadSetting)))
+        if (!await IsExistAsync(SettingName.TELEGRAM))
         {
             await _context.AppSettings.AddAsync(new AppSetting
             {
-                NormalizedName = "UPLOAD",
-                Name = "Upload",
-                Value = JsonSerializer.Serialize(new UploadSetting
-                {
-                    Type = UploadSettingType.LOCAL
-                }),
-                Locale = "vi-VN"
-            });
-        }
-        if (!await IsExistAsync("TELEGRAM"))
-        {
-            await _context.AppSettings.AddAsync(new AppSetting
-            {
-                NormalizedName = "TELEGRAM",
+                NormalizedName = SettingName.TELEGRAM,
                 Name = "Telegram",
                 Value = JsonSerializer.Serialize(new TelegramSetting
                 {
-                    BotToken = string.Empty,
+                    Token = string.Empty,
                     ChatId = string.Empty
                 }),
                 Locale = "vi-VN"

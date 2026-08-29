@@ -6,18 +6,15 @@ export async function listSetting(params: any) {
   });
 }
 
-export async function saveTelegram(id: string | undefined, data: API.Telegam) {
-  return request(`setting/telegram/save/${id}`, {
-    method: 'POST',
-    data,
-  });
-}
-
 export async function testTelegram(data: any) {
   return request(`setting/telegram/test`, {
     method: 'POST',
     data,
   });
+}
+
+export async function getTelegramUpdates() {
+  return request(`setting/telegram/updates`);
 }
 
 export async function saveSocial(data: any) {
@@ -68,8 +65,8 @@ export async function querySetting(normalizedName: string) {
   return request(`setting/unix/${normalizedName}`);
 }
 
-export async function apiSaveSetting(id: string | undefined, data: any) {
-  return request(`setting/${id}`, {
+export async function apiSaveSetting(data: any) {
+  return request(`setting`, {
     method: 'PUT',
     data,
   });
@@ -100,4 +97,8 @@ export async function apiDeleteSetting(id: string) {
   return request(`setting/${id}`, {
     method: 'DELETE',
   });
+}
+
+export async function apiGetSettingByName(normalizedName: string) {
+  return request(`setting/${normalizedName}`);
 }

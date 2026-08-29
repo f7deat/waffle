@@ -4,8 +4,8 @@ namespace Waffle.ExternalAPI.Telegrams.Models;
 
 public class TelegramSetting
 {
-    [JsonPropertyName("botToken")]
-    public string? BotToken { get; set; }
+    [JsonPropertyName("token")]
+    public string? Token { get; set; }
     [JsonPropertyName("chatId")]
     public string? ChatId { get; set; }
 }

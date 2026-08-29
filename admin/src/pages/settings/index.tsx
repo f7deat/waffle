@@ -1,11 +1,10 @@
-import { apiDeleteSetting, apiInitializeSettings, apiSaveSetting, listSetting } from '@/services/setting';
+import { apiDeleteSetting, apiGetSettingByName, apiInitializeSettings, apiSaveSetting, listSetting } from '@/services/setting';
 import { DeleteOutlined, EditOutlined, HomeOutlined, SendOutlined, SettingOutlined, SyncOutlined } from '@ant-design/icons';
 import {
   ActionType,
   DrawerForm,
   PageContainer,
   ProFormInstance,
-  ProTable,
 } from '@ant-design/pro-components';
 import { Button, message, Popconfirm } from 'antd';
 import { useEffect, useRef, useState } from 'react';
@@ -18,11 +17,13 @@ const SettingPage: React.FC = () => {
   const formRef = useRef<ProFormInstance>(null);
   const actionRef = useRef<ActionType>(null);
   const [selected, setSelected] = useState<any>();
+  const [value, setValue] = useState<any>();
 
   useEffect(() => {
     if (selected && open) {
-      formRef.current?.setFieldsValue({
-        ...JSON.parse((selected.value || '{}') as string)
+      apiGetSettingByName(selected.normalizedName).then((response) => {
+        setValue(response);
+        console.log('response', response);
       });
     } else {
       formRef.current?.resetFields();
@@ -30,7 +31,14 @@ const SettingPage: React.FC = () => {
   }, [selected, open]);
 
   const onFinish = async (values: any) => {
-    await apiSaveSetting(selected?.id, values);
+    if (!selected) {
+      message.warning('No setting selected');
+      return false;
+    }
+    await apiSaveSetting({
+      name: selected.normalizedName,
+      value: values
+    });
     message.success('Save setting successfully');
     actionRef.current?.reload();
     return true;
@@ -48,13 +56,19 @@ const SettingPage: React.FC = () => {
       name: 'Telegram',
       normalizedName: 'TELEGRAM',
       description: 'Manage Telegram settings like bot token, chat id, etc.',
-      component: <TelegramSettings />,
+      component: <TelegramSettings value={value} />,
       icon: <SendOutlined className="text-2xl text-gray-500" />,
     }
   ]
 
   return (
-    <PageContainer>
+    <PageContainer extra={[
+      <Button key="initialize" type="primary" icon={<SyncOutlined />} onClick={async () => {
+        await apiInitializeSettings();
+        message.success('Initialized settings successfully');
+        actionRef.current?.reload();
+      }}>Initialize</Button>
+    ]}>
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-4">
         {
           SETTINGS.map(setting => (
