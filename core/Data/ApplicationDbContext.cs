@@ -5,6 +5,7 @@ using Waffle.Entities.Affliates;
 using Waffle.Entities.Careers;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
+using Waffle.Entities.HR;
 using Waffle.Entities.Locations;
 using Waffle.Entities.Notifications;
 using Waffle.Entities.Settings;
@@ -67,6 +68,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Street> Streets { get; set; }
     public DbSet<Place> Places { get; set; }
     public DbSet<PlaceImage> PlaceImages { get; set; }
+    #endregion
+
+    #region HR
+    public DbSet<Branch> Branches { get; set; }
+    public DbSet<Department> Departments { get; set; }
+    public DbSet<Team> Teams { get; set; }
     #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)

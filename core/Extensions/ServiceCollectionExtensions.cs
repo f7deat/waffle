@@ -8,6 +8,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IRepositories;
 using Waffle.Core.IServices;
 using Waffle.Core.IServices.Financials;
+using Waffle.Core.IServices.HR;
 using Waffle.Core.IServices.Locations;
 using Waffle.Core.IServices.Shops;
 using Waffle.Core.IServices.Users;
@@ -20,12 +21,14 @@ using Waffle.Core.Services.Categories;
 using Waffle.Core.Services.Contacts;
 using Waffle.Core.Services.Financials;
 using Waffle.Core.Services.Files;
+using Waffle.Core.Services.HR;
 using Waffle.Core.Services.Locations;
 using Waffle.Core.Services.Shop;
 using Waffle.Core.Services.Tags;
 using Waffle.Infrastructure.Repositories;
 using Waffle.Infrastructure.Repositories.Careers;
 using Waffle.Infrastructure.Repositories.Catalogs;
+using Waffle.Infrastructure.Repositories.HR;
 using Waffle.Infrastructure.Repositories.Locations;
 
 namespace Waffle.Extensions;
@@ -110,6 +113,15 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IStreetService, StreetService>();
         services.AddScoped<IPlaceRepository, PlaceRepository>();
         services.AddScoped<IPlaceService, PlaceService>();
+        #endregion
+
+        #region HR
+        services.AddScoped<IBranchRepository, BranchRepository>();
+        services.AddScoped<IBranchService, BranchService>();
+        services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+        services.AddScoped<IDepartmentService, DepartmentService>();
+        services.AddScoped<ITeamRepository, TeamRepository>();
+        services.AddScoped<ITeamService, TeamService>();
         #endregion
     }
 }

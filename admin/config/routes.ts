@@ -176,6 +176,32 @@ export default [
     component: './partner',
   },
   {
+    icon: 'ApartmentOutlined',
+    name: 'hr',
+    path: '/hr',
+    routes: [
+      {
+        path: '/hr',
+        redirect: '/hr/branch',
+      },
+      {
+        name: 'branch',
+        path: '/hr/branch',
+        component: './hr/branch',
+      },
+      {
+        name: 'department',
+        path: '/hr/department',
+        component: './hr/department',
+      },
+      {
+        name: 'team',
+        path: '/hr/team',
+        component: './hr/team',
+      },
+    ],
+  },
+  {
     icon: 'FolderOutlined',
     name: 'fileManager',
     path: '/files',
