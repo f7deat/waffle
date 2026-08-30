@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import sanitizeHtml from 'sanitize-html';
 import { WebsiteBlock, WebsiteDocument } from '@/services/website-page';
 
 const get = (block: WebsiteBlock, key: string) => block.settings[key] || '';
@@ -47,6 +48,12 @@ function ImageBlock({ block }: { block: WebsiteBlock }) {
   return <figure className="mx-auto max-w-6xl px-5 py-10 sm:px-8"><img src={imageUrl} alt={get(block, 'alt')} className="w-full object-cover" />{get(block, 'caption') && <figcaption className="mt-3 text-sm text-slate-500">{get(block, 'caption')}</figcaption>}</figure>;
 }
 
+function HtmlBlock({ block }: { block: WebsiteBlock }) {
+  const html = get(block, 'html');
+  if (!html) return null;
+  return <section className="mx-auto max-w-6xl px-5 py-10 sm:px-8"><div dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }} /></section>;
+}
+
 function CtaBlock({ block }: { block: WebsiteBlock }) {
   return <section className="bg-emerald-800 py-16 text-white sm:py-20"><div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
     <h2 className="text-3xl font-bold">{get(block, 'title')}</h2>
@@ -71,6 +78,7 @@ const renderers: Record<Exclude<WebsiteBlock['type'], 'row' | 'col'>, (block: We
   richText: (block) => <RichTextBlock block={block} />,
   featureGrid: (block) => <FeatureGridBlock block={block} />,
   image: (block) => <ImageBlock block={block} />,
+  html: (block) => <HtmlBlock block={block} />,
   cta: (block) => <CtaBlock block={block} />,
 };
 

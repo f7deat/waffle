@@ -98,7 +98,7 @@ public class WebsitePageController(ApplicationDbContext context) : BaseControlle
         }
 
         var blockType = type.GetString();
-        if (blockType is not ("hero" or "richText" or "featureGrid" or "image" or "cta" or "row" or "col")) return false;
+    if (blockType is not ("hero" or "richText" or "featureGrid" or "image" or "html" or "cta" or "row" or "col")) return false;
         var isContainer = blockType is "row" or "col";
         if (!block.TryGetProperty("children", out var children)) return !isContainer;
         return isContainer && children.ValueKind == JsonValueKind.Array && children.EnumerateArray().All(IsValidBlock);

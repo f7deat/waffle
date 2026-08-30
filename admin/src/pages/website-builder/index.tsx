@@ -66,10 +66,27 @@ const BLOCKS: BlockDefinition[] = [
     defaults: { title: 'Vì sao chọn chúng tôi', itemOne: 'Thiết kế linh hoạt', itemTwo: 'Nội dung có chiều sâu', itemThree: 'Tối ưu cho mọi thiết bị' },
     fields: [{ key: 'title', label: 'Tiêu đề' }, { key: 'itemOne', label: 'Điểm nổi bật 1' }, { key: 'itemTwo', label: 'Điểm nổi bật 2' }, { key: 'itemThree', label: 'Điểm nổi bật 3' }],
   },
+  ...(['partner', 'sponsor'] as const).map((type) => {
+    const label = type === 'partner' ? 'Đối tác' : 'Nhà tài trợ';
+    const itemLabel = type === 'partner' ? 'đối tác' : 'nhà tài trợ';
+    const positions = ['One', 'Two', 'Three', 'Four'];
+    return {
+      type,
+      label,
+      description: `Danh sách logo ${itemLabel}`,
+      defaults: { title: type === 'partner' ? 'Đối tác của chúng tôi' : 'Nhà tài trợ', ...Object.fromEntries(positions.flatMap((position, index) => [[`logo${position}Url`, ''], [`logo${position}Name`, `${label} ${index + 1}`], [`logo${position}Link`, '']])) },
+      fields: [{ key: 'title', label: 'Tiêu đề' }, ...positions.flatMap((position, index) => [{ key: `logo${position}Url`, label: `URL logo ${itemLabel} ${index + 1}` }, { key: `logo${position}Name`, label: `Tên ${itemLabel} ${index + 1}` }, { key: `logo${position}Link`, label: `Liên kết ${itemLabel} ${index + 1}` }])],
+    };
+  }),
   {
     type: 'image', label: 'Hình ảnh', description: 'Ảnh toàn chiều rộng',
     defaults: { imageUrl: '', alt: 'Hình ảnh minh họa', caption: '' },
     fields: [{ key: 'imageUrl', label: 'URL hình ảnh' }, { key: 'alt', label: 'Văn bản thay thế' }, { key: 'caption', label: 'Chú thích' }],
+  },
+  {
+    type: 'html', label: 'HTML', description: 'Mã HTML tùy chỉnh',
+    defaults: { html: '<div>Nhập mã HTML của bạn tại đây.</div>' },
+    fields: [{ key: 'html', label: 'Mã HTML', multiline: true }],
   },
   {
     type: 'cta', label: 'Kêu gọi hành động', description: 'Dẫn người dùng đến bước tiếp theo',
@@ -138,6 +155,14 @@ function SortableBlock({ block, selectedId, onSelect }: { block: WebsiteBlock; s
 function PreviewBlock({ block }: { block: WebsiteBlock }) {
   if (block.type === 'row') return <section className="preview-row">{block.children?.filter((child) => !child.hidden).map((child) => <PreviewBlock key={child.id} block={child} />)}</section>;
   if (block.type === 'col') return <div className="preview-col">{block.children?.filter((child) => !child.hidden).map((child) => <PreviewBlock key={child.id} block={child} />)}</div>;
+  if (block.type === 'html') return <section className="preview-html"><pre>{block.settings.html || 'Chưa có mã HTML'}</pre></section>;
+  if (block.type === 'partner' || block.type === 'sponsor') {
+    const organizations = ['One', 'Two', 'Three', 'Four'].map((position) => ({ url: block.settings[`logo${position}Url`], name: block.settings[`logo${position}Name`], link: block.settings[`logo${position}Link`] })).filter((organization) => organization.url || organization.name);
+    return <section className={`preview-${block.type}`}><h2>{block.settings.title}</h2><div className="preview-organization-grid">{organizations.map((organization, index) => {
+      const content = organization.url ? <img src={organization.url} alt={organization.name} /> : <span>{organization.name}</span>;
+      return organization.link ? <a key={index} href={organization.link} target="_blank" rel="noreferrer">{content}</a> : <div key={index}>{content}</div>;
+    })}</div></section>;
+  }
   return <section className={`preview-${block.type}`}>{block.type === 'image' && block.settings.imageUrl ? <img src={block.settings.imageUrl} alt={block.settings.alt} /> : <><h2>{block.settings.title}</h2><p>{block.settings.description || block.settings.body}</p>{block.settings.buttonLabel && <Button type="primary">{block.settings.buttonLabel}</Button>}</>}</section>;
 }
 

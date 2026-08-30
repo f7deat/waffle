@@ -1,6 +1,6 @@
 import request from './request';
 
-export type WebsiteBlockType = 'hero' | 'richText' | 'featureGrid' | 'image' | 'cta' | 'row' | 'col';
+export type WebsiteBlockType = 'hero' | 'richText' | 'featureGrid' | 'image' | 'html' | 'cta' | 'row' | 'col';
 
 export type WebsiteBlock = {
   id: string;
