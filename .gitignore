@@ -24,3 +24,5 @@
 /build.log
 core/build-log.txt
 admin/pnpm-workspace.yaml
+web/pnpm-lock.yaml
+web/pnpm-workspace.yaml

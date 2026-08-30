@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import { defineConfig } from "@umijs/max";
 import defaultSettings from "./config/defaultSetting";
 import routes from "./config/routes";
@@ -36,7 +37,16 @@ export default defineConfig({
       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     },
   },
-  mako: {},
+  utoopack: {
+    module: {
+      rules: {
+        '*.md': {
+          loaders: [{ loader: join(__dirname, 'md-raw-loader.cjs') }],
+          as: '*.js',
+        },
+      },
+    },
+  },
   devtool: false,
   tailwindcss: {},
 });

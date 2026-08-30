@@ -10,7 +10,7 @@ type Props = ModalFormProps & {
 
 const MenuForm: React.FC<Props> = (props) => {
 
-    const formRef = useRef<ProFormInstance>();
+    const formRef = useRef<ProFormInstance>(null);
 
     useEffect(() => {
         if (props.id) {
@@ -53,6 +53,9 @@ const MenuForm: React.FC<Props> = (props) => {
         <>
             <Button type="primary" icon={<PlusOutlined />} onClick={() => props.onOpenChange?.(true)}>Tạo mới</Button>
             <ModalForm {...props} title="Menu setting"
+                modalProps={{
+                    destroyOnHidden: true
+                }}
                 formRef={formRef}
                 onFinish={async (values) => {
                     if (values.id) {

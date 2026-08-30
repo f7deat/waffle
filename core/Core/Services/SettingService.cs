@@ -146,6 +146,26 @@ public class SettingService(ApplicationDbContext _context, ILogService _logServi
                 Locale = "vi-VN"
             });
         }
+        if (!await IsExistAsync(SettingName.HEADER))
+        {
+            await _context.AppSettings.AddAsync(new AppSetting
+            {
+                NormalizedName = SettingName.HEADER,
+                Name = "Header",
+                Value = JsonSerializer.Serialize(new Header()),
+                Locale = "vi-VN"
+            });
+        }
+        if (!await IsExistAsync(SettingName.FOOTER))
+        {
+            await _context.AppSettings.AddAsync(new AppSetting
+            {
+                NormalizedName = SettingName.FOOTER,
+                Name = "Footer",
+                Value = JsonSerializer.Serialize(new Footer()),
+                Locale = "vi-VN"
+            });
+        }
         await _context.SaveChangesAsync();
         return TResult.Success;
     }

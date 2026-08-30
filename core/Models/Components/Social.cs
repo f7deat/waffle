@@ -11,5 +11,5 @@ public class Social
     [JsonPropertyName("xUrl")]
     public string? XUrl { get; set; }
     [JsonPropertyName("instagramUrl")]
-    public string? InstagramUrl { get;}
+    public string? InstagramUrl { get; set; }
 }

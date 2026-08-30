@@ -6,7 +6,7 @@ import { FALLBACK_THEME, getThemeKey, getThemeStylesheetHref } from "@/config/th
 import { useAppContext } from "@/contexts/app-context";
 import { CartProvider } from "@/contexts/cart-context";
 import Footer from "./footer";
-import Header from "./header";
+import DefaultHeader from "./default/header";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
     const { themeKey: appThemeKey } = useAppContext();
@@ -57,7 +57,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         }}>
             <CartProvider>
                 <div className="min-h-screen bg-slate-100" data-theme={themeKey.toLowerCase()}>
-                    <Header />
+                    <DefaultHeader />
                     {children}
                     <Footer />
                 </div>

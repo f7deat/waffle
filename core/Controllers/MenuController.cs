@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
@@ -22,7 +23,7 @@ public class MenuController(ApplicationDbContext _context) : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.Menus.FindAsync(id));
 
-    [HttpGet("list")]
+    [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> GetListAsync([FromQuery] MenuFilterOptions filterOptions)
     {
         try

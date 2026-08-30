@@ -1,5 +1,5 @@
-import { RoleListType } from '@/typings/role';
 import { request } from '@umijs/max';
+import { RoleListType } from './role';
 
 export async function login(data: any) {
   return request(`user/password-sign-in`, {

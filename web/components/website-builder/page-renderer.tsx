@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 import { WebsiteBlock, WebsiteDocument } from '@/services/website-page';
 
@@ -53,7 +55,18 @@ function CtaBlock({ block }: { block: WebsiteBlock }) {
   </div></section>;
 }
 
-const renderers: Record<WebsiteBlock['type'], (block: WebsiteBlock) => React.ReactNode> = {
+function renderBlock(block: WebsiteBlock): React.ReactNode {
+  if (block.hidden) return null;
+  if (block.type === 'row') {
+    return <section className="mx-auto grid max-w-6xl gap-6 px-5 py-8 sm:px-8 md:grid-cols-2">{block.children?.map((child) => <div key={child.id}>{renderBlock(child)}</div>)}</section>;
+  }
+  if (block.type === 'col') {
+    return <div className="flex flex-col gap-6">{block.children?.map((child) => <div key={child.id}>{renderBlock(child)}</div>)}</div>;
+  }
+  return renderers[block.type](block);
+}
+
+const renderers: Record<Exclude<WebsiteBlock['type'], 'row' | 'col'>, (block: WebsiteBlock) => React.ReactNode> = {
   hero: (block) => <HeroBlock block={block} />,
   richText: (block) => <RichTextBlock block={block} />,
   featureGrid: (block) => <FeatureGridBlock block={block} />,
@@ -62,5 +75,5 @@ const renderers: Record<WebsiteBlock['type'], (block: WebsiteBlock) => React.Rea
 };
 
 export default function WebsitePageRenderer({ document }: { document: WebsiteDocument }) {
-  return <main>{document.blocks.filter((block) => !block.hidden).map((block) => <div key={block.id}>{renderers[block.type]?.(block)}</div>)}</main>;
+  return <main>{document.blocks.map((block) => <div key={block.id}>{renderBlock(block)}</div>)}</main>;
 }

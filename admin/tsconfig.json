@@ -1,9 +1,22 @@
 {
-  "extends": "./src/.umi/tsconfig.json",
   "compilerOptions": {
-    "forceConsistentCasingInFileNames": false
+    "target": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@@/*": ["./src/.umi/*"],
+      "@@test/*": ["./src/.umi-test/*"],
+      "@root/*": ["./*"]
+    }
   },
-  "global": {
-    "page": true
-  }
+  "include": ["./**/*.d.ts", "./**/*.ts", "./**/*.tsx"]
 }

@@ -4,7 +4,8 @@ import Script from "next/script";
 import "./globals.css";
 import { AppProvider } from "@/contexts/app-context";
 import AppShell from "@/components/layout/app-shell";
-import { apiGetSiteSetting } from "@/services/setting";
+import { apiGetFooterSetting, apiGetHeaderSetting, apiGetSiteSetting } from "@/services/setting";
+import { apiGetMenuList } from "@/services/menu";
 import { getThemeKey, getThemeStylesheetHref } from "@/config/theme";
 
 const quicksand = Quicksand({
@@ -23,7 +24,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialSettings = await apiGetSiteSetting();
+  const [initialSettings, initialHeader, initialFooter, initialMenu] = await Promise.all([
+    apiGetSiteSetting(),
+    apiGetHeaderSetting(),
+    apiGetFooterSetting(),
+    apiGetMenuList(),
+  ]);
 
   const initialThemeKey = getThemeKey(initialSettings?.theme);
   const initialThemeStylesheetHref = getThemeStylesheetHref(initialThemeKey);
@@ -40,10 +46,16 @@ export default async function RootLayout({
         />
       </head>
       <body style={quicksand.style}>
-        <AppProvider initialSettings={initialSettings}>
+        <AppProvider
+          initialSettings={initialSettings}
+          initialHeader={initialHeader}
+          initialFooter={initialFooter}
+          initialMenu={initialMenu}
+        >
           <AppShell>{children}</AppShell>
         </AppProvider>
       </body>
     </html>
   );
 }
+

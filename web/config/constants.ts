@@ -1,3 +1,5 @@
 export const SETTINGS = {
-    SITE: 'SITE'
+    SITE: 'SITE',
+    HEADER: 'HEADER',
+    FOOTER: 'FOOTER'
 }

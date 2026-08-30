@@ -9,13 +9,13 @@ import {
 import { useRef, useState } from "react";
 import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import {
+  ArticleListItem,
   deleteArticle,
   listArticles,
 } from "@/services/article";
 import ArticleForm from "@/components/ArticleForm";
 import dayjs from "dayjs";
 import { Link } from "@umijs/max";
-import { ArticleListItem } from "@/typings/article";
 
 const ArticlePage: React.FC = () => {
 

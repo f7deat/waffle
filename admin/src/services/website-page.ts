@@ -1,12 +1,13 @@
 import { request } from '@umijs/max';
 
-export type WebsiteBlockType = 'hero' | 'richText' | 'featureGrid' | 'image' | 'cta';
+export type WebsiteBlockType = 'hero' | 'richText' | 'featureGrid' | 'image' | 'cta' | 'row' | 'col';
 
 export type WebsiteBlock = {
   id: string;
   type: WebsiteBlockType;
   hidden?: boolean;
   settings: Record<string, string>;
+  children?: WebsiteBlock[];
 };
 
 export type WebsiteDocument = {

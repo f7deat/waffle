@@ -1,13 +1,12 @@
-import { ArrowLeftOutlined, DeleteOutlined, PlusOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { ActionType, ModalForm, PageContainer, ProColumns, ProFormSelect, ProTable } from "@ant-design/pro-components"
 import { FormattedMessage, history, useParams } from "@umijs/max"
-import { Button, Space, Tag, Avatar, message, Popconfirm } from "antd";
-import { apiRoleUsers, apiAddUserToRole, apiRemoveUserFromRole, apiRoleByName } from "@/services/role";
+import { Button, Tag, message, Popconfirm } from "antd";
+import { apiRoleUsers, apiAddUserToRole, apiRemoveUserFromRole, apiRoleByName, RoleUserListItem } from "@/services/role";
 import { listUser } from "@/services/user";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
 import { useRequest } from "@umijs/max";
-import { RoleUserListItem } from "@/typings/role";
 
 const RoleCenter: React.FC = () => {
 

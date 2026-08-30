@@ -2,8 +2,10 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { apiCurrentUser } from "@/services/user/user";
-import { SiteSetting } from "@/typings/setting";
-import { apiGetSiteSetting } from "@/services/setting";
+import { FooterSetting, HeaderSetting, SiteSetting } from "@/typings/setting";
+import { apiGetFooterSetting, apiGetHeaderSetting, apiGetSiteSetting } from "@/services/setting";
+import { apiGetMenuList } from "@/services/menu";
+import { MenuNavItem } from "@/typings/menu";
 import { getThemeKey } from "@/config/theme";
 
 export interface AppState {
@@ -21,6 +23,12 @@ export interface AppState {
     logout: () => void;
     settings?: SiteSetting;
     themeKey: string;
+    /** Cấu hình header (brand, logo, top menu) từ admin */
+    header?: HeaderSetting;
+    /** Cấu hình footer (thông tin công ty, social, links) từ admin */
+    footer?: FooterSetting;
+    /** Menu điều hướng chính lấy từ API, quản lý trong admin */
+    menu: MenuNavItem[];
 }
 
 const AppContext = createContext<AppState | undefined>(undefined);
@@ -28,14 +36,23 @@ const AppContext = createContext<AppState | undefined>(undefined);
 export function AppProvider({
     children,
     initialSettings,
+    initialHeader,
+    initialFooter,
+    initialMenu,
 }: {
     children: React.ReactNode;
     initialSettings?: SiteSetting;
+    initialHeader?: HeaderSetting;
+    initialFooter?: FooterSetting;
+    initialMenu?: MenuNavItem[];
 }) {
 
     const [user, setUser] = useState<API.User | null>(null);
     const [initializing, setInitializing] = useState(true);
     const [settings, setSettings] = useState<SiteSetting | undefined>(initialSettings);
+    const [header, setHeader] = useState<HeaderSetting | undefined>(initialHeader);
+    const [footer, setFooter] = useState<FooterSetting | undefined>(initialFooter);
+    const [menu, setMenu] = useState<MenuNavItem[]>(initialMenu ?? []);
     const themeKey = getThemeKey(settings?.theme);
 
     const fetchUser = useCallback(async () => {
@@ -61,10 +78,31 @@ export function AppProvider({
         }
     }, []);
 
+    const fetchLayoutData = useCallback(async () => {
+        try {
+            const [headerRes, footerRes, menuRes] = await Promise.all([
+                apiGetHeaderSetting(),
+                apiGetFooterSetting(),
+                apiGetMenuList(),
+            ]);
+            setHeader(headerRes);
+            setFooter(footerRes);
+            setMenu(menuRes);
+        } catch (error) {
+            console.error("Failed to fetch header/footer/menu settings:", error);
+        }
+    }, []);
+
     useEffect(() => {
         fetchUser().finally(() => setInitializing(false));
-        fetchSettings();
-    }, [fetchUser, fetchSettings]);
+        // Skip refetching layout data on mount if it was already provided server-side
+        if (!initialHeader && !initialFooter && !initialMenu) {
+            fetchLayoutData();
+        }
+        if (!initialSettings) {
+            fetchSettings();
+        }
+    }, [fetchUser, fetchSettings, fetchLayoutData, initialHeader, initialFooter, initialMenu, initialSettings]);
 
     const refreshUser = useCallback(async () => {
         await fetchUser();
@@ -93,6 +131,9 @@ export function AppProvider({
                 logout,
                 settings,
                 themeKey,
+                header,
+                footer,
+                menu,
             }}
         >
             {children}

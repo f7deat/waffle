@@ -1,5 +1,5 @@
 import { apiGetSettingByName, apiInitializeSettings, apiSaveSetting } from '@/services/setting';
-import { HomeOutlined, SendOutlined, SyncOutlined } from '@ant-design/icons';
+import { HomeOutlined, LayoutOutlined, SendOutlined, SyncOutlined, TableOutlined } from '@ant-design/icons';
 import {
   ActionType,
   DrawerForm,
@@ -10,6 +10,8 @@ import { Button, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import SiteSettings from './components/site';
 import TelegramSettings from './components/telegram';
+import HeaderSettings from './components/header';
+import FooterSettings from './components/footer';
 
 const SettingPage: React.FC = () => {
 
@@ -53,6 +55,18 @@ const SettingPage: React.FC = () => {
       normalizedName: 'TELEGRAM',
       description: 'Manage Telegram settings like bot token, chat id, etc.',
       icon: <SendOutlined className="text-2xl text-gray-500" />,
+    },
+    {
+      name: 'Header',
+      normalizedName: 'HEADER',
+      description: 'Manage site header like brand, logo, menu, etc.',
+      icon: <LayoutOutlined className="text-2xl text-gray-500" />,
+    },
+    {
+      name: 'Footer',
+      normalizedName: 'FOOTER',
+      description: 'Manage site footer like company info, social links, etc.',
+      icon: <TableOutlined className="text-2xl text-gray-500" />,
     }
   ]
 
@@ -101,6 +115,12 @@ const SettingPage: React.FC = () => {
         }
         {
           selected?.normalizedName === 'TELEGRAM' && <TelegramSettings value={value} />
+        }
+        {
+          selected?.normalizedName === 'HEADER' && <HeaderSettings value={value} />
+        }
+        {
+          selected?.normalizedName === 'FOOTER' && <FooterSettings value={value} />
         }
       </DrawerForm>
     </PageContainer>

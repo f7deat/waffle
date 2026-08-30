@@ -1,3 +1,5 @@
+"use server";
+
 import request from "../request";
 
 export async function apiKolList(params?: API.KolFilterOptions) {

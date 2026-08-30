@@ -439,3 +439,6 @@ Each service interface:
 3. **Parameters normalized for API**
 4. **Returns response from backend**
 
+## Removes unnecessary packages.
+
+`pnpm prune`

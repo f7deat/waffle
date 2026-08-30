@@ -1,10 +1,30 @@
+"use client";
+
 import { CaretRightFilled, EnvironmentOutlined, FacebookFilled, InstagramFilled, LinkedinFilled, MailOutlined, PhoneOutlined, TikTokFilled } from "@ant-design/icons";
 import Link from "next/link";
 import LanguageSelector from "../language";
+import { useAppContext } from "@/contexts/app-context";
+
+const DEFAULT_LINKS = [
+    { name: "Trang chủ", href: "/" },
+    { name: "Bài viết", href: "/article" },
+    { name: "Wiki", href: "/wiki" },
+    { name: "Cửa hàng", href: "/shop" },
+    { name: "Liên hệ", href: "/contact" },
+    { name: "Influencers", href: "/influencer" },
+    { name: "Album", href: "/album" },
+];
 
 const DefaultFooter: React.FC = () => {
+    const { footer } = useAppContext();
 
     const year = new Date().getFullYear();
+    const companyName = footer?.companyName || "DefZone.Net";
+    const email = footer?.email || "defzone.net@gmail.com";
+    const phoneNumber = footer?.phoneNumber || "+84 762 559 696";
+    const address = footer?.address || "Thiên Hương, Thủy Nguyên, Hải Phòng";
+    const social = footer?.social;
+    const links: { href: string; name?: string; target?: string }[] = footer?.links?.length ? footer.links : DEFAULT_LINKS;
 
     return (
         <footer className="border-t border-slate-800 bg-slate-950 text-slate-100">
@@ -12,20 +32,24 @@ const DefaultFooter: React.FC = () => {
                 <div className="space-y-4">
                     <div className="flex items-center gap-3">
                         <div className="flex h-12 w-16 items-center justify-center rounded-full bg-blue-500 text-lg font-semibold text-white">
-                            DZ
+                            {companyName.slice(0, 2).toUpperCase()}
                         </div>
                         <div>
-                            <div className="text-lg font-semibold">DefZone.Net</div>
+                            <div className="text-lg font-semibold">{companyName}</div>
                             <p className="text-sm text-slate-400">Noi chia se kien thuc, huong dan va kham pha cong nghe.</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-4 text-slate-300">
-                        <a href="https://www.facebook.com/defzone.net/" aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
-                            <FacebookFilled />
-                        </a>
-                        <a href="https://www.instagram.com/f7deat/" aria-label="Instagram" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
-                            <InstagramFilled />
-                        </a>
+                        {social?.facebookUrl && (
+                            <a href={social.facebookUrl} aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
+                                <FacebookFilled />
+                            </a>
+                        )}
+                        {social?.instagramUrl && (
+                            <a href={social.instagramUrl} aria-label="Instagram" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
+                                <InstagramFilled />
+                            </a>
+                        )}
                         <a href="https://www.tiktok.com/@f7deat" aria-label="TikTok" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
                             <TikTokFilled />
                         </a>
@@ -38,22 +62,18 @@ const DefaultFooter: React.FC = () => {
                 <div className="space-y-3">
                     <h3 className="text-base font-semibold text-white">Liên kết nhanh</h3>
                     <nav className="grid grid-cols-2 gap-2 text-sm text-slate-300">
-                        <Link href="/" className="hover:text-white transition-colors"><CaretRightFilled /> Trang chủ</Link>
-                        <Link href="/article" className="hover:text-white transition-colors"><CaretRightFilled /> Bài viết</Link>
-                        <Link href="/wiki" className="hover:text-white transition-colors"><CaretRightFilled /> Wiki</Link>
-                        <Link href="/shop" className="hover:text-white transition-colors"><CaretRightFilled /> Cửa hàng</Link>
-                        <Link href="/contact" className="hover:text-white transition-colors"><CaretRightFilled /> Liên hệ</Link>
-                        <Link href="/influencer" className="hover:text-white transition-colors"><CaretRightFilled /> Influencers</Link>
-                        <Link href="/album" className="hover:text-white transition-colors"><CaretRightFilled /> Album</Link>
+                        {links.map((item) => (
+                            <Link key={item.href} href={item.href} target={item.target} className="hover:text-white transition-colors"><CaretRightFilled /> {item.name}</Link>
+                        ))}
                     </nav>
                 </div>
 
                 <div className="space-y-3">
                     <h3 className="text-base font-semibold text-white">Liên hệ</h3>
                     <div className="flex flex-col gap-2 text-sm text-slate-300">
-                        <div><MailOutlined className="mr-1" />Email: <a className="hover:text-white" href="mailto:defzone.net@gmail.com">defzone.net@gmail.com</a></div>
-                        <div><PhoneOutlined className="mr-1" />Điện thoại: <a className="hover:text-white" href="tel:+84762559696">+84 762 559 696</a></div>
-                        <div><EnvironmentOutlined className="mr-1" />Địa chỉ: Thiên Hương, Thủy Nguyên, Hải Phòng</div>
+                        <div><MailOutlined className="mr-1" />Email: <a className="hover:text-white" href={`mailto:${email}`}>{email}</a></div>
+                        <div><PhoneOutlined className="mr-1" />Điện thoại: <a className="hover:text-white" href={`tel:${phoneNumber}`}>{phoneNumber}</a></div>
+                        <div><EnvironmentOutlined className="mr-1" />Địa chỉ: {address}</div>
                     </div>
                 </div>
 
@@ -81,7 +101,7 @@ const DefaultFooter: React.FC = () => {
             </div>
             <div className="border-t border-slate-800">
                 <div className="mx-auto flex container flex-col gap-3 px-4 py-4 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
-                    <div>© {year} DefZone.Net. All rights reserved.</div>
+                    <div>© {year} {companyName}. All rights reserved.</div>
                     <div className="flex flex-wrap items-center gap-4">
                         <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
                         <a href="/terms" className="hover:text-white transition-colors">Terms</a>
