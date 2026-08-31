@@ -1,6 +1,6 @@
 import { request } from '@umijs/max';
 
-export type WebsiteBlockType = 'hero' | 'richText' | 'featureGrid' | 'image' | 'html' | 'cta' | 'partner' | 'sponsor' | 'row' | 'col';
+export type WebsiteBlockType = 'hero' | 'richText' | 'featureGrid' | 'testimonial' | 'image' | 'html' | 'cta' | 'partner' | 'sponsor' | 'row' | 'col';
 
 export type WebsiteBlock = {
   id: string;
