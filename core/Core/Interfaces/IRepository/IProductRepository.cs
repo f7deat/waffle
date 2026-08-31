@@ -12,6 +12,7 @@ public interface IProductRepository : IAsyncRepository<Product>
 {
     Task<ListResult<ProductCategoryListItem>> ListCategoriesAsync(ProductCategoryFilterOptions filterOptions);
     Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions);
+    Task<IEnumerable<ProductListItem>> ExportAsync(ProductFilterOptions filterOptions);
     Task<ListResult<ProductListItem>> ListByCategoryAsync(string normalizedName, ProductFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListRelatedAsync(PageData pageData);

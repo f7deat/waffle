@@ -159,6 +159,20 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
 
     public async Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
     {
+        var query = ProductListQuery(filterOptions);
+        query = query.OrderByDescending(x => x.ModifiedDate);
+        return await ListResult<ProductListItem>.Success(query, filterOptions);
+    }
+
+    public async Task<IEnumerable<ProductListItem>> ExportAsync(ProductFilterOptions filterOptions)
+    {
+        var query = ProductListQuery(filterOptions)
+            .OrderByDescending(x => x.ModifiedDate);
+        return await query.ToListAsync();
+    }
+
+    private IQueryable<ProductListItem> ProductListQuery(ProductFilterOptions filterOptions)
+    {
         var query = from product in _context.Products
                     join category in _context.Categories on product.CategoryId equals category.Id into categoryGroup
                     from category in categoryGroup.DefaultIfEmpty()
@@ -190,8 +204,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         {
             query = query.Where(x => x.CategoryId == filterOptions.CategoryId);
         }
-        query = query.OrderByDescending(x => x.ModifiedDate);
-        return await ListResult<ProductListItem>.Success(query, filterOptions);
+        return query;
     }
 
     public async Task<ListResult<ProductListItem>> ListByCategoryAsync(string normalizedName, ProductFilterOptions filterOptions)

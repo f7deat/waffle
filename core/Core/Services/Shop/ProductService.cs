@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using ClosedXML.Excel;
+using System.Text.Json;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
@@ -153,6 +154,47 @@ public class ProductService(IProductRepository _productRepository, IProductLinkR
     {
         filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
         return _productRepository.ListAsync(filterOptions);
+    }
+
+    public async Task<byte[]> ExportAsync(ProductFilterOptions filterOptions)
+    {
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        var products = await _productRepository.ExportAsync(filterOptions);
+
+        using var workbook = new XLWorkbook();
+        var worksheet = workbook.Worksheets.Add("Products");
+        worksheet.Cell(1, 1).Value = "Tên sản phẩm";
+        worksheet.Cell(1, 2).Value = "Danh mục";
+        worksheet.Cell(1, 3).Value = "Giá";
+        worksheet.Cell(1, 4).Value = "Giá khuyến mãi";
+        worksheet.Cell(1, 5).Value = "Lượt xem";
+        worksheet.Cell(1, 6).Value = "Locale";
+        worksheet.Cell(1, 7).Value = "Cập nhật";
+
+        var row = 2;
+        foreach (var product in products)
+        {
+            worksheet.Cell(row, 1).Value = product.Name ?? string.Empty;
+            worksheet.Cell(row, 2).Value = product.CategoryName ?? string.Empty;
+            worksheet.Cell(row, 3).Value = product.Price ?? 0;
+            worksheet.Cell(row, 4).Value = product.SalePrice ?? 0;
+            worksheet.Cell(row, 5).Value = product.ViewCount;
+            worksheet.Cell(row, 6).Value = product.Locale ?? string.Empty;
+            worksheet.Cell(row, 7).Value = product.ModifiedDate;
+            row++;
+        }
+
+        var header = worksheet.Range(1, 1, 1, 7);
+        header.Style.Font.Bold = true;
+        header.Style.Fill.BackgroundColor = XLColor.LightBlue;
+        worksheet.Columns(3, 4).Style.NumberFormat.Format = "#,##0.00";
+        worksheet.Column(7).Style.DateFormat.Format = "yyyy-mm-dd hh:mm";
+        worksheet.Columns().AdjustToContents();
+        worksheet.Column(1).Width = Math.Min(worksheet.Column(1).Width, 50);
+
+        using var stream = new MemoryStream();
+        workbook.SaveAs(stream);
+        return stream.ToArray();
     }
 
     public Task<ListResult<ProductListItem>> ListByCategoryAsync(string normalizedName, ProductFilterOptions filterOptions)

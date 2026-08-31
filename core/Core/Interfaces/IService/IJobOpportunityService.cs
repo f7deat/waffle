@@ -11,7 +11,7 @@ public interface IJobOpportunityService
     Task<TResult> DeleteAsync(Guid id);
     Task<JobOpportunity?> GetAsync(Guid id);
     Task<TResult> ApplyAsync(JobApplication args);
-    Task<ListResult<JobApplicationListItem>> ListApplicationAsync(BasicFilterOptions filterOptions);
+    Task<ListResult<JobApplicationListItem>> ListApplicationAsync(Guid? jobId, BasicFilterOptions filterOptions);
     Task<TResult> UpdateApplicationStatusAsync(Guid id, JobApplicationStatus status);
     Task<TResult> DeleteApplicationAsync(Guid id);
     Task<ListResult<object>> ListAsync(BasicFilterOptions filterOptions);

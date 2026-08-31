@@ -128,6 +128,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasForeignKey(x => x.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Entity<ApplicationUser>()
+            .HasOne(x => x.Team)
+            .WithMany(x => x.Members)
+            .HasForeignKey(x => x.TeamId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         base.OnModelCreating(builder);
     }
 }

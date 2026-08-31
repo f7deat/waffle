@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Waffle.Entities.HR;
 
 namespace Waffle.Entities.Users;
 
@@ -18,4 +19,6 @@ public class ApplicationUser : IdentityUser<Guid>
     [StringLength(2058)]
     public string? Avatar { get; set; }
     public int? DistrictId { get; set; }
+    public int? TeamId { get; set; }
+    public Team? Team { get; set; }
 }

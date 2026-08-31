@@ -110,6 +110,12 @@ export default [
         component: './career'
       },
       {
+        name: 'applicationByJob',
+        path: '/career/application/:jobId',
+        component: './career',
+        hideInMenu: true
+      },
+      {
         name: 'jobCenter',
         path: '/career/job/center/:id',
         component: './career/job/center',
@@ -182,7 +188,12 @@ export default [
     routes: [
       {
         path: '/hr',
-        redirect: '/hr/branch',
+        redirect: '/hr/statistics',
+      },
+      {
+        name: 'statistics',
+        path: '/hr/statistics',
+        component: './hr/statistics',
       },
       {
         name: 'branch',
@@ -198,6 +209,12 @@ export default [
         name: 'team',
         path: '/hr/team',
         component: './hr/team',
+      },
+      {
+        name: 'teamMembers',
+        path: '/hr/team/:id/members',
+        component: './hr/team/members',
+        hideInMenu: true,
       },
     ],
   },

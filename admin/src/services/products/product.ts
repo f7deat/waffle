@@ -89,3 +89,10 @@ export async function apiProductAdd(data: any) {
         data
     });
 }
+
+export async function apiProductExport(params: any) {
+    return request(`product/export`, {
+        params,
+        responseType: 'blob',
+    });
+}

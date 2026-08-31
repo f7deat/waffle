@@ -74,7 +74,7 @@ public class JobOpportunityService(ApplicationDbContext _context, IJobOpportunit
         });
     }
 
-    public async Task<ListResult<JobApplicationListItem>> ListApplicationAsync(BasicFilterOptions filterOptions)
+    public async Task<ListResult<JobApplicationListItem>> ListApplicationAsync(Guid? jobId, BasicFilterOptions filterOptions)
     {
         var query = from a in _context.JobApplications
                     join b in _context.JobOpportunities on a.JobId equals b.Id
@@ -91,6 +91,7 @@ public class JobOpportunityService(ApplicationDbContext _context, IJobOpportunit
                         Status = a.Status,
                         ResumeFile = a.ResumeFile
                     };
+        if (jobId.HasValue) query = query.Where(x => x.JobId == jobId.Value);
         query = query.OrderByDescending(x => x.AppliedDate);
         return await ListResult<JobApplicationListItem>.Success(query, filterOptions);
     }

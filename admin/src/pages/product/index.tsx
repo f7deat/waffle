@@ -1,5 +1,5 @@
-import { apiProductDelete, apiProductList, apiProductSave } from "@/services/products/product";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { apiProductDelete, apiProductExport, apiProductList, apiProductSave } from "@/services/products/product";
+import { DeleteOutlined, DownloadOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import {
     ActionType,
     PageContainer,
@@ -15,6 +15,7 @@ import { apiCategoryOptions } from "@/services/settings/category";
 
 const ProductPage: React.FC = () => {
     const actionRef = useRef<ActionType>(null);
+    const tableParamsRef = useRef<Record<string, any>>({});
     const [openForm, setOpenForm] = useState(false);
     const [editingRow, setEditingRow] = useState<ProductCatalogForm>();
 
@@ -52,6 +53,21 @@ const ProductPage: React.FC = () => {
         await apiProductDelete(id);
         message.success("Xóa sản phẩm thành công");
         actionRef.current?.reload();
+    };
+
+    const handleExport = async () => {
+        try {
+            const { name, categoryId } = tableParamsRef.current;
+            const blob = await apiProductExport({ name, categoryId, locale: getLocale() });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `products-${dayjs().format("YYYYMMDD-HHmmss")}.xlsx`;
+            link.click();
+            URL.revokeObjectURL(url);
+        } catch {
+            message.error("Xuất Excel thất bại");
+        }
     };
 
     const columns: ProColumns<any>[] = [
@@ -145,23 +161,29 @@ const ProductPage: React.FC = () => {
     return (
         <PageContainer
             extra={
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    onClick={() => {
-                        setEditingRow(undefined);
-                        setOpenForm(true);
-                    }}
-                >
-                    Thêm sản phẩm
-                </Button>
+                <Space>
+                    <Button icon={<DownloadOutlined />} onClick={handleExport}>Xuất Excel</Button>
+                    <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        onClick={() => {
+                            setEditingRow(undefined);
+                            setOpenForm(true);
+                        }}
+                    >
+                        Thêm sản phẩm
+                    </Button>
+                </Space>
             }
         >
             <ProTable
                 actionRef={actionRef}
                 scroll={{ x: true }}
                 rowKey="id"
-                request={(params) => apiProductList(params)}
+                request={(params) => {
+                    tableParamsRef.current = params;
+                    return apiProductList(params);
+                }}
                 columns={columns}
                 search={{
                     layout: "vertical",

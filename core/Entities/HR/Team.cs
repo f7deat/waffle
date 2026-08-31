@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Waffle.Entities.Users;
 
 namespace Waffle.Entities.HR;
 
@@ -11,4 +12,5 @@ public class Team : BaseEntity<int>
     public int DepartmentId { get; set; }
 
     public Department? Department { get; set; }
+    public ICollection<ApplicationUser> Members { get; set; } = [];
 }

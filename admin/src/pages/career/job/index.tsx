@@ -1,5 +1,5 @@
 import { apiDeleteJobOpportunity, apiJobOpportunityAdd, apiJobOpportunityList } from "@/services/careers/job";
-import { DeleteOutlined, EditOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, FileTextOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import {
     ActionType,
     ModalForm,
@@ -11,7 +11,7 @@ import {
     ProFormTextArea,
     ProTable
 } from "@ant-design/pro-components";
-import { Button, message, Popconfirm } from "antd";
+import { Button, message, Popconfirm, Tooltip } from "antd";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
 import { JOB_STATUS_OPTIONS } from "../utils/constants";
@@ -116,6 +116,11 @@ const Index: React.FC = () => {
             width: 90,
             align: "center",
             render: (_, record) => [
+                <Tooltip key="applications" title="Quản lý đơn ứng tuyển">
+                    <Link to={`/career/application/${record.id}`}>
+                        <Button icon={<FileTextOutlined />} size="small" />
+                    </Link>
+                </Tooltip>,
                 <Button
                     key="edit"
                     type="primary"

@@ -2,10 +2,12 @@ import { apiDeleteJobApplication, apiJobApplicationList, apiUpdateJobApplication
 import { DeleteOutlined, EyeOutlined, SettingOutlined } from "@ant-design/icons";
 import { ActionType, PageContainer, ProTable } from "@ant-design/pro-components"
 import { Button, message, Popconfirm, Space } from "antd";
+import { useParams } from "@umijs/max";
 import { useRef } from "react";
 
 const Index: React.FC = () => {
     const actionRef = useRef<ActionType>(null);
+    const { jobId } = useParams<{ jobId?: string }>();
 
     const handleUpdateStatus = async (id: string, status: number) => {
         await apiUpdateJobApplicationStatus(id, status);
@@ -20,10 +22,10 @@ const Index: React.FC = () => {
     };
 
     return (
-        <PageContainer>
+        <PageContainer title={jobId ? "Đơn ứng tuyển theo việc làm" : undefined}>
             <ProTable
                 actionRef={actionRef}
-                request={apiJobApplicationList}
+            request={(params) => apiJobApplicationList({ ...params, jobId })}
                 rowKey="id"
                 columns={[
                     {
@@ -33,7 +35,8 @@ const Index: React.FC = () => {
                     },
                     {
                         title: 'Vị trí tuyển dụng',
-                        dataIndex: 'jobTitle'
+                        dataIndex: 'jobTitle',
+                        hideInSearch: !!jobId
                     },
                     {
                         title: 'Ngày ứng tuyển',

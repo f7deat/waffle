@@ -1,6 +1,10 @@
 import { request } from "@umijs/max";
 
-export async function apiJobApplicationList(params: any) {
+export interface IJobApplicationFilter extends API.IFilter {
+    jobId?: string;
+}
+
+export async function apiJobApplicationList(params: IJobApplicationFilter) {
     return request(`career/list-application`, { params });
 }
 

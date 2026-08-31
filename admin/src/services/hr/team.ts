@@ -8,6 +8,16 @@ export type Team = {
 
 export type TeamInput = Omit<Team, 'id'>;
 
+export type TeamMember = {
+  id: string;
+  userName: string;
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
+  avatar?: string;
+  createdAt: string;
+};
+
 export async function apiTeamList(params: any) {
   return request('team/list', { params });
 }
@@ -32,6 +42,27 @@ export async function apiTeamUpdate(id: number, data: TeamInput) {
 
 export async function apiTeamDelete(id: number) {
   return request(`team/delete/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function apiTeamGet(id: number) {
+  return request(`team/${id}`);
+}
+
+export async function apiTeamMemberList(teamId: number, params: any) {
+  return request(`team/${teamId}/members`, { params });
+}
+
+export async function apiTeamAddMember(teamId: number, userId: string) {
+  return request(`team/${teamId}/members`, {
+    method: 'POST',
+    data: { userId },
+  });
+}
+
+export async function apiTeamRemoveMember(teamId: number, userId: string) {
+  return request(`team/${teamId}/members/${userId}`, {
     method: 'DELETE',
   });
 }

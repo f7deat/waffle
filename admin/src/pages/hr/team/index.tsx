@@ -1,13 +1,14 @@
 import { apiDepartmentOptions } from '@/services/hr/department';
 import { Team, TeamInput, apiTeamCreate, apiTeamDelete, apiTeamList, apiTeamUpdate } from '@/services/hr/team';
-import { DeleteOutlined, EditOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
 import { ActionType, ModalForm, PageContainer, ProColumns, ProFormInstance, ProFormSelect, ProFormText, ProTable } from '@ant-design/pro-components';
+import { history } from '@umijs/max';
 import { Button, Popconfirm, message } from 'antd';
 import { useRef, useState } from 'react';
 
 const TeamPage: React.FC = () => {
-  const actionRef = useRef<ActionType>();
-  const formRef = useRef<ProFormInstance>();
+  const actionRef = useRef<ActionType>(null);
+  const formRef = useRef<ProFormInstance>(null);
   const [editingTeam, setEditingTeam] = useState<Team>();
   const [openForm, setOpenForm] = useState(false);
 
@@ -73,6 +74,7 @@ const TeamPage: React.FC = () => {
       width: 92,
       align: 'center',
       render: (_, team) => [
+        <Button key="members" size="small" icon={<TeamOutlined />} onClick={() => history.push(`/hr/team/${team.id}/members`)} />,
         <Button key="edit" type="primary" size="small" icon={<EditOutlined />} onClick={() => openEditForm(team)} />,
         <Popconfirm
           key="delete"

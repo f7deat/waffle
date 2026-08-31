@@ -78,6 +78,13 @@ public class ProductController(IProductService _productService) : BaseController
     [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> ListAsync([FromQuery] ProductFilterOptions filterOptions) => Ok(await _productService.ListAsync(filterOptions));
 
+    [HttpGet("export")]
+    public async Task<IActionResult> ExportAsync([FromQuery] ProductFilterOptions filterOptions)
+    {
+        var content = await _productService.ExportAsync(filterOptions);
+        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"products-{DateTime.Now:yyyyMMddHHmmss}.xlsx");
+    }
+
     [HttpGet("category/{normalizedName}"), AllowAnonymous]
     public async Task<IActionResult> ListByCategoryAsync([FromRoute] string normalizedName, [FromQuery] ProductFilterOptions filterOptions)
         => Ok(await _productService.ListByCategoryAsync(normalizedName, filterOptions));

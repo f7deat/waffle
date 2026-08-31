@@ -51,7 +51,7 @@ public class CareerController(IJobOpportunityService _jobOpportunityService, IWe
     public async Task<IActionResult> ListPublishedOpportunityAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _jobOpportunityService.ListPublishedAsync(filterOptions));
 
     [HttpGet("list-application")]
-    public async Task<IActionResult> ListApplicationAsync([FromQuery] BasicFilterOptions filterOptions) => Ok(await _jobOpportunityService.ListApplicationAsync(filterOptions));
+    public async Task<IActionResult> ListApplicationAsync([FromQuery] Guid? jobId, [FromQuery] BasicFilterOptions filterOptions) => Ok(await _jobOpportunityService.ListApplicationAsync(jobId, filterOptions));
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _jobOpportunityService.DeleteAsync(id));
