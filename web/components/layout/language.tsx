@@ -1,9 +1,10 @@
 "use client";
 
-import { GlobalOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Dropdown } from "antd";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 const LanguageSelector: React.FC = () => {
     const router = useRouter();
@@ -67,7 +68,7 @@ const LanguageSelector: React.FC = () => {
             selectedKeys: [currentLanguage]
         }}>
             <button type="button" className="hover:text-white transition-colors">
-                <GlobalOutlined /> {languageLabels[currentLanguage]?.split(' ')[0] || '🇻🇳'}
+                <FontAwesomeIcon icon={faGlobe} /> {languageLabels[currentLanguage]?.split(' ')[0] || '🇻🇳'}
             </button>
         </Dropdown>
     );

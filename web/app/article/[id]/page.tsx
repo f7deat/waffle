@@ -3,12 +3,13 @@ import PageContainer from "@/components/layout/page-container";
 import { apiArticleDetail, apiArticleMeta, apiArticleRandoms } from "@/services/article";
 import { Metadata } from "next";
 import Link from "next/link";
-import { CalendarOutlined, EyeFilled } from "@ant-design/icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ArticleActions from "@/components/article/actions";
 import ArticleComments from "@/components/article/comments";
 import dayjs from "dayjs";
 import { JSX } from "react/jsx-dev-runtime";
 import { EditorJSBlock, EditorJSCodeData, EditorJSHeaderData, EditorJSImageData, EditorJSListData, EditorJSParagraphData, EditorJSQuoteData } from "@/services/typings/editorjs";
+import { faCalendar, faEye } from "@fortawesome/free-solid-svg-icons";
 
 type Params = Promise<{
     id: string;
@@ -78,7 +79,7 @@ const Page = async ({ params }: { params: Params }) => {
                             <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{article.name}</h1>
                             <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600">
                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
-                                    <EyeFilled className="text-gray-500" /> {article.viewCount?.toLocaleString() ?? 0} lượt xem
+                                    <FontAwesomeIcon icon={faEye} className="text-gray-500" /> {article.viewCount?.toLocaleString() ?? 0} lượt xem
                                 </span>
                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
                                     Cập nhật {article.modifiedDate ? new Date(article.modifiedDate).toLocaleDateString("vi-VN") : "Chưa cập nhật"}
@@ -187,8 +188,8 @@ const Page = async ({ params }: { params: Params }) => {
                                                         {item.name}
                                                     </h3>
                                                     <div className="text-slate-500 text-xs md:text-sm line-clamp-2">{item.description}</div>
-                                                    <span className="text-xs text-gray-500 mr-2"><CalendarOutlined /> {updatedAt}</span>
-                                                    <span className="text-xs text-gray-500 mt-1"><EyeFilled /> {item.viewCount?.toLocaleString() ?? 0}</span>
+                                                    <span className="text-xs text-gray-500 mr-2"><FontAwesomeIcon icon={faCalendar} /> {updatedAt}</span>
+                                                    <span className="text-xs text-gray-500 mt-1"><FontAwesomeIcon icon={faEye} /> {item.viewCount?.toLocaleString() ?? 0}</span>
                                                 </div>
                                             </div>
                                         </Link>

@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useCartContext } from "@/contexts/cart-context";
-import { FacebookFilled, InstagramFilled, LinkedinFilled, MailOutlined, PhoneFilled, TikTokFilled, UserOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from "next/link";
+import { faFacebook, faInstagram, faLinkedin, faTiktok } from "@fortawesome/free-brands-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Header: React.FC = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -43,22 +45,22 @@ const Header: React.FC = () => {
                 <div className="mx-auto flex container items-center justify-between px-4 py-2">
                     <div className="flex items-center gap-4">
                         <>
-                                <a href="mailto:defzone.net@gmail.com" className="hover:text-slate-900 dark:hover:text-white"><MailOutlined /> defzone.net@gmail.com</a>
-                                <a href="/contact" className="hover:text-slate-900 dark:hover:text-white"><PhoneFilled /> Liên hệ</a>
-                            </>
+                            {/* <a href="mailto:defzone.net@gmail.com" className="hover:text-slate-900 dark:hover:text-white"><MailOutlined /> defzone.net@gmail.com</a> */}
+                            {/* <a href="/contact" className="hover:text-slate-900 dark:hover:text-white"><PhoneFilled /> Liên hệ</a> */}
+                        </>
                     </div>
                     <div className="flex items-center gap-3 text-slate-500 dark:text-slate-300">
                         <a href="https://fb.me/tan.dct" aria-label="Facebook" className="hover:text-blue-600">
-                                <FacebookFilled />
-                            </a>
+                            <FontAwesomeIcon icon={faFacebook} />
+                        </a>
                         <a href="https://www.tiktok.com/@dungaixem" aria-label="TikTok" className="hover:text-sky-500">
-                            <TikTokFilled />
+                              <FontAwesomeIcon icon={faTiktok} />  
                         </a>
                         <a href="https://www.instagram.com/f7deat/" aria-label="Instagram" className="hover:text-red-500">
-                                <InstagramFilled />
-                            </a>
+                            <FontAwesomeIcon icon={faInstagram} />
+                        </a>
                         <a href="https://www.linkedin.com/in/f7deat/" aria-label="LinkedIn" className="hover:text-white transition-colors">
-                            <LinkedinFilled />
+                            <FontAwesomeIcon icon={faLinkedin} />
                         </a>
                     </div>
                 </div>
@@ -77,15 +79,15 @@ const Header: React.FC = () => {
                     </button>
 
                     <Link href="/" className="flex items-center gap-3">
-                       <div className="flex items-center gap-2">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
-                                    {"DE".slice(0, 2).toUpperCase()}
-                                </div>
-                                <div>
-                                    <div className="text-lg font-semibold text-slate-900 dark:text-slate-100">DefZone.Net</div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">Kien thuc cong nghe & giai tri</p>
-                                </div>
+                        <div className="flex items-center gap-2">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
+                                {"DE".slice(0, 2).toUpperCase()}
                             </div>
+                            <div>
+                                <div className="text-lg font-semibold text-slate-900 dark:text-slate-100">DefZone.Net</div>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">Kien thuc cong nghe & giai tri</p>
+                            </div>
+                        </div>
 
                     </Link>
 
@@ -139,7 +141,7 @@ const Header: React.FC = () => {
                             className="hidden h-10 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 md:flex dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
                             aria-label="User profile"
                         >
-                            <UserOutlined />
+                            <FontAwesomeIcon icon={faUser} />
                         </Link>
                     </div>
                 </div>
@@ -151,8 +153,8 @@ const Header: React.FC = () => {
                         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800">
                             <div className="flex items-center gap-2">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
-                                        {"DE".slice(0, 2).toUpperCase()}
-                                    </div>
+                                    {"DE".slice(0, 2).toUpperCase()}
+                                </div>
                                 <span className="text-base font-semibold text-slate-900 dark:text-slate-100">DefZone.Net</span>
                             </div>
                             <button
@@ -195,18 +197,18 @@ const Header: React.FC = () => {
                                 <a href={`mailto:defzone.net@gmail.com`} className="text-sm">defzone.net@gmail.com</a>
                                 <div className="flex items-center gap-3">
                                     <a href="https://www.facebook.com/tan.dct" aria-label="Facebook" className="hover:text-blue-600">
-                                            <FacebookFilled />
-                                        </a>
-                                   <a href="https://twitter.com/f7deat" aria-label="X" className="hover:text-sky-500">
-                                            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                                                <path d="M22 5.92c-.77.35-1.6.58-2.46.69a4.17 4.17 0 0 0 1.83-2.3 8.19 8.19 0 0 1-2.6.99 4.12 4.12 0 0 0-7.1 3.75 11.67 11.67 0 0 1-8.47-4.3 4.12 4.12 0 0 0 1.28 5.5 4.05 4.05 0 0 1-1.86-.51v.05a4.12 4.12 0 0 0 3.3 4.04 4.1 4.1 0 0 1-1.85.07 4.13 4.13 0 0 0 3.85 2.86A8.26 8.26 0 0 1 2 19.54 11.65 11.65 0 0 0 8.29 21c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.35 8.35 0 0 0 22 5.92Z" />
-                                            </svg>
-                                        </a>
+                                        <FontAwesomeIcon icon={faFacebook} />
+                                    </a>
+                                    <a href="https://twitter.com/f7deat" aria-label="X" className="hover:text-sky-500">
+                                        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+                                            <path d="M22 5.92c-.77.35-1.6.58-2.46.69a4.17 4.17 0 0 0 1.83-2.3 8.19 8.19 0 0 1-2.6.99 4.12 4.12 0 0 0-7.1 3.75 11.67 11.67 0 0 1-8.47-4.3 4.12 4.12 0 0 0 1.28 5.5 4.05 4.05 0 0 1-1.86-.51v.05a4.12 4.12 0 0 0 3.3 4.04 4.1 4.1 0 0 1-1.85.07 4.13 4.13 0 0 0 3.85 2.86A8.26 8.26 0 0 1 2 19.54 11.65 11.65 0 0 0 8.29 21c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.35 8.35 0 0 0 22 5.92Z" />
+                                        </svg>
+                                    </a>
                                     <a href="https://www.youtube.com/@f7deat" aria-label="YouTube" className="hover:text-red-500">
-                                            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-                                                <path d="M21.6 7.2s-.2-1.4-.8-2a2.8 2.8 0 0 0-2-.8C16.4 4 12 4 12 4s-4.4 0-6.8.4a2.8 2.8 0 0 0-2 .8c-.6.6-.8 2-.8 2S2 8.8 2 10.3v1.4C2 13.2 2.4 15 2.4 15s.2 1.4.8 2a2.8 2.8 0 0 0 2 .8C7.6 18 12 18 12 18s4.4 0 6.8-.4a2.8 2.8 0 0 0 2-.8c.6-.6.8-2 .8-2s.4-1.8.4-3.3v-1.4c0-1.5-.4-3.3-.4-3.3Zm-11 6.6V8.2l4.8 2.8-4.8 2.8Z" />
-                                            </svg>
-                                        </a>
+                                        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+                                            <path d="M21.6 7.2s-.2-1.4-.8-2a2.8 2.8 0 0 0-2-.8C16.4 4 12 4 12 4s-4.4 0-6.8.4a2.8 2.8 0 0 0-2 .8c-.6.6-.8 2-.8 2S2 8.8 2 10.3v1.4C2 13.2 2.4 15 2.4 15s.2 1.4.8 2a2.8 2.8 0 0 0 2 .8C7.6 18 12 18 12 18s4.4 0 6.8-.4a2.8 2.8 0 0 0 2-.8c.6-.6.8-2 .8-2s.4-1.8.4-3.3v-1.4c0-1.5-.4-3.3-.4-3.3Zm-11 6.6V8.2l4.8 2.8-4.8 2.8Z" />
+                                        </svg>
+                                    </a>
                                 </div>
                             </div>
 
@@ -215,7 +217,7 @@ const Header: React.FC = () => {
                                     href="/user/profile"
                                     className="flex h-10 flex-1 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
                                 >
-                                    <UserOutlined />
+                                    <FontAwesomeIcon icon={faUser} />
                                 </Link>
                                 <Link
                                     href="/shop/cart"

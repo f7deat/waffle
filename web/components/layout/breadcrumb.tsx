@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import "./breadcrumb.css";
-import { HomeFilled } from "@ant-design/icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHome } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
     items?: { label?: string; href: string }[];
@@ -23,7 +24,7 @@ const Breadcrumb: React.FC<Props> = ({ items = [] }) => {
                 >
                     <Link href="/" itemProp="item">
                         <span itemProp="name" className="flex items-center gap-1">
-                            <HomeFilled />
+                            <FontAwesomeIcon icon={faHome} />
                             Trang chủ
                         </span>
                     </Link>

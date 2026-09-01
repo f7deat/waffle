@@ -1,5 +1,6 @@
 ﻿using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Services.Shop.Filters;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Products;
@@ -33,4 +34,5 @@ public interface IProductService
     Task<TResult> SaveImagesAsync(Guid productId, IEnumerable<ProductImage> images);
     Task<IEnumerable<object>> GetTagsAsync(Guid productId);
     Task<TResult> SaveTagsAsync(Guid productId, IEnumerable<Guid> tagIds);
+    Task<ListResult> ListProductsByTagAsync(ProductTagFilterOptions filterOptions);
 }

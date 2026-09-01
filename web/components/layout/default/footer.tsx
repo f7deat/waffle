@@ -1,9 +1,7 @@
-"use client";
-
-import { CaretRightFilled, EnvironmentOutlined, FacebookFilled, InstagramFilled, LinkedinFilled, MailOutlined, PhoneOutlined, TikTokFilled } from "@ant-design/icons";
 import Link from "next/link";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import LanguageSelector from "../language";
-import { useAppContext } from "@/contexts/app-context";
+import { faFacebook, faInstagram, faTiktok, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 const DEFAULT_LINKS = [
     { name: "Trang chủ", href: "/" },
@@ -16,15 +14,12 @@ const DEFAULT_LINKS = [
 ];
 
 const DefaultFooter: React.FC = () => {
-    const { footer } = useAppContext();
 
     const year = new Date().getFullYear();
-    const companyName = footer?.companyName || "DefZone.Net";
-    const email = footer?.email || "defzone.net@gmail.com";
-    const phoneNumber = footer?.phoneNumber || "+84 762 559 696";
-    const address = footer?.address || "Thiên Hương, Thủy Nguyên, Hải Phòng";
-    const social = footer?.social;
-    const links: { href: string; name?: string; target?: string }[] = footer?.links?.length ? footer.links : DEFAULT_LINKS;
+    const companyName = "DefZone.Net";
+    const email = "defzone.net@gmail.com";
+    const phoneNumber = "+84 762 559 696";
+    const address = "Thiên Hương, Thủy Nguyên, Hải Phòng";
 
     return (
         <footer className="border-t border-slate-800 bg-slate-950 text-slate-100">
@@ -40,21 +35,17 @@ const DefaultFooter: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-4 text-slate-300">
-                        {social?.facebookUrl && (
-                            <a href={social.facebookUrl} aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
-                                <FacebookFilled />
+                        <a href={"https://www.facebook.com/defzone.net"} aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
+                                <FontAwesomeIcon icon={faFacebook} />
                             </a>
-                        )}
-                        {social?.instagramUrl && (
-                            <a href={social.instagramUrl} aria-label="Instagram" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
-                                <InstagramFilled />
+                        <a href={"https://www.instagram.com/f7deat/"} aria-label="Instagram" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
+                                <FontAwesomeIcon icon={faInstagram} />
                             </a>
-                        )}
                         <a href="https://www.tiktok.com/@f7deat" aria-label="TikTok" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
-                            <TikTokFilled />
+                            <FontAwesomeIcon icon={faTiktok} />
                         </a>
                         <a href="https://www.linkedin.com/in/f7deat/" aria-label="LinkedIn" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
-                            <LinkedinFilled />
+                            <FontAwesomeIcon icon={faLinkedin} />
                         </a>
                     </div>
                 </div>
@@ -62,18 +53,16 @@ const DefaultFooter: React.FC = () => {
                 <div className="space-y-3">
                     <h3 className="text-base font-semibold text-white">Liên kết nhanh</h3>
                     <nav className="grid grid-cols-2 gap-2 text-sm text-slate-300">
-                        {links.map((item) => (
-                            <Link key={item.href} href={item.href} target={item.target} className="hover:text-white transition-colors"><CaretRightFilled /> {item.name}</Link>
-                        ))}
+                        
                     </nav>
                 </div>
 
                 <div className="space-y-3">
                     <h3 className="text-base font-semibold text-white">Liên hệ</h3>
                     <div className="flex flex-col gap-2 text-sm text-slate-300">
-                        <div><MailOutlined className="mr-1" />Email: <a className="hover:text-white" href={`mailto:${email}`}>{email}</a></div>
-                        <div><PhoneOutlined className="mr-1" />Điện thoại: <a className="hover:text-white" href={`tel:${phoneNumber}`}>{phoneNumber}</a></div>
-                        <div><EnvironmentOutlined className="mr-1" />Địa chỉ: {address}</div>
+                        {/* <div><MailOutlined className="mr-1" />Email: <a className="hover:text-white" href={`mailto:${email}`}>{email}</a></div> */}
+                        {/* <div><PhoneOutlined className="mr-1" />Điện thoại: <a className="hover:text-white" href={`tel:${phoneNumber}`}>{phoneNumber}</a></div> */}
+                        {/* <div><EnvironmentOutlined className="mr-1" />Địa chỉ: {address}</div> */}
                     </div>
                 </div>
 

@@ -23,5 +23,5 @@ export async function apiProductImages(id: string) {
 }
 
 export async function apiProductTags(id: string) {
-    return await request.get<ProductTagItem[]>(`product/tags/${id}`);
+    return await request.get<API.TResult<ProductTagItem[]>>(`product/tags/${id}`);
 }

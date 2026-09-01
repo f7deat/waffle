@@ -2,8 +2,9 @@
 
 import { useAppContext } from "@/contexts/app-context";
 import { apiContactSubmit } from "@/services/contact";
-import { FacebookFilled, InstagramFilled, LinkedinFilled } from "@ant-design/icons";
 import { useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFacebook, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
 const ContactClient: React.FC = () => {
 
@@ -72,13 +73,13 @@ const ContactClient: React.FC = () => {
                             <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3">Follow Us</p>
                             <div className="flex gap-3">
                                 <a href="https://www.facebook.com/defzone.net/" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70 dark:hover:text-blue-400">
-                                    <FacebookFilled />
+                                    <FontAwesomeIcon icon={faFacebook} />
                                 </a>
                                 <a href="https://www.linkedin.com/in/f7deat/" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70 dark:hover:text-blue-400">
-                                    <LinkedinFilled />
+                                    <FontAwesomeIcon icon={faLinkedin} />
                                 </a>
                                 <a href="https://www.instagram.com/f7deat/" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-blue-500/40 dark:hover:bg-slate-800/70 dark:hover:text-blue-400">
-                                    <InstagramFilled />
+                                    <FontAwesomeIcon icon={faInstagram} />
                                 </a>
                             </div>
                         </div>

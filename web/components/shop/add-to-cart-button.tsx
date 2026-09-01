@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AddToCartInput, useCartContext } from "@/contexts/cart-context";
 import { useEffect, useRef, useState } from "react";
 
@@ -47,7 +47,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     return (
         <button type="button" onClick={handleClick} className={className ?? defaultClassName}>
             <span className="flex items-center justify-center gap-2">
-                {added ? <CheckOutlined /> : <ShoppingCartOutlined />}
+                {added ? <FontAwesomeIcon icon="check" /> : <FontAwesomeIcon icon="shopping-cart" />}
                 {added ? addedLabel : label}
             </span>
         </button>

@@ -6,6 +6,7 @@ using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices.Shops;
+using Waffle.Core.Services.Shop.Filters;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Products;
@@ -306,6 +307,11 @@ public class ProductService(IProductRepository _productRepository, IProductLinkR
         {
             return [];
         }
+    }
+
+    public Task<ListResult> ListProductsByTagAsync(ProductTagFilterOptions filterOptions)
+    {
+        throw new NotImplementedException();
     }
 
     private class LegacyProductContent

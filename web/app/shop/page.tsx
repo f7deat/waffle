@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
 import { apiProductCategories, apiProducts, apiProductsByCategory } from "@/services/shop/product";
-import { SearchOutlined } from "@ant-design/icons";
 import ProductList from "./components/product-list";
 import { Metadata } from "next";
 import Link from "next/link";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 
 export const metadata: Metadata = {
     title: "Sản phẩm - Dịch vụ",
@@ -64,6 +65,7 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
                                     <input type="hidden" name="category" value={selectedCategory} />
                                 ) : null}
                                 <button type="submit" className="text-slate-800 px-3" aria-label="Tìm kiếm sản phẩm">
+                                    <FontAwesomeIcon icon={faSearch} />
                                 </button>
                                 <input
                                     type="text"

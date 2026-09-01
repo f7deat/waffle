@@ -2,10 +2,13 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useMemo, useState } from "react";
-import { CameraOutlined, CloseOutlined, LeftOutlined, LoadingOutlined, ReloadOutlined, RightOutlined, SearchOutlined } from "@ant-design/icons";
 import PageContainer from "@/components/layout/page-container";
 import { apiGetAlbumPhotos } from "@/services/album";
 import { AlbumPhoto } from "@/typings/album";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCamera } from "@fortawesome/free-solid-svg-icons/faCamera";
+import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
+import { faArrowLeft, faArrowRight, faSpinner, faSync, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 type AlbumItem = AlbumPhoto & {
 	id: string;
@@ -108,7 +111,7 @@ const AlbumPage = () => {
 					<div className="relative flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
 						<div className="space-y-2">
 							<p className="inline-flex w-fit items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-amber-800">
-								<CameraOutlined /> Thư viện ảnh
+								<FontAwesomeIcon icon={faCamera} /> Thư viện ảnh
 							</p>
 							<h1 className="text-2xl font-bold text-slate-900 md:text-3xl">Album khoảnh khắc DefZone</h1>
 							<p className="max-w-2xl text-sm text-slate-600 md:text-base">
@@ -132,7 +135,7 @@ const AlbumPage = () => {
 				<section className="rounded-2xl bg-white p-4 shadow-sm md:p-5">
 					<div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
 						<div className="relative w-full md:w-80">
-							<SearchOutlined className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+							<FontAwesomeIcon icon={faSearch} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
 							<input
 								type="text"
 								value={keyword}
@@ -147,7 +150,7 @@ const AlbumPage = () => {
 							onClick={loadPhotos}
 							className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-amber-300 hover:bg-amber-50"
 						>
-							<ReloadOutlined /> Làm mới
+							<FontAwesomeIcon icon={faSync} /> Làm mới
 						</button>
 					</div>
 
@@ -172,7 +175,7 @@ const AlbumPage = () => {
 				{isLoading ? (
 					<div className="flex min-h-56 items-center justify-center rounded-2xl bg-white p-6 text-slate-500 shadow-sm">
 						<p className="inline-flex items-center gap-2 text-sm font-medium">
-							<LoadingOutlined spin /> Đang tải album...
+							<FontAwesomeIcon icon={faSpinner} spin /> Đang tải album...
 						</p>
 					</div>
 				) : errorMessage ? (
@@ -183,7 +186,7 @@ const AlbumPage = () => {
 							onClick={loadPhotos}
 							className="mt-3 inline-flex items-center gap-2 rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700"
 						>
-							<ReloadOutlined /> Thử lại
+							<FontAwesomeIcon icon={faSync} /> Thử lại
 						</button>
 					</div>
 				) : filteredPhotos.length === 0 ? (
@@ -229,7 +232,7 @@ const AlbumPage = () => {
 						className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white transition hover:bg-black/70"
 						aria-label="Đóng"
 					>
-						<CloseOutlined />
+						<FontAwesomeIcon icon={faTimes} />
 					</button>
 
 					<button
@@ -238,7 +241,7 @@ const AlbumPage = () => {
 						className="absolute left-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white transition hover:bg-black/70 md:left-6"
 						aria-label="Ảnh trước"
 					>
-						<LeftOutlined />
+						<FontAwesomeIcon icon={faArrowLeft} />
 					</button>
 
 					<div className="w-full max-w-5xl overflow-hidden rounded-xl border border-white/20 bg-black/30">
@@ -253,7 +256,7 @@ const AlbumPage = () => {
 								onClick={goNext}
 								className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-3 py-1.5 text-sm font-semibold transition hover:bg-white/10"
 							>
-								Tiếp <RightOutlined />
+								Tiếp <FontAwesomeIcon icon={faArrowRight} />
 							</button>
 						</div>
 					</div>
@@ -264,7 +267,7 @@ const AlbumPage = () => {
 						className="absolute right-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white transition hover:bg-black/70 md:right-6"
 						aria-label="Ảnh kế tiếp"
 					>
-						<RightOutlined />
+						<FontAwesomeIcon icon={faArrowRight} />
 					</button>
 				</div>
 			)}

@@ -1,8 +1,9 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import { FireFilled } from "@ant-design/icons";
 import { useMemo, useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFire } from "@fortawesome/free-solid-svg-icons";
 
 type ProductGalleryProps = {
     imageSources: string[];
@@ -44,7 +45,7 @@ const ProductGallery = ({
             <div className="group relative overflow-hidden rounded-[2rem] border border-slate-300/80 bg-white/90 backdrop-blur-sm">
                 <div className="absolute left-5 top-5 z-20 flex flex-wrap gap-2">
                     <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 backdrop-blur dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200">
-                        Đang Hot <FireFilled className="text-orange-500" />
+                        Đang Hot <FontAwesomeIcon icon={faFire} className="text-orange-500" />
                     </span>
                     {unitInStock !== undefined && unitInStock > 0 && (
                         <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">

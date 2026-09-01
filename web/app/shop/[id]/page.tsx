@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
 import AddToCartButton from "@/components/shop/add-to-cart-button";
-import { apiProductDetail } from "@/services/shop/product";
+import { apiProductDetail, apiProductTags } from "@/services/shop/product";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import LatestProducts from "./latest-products";
 import BlockRender from "@/components/editor/block-render";
 import ProductGallery from "./product-gallery";
-import { ArrowLeftOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import dayjs from "dayjs";
+import { faArrowLeft, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -58,6 +59,9 @@ const Page = async ({ params }: PageProps) => {
 
     const localePrice = (value?: number | null) =>
         typeof value === "number" ? `${value.toLocaleString("vi-VN")}đ` : "Liên hệ";
+
+    const tagsResponse = await apiProductTags(product.id);
+    const tags = tagsResponse.data || [];
 
     return (
         <PageContainer breadcrumbs={[
@@ -169,9 +173,9 @@ const Page = async ({ params }: PageProps) => {
                                     href={product.affiliateLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group relative overflow-hidden btn btn-primary text-center"
+                                    className="group relative overflow-hidden btn btn-primary text-center bg-gradient-to-r from-slate-800 to-slate-700 px-8 py-5 text-lg font-bold text-white transition hover:-translate-y-0.5 hover:from-slate-900 hover:to-slate-800 active:scale-[0.98] dark:from-slate-100 dark:to-slate-300 dark:text-slate-900 dark:hover:from-white dark:hover:to-slate-200"
                                 >
-                                    <ShoppingCartOutlined /> Mua ngay
+                                    <FontAwesomeIcon icon={faShoppingCart} /> Mua ngay
                                     <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition group-hover:translate-x-full group-hover:duration-1000"></div>
                                 </a>
                             ) : product.price ? (
@@ -199,7 +203,7 @@ const Page = async ({ params }: PageProps) => {
                                 className="group rounded-lg border border-slate-300 bg-white px-8 py-2 text-center font-semibold text-slate-700 transition hover:border-amber-500 hover:bg-amber-50 hover:text-amber-700"
                             >
                                 <span className="flex items-center justify-center gap-2">
-                                    <ArrowLeftOutlined />
+                                    <FontAwesomeIcon icon={faArrowLeft} />
                                     Xem thêm sản phẩm khác
                                 </span>
                             </Link>
@@ -208,6 +212,19 @@ const Page = async ({ params }: PageProps) => {
                 </div>
                 <div className="mt-12 rounded-lg p-4 bg-white backdrop-blur">
                     <BlockRender {...product.content} />
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                        {tags.map((tag) => (
+                            <Link
+                                key={tag.id}
+                                href={`/shop/tags/${tag.normalizedName}`}
+                                className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-amber-500 hover:bg-amber-50 hover:text-amber-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-amber-500 dark:hover:bg-amber-50 dark:hover:text-amber-700"
+                            >
+                                {tag.name}
+                            </Link>
+                        ))}
+                    </div>
+
                     <div className="mt-4 text-sm text-slate-500 dark:text-slate-400">
                         <div>
                             Ngày cập nhật: {dayjs(product.modifiedDate || product.createdDate).format("DD/MM/YYYY HH:mm")}
@@ -215,7 +232,7 @@ const Page = async ({ params }: PageProps) => {
                         <div>
                             Lượt xem: {product.viewCount?.toLocaleString()}
                         </div>
-                        </div>
+                    </div>
                 </div>
 
                 {/* Latest Products */}

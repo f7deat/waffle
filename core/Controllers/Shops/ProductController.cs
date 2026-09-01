@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.IServices.Shops;
+using Waffle.Core.Services.Shop.Filters;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 
@@ -55,8 +56,11 @@ public class ProductController(IProductService _productService) : BaseController
     public async Task<IActionResult> SaveImagesAsync([FromRoute] Guid id, [FromBody] IEnumerable<ProductImage> images)
         => Ok(await _productService.SaveImagesAsync(id, images));
 
-    [HttpGet("tags/{id}")]
-    public async Task<IActionResult> ListTagsAsync([FromRoute] Guid id) => Ok(await _productService.GetTagsAsync(id));
+    [HttpGet("tags/{id}"), AllowAnonymous]
+    public async Task<IActionResult> ListTagsAsync([FromRoute] Guid id) => Ok(TResult.Ok(await _productService.GetTagsAsync(id)));
+
+    [HttpGet("tags/products"), AllowAnonymous]
+    public async Task<IActionResult> ListProductsByTagAsync([FromQuery] ProductTagFilterOptions filterOptions) => Ok(await _productService.ListProductsByTagAsync(filterOptions));
 
     [HttpPost("save-tags/{id}")]
     public async Task<IActionResult> SaveTagsAsync([FromRoute] Guid id, [FromBody] IEnumerable<Guid> tagIds)

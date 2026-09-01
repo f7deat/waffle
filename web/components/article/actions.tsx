@@ -2,10 +2,12 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { SoundOutlined, PauseOutlined, PlayCircleOutlined, StopOutlined, BookOutlined, HeartOutlined, CheckOutlined, FacebookFilled, TwitterOutlined, TagsOutlined } from "@ant-design/icons";
 import { apiCatalogTags } from "@/services/catalog";
 import { ArticleDetail } from "@/services/typings/article";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { EditorJSListData, EditorJSParagraphData } from "@/services/typings/editorjs";
+import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faBookmark, faCheck, faHeart, faPause, faPlayCircle, faStop, faTags, faVolumeUp } from "@fortawesome/free-solid-svg-icons";
 
 interface ArticleActionsProps {
   article: ArticleDetail;
@@ -134,44 +136,44 @@ const ArticleActions: React.FC<ArticleActionsProps> = ({ article }) => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2">
         <button onClick={shareFacebook} className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">
-          <FacebookFilled /> Chia sẻ
+          <FontAwesomeIcon icon={faFacebook} /> Chia sẻ
         </button>
         <button onClick={shareX} className="inline-flex items-center gap-2 rounded-lg bg-black px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:opacity-90">
-          <TwitterOutlined /> Đăng lên X
+          <FontAwesomeIcon icon={faTwitter} /> Đăng lên X
         </button>
         <div className="mx-2 h-6 w-px bg-gray-200" />
         {!isReading ? (
           <button onClick={speak} className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700">
-            <SoundOutlined /> Đọc bài
+            <FontAwesomeIcon icon={faVolumeUp} /> Đọc bài
           </button>
         ) : (
           <div className="inline-flex items-center gap-2">
             {isPaused ? (
               <button onClick={resume} className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 px-3 py-1.5 text-sm font-semibold text-emerald-700 hover:bg-emerald-50">
-                <PlayCircleOutlined /> Tiếp tục
+                <FontAwesomeIcon icon={faPlayCircle} /> Tiếp tục
               </button>
             ) : (
               <button onClick={pause} className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 px-3 py-1.5 text-sm font-semibold text-emerald-700 hover:bg-emerald-50">
-                <PauseOutlined /> Tạm dừng
+                <FontAwesomeIcon icon={faPause} /> Tạm dừng
               </button>
             )}
             <button onClick={stop} className="inline-flex items-center gap-2 rounded-lg border border-rose-200 px-3 py-1.5 text-sm font-semibold text-rose-700 hover:bg-rose-50">
-              <StopOutlined /> Dừng
+              <FontAwesomeIcon icon={faStop} /> Dừng
             </button>
           </div>
         )}
         <div className="mx-2 h-6 w-px bg-gray-200" />
         <button onClick={handleBookmark} className="inline-flex items-center gap-2 rounded-lg border border-indigo-200 px-3 py-1.5 text-sm font-semibold text-indigo-700 hover:bg-indigo-50">
-          {bookmarked ? <CheckOutlined /> : <BookOutlined />} {bookmarked ? "Đã lưu" : "Lưu"}
+          {bookmarked ? <FontAwesomeIcon icon={faCheck} /> : <FontAwesomeIcon icon={faBookmark} />} {bookmarked ? "Đã lưu" : "Lưu"}
         </button>
         <button onClick={handleFavorite} className="inline-flex items-center gap-2 rounded-lg border border-pink-200 px-3 py-1.5 text-sm font-semibold text-pink-700 hover:bg-pink-50">
-          {favorited ? <CheckOutlined /> : <HeartOutlined />} {favorited ? "Đã thích" : "Yêu thích"}
+          {favorited ? <FontAwesomeIcon icon={faCheck} /> : <FontAwesomeIcon icon={faHeart} />} {favorited ? "Đã thích" : "Yêu thích"}
         </button>
       </div>
 
       {(loadingTags || tags.length > 0) && (
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700"><TagsOutlined /> Tags:</span>
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700"><FontAwesomeIcon icon={faTags} /> Tags:</span>
           {loadingTags ? (
             <span className="text-sm text-gray-500">Đang tải...</span>
           ) : (

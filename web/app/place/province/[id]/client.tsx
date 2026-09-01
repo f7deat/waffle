@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Link from "next/link";
-import { SearchOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 interface PlacesByProvinceClientProps {
   provinceId: number;
@@ -181,7 +182,7 @@ export default function PlacesByProvinceClient({
               type="submit"
               className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
             >
-              <SearchOutlined /> Tìm
+              <FontAwesomeIcon icon={faSearch} /> Tìm
             </button>
           </form>
         </div>
