@@ -45,7 +45,12 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
     const selectedCategoryName = categories.find((x) => x.normalizedName === selectedCategory)?.name;
 
     return (
-        <PageContainer>
+        <PageContainer breadcrumbs={[
+            {
+                label: 'Cửa hàng',
+                href: '/shop'
+            }
+        ]}>
             <div className="bg-slate-100 p-4 rounded-xl">
                 <div className="mb-4 bg-white rounded-lg p-4">
                     <div className="flex flex-col gap-3 md:flex-row md:items-center">
@@ -59,7 +64,6 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
                                     <input type="hidden" name="category" value={selectedCategory} />
                                 ) : null}
                                 <button type="submit" className="text-slate-800 px-3" aria-label="Tìm kiếm sản phẩm">
-                                    <SearchOutlined />
                                 </button>
                                 <input
                                     type="text"

@@ -73,7 +73,7 @@ const ArticlePage: React.FC = () => {
       )
     },
     {
-      title: <EyeOutlined />,
+      title: 'Lượt xem',
       dataIndex: "viewCount",
       key: "viewCount",
       width: 80,

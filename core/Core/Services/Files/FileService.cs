@@ -11,7 +11,6 @@ using Waffle.Data;
 using Waffle.Entities.Files;
 using Waffle.ExternalAPI.Models;
 using Waffle.Models;
-using Waffle.Models.Result;
 
 namespace Waffle.Core.Services.Files;
 

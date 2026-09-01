@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { DistrictSection } from "./home";
 import { apiArticleList, apiArticleRandoms } from "@/services/article";
 import { apiProducts } from "@/services/shop/product";
 import { apiTagRandoms } from "@/services/contents/tag";
@@ -7,9 +6,7 @@ import { apiPlaceList } from "@/services/locations/place";
 import { apiKolList } from "@/services/kol/kol";
 import { apiGetSiteSetting } from "@/services/setting";
 import { Metadata } from "next";
-import { EyeFilled } from "@ant-design/icons";
 import ShinecHome from "@/components/home/shinec";
-import { getThemeKey, THEME_NAME } from "@/config/theme";
 import { apiGetPublishedHomePage } from "@/services/website-page";
 import WebsitePageRenderer from "@/components/website-builder/page-renderer";
 
@@ -66,14 +63,6 @@ export default async function Home() {
     image: place.thumbnail,
     districtId: place.districtId,
   }));
-
-  const cardStyle = (url: string) => ({
-    backgroundImage: `url(${url})`,
-  });
-
-  if (getThemeKey(settings?.theme) === THEME_NAME.SHINEC) {
-    return <ShinecHome articles={articles} />;
-  }
 
   return (
     <main className="bg-slate-100">

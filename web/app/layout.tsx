@@ -4,9 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { AppProvider } from "@/contexts/app-context";
 import AppShell from "@/components/layout/app-shell";
-import { apiGetFooterSetting, apiGetHeaderSetting, apiGetSiteSetting } from "@/services/setting";
-import { apiGetMenuList } from "@/services/menu";
-import { getThemeKey, getThemeStylesheetHref } from "@/config/theme";
+import { apiGetSiteSetting } from "@/services/setting";
 
 const quicksand = Quicksand({
   subsets: ['latin'],
@@ -24,20 +22,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [initialSettings, initialHeader, initialFooter, initialMenu] = await Promise.all([
+  const [initialSettings] = await Promise.all([
     apiGetSiteSetting(),
-    apiGetHeaderSetting(),
-    apiGetFooterSetting(),
-    apiGetMenuList(),
   ]);
 
-  const initialThemeKey = getThemeKey(initialSettings?.theme);
-  const initialThemeStylesheetHref = getThemeStylesheetHref(initialThemeKey);
 
   return (
-    <html lang="en" data-scroll-behavior="smooth" data-theme={initialThemeKey.toLowerCase()}>
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
-        <link id="app-theme-css" rel="stylesheet" href={initialThemeStylesheetHref} data-theme-link="true" />
         <Script
           strategy="afterInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1430352774694606"
@@ -46,12 +38,7 @@ export default async function RootLayout({
         />
       </head>
       <body style={quicksand.style}>
-        <AppProvider
-          initialSettings={initialSettings}
-          initialHeader={initialHeader}
-          initialFooter={initialFooter}
-          initialMenu={initialMenu}
-        >
+        <AppProvider initialSettings={initialSettings}>
           <AppShell>{children}</AppShell>
         </AppProvider>
       </body>

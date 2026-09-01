@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import "./breadcrumb.css";
 import { HomeFilled } from "@ant-design/icons";

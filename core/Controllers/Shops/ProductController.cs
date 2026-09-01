@@ -55,7 +55,7 @@ public class ProductController(IProductService _productService) : BaseController
     public async Task<IActionResult> SaveImagesAsync([FromRoute] Guid id, [FromBody] IEnumerable<ProductImage> images)
         => Ok(await _productService.SaveImagesAsync(id, images));
 
-    [HttpGet("{id}/tags")]
+    [HttpGet("tags/{id}")]
     public async Task<IActionResult> ListTagsAsync([FromRoute] Guid id) => Ok(await _productService.GetTagsAsync(id));
 
     [HttpPost("save-tags/{id}")]
