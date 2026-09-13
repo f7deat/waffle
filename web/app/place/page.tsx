@@ -4,7 +4,8 @@ import { apiPlaceList } from "@/services/locations/place";
 import { apiKolList } from "@/services/kol/kol";
 import Link from "next/link";
 import { Metadata } from "next";
-import { ArrowLeftOutlined, ArrowRightOutlined, EnvironmentOutlined, SearchOutlined } from "@ant-design/icons";
+import { faArrowLeft, faArrowRight, faMapMarkerAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type SearchParams = Promise<{
 	page?: string;
@@ -138,7 +139,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 								type="submit"
 								className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
 							>
-								<SearchOutlined /> Tìm kiếm
+								<FontAwesomeIcon icon={faSearch} /> Tìm kiếm
 							</button>
 						</form>
 					</div>
@@ -188,7 +189,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 												<h2 className="text-lg font-semibold text-slate-900 line-clamp-2">{place.name}</h2>
 											</Link>
 											<p className="text-sm text-slate-600 line-clamp-2">
-												<EnvironmentOutlined className="mr-1" />
+												<FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" />
 												<Link href={`/district/${place.districtId}`}>{place.districtName}</Link>, {place.provinceName}
 											</p>
 											<div className="mt-auto flex items-center gap-3 text-xs text-slate-500">
@@ -216,14 +217,14 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 										aria-disabled={current === 1}
 										className={`rounded-lg px-3 py-2 font-semibold transition ${current === 1 ? "cursor-not-allowed bg-slate-100 text-slate-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
 									>
-										<ArrowLeftOutlined /> Trước
+										<FontAwesomeIcon icon={faArrowLeft} /> Trước
 									</Link>
 									<Link
 										href={buildPageHref(Math.min(totalPages, current + 1))}
 										aria-disabled={current === totalPages}
 										className={`rounded-lg px-3 py-2 text-white font-semibold transition ${current === totalPages ? "cursor-not-allowed bg-slate-100 text-slate-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
 									>
-										Sau <ArrowRightOutlined />
+										<FontAwesomeIcon icon={faArrowRight} /> Sau
 									</Link>
 								</div>
 							</div>

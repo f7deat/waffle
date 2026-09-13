@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import Link from "next/link";
-import { SearchOutlined } from "@ant-design/icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface SearchClientProps {
   q: string;
@@ -94,7 +95,7 @@ export default function SearchClient({
             type="submit"
             className="rounded-lg bg-blue-600 px-5 py-2 font-semibold text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
           >
-            <SearchOutlined /> Tìm kiếm
+            <FontAwesomeIcon icon={faSearch} /> Tìm kiếm
           </button>
         </div>
       </form>

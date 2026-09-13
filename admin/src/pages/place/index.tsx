@@ -2,10 +2,11 @@ import { apiDistrictOptions } from "@/services/locations/district";
 import { apiPlaceCreate, apiPlaceDelete, apiPlaceDetails, apiPlaceList, apiPlaceUpdate, IPlaceListItem } from "@/services/locations/place";
 import { apiProvinceOptions } from "@/services/locations/province";
 import { apiInfluencerOptions } from "@/services/user";
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
+import { CalendarOutlined, DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import { ActionType, ModalForm, PageContainer, ProColumns, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea, ProTable } from "@ant-design/pro-components"
 import { Link } from "@umijs/max";
 import { Button, Popconfirm, message } from "antd";
+import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 
 const EMPTY_CONTENT = {
@@ -59,7 +60,19 @@ const Index: React.FC = () => {
         {
             title: 'Name',
             dataIndex: 'name',
-            render: (text, record) => <Link to={`/place/center/${record.id}`}>{text}</Link>,
+            render: (text, record) => (
+                <div className="flex items-center gap-2">
+                    <div className="w-24 h-24 rounded">
+                        <img src={record.thumbnail} alt={record.name} className="w-full h-full object-cover rounded" />
+                    </div>
+                    <div className="flex-1">
+                        <div><Link to={`/place/center/${record.id}`}>{text}</Link></div>
+                        <div className="text-gray-500">
+                            <CalendarOutlined className="mr-1" /> {dayjs(record.modifiedDate).format('YYYY-MM-DD HH:mm:ss')}
+                        </div>
+                    </div>
+                </div>
+            ),
         },
         {
             title: 'Address',
@@ -75,14 +88,6 @@ const Index: React.FC = () => {
             title: 'Province',
             dataIndex: 'provinceName',
             search: false,
-        },
-        {
-            title: 'Last Updated',
-            dataIndex: 'modifiedDate',
-            valueType: 'dateTime',
-            width: 180,
-            search: false,
-            sorter: true,
         },
         {
             title: <SettingOutlined />,

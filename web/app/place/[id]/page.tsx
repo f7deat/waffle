@@ -4,10 +4,11 @@ import PlaceDetail from './client';
 import { apiPlaceDetail, apiPlaceList, apiPlaceRandom } from '@/services/locations/place';
 import PageContainer from '@/components/layout/page-container';
 import Link from 'next/link';
-import { CalendarOutlined, EnvironmentOutlined, EyeOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { apiShopeeBaseInfoAndLinks } from '@/services/apps/shopee';
 import PlaceComments from '@/components/place/place-comments';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendar, faEye, faMapLocation, faMapMarker } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -78,7 +79,9 @@ const Page: React.FC<Props> = async ({ params }) => {
                             <h1 className="text-3xl font-bold mb-3">{place.name}</h1>
                             <div className="space-y-2 text-sm text-gray-600">
                                 <div className="flex items-center">
-                                    <span className="font-semibold w-24"><EnvironmentOutlined /> Địa chỉ:</span>
+                                    <span className="font-semibold w-24">
+                                        <FontAwesomeIcon icon={faMapMarker} className="mr-1" />
+                                        Địa chỉ:</span>
                                     <span>{place.address},
                                         <Link href={`/district/${place.districtId}`} className="ml-1 text-blue-600 hover:underline">{place.districtName}</Link>
                                         ,
@@ -86,11 +89,15 @@ const Page: React.FC<Props> = async ({ params }) => {
                                     </span>
                                 </div>
                                 <div className="flex items-center">
-                                    <span className="font-semibold w-24"><EyeOutlined /> Lượt xem:</span>
+                                    <span className="font-semibold w-24">
+                                        <FontAwesomeIcon icon={faEye} className="mr-1" />
+                                        Lượt xem:</span>
                                     <span>{place.viewCount?.toLocaleString()}</span>
                                 </div>
                                 <div className="flex items-center">
-                                    <span className="font-semibold w-24"><CalendarOutlined /> Cập nhật:</span>
+                                    <span className="font-semibold w-24">
+                                        <FontAwesomeIcon icon={faCalendar} className="mr-1" />
+                                        Cập nhật:</span>
                                     <span>{dayjs(place.modifiedDate).format('DD-MM-YYYY HH:mm')}</span>
                                 </div>
                             </div>
@@ -174,7 +181,7 @@ const Page: React.FC<Props> = async ({ params }) => {
                                             </h3>
                                             <div className='text-slate-500 text-sm'>{randomPlace.description}</div>
                                             <p className="text-sm text-slate-500">
-                                                <EnvironmentOutlined /> {randomPlace.districtName}, {randomPlace.provinceName} <EyeOutlined /> {randomPlace.viewCount?.toLocaleString()}
+                                                <FontAwesomeIcon icon={faMapMarker} className="mr-1" /> {randomPlace.districtName}, {randomPlace.provinceName} <FontAwesomeIcon icon={faEye} className="mr-1" /> {randomPlace.viewCount?.toLocaleString()}
                                             </p>
                                         </div>
                                     </div>
@@ -203,7 +210,7 @@ const Page: React.FC<Props> = async ({ params }) => {
                                                     {relatedPlace.name}
                                                 </h3>
                                                 <p className="text-sm text-gray-600 line-clamp-1">
-                                                    {relatedPlace.districtName} <EyeOutlined /> {relatedPlace.viewCount?.toLocaleString()}
+                                                    <FontAwesomeIcon icon={faMapLocation} className="mr-1" /> {relatedPlace.districtName} <FontAwesomeIcon icon={faEye} className="mr-1" /> {relatedPlace.viewCount?.toLocaleString()}
                                                 </p>
                                             </div>
                                         </div>

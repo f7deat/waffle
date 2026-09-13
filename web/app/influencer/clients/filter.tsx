@@ -1,6 +1,7 @@
 "use client";
 
-import { SearchOutlined } from "@ant-design/icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 const InfluencerFilter: React.FC = () => {
@@ -43,7 +44,7 @@ const InfluencerFilter: React.FC = () => {
                         onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <SearchOutlined className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <FontAwesomeIcon icon={faSearch} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
                 <button
                     onClick={handleSearch}

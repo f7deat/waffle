@@ -2,9 +2,10 @@
 
 import PageContainer from "@/components/layout/page-container";
 import { Button, Form, Input, notification } from "antd";
-import { LockOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 import { apiMemberRegister } from "@/services/user/member";
 import Link from "next/link";
+import { faEnvelope, faLock, faPhone, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type RegisterValues = {
     userName: string;
@@ -78,7 +79,7 @@ const Page: React.FC = () => {
                             >
                                 <Input
                                     size="large"
-                                    prefix={<UserOutlined className="text-slate-400" />}
+                                    prefix={<FontAwesomeIcon icon={faUser} className="text-slate-400" />}
                                     placeholder="Tên đăng nhập"
                                     className="rounded-lg"
                                 />
@@ -94,7 +95,7 @@ const Page: React.FC = () => {
                             >
                                 <Input
                                     size="large"
-                                    prefix={<MailOutlined className="text-slate-400" />}
+                                    prefix={<FontAwesomeIcon icon={faEnvelope} className="text-slate-400" />}
                                     placeholder="Email của bạn"
                                     className="rounded-lg"
                                 />
@@ -106,7 +107,7 @@ const Page: React.FC = () => {
                             >
                                 <Input
                                     size="large"
-                                    prefix={<PhoneOutlined className="text-slate-400" />}
+                                    prefix={<FontAwesomeIcon icon={faPhone} className="text-slate-400" />}
                                     placeholder="Số điện thoại (tùy chọn)"
                                     className="rounded-lg"
                                 />
@@ -122,7 +123,7 @@ const Page: React.FC = () => {
                             >
                                 <Input.Password
                                     size="large"
-                                    prefix={<LockOutlined className="text-slate-400" />}
+                                    prefix={<FontAwesomeIcon icon={faLock} className="text-slate-400" />}
                                     placeholder="Mật khẩu"
                                     className="rounded-lg"
                                 />
@@ -146,7 +147,7 @@ const Page: React.FC = () => {
                             >
                                 <Input.Password
                                     size="large"
-                                    prefix={<LockOutlined className="text-slate-400" />}
+                                    prefix={<FontAwesomeIcon icon={faLock} className="text-slate-400" />}
                                     placeholder="Xác nhận mật khẩu"
                                     className="rounded-lg"
                                 />

@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
 import Link from "next/link";
-import { SearchOutlined } from "@ant-design/icons";
 import { apiProductCategories } from "@/services/shop/product";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface PageProps {
     searchParams?: Promise<{
@@ -50,7 +51,7 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
                         <form action="/shop/category" className="w-full md:max-w-sm">
                             <div className="flex items-center rounded-xl border border-slate-200 bg-slate-50 px-2">
                                 <button type="submit" aria-label="Tìm kiếm danh mục" className="px-2 text-slate-500">
-                                    <SearchOutlined />
+                                    <FontAwesomeIcon icon={faSearch} />
                                 </button>
                                 <input
                                     name="q"

@@ -1,9 +1,10 @@
 import PageContainer from "@/components/layout/page-container";
 import { apiKolList } from "@/services/kol/kol";
-import { CheckCircleFilled, StarFilled, UserOutlined } from "@ant-design/icons";
 import { Metadata } from "next";
 import Link from "next/link";
 import InfluencerFilter from "./clients/filter";
+import { faCheckCircle, faStar, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export async function generateMetadata(): Promise<Metadata> {
     return {
@@ -75,15 +76,15 @@ const Page: React.FC = async () => {
                             </p>
                             <ul className="space-y-2 text-sm text-blue-50">
                                 <li className="flex items-center gap-2">
-                                    <CheckCircleFilled className="text-white" />
+                                    <FontAwesomeIcon icon={faStar} className="text-white" />
                                     <span>Tiếp cận hàng ngàn thương hiệu tiềm năng</span>
                                 </li>
                                 <li className="flex items-center gap-2">
-                                    <CheckCircleFilled className="text-white" />
+                                    <FontAwesomeIcon icon={faUser} className="text-white" />
                                     <span>Quản lý profile và chiến dịch dễ dàng</span>
                                 </li>
                                 <li className="flex items-center gap-2">
-                                    <CheckCircleFilled className="text-white" />
+                                    <FontAwesomeIcon icon={faCheckCircle} className="text-white" />
                                     <span>Nhận thanh toán nhanh chóng và bảo mật</span>
                                 </li>
                             </ul>
@@ -117,11 +118,11 @@ const Page: React.FC = async () => {
                                         />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center">
-                                            <UserOutlined className="text-6xl text-white" />
+                                            <FontAwesomeIcon icon={faUser} className="text-6xl text-white" />
                                         </div>
                                     )}
                                     <div className="absolute top-2 right-2 bg-white rounded-full w-6 h-6 flex items-center justify-center">
-                                        <CheckCircleFilled className="text-blue-600 text-xl" />
+                                        <FontAwesomeIcon icon={faCheckCircle} className="text-blue-600 text-xl" />
                                     </div>
                                 </div>
 
@@ -145,13 +146,13 @@ const Page: React.FC = async () => {
                                     {/* Stats */}
                                     <div className="flex items-center justify-between mb-3 text-sm">
                                         <div className="flex items-center gap-1 text-gray-600">
-                                            <UserOutlined />
+                                            <FontAwesomeIcon icon={faUser} />
                                             <span className="font-semibold">
                                                 {formatFollowers(influencer.followers)}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-1 text-yellow-500">
-                                            <StarFilled />
+                                            <FontAwesomeIcon icon={faStar} />
                                             <span className="font-semibold text-gray-900">
                                                 {influencer.rating.toFixed(1)}
                                             </span>

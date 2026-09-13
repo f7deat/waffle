@@ -3,9 +3,11 @@
 import PageContainer from "@/components/layout/page-container";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Checkbox, Form, Input, notification } from "antd";
-import { GoogleOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
 import Script from "next/script";
 import { apiGoogleSignInToken, apiPasswordSignIn } from "@/services/user/user";
+import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 type GoogleCredentialResponse = {
     credential?: string;
@@ -175,7 +177,7 @@ const Page: React.FC = () => {
                             >
                                 <Input
                                     size="large"
-                                    prefix={<UserOutlined className="text-slate-400" />}
+                                    prefix={<FontAwesomeIcon icon={faUser} className="text-slate-400" />}
                                     placeholder="Tài khoản hoặc email"
                                     className="rounded-lg"
                                 />
@@ -188,7 +190,7 @@ const Page: React.FC = () => {
                             >
                                 <Input.Password
                                     size="large"
-                                    prefix={<LockOutlined className="text-slate-400" />}
+                                    prefix={<FontAwesomeIcon icon={faLock} className="text-slate-400" />}
                                     placeholder="••••••••"
                                     className="rounded-lg"
                                 />
@@ -219,7 +221,7 @@ const Page: React.FC = () => {
                                         size="large"
                                         block
                                         loading
-                                        icon={<GoogleOutlined />}
+                                        icon={<FontAwesomeIcon icon={faGoogle} />}
                                         className="rounded-lg"
                                     >
                                         Đang xác thực Google...

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import LanguageSelector from "../language";
 import { faFacebook, faInstagram, faTiktok, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faCaretRight, faEnvelope, faMapLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 const DEFAULT_LINKS = [
     { name: "Trang chủ", href: "/" },
@@ -36,11 +37,11 @@ const DefaultFooter: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-4 text-slate-300">
                         <a href={"https://www.facebook.com/defzone.net"} aria-label="Facebook" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
-                                <FontAwesomeIcon icon={faFacebook} />
-                            </a>
+                            <FontAwesomeIcon icon={faFacebook} />
+                        </a>
                         <a href={"https://www.instagram.com/f7deat/"} aria-label="Instagram" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
-                                <FontAwesomeIcon icon={faInstagram} />
-                            </a>
+                            <FontAwesomeIcon icon={faInstagram} />
+                        </a>
                         <a href="https://www.tiktok.com/@f7deat" aria-label="TikTok" className="hover:text-white transition-colors border rounded-lg h-10 w-10 flex items-center justify-center border-slate-700">
                             <FontAwesomeIcon icon={faTiktok} />
                         </a>
@@ -53,16 +54,22 @@ const DefaultFooter: React.FC = () => {
                 <div className="space-y-3">
                     <h3 className="text-base font-semibold text-white">Liên kết nhanh</h3>
                     <nav className="grid grid-cols-2 gap-2 text-sm text-slate-300">
-                        
+                        <Link href="/" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Trang chủ</Link>
+                        <Link href="/article" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Bài viết</Link>
+                        <Link href="/wiki" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Wiki</Link>
+                        <Link href="/shop" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Cửa hàng</Link>
+                        <Link href="/contact" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Liên hệ</Link>
+                        <Link href="/influencer" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Influencers</Link>
+                        <Link href="/album" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Album</Link>
                     </nav>
                 </div>
 
                 <div className="space-y-3">
                     <h3 className="text-base font-semibold text-white">Liên hệ</h3>
                     <div className="flex flex-col gap-2 text-sm text-slate-300">
-                        {/* <div><MailOutlined className="mr-1" />Email: <a className="hover:text-white" href={`mailto:${email}`}>{email}</a></div> */}
-                        {/* <div><PhoneOutlined className="mr-1" />Điện thoại: <a className="hover:text-white" href={`tel:${phoneNumber}`}>{phoneNumber}</a></div> */}
-                        {/* <div><EnvironmentOutlined className="mr-1" />Địa chỉ: {address}</div> */}
+                        <div><FontAwesomeIcon icon={faEnvelope} className="mr-1" />Email: <a className="hover:text-white" href={`mailto:${email}`}>{email}</a></div>
+                        <div><FontAwesomeIcon icon={faPhone} className="mr-1" />Điện thoại: <a className="hover:text-white" href={`tel:${phoneNumber}`}>{phoneNumber}</a></div>
+                        <div><FontAwesomeIcon icon={faMapLocationDot} className="mr-1" />Địa chỉ: {address}</div>
                     </div>
                 </div>
 

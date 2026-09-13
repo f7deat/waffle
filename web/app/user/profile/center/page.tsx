@@ -2,9 +2,10 @@
 
 import PageContainer from "@/components/layout/page-container"
 import { apiCurrentUser, apiUpdateProfile } from "@/services/user/user";
-import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ProfileEditPage: React.FC = () => {
 
@@ -130,13 +131,12 @@ const ProfileEditPage: React.FC = () => {
     return (
         <PageContainer>
             <div className="max-w-2xl mx-auto py-8 px-4">
-                {/* Header */}
                 <div className="mb-6">
                     <button
                         onClick={handleCancel}
                         className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors mb-4"
                     >
-                        <ArrowLeftOutlined /> Quay lại
+                        <FontAwesomeIcon icon={faArrowLeft} /> Quay lại
                     </button>
                     <h1 className="text-3xl font-bold text-gray-900">Chỉnh sửa hồ sơ cá nhân</h1>
                 </div>

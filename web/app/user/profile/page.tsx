@@ -4,10 +4,12 @@ import PageContainer from "@/components/layout/page-container"
 import { apiCurrentUser, apiChangePassword, apiChangeAvatar, apiTopupProfile, apiWithdrawProfile } from "@/services/user/user";
 import { apiInfluencerMyApplications } from "@/services/kol/kol";
 import { apiMyOrders } from "@/services/shop/order";
-import { LockOutlined, CameraOutlined, LogoutOutlined, EditOutlined } from "@ant-design/icons";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { MyOrderItem, MyOrderStatus } from "@/services/shop/typings";
+import { faCamera, faEdit, faLock, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Page: React.FC = () => {
 
@@ -39,7 +41,7 @@ const Page: React.FC = () => {
     const [withdrawError, setWithdrawError] = useState("");
     const [withdrawSuccess, setWithdrawSuccess] = useState("");
     const [isWithdrawSubmitting, setIsWithdrawSubmitting] = useState(false);
-    const [myOrders, setMyOrders] = useState<API.MyOrderItem[]>([]);
+    const [myOrders, setMyOrders] = useState<MyOrderItem[]>([]);
     const [myOrdersLoading, setMyOrdersLoading] = useState(true);
     const [appliedJobs, setAppliedJobs] = useState<API.MyAppliedInfluencerJobItem[]>([]);
     const [appliedJobsLoading, setAppliedJobsLoading] = useState(true);
@@ -55,7 +57,7 @@ const Page: React.FC = () => {
         return { text: "Chờ duyệt", className: "bg-yellow-100 text-yellow-700" };
     };
 
-    const getOrderStatus = (status: API.MyOrderStatus) => {
+    const getOrderStatus = (status: MyOrderStatus) => {
         if (status === "Confirmed" || status === 1) return { text: "Đã xác nhận", className: "bg-blue-100 text-blue-700" };
         if (status === "Paid" || status === 2) return { text: "Đã thanh toán", className: "bg-green-100 text-green-700" };
         if (status === "Refunded" || status === 3) return { text: "Đã hoàn tiền", className: "bg-slate-100 text-slate-700" };
@@ -412,7 +414,7 @@ const Page: React.FC = () => {
                                     className="absolute inset-0 w-32 h-32 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100"
                                     title="Đổi avatar"
                                 >
-                                    <CameraOutlined className="text-white text-2xl" />
+                                    <FontAwesomeIcon icon={faCamera} className="text-white text-2xl" />
                                 </button>
                             </div>
                             
@@ -442,7 +444,7 @@ const Page: React.FC = () => {
                             {/* Action Buttons */}
                             <div className="mt-4 sm:mt-0 flex gap-2">
                                 <Link href="/user/profile/center" className="px-4 hover:text-white py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium inline-block">
-                                    <EditOutlined /> Chỉnh sửa hồ sơ
+                                    <FontAwesomeIcon icon={faEdit} /> Chỉnh sửa hồ sơ
                                 </Link>
                             </div>
                         </div>
@@ -536,13 +538,13 @@ const Page: React.FC = () => {
                             onClick={handleOpenModal}
                             className="w-full sm:w-auto px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                         >
-                           <LockOutlined /> Đổi mật khẩu
+                           <FontAwesomeIcon icon={faLock} /> Đổi mật khẩu
                         </button>
                         <button 
                             onClick={handleLogout}
                             className="w-full sm:w-auto px-4 py-2 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors font-medium ml-0 sm:ml-2"
                         >
-                           <LogoutOutlined /> Đăng xuất
+                           <FontAwesomeIcon icon={faSignOutAlt} /> Đăng xuất
                         </button>
                     </div>
                 </div>

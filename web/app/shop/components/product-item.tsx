@@ -1,4 +1,6 @@
 import { ProductItemType } from "@/typings/shop/product";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 const ProductItem: React.FC<ProductItemType> = (product) => {
@@ -66,7 +68,8 @@ const ProductItem: React.FC<ProductItemType> = (product) => {
                     {originalPrice ? <p className="text-xs text-zinc-400 line-through">{originalPrice}</p> : null}
                 </div>
                 <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-medium text-amber-700 md:text-xs">
-                    Lượt xem {product.viewCount}
+                    <FontAwesomeIcon icon={faEye} className="mr-1" />
+                    Lượt xem {product.viewCount?.toLocaleString() ?? 0}
                 </span>
             </div>
 

@@ -5,8 +5,9 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import PageContainer from '@/components/layout/page-container';
 import { apiPlaceList } from '@/services/locations/place';
-import { EnvironmentOutlined, EyeOutlined } from '@ant-design/icons';
 import { Form, Input, Select } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 const Page: React.FC = () => {
     const params = useParams();
@@ -138,11 +139,11 @@ const Page: React.FC = () => {
                                             <div className="space-y-2 text-sm text-slate-500">
                                                 <div className="flex items-center justify-between gap-1 line-clamp-1">
                                                     <div>
-                                                        <EnvironmentOutlined className="flex-shrink-0" />
+                                                        <FontAwesomeIcon icon={faMapLocationDot} className="mr-1" />
                                                         <span>{place.provinceName}</span>
                                                     </div>
                                                     <div>
-                                                        <EyeOutlined className="mr-1" />
+                                                        <FontAwesomeIcon icon={faEye} className="mr-1" />
                                                         <span>{place.viewCount?.toLocaleString()}</span>
                                                     </div>
                                                 </div>
