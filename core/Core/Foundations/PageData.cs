@@ -13,7 +13,7 @@ public class PageData : BaseEntity
     public string? Category { get; set; }
     public CatalogType Type { get; set; }
     public int ViewCount { get; set; }
-    public DateTime ModifiedDate { get; set; }
+    public DateTime? ModifiedDate { get; set; }
     public string Url { get; set; } = default!;
     public string? SettingString { get; set; }
     public DateTime CreatedDate { get; set; }

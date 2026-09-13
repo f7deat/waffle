@@ -187,10 +187,11 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                         SalePrice = product.SalePrice,
                         Description = product.Description,
                         Type = CatalogType.Product,
-                        ModifiedDate = product.ModifiedDate ?? product.CreatedDate,
+                        ModifiedDate = product.ModifiedDate,
                         Locale = product.Locale,
                         CategoryId = product.CategoryId,
-                        CategoryName = category.Name
+                        CategoryName = category.Name,
+                        CreatedDate = product.CreatedDate,
                     };
         if (!string.IsNullOrWhiteSpace(filterOptions.Name))
         {
