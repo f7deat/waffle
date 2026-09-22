@@ -24,7 +24,7 @@
     "@editorjs/list": "^2.0.9",
     "@editorjs/quote": "^2.7.6",
     "@umijs/max": "^4.7.8",
-    "antd": "^5.29.3",
+    "antd": "^6.6.5",
     "dayjs": "^1.11.20"
   },
   "devDependencies": {

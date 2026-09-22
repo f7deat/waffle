@@ -1,5 +1,4 @@
 import { RequestConfig } from '@umijs/max';
-import '../tailwind.css';
 import '../style.less';
 import { queryCurrentUser } from './services/user';
 import { history } from '@umijs/max';
@@ -52,14 +51,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     layout: 'mix',
     token: {
       sider: {
-        colorMenuBackground: '#020617',
-        colorBgMenuItemHover: '#1677ff',
-        colorTextMenu: '#FFFFFF',
-        colorTextMenuSelected: '#FFFFFF',
-        colorTextMenuItemHover: '#FFFFFF',
-        colorTextMenuActive: '#FFFFFF',
-        colorBgMenuItemSelected: '#1677ff',
-        colorTextMenuTitle: '#FFFFFF'
+        colorMenuBackground: '#FFFFFF',
+        colorBgMenuItemHover: '#8ebaf7',
+        colorBgMenuItemSelected: '#8ebaf7'
       }
     },
     avatarProps: {

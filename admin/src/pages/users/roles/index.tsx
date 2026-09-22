@@ -1,12 +1,12 @@
 import { listRole } from "@/services/role"
-import { FolderOutlined } from "@ant-design/icons"
+import { FolderOutlined, SettingOutlined } from "@ant-design/icons"
 import { PageContainer, ProColumns, ProTable } from "@ant-design/pro-components"
 import { history } from "@umijs/max"
 import { Button } from "antd"
 
 const RolePage: React.FC = () => {
 
-    const columns: ProColumns<API.Role>[] = [
+    const columns: ProColumns<any>[] = [
         {
             title: '#',
             valueType: 'indexBorder',
@@ -20,24 +20,23 @@ const RolePage: React.FC = () => {
         },
         {
             title: 'Display Name',
-            dataIndex: 'displayName',
-            copyable: true
+            dataIndex: 'displayName'
         },
         {
-            title: 'User Count',
+            title: 'Số lượng',
             dataIndex: 'userCount',
             valueType: 'digit',
             width: 90,
-            search: false,
-            align: 'right'
+            search: false
         },
         {
-            title: 'Option',
+            title: <SettingOutlined />,
             valueType: 'option',
             render: (dom, entity) => [
                 <Button type="primary" icon={<FolderOutlined />} size="small" key="detail" onClick={() => history.push(`/user/roles/${entity.name}`)} />
             ],
-            width: 50
+            width: 40,
+            align: 'center'
         }
     ]
 
