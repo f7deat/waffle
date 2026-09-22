@@ -21,7 +21,7 @@ public class ShortLinkController(IShortLinkService shortLinkService) : BaseContr
         });
     }
 
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateShortLinkArgs args)
     {
         var result = await _shortLinkService.CreateAsync(args.Url);
@@ -39,7 +39,7 @@ public class ShortLinkController(IShortLinkService shortLinkService) : BaseContr
         return Ok(MapItem(data));
     }
 
-    [HttpPost("delete/{id}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _shortLinkService.DeleteAsync(id);

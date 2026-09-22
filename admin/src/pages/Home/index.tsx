@@ -416,6 +416,11 @@ const HomePage: React.FC = () => {
                   locale={{
                     emptyText: 'Không có dữ liệu'
                   }}
+                  pagination={{
+                    pageSize: 6,
+                    showLessItems: true,
+                    size: 'small'
+                  }}
                   metas={{
                     avatar: {
                       valueType: 'indexBorder',
@@ -448,6 +453,7 @@ const HomePage: React.FC = () => {
                   yField="value"
                   colorField="type"
                   group
+                  sizeField={60}
                   height={ACTIVITY_CHART_HEIGHT}
                   autoFit
                   legend={{ position: 'top' }}

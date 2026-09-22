@@ -69,8 +69,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
           blankTarget: true,
         },
         {
-          key: 'Waffle',
-          title: 'Waffle',
+          key: 'project-source',
+          title: 'Project Source',
           href: 'https://github.com/f7deat/waffle',
           blankTarget: true,
         },

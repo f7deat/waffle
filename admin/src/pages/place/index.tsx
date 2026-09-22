@@ -2,7 +2,7 @@ import { apiDistrictOptions } from "@/services/locations/district";
 import { apiPlaceCreate, apiPlaceDelete, apiPlaceDetails, apiPlaceList, apiPlaceUpdate, IPlaceListItem } from "@/services/locations/place";
 import { apiProvinceOptions } from "@/services/locations/province";
 import { apiInfluencerOptions } from "@/services/user";
-import { CalendarOutlined, DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
+import { CalendarOutlined, DeleteOutlined, EditOutlined, EnvironmentOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import { ActionType, ModalForm, PageContainer, ProColumns, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea, ProTable } from "@ant-design/pro-components"
 import { Link } from "@umijs/max";
 import { Button, Popconfirm, message } from "antd";
@@ -61,14 +61,19 @@ const Index: React.FC = () => {
             title: 'Name',
             dataIndex: 'name',
             render: (text, record) => (
-                <div className="flex items-center gap-2">
+                <div className="flex gap-2">
                     <div className="w-24 h-24 rounded">
                         <img src={record.thumbnail} alt={record.name} className="w-full h-full object-cover rounded" />
                     </div>
                     <div className="flex-1">
-                        <div><Link to={`/place/center/${record.id}`}>{text}</Link></div>
+                        <div className="font-medium">
+                            <Link to={`/place/center/${record.id}`}>{text}</Link>
+                        </div>
+                        <div className="text-slate-500">
+                            <EnvironmentOutlined /> {record.provinceName}
+                        </div>
                         <div className="text-gray-500">
-                            <CalendarOutlined className="mr-1" /> {dayjs(record.modifiedDate).format('YYYY-MM-DD HH:mm:ss')}
+                            <CalendarOutlined className="mr-1" /> Ngày tạo: {dayjs(record.modifiedDate).format('YYYY-MM-DD HH:mm:ss')}
                         </div>
                     </div>
                 </div>
@@ -88,6 +93,12 @@ const Index: React.FC = () => {
             title: 'Province',
             dataIndex: 'provinceName',
             search: false,
+        },
+        {
+            title: 'Lượt xem',
+            dataIndex: 'viewCount',
+            search: false,
+            valueType: 'digit'
         },
         {
             title: <SettingOutlined />,

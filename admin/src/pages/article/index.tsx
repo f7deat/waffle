@@ -2,12 +2,13 @@ import { ActionType, PageContainer, ProColumns, ProTable } from "@ant-design/pro
 import {
   Button,
   message,
-  Popconfirm,
   Image,
   Avatar,
+  Dropdown,
+  Modal,
 } from "antd";
 import { useRef, useState } from "react";
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EyeOutlined, MoreOutlined, PlusOutlined, SettingOutlined, ShareAltOutlined } from "@ant-design/icons";
 import {
   ArticleListItem,
   deleteArticle,
@@ -15,10 +16,11 @@ import {
 } from "@/services/article";
 import ArticleForm from "@/components/ArticleForm";
 import dayjs from "dayjs";
-import { Link } from "@umijs/max";
+import { Link, history } from "@umijs/max";
 
 const ArticlePage: React.FC = () => {
 
+  const [modal, contextHolder] = Modal.useModal();
   const actionRef = useRef<ActionType>(null);
   const [open, setOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | undefined>();
@@ -58,7 +60,7 @@ const ArticlePage: React.FC = () => {
       dataIndex: "name",
       key: "name",
       minWidth: 200,
-      render: (dom, record) => (
+      render: (_, record) => (
         <div>
           <Link to={`/article/${record.id}`}>
             <div className="font-medium">
@@ -81,7 +83,7 @@ const ArticlePage: React.FC = () => {
       valueType: "digit"
     },
     {
-      title: "Published",
+      title: "Ngày xuất bản",
       dataIndex: "publishedAt",
       key: "publishedAt",
       width: 180,
@@ -90,7 +92,7 @@ const ArticlePage: React.FC = () => {
       search: false
     },
     {
-      title: "Modified",
+      title: "Ngày cập nhật",
       dataIndex: "modifiedDate",
       key: "modifiedDate",
       width: 180,
@@ -105,21 +107,41 @@ const ArticlePage: React.FC = () => {
       align: "center",
       valueType: "option",
       render: (_: any, record: any) => [
-        <Popconfirm
-          title="Delete Article"
-          description="Are you sure you want to delete this article?"
-          okText="Yes"
-          key={"remove"}
-          cancelText="No"
-          onConfirm={() => handleDelete(record.id)}
-        >
+        <Dropdown key="more" menu={{
+          items: [
+            {
+              key: 'view',
+              label: 'Xem',
+              icon: <EyeOutlined />,
+              onClick: () => history.push(`/article/${record.id}`)
+            },
+            {
+              key: 'share',
+              label: 'Chia sẻ',
+              icon: <ShareAltOutlined />
+            },
+            {
+              key: 'delete',
+              label: 'Xóa',
+              icon: <DeleteOutlined />,
+              onClick: () => modal.confirm({
+                title: 'Xác nhận xóa',
+                content: 'Bạn có chắc chắn muốn xóa bài viết này không?',
+                okText: 'Xóa',
+                cancelText: 'Hủy',
+                onOk: () => handleDelete(record.id)
+              }),
+              danger: true
+            }
+          ]
+        }}>
           <Button
-            danger
+            type="dashed"
             size="small"
-            icon={<DeleteOutlined />}
+            icon={<MoreOutlined />}
             loading={deletingId === record.id}
           />
-        </Popconfirm>
+        </Dropdown>
       ]
     },
   ];
@@ -134,6 +156,7 @@ const ArticlePage: React.FC = () => {
         Tạo mới
       </Button>
     }>
+      {contextHolder}
       <ProTable
         columns={columns}
         request={listArticles}
