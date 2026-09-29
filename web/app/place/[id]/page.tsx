@@ -7,6 +7,7 @@ import Link from 'next/link';
 import dayjs from 'dayjs';
 import { apiShopeeBaseInfoAndLinks } from '@/services/apps/shopee';
 import PlaceComments from '@/components/place/place-comments';
+import RandomArticleList from '@/components/article/random-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faEye, faMapLocation, faMapMarker } from '@fortawesome/free-solid-svg-icons';
 
@@ -219,6 +220,7 @@ const Page: React.FC<Props> = async ({ params }) => {
                             </div>
                         </div>
                     )}
+                    <RandomArticleList layout="sidebar" />
                     <h3 className="text-xl font-bold">Sản phẩm liên quan</h3>
                     <div className="grid grid-cols-2 gap-4 mb-4">
                             {

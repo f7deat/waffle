@@ -17,6 +17,7 @@ export type ArticleListItem = {
 }
 
 export type ArticleDetailType = ArticleListItem & {
+  normalizedName: string;
     content: string;
 }
 
@@ -92,6 +93,12 @@ export async function updateArticle(data: {
   return request<API.TResult<object>>('article', {
     method: 'PUT',
     data,
+  });
+}
+
+export async function publishArticle(id: string) {
+  return request<API.TResult<object>>(`article/${id}/publish`, {
+    method: 'POST',
   });
 }
 

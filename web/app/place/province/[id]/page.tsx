@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import PageContainer from "@/components/layout/page-container";
+import { apiDistrictList } from "@/services/locations/district";
 import { apiPlaceList } from "@/services/locations/place";
 import { Metadata } from "next";
+import DistrictsByProvince from "./districts";
 import PlacesByProvinceClient from "./client";
 
 type PageProps = {
@@ -41,18 +43,21 @@ export default async function PlacesByProvincePage({ params, searchParams }: Pag
   const keyword = searchParamsResolved.keyword?.trim();
 
   // Fetch places by provinceId
-  const placeResponse = await apiPlaceList({
-    provinceId,
-    current,
-    pageSize,
-    name: keyword,
-  });
+  const [placeResponse, districtResponse] = await Promise.all([
+    apiPlaceList({
+      provinceId,
+      current,
+      pageSize,
+      name: keyword,
+    }),
+    apiDistrictList({ provinceId, current: 1, pageSize: 100 }),
+  ]);
 
   const places = placeResponse.data || [];
+  const districts = districtResponse.data || [];
   const total = placeResponse.total || places.length;
 
-  // Get province name from first place if available
-  const provinceName = places.length > 0 ? places[0].provinceName : `Tỉnh ${id}`;
+  const provinceName = places[0]?.provinceName || districts[0]?.provinceName || `Tỉnh ${id}`;
 
   const breadcrumbs = [
     { label: "Địa điểm", href: "/place" },
@@ -62,6 +67,7 @@ export default async function PlacesByProvincePage({ params, searchParams }: Pag
   return (
     <PageContainer breadcrumbs={breadcrumbs}>
       <div className="space-y-6">
+        <DistrictsByProvince provinceName={provinceName} districts={districts} />
         <PlacesByProvinceClient
           provinceId={provinceId}
           provinceName={provinceName}

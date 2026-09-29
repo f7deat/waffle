@@ -15,6 +15,10 @@ public class InfluencerJobController(IInfluencerJobService _influencerJobService
     public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions)
         => Ok(await _influencerJobService.ListAsync(filterOptions));
 
+    [HttpGet("completed/{userName}"), AllowAnonymous]
+    public async Task<IActionResult> CompletedByInfluencerAsync([FromRoute] string userName, [FromQuery] BasicFilterOptions filterOptions)
+        => Ok(await _influencerJobService.ListCompletedByInfluencerAsync(userName, filterOptions));
+
     [HttpGet("{id}"), AllowAnonymous]
     public async Task<IActionResult> GetAsync([FromRoute] Guid id)
     {

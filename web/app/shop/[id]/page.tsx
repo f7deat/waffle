@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import LatestProducts from "./latest-products";
 import BlockRender from "@/components/editor/block-render";
 import ProductGallery from "./product-gallery";
+import RandomArticleList from "@/components/article/random-list";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import dayjs from "dayjs";
 import { faArrowLeft, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
@@ -233,6 +234,10 @@ const Page = async ({ params }: PageProps) => {
                             Lượt xem: {product.viewCount?.toLocaleString()}
                         </div>
                     </div>
+                </div>
+
+                <div className="mt-12">
+                    <RandomArticleList />
                 </div>
 
                 {/* Latest Products */}

@@ -4,6 +4,8 @@ import { apiGetUserByUserName } from "@/services/user/user";
 import Link from "next/link";
 import ContactForm from "./client";
 import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
+import CompletedJobs from "./completed-jobs";
+import { apiInfluencerCompletedJobs } from "@/services/kol/kol";
 
 type Params = Promise<{
     id: string;
@@ -63,6 +65,14 @@ const Page = async ({ params }: { params: Params }) => {
                 </div>
             </PageContainer>
         );
+    }
+
+    let completedJobs: API.InfluencerCompletedJobItem[] = [];
+    try {
+        const jobsRes = await apiInfluencerCompletedJobs(user.userName, { current: 1, pageSize: 6 });
+        completedJobs = jobsRes.data ?? [];
+    } catch (error) {
+        console.error("Failed to fetch influencer completed jobs:", error);
     }
 
     const joinedDate = user.createdAt
@@ -156,6 +166,7 @@ const Page = async ({ params }: { params: Params }) => {
                     </div>
                 </div>
             </div>
+            <CompletedJobs jobs={completedJobs} />
         </PageContainer>
     );
 };

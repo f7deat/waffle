@@ -34,5 +34,5 @@ public interface IProductService
     Task<TResult> SaveImagesAsync(Guid productId, IEnumerable<ProductImage> images);
     Task<IEnumerable<object>> GetTagsAsync(Guid productId);
     Task<TResult> SaveTagsAsync(Guid productId, IEnumerable<Guid> tagIds);
-    Task<ListResult> ListProductsByTagAsync(ProductTagFilterOptions filterOptions);
+    Task<ListResult<ProductListItem>> ListProductsByTagAsync(ProductTagFilterOptions filterOptions);
 }

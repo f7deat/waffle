@@ -61,6 +61,7 @@ const DefaultFooter: React.FC = () => {
                         <Link href="/contact" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Liên hệ</Link>
                         <Link href="/influencer" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Influencers</Link>
                         <Link href="/album" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Album</Link>
+                        <Link href="/video" className="hover:text-white transition-colors"><FontAwesomeIcon icon={faCaretRight} /> Video</Link>
                     </nav>
                 </div>
 

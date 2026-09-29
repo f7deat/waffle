@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations;
@@ -17,6 +18,7 @@ public class VideoController(IWebHostEnvironment webHostEnvironment, Application
     private const long MaxVideoSize = 200 * 1024 * 1024;
     private static readonly string[] SupportedVideoExtensions = [".mp4", ".webm", ".mov", ".m4v", ".avi", ".mkv"];
 
+    [AllowAnonymous]
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] VideoFilterOptions filterOptions)
     {
@@ -35,6 +37,12 @@ public class VideoController(IWebHostEnvironment webHostEnvironment, Application
         if (filterOptions.SourceType.HasValue)
         {
             query = query.Where(x => x.SourceType == filterOptions.SourceType.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(filterOptions.Provider))
+        {
+            var provider = filterOptions.Provider.Trim();
+            query = query.Where(x => x.Provider != null && EF.Functions.Like(x.Provider, $"%{provider}%"));
         }
 
         var total = await query.CountAsync();
@@ -222,7 +230,8 @@ public class VideoController(IWebHostEnvironment webHostEnvironment, Application
         if (!Uri.TryCreate(url, UriKind.Absolute, out var uri)) return "external";
         var host = uri.Host.ToLowerInvariant();
 
-        if (host.Contains("youtube.com") || host.Contains("youtu.be")) return "youtube";
+        if (host == "youtube.com" || host.EndsWith(".youtube.com", StringComparison.Ordinal) || host == "youtu.be") return "youtube";
+        if (host == "tiktok.com" || host.EndsWith(".tiktok.com", StringComparison.Ordinal)) return "tiktok";
         if (host.Contains("vimeo.com")) return "vimeo";
         if (host.Contains("dailymotion.com")) return "dailymotion";
         return host;

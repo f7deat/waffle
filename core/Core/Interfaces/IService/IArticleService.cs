@@ -13,6 +13,7 @@ public interface IArticleService
     Task<ListResult> ListAsync(ArticleFilterOptions filterOptions);
     Task<TResult> AddAsync(CreateArticleArgs args, string locale);
     Task<TResult> UpdateAsync(UpdateArticleArgs args);
+    Task<TResult> PublishAsync(Guid id);
     Task<TResult> DeleteAsync(Guid id);
     Task<TResult> GetByIdAsync(Guid id);
     Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions);

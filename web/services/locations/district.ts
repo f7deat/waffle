@@ -1,6 +1,6 @@
 import request from "../request";
 
-export async function apiDistrictList(params: API.FilterOptions) {
+export async function apiDistrictList(params: API.FilterOptions & { provinceId?: number }) {
     return request.get<API.ListResult<API.DistrictListItem>>("district/list", { params });
 }
 

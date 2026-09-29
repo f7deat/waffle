@@ -72,7 +72,7 @@ const Index: React.FC = () => {
                         valueType: 'option',
                         width: 150,
                         render: (dom, record) => [
-                            <Link key={"view"} to={`/settings/country/${record.id}`}>
+                            <Link key={"view"} to={`/setting/country/${record.id}`}>
                                 <Button type="primary" icon={<EyeOutlined />} size="small" />
                             </Link>,
                             <Button

@@ -30,6 +30,11 @@ export interface ProductCategoryFilterOptions extends API.FilterOptions {
     name?: string;
 }
 
+export interface ProductTagFilterOptions extends API.FilterOptions {
+    tagName?: string;
+    name?: string;
+}
+
 export interface ProductCategoryItem {
     id: number;
     name: string;

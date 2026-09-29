@@ -86,6 +86,26 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
         }
     }
 
+    public async Task<TResult> PublishAsync(Guid id)
+    {
+        try
+        {
+            var article = await _articleRepository.FindAsync(id);
+            if (article is null) return TResult.Failed("Article not found");
+            if (article.PublishedAt is not null) return TResult.Ok(article.PublishedAt);
+
+            article.PublishedAt = DateTime.Now;
+            article.ModifiedDate = DateTime.Now;
+            var result = await _articleRepository.UpdateAsync(article);
+            await _articleRepository.SaveChangesAsync();
+            return TResult.Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return TResult.Failed(ex.ToString());
+        }
+    }
+
     public async Task<TResult> DeleteAsync(Guid id)
     {
         try

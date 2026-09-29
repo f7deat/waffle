@@ -1,4 +1,13 @@
 declare namespace API {
+    interface ProvinceFilterOptions extends FilterOptions {
+        name?: string;
+    }
+    interface ProvinceListItem {
+        id: number;
+        name: string;
+        countryId: number;
+        districtCount: number;
+    }
     interface DistrictListItem {
         id: number;
         name: string;

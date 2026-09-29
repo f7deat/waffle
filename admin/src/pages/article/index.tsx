@@ -6,14 +6,20 @@ import {
   Avatar,
   Dropdown,
   Modal,
+  Input,
+  Space,
+  Typography,
 } from "antd";
 import { useRef, useState } from "react";
-import { DeleteOutlined, EyeOutlined, MoreOutlined, PlusOutlined, SettingOutlined, ShareAltOutlined } from "@ant-design/icons";
+import { CloudUploadOutlined, CopyOutlined, DeleteOutlined, EyeOutlined, FacebookOutlined, LinkedinOutlined, MessageOutlined, MoreOutlined, PlusOutlined, SettingOutlined, ShareAltOutlined, TwitterOutlined } from "@ant-design/icons";
 import {
   ArticleListItem,
   deleteArticle,
+  getArticleById,
   listArticles,
+  publishArticle,
 } from "@/services/article";
+import { createShortLink } from "@/services/short-link";
 import ArticleForm from "@/components/ArticleForm";
 import dayjs from "dayjs";
 import { Link, history } from "@umijs/max";
@@ -24,6 +30,10 @@ const ArticlePage: React.FC = () => {
   const actionRef = useRef<ActionType>(null);
   const [open, setOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | undefined>();
+  const [publishingId, setPublishingId] = useState<string | undefined>();
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareLoading, setShareLoading] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
 
   const handleDelete = async (id: string) => {
     try {
@@ -37,6 +47,57 @@ const ArticlePage: React.FC = () => {
       setDeletingId(undefined);
     }
   };
+
+  const handlePublish = async (id: string) => {
+    try {
+      setPublishingId(id);
+      await publishArticle(id);
+      message.success("Xuất bản bài viết thành công");
+      actionRef.current?.reload();
+    } catch (error) {
+      message.error("Xuất bản bài viết thất bại");
+    } finally {
+      setPublishingId(undefined);
+    }
+  };
+
+  const handleShare = async (article: ArticleListItem) => {
+    setShareOpen(true);
+    setShareLoading(true);
+    setShareUrl("");
+
+    try {
+      const response = await getArticleById(article.id);
+      const detail = (response as any)?.data ?? response;
+      if (!detail?.normalizedName) {
+        throw new Error("Article URL is unavailable");
+      }
+
+      const siteUrl = (process.env.API_URL || window.location.origin)
+        .replace(/^(https?:\/\/)api\./, "$1")
+        .replace(/\/$/, "");
+      const shortLink = await createShortLink(
+        `${siteUrl}/article/${encodeURIComponent(detail.normalizedName)}`
+      );
+      setShareUrl(shortLink.shortUrl);
+    } catch {
+      message.error("Không thể tạo liên kết chia sẻ");
+      setShareOpen(false);
+    } finally {
+      setShareLoading(false);
+    }
+  };
+
+  const copyShareUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      message.success("Đã sao chép liên kết");
+    } catch {
+      message.error("Không thể sao chép liên kết");
+    }
+  };
+
+  const shareTo = (url: string) => window.open(url, "_blank", "noopener,noreferrer");
 
   const columns: ProColumns<ArticleListItem>[] = [
     {
@@ -109,6 +170,18 @@ const ArticlePage: React.FC = () => {
       render: (_: any, record: any) => [
         <Dropdown key="more" menu={{
           items: [
+            ...(!record.publishedAt ? [{
+              key: 'publish',
+              label: 'Xuất bản',
+              icon: <CloudUploadOutlined />,
+              onClick: () => modal.confirm({
+                title: 'Xác nhận xuất bản',
+                content: 'Bạn có chắc chắn muốn xuất bản bài viết này không?',
+                okText: 'Xuất bản',
+                cancelText: 'Hủy',
+                onOk: () => handlePublish(record.id)
+              })
+            }] : []),
             {
               key: 'view',
               label: 'Xem',
@@ -118,7 +191,8 @@ const ArticlePage: React.FC = () => {
             {
               key: 'share',
               label: 'Chia sẻ',
-              icon: <ShareAltOutlined />
+              icon: <ShareAltOutlined />,
+              onClick: () => handleShare(record)
             },
             {
               key: 'delete',
@@ -139,7 +213,7 @@ const ArticlePage: React.FC = () => {
             type="dashed"
             size="small"
             icon={<MoreOutlined />}
-            loading={deletingId === record.id}
+            loading={deletingId === record.id || publishingId === record.id}
           />
         </Dropdown>
       ]
@@ -169,6 +243,38 @@ const ArticlePage: React.FC = () => {
       />
 
       <ArticleForm open={open} onOpenChange={setOpen} />
+
+      <Modal
+        title="Chia sẻ bài viết"
+        open={shareOpen}
+        onCancel={() => setShareOpen(false)}
+        footer={null}
+        destroyOnClose
+      >
+        <Space direction="vertical" size="middle" className="w-full">
+          <Typography.Text type="secondary">Liên kết rút gọn</Typography.Text>
+          <Input
+            value={shareUrl}
+            readOnly
+            placeholder="Đang tạo liên kết..."
+            suffix={
+              <Button
+                type="text"
+                aria-label="Sao chép liên kết"
+                icon={<CopyOutlined />}
+                disabled={!shareUrl || shareLoading}
+                onClick={copyShareUrl}
+              />
+            }
+          />
+          <Space wrap>
+            <Button icon={<FacebookOutlined />} disabled={!shareUrl || shareLoading} onClick={() => shareTo(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`)}>Facebook</Button>
+            <Button icon={<TwitterOutlined />} disabled={!shareUrl || shareLoading} onClick={() => shareTo(`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`)}>X</Button>
+            <Button icon={<MessageOutlined />} disabled={!shareUrl || shareLoading} onClick={() => shareTo(`https://wa.me/?text=${encodeURIComponent(shareUrl)}`)}>WhatsApp</Button>
+            <Button icon={<LinkedinOutlined />} disabled={!shareUrl || shareLoading} onClick={() => shareTo(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`)}>LinkedIn</Button>
+          </Space>
+        </Space>
+      </Modal>
     </PageContainer>
   );
 };

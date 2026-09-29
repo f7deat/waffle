@@ -4,6 +4,7 @@ using Waffle.Core.Foundations.Models;
 using Waffle.Entities.Ecommerces;
 using Waffle.Models;
 using Waffle.Models.Params.Products;
+using Waffle.Core.Services.Shop.Filters;
 using Waffle.Models.ViewModels.Products;
 
 namespace Waffle.Core.Interfaces.IRepository;
@@ -14,6 +15,7 @@ public interface IProductRepository : IAsyncRepository<Product>
     Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ExportAsync(ProductFilterOptions filterOptions);
     Task<ListResult<ProductListItem>> ListByCategoryAsync(string normalizedName, ProductFilterOptions filterOptions);
+    Task<ListResult<ProductListItem>> ListProductsByTagAsync(ProductTagFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListByTagAsync(Guid tagId, CatalogFilterOptions filterOptions);
     Task<IEnumerable<ProductListItem>> ListRelatedAsync(PageData pageData);
     Task<IEnumerable<ProductListItem>> ListSpotlightAsync(int pageSize, IEnumerable<Guid> tagIds, string locale);

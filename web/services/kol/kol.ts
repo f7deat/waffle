@@ -26,6 +26,10 @@ export async function apiInfluencerJobList(params?: API.InfluencerJobFilterOptio
     return request.get<API.ListResult<API.InfluencerJobListItem>>("influencer-job/list", { params });
 }
 
+export async function apiInfluencerCompletedJobs(userName: string, params?: API.FilterOptions) {
+    return request.get<API.ListResult<API.InfluencerCompletedJobItem>>(`influencer-job/completed/${encodeURIComponent(userName)}`, { params });
+}
+
 export async function apiInfluencerJobCreate(data: API.CreateInfluencerJobRequest) {
     return request.post<API.TResult<null>>("influencer-job/create", data);
 }

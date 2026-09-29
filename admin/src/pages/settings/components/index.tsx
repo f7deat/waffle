@@ -35,7 +35,7 @@ const Index: React.FC = () => {
       render: (dom, entity) => (
         <a
           onClick={() =>
-            history.push(`/settings/component/center/${entity.id}`)
+            history.push(`/setting/component/center/${entity.id}`)
           }
         >
           {entity.name}

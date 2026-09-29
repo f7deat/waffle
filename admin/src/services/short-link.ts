@@ -15,7 +15,7 @@ export async function listShortLink() {
 }
 
 export async function createShortLink(url: string) {
-  return request<ShortLinkItem>('shortlink/create', {
+  return request<ShortLinkItem>('shortlink', {
     method: 'POST',
     data: {
       url,

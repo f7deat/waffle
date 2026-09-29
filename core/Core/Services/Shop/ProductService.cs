@@ -309,9 +309,11 @@ public class ProductService(IProductRepository _productRepository, IProductLinkR
         }
     }
 
-    public Task<ListResult> ListProductsByTagAsync(ProductTagFilterOptions filterOptions)
+    public Task<ListResult<ProductListItem>> ListProductsByTagAsync(ProductTagFilterOptions filterOptions)
     {
-        throw new NotImplementedException();
+        filterOptions.TagName = SeoHelper.ToSeoFriendly(filterOptions.TagName);
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        return _productRepository.ListProductsByTagAsync(filterOptions);
     }
 
     private class LegacyProductContent

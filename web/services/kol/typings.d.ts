@@ -69,6 +69,17 @@ declare namespace API {
         createdByAvatar?: string;
         applicationCount: number;
     }
+    interface InfluencerCompletedJobItem {
+        id: string;
+        title: string;
+        description?: string;
+        brand?: string;
+        contentType: InfluencerJobContentType | number;
+        category?: string;
+        budget: number;
+        budgetMax?: number;
+        postedByName: string;
+    }
     interface CreateInfluencerJobRequest {
         title: string;
         description: string;

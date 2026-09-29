@@ -7,4 +7,5 @@ public class VideoFilterOptions : FilterOptions
 {
     public string? Keyword { get; set; }
     public VideoSourceType? SourceType { get; set; }
+    public string? Provider { get; set; }
 }

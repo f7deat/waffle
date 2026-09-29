@@ -1,0 +1,512 @@
+.page {
+    min-height: 70vh;
+    color: #192a27;
+    background: #f5f5ef;
+}
+
+.intro {
+    position: relative;
+    display: flex;
+    min-height: 290px;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 48px max(calc((100vw - 1200px) / 2), 5vw);
+    color: #f7f7ed;
+    background-color: #183e37;
+    background-image: linear-gradient(115deg, rgba(13, 49, 43, .4), transparent 70%), repeating-linear-gradient(135deg, transparent 0, transparent 35px, rgba(255, 255, 255, .035) 36px, transparent 37px);
+}
+
+.introContent {
+    position: relative;
+    z-index: 1;
+    max-width: 650px;
+}
+
+.eyebrow,
+.provider {
+    margin: 0;
+    color: #cde36b;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.intro h1 {
+    margin: 16px 0 10px;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.1;
+    font-weight: 700;
+}
+
+.introText {
+    max-width: 530px;
+    margin: 0;
+    color: #d5e1d8;
+    font-size: 16px;
+    line-height: 1.65;
+}
+
+.introMark {
+    display: grid;
+    width: 180px;
+    height: 180px;
+    flex: 0 0 auto;
+    place-items: center;
+    margin-right: 5%;
+    border: 1px solid rgba(205, 227, 107, .55);
+    border-radius: 50%;
+    color: #d9eb78;
+    transform: rotate(-12deg);
+}
+
+.introMark::before {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border: 1px dashed rgba(205, 227, 107, .55);
+    border-radius: 50%;
+    content: "";
+}
+
+.introMark span {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.library {
+    width: min(1200px, 90vw);
+    margin: 0 auto;
+    padding: 36px 0 64px;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    border-bottom: 1px solid #d9ddd3;
+    padding-bottom: 20px;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filterButton,
+.pagination button {
+    min-height: 40px;
+    border: 1px solid #d7ddd3;
+    border-radius: 3px;
+    padding: 0 14px;
+    color: #40534d;
+    background: transparent;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.filterButton:hover,
+.pagination button:not(:disabled):hover {
+    border-color: #315c4f;
+}
+
+.filterActive {
+    border-color: #183e37;
+    color: #f7f7ed;
+    background: #183e37;
+}
+
+.filterActive:hover {
+    border-color: #183e37;
+}
+
+.search {
+    display: flex;
+    width: min(320px, 100%);
+    height: 42px;
+    border: 1px solid #cdd4ca;
+    background: #fff;
+}
+
+.search input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    padding: 0 12px;
+    color: #192a27;
+    background: transparent;
+    font: inherit;
+    font-size: 14px;
+}
+
+.search button {
+    border: 0;
+    padding: 0 16px;
+    color: #fff;
+    background: #d3573c;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.resultsHeading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 27px 0 18px;
+}
+
+.resultsHeading h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.resultsHeading span {
+    color: #718079;
+    font-size: 13px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px 22px;
+}
+
+.videoCard {
+    min-width: 0;
+}
+
+.poster {
+    position: relative;
+    display: grid;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    place-items: center;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    background: #dfe6d8;
+    cursor: pointer;
+}
+
+.poster::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(16, 32, 27, .45));
+    content: "";
+}
+
+.poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .35s ease;
+}
+
+.poster:hover img {
+    transform: scale(1.035);
+}
+
+.posterPlaceholder {
+    color: #547366;
+    font-size: 54px;
+    font-weight: 700;
+}
+
+.playButton {
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    width: 52px;
+    height: 52px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, .85);
+    border-radius: 50%;
+    background: rgba(24, 62, 55, .78);
+    transition: background .2s ease, transform .2s ease;
+}
+
+.poster:hover .playButton {
+    background: #d3573c;
+    transform: scale(1.06);
+}
+
+.playButton i {
+    width: 0;
+    height: 0;
+    margin-left: 4px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 12px solid #fff;
+}
+
+.duration {
+    position: absolute;
+    z-index: 1;
+    right: 9px;
+    bottom: 9px;
+    border-radius: 2px;
+    padding: 3px 6px;
+    color: #fff;
+    background: rgba(16, 32, 27, .8);
+    font-size: 11px;
+}
+
+.cardInfo {
+    padding-top: 13px;
+}
+
+.cardInfo .provider {
+    color: #bd523a;
+    font-size: 10px;
+}
+
+.cardInfo h3 {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 5px 0 0;
+    color: #192a27;
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 700;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.cardInfo p {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 6px 0 0;
+    color: #66756e;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.status {
+    display: flex;
+    min-height: 210px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #617168;
+    text-align: center;
+}
+
+.status button {
+    border: 0;
+    color: #b94e37;
+    background: transparent;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 34px;
+    color: #40534d;
+    font-size: 13px;
+}
+
+.pagination button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.modalBackdrop {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow-y: auto;
+    padding: 24px;
+    background: rgba(8, 22, 19, .82);
+}
+
+.playerDialog {
+    width: min(900px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+    background: #f7f7f1;
+}
+
+.dialogHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 18px;
+}
+
+.dialogHeader h2 {
+    overflow: hidden;
+    margin: 0;
+    font-size: 17px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dialogHeader button {
+    flex: 0 0 auto;
+    border: 1px solid #ccd3c9;
+    border-radius: 3px;
+    padding: 7px 12px;
+    color: #304840;
+    background: transparent;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.player {
+    display: grid;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    place-items: center;
+    background: #09110f;
+}
+
+.player video,
+.player iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.player video {
+    object-fit: contain;
+}
+
+.tiktokPlayer {
+    width: min(420px, 100%);
+    aspect-ratio: 9 / 16;
+    margin: 0 auto;
+}
+
+.externalFallback {
+    padding: 24px;
+    color: #f7f7ed;
+    text-align: center;
+}
+
+.externalFallback a {
+    display: inline-block;
+    margin-top: 8px;
+    color: #d9eb78;
+}
+
+.dialogDescription {
+    margin: 0;
+    padding: 16px 18px 20px;
+    color: #596a62;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+}
+
+@media (max-width: 800px) {
+    .intro {
+        min-height: 250px;
+        padding: 36px 6vw;
+    }
+
+    .introMark {
+        width: 130px;
+        height: 130px;
+        margin-right: 0;
+    }
+
+    .introMark::before {
+        width: 102px;
+        height: 102px;
+    }
+
+    .library {
+        width: 88vw;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+    .intro {
+        min-height: 230px;
+    }
+
+    .intro h1 {
+        font-size: 34px;
+    }
+
+    .introText {
+        max-width: 340px;
+        font-size: 14px;
+    }
+
+    .introMark {
+        position: absolute;
+        right: -40px;
+        bottom: -42px;
+        width: 145px;
+        height: 145px;
+        opacity: .42;
+    }
+
+    .toolbar {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .filters {
+        gap: 6px;
+    }
+
+    .filterButton {
+        min-height: 36px;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+
+    .poster {
+        aspect-ratio: 16 / 9;
+    }
+
+    .modalBackdrop {
+        padding: 12px;
+    }
+
+    .playerDialog {
+        max-height: calc(100vh - 24px);
+    }
+}

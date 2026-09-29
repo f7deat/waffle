@@ -37,7 +37,7 @@ const Index: React.FC = () => {
                         width: 50,
                         align: 'center',
                         render: (dom, record) => [
-                            <Link key={"view"} to={`/settings/country/province/district/${record.id}`}>
+                            <Link key={"view"} to={`/setting/country/province/district/${record.id}`}>
                                 <Button type="primary" icon={<EyeOutlined />} size="small" />
                             </Link>
                         ]

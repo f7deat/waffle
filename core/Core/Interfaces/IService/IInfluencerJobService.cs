@@ -7,6 +7,7 @@ namespace Waffle.Core.Interfaces.IService;
 public interface IInfluencerJobService
 {
     Task<ListResult<object>> ListAsync(BasicFilterOptions filterOptions);
+    Task<ListResult<object>> ListCompletedByInfluencerAsync(string userName, BasicFilterOptions filterOptions);
     Task<TResult> CreateAsync(InfluencerJob args, Guid userId);
     Task<TResult> UpdateAsync(InfluencerJob args, Guid userId);
     Task<TResult> DeleteAsync(Guid id);

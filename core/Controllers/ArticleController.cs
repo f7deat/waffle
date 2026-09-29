@@ -33,6 +33,9 @@ public class ArticleController(IArticleService _articleService) : BaseController
     [HttpPut]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateArticleArgs args) => Ok(await _articleService.UpdateAsync(args));
 
+    [HttpPost("{id}/publish")]
+    public async Task<IActionResult> PublishAsync([FromRoute] Guid id) => Ok(await _articleService.PublishAsync(id));
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _articleService.DeleteAsync(id));
 

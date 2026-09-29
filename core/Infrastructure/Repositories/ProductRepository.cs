@@ -9,6 +9,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Settings;
+using Waffle.Core.Services.Shop.Filters;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Products;
 
@@ -240,6 +241,45 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         {
             query = query.Where(x => x.Locale == filterOptions.Locale);
         }
+        query = query.OrderByDescending(x => x.ModifiedDate);
+        return await ListResult<ProductListItem>.Success(query, filterOptions);
+    }
+
+    public async Task<ListResult<ProductListItem>> ListProductsByTagAsync(ProductTagFilterOptions filterOptions)
+    {
+        var query = from product in _context.Products
+                    join productTag in _context.ProductTags on product.Id equals productTag.ProductId
+                    join tag in _context.Tags on productTag.TagId equals tag.Id
+                    join category in _context.Categories on product.CategoryId equals category.Id into categoryGroup
+                    from category in categoryGroup.DefaultIfEmpty()
+                    where tag.NormalizedName == filterOptions.TagName
+                    select new ProductListItem
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        NormalizedName = product.NormalizedName,
+                        Thumbnail = product.Thumbnail,
+                        ViewCount = product.ViewCount,
+                        Price = product.Price,
+                        SalePrice = product.SalePrice,
+                        Description = product.Description,
+                        Type = CatalogType.Product,
+                        ModifiedDate = product.ModifiedDate ?? product.CreatedDate,
+                        Locale = product.Locale,
+                        CategoryId = product.CategoryId,
+                        CategoryName = category.Name,
+                        CreatedDate = product.CreatedDate
+                    };
+
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        {
+            query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
+        }
+        if (!string.IsNullOrEmpty(filterOptions.Locale))
+        {
+            query = query.Where(x => x.Locale == filterOptions.Locale);
+        }
+
         query = query.OrderByDescending(x => x.ModifiedDate);
         return await ListResult<ProductListItem>.Success(query, filterOptions);
     }

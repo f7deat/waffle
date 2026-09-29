@@ -43,6 +43,32 @@ public class InfluencerJobService(ApplicationDbContext _context) : IInfluencerJo
         }
     }
 
+    public async Task<ListResult<object>> ListCompletedByInfluencerAsync(string userName, BasicFilterOptions filterOptions)
+    {
+        var query = from application in _context.InfluencerJobApplications
+                    join job in _context.InfluencerJobs on application.JobId equals job.Id
+                    join influencer in _context.Users on application.InfluencerId equals influencer.Id
+                    join creator in _context.Users on job.CreatedBy equals creator.Id
+                    where influencer.UserName == userName
+                        && application.Status == InfluencerJobApplicationStatus.Approved
+                        && job.Status == InfluencerJobStatus.Completed
+                    orderby job.CreatedDate descending
+                    select new
+                    {
+                        job.Id,
+                        job.Title,
+                        job.Description,
+                        job.Brand,
+                        job.ContentType,
+                        job.Category,
+                        job.Budget,
+                        job.BudgetMax,
+                        PostedByName = creator.Name ?? creator.UserName
+                    };
+
+        return await ListResult<object>.Success(query, filterOptions);
+    }
+
     public async Task<TResult> CreateAsync(InfluencerJob args, Guid userId)
     {
         var job = new InfluencerJob

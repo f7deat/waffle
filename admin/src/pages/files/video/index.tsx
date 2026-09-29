@@ -14,7 +14,7 @@ import {
     UploadOutlined,
 } from '@ant-design/icons';
 import { ActionType, ModalForm, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, Form, Input, InputNumber, Modal, Popconfirm, Select, Space, Tabs, Tag, Upload, message } from 'antd';
+import { Button, Form, Input, InputNumber, Modal, Popconfirm, Space, Tabs, Tag, Upload, message } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import dayjs from 'dayjs';
 import { useMemo, useRef, useState } from 'react';
@@ -218,7 +218,7 @@ const Index: React.FC = () => {
                         Upload Video
                     </Button>,
                     <Button key="external" icon={<PlusOutlined />} onClick={() => openCreateModal('external')}>
-                        Thêm Link YouTube/External
+                        Thêm Link YouTube/TikTok
                     </Button>,
                 ]}
             />
@@ -278,7 +278,7 @@ const Index: React.FC = () => {
                         },
                         {
                             key: 'external',
-                            label: 'YouTube / External',
+                            label: 'YouTube / TikTok',
                             children: (
                                 <Form layout="vertical" form={externalForm}>
                                     <Form.Item label="Tên video" name="name">
@@ -292,7 +292,7 @@ const Index: React.FC = () => {
                                         name="url"
                                         rules={[{ required: true, message: 'Vui lòng nhập URL video' }]}
                                     >
-                                        <Input placeholder="https://www.youtube.com/watch?v=..." />
+                                        <Input placeholder="YouTube hoặc TikTok URL" />
                                     </Form.Item>
                                     <Form.Item label="Thumbnail URL" name="thumbnailUrl">
                                         <Input placeholder="https://..." />
@@ -349,7 +349,7 @@ const Index: React.FC = () => {
                         name="url"
                         rules={[{ required: true, message: 'Vui lòng nhập URL video' }]}
                     >
-                        <Input placeholder="https://www.youtube.com/watch?v=..." />
+                        <Input placeholder="YouTube hoặc TikTok URL" />
                     </Form.Item>
                 )}
                 <Form.Item label="Thumbnail URL" name="thumbnailUrl">

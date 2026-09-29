@@ -1,7 +1,5 @@
 import { googleSignIn, login } from '@/services/user';
 import {
-  FacebookFilled,
-  GithubFilled,
   GoogleCircleFilled,
   LockOutlined,
   MobileOutlined,
@@ -15,10 +13,10 @@ import {
 } from '@ant-design/pro-components';
 import { FormattedHTMLMessage, SelectLang, useIntl } from '@umijs/max';
 import { history, useModel } from '@umijs/max';
-import { Button, message, Space, Tabs } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Button, message, Tabs } from 'antd';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
-import '../index.css';
+import '../index.less';
 import { Helmet } from '@umijs/max';
 import Settings from '../../../../config/defaultSetting';
 import ForgotPassword from '../components/forgot-password';
@@ -56,6 +54,9 @@ const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
   const [open, setOpen] = useState<boolean>(false);
+  const googleButtonRef = useRef<HTMLDivElement>(null);
+  const googleClientId = process.env.GOOGLE_CLIENT_ID;
+  const hasGoogleClientId = Boolean(googleClientId && !googleClientId.includes('Your Google Client Id'));
 
   const intl = useIntl();
 
@@ -102,8 +103,7 @@ const Login: React.FC = () => {
   }, [completeLogin]);
 
   useEffect(() => {
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    if (!clientId) return;
+    if (!hasGoogleClientId) return;
 
     loadGoogleGsiScript()
       .then(() => {
@@ -111,25 +111,45 @@ const Login: React.FC = () => {
         if (!google?.accounts?.id) return;
 
         google.accounts.id.initialize({
-          client_id: clientId,
+          client_id: googleClientId,
           callback: handleGoogleCredential,
         });
+
+        if (googleButtonRef.current) {
+          google.accounts.id.renderButton(googleButtonRef.current, {
+            theme: 'outline',
+            size: 'large',
+            text: 'signin_with',
+            shape: 'rectangular',
+            width: 348,
+          });
+        }
       })
       .catch(() => {
         message.error('Không thể tải Google SDK');
       });
-  }, [handleGoogleCredential]);
+  }, [googleClientId, handleGoogleCredential, hasGoogleClientId]);
 
   return (
-    <div className='h-screen'>
+    <div className='login-page flex items-center justify-center p-6'>
       <Helmet>
         <title>{intl.formatMessage({ id: 'menu.login', defaultMessage: 'Login', })} - {Settings.title}</title>
       </Helmet>
       <div className='fixed z-50 right-2 top-2'>
         <SelectLang />
       </div>
-      <div className="flex items-center relative h-full flex-col justify-center">
-        <div>
+      <div className="login-shell flex">
+        <div className="login-brand-panel">
+          <div className="relative z-10">
+            <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-2xl font-bold backdrop-blur-sm">
+              {companyName.charAt(0)}
+            </div>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-white/70">Welcome back</p>
+            <h1 className="m-0 max-w-sm text-4xl font-semibold leading-tight">Đăng nhập để tiếp tục hành trình của bạn.</h1>
+          </div>
+          <p className="relative z-10 m-0 text-sm text-white/70">&copy; 2025 {companyName}</p>
+        </div>
+        <div className="login-form-panel">
           <LoginForm
             logo={<img alt="logo" src={`${process.env.API_URL}/imgs/logo-icon.png`} />}
             title={companyName}
@@ -138,35 +158,15 @@ const Login: React.FC = () => {
               autoLogin: true,
             }}
             actions={[
-              <div key={2} className="mb-4 text-center text-gray-̀500 text-sm">
+              <div key={2} className="mb-4 text-center text-sm text-slate-500">
                 <FormattedHTMLMessage id="pages.login.orLoginWith" />
               </div>,
-              <div className="text-center" key={3}>
-                <Space align="center">
-                  <Button icon={<FacebookFilled />} shape='circle' size='large' type='primary'></Button>
-                  <Button
-                    icon={<GoogleCircleFilled />}
-                    shape='circle'
-                    size='large'
-                    type='primary'
-                    danger
-                    onClick={() => {
-                      if (!process.env.GOOGLE_CLIENT_ID) {
-                        message.warning('Thiếu GOOGLE_CLIENT_ID');
-                        return;
-                      }
-
-                      const google = (window as any).google;
-                      if (!google?.accounts?.id) {
-                        message.error('Google SDK chưa sẵn sàng');
-                        return;
-                      }
-
-                      google.accounts.id.prompt();
-                    }}
-                  ></Button>
-                  <Button icon={<GithubFilled />} shape='circle' size='large'></Button>
-                </Space>
+              <div className="login-google-button" key={3} ref={googleButtonRef}>
+                {!hasGoogleClientId && (
+                  <Button block danger icon={<GoogleCircleFilled />} disabled>
+                    Chưa cấu hình Google Client ID
+                  </Button>
+                )}
               </div>,
             ]}
             onFinish={async (values) => {
@@ -296,8 +296,7 @@ const Login: React.FC = () => {
               </div>
             </div>
           </LoginForm>
-        </div>
-        <div className='text-sm text-slate-800 text-capitalize'>&copy; 2025 {process.env.COMPANY_NAME}</div>
+          </div>
       </div>
       <ForgotPassword open={open} onOpenChange={setOpen} />
     </div>

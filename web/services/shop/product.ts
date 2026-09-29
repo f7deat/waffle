@@ -1,6 +1,6 @@
 import { ProductDetailType, ProductItemType } from "@/typings/shop/product";
 import request from "../request";
-import { ProductCategoryFilterOptions, ProductCategoryItem, ProductFilterOptions, ProductImageItem, ProductTagItem } from "./typings";
+import { ProductCategoryFilterOptions, ProductCategoryItem, ProductFilterOptions, ProductImageItem, ProductTagFilterOptions, ProductTagItem } from "./typings";
 
 export async function apiProducts(params: ProductFilterOptions) {
     return request.get<API.ListResult<ProductItemType>>('product/list', { params });
@@ -12,6 +12,12 @@ export async function apiProductCategories(params: ProductCategoryFilterOptions)
 
 export async function apiProductsByCategory(normalizedName: string, params: ProductFilterOptions) {
     return request.get<API.ListResult<ProductItemType>>(`product/category/${normalizedName}`, { params });
+}
+
+export async function apiProductsByTag(tagName: string, params: Partial<Omit<ProductTagFilterOptions, "tagName">> = {}) {
+    return request.get<API.ListResult<ProductItemType>>('product/tags/products', {
+        params: { ...params, tagName },
+    });
 }
 
 export async function apiProductDetail(id: string) {

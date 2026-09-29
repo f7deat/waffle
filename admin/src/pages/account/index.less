@@ -1,0 +1,77 @@
+body {
+    background-color: #f3f6fb;
+}
+
+.login-page {
+    min-height: 100vh;
+    background: #f3f6fb url('../../assets/login_background.svg') center / cover;
+}
+
+.login-shell {
+    width: min(100%, 1080px);
+    min-height: 640px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
+}
+
+.login-brand-panel {
+    position: relative;
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 52px;
+    color: #23404a;
+    background: linear-gradient(160deg, #dcefeb, #e1e8f8);
+}
+
+.login-brand-panel::after {
+    position: absolute;
+    right: -80px;
+    bottom: -100px;
+    width: 280px;
+    height: 280px;
+    border: 1px solid rgba(35, 64, 74, 0.12);
+    border-radius: 50%;
+    content: '';
+}
+
+.login-form-panel {
+    width: 460px;
+    padding: 48px 56px;
+}
+
+.login-form-panel .ant-pro-form-login-container {
+    max-width: none;
+    padding: 0;
+}
+
+.login-google-button {
+    min-height: 40px;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+@media (max-width: 767px) {
+    .login-page {
+        padding: 16px;
+    }
+
+    .login-shell {
+        min-height: auto;
+        border-radius: 18px;
+    }
+
+    .login-brand-panel {
+        display: none;
+    }
+
+    .login-form-panel {
+        width: 100%;
+        padding: 36px 24px 28px;
+    }
+}
