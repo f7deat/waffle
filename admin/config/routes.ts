@@ -30,6 +30,11 @@ export default [
         hideInMenu: true
       },
       {
+        name: 'trash',
+        path: '/article/trash',
+        component: './article/trash',
+      },
+      {
         name: 'center',
         path: '/article/:id',
         component: './article/center',
@@ -231,6 +236,11 @@ export default [
         name: 'Files',
         path: '/files/list',
         component: './files',
+      },
+      {
+        name: 'trash',
+        path: '/files/trash',
+        component: './files/trash',
       },
       {
         name: 'album',

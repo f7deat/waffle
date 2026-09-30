@@ -33,6 +33,12 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
         return _articleRepository.ListAsync(filterOptions);
     }
 
+    public Task<ListResult> GetDeletedListAsync(ArticleFilterOptions filterOptions)
+    {
+        filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
+        return _articleRepository.GetDeletedListAsync(filterOptions);
+    }
+
     public Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions)
     {
         filterOptions.Name = SeoHelper.ToSeoFriendly(filterOptions.Name);
@@ -68,7 +74,7 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
         try
         {
             var article = await _articleRepository.FindAsync(args.Id);
-            if (article is null) return TResult.Failed("Article not found");
+            if (article is null || article.DeletedAt.HasValue) return TResult.Failed("Article not found");
             article.NormalizedName = SeoHelper.ToSeoFriendly(article.Name);
             article.Name = args.Name;
             article.Description = args.Description;
@@ -91,7 +97,7 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
         try
         {
             var article = await _articleRepository.FindAsync(id);
-            if (article is null) return TResult.Failed("Article not found");
+            if (article is null || article.DeletedAt.HasValue) return TResult.Failed("Article not found");
             if (article.PublishedAt is not null) return TResult.Ok(article.PublishedAt);
 
             article.PublishedAt = DateTime.Now;
@@ -111,12 +117,12 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
         try
         {
             var article = await _articleRepository.FindAsync(id);
-            if (article is null)
+            if (article is null || article.DeletedAt.HasValue)
                 return TResult.Failed("Article not found");
 
-            await _articleRepository.DeleteAsync(article);
-            await _articleRepository.SaveChangesAsync();
-            return TResult.Ok("Article deleted successfully");
+            article.DeletedAt = DateTime.UtcNow;
+            await _articleRepository.UpdateAsync(article);
+            return TResult.Ok("Article moved to trash");
         }
         catch (Exception ex)
         {
@@ -124,10 +130,31 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
         }
     }
 
+    public async Task<TResult> RestoreAsync(Guid id)
+    {
+        var article = await _articleRepository.FindAsync(id);
+        if (article is null || !article.DeletedAt.HasValue)
+            return TResult.Failed("Article not found in trash");
+
+        article.DeletedAt = null;
+        await _articleRepository.UpdateAsync(article);
+        return TResult.Ok("Article restored successfully");
+    }
+
+    public async Task<TResult> DeletePermanentlyAsync(Guid id)
+    {
+        var article = await _articleRepository.FindAsync(id);
+        if (article is null || !article.DeletedAt.HasValue)
+            return TResult.Failed("Article not found in trash");
+
+        await _articleRepository.DeleteAsync(article);
+        return TResult.Ok("Article deleted permanently");
+    }
+
     public async Task<TResult> GetByIdAsync(Guid id)
     {
         var article = await _articleRepository.FindAsync(id);
-        if (article is null) return TResult.Failed("Article not found");
+        if (article is null || article.DeletedAt.HasValue) return TResult.Failed("Article not found");
 
         return TResult.Ok(new
         {

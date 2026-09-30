@@ -3,6 +3,7 @@ import { request } from "@umijs/max";
 export interface IPlaceFilter extends API.IFilter {
     name?: string;
     districtId?: number;
+    provinceId?: number;
 }
 
 export interface IPlaceListItem {

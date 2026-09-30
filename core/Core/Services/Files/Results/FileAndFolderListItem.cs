@@ -6,8 +6,10 @@ public class FileAndFolderListItem : BaseEntity
 {
     public string Name { get; set; } = default!;
     public string Url { get; set; } = default!;
+    public string Type { get; set; } = default!;
     public decimal Size { get; set; }
     public bool IsFolder { get; set; }
     public Guid? ParentId { get; set; }
     public DateTime? CreatedDate { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

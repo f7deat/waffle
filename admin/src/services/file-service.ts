@@ -101,3 +101,31 @@ export async function api3rdUpload(data: any) {
     }
   })
 }
+
+export type FileTrashItem = API.FileListItem & {
+  deletedAt?: string;
+  createdDate?: string;
+};
+
+export async function listDeletedFiles(params: {
+  current?: number;
+  pageSize?: number;
+  name?: string;
+}) {
+  return request<API.ListResult<FileTrashItem>>('file/trash', {
+    method: 'GET',
+    params,
+  });
+}
+
+export async function restoreFile(id: string) {
+  return request(`file/trash/${id}/restore`, {
+    method: 'POST',
+  });
+}
+
+export async function deleteFilePermanently(id: string) {
+  return request(`file/trash/${id}`, {
+    method: 'DELETE',
+  });
+}

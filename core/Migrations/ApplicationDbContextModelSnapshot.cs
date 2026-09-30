@@ -969,6 +969,9 @@ namespace Waffle.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasJsonPropertyName("id");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid?>("FolderId")
                         .HasColumnType("uniqueidentifier");
 

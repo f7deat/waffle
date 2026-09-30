@@ -1,5 +1,5 @@
 import { apiFinancialTransactions, apiFinancialUserOptions } from '@/services/financial';
-import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { FilePdfOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
 import { Button, Col, DatePicker, Form, Input, message, Row, Select, Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -7,6 +7,78 @@ import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 
 const { RangePicker } = DatePicker;
+
+const formatMoney = (value?: number) =>
+        Number(value || 0).toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0,
+        });
+
+const escapeHtml = (value: string) =>
+        value.replace(/[&<>"']/g, (character) => {
+                const entities: Record<string, string> = {
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        '"': '&quot;',
+                        "'": '&#39;',
+                };
+                return entities[character];
+        });
+
+const printInvoice = (transaction: API.FinancialTransaction) => {
+        const printWindow = window.open('', '_blank', 'width=900,height=700');
+        if (!printWindow) {
+                message.error('Trình duyệt chặn popup. Vui lòng cho phép popup để xuất hóa đơn.');
+                return;
+        }
+
+        const invoiceNumber = escapeHtml(transaction.invoiceNumber || '-');
+        const transactionType = transaction.transactionType === 'deposit' ? 'Nạp tiền' : 'Rút tiền';
+        const html = `
+<!doctype html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8" />
+        <title>Hóa đơn ${invoiceNumber}</title>
+        <style>
+            body { font-family: Arial, sans-serif; padding: 32px; color: #111827; }
+            .header { margin-bottom: 24px; }
+            .title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+            .sub { color: #6b7280; margin-bottom: 4px; }
+            .card { border: 1px solid #d1d5db; padding: 20px; }
+            .row { display: flex; justify-content: space-between; margin: 10px 0; gap: 16px; }
+            .label { color: #6b7280; }
+            .value { font-weight: 600; text-align: right; }
+            .total { margin-top: 16px; padding-top: 16px; border-top: 1px dashed #9ca3af; }
+            @media print { body { padding: 0; } }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="title">Hóa đơn giao dịch tài chính</div>
+            <div class="sub">Số hóa đơn: ${invoiceNumber}</div>
+            <div class="sub">Thời gian: ${escapeHtml(dayjs(transaction.createdAt).format('DD/MM/YYYY HH:mm'))}</div>
+        </div>
+        <div class="card">
+            <div class="row"><span class="label">Người dùng</span><span class="value">${escapeHtml(transaction.userName || '-')}</span></div>
+            <div class="row"><span class="label">Email</span><span class="value">${escapeHtml(transaction.userEmail || '-')}</span></div>
+            <div class="row"><span class="label">Loại giao dịch</span><span class="value">${transactionType}</span></div>
+            <div class="row"><span class="label">Người thao tác</span><span class="value">${escapeHtml(transaction.createdByName || '-')}</span></div>
+            <div class="row"><span class="label">Số dư trước giao dịch</span><span class="value">${escapeHtml(formatMoney(transaction.balanceBefore))}</span></div>
+            <div class="row total"><span class="label">Số tiền giao dịch</span><span class="value">${escapeHtml(formatMoney(transaction.absoluteAmount))}</span></div>
+            <div class="row"><span class="label">Số dư sau giao dịch</span><span class="value">${escapeHtml(formatMoney(transaction.balanceAfter))}</span></div>
+            <div class="row"><span class="label">Ghi chú</span><span class="value">${escapeHtml(transaction.note || '-')}</span></div>
+        </div>
+        <script>window.onload = function () { window.print(); };</script>
+    </body>
+</html>`;
+
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
+};
 
 type FilterState = {
     userId?: string;
@@ -23,14 +95,6 @@ const TransactionPage: React.FC = () => {
     const [userOptions, setUserOptions] = useState<API.FinancialUserOption[]>([]);
     const [filters, setFilters] = useState<FilterState>({});
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
-
-    const formatMoney = (value?: number) => {
-        return Number(value || 0).toLocaleString('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-            maximumFractionDigits: 0,
-        });
-    };
 
     const loadUsers = async (keyWords?: string) => {
         const response = await apiFinancialUserOptions({ keyWords });
@@ -155,6 +219,17 @@ const TransactionPage: React.FC = () => {
                 dataIndex: 'note',
                 width: 240,
                 render: (value: string) => value || '-',
+            },
+            {
+                title: 'Hóa đơn',
+                key: 'invoice',
+                width: 120,
+                fixed: 'right',
+                render: (_, record) => (
+                    <Button size='small' icon={<FilePdfOutlined />} onClick={() => printInvoice(record)}>
+                        Xuất
+                    </Button>
+                ),
             },
         ],
         [pagination.current, pagination.pageSize],

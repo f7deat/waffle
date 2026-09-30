@@ -67,6 +67,10 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
         {
             query = query.Where(x => x.DistrictId == filterOptions.DistrictId);
         }
+        if (filterOptions.ProvinceId.HasValue)
+        {
+            query = query.Where(x => x.ProvinceId == filterOptions.ProvinceId);
+        }
         query = query.OrderBy(r => Guid.NewGuid()).Take(filterOptions.PageSize);
         return await ListResult.Success(query, filterOptions);
     }
@@ -99,6 +103,10 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
             if (filterOptions.DistrictId.HasValue)
             {
                 query = query.Where(x => x.DistrictId == filterOptions.DistrictId);
+            }
+            if (filterOptions.ProvinceId.HasValue)
+            {
+                query = query.Where(x => x.ProvinceId == filterOptions.ProvinceId);
             }
             if (!string.IsNullOrWhiteSpace(filterOptions.Name))
             {

@@ -11,7 +11,7 @@ namespace Waffle.Infrastructure.Repositories;
 
 public class FileRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<FileContent>(context, hcaService), IFileRepository
 {
-    public async Task<decimal> GetTotalSizeAsync() => await _context.FileContents.SumAsync(x => x.Size);
+    public async Task<decimal> GetTotalSizeAsync() => await _context.FileContents.Where(x => x.DeletedAt == null).SumAsync(x => x.Size);
 
     public async Task<ListResult<FileAndFolderListItem>> ListAsync(FileFilterOptions filterOptions)
     {
@@ -21,7 +21,7 @@ public class FileRepository(ApplicationDbContext context, IHCAService hcaService
         {
             Id = x.Id,
             Name = x.Name,
-            Size = _context.FileContents.Where(s => s.FolderId == x.Id).Sum(s => s.Size),
+            Size = _context.FileContents.Where(s => s.FolderId == x.Id && s.DeletedAt == null).Sum(s => s.Size),
             CreatedDate = x.CreatedDate,
             ParentId = x.ParentId,
             IsFolder = true,
@@ -35,7 +35,7 @@ public class FileRepository(ApplicationDbContext context, IHCAService hcaService
         filterOptions.PageSize -= total;
         if (filterOptions.PageSize > 0)
         {
-            var fileQuery = _context.FileContents.OrderByDescending(x => x.UploadDate).Where(x => filterOptions.FolderId == null || x.FolderId == filterOptions.FolderId).Select(x => new FileAndFolderListItem
+            var fileQuery = _context.FileContents.OrderByDescending(x => x.UploadDate).Where(x => x.DeletedAt == null && (filterOptions.FolderId == null || x.FolderId == filterOptions.FolderId)).Select(x => new FileAndFolderListItem
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -43,7 +43,8 @@ public class FileRepository(ApplicationDbContext context, IHCAService hcaService
                 CreatedDate = x.UploadDate,
                 ParentId = x.FolderId,
                 IsFolder = false,
-                Url = x.Url
+                Url = x.Url,
+                Type = x.Type
             });
 
             var files = await fileQuery.Skip((filterOptions.Current - 1) * filterOptions.PageSize).Take(filterOptions.PageSize).ToListAsync();

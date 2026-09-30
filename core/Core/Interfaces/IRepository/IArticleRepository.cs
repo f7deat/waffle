@@ -15,6 +15,7 @@ public interface IArticleRepository : IAsyncRepository<Article>
     Task<ListResult> GetMostViewedAsync(string locale);
     Task<int> GetPreviousMonthAsync(string locale);
     Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions);
+    Task<ListResult> GetDeletedListAsync(ArticleFilterOptions filterOptions);
     Task<TResult> GetRandomsAsync(string locale);
     Task<int> GetTotalArticlesAsync(string locale);
     Task<int> GetTotalViewCountAsync(string locale);

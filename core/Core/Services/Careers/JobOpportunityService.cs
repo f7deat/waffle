@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Waffle.Core.Constants;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Helpers;
 using Waffle.Core.Interfaces.IRepository.Careers;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Users;
+using Waffle.Core.Services.Users.Args;
 using Waffle.Data;
 using Waffle.Entities.Careers;
 using Waffle.Models;
@@ -12,7 +15,7 @@ using Waffle.Modules.Jobs.Models;
 
 namespace Waffle.Core.Services.Careers;
 
-public class JobOpportunityService(ApplicationDbContext _context, IJobOpportunityRepository _jobOpportunityRepository, IHCAService _hcaService, ILogService _logService) : IJobOpportunityService
+public class JobOpportunityService(ApplicationDbContext _context, IJobOpportunityRepository _jobOpportunityRepository, IHCAService _hcaService, ILogService _logService, INotificationService _notificationService) : IJobOpportunityService
 {
     public async Task<TResult> ApplyAsync(JobApplication args)
     {
@@ -27,6 +30,13 @@ public class JobOpportunityService(ApplicationDbContext _context, IJobOpportunit
         };
         await _context.JobApplications.AddAsync(application);
         await _context.SaveChangesAsync();
+        await _notificationService.CreateAsync(new CreateNotificationArgs
+        {
+            Title = "Có đơn ứng tuyển mới",
+            Content = $"Ứng tuyển vị trí: {job.Title}",
+            ActionUrl = $"/career/application/{args.JobId}",
+            RoleName = RoleName.Admin
+        });
         return TResult.Success;
     }
 

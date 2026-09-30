@@ -18,6 +18,9 @@ public class ArticleController(IArticleService _articleService) : BaseController
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync([FromQuery] ArticleFilterOptions filterOptions) => Ok(await _articleService.ListAsync(filterOptions));
 
+    [HttpGet("trash")]
+    public async Task<IActionResult> GetDeletedListAsync([FromQuery] ArticleFilterOptions filterOptions) => Ok(await _articleService.GetDeletedListAsync(filterOptions));
+
     [HttpGet("published-list"), AllowAnonymous]
     public async Task<IActionResult> GetPublishedListAsync([FromQuery] ArticleFilterOptions filterOptions) => Ok(await _articleService.GetPublishedListAsync(filterOptions));
 
@@ -38,6 +41,12 @@ public class ArticleController(IArticleService _articleService) : BaseController
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _articleService.DeleteAsync(id));
+
+    [HttpPost("{id}/restore")]
+    public async Task<IActionResult> RestoreAsync([FromRoute] Guid id) => Ok(await _articleService.RestoreAsync(id));
+
+    [HttpDelete("{id}/permanent")]
+    public async Task<IActionResult> DeletePermanentlyAsync([FromRoute] Guid id) => Ok(await _articleService.DeletePermanentlyAsync(id));
 
     [HttpGet("meta/{normalizedName}"), AllowAnonymous]
     public async Task<IActionResult> GetMetaAsync([FromRoute] string normalizedName) => Ok(await _articleService.GetMetaAsync(normalizedName));

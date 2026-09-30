@@ -21,7 +21,22 @@ import {
   queryNotificationList,
 } from '@/services/notification';
 import { NOTIFICATION_UPDATED_EVENT } from '@/constants';
-import { Badge, Button, Card, Empty, Input, List, Space, Tag, Typography, message } from 'antd';
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Empty,
+  Input,
+  List,
+  Row,
+  Space,
+  Statistic,
+  Tag,
+  Typography,
+  message,
+} from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { apiUserOptions } from '@/services/user';
 import { history } from '@umijs/max';
@@ -158,102 +173,148 @@ const NotificationPage: React.FC = () => {
         <Button key="reload" icon={<ReloadOutlined />} onClick={() => loadNotifications()}>
           Làm mới
         </Button>,
-        <Button
-          key="mark-all"
-          type="primary"
-          icon={<CheckCircleOutlined />}
-          onClick={onMarkAllAsRead}
-          disabled={unreadCount === 0}
-        >
-          Đánh dấu tất cả đã đọc
-        </Button>,
       ]}
     >
-      <Card>
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
-          <Space>
-            <Badge count={unreadCount} overflowCount={99} showZero>
-              <Tag color={unreadCount > 0 ? 'processing' : 'default'}>
-                <MailOutlined /> Chưa đọc
-              </Tag>
-            </Badge>
-            <Typography.Text type="secondary">
-              Tổng: {pagination.total} thông báo
-            </Typography.Text>
-          </Space>
-
-          <Input.Search
-            allowClear
-            placeholder="Tìm theo tiêu đề hoặc nội dung"
-            onSearch={(value) => {
-              const keyword = value.trim();
-              setSearchTerm(keyword);
-              loadNotifications({ current: 1, searchTerm: keyword });
-            }}
-          />
-
-          <List
-            loading={loading}
-            dataSource={notifications}
-            locale={{
-              emptyText: <Empty description="Chưa có thông báo" />,
-            }}
-            pagination={{
-              current: pagination.current,
-              pageSize: pagination.pageSize,
-              total: pagination.total,
-              showSizeChanger: true,
-              onChange: (current, pageSize) => {
-                loadNotifications({ current, pageSize });
-              },
-            }}
-            renderItem={(item) => (
-              <List.Item
-                actions={[
-                  <Button
-                    key="mark-read"
-                    type="link"
-                    icon={<CheckOutlined />}
-                    disabled={item.isRead}
-                    onClick={() => onMarkAsRead(item.id)}
-                  >
-                    Đánh dấu đã đọc
-                  </Button>,
-                ]}
-              >
-                <List.Item.Meta
-                  avatar={<InfoCircleOutlined className={item.isRead ? 'text-gray-400' : 'text-blue-500'} />}
-                  title={
-                    <Space>
-                      <Typography.Text strong={!item.isRead} className="cursor-pointer" onClick={() => onOpenNotification(item)}>
-                        {item.title}
-                      </Typography.Text>
-                      {!item.isRead && <Tag color="blue">Mới</Tag>}
-                    </Space>
-                  }
-                  description={
-                    <Space direction="vertical" size={4}>
-                      {item.content && <Typography.Text className="cursor-pointer" onClick={() => onOpenNotification(item)}>{item.content}</Typography.Text>}
-                      <Typography.Text type="secondary">
-                        {new Date(item.createdDate).toLocaleString('vi-VN')}
-                      </Typography.Text>
-                    </Space>
-                  }
-                />
-              </List.Item>
-            )}
-          />
-
-          <ModalForm
-            title="Tạo thông báo"
-            open={openCreateForm}
-            onOpenChange={setOpenCreateForm}
-            onFinish={onCreateNotification}
-            initialValues={{
-              type: 0,
-              recipientType: 'all',
-            }}
+      <Row gutter={[16, 16]} align="top">
+        <Col xs={24} lg={16}>
+          <Card
+            title={
+              <Space size={10}>
+                <MailOutlined />
+                <span>Hộp thư thông báo</span>
+              </Space>
+            }
+            extra={<Typography.Text type="secondary">{pagination.total} thông báo</Typography.Text>}
           >
+            <Space direction="vertical" size={16} style={{ width: '100%' }}>
+              <Input.Search
+                allowClear
+                placeholder="Tìm theo tiêu đề hoặc nội dung"
+                onSearch={(value) => {
+                  const keyword = value.trim();
+                  setSearchTerm(keyword);
+                  loadNotifications({ current: 1, searchTerm: keyword });
+                }}
+              />
+
+              <List
+                loading={loading}
+                dataSource={notifications}
+                locale={{
+                  emptyText: <Empty description="Chưa có thông báo" />,
+                }}
+                pagination={{
+                  current: pagination.current,
+                  pageSize: pagination.pageSize,
+                  total: pagination.total,
+                  showSizeChanger: true,
+                  onChange: (current, pageSize) => {
+                    loadNotifications({ current, pageSize });
+                  },
+                }}
+                renderItem={(item) => (
+                  <List.Item
+                    actions={[
+                      <Button
+                        key="mark-read"
+                        type="link"
+                        icon={<CheckOutlined />}
+                        disabled={item.isRead}
+                        onClick={() => onMarkAsRead(item.id)}
+                      >
+                        Đánh dấu đã đọc
+                      </Button>,
+                    ]}
+                  >
+                    <List.Item.Meta
+                      avatar={<InfoCircleOutlined className={item.isRead ? 'text-gray-400' : 'text-blue-500'} />}
+                      title={
+                        <Space>
+                          <Typography.Text
+                            strong={!item.isRead}
+                            className="cursor-pointer"
+                            onClick={() => onOpenNotification(item)}
+                          >
+                            {item.title}
+                          </Typography.Text>
+                          {!item.isRead && <Tag color="blue">Mới</Tag>}
+                        </Space>
+                      }
+                      description={
+                        <Space direction="vertical" size={4}>
+                          {item.content && (
+                            <Typography.Text
+                              className="cursor-pointer"
+                              onClick={() => onOpenNotification(item)}
+                            >
+                              {item.content}
+                            </Typography.Text>
+                          )}
+                          <Typography.Text type="secondary">
+                            {new Date(item.createdDate).toLocaleString('vi-VN')}
+                          </Typography.Text>
+                        </Space>
+                      }
+                    />
+                  </List.Item>
+                )}
+              />
+            </Space>
+          </Card>
+        </Col>
+
+        <Col xs={24} lg={8}>
+          <Space direction="vertical" size={16} style={{ width: '100%' }}>
+            <Card title="Tổng quan">
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Statistic title="Chưa đọc" value={unreadCount} />
+                </Col>
+                <Col span={12}>
+                  <Statistic title="Tổng cộng" value={pagination.total} />
+                </Col>
+              </Row>
+              <Divider />
+              <Space>
+                <Badge count={unreadCount} overflowCount={99} showZero>
+                  <Tag color={unreadCount > 0 ? 'processing' : 'default'}>
+                    <MailOutlined /> Hộp thư
+                  </Tag>
+                </Badge>
+                <Typography.Text type="secondary">Đang hiển thị trang {pagination.current}</Typography.Text>
+              </Space>
+            </Card>
+
+            <Card title="Thao tác nhanh">
+              <Space direction="vertical" size={12} style={{ width: '100%' }}>
+                <Button
+                  block
+                  type="primary"
+                  icon={<CheckCircleOutlined />}
+                  onClick={onMarkAllAsRead}
+                  disabled={unreadCount === 0}
+                >
+                  Đánh dấu tất cả đã đọc
+                </Button>
+                <Button block icon={<PlusOutlined />} onClick={() => setOpenCreateForm(true)}>
+                  Tạo thông báo mới
+                </Button>
+              </Space>
+            </Card>
+          </Space>
+        </Col>
+      </Row>
+
+      <ModalForm
+        title="Tạo thông báo"
+        open={openCreateForm}
+        onOpenChange={setOpenCreateForm}
+        onFinish={onCreateNotification}
+        initialValues={{
+          type: 0,
+          recipientType: 'all',
+        }}
+      >
             <ProFormText
               name="title"
               label="Tiêu đề"
@@ -316,9 +377,7 @@ const NotificationPage: React.FC = () => {
                 return null;
               }}
             </ProFormDependency>
-          </ModalForm>
-        </Space>
-      </Card>
+      </ModalForm>
     </PageContainer>
   );
 };

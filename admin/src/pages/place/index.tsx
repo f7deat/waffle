@@ -31,9 +31,11 @@ const Index: React.FC = () => {
 
     const actionRef = useRef<ActionType | undefined>(undefined);
     const editFormRef = useRef<ProFormInstance | undefined>(undefined);
+    const searchFormRef = useRef<ProFormInstance | undefined>(undefined);
     const [openCreate, setOpenCreate] = useState<boolean>(false);
     const [openEdit, setOpenEdit] = useState<boolean>(false);
     const [selectedProvinceId, setSelectedProvinceId] = useState<number>();
+    const [selectedFilterProvinceId, setSelectedFilterProvinceId] = useState<number>();
     const [currentPlace, setCurrentPlace] = useState<IPlaceListItem>();
     const [currentPlaceDetails, setCurrentPlaceDetails] = useState<any>();
 
@@ -93,6 +95,39 @@ const Index: React.FC = () => {
             title: 'Province',
             dataIndex: 'provinceName',
             search: false,
+        },
+        {
+            title: 'Province',
+            dataIndex: 'provinceId',
+            hideInTable: true,
+            renderFormItem: () => (
+                <ProFormSelect
+                    showSearch
+                    allowClear
+                    request={apiProvinceOptions}
+                    fieldProps={{
+                        onChange: (value) => {
+                            const parsed = Number(value);
+                            setSelectedFilterProvinceId(Number.isNaN(parsed) ? undefined : parsed);
+                            searchFormRef.current?.setFieldsValue({ districtId: undefined });
+                        }
+                    }}
+                />
+            ),
+        },
+        {
+            title: 'District',
+            dataIndex: 'districtId',
+            hideInTable: true,
+            renderFormItem: () => (
+                <ProFormSelect
+                    showSearch
+                    allowClear
+                    disabled={!selectedFilterProvinceId}
+                    request={apiDistrictOptions}
+                    params={{ provinceId: selectedFilterProvinceId }}
+                />
+            ),
         },
         {
             title: 'Lượt xem',
@@ -182,8 +217,10 @@ const Index: React.FC = () => {
                 rowKey="id"
                 columns={columns}
                 request={apiPlaceList}
+                formRef={searchFormRef}
                 search={{
-                    layout: 'vertical'
+                    layout: 'vertical',
+                    onReset: () => setSelectedFilterProvinceId(undefined),
                 }}
                 headerTitle={
                     <Button type="primary" icon={<PlusOutlined />} onClick={() => setOpenCreate(true)}>

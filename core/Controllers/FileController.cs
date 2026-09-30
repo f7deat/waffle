@@ -5,6 +5,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.Files.Args;
+using Waffle.Core.Services.Files.Results;
 using Waffle.Data;
 using Waffle.Entities.Files;
 using Waffle.Extensions;
@@ -25,6 +26,55 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
     {
         var fileContent = await _fileService.FindAsync(id);
         if (fileContent is null) return BadRequest("File not found!");
+        fileContent.DeletedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+        return Ok(IdentityResult.Success);
+    }
+
+    [HttpGet("trash")]
+    public async Task<IActionResult> GetTrashAsync([FromQuery] FileFilterOptions filterOptions)
+    {
+        var query = _context.FileContents.AsNoTracking()
+            .Where(x => x.DeletedAt != null)
+            .OrderByDescending(x => x.DeletedAt)
+            .Select(x => new FileAndFolderListItem
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Size = x.Size,
+                Type = x.Type,
+                Url = x.Url,
+                CreatedDate = x.UploadDate,
+                DeletedAt = x.DeletedAt,
+                ParentId = x.FolderId,
+                IsFolder = false
+            });
+
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        {
+            query = query.Where(x => EF.Functions.Like(x.Name, $"%{filterOptions.Name}%"));
+        }
+
+        return Ok(await ListResult<FileAndFolderListItem>.Success(query, filterOptions));
+    }
+
+    [HttpPost("trash/{id}/restore")]
+    public async Task<IActionResult> RestoreFromTrashAsync([FromRoute] Guid id)
+    {
+        var fileContent = await _context.FileContents.FirstOrDefaultAsync(x => x.Id == id && x.DeletedAt != null);
+        if (fileContent is null) return BadRequest("File not found in trash!");
+
+        fileContent.DeletedAt = null;
+        await _context.SaveChangesAsync();
+        return Ok(IdentityResult.Success);
+    }
+
+    [HttpDelete("trash/{id}")]
+    public async Task<IActionResult> DeletePermanentlyAsync([FromRoute] Guid id)
+    {
+        var fileContent = await _context.FileContents.FirstOrDefaultAsync(x => x.Id == id && x.DeletedAt != null);
+        if (fileContent is null) return BadRequest("File not found in trash!");
+
         DeletePhysicalFile(fileContent);
         _context.FileContents.Remove(fileContent);
         await _context.SaveChangesAsync();
@@ -34,7 +84,7 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
     [HttpGet("image-library")]
     public async Task<IActionResult> ImageLibraryAsync([FromQuery] FileFilterOptions filterOptions)
     {
-        var query = _context.FileContents.AsNoTracking().Where(x => IsImageType(x.Type, x.Name));
+        var query = _context.FileContents.AsNoTracking().Where(x => x.DeletedAt == null && IsImageType(x.Type, x.Name));
 
         if (!string.IsNullOrWhiteSpace(filterOptions.Name))
         {
@@ -113,12 +163,11 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
     [HttpDelete("image/{id}")]
     public async Task<IActionResult> DeleteImageAsync([FromRoute] Guid id)
     {
-        var fileContent = await _context.FileContents.FindAsync(id);
+        var fileContent = await _context.FileContents.FirstOrDefaultAsync(x => x.Id == id && x.DeletedAt == null);
         if (fileContent is null) return BadRequest("Image not found!");
         if (!IsImageType(fileContent.Type, fileContent.Name)) return BadRequest("File is not an image!");
 
-        DeletePhysicalFile(fileContent);
-        _context.FileContents.Remove(fileContent);
+        fileContent.DeletedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
         return Ok(IdentityResult.Success);
     }
@@ -128,15 +177,14 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
     {
         if (args.Ids.Count == 0) return BadRequest("Image ids are required!");
 
-        var images = await _context.FileContents.Where(x => args.Ids.Contains(x.Id) && IsImageType(x.Type, x.Name)).ToListAsync();
+        var images = await _context.FileContents.Where(x => args.Ids.Contains(x.Id) && x.DeletedAt == null && IsImageType(x.Type, x.Name)).ToListAsync();
         if (images.Count == 0) return BadRequest("Images not found!");
 
         foreach (var image in images)
         {
-            DeletePhysicalFile(image);
+            image.DeletedAt = DateTime.UtcNow;
         }
 
-        _context.FileContents.RemoveRange(images);
         await _context.SaveChangesAsync();
         return Ok(new
         {
@@ -249,7 +297,7 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
         if (!args.Id.HasValue) return BadRequest("File id is required!");
 
         var fileContent = await _context.FileContents.FindAsync(args.Id.Value);
-        if (fileContent is null) return BadRequest("File not found!");
+        if (fileContent is null || fileContent.DeletedAt != null) return BadRequest("File not found!");
 
         if (args.FolderId.HasValue)
         {
@@ -295,7 +343,7 @@ public class FileController(IWebHostEnvironment _webHostEnvironment, Application
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.FileContents.FindAsync(id));
+    public async Task<IActionResult> GetAsync([FromRoute] Guid id) => Ok(await _context.FileContents.FirstOrDefaultAsync(x => x.Id == id && x.DeletedAt == null));
 
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync() => Ok(await _fileService.CountAsync());

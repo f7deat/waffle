@@ -39,7 +39,7 @@ const ArticlePage: React.FC = () => {
     try {
       setDeletingId(id);
       await deleteArticle(id);
-      message.success("Delete article successfully");
+      message.success("Đã chuyển bài viết vào thùng rác");
       actionRef.current?.reload();
     } catch (error) {
       message.error("Delete article failed");
@@ -200,8 +200,8 @@ const ArticlePage: React.FC = () => {
               icon: <DeleteOutlined />,
               onClick: () => modal.confirm({
                 title: 'Xác nhận xóa',
-                content: 'Bạn có chắc chắn muốn xóa bài viết này không?',
-                okText: 'Xóa',
+                content: 'Bài viết sẽ được chuyển vào thùng rác và có thể khôi phục.',
+                okText: 'Chuyển vào thùng rác',
                 cancelText: 'Hủy',
                 onOk: () => handleDelete(record.id)
               }),
@@ -221,7 +221,8 @@ const ArticlePage: React.FC = () => {
   ];
 
   return (
-    <PageContainer extra={
+    <PageContainer extra={<Space>
+      <Button onClick={() => history.push('/article/trash')}>Thùng rác</Button>
       <Button
         type="primary"
         icon={<PlusOutlined />}
@@ -229,7 +230,7 @@ const ArticlePage: React.FC = () => {
       >
         Tạo mới
       </Button>
-    }>
+    </Space>}>
       {contextHolder}
       <ProTable
         columns={columns}

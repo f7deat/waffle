@@ -6,4 +6,5 @@ public class PlaceFilterOptions : FilterOptions
 {
     public string? Name { get; set; }
     public int? DistrictId { get; set; }
+    public int? ProvinceId { get; set; }
 }

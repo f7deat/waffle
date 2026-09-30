@@ -8,6 +8,7 @@ export type ArticleListItem = {
     description?: string;
     thumbnail?: string;
     publishedAt?: string;
+    deletedAt?: string;
     viewCount: number;
     creatorName?: string;
     creatorAvatar?: string;
@@ -47,6 +48,28 @@ export async function listArticles(
   sort: Record<string, SortOrder>
 ) {
   return request<API.ListResult<ArticleListItem>>('article/list', {
+    method: 'GET',
+    params: {
+      modifiedDate: sort.modifiedDate
+        ? sort.modifiedDate === 'ascend'
+          ? ESortOrder.Ascending
+          : ESortOrder.Descending
+        : ESortOrder.Unspecified,
+      ...params,
+    },
+  });
+}
+
+export async function listDeletedArticles(
+  params: {
+    current?: number;
+    pageSize?: number;
+    locale?: string;
+    name?: string;
+  },
+  sort: Record<string, SortOrder>
+) {
+  return request<API.ListResult<ArticleListItem>>('article/trash', {
     method: 'GET',
     params: {
       modifiedDate: sort.modifiedDate
@@ -104,6 +127,18 @@ export async function publishArticle(id: string) {
 
 export async function deleteArticle(id: string) {
   return request<API.TResult<object>>(`article/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function restoreArticle(id: string) {
+  return request<API.TResult<object>>(`article/${id}/restore`, {
+    method: 'POST',
+  });
+}
+
+export async function deleteArticlePermanently(id: string) {
+  return request<API.TResult<object>>(`article/${id}/permanent`, {
     method: 'DELETE',
   });
 }

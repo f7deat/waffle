@@ -2,8 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
+using Waffle.Core.Constants;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
+using Waffle.Core.IServices.Users;
+using Waffle.Core.Services.Users.Args;
 using Waffle.Entities;
 using Waffle.Entities.Users;
 using Waffle.Models;
@@ -13,7 +16,7 @@ using Waffle.Models.ViewModels.Comments;
 
 namespace Waffle.Core.Services;
 
-public class CommentService(ICatalogRepository catalogRepository, ILogService _logService, IHCAService _hcaService, ICommentRepository commentRepository, UserManager<ApplicationUser> userManager) : ICommentService
+public class CommentService(ICatalogRepository catalogRepository, ILogService _logService, IHCAService _hcaService, ICommentRepository commentRepository, UserManager<ApplicationUser> userManager, INotificationService _notificationService) : ICommentService
 {
     private readonly ICommentRepository _commentRepository = commentRepository;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
@@ -65,6 +68,13 @@ public class CommentService(ICatalogRepository catalogRepository, ILogService _l
             Rating = addComment.Rating
         };
         await _commentRepository.AddAsync(comment);
+        await _notificationService.CreateAsync(new CreateNotificationArgs
+        {
+            Title = "Có bình luận mới",
+            Content = addComment.Message,
+            ActionUrl = "/comments",
+            RoleName = RoleName.Admin
+        });
         return IdentityResult.Success;
     }
 

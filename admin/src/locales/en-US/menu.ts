@@ -4,6 +4,7 @@ export default {
   'menu.career.job': 'Jobs',
   'menu.career.application': 'Applications',
   'menu.catalog.article': 'Article',
+  'menu.article.trash': 'Trash',
   'menu.catalog.tag': 'Tag',
   'menu.catalog.tagCenter': 'Tag center',
   'menu.catalog': 'Catalog',

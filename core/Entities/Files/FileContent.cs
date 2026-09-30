@@ -17,6 +17,7 @@ public class FileContent : BaseEntity
     [JsonPropertyName("url")]
     public string Url { get; set; } = default!;
     public DateTime UploadDate { get; set; }
+    public DateTime? DeletedAt { get; set; }
     public Guid UploadBy { get; set; }
     [ForeignKey(nameof(Folder))]
     public Guid? FolderId { get; set; }

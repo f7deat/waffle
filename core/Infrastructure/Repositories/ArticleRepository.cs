@@ -13,7 +13,7 @@ namespace Waffle.Infrastructure.Repositories;
 
 public class ArticleRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Article>(context, hcaService), IArticleRepository
 {
-    public Task<Article?> FindByNameAsync(string normalizedName) => _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName);
+    public Task<Article?> FindByNameAsync(string normalizedName) => _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName && a.DeletedAt == null);
 
     private static object GetArticleContent(string? content)
     {
@@ -30,7 +30,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
 
     public async Task<TResult> GetByNameAsync(string normalizedName)
     {
-        var article = await _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName);
+        var article = await _context.Articles.FirstOrDefaultAsync(a => a.NormalizedName == normalizedName && a.DeletedAt == null);
         if (article is null) return TResult.Failed("Article not found");
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == article.CreatedBy);
         article.ViewCount++;
@@ -56,14 +56,14 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
         });
     }
 
-    public Task<int> GetCurrentMonthAsync(string locale) => _context.Articles.CountAsync(a => a.PublishedAt != null && a.Locale == locale && a.PublishedAt.Value.Month == DateTime.UtcNow.Month && a.PublishedAt.Value.Year == DateTime.Now.Year);
+    public Task<int> GetCurrentMonthAsync(string locale) => _context.Articles.CountAsync(a => a.DeletedAt == null && a.PublishedAt != null && a.Locale == locale && a.PublishedAt.Value.Month == DateTime.UtcNow.Month && a.PublishedAt.Value.Year == DateTime.Now.Year);
 
-    public Task<int> GetPreviousMonthAsync(string locale) => _context.Articles.CountAsync(a => a.PublishedAt != null && a.Locale == locale && a.PublishedAt.Value.Month == DateTime.UtcNow.AddMonths(-1).Month && a.PublishedAt.Value.Year == DateTime.Now.Year);
+    public Task<int> GetPreviousMonthAsync(string locale) => _context.Articles.CountAsync(a => a.DeletedAt == null && a.PublishedAt != null && a.Locale == locale && a.PublishedAt.Value.Month == DateTime.UtcNow.AddMonths(-1).Month && a.PublishedAt.Value.Year == DateTime.Now.Year);
 
     public async Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions)
     {
         var query = from a in _context.Articles
-                    where a.PublishedAt != null && a.Locale == filterOptions.Locale
+                    where a.DeletedAt == null && a.PublishedAt != null && a.Locale == filterOptions.Locale
                     select new
                     {
                         a.Id,
@@ -83,7 +83,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
     public async Task<TResult> GetRandomsAsync(string locale)
     {
         var query = from a in _context.Articles
-                    where a.PublishedAt != null && a.Locale == locale
+                    where a.DeletedAt == null && a.PublishedAt != null && a.Locale == locale
                     select new
                     {
                         a.Id,
@@ -100,16 +100,16 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
         return TResult.Ok(await query.Take(5).ToListAsync());
     }
 
-    public Task<int> GetTotalArticlesAsync(string locale) => _context.Articles.CountAsync(a => a.PublishedAt != null && a.Locale == locale);
+    public Task<int> GetTotalArticlesAsync(string locale) => _context.Articles.CountAsync(a => a.DeletedAt == null && a.PublishedAt != null && a.Locale == locale);
 
-    public Task<int> GetTotalViewCountAsync(string locale) => _context.Articles.Where(a => a.PublishedAt != null && a.Locale == locale).SumAsync(a => a.ViewCount);
+    public Task<int> GetTotalViewCountAsync(string locale) => _context.Articles.Where(a => a.DeletedAt == null && a.PublishedAt != null && a.Locale == locale).SumAsync(a => a.ViewCount);
 
     public async Task<ListResult> ListAsync(ArticleFilterOptions filterOptions)
     {
         var query = from a in _context.Articles
                     join u in _context.Users on a.CreatedBy equals u.Id into userJoin
                     from u in userJoin.DefaultIfEmpty()
-                    where a.Locale == filterOptions.Locale
+                    where a.DeletedAt == null && a.Locale == filterOptions.Locale
                     select new
                     {
                         a.Id,
@@ -133,10 +133,39 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
         return await ListResult.Success(query, filterOptions);
     }
 
+    public async Task<ListResult> GetDeletedListAsync(ArticleFilterOptions filterOptions)
+    {
+        var query = from a in _context.Articles
+                    join u in _context.Users on a.CreatedBy equals u.Id into userJoin
+                    from u in userJoin.DefaultIfEmpty()
+                    where a.DeletedAt != null && a.Locale == filterOptions.Locale
+                    select new
+                    {
+                        a.Id,
+                        a.Name,
+                        a.ViewCount,
+                        a.NormalizedName,
+                        a.ModifiedDate,
+                        a.Thumbnail,
+                        a.Description,
+                        a.CreatedDate,
+                        a.PublishedAt,
+                        a.DeletedAt,
+                        CreatorName = u.Name,
+                        CreatorAvatar = u.Avatar
+                    };
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        {
+            query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
+        }
+        query = query.OrderByDescending(x => x.DeletedAt);
+        return await ListResult.Success(query, filterOptions);
+    }
+
     public async Task<TResult> GetChartDataAsync(string locale)
     {
         var query = from a in _context.Articles
-                    where a.PublishedAt != null && a.PublishedAt.Value.Year == DateTime.Now.Year && a.Locale == locale
+                    where a.DeletedAt == null && a.PublishedAt != null && a.PublishedAt.Value.Year == DateTime.Now.Year && a.Locale == locale
                     group a by a.PublishedAt!.Value.Month into g
                     orderby g.Key
                     select new
@@ -150,7 +179,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
     public async Task<ListResult> GetMostViewedAsync(string locale)
     {
         var query = from a in _context.Articles
-                    where a.PublishedAt != null && a.Locale == locale
+                    where a.DeletedAt == null && a.PublishedAt != null && a.Locale == locale
                     orderby a.ViewCount descending
                     select new
                     {

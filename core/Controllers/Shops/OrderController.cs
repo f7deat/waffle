@@ -6,6 +6,8 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices.Shops;
+using Waffle.Core.IServices.Users;
+using Waffle.Core.Services.Users.Args;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Users;
 using Waffle.Extensions;
@@ -15,7 +17,7 @@ using Waffle.Models.Params.Products;
 
 namespace Waffle.Controllers.Shops;
 
-public class OrderController(IOrderService _orderService, ITelegramService _telegramService, UserManager<ApplicationUser> _userManager) : BaseController
+public class OrderController(IOrderService _orderService, ITelegramService _telegramService, UserManager<ApplicationUser> _userManager, INotificationService _notificationService) : BaseController
 {
     [HttpGet("list")]
     public async Task<IActionResult> ListAsync(BasicFilterOptions filterOptions) => Ok(await _orderService.ListAsync(filterOptions));
@@ -78,6 +80,13 @@ public class OrderController(IOrderService _orderService, ITelegramService _tele
         };
         await _orderService.AddAsync(order);
         await _orderService.AddOrderDetailsAsync(order.Id, args.OrderDetails);
+        await _notificationService.CreateAsync(new CreateNotificationArgs
+        {
+            Title = "Có đơn hàng mới",
+            Content = $"Đơn {order.Number} - {args.Name}",
+            ActionUrl = "/shop/order",
+            RoleName = RoleName.Admin
+        });
         await _telegramService.SendMessageAsync($"New order [{order.Number}]: \nName: {args.Name}\nPhone: {args.PhoneNumber}\nAddress: {args.Address}\nNote: {args.Note}");
         return Ok(TResult.Success);
     }

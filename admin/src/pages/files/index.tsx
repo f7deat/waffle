@@ -154,7 +154,7 @@ const FilePage: React.FC = () => {
         await deleteFileContent(entity.id);
       }
 
-      message.success('Deleted!');
+      message.success(entity.isFolder ? 'Deleted!' : 'Đã chuyển tệp vào thùng rác.');
       reloadData();
     } catch (error: any) {
       message.error(error?.data?.message || 'Delete failed!');
@@ -166,7 +166,9 @@ const FilePage: React.FC = () => {
   const confirmDelete = (entity: API.FileListItem) => {
     Modal.confirm({
       title: entity.isFolder ? 'Xác nhận xóa thư mục' : 'Xác nhận xóa file',
-      content: 'Bạn có chắc chắn muốn xóa mục này?',
+      content: entity.isFolder
+        ? 'Bạn có chắc chắn muốn xóa mục này?'
+        : 'Tệp sẽ được chuyển vào thùng rác và có thể khôi phục.',
       onOk: () => handleDelete(entity),
     });
   };
@@ -177,9 +179,15 @@ const FilePage: React.FC = () => {
       return;
     }
 
+    const selectedFileCount = selectedRows.filter((row) => !row.isFolder).length;
+    const selectedFolderCount = selectedRows.length - selectedFileCount;
+    const deleteDescription = selectedFolderCount > 0
+      ? `${selectedFileCount} tệp sẽ vào thùng rác; ${selectedFolderCount} thư mục sẽ bị xóa.`
+      : 'Các tệp đã chọn sẽ được chuyển vào thùng rác và có thể khôi phục.';
+
     Modal.confirm({
       title: 'Xác nhận xóa nhiều mục',
-      content: `Bạn có chắc chắn muốn xóa ${selectedRowKeys.length} mục đã chọn?`,
+      content: deleteDescription,
       onOk: async () => {
         try {
           setIsBusy(true);
@@ -667,6 +675,9 @@ const FilePage: React.FC = () => {
     <PageContainer
       extra={
         <Space>
+          <Button icon={<DeleteOutlined />} onClick={() => history.push('/files/trash')}>
+            Thùng rác
+          </Button>
           <Button icon={<ArrowUpOutlined />} onClick={goBackOneFolder} disabled={folderTrail.length === 0}>
             Up
           </Button>

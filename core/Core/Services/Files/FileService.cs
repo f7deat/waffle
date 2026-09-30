@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Waffle.Core.Foundations.Interfaces;
@@ -19,7 +20,7 @@ public class FileService(ApplicationDbContext context, IFileRepository _fileRepo
     private readonly ApplicationDbContext _context = context;
     private readonly SettingOptions _options = options.Value;
 
-    public async Task<int> CountAsync() => await _fileRepository.CountAsync();
+    public async Task<int> CountAsync() => await _context.FileContents.CountAsync(x => x.DeletedAt == null);
 
     public async Task<TResult> DeletePathAsync(string path)
     {
