@@ -3,9 +3,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import PageContainer from "@/components/layout/page-container";
-import Block from "@/components/block";
 import { apiCareerDetail } from "@/services/career";
 import ApplyForm from "./apply-form";
+import BlockRender from "@/components/editor/block-render";
 
 type Params = Promise<{
     id: string;
@@ -148,24 +148,7 @@ const Page = async ({ params }: { params: Params }) => {
                     </div>
 
                     <div className="prose max-w-none rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                        {blocks.length === 0 ? (
-                            <p className="text-slate-500">Noi dung chi tiet dang duoc cap nhat.</p>
-                        ) : (
-                            blocks.map((block, index) => (
-                                <Block
-                                    key={block.id || `${block.type}-${index}`}
-                                    type={block.type as API.BlockType}
-                                    data={{
-                                        text: block.data?.text,
-                                        level: block.data?.level,
-                                        code: block.data?.code,
-                                        caption: block.data?.caption,
-                                        url: block.data?.file?.url,
-                                        items: block.data?.items,
-                                    }}
-                                />
-                            ))
-                        )}
+                        <BlockRender blocks={detailContent} />
                     </div>
                 </section>
 

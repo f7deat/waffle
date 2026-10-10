@@ -312,10 +312,12 @@ const Index: React.FC = () => {
                                 style={{ display: "none" }}
                                 onChange={onThumbnailSelected}
                             />
-                            <ProFormDigit name={"price"} label="Giá bán" />
-                            <ProFormDigit name="salePrice" label="Giá khuyến mãi" />
-                            <ProFormDigit name="unitInStock" label="Số lượng trong kho" />
-                            <ProFormText name={"sku"} label="SKU" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <ProFormDigit name={"price"} label="Giá bán" />
+                                <ProFormDigit name="salePrice" label="Giá khuyến mãi" />
+                                <ProFormDigit name="unitInStock" label="SL trong kho" />
+                                <ProFormText name={"sku"} label="SKU" />
+                            </div>
                             <ProFormSelect name="categoryId" label="Danh mục" request={apiCategoryOptions} showSearch />
                             <ProFormText name={"affiliateLink"} label="Affiliate Link" />
                         </Col>

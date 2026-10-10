@@ -303,32 +303,45 @@ const HomePage: React.FC = () => {
   return (
     <PageContainer>
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mb-4'>
-        <ProCard bordered title="Tổng bài viết" extra={<FileTextOutlined />} loading={staticLoading}>
-          <Statistic value={summary.article.totalArticles} suffix="bài" />
-          <Typography.Text type="secondary">Lượt xem: {summary.article.viewCount.toLocaleString()}</Typography.Text>
+        <ProCard bordered title="Tổng bài viết" extra={<FileTextOutlined />} loading={staticLoading} size='small'>
+          <div className="flex gap-3 h-full">
+            <div className="h-full w-1 bg-red-500"></div>
+            <div className="flex-1">
+              <Statistic value={summary.article.totalArticles} suffix="bài" />
+              <div className="text-gray-500">
+                Lượt xem: {summary.article.viewCount.toLocaleString()}
+              </div>
+            </div>
+          </div>
         </ProCard>
 
-        <ProCard bordered title="Lượt xem bài viết" extra={<ArrowUpOutlined />} loading={staticLoading}>
+        <ProCard bordered title="Lượt xem bài viết" extra={<ArrowUpOutlined />} loading={staticLoading} size='small'>
           <Statistic value={summary.article.viewCount} />
           <Space size={8}>
             <Tag color={isTrendUp ? 'success' : 'error'}>
               {isTrendUp ? <ArrowUpOutlined /> : <ArrowDownOutlined />} {Math.abs(articleTrend).toFixed(1)}%
             </Tag>
-            <Typography.Text type="secondary">So với tháng trước</Typography.Text>
+            <div className="text-gray-500">
+              So với tháng trước
+            </div>
           </Space>
         </ProCard>
 
-        <ProCard bordered title="Đơn hàng" extra={<OrderedListOutlined />} loading={staticLoading}>
+        <ProCard bordered title="Đơn hàng" extra={<OrderedListOutlined />} loading={staticLoading} size='small'>
           <Statistic value={summary.orderCount} suffix="đơn" />
-          <Typography.Text type="secondary">Tổng đơn hiện có trong hệ thống</Typography.Text>
+          <div className="text-gray-500">
+            Tổng đơn hiện có trong hệ thống
+          </div>
         </ProCard>
 
-        <ProCard bordered title="Sản phẩm" extra={<ShoppingOutlined />} loading={staticLoading}>
+        <ProCard bordered title="Sản phẩm" extra={<ShoppingOutlined />} loading={staticLoading} size='small'>
           <Statistic value={summary.productCount} suffix="sản phẩm" />
-          <Typography.Text type="secondary">Tổng sản phẩm đang quản lý</Typography.Text>
+          <div className="text-gray-500">
+            Tổng sản phẩm đang quản lý
+          </div>
         </ProCard>
 
-        <ProCard title="Kho tệp" extra={<FileOutlined />} loading={staticLoading}>
+        <ProCard title="Kho tệp" extra={<FileOutlined />} loading={staticLoading} size='small'>
           <Statistic value={summary.fileCount} suffix="tệp" />
           <Typography.Text type="secondary">Dung lượng: {formatFileSize(summary.totalFileSize)}</Typography.Text>
         </ProCard>

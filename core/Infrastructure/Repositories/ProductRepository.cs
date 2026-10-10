@@ -58,6 +58,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         {
             return TResult.Failed("Product with the same name already exists!");
         }
+        if (args.CategoryId.HasValue && !await CategoryExistsAsync(args.CategoryId.Value)) return TResult.Failed("Category does not exist!");
         await _context.Products.AddAsync(new Product
         {
             Name = args.Name,
@@ -188,7 +189,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                         SalePrice = product.SalePrice,
                         Description = product.Description,
                         Type = CatalogType.Product,
-                        ModifiedDate = product.ModifiedDate,
+                        ModifiedDate = product.ModifiedDate ?? product.CreatedDate,
                         Locale = product.Locale,
                         CategoryId = product.CategoryId,
                         CategoryName = category.Name,

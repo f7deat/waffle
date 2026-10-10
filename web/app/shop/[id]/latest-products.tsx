@@ -40,22 +40,19 @@ const LatestProducts: React.FC = () => {
     }
 
     return (
-        <div className="mt-20">
-            <div className="mb-10 text-center">
+        <div className="mt-4">
+            <div className="mb-4 text-center">
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-2 text-sm font-semibold text-blue-700 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-300">
                     <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                     </svg>
                     Explore More
                 </div>
-                <h2 className="text-4xl font-bold text-slate-900 dark:text-slate-100">
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
                     Latest Products
                 </h2>
-                <p className="mt-3 text-lg text-slate-600 dark:text-slate-400">
-                    Discover our newest arrivals and trending items
-                </p>
             </div>
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-4 grid-cols-1">
                 {products.map((product) => {
                     const hasDiscount = product.salePrice && product.salePrice < (product.price || 0);
                     const discountPercent = hasDiscount

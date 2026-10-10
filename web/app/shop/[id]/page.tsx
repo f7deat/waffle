@@ -211,27 +211,36 @@ const Page = async ({ params }: PageProps) => {
                         </div>
                     </div>
                 </div>
-                <div className="mt-12 rounded-lg p-4 bg-white backdrop-blur">
-                    <BlockRender {...product.content} />
+                <div className="md:flex gap-4">
+                    <div className="flex-1">
+                        <div className="mt-12 rounded-lg p-4 bg-white backdrop-blur">
+                            <BlockRender {...product.content} />
 
-                    <div className="mt-4 flex flex-wrap gap-2">
-                        {tags.map((tag) => (
-                            <Link
-                                key={tag.id}
-                                href={`/shop/tags/${tag.normalizedName}`}
-                                className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-amber-500 hover:bg-amber-50 hover:text-amber-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-amber-500 dark:hover:bg-amber-50 dark:hover:text-amber-700"
-                            >
-                                {tag.name}
-                            </Link>
-                        ))}
-                    </div>
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {tags.map((tag) => (
+                                    <Link
+                                        key={tag.id}
+                                        href={`/shop/tags/${tag.normalizedName}`}
+                                        className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-amber-500 hover:bg-amber-50 hover:text-amber-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-amber-500 dark:hover:bg-amber-50 dark:hover:text-amber-700"
+                                    >
+                                        {tag.name}
+                                    </Link>
+                                ))}
+                            </div>
 
-                    <div className="mt-4 text-sm text-slate-500 dark:text-slate-400">
-                        <div>
-                            Ngày cập nhật: {dayjs(product.modifiedDate || product.createdDate).format("DD/MM/YYYY HH:mm")}
+                            <div className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                                <div>
+                                    Ngày cập nhật: {dayjs(product.modifiedDate || product.createdDate).format("DD/MM/YYYY HH:mm")}
+                                </div>
+                                <div>
+                                    Lượt xem: {product.viewCount?.toLocaleString()}
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            Lượt xem: {product.viewCount?.toLocaleString()}
+                    </div>
+                    <div className="md:w-1/4">
+                        <div className="mt-12">
+                            <LatestProducts />
                         </div>
                     </div>
                 </div>
@@ -241,9 +250,6 @@ const Page = async ({ params }: PageProps) => {
                 </div>
 
                 {/* Latest Products */}
-                <div className="mt-12">
-                    <LatestProducts />
-                </div>
             </div>
         </PageContainer>
     );

@@ -1,8 +1,10 @@
 import { apiProductAdd } from "@/services/products/product";
+import { apiCategoryOptions } from "@/services/settings/category";
 import {
     ModalForm,
     ModalFormProps,
     ProFormDigit,
+    ProFormSelect,
     ProFormText,
     ProFormTextArea,
 } from "@ant-design/pro-components";
@@ -50,6 +52,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm" }]}
             />
             <ProFormTextArea name="description" label="Mô tả" />
+            <ProFormSelect
+                request={apiCategoryOptions} showSearch
+                name="categoryId"
+                label="Danh mục" />
         </ModalForm>
     );
 };

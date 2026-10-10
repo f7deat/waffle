@@ -15,18 +15,18 @@ const RandomArticleList = async ({ layout = "grid" }: RandomArticleListProps) =>
         const articles = response.data || [];
 
         return (
-            <section className="rounded-lg bg-white p-4 backdrop-blur">
+            <section>
                 <div className="mb-4 flex items-center justify-between gap-3">
                     <h2 className="text-xl font-semibold text-slate-900">Bài viết ngẫu nhiên</h2>
                     <Link href="/article" className="text-sm font-medium text-blue-600 transition hover:text-blue-700">
-                        Xem tất cả
+                        Xem tất cả <span aria-hidden="true">&rarr;</span>
                     </Link>
                 </div>
 
                 {articles.length === 0 ? (
                     <p className="text-sm text-slate-500">Chưa có bài viết.</p>
                 ) : (
-                    <div className={layout === "sidebar" ? "space-y-3" : "grid gap-4 md:grid-cols-2 xl:grid-cols-4"}>
+                    <div className={layout === "sidebar" ? "space-y-3" : "grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5"}>
                         {articles.map((article) => (
                             <Link
                                 key={article.id}
@@ -36,7 +36,7 @@ const RandomArticleList = async ({ layout = "grid" }: RandomArticleListProps) =>
                                     : "group overflow-hidden rounded-lg border border-slate-200 bg-slate-50 transition hover:-translate-y-1 hover:border-blue-200 hover:bg-blue-50 hover:shadow-md"}
                             >
                                 <div className={layout === "sidebar"
-                                    ? "h-20 w-20 flex-shrink-0 overflow-hidden rounded-md bg-slate-100"
+                                    ? "h-20 w-20 flex-shrink-0 overflow-hidden rounded-md bg-white"
                                     : "h-40 overflow-hidden bg-slate-100"}>
                                     {article.thumbnail ? (
                                         <img

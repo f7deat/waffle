@@ -20,7 +20,9 @@ declare namespace API {
         html?: string;
         code?: string;
         items?: EditorjsItem[];
-        url?: string;
+        file?: {
+            url: string;
+        };
         caption?: string;
         align?: 'left' | 'center' | 'right';
         embed?: string;

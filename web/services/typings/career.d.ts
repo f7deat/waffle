@@ -16,12 +16,6 @@ declare namespace API {
         };
     }
 
-    interface CareerEditorContent {
-        time?: number;
-        version?: string;
-        blocks?: CareerDetailBlock[];
-    }
-
     interface CareerListItem {
         id: string;
         normalizedName: string;
@@ -44,7 +38,7 @@ declare namespace API {
         id: string;
         title: string;
         description?: string;
-        detail?: CareerEditorContent | null;
+        detail?: API.Block | null;
         detailJson?: CareerEditorContent | null;
         jobType: CareerJobType;
         status: CareerJobStatus;
