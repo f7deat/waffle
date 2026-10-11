@@ -1,3 +1,4 @@
+import { BrandDetailType, BrandItemType } from "@/typings/shop/brand";
 import { ProductDetailType, ProductItemType } from "@/typings/shop/product";
 import request from "../request";
 import { ProductCategoryFilterOptions, ProductCategoryItem, ProductFilterOptions, ProductImageItem, ProductTagFilterOptions, ProductTagItem } from "./typings";
@@ -30,4 +31,12 @@ export async function apiProductImages(id: string) {
 
 export async function apiProductTags(id: string) {
     return await request.get<API.TResult<ProductTagItem[]>>(`product/tags/${id}`);
+}
+
+export async function apiBrands(params: { current: number; pageSize: number; name?: string }) {
+    return request.get<API.ListResult<BrandItemType>>("brand/list", { params });
+}
+
+export async function apiBrandDetail(normalizedName: string) {
+    return request.get<API.TResult<BrandDetailType>>(`brand/detail/${normalizedName}`);
 }

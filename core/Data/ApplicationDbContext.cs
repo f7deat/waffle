@@ -33,7 +33,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Localization> Localizations { get; set; } = default!;
     public DbSet<Order> Orders { get; set; } = default!;
     public DbSet<OrderDetail> OrderDetails { get; set; }
+    #region E-Commerces
     public DbSet<Product> Products { get; set; }
+    public DbSet<Brand> Brands { get; set; }
+
+    #endregion
     public DbSet<ProductTag> ProductTags { get; set; }
     public DbSet<Menu> Menus { get; set; }
     public DbSet<Folder> Folders { get; set; }

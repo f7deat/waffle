@@ -28,6 +28,7 @@ export default {
   'menu.article.center': 'Chi tiết',
   'menu.shop': 'Cửa hàng',
   'menu.shop.product': 'Sản phẩm',
+  'menu.shop.brand': 'Thương hiệu',
   'menu.shop.productCenter': 'Chi tiết sản phẩm',
   'menu.shop.center': 'Chi tiết',
   'menu.shop.order': 'Đơn hàng',

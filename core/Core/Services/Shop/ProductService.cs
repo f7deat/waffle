@@ -68,6 +68,7 @@ public class ProductService(IProductRepository _productRepository, IProductLinkR
             Content = JsonSerializer.Deserialize<object>(product.Content ?? "{}"),
             product.NormalizedName,
             product.CategoryId,
+            product.BrandId,
             product.CreatedDate,
             product.ModifiedDate,
             TagIds = tags.Select(x => x.TagId),
@@ -234,6 +235,7 @@ public class ProductService(IProductRepository _productRepository, IProductLinkR
         var product = await _productRepository.FindAsync(args.Id);
         if (product is null) return TResult.Failed("Product not found!");
         if (args.CategoryId.HasValue && !await _productRepository.CategoryExistsAsync(args.CategoryId.Value)) return TResult.Failed("Category not found!");
+        if (args.BrandId.HasValue && !await _productRepository.BrandExistsAsync(args.BrandId.Value)) return TResult.Failed("Brand not found!");
         product.Price = args.Price;
         product.SKU = args.SKU;
         product.UnitInStock = args.UnitInStock;
@@ -244,6 +246,7 @@ public class ProductService(IProductRepository _productRepository, IProductLinkR
         product.Description = args.Description;
         product.Thumbnail = args.Thumbnail;
         product.CategoryId = args.CategoryId;
+        product.BrandId = args.BrandId;
         product.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
 
         if (args.Variants is not null)

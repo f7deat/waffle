@@ -59,6 +59,9 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
                             Danh sách sản phẩm
                             {selectedCategoryName ? `: ${selectedCategoryName}` : ""}
                         </div>
+                        <Link href="/shop/brand" className="text-sm font-medium text-amber-700 hover:underline">
+                            Xem thương hiệu
+                        </Link>
                         <form action="/shop" className="w-full md:w-auto">
                             <div className="bg-slate-100 rounded-lg items-center text-sm flex">
                                 {selectedCategory ? (

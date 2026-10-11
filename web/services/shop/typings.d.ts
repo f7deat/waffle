@@ -24,6 +24,7 @@ export interface ProductImageItem {
 }
 export interface ProductFilterOptions extends API.FilterOptions {
     name?: string;
+    brandId?: number;
 }
 
 export interface ProductCategoryFilterOptions extends API.FilterOptions {

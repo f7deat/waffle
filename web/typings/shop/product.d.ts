@@ -30,6 +30,12 @@ export type ProductDetailType = {
     unitInStock?: number;
     affiliateLink?: string;
     category?: CategoryItemType;
+    brandId?: number;
+    brand?: {
+        id: number;
+        name: string;
+        normalizedName: string;
+    };
 }
 
 export type ProductImageItemType = {

@@ -19,6 +19,7 @@ export default {
   'menu.hr.teamMembers': 'Team Members',
   'menu.shop': 'E-Commerce',
   'menu.shop.product': 'Product',
+  'menu.shop.brand': 'Brand',
   'menu.shop.productCenter': 'Product center',
   'menu.shop.order': 'Orders',
   'menu.shop.newOrder': 'New order',

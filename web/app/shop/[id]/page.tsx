@@ -107,6 +107,14 @@ const Page = async ({ params }: PageProps) => {
                                     {product.description}
                                 </p>
                             )}
+                            {product.brand && (
+                                <Link
+                                    href={`/shop/brand/${product.brand.normalizedName}`}
+                                    className="inline-flex items-center gap-2 text-sm font-medium text-amber-700 hover:text-amber-900 hover:underline"
+                                >
+                                    {product.brand.name}
+                                </Link>
+                            )}
                         </div>
 
                         {/* Price */}

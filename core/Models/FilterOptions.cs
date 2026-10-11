@@ -48,6 +48,7 @@ public class ProductFilterOptions : FilterOptions
 {
     public string? Name { get; set; }
     public int? CategoryId { get; set; }
+    public int? BrandId { get; set; }
 }
 
 public class ProductCategoryFilterOptions : FilterOptions

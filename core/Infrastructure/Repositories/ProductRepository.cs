@@ -50,6 +50,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
     }
 
     public Task<bool> CategoryExistsAsync(int categoryId) => _context.Categories.AnyAsync(x => x.Id == categoryId);
+    public Task<bool> BrandExistsAsync(int brandId) => _context.Brands.AnyAsync(x => x.Id == brandId);
 
     public async Task<TResult> CreateAsync(Product args, string locale)
     {
@@ -129,6 +130,12 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
             .ToListAsync();
         
         var category = product.CategoryId.HasValue ? await _context.Categories.FindAsync(product.CategoryId) : null;
+        var brand = product.BrandId.HasValue
+            ? await _context.Brands
+                .Where(x => x.Id == product.BrandId && x.IsActive && !x.DeletedAt.HasValue)
+                .Select(x => new { x.Id, x.Name, x.NormalizedName })
+                .FirstOrDefaultAsync()
+            : null;
 
         return TResult.Ok(new
         {
@@ -150,6 +157,8 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
             Variants = variants,
             Images = images,
             product.CategoryId,
+            product.BrandId,
+            brand = brand,
             category = new
             {
                 category?.Id,
@@ -192,6 +201,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                         ModifiedDate = product.ModifiedDate ?? product.CreatedDate,
                         Locale = product.Locale,
                         CategoryId = product.CategoryId,
+                        BrandId = product.BrandId,
                         CategoryName = category.Name,
                         CreatedDate = product.CreatedDate,
                     };
@@ -206,6 +216,10 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         if (filterOptions.CategoryId.HasValue)
         {
             query = query.Where(x => x.CategoryId == filterOptions.CategoryId);
+        }
+        if (filterOptions.BrandId.HasValue)
+        {
+            query = query.Where(x => x.BrandId == filterOptions.BrandId);
         }
         return query;
     }

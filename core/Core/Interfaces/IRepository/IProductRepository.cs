@@ -27,4 +27,5 @@ public interface IProductRepository : IAsyncRepository<Product>
     Task<Product?> DetailAsync(Guid id);
     Task<TResult> GetByNameAsync(string normalizedName);
     Task<bool> CategoryExistsAsync(int categoryId);
+    Task<bool> BrandExistsAsync(int brandId);
 }

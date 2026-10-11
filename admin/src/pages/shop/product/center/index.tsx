@@ -10,6 +10,7 @@ import { Button, Col, message, Row } from "antd";
 import type { RcFile } from "antd/lib/upload";
 import { useEffect, useRef, useState } from "react";
 import { apiCategoryOptions } from "@/services/settings/category";
+import { apiBrandOptions } from "@/services/products/brand";
 
 type ProductVariant = {
     name?: string;
@@ -196,6 +197,13 @@ const Index: React.FC = () => {
                                 mode="multiple"
                                 request={apiTagOptions}
                                 showSearch
+                            />
+                            <ProFormSelect
+                                name="brandId"
+                                label="Thương hiệu"
+                                request={apiBrandOptions}
+                                showSearch
+                                allowClear
                             />
                             <ProFormList
                                 name="images"

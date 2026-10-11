@@ -29,11 +29,14 @@ public class Product : AuditEntity
     public int? CategoryId { get; set; }
     [StringLength(10)]
     public string Locale { get; set; } = "vi-VN";
+    [ForeignKey(nameof(Brand))]
+    public int? BrandId { get; set; }
 
     [NotMapped]
     public IEnumerable<Guid>? TagIds { get; set; }
 
     public Category? Category { get; set; }
+    public Brand? Brand { get; set; }
     public ICollection<ProductVariant>? Variants { get; set; }
     public ICollection<ProductTag>? ProductTags { get; set; }
     public ICollection<ProductImage>? Images { get; set; }

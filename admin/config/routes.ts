@@ -53,6 +53,11 @@ export default [
         component: './shop/product'
       },
       {
+        name: 'brand',
+        path: '/shop/brand',
+        component: './shop/brand'
+      },
+      {
         name: 'order',
         path: '/shop/order',
         component: './order'
