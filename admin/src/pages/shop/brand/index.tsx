@@ -75,6 +75,9 @@ const Index: React.FC = () => {
             <ProTable<BrandItem>
                 actionRef={actionRef}
                 rowKey="id"
+                search={{
+                    layout: "vertical"
+                }}
                 request={apiBrandList}
                 columns={[
                     {
