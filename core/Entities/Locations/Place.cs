@@ -11,6 +11,12 @@ public class Place : BaseEntity
     [StringLength(512)]
     public string? Address { get; set; }
     public Guid? InfluencerId { get; set; }
+    [StringLength(2048)]
+    public string? AffiliateLink { get; set; }
+    [Column(TypeName = "decimal(10,7)")]
+    public decimal? Latitude { get; set; }
+    [Column(TypeName = "decimal(10,7)")]
+    public decimal? Longitude { get; set; }
 
     public virtual District? District { get; set; }
     public virtual ICollection<PlaceImage>? PlaceImages { get; set; }

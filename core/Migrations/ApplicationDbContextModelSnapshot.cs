@@ -1389,6 +1389,10 @@ namespace Waffle.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<string>("AffiliateLink")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
@@ -1397,6 +1401,12 @@ namespace Waffle.Migrations
 
                     b.Property<Guid?>("InfluencerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("Latitude")
+                        .HasColumnType("decimal(10,7)");
+
+                    b.Property<decimal?>("Longitude")
+                        .HasColumnType("decimal(10,7)");
 
                     b.HasKey("Id");
 
@@ -1452,6 +1462,35 @@ namespace Waffle.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Provinces");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Locations.Room", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasJsonPropertyName("id");
+
+                    b.Property<string>("AffiliateLink")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<Guid>("CatalogId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Galleries")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CatalogId");
+
+                    b.HasIndex("CityId");
+
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Locations.Street", b =>
@@ -1602,35 +1641,6 @@ namespace Waffle.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Partners");
-                });
-
-            modelBuilder.Entity("Waffle.Entities.Room", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasJsonPropertyName("id");
-
-                    b.Property<string>("AffiliateLink")
-                        .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)");
-
-                    b.Property<Guid>("CatalogId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Galleries")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CatalogId");
-
-                    b.HasIndex("CityId");
-
-                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Settings.Category", b =>
@@ -2245,6 +2255,23 @@ namespace Waffle.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.Locations.Room", b =>
+                {
+                    b.HasOne("Waffle.Entities.Catalog", "Catalog")
+                        .WithMany()
+                        .HasForeignKey("CatalogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Waffle.Entities.Catalog", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId");
+
+                    b.Navigation("Catalog");
+
+                    b.Navigation("City");
+                });
+
             modelBuilder.Entity("Waffle.Entities.Locations.Street", b =>
                 {
                     b.HasOne("Waffle.Entities.Locations.District", "District")
@@ -2265,23 +2292,6 @@ namespace Waffle.Migrations
                         .IsRequired();
 
                     b.Navigation("Notification");
-                });
-
-            modelBuilder.Entity("Waffle.Entities.Room", b =>
-                {
-                    b.HasOne("Waffle.Entities.Catalog", "Catalog")
-                        .WithMany()
-                        .HasForeignKey("CatalogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Waffle.Entities.Catalog", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
-
-                    b.Navigation("Catalog");
-
-                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Tags.TagCatalog", b =>

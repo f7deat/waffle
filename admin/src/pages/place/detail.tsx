@@ -2,6 +2,7 @@ import FormEditor from "@/components/editorjs/form-editor";
 import { apiDistrictOptions } from "@/services/locations/district";
 import {
     apiPlaceAddImages,
+    apiPlaceAddImageUrl,
     apiPlaceDeleteImage,
     apiPlaceDetails,
     apiPlaceImageList,
@@ -9,7 +10,7 @@ import {
 } from "@/services/locations/place";
 import { apiProvinceOptions } from "@/services/locations/province";
 import { apiInfluencerOptions } from "@/services/user";
-import { DeleteOutlined, LeftOutlined, UploadOutlined } from "@ant-design/icons";
+import { AimOutlined, DeleteOutlined, SendOutlined, ShopOutlined, UploadOutlined } from "@ant-design/icons";
 import {
     PageContainer,
     ProCard,
@@ -19,7 +20,7 @@ import {
     ProFormText,
 } from "@ant-design/pro-components";
 import { useParams, useRequest } from "@umijs/max";
-import { Button, Col, message, Row, Spin, Upload } from "antd";
+import { Button, Col, Input, message, Row, Spin, Upload } from "antd";
 import { useEffect, useRef, useState } from "react";
 import CatalogSetting from "../catalog/setting";
 
@@ -46,7 +47,9 @@ const PlaceDetail: React.FC = () => {
     const formRef = useRef<ProFormInstance>(null);
     const [selectedProvinceId, setSelectedProvinceId] = useState<number | undefined>(undefined);
     const [images, setImages] = useState<any[]>([]);
-    const [uploading, setUploading] = useState(false);
+    const [uploadingImage, setUploadingImage] = useState(false);
+    const [savingImageUrl, setSavingImageUrl] = useState(false);
+    const [imageUrl, setImageUrl] = useState("");
     const [loadingImages, setLoadingImages] = useState(false);
 
     const { data, loading, refresh } = useRequest(() => apiPlaceDetails(id), {
@@ -81,29 +84,63 @@ const PlaceDetail: React.FC = () => {
             address: data?.address,
             influencerId: data?.influencerId,
             content: parseContent(data?.content),
+            affiliateLink: data?.affiliateLink
         });
         setSelectedProvinceId(data?.provinceId);
     }, [data]);
 
-    const handleUpload = async (file: File) => {
+    const handleUploadImage = async (file: File) => {
+        if (!id) {
+            message.error("Place ID is missing");
+            return false;
+        }
+
         try {
-            if (!id) {
-                message.error("Place ID is missing");
-                return false;
-            }
-            setUploading(true);
+            setUploadingImage(true);
             const formData = new FormData();
-            formData.append("images", file);
             formData.append("placeId", id);
+            formData.append("images", file);
             await apiPlaceAddImages(formData);
             message.success("Image uploaded successfully");
             await loadImages();
         } catch {
             message.error("Failed to upload image");
         } finally {
-            setUploading(false);
+            setUploadingImage(false);
         }
         return false;
+    };
+
+    const handleAddImageUrl = async () => {
+        if (!id) {
+            message.error("Place ID is missing");
+            return;
+        }
+
+        let url: URL;
+        try {
+            url = new URL(imageUrl.trim());
+        } catch {
+            message.warning("Please enter a valid image URL");
+            return;
+        }
+
+        if (url.protocol !== "http:" && url.protocol !== "https:") {
+            message.warning("Image URL must use HTTP or HTTPS");
+            return;
+        }
+
+        try {
+            setSavingImageUrl(true);
+            await apiPlaceAddImageUrl(id, url.toString());
+            message.success("Image added successfully");
+            setImageUrl("");
+            await loadImages();
+        } catch {
+            message.error("Failed to add image");
+        } finally {
+            setSavingImageUrl(false);
+        }
     };
 
     const handleDeleteImage = async (imageId: string) => {
@@ -137,128 +174,157 @@ const PlaceDetail: React.FC = () => {
         <PageContainer
             title={data?.name || "Place detail"}
             onBack={() => history.back()}
+            extra={<Button type="primary" onClick={() => formRef.current?.submit()} icon={<SendOutlined />}>Lưu lại</Button>}
         >
-            <ProCard tabs={{
-                type: "card",
-                items: [
-                    {
-                        key: 'details',
-                        label: 'Details',
-                        children: (
-                            <ProForm
-                                onFinish={onFinish}
-                                formRef={formRef}
-                                submitter={{
-                                    searchConfig: {
-                                        submitText: "Save",
-                                    },
-                                }}
-                            >
-                                <Row gutter={16}>
-                                    <Col md={18} xs={24}>
-                                        {!loading && (
-                                            <FormEditor
-                                                name="content"
-                                                label="Content"
-                                                rules={[{ required: true, message: "Please enter content" }]}
-                                                initialValue={parseContent(data?.content)}
-                                            />
-                                        )}
+            <div className="md:flex gap-4 mb-4">
+                <div className="flex-1">
+                    <ProCard title={(
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded bg-blue-100 flex items-center justify-center">
+                                <span className="text-blue-500">
+                                    <ShopOutlined />
+                                </span>
+                            </div>
+                            Thông tin chung & Định danh
+                        </div>
+                    )}>
+                        <ProForm
+                            onFinish={onFinish}
+                            formRef={formRef}
+                            submitter={{
+                                searchConfig: {
+                                    submitText: "Save",
+                                },
+                            }}
+                        >
+                            {!loading && (
+                                <FormEditor
+                                    name="content"
+                                    label="Content"
+                                    rules={[{ required: true, message: "Please enter content" }]}
+                                    initialValue={parseContent(data?.content)}
+                                />
+                            )}
 
-                                        <div className="mb-4">
-                                            <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>
-                                                Images
-                                            </label>
-                                            <Spin spinning={loadingImages}>
-                                                <div style={{ marginBottom: "16px" }}>
-                                                    <Row gutter={[8, 8]}>
-                                                        {images?.map((image) => (
-                                                            <Col key={image.id} xs={12} sm={8}>
-                                                                <div className="relative">
-                                                                    <img
-                                                                        src={image.url}
-                                                                        alt={image.name}
-                                                                        className="object-cover h-64 w-full"
-                                                                    />
-                                                                    <Button
-                                                                        type="dashed"
-                                                                        danger
-                                                                        size="small"
-                                                                        icon={<DeleteOutlined />}
-                                                                        onClick={() => handleDeleteImage(image.id)}
-                                                                        style={{
-                                                                            position: "absolute",
-                                                                            top: 0,
-                                                                            right: 0,
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            </Col>
-                                                        ))}
-                                                        <Col xs={12} sm={8}>
-                                                            <Upload
-                                                                beforeUpload={handleUpload as any}
-                                                                accept="image/*"
-                                                                multiple
-                                                                disabled={uploading}
-                                                                showUploadList={false}
-                                                                className="h-64 block w-full border-dashed hover:border-blue-500 cursor-pointer border-2 border-gray-300 rounded flex items-center justify-center"
-                                                            >
-                                                                <div className="flex gap-2 font-medium">
-                                                                    <UploadOutlined />
-                                                                    Upload Images
-                                                                </div>
-                                                            </Upload>
-                                                        </Col>
-                                                    </Row>
+                            <div className="mb-4">
+                                <label style={{ display: "block", marginBottom: "8px", fontWeight: 500 }}>
+                                    Images
+                                </label>
+                                <Spin spinning={loadingImages}>
+                                    <div style={{ marginBottom: "16px" }}>
+                                        <Row gutter={[8, 8]}>
+                                            {images?.map((image) => (
+                                                <Col key={image.id} xs={12} sm={8}>
+                                                    <div className="relative">
+                                                        <img
+                                                            src={image.url}
+                                                            alt={image.name}
+                                                            className="object-cover h-64 w-full"
+                                                        />
+                                                        <Button
+                                                            type="dashed"
+                                                            danger
+                                                            size="small"
+                                                            icon={<DeleteOutlined />}
+                                                            onClick={() => handleDeleteImage(image.id)}
+                                                            style={{
+                                                                position: "absolute",
+                                                                top: 0,
+                                                                right: 0,
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            ))}
+                                            <Col xs={12} sm={8}>
+                                                <Upload
+                                                    accept="image/*"
+                                                    beforeUpload={handleUploadImage}
+                                                    disabled={uploadingImage || savingImageUrl}
+                                                    showUploadList={false}
+                                                    className="h-64 block w-full border-dashed hover:border-blue-500 cursor-pointer border-2 border-gray-300 rounded flex items-center justify-center"
+                                                >
+                                                    <div className="flex gap-2 font-medium">
+                                                        <UploadOutlined />
+                                                        Tải ảnh lên
+                                                    </div>
+                                                </Upload>
+                                            </Col>
+                                            <Col xs={12} sm={8}>
+                                                <div className="h-64 flex items-center">
+                                                    <Input.Search
+                                                        type="url"
+                                                        placeholder="Dán link ảnh"
+                                                        enterButton="Thêm link"
+                                                        value={imageUrl}
+                                                        onChange={(event) => setImageUrl(event.target.value)}
+                                                        onSearch={handleAddImageUrl}
+                                                        loading={savingImageUrl}
+                                                        disabled={savingImageUrl || uploadingImage}
+                                                    />
                                                 </div>
-                                            </Spin>
-                                        </div>
-                                    </Col>
-
-                                    <Col md={6} xs={24}>
-                                        <ProFormSelect
-                                            name="provinceId"
-                                            label="Province"
-                                            showSearch
-                                            request={apiProvinceOptions}
-                                            fieldProps={{
-                                                onChange: (value) => {
-                                                    const parsed = Number(value);
-                                                    setSelectedProvinceId(Number.isNaN(parsed) ? undefined : parsed);
-                                                },
-                                            }}
-                                        />
-                                        <ProFormSelect
-                                            name="districtId"
-                                            label="District"
-                                            showSearch
-                                            request={apiDistrictOptions}
-                                            params={{
-                                                provinceId: selectedProvinceId,
-                                            }}
-                                        />
-                                        <ProFormText name="address" label="Address" />
-                                        <ProFormSelect
-                                            name="influencerId"
-                                            label="Influencer"
-                                            showSearch
-                                            request={apiInfluencerOptions}
-                                        />
-                                    </Col>
-                                </Row>
-                            </ProForm>
-                        )
-                    },
-                    {
-                        key: 'settings',
-                        label: 'Settings',
-                        children: (
-                            <CatalogSetting />
-                        )
-                    }
-                ]
-            }} />
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </Spin>
+                            </div>
+                            <ProFormText name="affiliateLink" label="Affiliate Link" fieldProps={{
+                                variant: 'filled'
+                            }} />
+                            <ProFormSelect
+                                name="influencerId"
+                                label="Influencer"
+                                showSearch
+                                request={apiInfluencerOptions}
+                            />
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <ProFormSelect
+                                    name="provinceId"
+                                    label="Province"
+                                    showSearch
+                                    request={apiProvinceOptions}
+                                    fieldProps={{
+                                        variant: 'filled',
+                                        onChange: (value) => {
+                                            const parsed = Number(value);
+                                            setSelectedProvinceId(Number.isNaN(parsed) ? undefined : parsed);
+                                        },
+                                    }}
+                                />
+                                <ProFormSelect
+                                    name="districtId"
+                                    label="District"
+                                    showSearch fieldProps={{
+                                        variant: 'filled',
+                                    }}
+                                    request={apiDistrictOptions}
+                                    params={{
+                                        provinceId: selectedProvinceId,
+                                    }}
+                                />
+                            </div>
+                            <ProFormText name="address" label="Địa chỉ chi tiết" fieldProps={{
+                                variant: 'filled'
+                            }} />
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <ProFormText name="latitude" label="Latitude" fieldProps={{
+                                    variant: 'filled',
+                                    prefix: <AimOutlined />
+                                }} />
+                                <ProFormText name="longitude" label="Longitude" fieldProps={{
+                                    variant: 'filled',
+                                    prefix: <AimOutlined />
+                                }} />
+                            </div>
+                        </ProForm>
+                    </ProCard>
+                </div>
+                <div className="md:w-1/3">
+                    <ProCard>
+                        <CatalogSetting />
+                    </ProCard>
+                </div>
+            </div>
 
         </PageContainer>
     );

@@ -1,5 +1,5 @@
 ﻿using Waffle.Core.Foundations.Models;
-using Waffle.Entities;
+using Waffle.Entities.Locations;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.List;

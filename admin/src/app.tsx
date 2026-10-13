@@ -53,7 +53,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       sider: {
         colorMenuBackground: '#FFFFFF',
         colorBgMenuItemHover: '#8ebaf7',
-        colorBgMenuItemSelected: '#8ebaf7'
+        colorBgMenuItemSelected: '#8ebaf7',
+        colorTextMenuTitle: '#000000',
       }
     },
     avatarProps: {

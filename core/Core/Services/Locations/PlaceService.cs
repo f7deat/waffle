@@ -72,42 +72,76 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
 
     public async Task<TResult> AddImageAsync(PlaceAddImageArgs args, string host)
     {
-        if (args.Images is null || args.Images.Count == 0) return TResult.Failed("No images provided!");
+        var imageUrls = args.ImageUrls ?? new List<string>();
+        if ((args.Images is null || args.Images.Count == 0) && imageUrls.Count == 0)
+        {
+            return TResult.Failed("No images provided!");
+        }
+        if (imageUrls.Any(url =>
+                string.IsNullOrWhiteSpace(url) ||
+                url.Length > 2048 ||
+                !Uri.TryCreate(url, UriKind.Absolute, out var uri) ||
+                (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)))
+        {
+            return TResult.Failed("Image URLs must be valid HTTP or HTTPS URLs no longer than 2048 characters.");
+        }
+
         var place = await _placeRepository.FindAsync(args.PlaceId);
         if (place is null) return TResult.Failed("Place not found!");
-        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "places", place.Id.ToString());
-        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
         var images = new List<PlaceImage>();
-        foreach (var image in args.Images)
+        if (args.Images is { Count: > 0 })
         {
-            var fileExtension = Path.GetExtension(image.FileName);
-            var fileName = $"{Guid.NewGuid()}{fileExtension}";
-            var filePath = Path.Combine(uploadsFolder, fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "places", place.Id.ToString());
+            if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+            foreach (var image in args.Images)
             {
-                await image.CopyToAsync(stream);
+                var fileExtension = Path.GetExtension(image.FileName);
+                var fileName = $"{Guid.NewGuid()}{fileExtension}";
+                var filePath = Path.Combine(uploadsFolder, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+                var imageUrl = $"{host}/uploads/places/{place.Id}/{fileName}";
+                images.Add(new PlaceImage
+                {
+                    PlaceId = place.Id,
+                    Url = imageUrl,
+                    UploadedAt = DateTime.UtcNow
+                });
             }
-            var imageUrl = $"{host}/uploads/places/{place.Id}/{fileName}";
-            var placeImage = new PlaceImage
-            {
-                PlaceId = place.Id,
-                Url = imageUrl,
-                UploadedAt = DateTime.UtcNow
-            };
-            images.Add(placeImage);
         }
+
+        images.AddRange(imageUrls.Select(url => new PlaceImage
+        {
+            PlaceId = place.Id,
+            Url = url,
+            UploadedAt = DateTime.UtcNow
+        }));
         await _placeRepository.AddImagesAsync(images);
         await _placeRepository.SaveChangesAsync();
         return TResult.Success;
     }
 
+    public Task<TResult> AddImageUrlAsync(PlaceAddImageUrlArgs args, string host) =>
+        AddImageAsync(new PlaceAddImageArgs
+        {
+            PlaceId = args.PlaceId,
+            ImageUrls = new List<string> { args.ImageUrl }
+        }, host);
+
     public async Task<TResult> DeleteImageAsync(Guid imageId, string host)
     {
         var image = await _placeRepository.GetImageById(imageId);
         if (image is null) return TResult.Failed("Image not found!");
-        var uri = new Uri(image.Url);
-        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, uri.LocalPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
-        if (File.Exists(filePath)) File.Delete(filePath);
+        if (Uri.TryCreate(image.Url, UriKind.Absolute, out var imageUri) &&
+            Uri.TryCreate(host, UriKind.Absolute, out var hostUri) &&
+            imageUri.Authority.Equals(hostUri.Authority, StringComparison.OrdinalIgnoreCase))
+        {
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, imageUri.LocalPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+            if (File.Exists(filePath)) File.Delete(filePath);
+        }
         await _placeRepository.DeleteImageAsync(image);
         return TResult.Success;
     }
@@ -181,7 +215,8 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
             DistrictName = district?.Name,
             district?.ProvinceId,
             ProvinceName = province?.Name,
-            place.InfluencerId
+            place.InfluencerId,
+            place.AffiliateLink
         });
     }
 
@@ -246,6 +281,7 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
         place.DistrictId = args.DistrictId;
         place.Address = args.Address;
         place.InfluencerId = args.InfluencerId;
+        place.AffiliateLink = args.AffiliateLink;
         var catalog = await _catalogService.FindAsync(place.Id);
         if (catalog is not null)
         {

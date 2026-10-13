@@ -8,4 +8,5 @@ public class PlaceUpdateArgs : BaseEntity
     public string? Address { get; set; }
     public string? Content { get; set; }
     public Guid? InfluencerId { get; set; }
+    public string? AffiliateLink { get; set; }
 }

@@ -34,6 +34,10 @@ public class PlaceController(IPlaceService _placeService) : BaseController
     [HttpPost("images")]
     public async Task<IActionResult> AddImagesAsync([FromForm] PlaceAddImageArgs args) => Ok(await _placeService.AddImageAsync(args, $"https://{Request.Host.Value}"));
 
+    [HttpPost("image-url")]
+    public async Task<IActionResult> AddImageUrlAsync([FromBody] PlaceAddImageUrlArgs args) =>
+        Ok(await _placeService.AddImageUrlAsync(args, $"https://{Request.Host.Value}"));
+
     [HttpGet("images"), AllowAnonymous]
     public async Task<IActionResult> GetImagesAsync([FromQuery] Guid placeId) => Ok(await _placeService.GetImagesAsync(placeId));
 

@@ -62,6 +62,16 @@ export async function apiPlaceAddImages(formData: FormData) {
     });
 }
 
+export async function apiPlaceAddImageUrl(placeId: string, imageUrl: string) {
+    return request(`place/image-url`, {
+        method: 'POST',
+        data: {
+            placeId,
+            imageUrl,
+        },
+    });
+}
+
 export async function apiPlaceDeleteImage(imageId: string) {
     return request(`place/image/${imageId}`, {
         method: 'DELETE'

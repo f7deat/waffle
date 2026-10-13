@@ -3,6 +3,7 @@ using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Locations;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
 using Waffle.Models.List;

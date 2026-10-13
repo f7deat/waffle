@@ -48,6 +48,7 @@ export default {
   'menu.fileManager.audio': 'Âm thanh',
   'menu.fileManager.album': 'Album',
   'menu.fileManager.Files': 'Tệp tin',
+  'menu.fileManager.trash': 'Thùng rác',
   'menu.login': 'Đăng nhập',
   'menu.setting': 'Cài đặt',
   'menu.setting.component': 'Component',

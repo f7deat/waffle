@@ -17,7 +17,8 @@ const FileTrashPage: React.FC = () => {
   const actionRef = useRef<ActionType>(null);
   const [processingId, setProcessingId] = useState<string>();
 
-  const handleRestore = async (id: string) => {
+  const handleRestore = async (id?: string) => {
+    if (!id) return;
     try {
       setProcessingId(id);
       await restoreFile(id);
@@ -30,7 +31,8 @@ const FileTrashPage: React.FC = () => {
     }
   };
 
-  const handlePermanentDelete = async (id: string) => {
+  const handlePermanentDelete = async (id?: string) => {
+    if (!id) return;
     try {
       setProcessingId(id);
       await deleteFilePermanently(id);
@@ -112,7 +114,7 @@ const FileTrashPage: React.FC = () => {
   ];
 
   return (
-    <PageContainer
+    <PageContainer onBack={() => history.push('/files/list')}
       title="Thùng rác tệp tin"
       extra={<Button onClick={() => history.push('/files/list')}>Danh sách tệp</Button>}
     >

@@ -219,8 +219,7 @@ const Index: React.FC = () => {
                 request={apiPlaceList}
                 formRef={searchFormRef}
                 search={{
-                    layout: 'vertical',
-                    onReset: () => setSelectedFilterProvinceId(undefined),
+                    layout: 'vertical'
                 }}
                 headerTitle={
                     <Button type="primary" icon={<PlusOutlined />} onClick={() => setOpenCreate(true)}>

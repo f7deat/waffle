@@ -942,15 +942,16 @@ const FilePage: React.FC = () => {
           />
         </Col>
         <Col span={6}>
-          <ProCard className='mb-4' style={{ borderRadius: 14 }}>
-            <Space direction="vertical" size={4} style={{ width: '100%' }}>
+          <div className='mb-4'>
+            <ProCard style={{ borderRadius: 14 }}>
               <Text type="secondary">Workspace Totals</Text>
-              <Title level={5} style={{ margin: 0 }}>Tổng quan toàn bộ kho tệp</Title>
-              <Divider style={{ margin: '8px 0' }} />
-              <Statistic title="Total Files" value={count} />
-              <Statistic title="Total Size" value={formatFileSize(size)} />
-            </Space>
-          </ProCard>
+              <Title level={5}>Tổng quan toàn bộ kho tệp</Title>
+              <div className='flex justify-between items-center'>
+                <Statistic title="Total Files" value={count} />
+                <Statistic title="Total Size" value={formatFileSize(size)} />
+              </div>
+            </ProCard>
+          </div>
 
           <ProCard className='mb-4' style={{ borderRadius: 14 }}>
             <Space direction="vertical" size={8} style={{ width: '100%' }}>
