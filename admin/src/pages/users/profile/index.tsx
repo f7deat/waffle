@@ -477,11 +477,6 @@ const Profile: React.FC = () => {
           </ProCard>
         </Col>
         <Col span={18}>
-          {!data?.emailConfirmed && (
-            <Alert message={(
-              <div>Bạn chưa xác thực email, vui lòng kiểm tra email để xác thực tài khoản của bạn. <span className='font-semibold cursor-pointer' onClick={onConfirmEmail}>Gửi lại email xác thực?</span></div>
-            )} type="warning" showIcon className='mb-4' />
-          )}
           <ProCard tabs={{
             tabPosition: 'top',
             activeKey: activeKey,

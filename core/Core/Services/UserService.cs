@@ -440,10 +440,7 @@ public class UserService(UserManager<ApplicationUser> _userManager, IFileService
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user is null) return TResult.Failed("User not found!");
-        if (!string.IsNullOrWhiteSpace(user.Avatar))
-        {
-            await _fileService.DeletePathAsync(user.Avatar);
-        }
+        if (!string.IsNullOrWhiteSpace(user.Avatar)) return await _fileService.DeletePathAsync(user.Avatar);
         return TResult.Success;
     }
 }

@@ -1,5 +1,5 @@
-import { apiGetUser, apiUpdateUser, createUser, apiUserDelete, listUser } from '@/services/user';
-import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined, EditOutlined, EyeOutlined, ManOutlined, MoreOutlined, PlusOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
+import { createUser, apiUserDelete, listUser } from '@/services/user';
+import { DeleteOutlined, EditOutlined, EyeOutlined, ManOutlined, MoreOutlined, PlusOutlined, SettingOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
 import {
   ActionType,
   ModalForm,
@@ -9,12 +9,13 @@ import {
 } from '@ant-design/pro-components';
 import UserFormFields from '../components/user-form-fields';
 import { FormattedMessage, useIntl, history, Link } from '@umijs/max';
-import { Button, Dropdown, message, Popconfirm, Space } from 'antd';
+import { Button, Dropdown, message, Modal, Space } from 'antd';
 import { useRef, useState } from 'react';
 import UserEditForm from '../components/edit-form';
 
 const UserList: React.FC = () => {
   const intl = useIntl();
+  const [modal, contextHolder] = Modal.useModal();
   const actionRef = useRef<ActionType | undefined>(undefined);
   const [open, setOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
@@ -122,7 +123,7 @@ const UserList: React.FC = () => {
       search: false
     },
     {
-      title: 'Tác vụ',
+      title: <SettingOutlined />,
       valueType: 'option',
       render: (_, entity) => [
         <Dropdown key="more" menu={{
@@ -143,18 +144,32 @@ const UserList: React.FC = () => {
                 setEditData(entity);
                 setEditOpen(true);
               }
+            },
+            {
+              key: 'delete',
+              label: 'Delete',
+              icon: <DeleteOutlined />,
+              onClick: async () => {
+                const confirmed = await modal.confirm({
+                  title: 'Are you sure you want to delete this user?',
+                  content: 'This action cannot be undone.',
+                  okText: 'Yes'
+                });
+                if (confirmed) {
+                  onConfirm(entity.id);
+                }
+              },
+              danger: true
             }
           ]
         }}>
           <Button type="dashed" size='small'>
             <MoreOutlined />
           </Button>
-        </Dropdown>,
-        <Popconfirm title="Are you sure?" key={2} onConfirm={() => onConfirm(entity.id)}>
-          <Button type="primary" icon={<DeleteOutlined />} size='small' danger />
-        </Popconfirm>,
+        </Dropdown>
       ],
-      width: 80
+      width: 30,
+      align: 'center'
     },
   ];
 
@@ -195,6 +210,7 @@ const UserList: React.FC = () => {
         actionRef.current?.reload();
         setEditData(undefined);
       }} />
+      {contextHolder}
     </PageContainer>
   );
 };
