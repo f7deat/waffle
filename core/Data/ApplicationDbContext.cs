@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Waffle.Entities;
 using Waffle.Entities.Affliates;
 using Waffle.Entities.Careers;
+using Waffle.Entities.Commons;
 using Waffle.Entities.Ecommerces;
 using Waffle.Entities.Files;
 using Waffle.Entities.HR;
@@ -78,6 +79,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Branch> Branches { get; set; }
     public DbSet<Department> Departments { get; set; }
     public DbSet<Team> Teams { get; set; }
+    #endregion
+
+    #region Common
+    public DbSet<SocialPlatform> SocialPlatforms { get; set; }
+    #endregion
+    #region User
+    public DbSet<SocialAccount> SocialAccounts { get; set; }
     #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)

@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic'; 
+export const dynamic = 'force-dynamic';
 
 import Link from "next/link";
 import { DistrictSection } from "./home";
@@ -12,7 +12,7 @@ import { Metadata } from "next";
 import WebsitePageRenderer from "@/components/website-builder/page-renderer";
 import { apiGetPublishedHomePage } from "@/services/website-page";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCompass, faEye, faLayerGroup, faLocationDot, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -67,11 +67,129 @@ export default async function Home() {
 
   return (
     <main className="bg-slate-100">
-      {
-        builderPage?.isPublished && builderPage.content?.blocks?.some((block) => !block.hidden) && (
-          <WebsitePageRenderer document={builderPage.content} />
-        )
-      }
+      <section className="relative w-full pt-36 pb-20 md:pb-28 overflow-hidden bg-surface-container-low">
+        <div className="absolute inset-0 z-0">
+          <div
+            className="w-full h-full bg-cover bg-center object-cover"
+            data-alt="Cinematic wide-angle view of coastal Hai Phong and Lan Ha Bay at golden hour sunset, showing tranquil emerald waters, karst limestone peaks, and stylish terrace cafes glowing warmly with string lights and happy people dining outdoors, editorial travel magazine photography style with warm coral, golden amber, and deep emerald green palette."
+            style={{
+              backgroundImage:
+                'url("https://datviettour.com.vn/uploads/images/tin-tuc-SEO/mien-bac/ha-long/danh-thang/Tren-dao-Reu.jpg")'
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-on-surface/40 to-on-surface/65" />
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary-container/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-[32rem] h-[32rem] bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-gutter flex flex-col items-center text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md shadow-md mb-6">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
+            <span className="font-label-sm text-label-sm text-secondary uppercase tracking-widest">
+              Nền tảng Khám phá Du lịch &amp; Ẩm thực Bản địa
+            </span>
+          </div>
+          <h1 className="font-bold 2xl:text-5xl text-display max-w-4xl text-surface tracking-tight mb-4 drop-shadow-sm">
+            Đi đâu hôm nay,{" "}
+            <span className="text-primary-container underline decoration-primary-container/40 underline-offset-8">
+              trải nghiệm chất
+            </span>{" "}
+            hôm nay!
+          </h1>
+          <p className="font-body-lg text-body-lg text-surface-container-high max-w-2xl mb-10 leading-relaxed font-normal">
+            Khám phá quán ngon, góc check-in đẹp và những hành trình đáng nhớ tại Hải
+            Phòng &amp; khắp mọi miền Việt Nam.
+          </p>
+          {/* Floating Search Glassmorphism Card */}
+          <div className="w-full max-w-5xl bg-surface-container-lowest/95 backdrop-blur-xl p-4 sm:p-5 rounded-2xl shadow-xl flex flex-col lg:flex-row items-stretch gap-3">
+            {/* City dropdown */}
+            <div className="relative flex-1 bg-surface-container-low rounded-xl px-4 py-3 flex flex-col text-left justify-center cursor-pointer group hover:bg-surface-container transition-colors">
+              <span className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px] text-primary">
+                  <FontAwesomeIcon icon={faLocationDot} />
+                </span>{" "}
+                Điểm đến
+              </span>
+              <div className="flex items-center justify-between mt-0.5">
+                <span className="font-title text-body-lg font-semibold text-on-surface">
+                  Hải Phòng
+                </span>
+                <span className="material-symbols-outlined text-[18px] text-outline group-hover:text-primary transition-transform group-hover:translate-y-0.5">
+                    
+                </span>
+              </div>
+              <span className="font-body-sm text-body-sm text-outline truncate">
+                Hồng Bàng, Ngô Quyền, Đồ Sơn, Cát Bà
+              </span>
+            </div>
+            {/* Category dropdown */}
+            <div className="relative flex-1 bg-surface-container-low rounded-xl px-4 py-3 flex flex-col text-left justify-center cursor-pointer group hover:bg-surface-container transition-colors">
+              <span className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px] text-secondary">
+                  <FontAwesomeIcon icon={faLayerGroup} />
+                </span>{" "}
+                Trải nghiệm
+              </span>
+              <div className="flex items-center justify-between mt-0.5">
+                <span className="font-title text-body-lg font-semibold text-on-surface truncate">
+                  🍽️ Ăn uống &amp; Ẩm thực
+                </span>
+                <span className="material-symbols-outlined text-[18px] text-outline group-hover:text-primary transition-transform group-hover:translate-y-0.5">
+                  <FontAwesomeIcon icon={faCaretDown} />
+                </span>
+              </div>
+              <span className="font-body-sm text-body-sm text-outline truncate">
+                Cà phê, Check-in, Khách sạn
+              </span>
+            </div>
+            {/* Keyword search input */}
+            <div className="relative flex-[1.4] bg-surface-container-low rounded-xl px-4 py-3 flex flex-col text-left justify-center">
+              <span className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px] text-tertiary">
+                  <FontAwesomeIcon icon={faSearch} />
+                </span>{" "}
+                Bạn tìm gì?
+              </span>
+              <input
+                className="w-full bg-transparent font-title text-body-lg text-on-surface placeholder:text-outline/70 focus:outline-none mt-0.5"
+                placeholder="Nhập món ăn, tên quán hoặc địa danh..."
+                type="text"
+              />
+            </div>
+            {/* CTA Button */}
+            <button className="bg-primary hover:bg-primary-container text-on-primary px-8 py-4 rounded-xl flex items-center justify-center gap-2 font-label-lg text-label-lg shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 flex-shrink-0 cursor-pointer">
+              <span className="material-symbols-outlined text-[20px]">
+                <FontAwesomeIcon icon={faCompass} />
+              </span>
+              <span>Khám phá ngay</span>
+            </button>
+          </div>
+          {/* Quick Chips */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-6 max-w-4xl">
+            <span className="font-label-sm text-label-sm text-surface-container-highest uppercase tracking-wider mr-1">
+              Tìm nhanh:
+            </span>
+            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+              🍜 Bánh đa cua Hải Phòng
+            </button>
+            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+              ☕ Cafe view sông Tam Bạc
+            </button>
+            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+              📸 Ga Hải Phòng check-in
+            </button>
+            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+              🏖️ Sunset Cát Bà
+            </button>
+            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+              🍹 Cà phê cốt dừa
+            </button>
+            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+              🥖 Bánh mì que chính gốc
+            </button>
+          </div>
+        </div>
+      </section>
+
       <div className="mx-auto px-4 py-10">
         <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
           <aside className="space-y-6 lg:sticky lg:top-20 self-start">

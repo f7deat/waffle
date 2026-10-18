@@ -12,5 +12,5 @@ public class Team : BaseEntity<int>
     public int DepartmentId { get; set; }
 
     public Department? Department { get; set; }
-    public ICollection<ApplicationUser> Members { get; set; } = [];
+    public ICollection<ApplicationUser>? Members { get; set; }
 }

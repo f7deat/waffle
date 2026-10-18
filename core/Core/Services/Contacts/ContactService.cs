@@ -19,8 +19,8 @@ public class ContactService(IContactRepository _contactRepository, ILogService _
             await _contactRepository.AddAsync(args);
             await _notificationService.CreateAsync(new CreateNotificationArgs
             {
-                Title = "Có liên hệ mới",
-                Content = $"{args.Name} - {args.PhoneNumber}",
+                Title = $"Liên hệ mới {args.Name} - {args.PhoneNumber}",
+                Content = $"Họ và tên: {args.Name}\nSố điện thoại: {args.PhoneNumber}\nEmail: {args.Email}\nNội dung: {args.Note}",
                 ActionUrl = "/user/contact",
                 RoleName = RoleName.Admin
             });

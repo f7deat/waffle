@@ -22,20 +22,6 @@ input {
   transition: background-color 0.3s ease;
 }
 
-.bg-primary {
-  background-color: var(--color-primary);
-}
-
-.btn-primary {
-  color: white;
-  background-color: var(--color-primary);
-}
-
-.btn-primary:hover {
-  color: white;
-  background-color: var(--color-primary-hover);
-}
-
 .prose ul, .prose ol {
   padding-left: 1rem;
 }

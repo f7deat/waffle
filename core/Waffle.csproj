@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.105.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.75.0" />
+    <PackageReference Include="EPPlus" Version="8.7.2" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.77.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />

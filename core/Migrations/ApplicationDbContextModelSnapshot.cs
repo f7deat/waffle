@@ -618,6 +618,34 @@ namespace Waffle.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.Commons.SocialPlatform", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasJsonPropertyName("id");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("SocialPlatforms");
+                });
+
             modelBuilder.Entity("Waffle.Entities.Component", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1804,6 +1832,10 @@ namespace Waffle.Migrations
                         .HasMaxLength(2058)
                         .HasColumnType("nvarchar(2058)");
 
+                    b.Property<string>("Bio")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -1880,6 +1912,41 @@ namespace Waffle.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.SocialAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasJsonPropertyName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("FollowersCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProfileUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<Guid>("SocialPlatformId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SocialPlatformId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SocialAccount");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Users.UserTopupTransaction", b =>
@@ -2323,6 +2390,25 @@ namespace Waffle.Migrations
                     b.Navigation("Team");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.Users.SocialAccount", b =>
+                {
+                    b.HasOne("Waffle.Entities.Commons.SocialPlatform", "SocialPlatform")
+                        .WithMany("SocialAccounts")
+                        .HasForeignKey("SocialPlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Waffle.Entities.Users.ApplicationUser", "User")
+                        .WithMany("SocialAccounts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SocialPlatform");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Waffle.Entities.Careers.InfluencerJob", b =>
                 {
                     b.Navigation("Applications");
@@ -2336,6 +2422,11 @@ namespace Waffle.Migrations
             modelBuilder.Entity("Waffle.Entities.Catalog", b =>
                 {
                     b.Navigation("CatalogAffiliateLinks");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Commons.SocialPlatform", b =>
+                {
+                    b.Navigation("SocialAccounts");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Ecommerces.Brand", b =>
@@ -2409,6 +2500,11 @@ namespace Waffle.Migrations
                     b.Navigation("Articles");
 
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.ApplicationUser", b =>
+                {
+                    b.Navigation("SocialAccounts");
                 });
 #pragma warning restore 612, 618
         }

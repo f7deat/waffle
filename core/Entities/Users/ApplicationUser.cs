@@ -19,6 +19,11 @@ public class ApplicationUser : IdentityUser<Guid>
     [StringLength(2058)]
     public string? Avatar { get; set; }
     public int? DistrictId { get; set; }
+    [ForeignKey(nameof(Team))]
     public int? TeamId { get; set; }
+    [StringLength(1024)]
+    public string? Bio { get; set; }
+
     public Team? Team { get; set; }
+    public ICollection<SocialAccount>? SocialAccounts { get; set; }
 }

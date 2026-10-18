@@ -2,13 +2,13 @@
 import PageContainer from "@/components/layout/page-container";
 import { apiGetUserByUserName } from "@/services/user/user";
 import Link from "next/link";
-import ContactForm from "./client";
 import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 import CompletedJobs from "./completed-jobs";
 import { apiInfluencerCompletedJobs } from "@/services/kol/kol";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faBookmark, faCalendar, faCamera, faCheckCircle, faChevronCircleRight, faEnvelope, faEyeLowVision, faFire, faHeart, faLocation, faMap, faMessage, faPieChart, faPlay, faShare, faShieldHalved, faShop, faStar, faThunderstorm, faTrophy, faUserCheck, faUserFriends, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook, faInstagram, faTiktok, faYoutube } from "@fortawesome/free-brands-svg-icons";
+import ContactForm from "./contact-form";
 
 type Params = Promise<{
     id: string;
@@ -762,61 +762,7 @@ const Page = async ({ params }: { params: Params }) => {
                         </div>
                     </div>
                     <aside className="lg:col-span-4 flex flex-col gap-6">
-                        <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-sm flex flex-col gap-4" id="booking-section">
-                            <div className="flex items-center gap-2">
-                                <span className="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center">
-                                    <span className="text-sm">
-                                        <FontAwesomeIcon icon={faMessage} />
-                                    </span>
-                                </span>
-                                <div>
-                                    <h3 className="font-title text-title text-on-surface font-semibold">Gửi yêu cầu hợp tác nhanh</h3>
-                                    <p className="font-label-sm text-label-sm text-on-surface-variant">Phản hồi trong vòng 12-24 giờ làm việc</p>
-                                </div>
-                            </div>
-                            <form className="flex flex-col gap-3.5 mt-1" id="bookingForm" >
-                                <div>
-                                    <label className="block font-label-sm text-label-sm text-on-surface font-semibold mb-1">Tên đơn vị / Thương hiệu *</label>
-                                    <input className="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary border-0" placeholder="Ví dụ: Cà phê Phố Cổ, Quán ăn Bà Ba..." />
-                                </div>
-                                <div>
-                                    <label className="block font-label-sm text-label-sm text-on-surface font-semibold mb-1">Hình thức muốn hợp tác *</label>
-                                    <select className="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary border-0">
-                                        <option value="1">Trải nghiệm &amp; Review quán ăn / cafe mới</option>
-                                        <option value="2">Quay video TikTok Review chuyên sâu</option>
-                                        <option value="3">Ghim bài &amp; Vị trí lên Bản đồ độc quyền</option>
-                                        <option value="4">Chụp bộ ảnh Lookbook không gian &amp; món</option>
-                                        <option value="5">Hợp tác dài hạn / Đại sứ thương hiệu</option>
-                                    </select>
-                                </div>
-                                <div className="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label className="block font-label-sm text-label-sm text-on-surface font-semibold mb-1">Số điện thoại *</label>
-                                        <input className="w-full px-3 py-2.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary border-0" placeholder="09xx..." />
-                                    </div>
-                                    <div>
-                                        <label className="block font-label-sm text-label-sm text-on-surface font-semibold mb-1">Email liên hệ</label>
-                                        <input className="w-full px-3 py-2.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary border-0" placeholder="contact@..." type="email" />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block font-label-sm text-label-sm text-on-surface font-semibold mb-1">Nội dung tóm tắt &amp; Thời gian dự kiến</label>
-                                    <textarea className="w-full px-3.5 py-2 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary border-0 resize-none" placeholder="Ghi chú về địa điểm, địa chỉ, món đặc trưng và thời gian bạn muốn triển khai..." rows={3}></textarea>
-                                </div>
-                                <button className="w-full mt-1 py-3 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary transition-all flex items-center justify-center gap-2" type="submit">
-                                    <span className="material-symbols-outlined text-[18px]">
-                                        <FontAwesomeIcon icon={faEnvelope} />
-                                    </span>
-                                    <span>Gửi lời mời hợp tác</span>
-                                </button>
-                                <p className="font-body-sm text-[11px] text-center text-on-surface-variant">
-                                    Hoặc liên hệ Quản lý: <span className="font-semibold text-secondary">defzone.net@gmail.com</span> (0762.559.696)
-                                </p>
-                            </form>
-                            <div className="hidden p-3 rounded-lg bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm text-center" id="bookingToast">
-                                ✓ Yêu cầu hợp tác đã gửi thành công! {user.name?.split(' ').pop()} sẽ liên hệ lại sớm nhất.
-                            </div>
-                        </div>
+                        <ContactForm />
                         <div className="bg-surface-container-low p-5 rounded-2xl flex flex-col gap-3">
                             <div className="flex items-center gap-2 text-secondary">
                                 <span className="material-symbols-outlined text-[20px]">
