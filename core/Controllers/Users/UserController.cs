@@ -312,6 +312,9 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
     [HttpPost("influencer"), AllowAnonymous]
     public async Task<IActionResult> BecomeInfluencerAsync([FromBody] BecomeInfluencerArgs args) => Ok(await _userService.BecomeInfluencerAsync(args));
 
+    [HttpGet("influencer/random-list"), AllowAnonymous]
+    public async Task<IActionResult> GetRandomInfluencersAsync([FromQuery] FilterOptions filterOptions) => Ok(await _userService.GetRandomInfluencersAsync(filterOptions));
+
     [HttpGet("influencer/options")]
     public async Task<IActionResult> GetInfluencerOptionsAsync([FromQuery] SelectOptions selectOptions) => Ok(await _userService.GetInfluencerOptionsAsync(selectOptions));
 

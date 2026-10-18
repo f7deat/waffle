@@ -6,9 +6,8 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.Brands;
 using Waffle.Models.ViewModels.Brands;
 
-namespace Waffle.Controllers;
+namespace Waffle.Controllers.Shops;
 
-[ApiController]
 public class BrandController(IBrandService brandService) : BaseController
 {
     [HttpGet("list"), AllowAnonymous]

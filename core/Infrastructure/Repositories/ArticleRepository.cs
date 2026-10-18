@@ -63,6 +63,8 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
     public async Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions)
     {
         var query = from a in _context.Articles
+                    join c in _context.Categories on a.CategoryId equals c.Id into categoryJoin
+                    from c in categoryJoin.DefaultIfEmpty()
                     where a.DeletedAt == null && a.PublishedAt != null && a.Locale == filterOptions.Locale
                     select new
                     {
@@ -74,7 +76,9 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
                         a.Thumbnail,
                         a.Description,
                         a.CreatedDate,
-                        a.PublishedAt
+                        a.PublishedAt,
+                        a.CategoryId,
+                        CategoryName = c.Name
                     };
         query = query.OrderByDescending(x => x.PublishedAt);
         return await ListResult.Success(query, filterOptions);

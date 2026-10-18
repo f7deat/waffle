@@ -1,9 +1,9 @@
 import { ArticleMeta } from "@/typings/article";
 import request from "./request";
-import { ArticleDetail, ArticleFilterOptions } from "./typings/article";
+import { ArticleDetail, ArticleFilterOptions, ArticleListItem } from "./typings/article";
 
 export async function apiArticleList(params: ArticleFilterOptions, cookie?: string) {
-    return request.get<API.ListResult<ArticleDetail>>("article/published-list", {
+    return request.get<API.ListResult<ArticleListItem>>("article/published-list", {
         params,
         cookie
     });

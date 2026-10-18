@@ -11,10 +11,11 @@ using Waffle.Entities;
 using Waffle.Entities.Users;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Users;
+using Waffle.Modules.Users.Interfaces;
 
 namespace Waffle.Core.Services;
 
-public class UserService(UserManager<ApplicationUser> _userManager, IFileService _fileService, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : IUserService
+public class UserService(UserManager<ApplicationUser> _userManager, IUserRepository _userRepository, IFileService _fileService, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : IUserService
 {
     private async Task<ApplicationUser?> FindAsync(Guid id) => await _context.Users.FindAsync(id);
 
@@ -443,4 +444,6 @@ public class UserService(UserManager<ApplicationUser> _userManager, IFileService
         if (!string.IsNullOrWhiteSpace(user.Avatar)) return await _fileService.DeletePathAsync(user.Avatar);
         return TResult.Success;
     }
+
+    public Task<ListResult> GetRandomInfluencersAsync(FilterOptions filterOptions) => _userRepository.GetRandomInfluencersAsync(filterOptions);
 }
