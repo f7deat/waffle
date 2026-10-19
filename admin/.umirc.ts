@@ -5,10 +5,15 @@ import routes from "./config/routes";
 
 export default defineConfig({
   antd: {
-    theme: {
-      token: {
-        fontFamily: `"Inter", sans-serif`,
-      },
+    appConfig: {},
+    configProvider: {
+      variant: 'filled',
+      theme: {
+        token: {
+          fontFamily: `"Inter", sans-serif`,
+          colorPrimary: '#030715'
+        }
+      }
     },
   },
   access: {},

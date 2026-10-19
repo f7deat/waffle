@@ -55,7 +55,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         colorBgMenuItemHover: '#8ebaf7',
         colorBgMenuItemSelected: '#8ebaf7',
         colorTextMenuTitle: '#000000',
-      }
+      },
+      colorPrimary: '#030715'
     },
     avatarProps: {
       src: initialState?.avatar,

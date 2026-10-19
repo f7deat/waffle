@@ -33,6 +33,7 @@ export default [
         name: 'trash',
         path: '/article/trash',
         component: './article/trash',
+        hideInMenu: true
       },
       {
         name: 'center',
