@@ -10,8 +10,7 @@ export default defineConfig({
       variant: 'filled',
       theme: {
         token: {
-          fontFamily: `"Inter", sans-serif`,
-          colorPrimary: '#030715'
+          fontFamily: `"Inter", sans-serif`
         }
       }
     },

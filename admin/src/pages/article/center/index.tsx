@@ -1,7 +1,7 @@
 import ImageLibraryPicker from '@/components/image-library/picker';
 import { getArticleById, updateArticle } from '@/services/article';
 import { uploadRcFile } from '@/services/file-service';
-import { PictureOutlined, SendOutlined, UploadOutlined } from '@ant-design/icons';
+import { EyeOutlined, PictureOutlined, SaveOutlined, SendOutlined, UploadOutlined } from '@ant-design/icons';
 import {
     PageContainer,
     ProCard,
@@ -46,6 +46,7 @@ const Index: React.FC = () => {
             name: article.name,
             description: article.description,
             thumbnail: article.thumbnail,
+            normalizedName: article.normalizedName,
             publishedAt: article.publishedAt ? dayjs(article.publishedAt) : undefined,
             content: article.content || '',
         });
@@ -104,6 +105,8 @@ const Index: React.FC = () => {
             onBack={() => history.back()}
             extra={(
                 <>
+                    <Button type="dashed" icon={<EyeOutlined />}>Xem trước</Button>
+                    <Button icon={<SaveOutlined />}>Lưu nháp</Button>
                     <Button type="primary" onClick={() => form.submit()} icon={<SendOutlined />}>Xuất bản</Button>
                 </>
             )}
@@ -115,11 +118,11 @@ const Index: React.FC = () => {
                         <ProCard>
                             <ProFormText
                                 name="name"
-                                label="Tieu de"
+                                label="Tiêu đề"
                                 rules={[{ required: true, message: 'Vui long nhap tieu de' }]}
                             />
-
-                            <ProFormTextArea name="description" label="Mo ta" />
+                            <ProFormText name="normalizedName" label="Tên chuẩn hóa" disabled />
+                            <ProFormTextArea name="description" label="Mô tả" />
                             <FormEditor name="content" label="Nội dung" initialValue={detailResponse?.content} />
                         </ProCard>
                     </div>

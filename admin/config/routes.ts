@@ -345,7 +345,7 @@ export default [
         component: './settings/country'
       },
       {
-        name: 'category',
+        name: 'categoryAndTag',
         path: '/setting/category',
         component: './settings/category'
       },
@@ -371,6 +371,7 @@ export default [
         name: 'tag',
         path: '/setting/tag',
         component: './tag',
+        hideInMenu: true
       }
     ],
   },
