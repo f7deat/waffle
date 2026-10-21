@@ -3,7 +3,7 @@
 import { apiContactSubmit } from "@/services/contact";
 import { faEnvelope, faExclamationTriangle, faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Form } from "antd";
+import { Button, Form, Select } from "antd";
 import { useState } from "react";
 
 const COLLABORATION_TYPES = [
@@ -68,13 +68,7 @@ const ContactForm: React.FC = () => {
                         <input className="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary border-0" placeholder="Ví dụ: Cà phê Phố Cổ, Quán ăn Bà Ba..." />
                     </Form.Item>
                     <Form.Item name="collaborationType" label="Hình thức hợp tác" rules={[{ required: true, message: 'Vui lòng chọn hình thức hợp tác' }]}>
-                        <select className="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary border-0">
-                            {COLLABORATION_TYPES.map((type) => (
-                                <option key={type} value={type}>
-                                    {type}
-                                </option>
-                            ))}
-                        </select>
+                        <Select options={COLLABORATION_TYPES.map(type => ({ label: type, value: type }))} placeholder="Chọn hình thức hợp tác" className="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary border-0" />
                     </Form.Item>
                     <div className="grid grid-cols-2 gap-2">
                         <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}>

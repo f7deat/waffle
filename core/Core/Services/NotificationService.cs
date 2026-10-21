@@ -53,16 +53,16 @@ public class NotificationService(ApplicationDbContext _context, IHCAService _hca
 
         var notification = new Notification
         {
+            Id = Guid.NewGuid(),
             Title = args.Title.Trim(),
             Content = string.IsNullOrWhiteSpace(args.Content) ? null : args.Content.Trim(),
             ActionUrl = string.IsNullOrWhiteSpace(args.ActionUrl) ? null : args.ActionUrl.Trim(),
             Type = args.Type,
             CreatedBy = _hcaService.GetUserId(),
-            CreatedDate = DateTime.UtcNow,
+            CreatedDate = DateTime.Now,
         };
 
         await _context.Notifications.AddAsync(notification);
-        await _context.SaveChangesAsync();
 
         await _context.NotificationUsers.AddRangeAsync(userIds.Select(userId => new NotificationUser
         {

@@ -34,6 +34,8 @@ declare namespace API {
         modifiedDate: string;
         normalizedName: string;
         description?: string;
+        influencerName?: string;
+        influencerUserName?: string;
     }
     interface PlaceDetail extends PlaceListItem {
         content: API.BlockEditor;

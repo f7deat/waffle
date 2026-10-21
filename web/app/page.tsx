@@ -713,13 +713,13 @@ export default async function Home() {
                   <span className="material-symbols-outlined text-[20px]">
                     <FontAwesomeIcon icon={faShop} />
                   </span>
-                  <span>Chia sẻ địa điểm của bạn ngay</span>
+                  <span>Chia sẻ địa điểm của bạn</span>
                 </button>
                 <button className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-surface-container-lowest text-secondary hover:bg-secondary-fixed font-label-lg text-label-lg shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-center gap-2">
                   <span className="material-symbols-outlined text-[20px]">
                     <FontAwesomeIcon icon={faRankingStar} />
                   </span>
-                  <span>Trở thành Creator Đi Đâu Đây</span>
+                  <span>Trở thành Creator</span>
                 </button>
               </div>
             </div>

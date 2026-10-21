@@ -115,7 +115,9 @@ const Place: React.FC = async () => {
                                             </div>
                                             <span className="font-label-sm text-label-sm text-on-surface-variant">
                                                 Review bởi{" "}
-                                                <strong className="text-on-surface">Tân bận rồi</strong>
+                                                <Link href={`/user/${place.influencerUserName || 'tandc'}`} className="font-bold hover:underline">
+                                                    {place.influencerName || 'Tân bận rồi'}
+                                                </Link>
                                             </span>
                                         </div>
                                         <span className="material-symbols-outlined text-[18px] text-outline group-hover:text-primary group-hover:translate-x-1 transition-all">

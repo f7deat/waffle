@@ -108,8 +108,10 @@ public class UserService(UserManager<ApplicationUser> _userManager, IUserReposit
         var query = from u in _context.Users
                     join ur in _context.UserRoles on u.Id equals ur.UserId
                     join r in _context.Roles on ur.RoleId equals r.Id
-                    join d in _context.Districts on u.DistrictId equals d.Id
-                    join p in _context.Provinces on d.ProvinceId equals p.Id
+                    join d in _context.Districts on u.DistrictId equals d.Id into ud
+                    from d in ud.DefaultIfEmpty()
+                    join p in _context.Provinces on d.ProvinceId equals p.Id into dp
+                    from p in dp.DefaultIfEmpty()
                     where r.Name == RoleName.Influencer
                     select new
                     {
@@ -124,7 +126,8 @@ public class UserService(UserManager<ApplicationUser> _userManager, IUserReposit
                         Rating = 5,
                         PricePerReview = 0,
                         u.EmailConfirmed,
-                        ProvinceName = p.Name
+                        ProvinceName = p.Name,
+                        ProvinceId = (int?)p.Id
                     };
         return await ListResult.Success(query, filterOptions);
     }

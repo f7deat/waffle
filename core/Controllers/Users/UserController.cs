@@ -20,17 +20,27 @@ using Waffle.Extensions;
 using Waffle.ExternalAPI.Googles;
 using Waffle.Models;
 using Waffle.Models.Params;
+using Waffle.Modules.Users.Filters;
 
 namespace Waffle.Controllers.Users;
 
 public class UserController(IUserService _userService, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, IConfiguration _configuration, ICatalogService _catalogService, IOptions<SettingOptions> options) : BaseController
 {
     private readonly SettingOptions _options = options.Value;
+
     [HttpGet("list")]
-    public async Task<IActionResult> ListAsync([FromQuery] BasicFilterOptions filterOptions)
+    public async Task<IActionResult> ListAsync([FromQuery] UserFilterOptions filterOptions)
     {
-        var currentUserId = User.GetId();
-        var query = _userManager.Users.Where(x => x.Id != currentUserId).OrderByDescending(x => x.Id);
+        var query = _userManager.Users;
+        if (!string.IsNullOrWhiteSpace(filterOptions.UserName))
+        {
+            query = query.Where(x => x.UserName != null && x.UserName.Contains(filterOptions.UserName));
+        }
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        {
+            query = query.Where(x =>  x.Name != null && x.Name.Contains(filterOptions.Name));
+        }
+        query = query.OrderByDescending(x => x.CreatedAt);
         return Ok(await ListResult<ApplicationUser>.Success(query, filterOptions));
     }
 
