@@ -1,13 +1,14 @@
 import ImageLibraryPicker from '@/components/image-library/picker';
 import { getArticleById, updateArticle } from '@/services/article';
 import { uploadRcFile } from '@/services/file-service';
-import { UploadOutlined } from '@ant-design/icons';
+import { EyeOutlined, PictureOutlined, SaveOutlined, SendOutlined, UploadOutlined } from '@ant-design/icons';
 import {
     PageContainer,
     ProCard,
     ProForm,
     ProFormDateTimePicker,
     ProFormInstance,
+    ProFormSelect,
     ProFormText,
     ProFormTextArea,
 } from '@ant-design/pro-components';
@@ -17,6 +18,7 @@ import type { RcFile } from 'antd/lib/upload';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import FormEditor from '@/components/editorjs/form-editor';
+import { apiCategoryOptions } from '@/services/settings/category';
 
 const Index: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -44,6 +46,7 @@ const Index: React.FC = () => {
             name: article.name,
             description: article.description,
             thumbnail: article.thumbnail,
+            normalizedName: article.normalizedName,
             publishedAt: article.publishedAt ? dayjs(article.publishedAt) : undefined,
             content: article.content || '',
         });
@@ -100,24 +103,39 @@ const Index: React.FC = () => {
             title={article?.name || 'Article'}
             loading={loading}
             onBack={() => history.back()}
+            extra={(
+                <>
+                    <Button type="dashed" icon={<EyeOutlined />}>Xem trước</Button>
+                    <Button icon={<SaveOutlined />}>Lưu nháp</Button>
+                    <Button type="primary" onClick={() => form.submit()} icon={<SendOutlined />}>Xuất bản</Button>
+                </>
+            )}
         >
-            <ProCard>
-                <ProForm loading={loading} form={form} formRef={formRef} onFinish={onFinish} submitter={{ searchConfig: { submitText: 'Luu thay doi' } }}>
-                    <Row gutter={16}>
-                        <Col xs={24} md={16}>
+            <ProForm loading={loading} form={form} formRef={formRef} onFinish={onFinish} submitter={false}>
+                <div className="md:flex gap-4">
 
+                    <div className="flex-1">
+                        <ProCard>
                             <ProFormText
                                 name="name"
-                                label="Tieu de"
+                                label="Tiêu đề"
                                 rules={[{ required: true, message: 'Vui long nhap tieu de' }]}
                             />
-
-                            <ProFormTextArea name="description" label="Mo ta" />
+                            <ProFormText name="normalizedName" label="Tên chuẩn hóa" disabled />
+                            <ProFormTextArea name="description" label="Mô tả" />
                             <FormEditor name="content" label="Nội dung" initialValue={detailResponse?.content} />
-                        </Col>
-                        <Col xs={24} md={8}>
+                        </ProCard>
+                    </div>
+                    <div className="md:w-96">
+                        <div className="mb-4">
+                            <ProCard title="Thông tin phân loại">
+                                <ProFormSelect name="categoryId" showSearch label="Danh mục" request={apiCategoryOptions} />
+                                <ProFormDateTimePicker name="publishedAt" label="Ngày xuất bản" width="xl" />
+                            </ProCard>
+                        </div>
+                        <ProCard title={<div><span className="text-blue-500 mr-1"><PictureOutlined /></span>Ảnh đại diện (Featured)</div>}>
                             <div className="border rounded p-1 mb-2">
-                                <img src={thumbnail} alt="Thumbnail" className="w-full h-64 rounded object-cover" />
+                                <img src={thumbnail} alt="Thumbnail" className="w-full h-52 rounded object-cover" />
                             </div>
                             <ProFormText name="thumbnail" label="Thumbnail URL"
                                 fieldProps={{
@@ -145,12 +163,10 @@ const Index: React.FC = () => {
                                 style={{ display: 'none' }}
                                 onChange={onThumbnailSelected}
                             />
-
-                            <ProFormDateTimePicker name="publishedAt" label="Ngày xuất bản" width="xl" />
-                        </Col>
-                    </Row>
-                </ProForm>
-            </ProCard>
+                        </ProCard>
+                    </div>
+                </div>
+            </ProForm>
         </PageContainer>
     )
 }

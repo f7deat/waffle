@@ -10,6 +10,7 @@ export type ProductItemType = {
     salePrice?: number;
     viewCount: number;
     modifiedDate: string;
+    categoryName?: string;
 }
 
 export type ProductDetailType = {

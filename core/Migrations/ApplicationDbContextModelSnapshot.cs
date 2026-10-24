@@ -1946,7 +1946,7 @@ namespace Waffle.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SocialAccount");
+                    b.ToTable("SocialAccounts");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Users.UserTopupTransaction", b =>

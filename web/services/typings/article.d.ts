@@ -9,6 +9,8 @@ export type ArticleListItem = {
     thumbnail?: string;
     viewCount: number;
     createdDate: string;
+    categoryId?: number;
+    categoryName?: string;
 }
 
 export type ArticleDetail = ArticleListItem & {

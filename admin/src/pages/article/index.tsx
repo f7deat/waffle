@@ -11,7 +11,7 @@ import {
   Typography,
 } from "antd";
 import { useRef, useState } from "react";
-import { CloudUploadOutlined, CopyOutlined, DeleteOutlined, EyeOutlined, FacebookOutlined, LinkedinOutlined, MessageOutlined, MoreOutlined, PlusOutlined, SettingOutlined, ShareAltOutlined, TwitterOutlined } from "@ant-design/icons";
+import { ArrowUpOutlined, BarChartOutlined, CalendarOutlined, CloudUploadOutlined, CopyOutlined, DeleteOutlined, ExclamationOutlined, EyeOutlined, FacebookOutlined, FileOutlined, LinkedinOutlined, MessageOutlined, MoreOutlined, PlusOutlined, SettingOutlined, ShareAltOutlined, StarOutlined, TwitterOutlined } from "@ant-design/icons";
 import {
   ArticleListItem,
   deleteArticle,
@@ -231,6 +231,89 @@ const ArticlePage: React.FC = () => {
         Tạo mới
       </Button>
     </Space>}>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <div className="bg-white p-4 rounded-xl flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+              Tổng xuất bản
+            </span>
+            <span className="font-headline-lg text-3xl text-on-surface font-bold mt-1">
+              1,428
+            </span>
+            <span className="font-code-sm text-code-sm text-green-800 flex items-center gap-1 mt-0.5">
+              <span className="material-symbols-outlined text-[14px]">
+                <ArrowUpOutlined />
+              </span>{" "}
+              +14 tuần này
+            </span>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-800">
+            <span className="material-symbols-outlined text-[22px]"><FileOutlined /></span>
+          </div>
+        </div>
+        <div className="bg-white p-4 rounded-xl flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+              Chờ duyệt bài
+            </span>
+            <span className="font-headline-lg text-3xl text-on-surface font-bold mt-1">
+              12
+            </span>
+            <span className="font-code-sm text-code-sm text-red-900 flex items-center gap-1 mt-0.5">
+              <span className="material-symbols-outlined text-[14px]">
+                <ExclamationOutlined />
+              </span>{" "}
+              3 bài cần kíp
+            </span>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center text-red-900">
+            <span className="material-symbols-outlined text-[22px]">
+              <StarOutlined />
+            </span>
+          </div>
+        </div>
+        <div className="bg-white p-4 rounded-xl flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+              Lên lịch sẵn
+            </span>
+            <span className="font-headline-lg text-3xl text-on-surface font-bold mt-1">
+              5
+            </span>
+            <span className="font-code-sm text-code-sm text-green-600 flex items-center gap-1 mt-0.5">
+              <span className="material-symbols-outlined text-[14px]">
+                <CalendarOutlined />
+              </span>{" "}
+              2 bài hôm nay
+            </span>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center text-green-900">
+            <span className="material-symbols-outlined text-[22px]">
+              <CalendarOutlined />
+            </span>
+          </div>
+        </div>
+        <div className="bg-white p-4 rounded-xl flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+              Lượt xem hôm nay
+            </span>
+            <span className="font-headline-lg text-3xl text-on-surface font-bold mt-1">
+              184.2K
+            </span>
+            <span className="font-code-sm text-code-sm text-green-600 flex items-center gap-1 mt-0.5">
+              <span className="material-symbols-outlined text-[14px]">
+                <EyeOutlined />
+              </span>{" "}
+              12.4K realtime
+            </span>
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-green-600">
+            <span className="material-symbols-outlined text-[22px]"><BarChartOutlined /></span>
+          </div>
+        </div>
+      </div>
+
       {contextHolder}
       <ProTable
         columns={columns}

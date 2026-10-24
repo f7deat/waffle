@@ -3,9 +3,10 @@ import { Button, message, Modal, Form, Input, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import { apiTags, apiTagCreate, apiTagUpdate, apiTagDelete, ITagListItem } from '@/services/tag';
+import { history } from '@umijs/max';
 
 const Index: React.FC = () => {
-  const actionRef = useRef<ActionType>();
+  const actionRef = useRef<ActionType>(undefined);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState<ITagListItem>();
@@ -96,7 +97,7 @@ const Index: React.FC = () => {
   };
 
   return (
-    <PageContainer extra={<Button
+    <PageContainer onBack={() => history.back()} extra={<Button
       key="create"
       type="primary"
       icon={<PlusOutlined />}

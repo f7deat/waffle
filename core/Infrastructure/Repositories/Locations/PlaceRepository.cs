@@ -85,6 +85,8 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
                         from d in sd.DefaultIfEmpty()
                         join province in _context.Provinces on d.ProvinceId equals province.Id into dp
                         from province in dp.DefaultIfEmpty()
+                        join influencer in _context.Users on p.InfluencerId equals influencer.Id into si
+                        from influencer in si.DefaultIfEmpty()
                         where c.Active && c.Locale == filterOptions.Locale
                         select new
                         {
@@ -98,7 +100,9 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
                             p.DistrictId,
                             ProvinceName = province.Name,
                             ProvinceId = (int?)d.ProvinceId,
-                            c.Thumbnail
+                            c.Thumbnail,
+                            InfluencerName = influencer.Name,
+                            InfluencerUserName = influencer.UserName
                         };
             if (filterOptions.DistrictId.HasValue)
             {

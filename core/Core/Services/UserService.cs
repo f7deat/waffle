@@ -11,10 +11,11 @@ using Waffle.Entities;
 using Waffle.Entities.Users;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Users;
+using Waffle.Modules.Users.Interfaces;
 
 namespace Waffle.Core.Services;
 
-public class UserService(UserManager<ApplicationUser> _userManager, IFileService _fileService, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : IUserService
+public class UserService(UserManager<ApplicationUser> _userManager, IUserRepository _userRepository, IFileService _fileService, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : IUserService
 {
     private async Task<ApplicationUser?> FindAsync(Guid id) => await _context.Users.FindAsync(id);
 
@@ -107,8 +108,10 @@ public class UserService(UserManager<ApplicationUser> _userManager, IFileService
         var query = from u in _context.Users
                     join ur in _context.UserRoles on u.Id equals ur.UserId
                     join r in _context.Roles on ur.RoleId equals r.Id
-                    join d in _context.Districts on u.DistrictId equals d.Id
-                    join p in _context.Provinces on d.ProvinceId equals p.Id
+                    join d in _context.Districts on u.DistrictId equals d.Id into ud
+                    from d in ud.DefaultIfEmpty()
+                    join p in _context.Provinces on d.ProvinceId equals p.Id into dp
+                    from p in dp.DefaultIfEmpty()
                     where r.Name == RoleName.Influencer
                     select new
                     {
@@ -123,7 +126,8 @@ public class UserService(UserManager<ApplicationUser> _userManager, IFileService
                         Rating = 5,
                         PricePerReview = 0,
                         u.EmailConfirmed,
-                        ProvinceName = p.Name
+                        ProvinceName = p.Name,
+                        ProvinceId = (int?)p.Id
                     };
         return await ListResult.Success(query, filterOptions);
     }
@@ -443,4 +447,6 @@ public class UserService(UserManager<ApplicationUser> _userManager, IFileService
         if (!string.IsNullOrWhiteSpace(user.Avatar)) return await _fileService.DeletePathAsync(user.Avatar);
         return TResult.Success;
     }
+
+    public Task<ListResult> GetRandomInfluencersAsync(FilterOptions filterOptions) => _userRepository.GetRandomInfluencersAsync(filterOptions);
 }

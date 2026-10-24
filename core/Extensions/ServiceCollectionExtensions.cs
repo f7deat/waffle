@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using Waffle.Core.Foundations;
-using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IRepository.Careers;
 using Waffle.Core.Interfaces.IRepository.Catalogs;
@@ -31,6 +29,8 @@ using Waffle.Infrastructure.Repositories.Careers;
 using Waffle.Infrastructure.Repositories.Catalogs;
 using Waffle.Infrastructure.Repositories.HR;
 using Waffle.Infrastructure.Repositories.Locations;
+using Waffle.Modules.Users.Interfaces;
+using Waffle.Modules.Users.Repositories;
 
 namespace Waffle.Extensions;
 
@@ -125,6 +125,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDepartmentService, DepartmentService>();
         services.AddScoped<ITeamRepository, TeamRepository>();
         services.AddScoped<ITeamService, TeamService>();
+        #endregion
+
+        #region User
+        services.AddScoped<IUserRepository, UserRepository>();
         #endregion
     }
 }

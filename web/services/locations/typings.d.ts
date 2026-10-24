@@ -28,11 +28,14 @@ declare namespace API {
         districtName: string;
         provinceId: number;
         provinceName: string;
+        categoryName: string;
         thumbnail: string;
         viewCount: number;
         modifiedDate: string;
         normalizedName: string;
         description?: string;
+        influencerName?: string;
+        influencerUserName?: string;
     }
     interface PlaceDetail extends PlaceListItem {
         content: API.BlockEditor;

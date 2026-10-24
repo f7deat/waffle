@@ -14,7 +14,6 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Models;
 using Waffle.Models.Args.Catalogs;
-using Waffle.Models.Components;
 using Waffle.Models.Filters.Catalogs;
 using Waffle.Models.ViewModels;
 
@@ -52,44 +51,6 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
 
     [HttpGet("list"), AllowAnonymous]
     public async Task<IActionResult> ListAsync([FromQuery] CatalogFilterOptions filterOptions) => Ok(await _catalogService.ListAsync(filterOptions));
-
-    [HttpGet("tree")]
-    public async Task<IActionResult> TreeAsync()
-    {
-        var returnValue = new List<Tree>();
-        var parrent = await _context.Catalogs.Where(x => x.Active && x.ParentId == null && x.Type != CatalogType.Entry).ToListAsync();
-        foreach (var catalog in parrent)
-        {
-            List<Tree>? children = null;
-            if (await _context.Catalogs.AnyAsync(x => x.ParentId == catalog.ParentId))
-            {
-                children = await _context.Catalogs.Where(x => x.Active && x.ParentId == catalog.Id).Select(x => new Tree
-                {
-                    Key = x.Id,
-                    Title = x.Name
-                }).ToListAsync();
-            }
-            returnValue.Add(new Tree
-            {
-                Key = catalog.Id,
-                Title = catalog.Name,
-                Icon = GetIcon(catalog.Type),
-                Children = children
-            });
-        }
-        return Ok(returnValue);
-    }
-
-    private static string GetIcon(CatalogType type)
-    {
-        switch (type)
-        {
-            case CatalogType.Entry:
-                return "🏠";
-            default:
-                return "🗍";
-        }
-    }
 
     [HttpDelete("{id}"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)

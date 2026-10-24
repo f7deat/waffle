@@ -32,4 +32,5 @@ public interface IUserService
     Task<TResult> GetDetailAsync(Guid id);
     Task<TResult> GetRolesAsync(Guid userId);
     Task<TResult> DeleteAsync(string id);
+    Task<ListResult> GetRandomInfluencersAsync(FilterOptions filterOptions);
 }

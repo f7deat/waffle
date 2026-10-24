@@ -211,7 +211,11 @@ const Index: React.FC = () => {
     };
 
     return (
-        <PageContainer>
+        <PageContainer extra={(
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => setOpenCreate(true)}>
+                New Place
+            </Button>
+        )}>
             <ProTable<IPlaceListItem>
                 actionRef={actionRef}
                 rowKey="id"
@@ -221,11 +225,6 @@ const Index: React.FC = () => {
                 search={{
                     layout: 'vertical'
                 }}
-                headerTitle={
-                    <Button type="primary" icon={<PlusOutlined />} onClick={() => setOpenCreate(true)}>
-                        New Place
-                    </Button>
-                }
             />
 
             <ModalForm

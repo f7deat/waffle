@@ -1,4 +1,5 @@
 import request from "../request";
+import { InfluencerRandomListItem } from "./typings";
 
 export async function apiPasswordSignIn(data: { username: string; password: string; remember?: boolean }) {
     return request.post<{
@@ -48,3 +49,9 @@ export async function apiWithdrawProfile(data: { amount: number; note?: string; 
 export async function apiGetUserByUserName(userName: string) {
     return request.get<API.TResult<API.UserBasicInfo>>(`user/user-name/${userName}`);
 }
+
+// #region Influencer
+export async function apiInfluencerRandomList(params: { current: number; pageSize: number }) {
+    return request.get<API.ListResult<InfluencerRandomListItem>>("user/influencer/random-list", { params });
+}
+//#endregion

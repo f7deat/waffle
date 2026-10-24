@@ -15,8 +15,11 @@ public class BrandRepository(ApplicationDbContext context, IHCAService hcaServic
 {
     public async Task<ListResult<BrandListItem>> ListAsync(BrandFilterOptions filterOptions, bool activeOnly)
     {
-        var query = _context.Brands
-            .Where(brand => !brand.DeletedAt.HasValue && (!activeOnly || brand.IsActive))
+        try
+        {
+            var query = _context.Brands
+                .Where(x => x.DeletedAt == null)
+            .Where(brand => !activeOnly || brand.IsActive)
             .Select(brand => new BrandListItem(
                 brand.Id,
                 brand.Name,
@@ -26,13 +29,19 @@ public class BrandRepository(ApplicationDbContext context, IHCAService hcaServic
                 brand.IsActive,
                 _context.Products.Count(product => product.BrandId == brand.Id)));
 
-        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
-        {
-            var keyword = filterOptions.Name.ToLower();
-            query = query.Where(brand => brand.Name.ToLower().Contains(keyword));
-        }
+            if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+            {
+                var keyword = filterOptions.Name.ToLower();
+                query = query.Where(brand => brand.Name.ToLower().Contains(keyword));
+            }
+            query = query.OrderBy(x => Guid.NewGuid());
 
-        return await ListResult<BrandListItem>.Success(query.OrderBy(brand => brand.Name), filterOptions);
+            return await ListResult<BrandListItem>.Success(query, filterOptions);
+        }
+        catch (Exception ex)
+        {
+            return ListResult<BrandListItem>.Failed(ex.ToString());
+        }
     }
 
     public Task<BrandListItem?> GetActiveByNormalizedNameAsync(string normalizedName)
