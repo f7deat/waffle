@@ -238,7 +238,7 @@ const Page: React.FC = () => {
                             </div>
 
                             <p className="text-center text-sm text-slate-600">
-                                Chưa có tài khoản? <a href="/influencer/register" className="font-semibold text-indigo-600 hover:text-indigo-700">Đăng ký</a>
+                                Chưa có tài khoản? <a href="/user/register" className="font-semibold text-indigo-600 hover:text-indigo-700">Đăng ký</a>
                             </p>
                         </Form>
                     </section>

@@ -80,12 +80,12 @@ const Header: React.FC = () => {
 
                     <Link href="/" className="flex items-center gap-3">
                         <div className="flex items-center gap-2">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-semibold">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white font-semibold">
                                 {"DE".slice(0, 2).toUpperCase()}
                             </div>
                             <div>
-                                <div className="text-lg font-semibold text-slate-900 dark:text-slate-100">DefZone.Net</div>
-                                <p className="text-xs text-slate-500 dark:text-slate-400">Kien thuc cong nghe & giai tri</p>
+                                <div className="text-lg 2xl:text-xl font-bold dark:text-slate-100 text-primary">DefZone.Net</div>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">Inovation & Exploration</p>
                             </div>
                         </div>
 

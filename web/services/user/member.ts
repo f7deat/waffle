@@ -1,6 +1,7 @@
 import request from "../request";
 
 export type MemberRegisterData = {
+    name: string;
     userName: string;
     password: string;
     email: string;

@@ -118,11 +118,15 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
     {
         if (string.IsNullOrWhiteSpace(args.UserName)) return BadRequest("Tên đăng nhập không được để trống.");
         if (string.IsNullOrWhiteSpace(args.Password)) return BadRequest("Mật khẩu không được để trống.");
+        if (string.IsNullOrWhiteSpace(args.Name)) return BadRequest("Họ và tên không được để trống.");
+        if (string.IsNullOrWhiteSpace(args.Email) || !new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(args.Email))
+            return BadRequest("Email không hợp lệ.");
 
         var user = new ApplicationUser
         {
             UserName = args.UserName,
-            Email = args.Email,
+            Name = args.Name.Trim(),
+            Email = args.Email.Trim(),
             PhoneNumber = args.PhoneNumber
         };
         var result = await _userManager.CreateAsync(user, args.Password);
