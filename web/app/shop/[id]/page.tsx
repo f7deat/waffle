@@ -11,7 +11,7 @@ import ProductGallery from "./product-gallery";
 import RandomArticleList from "@/components/article/random-list";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import dayjs from "dayjs";
-import { faArrowLeft, faHome, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight, faArrowRightArrowLeft, faCheckCircle, faContactCard, faGift, faHeart, faHome, faHourglass, faPiggyBank, faPlay, faPlusCircle, faSearchPlus, faShare, faShoppingCart, faStar, faTags, faUserCheck, faUserShield } from "@fortawesome/free-solid-svg-icons";
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -75,247 +75,59 @@ const Page = async ({ params }: PageProps) => {
                 label: product.category?.name
             }
         ]}>
-            <main className="w-full pt-28 bg-surface min-h-[calc(100vh-28rem)]">
+            <main className="w-full bg-surface min-h-[calc(100vh-28rem)]">
                 <div className="flex flex-col w-full">
-                    {/* Breadcrumb & Top Utility Bar */}
-                    <section className="w-full bg-surface-bright/80 backdrop-blur-sm py-2 px-gutter">
-                        <div className="container mx-auto flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
-                            <nav className="flex items-center flex-wrap gap-2 font-body-sm text-body-sm text-on-surface-variant">
-                                <a
-                                    className="hover:text-primary transition-colors flex items-center gap-1"
-                                    data-path="trang-chu"
-                                    href="#"
-                                >
-                                    <span className="material-symbols-outlined text-[16px]">
-                                        <FontAwesomeIcon icon={faHome} />
-                                    </span>
-                                    Trang chủ
-                                </a>
-                                <span className="text-outline/40">/</span>
-                                <a
-                                    className="hover:text-primary transition-colors"
-                                    data-path="dac-san-qua-tang"
-                                    href="#"
-                                >
-                                    Đặc sản &amp; Quà tặng
-                                </a>
-                                <span className="text-outline/40">/</span>
-                                <a className="hover:text-primary transition-colors" href="#">
-                                    Thời trang &amp; Thủ công bản địa
-                                </a>
-                                <span className="text-outline/40">/</span>
-                                <span className="text-on-surface font-label-md text-label-md truncate max-w-[280px] lg:max-w-none">
-                                    Áo Dài Lụa Tơ Tằm Hà Đông Thêu Tay Bản Sắc
-                                </span>
-                            </nav>
-                            <div className="flex items-center gap-space-md flex-shrink-0 self-end md:self-auto">
-                                <span className="font-label-sm text-label-sm text-outline tracking-wider bg-surface-container px-2 py-0.5 rounded">
-                                    MÃ SP: DDD-TH-8829
-                                </span>
-                                <div className="h-3 w-px bg-surface-variant" />
-                                <div className="flex items-center gap-1">
-                                    <button
-                                        aria-label="Chia sẻ sản phẩm"
-                                        className="p-1.5 rounded-full hover:bg-surface-container text-on-surface-variant hover:text-primary transition-colors inline-flex items-center gap-1 text-label-sm"
-                                        type="button"
-                                    >
-                                        <span className="material-symbols-outlined text-[18px]">
-                                            share
-                                        </span>
-                                        <span className="hidden sm:inline">Chia sẻ</span>
-                                    </button>
-                                    <button
-                                        className="p-1.5 px-2.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-primary transition-all inline-flex items-center gap-1.5"
-                                        id="btn-wishlist"
-                                        type="button"
-                                    >
-                                        <span
-                                            className="material-symbols-outlined text-[18px] text-primary"
-                                            style={{ fontVariationSettings: '"FILL" 1' }}
-                                        >
-                                            favorite
-                                        </span>
-                                        <span
-                                            className="font-label-md text-label-md text-on-surface"
-                                            id="wishlist-count"
-                                        >
-                                            348 yêu thích
-                                        </span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
                     {/* Main Product Section (2-Column Desktop Grid) */}
                     <section className="container mx-auto px-gutter py-4 w-full">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                             {/* Left Column: Visual Showcase Gallery (7 Columns Desktop) */}
-                            <div className="lg:col-span-7 flex flex-col gap-4">
-                                {/* Main Large Media Stage */}
-                                <div className="relative w-full aspect-[4/5] sm:aspect-[1/1] lg:aspect-[4/5] rounded-xl overflow-hidden bg-surface-container shadow-sm group">
-                                    <div
-                                        className="w-full h-full bg-cover bg-center transition-all duration-500 ease-out"
-                                        data-alt="Editorial close up shot of a Vietnamese modern reformed Ao Dai made from natural off-white mulberry silk from Ha Dong loom, with delicate hand-embroidered white lotus petal patterns on chest. Soft golden natural daylight highlighting the organic raw slub weave texture, artisanal studio background with earthy pottery and muted sand tones."
-                                        id="main-product-display"
-                                        style={{
-                                            backgroundImage:
-                                                'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBqSTHtVQcp7Slk2U5p9WnDhiCFPLuOp7sFc0SlK6I4oNO4yc3IyIeMw2jFgkQHCxFW9K2XRYqv9kxygTS2Gn4VwvC2u-M0SVJzHWS4QSuupo8mnDnh8jAUh6q1Ak5qiSScZ_eWZxk6oPfz0VdsdFx8g9hMM0rjGnmsvF4-PB4IhuxpEOYNJ_i0vB_zYA1FMik6LQHu4loMt7Myzwkt3WLdvgZVvAAFr7HzhnfxgdvXfprZGgLu7T45Vg")'
-                                        }}
-                                    ></div>
-                                    {/* Editorial Floating Badges */}
-                                    <div className="absolute top-4 left-4 flex flex-col items-start gap-2 pointer-events-none">
-                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm shadow-md backdrop-blur-md">
-                                            <span className="material-symbols-outlined text-[14px] text-tertiary-fixed">
-                                                verified
-                                            </span>
-                                            Nghệ nhân Hà Đông
+                            <ProductGallery
+                                imageSources={imageSources}
+                                productName={product.name}
+                                unitInStock={product.unitInStock}
+                                hasDiscount={!!hasDiscount}
+                                discountPercent={discountPercent}
+                            />
+                            {/* Right Column: Product Detail & Commercial Engine (5 Columns Desktop) */}
+                            <div className="lg:col-span-5 flex flex-col gap-4">
+                                <div className="container mx-auto flex flex-col md:flex-row md:items-center justify-between gap-2">
+                                    <div className="flex items-center gap-4 flex-shrink-0 self-end md:self-auto">
+                                        <span className="font-label-sm text-label-sm text-outline tracking-wider bg-surface-container px-2 py-0.5 rounded">
+                                            MÃ SP: DDD-TH-8829
                                         </span>
-                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-bright/90 text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-md">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-primary-container" />
-                                            100% Lụa Tơ Tằm Tự Nhiên
-                                        </span>
-                                    </div>
-                                    {/* Video Reel Pill Tag */}
-                                    <button
-                                        className="absolute bottom-4 left-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-bright/95 hover:bg-surface-bright text-on-surface shadow-md hover:scale-105 transition-all text-label-sm font-label-sm"
-                                        type="button"
-                                    >
-                                        <span className="material-symbols-outlined text-primary text-[18px]">
-                                            play_circle
-                                        </span>
-                                        <span>Xem video nghệ nhân dệt vải (0:45s)</span>
-                                    </button>
-                                    {/* Expand / Zoom Trigger */}
-                                    <button
-                                        aria-label="Phóng to ảnh"
-                                        className="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-bright/90 hover:bg-surface-bright text-on-surface flex items-center justify-center shadow-md transition-all"
-                                        type="button"
-                                    >
-                                        <span className="material-symbols-outlined text-[18px]">
-                                            zoom_in
-                                        </span>
-                                    </button>
-                                </div>
-                                {/* 5 Interactive Thumbnails Shelf */}
-                                <div className="grid grid-cols-5 gap-space-sm">
-                                    <button
-                                        className="gallery-thumb relative aspect-square rounded-lg overflow-hidden bg-surface-container shadow-sm p-0.5 transition-all outline-none"
-                                        data-target={0}
-                                        type="button"
-                                    >
-                                        <div
-                                            className="w-full h-full bg-cover bg-center rounded"
-                                            data-alt="Front view full shot of model wearing ivory raw silk Ao Dai with loose relaxed modern silhouette, standing near rustic wooden doorway with warm natural morning lighting."
-                                            style={{
-                                                backgroundImage:
-                                                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuA1pKeyB9EBLQeet9qvGyskDzEfsjBcKjGMrRXArKJEAnDvnPiLDKrwRMjFz_hMhEOBvEhc7KTmXKneLF6Pw9qSSES2KOviDqt1YVahcR9QNLJypxiWa0OhXQ9zBc2d10OkAooIFr41s8u2ejeBabBJQOyjt3ip78H1T28B6qxTM3CBMwu7fLTTgEstnp57BPHo1D_VOrmxOp2ZvIFeXM8388-we40oJluybTahiIfmzUoEVk6SXqtTRw")'
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 bg-primary/10 rounded pointer-events-none opacity-100 thumb-active-indicator" />
-                                    </button>
-                                    <button
-                                        className="gallery-thumb relative aspect-square rounded-lg overflow-hidden bg-surface-container shadow-sm p-0.5 transition-all outline-none"
-                                        data-target={1}
-                                        type="button"
-                                    >
-                                        <div
-                                            className="w-full h-full bg-cover bg-center rounded"
-                                            data-alt="Extreme macro texture shot of handwoven mulberry silk fabric Nha Xa, highlighting raw textured grain, slub natural threads and authentic matte pearl sheen."
-                                            style={{
-                                                backgroundImage:
-                                                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCEsdZbf4BfGvL2NUNUY7GjOESg_M5xkeh1T9rn8qc9m_EpGAo4Is_yyzyVpZ5AEMdOyv8mKWmoqepaGWVPrItv9noNVyHpIlZfQeR-04tDnkEhxprfjVKtKYQhBBr-RGgX0ewumBfeZRNZ-305Wr1oHkRDecQNTQ4ZZ4SIAZAxpKNoQ3yHn6Cwd5uiOkAyiDyx04oRJT1-g8aG8N42lYWsE39GVsm4KbeprtBH4k2RSJifvXzPVYxbow")'
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 bg-primary/10 rounded pointer-events-none opacity-0 thumb-active-indicator" />
-                                    </button>
-                                    <button
-                                        className="gallery-thumb relative aspect-square rounded-lg overflow-hidden bg-surface-container shadow-sm p-0.5 transition-all outline-none"
-                                        data-target={2}
-                                        type="button"
-                                    >
-                                        <div
-                                            className="w-full h-full bg-cover bg-center rounded"
-                                            data-alt="Delicate hand-embroidery detail of traditional Vietnamese wild lotus blossom using fine silk threads on off-white woven silk collar and chest area."
-                                            style={{
-                                                backgroundImage:
-                                                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCBSptpwhXjLP-fr3QenT00a9CM8I_KkwuN2Rukd3tMSukau815S3fDxj4mzwq27HEn6EN-NvW96JxowPzwLwNHOr90Gv4cZ7gI7QfhMo0SL2WyJQwKEJKpuF_TNGL8ixwU-Z4I7Y6T158O4FOmHMb-2XfBnfhB1OSXyG2-Ft1T_0RaNmPcV95Tzixu0uOEYnOpZDK89lErGoLOpYK-c1uwo7T3m8WJgr4Nyba1cubP1qndCrVX-RIZ7g")'
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 bg-primary/10 rounded pointer-events-none opacity-0 thumb-active-indicator" />
-                                    </button>
-                                    <button
-                                        className="gallery-thumb relative aspect-square rounded-lg overflow-hidden bg-surface-container shadow-sm p-0.5 transition-all outline-none"
-                                        data-target={3}
-                                        type="button"
-                                    >
-                                        <div
-                                            className="w-full h-full bg-cover bg-center rounded"
-                                            data-alt="Lifestyle interior setting showing the folded silk tunic placed beside a handmade unglazed Bat Trang rustic ceramic vase with dried lotus seed pods on warm wooden tea table."
-                                            style={{
-                                                backgroundImage:
-                                                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAIbe1yIXFmohMOVt6ByTiuw-1PXPfT-g3Eonv1GD-tokZN3ySLEwLnWgNDKUgQWZqOJqcdGdGgySUcIqbGd_6gZ67Ircx9WBA6VhxY6KDj0uwA-wkiUxvh8cuBASxEfj-LEL0twnh5WkMXvanbE2P9fRq4wWzLNXumDZldEbfArSZ-s_rjgzgGr1ggjvg-uYLnDJS4N07joTTTUnxAgwDk1n6pbZoJBAyMs82n4mqeiKPc4wLiMsjYfg")'
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 bg-primary/10 rounded pointer-events-none opacity-0 thumb-active-indicator" />
-                                    </button>
-                                    <button
-                                        className="gallery-thumb relative aspect-square rounded-lg overflow-hidden bg-surface-container shadow-sm p-0.5 transition-all outline-none"
-                                        data-target={4}
-                                        type="button"
-                                    >
-                                        <div
-                                            className="w-full h-full bg-cover bg-center rounded"
-                                            data-alt="Back view of unisex modern silk tunic showing minimalist mandarin collar and free-flowing drape on male model in serene cultural tea room."
-                                            style={{
-                                                backgroundImage:
-                                                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDzxeZpX5stO2oI8g2IKtOt57tjx8NMqO8YM0lnJVxAq9HvaCl9b8QaYiwuCKm58QpCdp_kGZvegRVKXWNv1WDsoBF0DsI2gNhoBVrB2lh8Q8e87iKvhiK-iBu54XVBNEyMfOnLem43AhtoDq-NsUHQTHdFE9ebiph40QeLZntb4fnczH3q12sUc86XTnES77o4qfKhxJceL3vhmd5MtjE7E8r0X3mNLGiyY8Zxl_WDaRCKJspXiDd9GA")'
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 bg-primary/10 rounded pointer-events-none opacity-0 thumb-active-indicator" />
-                                    </button>
-                                </div>
-                                {/* Artisan Micro-Banner */}
-                                <div className="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low mt-space-xs">
-                                    <div className="flex items-center gap-space-md">
-                                        <div
-                                            className="w-12 h-12 rounded-full bg-cover bg-center shadow-sm flex-shrink-0"
-                                            data-alt="Portrait of an elderly master silk weaver in Van Phuc silk village smiling beside a traditional handloom workshop filled with wooden spindles."
-                                            style={{
-                                                backgroundImage:
-                                                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBooJe1adPVxAaVJgin9JDJIQRd107bzUD7xhZJ19fxkcHPYMoG7trOvzYZfJBtetC9ZkiMeY7_BPWMpGpFy9wfQvir-qxwT8xAu8MPDyGwhrIv1Z3ZLhSGjWePsowtSiQ4rc5wjXYthTKxTwFUf6Tg2GC94-lU0xLYQPFX694y5wtVx0v-3fwHSmFN1KPmzOwFJEqUZKFFCt6ygyN-O6KTnEuAOrk3NP59UITCAZBR86QY8nWSJexwHw")'
-                                            }}
-                                        />
-                                        <div>
-                                            <div className="flex items-center gap-1.5">
-                                                <span className="font-label-lg text-label-lg text-on-surface">
-                                                    Xưởng Lụa Triệu Thái Vinh
+                                        <div className="h-3 w-px bg-surface-variant" />
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                aria-label="Chia sẻ sản phẩm"
+                                                className="p-1.5 rounded-full hover:bg-surface-container text-on-surface-variant hover:text-primary transition-colors inline-flex items-center gap-1 text-label-sm"
+                                                type="button"
+                                            >
+                                                <span className="material-symbols-outlined text-[18px]">
+                                                    <FontAwesomeIcon icon={faShare} />
+                                                </span>
+                                                <span className="hidden sm:inline">Chia sẻ</span>
+                                            </button>
+                                            <button
+                                                className="p-1.5 px-2.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-primary transition-all inline-flex items-center gap-1.5"
+                                                id="btn-wishlist"
+                                                type="button"
+                                            >
+                                                <span
+                                                    className="material-symbols-outlined text-[18px] text-primary"
+                                                    style={{ fontVariationSettings: '"FILL" 1' }}
+                                                >
+                                                    <FontAwesomeIcon icon={faHeart} />
                                                 </span>
                                                 <span
-                                                    className="material-symbols-outlined text-[16px] text-secondary"
-                                                    title="Đã xác thực làng nghề cổ truyền"
+                                                    className="font-label-md text-label-md text-on-surface"
+                                                    id="wishlist-count"
                                                 >
-                                                    verified
+                                                    348 yêu thích
                                                 </span>
-                                            </div>
-                                            <p className="font-body-sm text-body-sm text-on-surface-variant">
-                                                Làng Lụa Vạn Phúc, Hà Đông • 4 thế hệ gìn giữ cửi dệt truyền
-                                                thống
-                                            </p>
+                                            </button>
                                         </div>
                                     </div>
-                                    <a
-                                        className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container text-secondary font-label-md text-label-md hover:bg-secondary hover:text-on-secondary transition-all"
-                                        href="#"
-                                    >
-                                        <span>Thăm gian hàng</span>
-                                        <span className="material-symbols-outlined text-[16px]">
-                                            arrow_forward
-                                        </span>
-                                    </a>
                                 </div>
-                            </div>
-                            {/* Right Column: Product Detail & Commercial Engine (5 Columns Desktop) */}
-                            <div className="lg:col-span-5 flex flex-col gap-space-md">
                                 {/* Studio Label & Title */}
                                 <div className="flex flex-col gap-1.5">
                                     <div className="flex items-center gap-2">
@@ -326,19 +138,18 @@ const Page = async ({ params }: PageProps) => {
                                             Top 1 Quà tặng 2025
                                         </span>
                                     </div>
-                                    <h1 className="font-headline-lg text-headline-lg text-on-surface leading-snug">
-                                        Áo Dài Cách Tân Lụa Tơ Tằm Thêu Hoa Sen Mộc (Dáng Suông Tự Do Phù
-                                        Hợp Nam &amp; Nữ)
+                                    <h1 className="font-bold text-lg md:text-xl lg:text-2xl 2xl:text-3xl text-on-surface leading-snug">
+                                        {product.name}
                                     </h1>
                                 </div>
                                 {/* Rating & Social Proof Block */}
-                                <div className="flex items-center flex-wrap gap-space-sm font-body-sm text-body-sm">
+                                <div className="flex items-center flex-wrap gap-2 font-body-sm text-body-sm">
                                     <div className="flex items-center gap-1 bg-surface-container px-2 py-1 rounded-full">
                                         <span
                                             className="material-symbols-outlined text-[16px] text-tertiary-container"
                                             style={{ fontVariationSettings: '"FILL" 1' }}
                                         >
-                                            star
+                                            <FontAwesomeIcon icon={faStar} />
                                         </span>
                                         <span className="font-label-md text-label-md text-on-surface">
                                             4.9
@@ -348,18 +159,18 @@ const Page = async ({ params }: PageProps) => {
                                     <span className="text-outline/40">•</span>
                                     <span className="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
                                         <span className="material-symbols-outlined text-[16px] text-secondary">
-                                            check_circle
+                                            <FontAwesomeIcon icon={faCheckCircle} />
                                         </span>
                                         420 đã may đo &amp; giao thành công
                                     </span>
                                 </div>
                                 {/* Pricing Card Container */}
-                                <div className="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-sm">
-                                    <div className="flex items-baseline gap-space-md">
-                                        <span className="font-display text-display text-primary tracking-tight">
+                                <div className="p-4 rounded-xl bg-surface-container-low flex flex-col gap-2">
+                                    <div className="flex items-baseline gap-4">
+                                        <span className="font-bold text-xl md:text-2xl 2xl:text-4xl text-primary tracking-tight">
                                             1.850.000₫
                                         </span>
-                                        <span className="font-body-lg text-body-lg text-outline line-through">
+                                        <span className="font-semibold text-lg text-outline line-through">
                                             2.350.000₫
                                         </span>
                                         <span className="px-2 py-0.5 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold">
@@ -370,7 +181,7 @@ const Page = async ({ params }: PageProps) => {
                                     <div className="flex flex-col gap-1 pt-1">
                                         <div className="flex items-center gap-2 font-label-sm text-label-sm text-primary">
                                             <span className="material-symbols-outlined text-[16px]">
-                                                local_activity
+                                                <FontAwesomeIcon icon={faTags} />
                                             </span>
                                             <span>
                                                 Nhập mã{" "}
@@ -382,7 +193,7 @@ const Page = async ({ params }: PageProps) => {
                                         </div>
                                         <div className="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
                                             <span className="material-symbols-outlined text-[16px] text-secondary">
-                                                workspace_premium
+                                                <FontAwesomeIcon icon={faPiggyBank} />
                                             </span>
                                             <span>
                                                 Tích lũy <strong>+185 Điểm Thổ Địa</strong> vào ví Đi Đâu Đây
@@ -391,10 +202,10 @@ const Page = async ({ params }: PageProps) => {
                                     </div>
                                 </div>
                                 {/* Special Gifts Highlight Box */}
-                                <div className="p-space-md rounded-xl bg-surface-container-high/60 flex flex-col gap-2">
+                                <div className="p-4 rounded-xl bg-surface-container-high/60 flex flex-col gap-2">
                                     <div className="flex items-center gap-2">
                                         <span className="material-symbols-outlined text-primary text-[18px]">
-                                            redeem
+                                            <FontAwesomeIcon icon={faUserShield} />
                                         </span>
                                         <span className="font-label-md text-label-md text-on-surface font-semibold">
                                             Đặc quyền đặt hàng hôm nay:
@@ -424,7 +235,7 @@ const Page = async ({ params }: PageProps) => {
                                             Trắng Ngà Vân Mây (Ivory Silk)
                                         </span>
                                     </div>
-                                    <div className="flex items-center gap-space-sm" id="color-selector">
+                                    <div className="flex items-center gap-2" id="color-selector">
                                         <button
                                             className="color-opt p-1.5 rounded-full flex items-center gap-2 bg-surface-container-lowest shadow-sm hover:scale-102 transition-all ring-2 ring-primary"
                                             data-color="Trắng Ngà Vân Mây (Ivory Silk)"
@@ -463,7 +274,7 @@ const Page = async ({ params }: PageProps) => {
                                         Dáng áo thiết kế:
                                     </span>
                                     <div
-                                        className="grid grid-cols-2 gap-space-sm"
+                                        className="grid grid-cols-2 gap-2"
                                         id="gender-fit-selector"
                                     >
                                         <button
@@ -541,14 +352,14 @@ const Page = async ({ params }: PageProps) => {
                                     </div>
                                     <span className="font-body-sm text-body-sm text-error/90 flex items-center gap-1">
                                         <span className="material-symbols-outlined text-[16px]">
-                                            hourglass_top
+                                            <FontAwesomeIcon icon={faHourglass} />
                                         </span>
                                         Chỉ còn 7 tấm lụa đạt tiêu chuẩn dệt cho đợt thủ công này
                                     </span>
                                 </div>
                                 {/* Quantity & Core Commercial Actions */}
                                 <div className="flex flex-col gap-3 pt-2">
-                                    <div className="flex items-center gap-space-md">
+                                    <div className="flex items-center gap-4">
                                         {/* Counter */}
                                         <div className="flex items-center rounded-full bg-surface-container p-1 shadow-inner">
                                             <button
@@ -581,7 +392,7 @@ const Page = async ({ params }: PageProps) => {
                                             type="button"
                                         >
                                             <span className="material-symbols-outlined text-[20px]">
-                                                shopping_bag
+                                                <FontAwesomeIcon icon={faShoppingCart} />
                                             </span>
                                             <span>Thêm vào giỏ</span>
                                         </button>
@@ -593,7 +404,7 @@ const Page = async ({ params }: PageProps) => {
                                     >
                                         <span>Mua ngay - Giao tận nơi</span>
                                         <span className="material-symbols-outlined text-[18px]">
-                                            east
+                                            <FontAwesomeIcon icon={faArrowRight} />
                                         </span>
                                     </button>
                                     {/* Consult with Local Expert */}
@@ -602,7 +413,7 @@ const Page = async ({ params }: PageProps) => {
                                         type="button"
                                     >
                                         <span className="material-symbols-outlined text-[18px]">
-                                            support_agent
+                                            <FontAwesomeIcon icon={faContactCard} />
                                         </span>
                                         <span>Đặt hẹn may đo tại xưởng hoặc tư vấn Zalo với Thổ Địa</span>
                                     </button>
@@ -611,7 +422,7 @@ const Page = async ({ params }: PageProps) => {
                                 <div className="grid grid-cols-1 gap-2 pt-2">
                                     <div className="flex items-center gap-2.5 text-on-surface-variant font-body-sm text-body-sm">
                                         <span className="material-symbols-outlined text-secondary text-[18px]">
-                                            verified_user
+                                            <FontAwesomeIcon icon={faUserCheck} />
                                         </span>
                                         <span>
                                             100% sợi tơ tự nhiên nguyên bản, kèm thẻ chứng thư làng nghề.
@@ -619,13 +430,13 @@ const Page = async ({ params }: PageProps) => {
                                     </div>
                                     <div className="flex items-center gap-2.5 text-on-surface-variant font-body-sm text-body-sm">
                                         <span className="material-symbols-outlined text-secondary text-[18px]">
-                                            swap_horizontal_circle
+                                            <FontAwesomeIcon icon={faArrowRightArrowLeft} />
                                         </span>
                                         <span>Đổi cỡ miễn phí trong 7 ngày nếu mặc chưa vừa ý.</span>
                                     </div>
                                     <div className="flex items-center gap-2.5 text-on-surface-variant font-body-sm text-body-sm">
                                         <span className="material-symbols-outlined text-secondary text-[18px]">
-                                            card_giftcard
+                                            <FontAwesomeIcon icon={faGift} />
                                         </span>
                                         <span>
                                             Tặng thẻ giảm 15% cho BST gốm mộc và đồ trang trí bàn trà.
@@ -636,9 +447,9 @@ const Page = async ({ params }: PageProps) => {
                         </div>
                     </section>
                     {/* Cross-Sell / Combo Set Section "Phối Đồ & Không Gian Sống Cùng Thổ Địa" */}
-                    <section className="w-full bg-surface-container-low py-space-xl px-gutter my-space-md">
-                        <div className="max-w-7xl mx-auto flex flex-col gap-space-lg">
-                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-sm">
+                    <section className="w-full bg-surface-container-low py-8 px-gutter my-4">
+                        <div className="container mx-auto flex flex-col gap-space-lg">
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-2">
                                 <div>
                                     <span className="font-label-sm text-label-sm text-primary tracking-widest uppercase">
                                         Gợi ý phong cách sống bản địa
@@ -653,7 +464,7 @@ const Page = async ({ params }: PageProps) => {
                                 </div>
                                 <div className="flex items-center gap-2 bg-surface-bright px-3 py-1.5 rounded-full shadow-sm">
                                     <span className="material-symbols-outlined text-secondary text-[18px]">
-                                        savings
+                                        <FontAwesomeIcon icon={faPiggyBank} />
                                     </span>
                                     <span className="font-label-sm text-label-sm text-secondary font-semibold">
                                         Tiết kiệm 260.000₫ khi mua combo
@@ -661,9 +472,9 @@ const Page = async ({ params }: PageProps) => {
                                 </div>
                             </div>
                             {/* Combo Products Multi-Card Row */}
-                            <div className="grid grid-cols-1 md:grid-cols-12 gap-space-md items-center">
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                                 {/* Item 1 (The Main Dress) */}
-                                <div className="md:col-span-3 bg-surface-bright rounded-xl p-space-md shadow-sm flex flex-col gap-2">
+                                <div className="md:col-span-3 bg-surface-bright rounded-xl p-4 shadow-sm flex flex-col gap-2">
                                     <div
                                         className="w-full aspect-square rounded-lg bg-cover bg-center"
                                         data-alt="Modern silk Ao Dai neatly folded on textured bamboo surface with gentle studio light."
@@ -686,11 +497,11 @@ const Page = async ({ params }: PageProps) => {
                                 </div>
                                 <div className="hidden md:flex md:col-span-1 justify-center text-outline">
                                     <span className="material-symbols-outlined text-[28px]">
-                                        add_circle
+                                        <FontAwesomeIcon icon={faPlusCircle} />
                                     </span>
                                 </div>
                                 {/* Item 2 (Ceramic Decor) */}
-                                <div className="md:col-span-3 bg-surface-bright rounded-xl p-space-md shadow-sm flex flex-col gap-2">
+                                <div className="md:col-span-3 bg-surface-bright rounded-xl p-4 shadow-sm flex flex-col gap-2">
                                     <div
                                         className="w-full aspect-square rounded-lg bg-cover bg-center"
                                         data-alt="Artisanal Bat Trang crackle-glaze bell-shaped ceramic flower vase placed on wooden tea tray with dry lotus bloom."
@@ -718,11 +529,11 @@ const Page = async ({ params }: PageProps) => {
                                 </div>
                                 <div className="hidden md:flex md:col-span-1 justify-center text-outline">
                                     <span className="material-symbols-outlined text-[28px]">
-                                        add_circle
+                                        <FontAwesomeIcon icon={faPlusCircle} />
                                     </span>
                                 </div>
                                 {/* Item 3 (Silk Accessory) */}
-                                <div className="md:col-span-2 bg-surface-bright rounded-xl p-space-md shadow-sm flex flex-col gap-2">
+                                <div className="md:col-span-2 bg-surface-bright rounded-xl p-4 shadow-sm flex flex-col gap-2">
                                     <div
                                         className="w-full aspect-square rounded-lg bg-cover bg-center"
                                         data-alt="Handcrafted square silk scarf accessory with hand-rolled hems and muted natural botanical dye pattern."
@@ -744,7 +555,7 @@ const Page = async ({ params }: PageProps) => {
                                     </div>
                                 </div>
                                 {/* Combo Checkout Box */}
-                                <div className="md:col-span-2 bg-surface-container rounded-xl p-space-md flex flex-col justify-between h-full gap-space-md">
+                                <div className="md:col-span-2 bg-surface-container rounded-xl p-4 flex flex-col justify-between h-full gap-4">
                                     <div className="flex flex-col gap-1">
                                         <span className="font-label-sm text-label-sm text-on-surface-variant uppercase">
                                             Giá trọn bộ 3 món
@@ -761,7 +572,7 @@ const Page = async ({ params }: PageProps) => {
                                         type="button"
                                     >
                                         <span className="material-symbols-outlined text-[18px]">
-                                            card_membership
+                                            <FontAwesomeIcon icon={faShoppingCart} />
                                         </span>
                                         <span>Thêm cả bộ (+ 1 click)</span>
                                     </button>
@@ -770,10 +581,10 @@ const Page = async ({ params }: PageProps) => {
                         </div>
                     </section>
                     {/* Detailed Tabbed Storytelling Section */}
-                    <section className="max-w-7xl mx-auto px-gutter py-space-lg w-full">
+                    <section className="container mx-auto px-gutter py-6 w-full">
                         {/* Navigation Tabs */}
                         <div
-                            className="flex items-center gap-space-md overflow-x-auto border-b border-surface-variant/60 pb-1 scrollbar-none"
+                            className="flex items-center gap-4 overflow-x-auto border-b border-surface-variant/60 pb-1 scrollbar-none"
                             id="product-tabs"
                         >
                             <button
@@ -819,11 +630,11 @@ const Page = async ({ params }: PageProps) => {
                         </div>
                         {/* Tab 1: Story & Heritage Material */}
                         <div
-                            className="tab-content py-space-xl flex flex-col gap-space-xl"
+                            className="tab-content py-8 flex flex-col gap-8"
                             id="tab-story"
                         >
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
-                                <div className="lg:col-span-6 flex flex-col gap-space-md">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                                <div className="lg:col-span-6 flex flex-col gap-4">
                                     <span className="font-label-sm text-label-sm text-secondary font-bold tracking-widest uppercase">
                                         Từ kén tằm bên bờ sông Đáy
                                     </span>
@@ -837,8 +648,8 @@ const Page = async ({ params }: PageProps) => {
                                         gạo duyên dáng đặc trưng – minh chứng cho quy trình dệt thoi gỗ
                                         thủ công truyền thống.
                                     </p>
-                                    <div className="grid grid-cols-3 gap-space-sm pt-space-sm">
-                                        <div className="p-space-md rounded-xl bg-surface-container-low flex flex-col">
+                                    <div className="grid grid-cols-3 gap-2 pt-2">
+                                        <div className="p-4 rounded-xl bg-surface-container-low flex flex-col">
                                             <span className="font-headline-md text-headline-md text-primary font-bold">
                                                 1.200
                                             </span>
@@ -846,7 +657,7 @@ const Page = async ({ params }: PageProps) => {
                                                 Kén tằm tự nhiên cho 1 mét vải
                                             </span>
                                         </div>
-                                        <div className="p-space-md rounded-xl bg-surface-container-low flex flex-col">
+                                        <div className="p-4 rounded-xl bg-surface-container-low flex flex-col">
                                             <span className="font-headline-md text-headline-md text-secondary font-bold">
                                                 14 Ngày
                                             </span>
@@ -854,7 +665,7 @@ const Page = async ({ params }: PageProps) => {
                                                 Ươm tơ &amp; thêu tay tỉ mỉ
                                             </span>
                                         </div>
-                                        <div className="p-space-md rounded-xl bg-surface-container-low flex flex-col">
+                                        <div className="p-4 rounded-xl bg-surface-container-low flex flex-col">
                                             <span className="font-headline-md text-headline-md text-tertiary-container font-bold">
                                                 0%
                                             </span>
@@ -864,7 +675,7 @@ const Page = async ({ params }: PageProps) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="lg:col-span-6 grid grid-cols-2 gap-space-md">
+                                <div className="lg:col-span-6 grid grid-cols-2 gap-4">
                                     <div
                                         className="aspect-[3/4] rounded-xl bg-cover bg-center shadow-sm"
                                         data-alt="Vietnamese craftsman working meticulously on an antique wooden weaving loom, shuttle flying with creamy white natural silk yarn in workshop."
@@ -873,7 +684,7 @@ const Page = async ({ params }: PageProps) => {
                                                 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuA78aHxvTgH2xgnJ4_sn2IXQjFE_rYtjFv5uZ-t1C4FDMIJzysiDdeYlM7O_A0FjY8ALYiz0hRVSX6Elr0X0EEmDr7KA3YGGgvAToK4-WYxzD6cpqF_Rtbs-GbQIdXkxUN_MJlDeOC5lEqHz_P-3Jy5fHY4mDbP9kSkX99bpHs60bAg8pJuKJDCONZR8QbJ1IjZFaF9dyK3RkY4HPb4SvGrS1CtR-xlrynV7exvA_0Z0mucYX-vZQYCJQ")'
                                         }}
                                     />
-                                    <div className="flex flex-col gap-space-md">
+                                    <div className="flex flex-col gap-4">
                                         <div
                                             className="aspect-square rounded-xl bg-cover bg-center shadow-sm"
                                             data-alt="Close up of golden silkworm cocoons resting in shallow woven bamboo basket under warm sun."
@@ -896,7 +707,7 @@ const Page = async ({ params }: PageProps) => {
                         </div>
                         {/* Tab 2: Specs Table */}
                         <div className="tab-content py-space-xl hidden" id="tab-specs">
-                            <div className="max-w-4xl mx-auto rounded-xl bg-surface-container-lowest shadow-sm p-space-lg flex flex-col gap-space-md">
+                            <div className="max-w-4xl mx-auto rounded-xl bg-surface-container-lowest shadow-sm p-space-lg flex flex-col gap-4">
                                 <h3 className="font-title text-title text-on-surface">
                                     Bảng thông số chi tiết trang phục
                                 </h3>
@@ -1010,8 +821,8 @@ const Page = async ({ params }: PageProps) => {
                                         phong vị văn hóa bình an.
                                     </p>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
-                                    <div className="p-space-md bg-surface-container-lowest rounded-xl shadow-sm flex flex-col gap-3">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="p-4 bg-surface-container-lowest rounded-xl shadow-sm flex flex-col gap-3">
                                         <div
                                             className="aspect-square rounded-lg bg-cover bg-center"
                                             data-alt="Handcrafted minimalist earthy ceramic vase on raw wood tabletop with warm side lighting."
@@ -1044,7 +855,7 @@ const Page = async ({ params }: PageProps) => {
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="p-space-md bg-surface-container-lowest rounded-xl shadow-sm flex flex-col gap-3">
+                                    <div className="p-4 bg-surface-container-lowest rounded-xl shadow-sm flex flex-col gap-3">
                                         <div
                                             className="aspect-square rounded-lg bg-cover bg-center"
                                             data-alt="Traditional woven bamboo lantern hanging in cozy tea room interior, casting warm intricate geometric shadows."
@@ -1077,7 +888,7 @@ const Page = async ({ params }: PageProps) => {
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="p-space-md bg-surface-container-lowest rounded-xl shadow-sm flex flex-col gap-3">
+                                    <div className="p-4 bg-surface-container-lowest rounded-xl shadow-sm flex flex-col gap-3">
                                         <div
                                             className="aspect-square rounded-lg bg-cover bg-center"
                                             data-alt="Mother of pearl inlaid wooden tea tray with intricate floral inlay beside ceramic teacups."
@@ -1237,11 +1048,11 @@ const Page = async ({ params }: PageProps) => {
                                     </div>
                                 </div>
                                 {/* Review Cards List */}
-                                <div className="flex flex-col gap-space-md">
+                                <div className="flex flex-col gap-4">
                                     {/* Review 1 */}
-                                    <div className="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-2">
+                                    <div className="p-4 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-2">
                                         <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-space-sm">
+                                            <div className="flex items-center gap-2">
                                                 <div
                                                     className="w-10 h-10 rounded-full bg-cover bg-center"
                                                     data-alt="Portrait of an elegant young Vietnamese woman in her late 20s smiling warmly."
@@ -1323,9 +1134,9 @@ const Page = async ({ params }: PageProps) => {
                                         </div>
                                     </div>
                                     {/* Review 2 */}
-                                    <div className="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-2">
+                                    <div className="p-4 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-2">
                                         <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-space-sm">
+                                            <div className="flex items-center gap-2">
                                                 <div
                                                     className="w-10 h-10 rounded-full bg-cover bg-center"
                                                     data-alt="Portrait of a young creative professional man wearing casual stylish spectacles."
@@ -1393,7 +1204,7 @@ const Page = async ({ params }: PageProps) => {
                         {/* Tab 5: Care Guide & FAQ */}
                         <div className="tab-content py-space-xl hidden" id="tab-care">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
-                                <div className="p-space-lg rounded-xl bg-surface-container-low flex flex-col gap-space-md">
+                                <div className="p-space-lg rounded-xl bg-surface-container-low flex flex-col gap-4">
                                     <div className="flex items-center gap-2 text-secondary">
                                         <span className="material-symbols-outlined text-[24px]">
                                             dry_cleaning
@@ -1434,7 +1245,7 @@ const Page = async ({ params }: PageProps) => {
                                         </li>
                                     </ul>
                                 </div>
-                                <div className="p-space-lg rounded-xl bg-surface-container-low flex flex-col gap-space-md">
+                                <div className="p-space-lg rounded-xl bg-surface-container-low flex flex-col gap-4">
                                     <div className="flex items-center gap-2 text-secondary">
                                         <span className="material-symbols-outlined text-[24px]">
                                             potted_plant
@@ -1496,7 +1307,7 @@ const Page = async ({ params }: PageProps) => {
                                 </a>
                             </div>
                             {/* Recommendation Cards Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                 {/* Rec Card 1 */}
                                 <div className="bg-surface-bright rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col">
                                     <div className="relative aspect-[4/5] bg-surface-container overflow-hidden">
@@ -1521,7 +1332,7 @@ const Page = async ({ params }: PageProps) => {
                                             </span>
                                         </button>
                                     </div>
-                                    <div className="p-space-md flex flex-col flex-1 justify-between gap-2">
+                                    <div className="p-4 flex flex-col flex-1 justify-between gap-2">
                                         <div>
                                             <span className="font-label-sm text-label-sm text-outline">
                                                 Nha Xá • Hà Nam
@@ -1570,7 +1381,7 @@ const Page = async ({ params }: PageProps) => {
                                             </span>
                                         </button>
                                     </div>
-                                    <div className="p-space-md flex flex-col flex-1 justify-between gap-2">
+                                    <div className="p-4 flex flex-col flex-1 justify-between gap-2">
                                         <div>
                                             <span className="font-label-sm text-label-sm text-outline">
                                                 Bát Tràng • Hà Nội
@@ -1619,7 +1430,7 @@ const Page = async ({ params }: PageProps) => {
                                             </span>
                                         </button>
                                     </div>
-                                    <div className="p-space-md flex flex-col flex-1 justify-between gap-2">
+                                    <div className="p-4 flex flex-col flex-1 justify-between gap-2">
                                         <div>
                                             <span className="font-label-sm text-label-sm text-outline">
                                                 Lụa Tơ Đũi Nam Cao
@@ -1668,7 +1479,7 @@ const Page = async ({ params }: PageProps) => {
                                             </span>
                                         </button>
                                     </div>
-                                    <div className="p-space-md flex flex-col flex-1 justify-between gap-2">
+                                    <div className="p-4 flex flex-col flex-1 justify-between gap-2">
                                         <div>
                                             <span className="font-label-sm text-label-sm text-outline">
                                                 Trúc Chỉ • Huế
@@ -1698,7 +1509,7 @@ const Page = async ({ params }: PageProps) => {
                     </section>
                     {/* Sticky Bottom Quick-Action Dock for Mobile / Fast Conversions */}
                     <aside className="sticky bottom-0 left-0 right-0 z-40 bg-surface-bright/95 backdrop-blur-md border-t border-surface-variant/40 py-2.5 px-gutter shadow-lg lg:hidden">
-                        <div className="max-w-7xl mx-auto flex items-center justify-between gap-space-sm">
+                        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
                             <div className="flex flex-col">
                                 <span className="font-label-sm text-label-sm text-outline">
                                     Giá may ưu đãi
@@ -1737,13 +1548,6 @@ const Page = async ({ params }: PageProps) => {
                 </div>
 
                 <div className="md:flex gap-4">
-                    <ProductGallery
-                        imageSources={imageSources}
-                        productName={product.name}
-                        unitInStock={product.unitInStock}
-                        hasDiscount={!!hasDiscount}
-                        discountPercent={discountPercent}
-                    />
                     {/* Product Info */}
                     <div className="flex flex-col gap-4 flex-1">
                         <div className="space-y-4">

@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useMemo, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFire } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faFire, faPlay, faSearchPlus, faStore } from "@fortawesome/free-solid-svg-icons";
 
 type ProductGalleryProps = {
     imageSources: string[];
@@ -41,90 +41,126 @@ const ProductGallery = ({
     };
 
     return (
-        <div className="md:w-96">
-            <div className="group relative overflow-hidden rounded-[2rem] border border-slate-300/80 bg-white/90 backdrop-blur-sm">
-                <div className="absolute left-5 top-5 z-20 flex flex-wrap gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 backdrop-blur dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200">
-                        Đang Hot <FontAwesomeIcon icon={faFire} className="text-orange-500" />
-                    </span>
-                    {unitInStock !== undefined && unitInStock > 0 && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
-                            Ready Stock
-                        </span>
-                    )}
-                </div>
-
-                <div className="aspect-square">
-                    {activeImage ? (
-                        <img
-                            src={activeImage}
-                            alt={productName}
-                            className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
-                        />
-                    ) : (
-                        <div className="flex h-full items-center justify-center bg-slate-100 dark:bg-slate-800">
-                            <span className="rounded-full border border-dashed border-slate-300 px-4 py-2 text-sm font-medium text-slate-500 dark:border-slate-600 dark:text-slate-400">
-                                No image available
+        <>
+            <div className="lg:col-span-7 flex flex-col gap-4">
+                {/* Main Large Media Stage */}
+                <div className="relative w-full aspect-[4/5] sm:aspect-[1/1] lg:aspect-[4/5] rounded-xl overflow-hidden bg-surface-container shadow-sm group">
+                    <div
+                        className="w-full h-full bg-cover bg-center transition-all duration-500 ease-out"
+                        data-alt="Editorial close up shot of a Vietnamese modern reformed Ao Dai made from natural off-white mulberry silk from Ha Dong loom, with delicate hand-embroidered white lotus petal patterns on chest. Soft golden natural daylight highlighting the organic raw slub weave texture, artisanal studio background with earthy pottery and muted sand tones."
+                        id="main-product-display"
+                        style={{
+                            backgroundImage: `url(${activeImage})`
+                        }}
+                    ></div>
+                    {/* Editorial Floating Badges */}
+                    <div className="absolute top-4 left-4 flex flex-col items-start gap-2 pointer-events-none">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm shadow-md backdrop-blur-md">
+                            <span className="material-symbols-outlined text-[14px] text-tertiary-fixed">
+                                <FontAwesomeIcon icon={faCheckCircle} />
                             </span>
-                        </div>
-                    )}
-                </div>
-
-                {hasMultipleImages && (
-                    <>
-                        <button
-                            type="button"
-                            aria-label="Ảnh trước"
-                            onClick={goPrev}
-                            className="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/60 bg-white/80 px-3 py-2 text-xs font-semibold text-slate-700 shadow backdrop-blur transition hover:bg-white md:hidden"
-                        >
-                            Prev
-                        </button>
-                        <button
-                            type="button"
-                            aria-label="Ảnh sau"
-                            onClick={goNext}
-                            className="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/60 bg-white/80 px-3 py-2 text-xs font-semibold text-slate-700 shadow backdrop-blur transition hover:bg-white md:hidden"
-                        >
-                            Next
-                        </button>
-                    </>
-                )}
-
-                {hasDiscount && (
-                    <div className="absolute right-6 top-6 flex items-center gap-1.5 rounded-full bg-gradient-to-r from-rose-500 to-orange-500 px-4 py-2 text-sm font-bold text-white ring-1 ring-white/70 dark:ring-white/30">
-                        <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        -{discountPercent}%
+                            Nghệ nhân Hà Đông
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-bright/90 text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-md">
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary-container" />
+                            100% Lụa Tơ Tằm Tự Nhiên
+                        </span>
                     </div>
-                )}
-            </div>
-
-            {hasMultipleImages && (
-                <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
-                    {safeImages.map((image, index) => (
-                        <button
-                            key={`${image}-${index}`}
-                            type="button"
-                            aria-label={`Xem ảnh ${index + 1}`}
-                            onClick={() => setActiveIndex(index)}
-                            className={`shrink-0 overflow-hidden rounded-xl border bg-white transition ${
-                                activeIndex === index
-                                    ? "border-amber-500 ring-2 ring-amber-200"
-                                    : "border-slate-200 hover:border-amber-400"
-                            }`}
-                        >
-                            <img
-                                src={image}
-                                alt={`${productName} - ${index + 1}`}
-                                className="h-20 w-20 object-cover"
-                            />
-                        </button>
-                    ))}
+                    {/* Video Reel Pill Tag */}
+                    <button
+                        className="absolute bottom-4 left-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-bright/95 hover:bg-surface-bright text-on-surface shadow-md hover:scale-105 transition-all text-label-sm font-label-sm"
+                        type="button"
+                    >
+                        <span className="material-symbols-outlined text-primary text-[18px]">
+                            <FontAwesomeIcon icon={faPlay} />
+                        </span>
+                        <span>Xem video nghệ nhân dệt vải (0:45s)</span>
+                    </button>
+                    {/* Expand / Zoom Trigger */}
+                    <button
+                        aria-label="Phóng to ảnh"
+                        className="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-bright/90 hover:bg-surface-bright text-on-surface flex items-center justify-center shadow-md transition-all"
+                        type="button"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">
+                            <FontAwesomeIcon icon={faSearchPlus} />
+                        </span>
+                    </button>
                 </div>
-            )}
-        </div>
+                {/* 5 Interactive Thumbnails Shelf */}
+                {
+                    hasMultipleImages && (
+                        <div className="grid grid-cols-5 gap-2">
+                            {
+                                safeImages.map((image, index) => (
+                                    <button
+                                        className={`gallery-thumb relative aspect-square rounded-lg overflow-hidden bg-surface-container shadow-sm p-0.5 transition-all outline-none ${activeIndex === index ? "ring-2 ring-primary" : "hover:ring-1 hover:ring-primary/50"}`}
+                                        key={index}
+                                        data-target={index}
+                                        type="button"
+                                        aria-label={`Xem ảnh ${index + 1}`}
+                                        onClick={() => setActiveIndex(index)}
+                                    >
+                                        <div
+                                            className="w-full h-full bg-cover bg-center rounded"
+                                            data-alt={productName + ` - ${index + 1}`}
+                                            style={{
+                                                backgroundImage: `url("${image}")`
+                                            }}
+                                        />
+                                        {
+                                            activeIndex === index && (
+                                                <div className="absolute inset-0 bg-primary/10 rounded pointer-events-none opacity-100 thumb-active-indicator" />
+                                            )
+                                        }
+                                    </button>
+                                ))
+                            }
+                        </div>
+                    )
+                }
+
+                {/* Artisan Micro-Banner */}
+                <div className="flex items-center justify-between p-4 rounded-xl bg-surface-container-low mt-space-xs">
+                    <div className="flex items-center gap-4">
+                        <div
+                            className="w-12 h-12 rounded-full bg-cover bg-center shadow-sm flex-shrink-0"
+                            data-alt="Portrait of an elderly master silk weaver in Van Phuc silk village smiling beside a traditional handloom workshop filled with wooden spindles."
+                            style={{
+                                backgroundImage:
+                                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBooJe1adPVxAaVJgin9JDJIQRd107bzUD7xhZJ19fxkcHPYMoG7trOvzYZfJBtetC9ZkiMeY7_BPWMpGpFy9wfQvir-qxwT8xAu8MPDyGwhrIv1Z3ZLhSGjWePsowtSiQ4rc5wjXYthTKxTwFUf6Tg2GC94-lU0xLYQPFX694y5wtVx0v-3fwHSmFN1KPmzOwFJEqUZKFFCt6ygyN-O6KTnEuAOrk3NP59UITCAZBR86QY8nWSJexwHw")'
+                            }}
+                        />
+                        <div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="font-label-lg text-label-lg text-on-surface">
+                                    Xưởng Lụa Triệu Thái Vinh
+                                </span>
+                                <span
+                                    className="material-symbols-outlined text-[16px] text-secondary"
+                                    title="Đã xác thực làng nghề cổ truyền"
+                                >
+                                    <FontAwesomeIcon icon={faCheckCircle} />
+                                </span>
+                            </div>
+                            <p className="font-body-sm text-body-sm text-on-surface-variant">
+                                Làng Lụa Vạn Phúc, Hà Đông • 4 thế hệ gìn giữ cửi dệt truyền
+                                thống
+                            </p>
+                        </div>
+                    </div>
+                    <a
+                        className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container text-secondary font-label-md text-label-md hover:bg-secondary hover:text-on-secondary transition-all"
+                        href="#"
+                    >
+                        <span>Thăm gian hàng</span>
+                        <span className="material-symbols-outlined text-[16px]">
+                            <FontAwesomeIcon icon={faStore} />
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </>
     );
 };
 
