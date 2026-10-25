@@ -4,6 +4,7 @@ export default {
   'menu.catalog': '目录',
   'menu.comments': '评论',
   'menu.partner': '合作伙伴',
+  'menu.setting.socialPlatform': '社交平台',
   'menu.hr': '人力资源',
   'menu.hr.statistics': '统计',
   'menu.hr.branch': '分支',

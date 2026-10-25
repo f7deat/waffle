@@ -19,6 +19,7 @@ using Waffle.Entities.Users;
 using Waffle.Extensions;
 using Waffle.ExternalAPI.Googles;
 using Waffle.Models;
+using Waffle.Models.Args.Users;
 using Waffle.Models.Params;
 using Waffle.Modules.Users.Filters;
 
@@ -46,6 +47,44 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
 
     [HttpGet("{id}")]
     public async Task<IActionResult> FindByIdAsync([FromRoute] Guid id) => Ok(await _userService.GetDetailAsync(id));
+
+    [HttpGet("{id:guid}/social-accounts"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> GetSocialAccountsAsync([FromRoute] Guid id)
+    {
+        if (await _userManager.FindByIdAsync(id.ToString()) is null) return NotFound("User not found.");
+        return Ok(await _userService.GetSocialAccountsAsync(id));
+    }
+
+    [HttpPut("{id:guid}/social-accounts"), Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> UpdateSocialAccountsAsync(
+        [FromRoute] Guid id,
+        [FromBody] List<UpdateSocialAccountArgs>? accounts)
+    {
+        if (accounts is null) return BadRequest("Request body is required.");
+        if (await _userManager.FindByIdAsync(id.ToString()) is null) return NotFound("User not found.");
+
+        foreach (var account in accounts)
+        {
+            if (account.SocialPlatformId == Guid.Empty)
+                return BadRequest("Social platform is required.");
+            if (string.IsNullOrWhiteSpace(account.ProfileUrl) || account.ProfileUrl.Trim().Length > 1000)
+                return BadRequest("Profile URL is required and must not exceed 1000 characters.");
+            if (!Uri.TryCreate(account.ProfileUrl.Trim(), UriKind.Absolute, out var profileUri)
+                || (profileUri.Scheme != Uri.UriSchemeHttp && profileUri.Scheme != Uri.UriSchemeHttps))
+                return BadRequest("Profile URL must be an absolute HTTP or HTTPS URL.");
+            if (account.FollowersCount < 0)
+                return BadRequest("Followers count cannot be negative.");
+
+            account.ProfileUrl = account.ProfileUrl.Trim();
+        }
+
+        if (accounts.Select(account => account.SocialPlatformId).Distinct().Count() != accounts.Count)
+            return BadRequest("A social platform can only be included once.");
+        if (!await _userService.UpdateSocialAccountsAsync(id, accounts))
+            return BadRequest("One or more social platforms do not exist.");
+
+        return Ok(new { succeeded = true });
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetCurrentUserAsync() => Ok(await _userService.GetCurrentUserAsync(User.GetId()));

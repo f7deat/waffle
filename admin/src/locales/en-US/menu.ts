@@ -74,6 +74,7 @@ export default {
   'menu.settings.componentCenter': 'Component center',
   'menu.settings.localization': 'Localization',
   'menu.settings.menu': 'Menu',
+  'menu.setting.socialPlatform': 'Social platforms',
   'menu.settings.sendGrid': 'SendGrid',
   'menu.setting.category': 'Category',
   'menu.user': 'Users',

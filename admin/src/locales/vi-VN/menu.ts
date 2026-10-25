@@ -59,6 +59,7 @@ export default {
   'menu.setting.localization': 'Ngôn ngữ',
   'menu.setting.google': 'Google',
   'menu.setting.menu': 'Menu',
+  'menu.setting.socialPlatform': 'Nền tảng mạng xã hội',
   'menu.setting.role': 'Vai trò',
   'menu.setting.roleCenter': 'Chi tiết vai trò',
   'menu.setting.country': 'Quốc gia',

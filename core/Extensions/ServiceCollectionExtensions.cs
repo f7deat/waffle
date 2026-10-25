@@ -24,6 +24,8 @@ using Waffle.Core.Services.HR;
 using Waffle.Core.Services.Locations;
 using Waffle.Core.Services.Shop;
 using Waffle.Core.Services.Tags;
+using Waffle.Core.Services.Users;
+using Waffle.Core.Services.Users.Interfaces;
 using Waffle.Infrastructure.Repositories;
 using Waffle.Infrastructure.Repositories.Careers;
 using Waffle.Infrastructure.Repositories.Catalogs;
@@ -54,6 +56,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ILocalizationService, LocalizationService>();
         services.AddScoped<ILocalizationRepository, LocalizationRepository>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ISocialPlatformService, SocialPlatformService>();
         services.AddScoped<IWorkService, WorkService>();
         services.AddScoped<IWorkContentRepository, WorkItemRepository>();
         services.AddScoped<IFileRepository, FileRepository>();

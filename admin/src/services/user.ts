@@ -75,6 +75,35 @@ export const apiUpdateUser = (data: any) => request(`user/update`, {
   data
 })
 
+export type UserSocialAccount = {
+  socialPlatformId: string;
+  socialPlatformName: string;
+  profileUrl: string | null;
+  followersCount: number | null;
+  isVerified: boolean;
+};
+
+export type UserSocialAccountInput = {
+  socialPlatformId: string;
+  profileUrl: string;
+  followersCount?: number;
+  isVerified: boolean;
+};
+
+export async function apiGetUserSocialAccounts(id: string) {
+  return request<UserSocialAccount[]>(`user/${id}/social-accounts`);
+}
+
+export async function apiUpdateUserSocialAccounts(
+  id: string,
+  data: UserSocialAccountInput[],
+) {
+  return request<{ succeeded: boolean }>(`user/${id}/social-accounts`, {
+    method: 'PUT',
+    data,
+  });
+}
+
 export async function apiResetPassword(data: {
   userId: string;
   newPassword: string;

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import SecuriryCenter from './components/security';
 import Basic from './components/basic';
 import { history } from '@umijs/max';
+import SocialAccounts from './components/social-accounts';
 
 const UserCenter: React.FC = () => {
   const [tab, setTab] = useState('basic');
@@ -28,6 +29,11 @@ const UserCenter: React.FC = () => {
               label: 'Liên kết',
               key: 'tab3',
               children: <Empty />,
+            },
+            {
+              label: 'Mạng xã hội',
+              key: 'tab5',
+              children: <SocialAccounts />,
             },
             {
               label: 'Thông báo',

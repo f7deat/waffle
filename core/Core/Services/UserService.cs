@@ -10,6 +10,7 @@ using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Users;
 using Waffle.Models;
+using Waffle.Models.Args.Users;
 using Waffle.Models.ViewModels.Users;
 using Waffle.Modules.Users.Interfaces;
 
@@ -106,6 +107,67 @@ public class UserService(UserManager<ApplicationUser> _userManager, IUserReposit
         user.DateOfBirth = args.DateOfBirth;
         await _userManager.UpdateAsync(user);
         return TResult.Success;
+    }
+
+    public Task<List<SocialAccountViewModel>> GetSocialAccountsAsync(Guid userId) => _context.SocialAccounts
+        .AsNoTracking()
+        .Where(account => account.UserId == userId)
+        .OrderBy(account => account.SocialPlatform!.Name)
+        .Select(account => new SocialAccountViewModel
+        {
+            SocialPlatformId = account.SocialPlatformId,
+            SocialPlatformName = account.SocialPlatform!.Name,
+            ProfileUrl = account.ProfileUrl,
+            FollowersCount = account.FollowersCount,
+            IsVerified = account.IsVerified
+        })
+        .ToListAsync();
+
+    public async Task<bool> UpdateSocialAccountsAsync(Guid userId, IReadOnlyCollection<UpdateSocialAccountArgs> accounts)
+    {
+        var platformIds = accounts.Select(account => account.SocialPlatformId).ToList();
+        if (platformIds.Distinct().Count() != platformIds.Count) return false;
+
+        var existingPlatformIds = await _context.SocialPlatforms
+            .Where(platform => platformIds.Contains(platform.Id))
+            .Select(platform => platform.Id)
+            .ToListAsync();
+        if (existingPlatformIds.Count != platformIds.Count) return false;
+
+        var existingAccounts = await _context.SocialAccounts
+            .Where(account => account.UserId == userId)
+            .ToListAsync();
+        var accountsByPlatform = accounts.ToDictionary(account => account.SocialPlatformId);
+
+        foreach (var existingAccount in existingAccounts)
+        {
+            if (!accountsByPlatform.TryGetValue(existingAccount.SocialPlatformId, out var updatedAccount))
+            {
+                _context.SocialAccounts.Remove(existingAccount);
+                continue;
+            }
+
+            existingAccount.ProfileUrl = updatedAccount.ProfileUrl.Trim();
+            existingAccount.FollowersCount = updatedAccount.FollowersCount;
+            existingAccount.IsVerified = updatedAccount.IsVerified;
+        }
+
+        foreach (var account in accounts)
+        {
+            if (existingAccounts.Any(existing => existing.SocialPlatformId == account.SocialPlatformId)) continue;
+
+            _context.SocialAccounts.Add(new SocialAccount
+            {
+                UserId = userId,
+                SocialPlatformId = account.SocialPlatformId,
+                ProfileUrl = account.ProfileUrl.Trim(),
+                FollowersCount = account.FollowersCount,
+                IsVerified = account.IsVerified
+            });
+        }
+
+        await _context.SaveChangesAsync();
+        return true;
     }
 
     public async Task<ListResult> GetInfluencersAsync(FilterOptions filterOptions)

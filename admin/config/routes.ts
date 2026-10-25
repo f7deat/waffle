@@ -340,6 +340,11 @@ export default [
         component: './settings/menu',
       },
       {
+        name: 'socialPlatform',
+        path: '/setting/social-platform',
+        component: './settings/social-platform',
+      },
+      {
         name: 'country',
         path: '/setting/country',
         component: './settings/country'
