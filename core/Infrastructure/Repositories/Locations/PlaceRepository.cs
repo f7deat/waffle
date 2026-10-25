@@ -102,7 +102,8 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
                             ProvinceId = (int?)d.ProvinceId,
                             c.Thumbnail,
                             InfluencerName = influencer.Name,
-                            InfluencerUserName = influencer.UserName
+                            InfluencerUserName = influencer.UserName,
+                            InfluencerAvatar = influencer.Avatar
                         };
             if (filterOptions.DistrictId.HasValue)
             {
@@ -115,6 +116,10 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
             if (!string.IsNullOrWhiteSpace(filterOptions.Name))
             {
                 query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
+            }
+            if (!string.IsNullOrWhiteSpace(filterOptions.InfluencerUserName))
+            {
+                query = query.Where(x => x.InfluencerUserName.ToLower() == filterOptions.InfluencerUserName.ToLower());
             }
             query = query.OrderByDescending(x => x.ModifiedDate);
             return await ListResult.Success(query, filterOptions);

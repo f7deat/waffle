@@ -40,13 +40,18 @@ public class UserService(UserManager<ApplicationUser> _userManager, IUserReposit
     public async Task<TResult> CreateAsync(CreateUserModel model)
     {
         if (string.IsNullOrWhiteSpace(model.Password)) return TResult.Failed("Password is required!");
-        var result = await _userManager.CreateAsync(new ApplicationUser
+        var user = new ApplicationUser
         {
             Email = model.Email,
             UserName = model.UserName,
             PhoneNumber = model.PhoneNumber
-        }, model.Password);
-        return result.Succeeded ? TResult.Success : TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "User creation failed.");
+        };
+        var result = await _userManager.CreateAsync(user, model.Password);
+        if (!result.Succeeded) return TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "User creation failed.");
+        var allowedRoles = new List<string> { RoleName.Member, RoleName.Influencer, RoleName.Business };
+        if (!allowedRoles.Contains(model.AccountType)) return TResult.Failed("Invalid account type.");
+        await _userManager.AddToRoleAsync(user, model.AccountType);
+        return TResult.Success;
     }
 
     public async Task<CurrentUserViewModel?> GetCurrentUserAsync(Guid id)

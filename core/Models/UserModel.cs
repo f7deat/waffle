@@ -1,4 +1,5 @@
-﻿using Waffle.Entities;
+﻿using Waffle.Core.Constants;
+using Waffle.Entities;
 
 namespace Waffle.Models;
 
@@ -19,6 +20,7 @@ public class CreateUserModel : LoginModel
     public string? Name { get; set; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
+    public string AccountType { get; set; } = RoleName.Member;
 }
 
 public class UpdateProfileModel

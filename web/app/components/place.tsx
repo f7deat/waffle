@@ -2,6 +2,7 @@ import { apiPlaceList } from "@/services/locations/place";
 import { faCocktail, faFire, faHeart, faLocationDot, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons/faArrowRight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Avatar } from "antd";
 import Link from "next/link";
 
 const Place: React.FC = async () => {
@@ -110,9 +111,7 @@ const Place: React.FC = async () => {
                                     </div>
                                     <div className="mt-4 pt-3 bg-surface-container-low -mx-5 -mb-5 px-5 py-3 flex items-center justify-between">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-6 h-6 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-[10px]">
-                                                CY
-                                            </div>
+                                            <Avatar src={place.influencerAvatar} alt={place.influencerName} />
                                             <span className="font-label-sm text-label-sm text-on-surface-variant">
                                                 Review bởi{" "}
                                                 <Link href={`/user/${place.influencerUserName || 'tandc'}`} className="font-bold hover:underline">

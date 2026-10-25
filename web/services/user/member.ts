@@ -6,6 +6,7 @@ export type MemberRegisterData = {
     password: string;
     email: string;
     phoneNumber?: string;
+    accountType: "member" | "business" | "influencer" | string;
 };
 
 export async function apiMemberRegister(data: MemberRegisterData) {

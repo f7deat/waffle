@@ -59,7 +59,7 @@ const Influencer: React.FC = async () => {
                                         </span>
                                     </span>
                                 </div>
-                                <Link href={`/influencer/${influencer.userName}`}>
+                                <Link href={`/user/${influencer.userName}`}>
                                     <h3 className="font-headline-sm text-headline-sm text-on-surface font-bold group-hover:text-primary transition-colors">
                                         {influencer.name}
                                     </h3>

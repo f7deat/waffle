@@ -19,6 +19,7 @@ declare namespace API {
         districtId?: number;
         provinceId?: number;
         name?: string;
+        influencerUserName?: string;
     }
     interface PlaceListItem {
         id: string;
@@ -36,6 +37,7 @@ declare namespace API {
         description?: string;
         influencerName?: string;
         influencerUserName?: string;
+        influencerAvatar?: string;
     }
     interface PlaceDetail extends PlaceListItem {
         content: API.BlockEditor;

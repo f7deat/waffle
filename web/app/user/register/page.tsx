@@ -1,7 +1,7 @@
 "use client";
 
 import PageContainer from "@/components/layout/page-container";
-import { Form, notification } from "antd";
+import { Checkbox, Form, notification } from "antd";
 import { isAxiosError } from "axios";
 import { useState } from "react";
 import { apiMemberRegister } from "@/services/user/member";
@@ -16,6 +16,7 @@ type RegisterValues = {
     confirmPassword: string;
     phoneNumber?: string;
     acceptTerms: boolean;
+    accountType: "member" | "business" | "influencer" | string;
 };
 
 const Page: React.FC = () => {
@@ -33,6 +34,7 @@ const Page: React.FC = () => {
                 password: values.password,
                 email: values.email.trim(),
                 phoneNumber: values.phoneNumber?.trim(),
+                accountType: selectedPurpose
             });
 
             if (!response.succeeded) {
@@ -40,14 +42,14 @@ const Page: React.FC = () => {
                     response.errors?.map((e) => e.description).join(" ") ||
                     "Vui lòng kiểm tra lại thông tin đăng ký.";
                 api.error({
-                    message: "Đăng ký thất bại",
+                    title: "Đăng ký thất bại",
                     description,
                 });
                 return;
             }
 
             api.success({
-                message: "Đăng ký thành công",
+                title: "Đăng ký thành công",
                 description: "Tài khoản thành viên của bạn đã được tạo. Hãy đăng nhập để tiếp tục.",
             });
 
@@ -61,7 +63,7 @@ const Page: React.FC = () => {
                     (typeof error.response?.data === "string" ? error.response.data : "") ||
                     description;
             }
-            api.error({ message: "Đăng ký thất bại", description });
+            api.error({ title: "Đăng ký thất bại", description });
         } finally {
             setIsSubmitting(false);
         }
@@ -335,7 +337,7 @@ const Page: React.FC = () => {
                                 onFinish={handleFinish}
                                 onFinishFailed={({ errorFields }) => {
                                     api.error({
-                                        message: "Thông tin chưa hợp lệ",
+                                        title: "Thông tin chưa hợp lệ",
                                         description: errorFields[0]?.errors[0] || "Vui lòng kiểm tra lại biểu mẫu.",
                                     });
                                 }}
@@ -615,10 +617,7 @@ const Page: React.FC = () => {
                                             ]}
                                             noStyle
                                         >
-                                            <input
-                                                className="mt-1 w-4 h-4 rounded text-secondary focus:ring-secondary accent-secondary"
-                                                type="checkbox"
-                                            />
+                                            <Checkbox />
                                         </Form.Item>
                                         <span className="font-body-sm text-body-sm text-on-surface-variant leading-snug">
                                             Tôi đồng ý với{" "}
