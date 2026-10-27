@@ -1,0 +1,29 @@
+@baseUrl = https://localhost:5001
+@articleId = 00000000-0000-0000-0000-000000000001
+@locale = vi-VN
+
+### Get scheduled and published articles for a calendar range
+GET {{baseUrl}}/api/article/schedule?from=2026-10-26T00:00:00Z&to=2026-11-02T00:00:00Z&locale={{locale}}
+Authorization: Bearer {{accessToken}}
+
+### Reject an invalid range (end must be after start)
+GET {{baseUrl}}/api/article/schedule?from=2026-11-02T00:00:00Z&to=2026-10-26T00:00:00Z&locale={{locale}}
+Authorization: Bearer {{accessToken}}
+
+### Schedule a draft
+PUT {{baseUrl}}/api/article/{{articleId}}/schedule
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "scheduledAt": "2026-10-30T14:30:00+07:00"
+}
+
+### Cancel a schedule and return the article to draft
+PUT {{baseUrl}}/api/article/{{articleId}}/schedule
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "scheduledAt": null
+}

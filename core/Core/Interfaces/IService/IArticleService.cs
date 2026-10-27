@@ -1,6 +1,7 @@
 ﻿using Waffle.Core.Foundations.Models;
 using Waffle.Core.Services.Articles.Args;
 using Waffle.Core.Services.Articles.Filters;
+using Waffle.Core.Services.Articles.Models;
 using Waffle.Models;
 
 namespace Waffle.Core.Interfaces.IService;
@@ -23,4 +24,7 @@ public interface IArticleService
     Task<TResult> GetMetaAsync(string normalizedName);
     Task<TResult> GetChartDataAsync(string locale);
     Task<ListResult> GetMostViewedAsync(string locale);
+    Task<ArticleScheduleResponse> GetScheduleAsync(ArticleScheduleFilterOptions filterOptions, CancellationToken cancellationToken);
+    Task<ScheduleArticleResponse?> ScheduleAsync(Guid id, DateTimeOffset? scheduledAt, CancellationToken cancellationToken);
+    Task<int> PublishScheduledArticlesAsync(CancellationToken cancellationToken);
 }

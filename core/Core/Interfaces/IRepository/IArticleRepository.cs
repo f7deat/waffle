@@ -1,6 +1,7 @@
 ﻿using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Services.Articles.Filters;
+using Waffle.Core.Services.Articles.Models;
 using Waffle.Entities;
 using Waffle.Models;
 
@@ -20,4 +21,11 @@ public interface IArticleRepository : IAsyncRepository<Article>
     Task<int> GetTotalArticlesAsync(string locale);
     Task<int> GetTotalViewCountAsync(string locale);
     Task<ListResult> ListAsync(ArticleFilterOptions filterOptions);
+    Task<ArticleScheduleResponse> GetScheduleAsync(ArticleScheduleFilterOptions filterOptions, CancellationToken cancellationToken);
+    Task<ScheduleArticleResponse?> ScheduleArticleAsync(
+        Guid id,
+        DateTimeOffset? scheduledAt,
+        DateTimeOffset modifiedAt,
+        CancellationToken cancellationToken);
+    Task<int> PublishScheduledArticlesAsync(DateTimeOffset now, CancellationToken cancellationToken);
 }

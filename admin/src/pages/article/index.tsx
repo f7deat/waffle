@@ -148,8 +148,16 @@ const ArticlePage: React.FC = () => {
       dataIndex: "publishedAt",
       key: "publishedAt",
       width: 180,
-      render: (_, record: any) =>
-        record.publishedAt ? dayjs(record.publishedAt).format("YYYY-MM-DD HH:mm") : "-",
+      render: (_, record: any) => {
+        const publishDate = record.scheduledAt || record.publishedAt;
+        if (!publishDate) return "-";
+        return (
+          <div>
+            <div>{dayjs(publishDate).format("YYYY-MM-DD HH:mm")}</div>
+            {record.scheduledAt && <span className="text-xs text-blue-600">Đã lên lịch</span>}
+          </div>
+        );
+      },
       search: false
     },
     {

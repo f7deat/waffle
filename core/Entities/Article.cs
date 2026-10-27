@@ -21,6 +21,7 @@ public class Article : AuditEntity, ISoftDelete, ILocale
     [StringLength(10)]
     public string Locale { get; set; } = "vi-VN";
     public DateTime? PublishedAt { get; set; }
+    public DateTimeOffset? ScheduledAt { get; set; }
 
     [ForeignKey(nameof(Category))]
     public int? CategoryId { get; set; }

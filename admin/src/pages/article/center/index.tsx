@@ -47,7 +47,11 @@ const Index: React.FC = () => {
             description: article.description,
             thumbnail: article.thumbnail,
             normalizedName: article.normalizedName,
-            publishedAt: article.publishedAt ? dayjs(article.publishedAt) : undefined,
+            publishedAt: article.scheduledAt
+                ? dayjs(article.scheduledAt)
+                : article.publishedAt
+                    ? dayjs(article.publishedAt)
+                    : undefined,
             content: article.content || '',
         });
     }, [article]);

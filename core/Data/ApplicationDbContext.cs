@@ -109,6 +109,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<TagCatalog>().HasKey(tc => new { tc.CatalogId, tc.TagId });
         builder.Entity<ProductTag>().HasKey(k => new { k.ProductId, k.TagId });
         builder.Entity<WebsitePage>().HasIndex(x => x.PageKey).IsUnique();
+        builder.Entity<Article>().HasIndex(x => x.ScheduledAt);
 
         builder.Entity<Photo>()
             .HasOne(x => x.Album)

@@ -5,6 +5,7 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.Articles.Args;
 using Waffle.Core.Services.Articles.Filters;
+using Waffle.Core.Services.Articles.Models;
 using Waffle.Entities;
 using Waffle.Models;
 
@@ -80,7 +81,16 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
             article.Description = args.Description;
             article.Thumbnail = args.Thumbnail;
             article.Content = args.Content;
-            article.PublishedAt = args.PublishedAt;
+            if (args.PublishedAt.HasValue && args.PublishedAt.Value > DateTimeOffset.UtcNow)
+            {
+                article.PublishedAt = null;
+                article.ScheduledAt = args.PublishedAt.Value;
+            }
+            else
+            {
+                article.PublishedAt = args.PublishedAt?.UtcDateTime;
+                article.ScheduledAt = null;
+            }
             article.ModifiedDate = DateTime.Now;
             var result = await _articleRepository.UpdateAsync(article);
             await _articleRepository.SaveChangesAsync();
@@ -100,8 +110,9 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
             if (article is null || article.DeletedAt.HasValue) return TResult.Failed("Article not found");
             if (article.PublishedAt is not null) return TResult.Ok(article.PublishedAt);
 
-            article.PublishedAt = DateTime.Now;
-            article.ModifiedDate = DateTime.Now;
+            article.PublishedAt = DateTime.UtcNow;
+            article.ScheduledAt = null;
+            article.ModifiedDate = DateTime.UtcNow;
             var result = await _articleRepository.UpdateAsync(article);
             await _articleRepository.SaveChangesAsync();
             return TResult.Ok(result);
@@ -164,7 +175,10 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
             article.Description,
             article.Thumbnail,
             article.ViewCount,
-            article.PublishedAt,
+            PublishedAt = article.PublishedAt.HasValue
+                ? new DateTimeOffset(DateTime.SpecifyKind(article.PublishedAt.Value, DateTimeKind.Utc))
+                : null,
+            article.ScheduledAt,
             article.Content,
             article.Locale,
             article.CreatedDate,
@@ -195,4 +209,22 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
     public Task<TResult> GetChartDataAsync(string locale) => _articleRepository.GetChartDataAsync(locale);
 
     public Task<ListResult> GetMostViewedAsync(string locale) => _articleRepository.GetMostViewedAsync(locale);
+
+    public Task<ArticleScheduleResponse> GetScheduleAsync(
+        ArticleScheduleFilterOptions filterOptions,
+        CancellationToken cancellationToken) =>
+        _articleRepository.GetScheduleAsync(filterOptions, cancellationToken);
+
+    public async Task<ScheduleArticleResponse?> ScheduleAsync(
+        Guid id,
+        DateTimeOffset? scheduledAt,
+        CancellationToken cancellationToken)
+    {
+        if (scheduledAt.HasValue && scheduledAt.Value <= DateTimeOffset.UtcNow)
+            throw new InvalidArticleScheduleException();
+        return await _articleRepository.ScheduleArticleAsync(id, scheduledAt, DateTimeOffset.UtcNow, cancellationToken);
+    }
+
+    public Task<int> PublishScheduledArticlesAsync(CancellationToken cancellationToken) =>
+        _articleRepository.PublishScheduledArticlesAsync(DateTimeOffset.UtcNow, cancellationToken);
 }

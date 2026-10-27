@@ -7,5 +7,5 @@ public class UpdateArticleArgs
     public string? Description { get; set; }
     public string? Content { get; set; }
     public string? Thumbnail { get; set; }
-    public DateTime? PublishedAt { get; set; }
+    public DateTimeOffset? PublishedAt { get; set; }
 }

@@ -30,6 +30,11 @@ export default [
         hideInMenu: true
       },
       {
+        name: 'schedule',
+        path: '/article/schedule',
+        component: './article/schedule',
+      },
+      {
         name: 'trash',
         path: '/article/trash',
         component: './article/trash',

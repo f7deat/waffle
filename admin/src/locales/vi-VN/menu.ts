@@ -24,6 +24,7 @@ export default {
   'menu.hr.teamMembers': 'Thành viên Team',
   'menu.article': 'Bài viết',
   'menu.article.list': 'Danh sách',
+  'menu.article.schedule': 'Lịch xuất bản',
   'menu.article.trash': 'Thùng rác',
   'menu.article.center': 'Chi tiết',
   'menu.shop': 'Cửa hàng',

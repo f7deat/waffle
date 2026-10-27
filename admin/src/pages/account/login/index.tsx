@@ -131,173 +131,252 @@ const Login: React.FC = () => {
   }, [googleClientId, handleGoogleCredential, hasGoogleClientId]);
 
   return (
-    <div className='login-page flex items-center justify-center p-6'>
+    <div className="login-page">
       <Helmet>
-        <title>{intl.formatMessage({ id: 'menu.login', defaultMessage: 'Login', })} - {Settings.title}</title>
+        <title>{intl.formatMessage({ id: 'menu.login', defaultMessage: 'Login' })} - {Settings.title}</title>
       </Helmet>
-      <div className='fixed z-50 right-2 top-2'>
-        <SelectLang />
-      </div>
-      <div className="login-shell flex">
-        <div className="login-brand-panel">
-          <div className="relative z-10">
-            <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-2xl font-bold backdrop-blur-sm">
-              {companyName.charAt(0)}
-            </div>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-white/70">Welcome back</p>
-            <h1 className="m-0 max-w-sm text-4xl font-semibold leading-tight">Đăng nhập để tiếp tục hành trình của bạn.</h1>
+      <header className="login-header">
+        <div className="login-header-inner">
+          <a className="login-brand" href="/" aria-label={companyName}>
+            <span className="login-brand-mark"><UserOutlined /></span>
+            <span className="login-brand-copy">
+              <strong>{companyName}</strong>
+              <small>CMS quản trị nội dung</small>
+            </span>
+          </a>
+          <div className="login-header-actions">
+            <span className="login-system-status">
+              <span className="login-status-dot" />
+              Cổng quản trị
+            </span>
+            <SelectLang />
           </div>
-          <p className="relative z-10 m-0 text-sm text-white/70">&copy; 2025 {companyName}</p>
         </div>
-        <div className="login-form-panel">
-          <LoginForm
-            logo={<img alt="logo" src={`${process.env.API_URL}/imgs/logo-icon.png`} />}
-            title={companyName}
-            subTitle={intl.formatMessage({ id: 'pages.login.subTitle' })}
-            initialValues={{
-              autoLogin: true,
-            }}
-            actions={[
-              <div key={2} className="mb-4 text-center text-sm text-slate-500">
-                <FormattedHTMLMessage id="pages.login.orLoginWith" />
-              </div>,
-              <div className="login-google-button" key={3} ref={googleButtonRef}>
-                {!hasGoogleClientId && (
-                  <Button block danger icon={<GoogleCircleFilled />} disabled>
-                    Chưa cấu hình Google Client ID
-                  </Button>
-                )}
-              </div>,
-            ]}
-            onFinish={async (values) => {
-              await handleSubmit(values as any);
-            }}
-          >
-            <Tabs
-              activeKey={type}
-              onChange={setType}
-              centered
-              items={[
-                {
-                  key: 'account',
-                  label: intl.formatMessage({ id: 'pages.login.account', defaultMessage: 'Account' }),
-                },
-                {
-                  key: 'mobile',
-                  label: intl.formatMessage({
-                    id: 'general.phoneNumber',
-                    defaultMessage: 'Phone number',
-                  }),
-                },
-              ]}
-            />
-            {type === 'account' && (
-              <>
-                <ProFormText
-                  name="username"
-                  fieldProps={{
-                    size: 'large',
-                    prefix: <UserOutlined />,
-                  }}
-                  placeholder="Tài khoản"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input username!'
-                    },
-                  ]}
-                />
-                <ProFormText.Password
-                  name="password"
-                  fieldProps={{
-                    size: 'large',
-                    prefix: <LockOutlined />,
-                  }}
-                  placeholder={intl.formatMessage({
-                    id: 'pages.login.password',
-                  })}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please input password!',
-                    },
-                  ]}
-                />
-              </>
-            )}
+      </header>
 
-            {type === 'mobile' && (
-              <>
-                <ProFormText
-                  fieldProps={{
-                    size: 'large',
-                    prefix: <MobileOutlined />,
-                  }}
-                  name="mobile"
-                  placeholder={intl.formatMessage({
-                    id: 'general.phoneNumber',
-                    defaultMessage: 'Phone number',
-                  })}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập số điện thoại',
-                    },
-                    {
-                      pattern: /^1\d{10}$/,
-                      message: 'Số điện thoại không hợp lệ',
-                    },
-                  ]}
-                />
-                <ProFormCaptcha
-                  fieldProps={{
-                    size: 'large',
-                    prefix: <LockOutlined />,
-                  }}
-                  captchaProps={{
-                    size: 'large',
-                  }}
-                  placeholder="Mã xác nhận"
-                  captchaTextRender={(timing, count) => {
-                    if (timing) {
-                      return 'Lấy mã + ' + count;
-                    }
-                    return 'Lấy mã';
-                  }}
-                  name="captcha"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập mã xác nhận!',
-                    },
-                  ]}
-                  onGetCaptcha={async (phone) => {
-                    if (!phone) {
-                      message.warning('Vui lòng nhập số điện thoại');
-                      return;
-                    }
-                    if (!/^1\d{10}$/.test(phone)) {
-                      message.error('Số điện thoại không hợp lệ');
-                      return;
-                    }
-                    message.success('Đã gửi mã xác minh tới: ' + phone);
-                  }}
-                />
-              </>
-            )}
-            <div className='mb-6'>
-              <ProFormCheckbox noStyle name="autoLogin">
-                <FormattedHTMLMessage id="pages.login.rememberMe" />
-              </ProFormCheckbox>
-              <div className='float-right'>
-                <button type='button' onClick={() => setOpen(true)} className='hover:text-blue-500'>
-                  <FormattedHTMLMessage id="pages.login.forgotPassword" />
-                </button>
+      <main className="login-main">
+        <div className="login-shell">
+          <section className="login-brand-panel">
+            <div className="login-brand-decoration login-brand-decoration-top" />
+            <div className="login-brand-decoration login-brand-decoration-bottom" />
+            <div className="login-brand-content">
+              <div className="login-brand-kicker">Không gian làm việc nội bộ</div>
+              <div className="login-brand-heading">
+                <span>{companyName}</span>
+                <strong>CMS</strong>
               </div>
+              <p className="login-brand-description">
+                Nền tảng quản trị và xuất bản nội dung, được thiết kế để hỗ trợ đội ngũ vận hành
+                công việc hằng ngày.
+              </p>
+
+              <div className="login-feature-card">
+                <div className="login-feature-heading">
+                  <span className="login-feature-icon"><LockOutlined /></span>
+                  <span>
+                    <strong>Bảo vệ tài khoản</strong>
+                    <small>Đăng nhập an toàn, có kiểm soát</small>
+                  </span>
+                </div>
+                <div className="login-feature-divider" />
+                <p>
+                  Chỉ sử dụng tài khoản được cấp. Không chia sẻ thông tin đăng nhập và mã xác thực
+                  với bất kỳ ai.
+                </p>
+              </div>
+
+              <blockquote className="login-quote">
+                <span className="login-quote-mark">“</span>
+                <p>Thông tin chính xác bắt đầu từ quy trình biên tập có trách nhiệm.</p>
+                <footer>{companyName} · Editorial workspace</footer>
+              </blockquote>
             </div>
-          </LoginForm>
-          </div>
-      </div>
+            <div className="login-brand-footer">
+              <span><span className="login-status-dot" /> Khu vực dành cho nhân sự được cấp quyền</span>
+              <span>CMS / INTERNAL</span>
+            </div>
+          </section>
+
+          <section className="login-form-panel">
+            <LoginForm
+              title={false}
+              logo={false}
+              subTitle={false}
+              initialValues={{ autoLogin: true }}
+              submitter={{ searchConfig: { submitText: 'Đăng nhập vào hệ thống' } }}
+              onFinish={async (values) => {
+                await handleSubmit(values as any);
+              }}
+            >
+              <div className="login-form-content">
+                <div className="login-form-heading">
+                  <div className="login-form-eyebrow">
+                    <LockOutlined />
+                    <span>Cổng xác thực nội bộ</span>
+                  </div>
+                  <h1>Đăng nhập hệ thống</h1>
+                  <p>Nhập thông tin tài khoản được cấp để tiếp tục.</p>
+                </div>
+
+                <div className="login-sso-section">
+                  <div className="login-google-button" ref={googleButtonRef}>
+                    {!hasGoogleClientId && (
+                      <Button block icon={<GoogleCircleFilled />} disabled>
+                        Google SSO chưa được cấu hình
+                      </Button>
+                    )}
+                  </div>
+                  <div className="login-divider">
+                    <span>Hoặc đăng nhập bằng tài khoản CMS</span>
+                  </div>
+                </div>
+
+                <Tabs
+                  className="login-tabs"
+                  activeKey={type}
+                  onChange={setType}
+                  items={[
+                    {
+                      key: 'account',
+                      label: intl.formatMessage({ id: 'pages.login.account', defaultMessage: 'Tài khoản' }),
+                    },
+                    {
+                      key: 'mobile',
+                      label: intl.formatMessage({
+                        id: 'general.phoneNumber',
+                        defaultMessage: 'Số điện thoại',
+                      }),
+                    },
+                  ]}
+                />
+
+                {type === 'account' && (
+                  <>
+                    <div className="login-field-label">Tên đăng nhập</div>
+                    <ProFormText
+                      name="username"
+                      fieldProps={{
+                        size: 'large',
+                        prefix: <UserOutlined />,
+                        placeholder: 'Nhập tên đăng nhập',
+                      }}
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Vui lòng nhập tên đăng nhập',
+                        },
+                      ]}
+                    />
+                    <div className="login-field-label login-password-label">
+                      <span>Mật khẩu</span>
+                      <button type="button" onClick={() => setOpen(true)}>
+                        <FormattedHTMLMessage id="pages.login.forgotPassword" />
+                      </button>
+                    </div>
+                    <ProFormText.Password
+                      name="password"
+                      fieldProps={{
+                        size: 'large',
+                        prefix: <LockOutlined />,
+                        placeholder: 'Nhập mật khẩu',
+                      }}
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Vui lòng nhập mật khẩu',
+                        },
+                      ]}
+                    />
+                  </>
+                )}
+
+                {type === 'mobile' && (
+                  <>
+                    <div className="login-field-label">Số điện thoại</div>
+                    <ProFormText
+                      fieldProps={{
+                        size: 'large',
+                        prefix: <MobileOutlined />,
+                        placeholder: intl.formatMessage({
+                          id: 'general.phoneNumber',
+                          defaultMessage: 'Nhập số điện thoại',
+                        }),
+                      }}
+                      name="mobile"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Vui lòng nhập số điện thoại',
+                        },
+                        {
+                          pattern: /^1\d{10}$/,
+                          message: 'Số điện thoại không hợp lệ',
+                        },
+                      ]}
+                    />
+                    <div className="login-field-label">Mã xác nhận</div>
+                    <ProFormCaptcha
+                      fieldProps={{
+                        size: 'large',
+                        prefix: <LockOutlined />,
+                      }}
+                      captchaProps={{ size: 'large' }}
+                      placeholder="Nhập mã xác nhận"
+                      captchaTextRender={(timing, count) => (timing ? `Lấy mã + ${count}` : 'Lấy mã')}
+                      name="captcha"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Vui lòng nhập mã xác nhận!',
+                        },
+                      ]}
+                      onGetCaptcha={async (phone) => {
+                        if (!phone) {
+                          message.warning('Vui lòng nhập số điện thoại');
+                          return;
+                        }
+                        if (!/^1\d{10}$/.test(phone)) {
+                          message.error('Số điện thoại không hợp lệ');
+                          return;
+                        }
+                        message.success('Đã gửi mã xác minh tới: ' + phone);
+                      }}
+                    />
+                  </>
+                )}
+
+                <div className="login-options">
+                  <ProFormCheckbox noStyle name="autoLogin">
+                    <FormattedHTMLMessage id="pages.login.rememberMe" />
+                  </ProFormCheckbox>
+                  {type === 'mobile' && (
+                    <button type="button" onClick={() => setOpen(true)}>
+                      <FormattedHTMLMessage id="pages.login.forgotPassword" />
+                    </button>
+                  )}
+                </div>
+
+                <div className="login-security-note">
+                  <span className="login-security-icon"><LockOutlined /></span>
+                  <span>
+                    <strong>Bảo mật tài khoản của bạn</strong>
+                    <small>Không chia sẻ mật khẩu hoặc mã xác thực với người khác.</small>
+                  </span>
+                </div>
+              </div>
+            </LoginForm>
+
+            <div className="login-legal">
+              © {new Date().getFullYear()} {companyName}. Bản quyền được bảo lưu.
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer className="login-footer">
+        <span>{companyName} · Nền tảng quản trị nội dung</span>
+        <span>Đăng nhập an toàn vào không gian làm việc của bạn</span>
+      </footer>
       <ForgotPassword open={open} onOpenChange={setOpen} />
     </div>
   );

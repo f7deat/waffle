@@ -7,7 +7,8 @@ export type ArticleListItem = {
     name: string;
     description?: string;
     thumbnail?: string;
-    publishedAt?: string;
+    publishedAt?: string | null;
+    scheduledAt?: string | null;
     deletedAt?: string;
     viewCount: number;
     creatorName?: string;
@@ -19,7 +20,7 @@ export type ArticleListItem = {
 
 export type ArticleDetailType = ArticleListItem & {
   normalizedName: string;
-    content: string;
+  content: string;
 }
 
 export async function getArticleById(id: string) {
@@ -111,7 +112,7 @@ export async function updateArticle(data: {
   description?: string;
   content?: string;
   thumbnail?: string;
-  publishedAt?: string;
+  publishedAt?: string | null;
 }) {
   return request<API.TResult<object>>('article', {
     method: 'PUT',

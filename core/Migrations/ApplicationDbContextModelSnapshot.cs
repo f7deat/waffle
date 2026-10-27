@@ -278,6 +278,9 @@ namespace Waffle.Migrations
                     b.Property<DateTime?>("PublishedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTimeOffset?>("ScheduledAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Thumbnail")
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
@@ -288,6 +291,8 @@ namespace Waffle.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("ScheduledAt");
 
                     b.ToTable("Articles");
                 });

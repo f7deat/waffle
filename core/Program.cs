@@ -7,6 +7,7 @@ using System.Text;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Options;
 using Waffle.Core.Services;
+using Waffle.Core.Services.Articles;
 using Waffle.Data;
 using Waffle.Entities.Users;
 using Waffle.Extensions;
@@ -31,6 +32,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IHCAService, HCAService>();
 builder.Services.AddServices();
+builder.Services.AddHostedService<ArticleSchedulePublisher>();
 builder.Services.AddHttpClients();
 
 builder.Services.AddRazorPages();
