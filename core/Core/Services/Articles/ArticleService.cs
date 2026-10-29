@@ -175,9 +175,7 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
             article.Description,
             article.Thumbnail,
             article.ViewCount,
-            PublishedAt = article.PublishedAt.HasValue
-                ? new DateTimeOffset(DateTime.SpecifyKind(article.PublishedAt.Value, DateTimeKind.Utc))
-                : null,
+            article.PublishedAt,
             article.ScheduledAt,
             article.Content,
             article.Locale,

@@ -26,8 +26,7 @@ export default [
       {
         name: 'list',
         path: '/article/list',
-        component: './article',
-        hideInMenu: true
+        component: './article'
       },
       {
         name: 'schedule',

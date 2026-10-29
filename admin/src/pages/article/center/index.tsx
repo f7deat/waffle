@@ -1,4 +1,4 @@
-import ImageLibraryPicker from '@/components/image-library/picker';
+import ImagePicker from '@/components/image-library/picker';
 import { getArticleById, updateArticle } from '@/services/article';
 import { uploadRcFile } from '@/services/file-service';
 import { EyeOutlined, PictureOutlined, SaveOutlined, SendOutlined, UploadOutlined } from '@ant-design/icons';
@@ -13,7 +13,7 @@ import {
     ProFormTextArea,
 } from '@ant-design/pro-components';
 import { history, useParams, useRequest } from '@umijs/max';
-import { Button, Col, message, Row } from 'antd';
+import { Button, message } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -25,8 +25,8 @@ const Index: React.FC = () => {
     const formRef = useRef<ProFormInstance>(null);
     const [form] = ProForm.useForm();
     const thumbnailInputRef = useRef<HTMLInputElement>(null);
-    const [thumbnailUploading, setThumbnailUploading] = useState(false);
     const thumbnail = ProForm.useWatch('thumbnail', form);
+    const [openImagePicker, setOpenImagePicker] = useState(false);
 
     const { data: detailResponse, loading } = useRequest(
         () => getArticleById(id as string),
@@ -69,7 +69,6 @@ const Index: React.FC = () => {
         if (!file) return;
 
         try {
-            setThumbnailUploading(true);
             const response = await uploadRcFile(file as RcFile);
             const imageUrl = resolveUploadedUrl(response);
 
@@ -83,7 +82,6 @@ const Index: React.FC = () => {
         } catch (error) {
             message.error('Upload thumbnail that bai');
         } finally {
-            setThumbnailUploading(false);
             if (thumbnailInputRef.current) {
                 thumbnailInputRef.current.value = '';
             }
@@ -141,23 +139,13 @@ const Index: React.FC = () => {
                             <div className="border rounded p-1 mb-2">
                                 <img src={thumbnail} alt="Thumbnail" className="w-full h-52 rounded object-cover" />
                             </div>
-                            <ProFormText name="thumbnail" label="Thumbnail URL"
-                                fieldProps={{
-                                    suffix: (
-                                        <div className="flex gap-1">
-                                            <Button
-                                                size="small"
-                                                icon={<UploadOutlined />}
-                                                loading={thumbnailUploading}
-                                                onClick={() => thumbnailInputRef.current?.click()}
-                                            >Upload</Button>
-                                            <ImageLibraryPicker
-                                                value={thumbnail}
-                                                onChange={(url) => formRef.current?.setFieldValue('thumbnail', url)}
-                                            />
-                                        </div>
-                                    )
-                                }}
+                            <ProFormText name="thumbnail" label="Thumbnail URL" />
+                            <Button type="dashed" block onClick={() => setOpenImagePicker(true)}>Chọn từ thư viện ảnh</Button>
+                            <ImagePicker
+                                open={openImagePicker}
+                                onOpenChange={setOpenImagePicker}
+                                value={thumbnail}
+                                onChange={(url) => formRef.current?.setFieldValue('thumbnail', url)}
                             />
 
                             <input

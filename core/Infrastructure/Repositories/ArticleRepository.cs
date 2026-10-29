@@ -54,8 +54,8 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
 
         var rows = await (
             from article in articleQuery
-            join category in _context.Categories on article.CategoryId equals category.Id into categories
-            from category in categories.DefaultIfEmpty()
+            join category in _context.Categories on article.CategoryId equals category.Id into categories1
+            from category in categories1.DefaultIfEmpty()
             join user in _context.Users on article.CreatedBy equals user.Id into users
             from user in users.DefaultIfEmpty()
             select new ArticleScheduleRaw(
@@ -79,8 +79,8 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
             .ToList();
         var drafts = await (
             from article in _context.Articles.AsNoTracking()
-            join category in _context.Categories on article.CategoryId equals category.Id into categories
-            from category in categories.DefaultIfEmpty()
+            join category in _context.Categories on article.CategoryId equals category.Id into categories1
+            from category in categories1.DefaultIfEmpty()
             join user in _context.Users on article.CreatedBy equals user.Id into users
             from user in users.DefaultIfEmpty()
             where article.DeletedAt == null
