@@ -53,6 +53,8 @@ const Index: React.FC = () => {
             priceFrom: currentPlaceDetails?.priceFrom,
             priceTo: currentPlaceDetails?.priceTo,
             amenities: currentPlaceDetails?.amenities,
+            latitude: currentPlaceDetails?.latitude,
+            longitude: currentPlaceDetails?.longitude,
             influencerId: currentPlaceDetails?.influencerId,
         });
     }, [openEdit, currentPlace, currentPlaceDetails, selectedProvinceId]);
@@ -197,6 +199,8 @@ const Index: React.FC = () => {
             priceFrom: values.priceFrom,
             priceTo: values.priceTo,
             amenities: values.amenities,
+            latitude: values.latitude,
+            longitude: values.longitude,
         });
         if (result?.succeeded === false) {
             message.error(result.message || 'Failed to create place');
@@ -222,6 +226,8 @@ const Index: React.FC = () => {
             priceFrom: values.priceFrom,
             priceTo: values.priceTo,
             amenities: values.amenities,
+            latitude: values.latitude,
+            longitude: values.longitude,
             influencerId: values.influencerId,
             content: JSON.stringify(normalizeContent(currentPlaceDetails?.content))
         });
@@ -294,6 +300,8 @@ const Index: React.FC = () => {
                 <ProFormText name="openingHours" label="Opening hours" placeholder="07:00 - 22:00" />
                 <ProFormDigit name="priceFrom" label="Price from (VND)" min={0} fieldProps={{ precision: 0 }} />
                 <ProFormDigit name="priceTo" label="Price to (VND)" min={0} fieldProps={{ precision: 0 }} />
+                <ProFormDigit name="latitude" label="Latitude" min={-90} max={90} fieldProps={{ precision: 7 }} />
+                <ProFormDigit name="longitude" label="Longitude" min={-180} max={180} fieldProps={{ precision: 7 }} />
                 <ProFormTextArea
                     name="amenities"
                     label="Amenities"
@@ -361,6 +369,8 @@ const Index: React.FC = () => {
                 <ProFormText name="openingHours" label="Opening hours" placeholder="07:00 - 22:00" />
                 <ProFormDigit name="priceFrom" label="Price from (VND)" min={0} fieldProps={{ precision: 0 }} />
                 <ProFormDigit name="priceTo" label="Price to (VND)" min={0} fieldProps={{ precision: 0 }} />
+                <ProFormDigit name="latitude" label="Latitude" min={-90} max={90} fieldProps={{ precision: 7 }} />
+                <ProFormDigit name="longitude" label="Longitude" min={-180} max={180} fieldProps={{ precision: 7 }} />
                 <ProFormTextArea
                     name="amenities"
                     label="Amenities"

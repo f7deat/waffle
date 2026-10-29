@@ -10,7 +10,7 @@ import {
 } from "@/services/locations/place";
 import { apiProvinceOptions } from "@/services/locations/province";
 import { apiInfluencerOptions } from "@/services/user";
-import { AimOutlined, DeleteOutlined, SendOutlined, ShopOutlined, UploadOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SendOutlined, ShopOutlined, UploadOutlined } from "@ant-design/icons";
 import {
     PageContainer,
     ProCard,
@@ -89,6 +89,8 @@ const PlaceDetail: React.FC = () => {
             priceFrom: data?.priceFrom,
             priceTo: data?.priceTo,
             amenities: data?.amenities,
+            latitude: data?.latitude,
+            longitude: data?.longitude,
             influencerId: data?.influencerId,
             content: parseContent(data?.content),
             affiliateLink: data?.affiliateLink
@@ -174,6 +176,8 @@ const PlaceDetail: React.FC = () => {
             priceFrom: values.priceFrom,
             priceTo: values.priceTo,
             amenities: values.amenities,
+            latitude: values.latitude,
+            longitude: values.longitude,
             influencerId: values.influencerId,
             content: JSON.stringify(values.content || EMPTY_CONTENT),
         });
@@ -338,6 +342,14 @@ const PlaceDetail: React.FC = () => {
                                     variant: 'filled',
                                     precision: 0
                                 }} />
+                                <ProFormDigit name="latitude" label="Vĩ độ" min={-90} max={90} fieldProps={{
+                                    variant: 'filled',
+                                    precision: 7
+                                }} />
+                                <ProFormDigit name="longitude" label="Kinh độ" min={-180} max={180} fieldProps={{
+                                    variant: 'filled',
+                                    precision: 7
+                                }} />
                             </div>
                             <ProFormTextArea
                                 name="amenities"
@@ -345,16 +357,6 @@ const PlaceDetail: React.FC = () => {
                                 placeholder="Mỗi tiện nghi trên một dòng"
                                 fieldProps={{ variant: 'filled', rows: 4 }}
                             />
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                <ProFormText name="latitude" label="Latitude" fieldProps={{
-                                    variant: 'filled',
-                                    prefix: <AimOutlined />
-                                }} />
-                                <ProFormText name="longitude" label="Longitude" fieldProps={{
-                                    variant: 'filled',
-                                    prefix: <AimOutlined />
-                                }} />
-                            </div>
                         </ProForm>
                     </ProCard>
                 </div>

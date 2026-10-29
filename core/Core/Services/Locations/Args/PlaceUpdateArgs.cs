@@ -17,4 +17,6 @@ public class PlaceUpdateArgs : BaseEntity
     public string? Content { get; set; }
     public Guid? InfluencerId { get; set; }
     public string? AffiliateLink { get; set; }
+    public decimal? Latitude { get; set; }
+    public decimal? Longitude { get; set; }
 }

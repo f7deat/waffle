@@ -16,6 +16,13 @@ export interface IPlaceListItem {
     provinceName?: string;
     modifiedDate?: string;
     thumbnail?: string;
+    viewCount?: number;
+    priceFrom?: number;
+    priceTo?: number;
+    openingHours?: string;
+    amenities?: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 export async function apiPlaceList(params: IPlaceFilter) {
@@ -33,6 +40,8 @@ export interface IPlaceCreate {
     priceFrom?: number;
     priceTo?: number;
     amenities?: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 export interface IPlaceUpdate {
@@ -50,6 +59,8 @@ export interface IPlaceUpdate {
     influencerId?: string;
     affiliateLink?: string;
     content?: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 export async function apiPlaceCreate(data: IPlaceCreate) {

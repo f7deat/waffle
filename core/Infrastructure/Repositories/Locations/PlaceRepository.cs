@@ -88,22 +88,29 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
                         join influencer in _context.Users on p.InfluencerId equals influencer.Id into si
                         from influencer in si.DefaultIfEmpty()
                         where c.Active && c.Locale == filterOptions.Locale
-                        select new
+                        select new PlaceListItem
                         {
-                            c.Id,
-                            c.Name,
-                            c.ViewCount,
-                            c.NormalizedName,
-                            StreetName = c.Name,
+                            Id = c.Id,
+                            Name = c.Name,
+                            ViewCount = c.ViewCount,
+                            NormalizedName = c.NormalizedName,
                             ModifiedDate = c.ModifiedDate ?? c.CreatedDate,
                             DistrictName = d.Name,
-                            p.DistrictId,
+                            DistrictId = p.DistrictId,
                             ProvinceName = province.Name,
                             ProvinceId = (int?)d.ProvinceId,
-                            c.Thumbnail,
+                            Thumbnail = c.Thumbnail,
+                            Description = c.Description,
                             InfluencerName = influencer.Name,
                             InfluencerUserName = influencer.UserName,
-                            InfluencerAvatar = influencer.Avatar
+                            InfluencerAvatar = influencer.Avatar,
+                            Address = p.Address,
+                            OpeningHours = p.OpeningHours,
+                            PriceFrom = p.PriceFrom,
+                            PriceTo = p.PriceTo,
+                            Amenities = p.Amenities,
+                            Latitude = p.Latitude,
+                            Longitude = p.Longitude
                         };
             if (filterOptions.DistrictId.HasValue)
             {
@@ -119,9 +126,38 @@ public class PlaceRepository(ApplicationDbContext context, IHCAService hcaServic
             }
             if (!string.IsNullOrWhiteSpace(filterOptions.InfluencerUserName))
             {
-                query = query.Where(x => x.InfluencerUserName.ToLower() == filterOptions.InfluencerUserName.ToLower());
+                var influencerUserName = filterOptions.InfluencerUserName.ToLower();
+                query = query.Where(x => x.InfluencerUserName != null && x.InfluencerUserName.ToLower() == influencerUserName);
             }
-            query = query.OrderByDescending(x => x.ModifiedDate);
+            if (filterOptions.MinPrice.HasValue)
+            {
+                var minPrice = filterOptions.MinPrice.Value;
+                query = query.Where(x => x.PriceTo.HasValue
+                    ? x.PriceTo >= minPrice
+                    : x.PriceFrom >= minPrice);
+            }
+            if (filterOptions.MaxPrice.HasValue)
+            {
+                var maxPrice = filterOptions.MaxPrice.Value;
+                query = query.Where(x => x.PriceFrom.HasValue && x.PriceFrom <= maxPrice);
+            }
+            if (filterOptions.HasOpeningHours == true)
+            {
+                query = query.Where(x => x.OpeningHours != null && x.OpeningHours != "");
+            }
+            if (!string.IsNullOrWhiteSpace(filterOptions.Amenity))
+            {
+                var amenity = filterOptions.Amenity.Trim();
+                query = query.Where(x => x.Amenities != null && x.Amenities.Contains(amenity));
+            }
+
+            query = filterOptions.SortBy?.ToLowerInvariant() switch
+            {
+                "recommended" => query.OrderByDescending(x => x.ViewCount).ThenByDescending(x => x.ModifiedDate),
+                "price-low" => query.OrderBy(x => x.PriceFrom == null).ThenBy(x => x.PriceFrom),
+                "price-high" => query.OrderByDescending(x => x.PriceFrom),
+                _ => query.OrderByDescending(x => x.ModifiedDate)
+            };
             return await ListResult.Success(query, filterOptions);
         }
         catch (Exception ex)

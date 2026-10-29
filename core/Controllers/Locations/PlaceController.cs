@@ -20,7 +20,16 @@ public class PlaceController(IPlaceService _placeService) : BaseController
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id) => Ok(await _placeService.GetByIdAsync(id));
 
     [HttpGet("list"), AllowAnonymous]
-    public async Task<IActionResult> ListAsync([FromQuery] PlaceFilterOptions filterOptions) => Ok(await _placeService.ListAsync(filterOptions));
+    public async Task<IActionResult> ListAsync([FromQuery] PlaceFilterOptions filterOptions)
+    {
+        if (filterOptions.MinPrice < 0 || filterOptions.MaxPrice < 0 ||
+            (filterOptions.MinPrice.HasValue && filterOptions.MaxPrice.HasValue && filterOptions.MinPrice > filterOptions.MaxPrice))
+        {
+            return BadRequest("Price filters must be non-negative and the minimum cannot exceed the maximum.");
+        }
+
+        return Ok(await _placeService.ListAsync(filterOptions));
+    }
 
     [HttpPut]
     public async Task<IActionResult> UpdateAsync([FromBody] PlaceUpdateArgs args) => Ok(await _placeService.UpdateAsync(args));

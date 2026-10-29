@@ -13,4 +13,14 @@ public class PlaceListItem
     public int? ProvinceId { get; set; }
     public string? Thumbnail { get; set; }
     public string? Description { get; set; }
+    public string? Address { get; set; }
+    public string? OpeningHours { get; set; }
+    public decimal? PriceFrom { get; set; }
+    public decimal? PriceTo { get; set; }
+    public string? Amenities { get; set; }
+    public decimal? Latitude { get; set; }
+    public decimal? Longitude { get; set; }
+    public string? InfluencerName { get; set; }
+    public string? InfluencerUserName { get; set; }
+    public string? InfluencerAvatar { get; set; }
 }

@@ -23,6 +23,7 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
     {
         if (string.IsNullOrWhiteSpace(args.Name)) return TResult.Failed("Please enter place name!");
         if (!IsValidPriceRange(args.PriceFrom, args.PriceTo)) return TResult.Failed("Prices must be non-negative and the minimum price cannot exceed the maximum price.");
+        if (!IsValidCoordinates(args.Latitude, args.Longitude)) return TResult.Failed("Coordinates must be within valid latitude and longitude ranges.");
 
         var locale = string.IsNullOrWhiteSpace(args.Locale) ? "vi-VN" : args.Locale;
         if (!LocaleHelper.IsAvailable(locale)) locale = "vi-VN";
@@ -62,7 +63,9 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
                 PriceTo = args.PriceTo,
                 Amenities = args.Amenities,
                 InfluencerId = args.InfluencerId,
-                Content = args.Content
+                Content = args.Content,
+                Latitude = args.Latitude,
+                Longitude = args.Longitude
             });
 
             await _context.SaveChangesAsync();
@@ -300,6 +303,7 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
     public async Task<TResult> UpdateAsync(PlaceUpdateArgs args)
     {
         if (!IsValidPriceRange(args.PriceFrom, args.PriceTo)) return TResult.Failed("Prices must be non-negative and the minimum price cannot exceed the maximum price.");
+        if (!IsValidCoordinates(args.Latitude, args.Longitude)) return TResult.Failed("Coordinates must be within valid latitude and longitude ranges.");
         var place = await _placeRepository.FindAsync(args.Id);
         if (place is null) return TResult.Failed("Place not found!");
         place.Content = args.Content;
@@ -312,6 +316,8 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
         place.Amenities = args.Amenities;
         place.InfluencerId = args.InfluencerId;
         place.AffiliateLink = args.AffiliateLink;
+        place.Latitude = args.Latitude;
+        place.Longitude = args.Longitude;
         var catalog = await _catalogService.FindAsync(place.Id);
         if (catalog is not null)
         {
@@ -342,4 +348,8 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
         (!priceFrom.HasValue || priceFrom >= 0) &&
         (!priceTo.HasValue || priceTo >= 0) &&
         (!priceFrom.HasValue || !priceTo.HasValue || priceFrom <= priceTo);
+
+    private static bool IsValidCoordinates(decimal? latitude, decimal? longitude) =>
+        (!latitude.HasValue || latitude is >= -90 and <= 90) &&
+        (!longitude.HasValue || longitude is >= -180 and <= 180);
 }
