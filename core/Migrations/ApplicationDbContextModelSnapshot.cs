@@ -598,6 +598,14 @@ namespace Waffle.Migrations
                         .HasColumnType("datetime2")
                         .HasJsonPropertyName("createdDate");
 
+                    b.Property<bool>("IsOfficialResponse")
+                        .HasColumnType("bit")
+                        .HasJsonPropertyName("isOfficialResponse");
+
+                    b.Property<bool>("IsPinned")
+                        .HasColumnType("bit")
+                        .HasJsonPropertyName("isPinned");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2")
                         .HasJsonPropertyName("modifiedDate");
@@ -621,6 +629,71 @@ namespace Waffle.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.CommentReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasJsonPropertyName("id");
+
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("CommentId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("CommentReports");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.CommentModerationRule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasJsonPropertyName("id");
+
+                    b.Property<int>("Action")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MatchCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Pattern")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CommentModerationRules");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Commons.SocialPlatform", b =>
@@ -2393,6 +2466,25 @@ namespace Waffle.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.CommentReport", b =>
+                {
+                    b.HasOne("Waffle.Entities.Comment", "Comment")
+                        .WithMany()
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Waffle.Entities.Users.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Users.SocialAccount", b =>

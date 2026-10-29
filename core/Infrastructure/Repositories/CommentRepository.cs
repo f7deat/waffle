@@ -19,8 +19,8 @@ public class CommentRepository : EfRepository<Comment>, ICommentRepository
     {
         var query = from comment in _context.Comments
                     join user in _context.Users on comment.UserId equals user.Id
-                    where comment.CatalogId == filterOptions.CatalogId && (comment.Status == CommentStatus.Draft || comment.Status == CommentStatus.Active)
-                    orderby comment.CreatedDate descending
+                    where comment.CatalogId == filterOptions.CatalogId && comment.Status == CommentStatus.Active
+                    orderby comment.IsPinned descending, comment.CreatedDate descending
                     select new CommentListItem
                     {
                         CatalogId = filterOptions.CatalogId,
@@ -33,7 +33,10 @@ public class CommentRepository : EfRepository<Comment>, ICommentRepository
                         Status = comment.Status,
                         UserName = user.UserName,
                         UserAvatar = user.Avatar,
-                        Rating = comment.Rating
+                        Rating = comment.Rating,
+                        IsPinned = comment.IsPinned,
+                        IsOfficialResponse = comment.IsOfficialResponse,
+                        ReplyCount = _context.Comments.Count(reply => reply.ParentId == comment.Id)
                     };
         return await ListResult<CommentListItem>.Success(query, filterOptions);
     }

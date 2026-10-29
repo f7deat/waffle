@@ -2,9 +2,9 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Empty } from "antd";
+import { Empty, message, Popconfirm } from "antd";
 import { useAppContext } from "@/contexts/app-context";
-import { apiAddComment, apiListComments } from "@/services/comment";
+import { apiAddComment, apiListComments, apiReportComment } from "@/services/comment";
 
 interface ArticleCommentsProps {
   articleId: string;
@@ -24,6 +24,7 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({ articleId, articleSlu
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
   
   const { user, isAuthenticated } = useAppContext();
 
@@ -57,6 +58,20 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({ articleId, articleSlu
       // Error already handled
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const reportComment = async (commentId: string) => {
+    try {
+      const result = await apiReportComment(commentId);
+      if (!result.succeeded) {
+        message.error(result.errors?.[0]?.description || "Không thể gửi báo cáo.");
+        return;
+      }
+      setReportedIds((previous) => new Set(previous).add(commentId));
+      message.success("Đã gửi báo cáo bình luận.");
+    } catch {
+      message.error("Không thể gửi báo cáo bình luận.");
     }
   };
 
@@ -123,10 +138,29 @@ const ArticleComments: React.FC<ArticleCommentsProps> = ({ articleId, articleSlu
                       </div>
                     )}
                     <span className="font-medium text-gray-700 text-sm">{c.userName}</span>
+                    {c.isOfficialResponse && (
+                      <span className="rounded bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700">
+                        DefZone.Net
+                      </span>
+                    )}
                   </div>
                   <span className="text-xs text-gray-500">{new Date(c.createdDate).toLocaleString("vi-VN")}</span>
                 </div>
                 <p className="text-sm text-gray-800 whitespace-pre-wrap">{c.content}</p>
+                {isAuthenticated && !reportedIds.has(c.id) && (
+                  <div className="mt-2 text-right">
+                    <Popconfirm
+                      title="Báo cáo bình luận này với quản trị viên?"
+                      onConfirm={() => reportComment(c.id)}
+                      okText="Báo cáo"
+                      cancelText="Hủy"
+                    >
+                      <button type="button" className="text-xs text-gray-500 hover:text-red-600">
+                        Báo cáo
+                      </button>
+                    </Popconfirm>
+                  </div>
+                )}
               </div>
             ))
           )}

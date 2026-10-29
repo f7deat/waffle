@@ -3,7 +3,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import dayjs from "dayjs";
-import { apiAddComment, apiListComments } from "@/services/comment";
+import { message, Popconfirm } from "antd";
+import { apiAddComment, apiListComments, apiReportComment } from "@/services/comment";
 import { useAppContext } from "@/contexts/app-context";
 
 interface PlaceCommentsProps {
@@ -43,6 +44,7 @@ const PlaceComments: React.FC<PlaceCommentsProps> = ({ placeId }) => {
     const [text, setText] = useState("");
     const [rating, setRating] = useState(5);
     const [error, setError] = useState<string | null>(null);
+    const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
 
     const { user, isAuthenticated, hasRole, logout, refreshUser } = useAppContext();
 
@@ -85,6 +87,20 @@ const PlaceComments: React.FC<PlaceCommentsProps> = ({ placeId }) => {
             setError("Đã có lỗi xảy ra. Vui lòng thử lại.");
         } finally {
             setSubmitting(false);
+        }
+    };
+
+    const reportComment = async (commentId: string) => {
+        try {
+            const result = await apiReportComment(commentId);
+            if (!result.succeeded) {
+                message.error(result.errors?.[0]?.description || "Không thể gửi báo cáo.");
+                return;
+            }
+            setReportedIds((previous) => new Set(previous).add(commentId));
+            message.success("Đã gửi báo cáo bình luận.");
+        } catch {
+            message.error("Không thể gửi báo cáo bình luận.");
         }
     };
 
@@ -177,11 +193,30 @@ const PlaceComments: React.FC<PlaceCommentsProps> = ({ placeId }) => {
                                             </div>
                                         )}
                                         <span className="font-medium text-gray-700 text-sm">{c.userName ?? "Ẩn danh"}</span>
+                                        {c.isOfficialResponse && (
+                                            <span className="rounded bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700">
+                                                DefZone.Net
+                                            </span>
+                                        )}
                                         {c.rating > 0 && <StarRating value={c.rating} readonly />}
                                     </div>
                                     <span className="text-xs text-gray-500">{dayjs(c.createdDate).format("DD/MM/YYYY HH:mm")}</span>
                                 </div>
                                 <p className="text-sm text-gray-800 whitespace-pre-wrap">{c.content}</p>
+                                {isAuthenticated && !reportedIds.has(c.id) && (
+                                    <div className="mt-2 text-right">
+                                        <Popconfirm
+                                            title="Báo cáo bình luận này với quản trị viên?"
+                                            onConfirm={() => reportComment(c.id)}
+                                            okText="Báo cáo"
+                                            cancelText="Hủy"
+                                        >
+                                            <button type="button" className="text-xs text-gray-500 hover:text-red-600">
+                                                Báo cáo
+                                            </button>
+                                        </Popconfirm>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>

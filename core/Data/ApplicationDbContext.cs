@@ -23,6 +23,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Article> Articles { get; set; }
     public DbSet<Catalog> Catalogs { get; set; }
     public DbSet<Comment> Comments { get; set; }
+    public DbSet<CommentReport> CommentReports { get; set; }
+    public DbSet<CommentModerationRule> CommentModerationRules { get; set; }
     public DbSet<Component> Components { get; set; } = default!;
     public DbSet<FileContent> FileContents { get; set; } = default!;
     public DbSet<Album> Albums { get; set; } = default!;
@@ -110,6 +112,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<ProductTag>().HasKey(k => new { k.ProductId, k.TagId });
         builder.Entity<WebsitePage>().HasIndex(x => x.PageKey).IsUnique();
         builder.Entity<Article>().HasIndex(x => x.ScheduledAt);
+        builder.Entity<CommentReport>()
+            .HasIndex(x => new { x.CommentId, x.UserId })
+            .IsUnique();
+        builder.Entity<CommentReport>()
+            .HasOne(x => x.Comment)
+            .WithMany()
+            .HasForeignKey(x => x.CommentId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<CommentReport>()
+            .HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Photo>()
             .HasOne(x => x.Album)

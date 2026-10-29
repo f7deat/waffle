@@ -15,3 +15,10 @@ export async function apiListComments(params: {
 }, cookie?: string) {
     return request.get<API.ListResult<API.CommentListItem>>("comment/list", { params, cookie });
 }
+
+export async function apiReportComment(commentId: string) {
+    return request.post<{
+        succeeded: boolean;
+        errors?: { description?: string }[];
+    }>(`comment/report/${commentId}`, {}, {});
+}

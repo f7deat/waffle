@@ -20,11 +20,17 @@ public class Comment : BaseEntity
     public CommentStatus Status { get; set; }
     [JsonPropertyName("rating")]
     public int Rating { get; set; }
+    [JsonPropertyName("isPinned")]
+    public bool IsPinned { get; set; }
+    [JsonPropertyName("isOfficialResponse")]
+    public bool IsOfficialResponse { get; set; }
 }
 
 public enum CommentStatus
 {
-    Draft,
-    Active,
-    Deleted
+    Draft = 0,
+    Active = 1,
+    Deleted = 2,
+    Hidden = 3,
+    Spam = 4
 }

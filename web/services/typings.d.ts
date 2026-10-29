@@ -64,7 +64,12 @@ declare namespace API {
         status: number;
         rating: number;
         userName?: string;
+        userEmail?: string;
         catalogName?: string;
         userAvatar?: string;
+        isPinned: boolean;
+        isOfficialResponse: boolean;
+        reportCount: number;
+        replyCount?: number;
     }
 }
