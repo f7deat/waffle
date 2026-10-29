@@ -22,6 +22,7 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
     public async Task<TResult> CreateAsync(PlaceCreateArgs args)
     {
         if (string.IsNullOrWhiteSpace(args.Name)) return TResult.Failed("Please enter place name!");
+        if (!IsValidPriceRange(args.PriceFrom, args.PriceTo)) return TResult.Failed("Prices must be non-negative and the minimum price cannot exceed the maximum price.");
 
         var locale = string.IsNullOrWhiteSpace(args.Locale) ? "vi-VN" : args.Locale;
         if (!LocaleHelper.IsAvailable(locale)) locale = "vi-VN";
@@ -55,6 +56,11 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
                 Id = placeId,
                 DistrictId = args.DistrictId,
                 Address = args.Address,
+                PhoneNumber = args.PhoneNumber,
+                OpeningHours = args.OpeningHours,
+                PriceFrom = args.PriceFrom,
+                PriceTo = args.PriceTo,
+                Amenities = args.Amenities,
                 InfluencerId = args.InfluencerId,
                 Content = args.Content
             });
@@ -178,9 +184,9 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
     public async Task<TResult> GetByIdAsync(Guid id)
     {
         var place = await _placeRepository.FindAsync(id);
+        var catalog = await _catalogService.FindAsync(id);
         if (place is null)
         {
-            var catalog = await _catalogService.FindAsync(id);
             if (catalog is null) return TResult.Failed("Place not found!");
             place = new Place
             {
@@ -209,14 +215,24 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
         return TResult.Ok(new
         {
             place.Id,
+            Name = catalog?.Name,
+            Description = catalog?.Description,
+            Active = catalog?.Active,
             content,
             place.DistrictId,
             place.Address,
+            place.PhoneNumber,
+            place.OpeningHours,
+            place.PriceFrom,
+            place.PriceTo,
+            place.Amenities,
             DistrictName = district?.Name,
             district?.ProvinceId,
             ProvinceName = province?.Name,
             place.InfluencerId,
-            place.AffiliateLink
+            place.AffiliateLink,
+            place.Latitude,
+            place.Longitude
         });
     }
 
@@ -248,6 +264,11 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
             catalog.CreatedDate,
             catalog.ViewCount,
             place.Address,
+            place.PhoneNumber,
+            place.OpeningHours,
+            place.PriceFrom,
+            place.PriceTo,
+            place.Amenities,
             Content = string.IsNullOrEmpty(place.Content) ? new BlockEditor() : JsonSerializer.Deserialize<BlockEditor>(place.Content),
             Images = images.Select(x => new
             {
@@ -259,7 +280,10 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
             DistrictName = district?.Name,
             ProvinceId = province?.Id,
             ProvinceName = province?.Name,
-            Influencer = await _placeRepository.GetInfluencerAsync(place.InfluencerId)
+            Influencer = await _placeRepository.GetInfluencerAsync(place.InfluencerId),
+            place.AffiliateLink,
+            place.Latitude,
+            place.Longitude
         });
     }
 
@@ -275,16 +299,37 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
 
     public async Task<TResult> UpdateAsync(PlaceUpdateArgs args)
     {
+        if (!IsValidPriceRange(args.PriceFrom, args.PriceTo)) return TResult.Failed("Prices must be non-negative and the minimum price cannot exceed the maximum price.");
         var place = await _placeRepository.FindAsync(args.Id);
         if (place is null) return TResult.Failed("Place not found!");
         place.Content = args.Content;
         place.DistrictId = args.DistrictId;
         place.Address = args.Address;
+        place.PhoneNumber = args.PhoneNumber;
+        place.OpeningHours = args.OpeningHours;
+        place.PriceFrom = args.PriceFrom;
+        place.PriceTo = args.PriceTo;
+        place.Amenities = args.Amenities;
         place.InfluencerId = args.InfluencerId;
         place.AffiliateLink = args.AffiliateLink;
         var catalog = await _catalogService.FindAsync(place.Id);
         if (catalog is not null)
         {
+            if (!string.IsNullOrWhiteSpace(args.Name))
+            {
+                var normalizedName = SeoHelper.ToSeoFriendly(args.Name);
+                if (await _context.Catalogs.AnyAsync(x =>
+                        x.Id != catalog.Id &&
+                        x.Locale == catalog.Locale &&
+                        x.NormalizedName == normalizedName))
+                {
+                    return TResult.Failed("Place name already exists!");
+                }
+                catalog.Name = args.Name;
+                catalog.NormalizedName = normalizedName;
+            }
+            if (args.Description is not null) catalog.Description = args.Description;
+            if (args.Active.HasValue) catalog.Active = args.Active.Value;
             catalog.ModifiedDate = DateTime.UtcNow;
             catalog.ModifiedBy = _hcaService.GetUserId();
             await _catalogService.UpdateAsync(catalog);
@@ -292,4 +337,9 @@ public class PlaceService(IPlaceRepository _placeRepository, IHCAService _hcaSer
         await _placeRepository.UpdateAsync(place);
         return TResult.Success;
     }
+
+    private static bool IsValidPriceRange(decimal? priceFrom, decimal? priceTo) =>
+        (!priceFrom.HasValue || priceFrom >= 0) &&
+        (!priceTo.HasValue || priceTo >= 0) &&
+        (!priceFrom.HasValue || !priceTo.HasValue || priceFrom <= priceTo);
 }

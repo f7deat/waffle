@@ -15,9 +15,11 @@ import {
     PageContainer,
     ProCard,
     ProForm,
+    ProFormDigit,
     ProFormInstance,
     ProFormSelect,
     ProFormText,
+    ProFormTextArea,
 } from "@ant-design/pro-components";
 import { useParams, useRequest } from "@umijs/max";
 import { Button, Col, Input, message, Row, Spin, Upload } from "antd";
@@ -82,6 +84,11 @@ const PlaceDetail: React.FC = () => {
             districtId: data?.districtId,
             provinceId: data?.provinceId,
             address: data?.address,
+            phoneNumber: data?.phoneNumber,
+            openingHours: data?.openingHours,
+            priceFrom: data?.priceFrom,
+            priceTo: data?.priceTo,
+            amenities: data?.amenities,
             influencerId: data?.influencerId,
             content: parseContent(data?.content),
             affiliateLink: data?.affiliateLink
@@ -155,16 +162,25 @@ const PlaceDetail: React.FC = () => {
 
     const onFinish = async (values: any) => {
         if (!id) return false;
-        await apiPlaceUpdate({
+        const result = await apiPlaceUpdate({
             id,
             name: values.name,
             description: values.description,
             active: values.active,
             districtId: values.districtId,
             address: values.address,
+            phoneNumber: values.phoneNumber,
+            openingHours: values.openingHours,
+            priceFrom: values.priceFrom,
+            priceTo: values.priceTo,
+            amenities: values.amenities,
             influencerId: values.influencerId,
             content: JSON.stringify(values.content || EMPTY_CONTENT),
         });
+        if (result?.succeeded === false) {
+            message.error(result.message || "Failed to update place");
+            return false;
+        }
         message.success("Place updated successfully");
         await refresh();
         return true;
@@ -306,6 +322,29 @@ const PlaceDetail: React.FC = () => {
                             <ProFormText name="address" label="Địa chỉ chi tiết" fieldProps={{
                                 variant: 'filled'
                             }} />
+                            <ProFormText name="phoneNumber" label="Số điện thoại" fieldProps={{
+                                variant: 'filled',
+                                type: 'tel'
+                            }} />
+                            <ProFormText name="openingHours" label="Giờ mở cửa" placeholder="07:00 - 22:00" fieldProps={{
+                                variant: 'filled'
+                            }} />
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <ProFormDigit name="priceFrom" label="Giá từ (VND)" min={0} fieldProps={{
+                                    variant: 'filled',
+                                    precision: 0
+                                }} />
+                                <ProFormDigit name="priceTo" label="Giá đến (VND)" min={0} fieldProps={{
+                                    variant: 'filled',
+                                    precision: 0
+                                }} />
+                            </div>
+                            <ProFormTextArea
+                                name="amenities"
+                                label="Tiện nghi"
+                                placeholder="Mỗi tiện nghi trên một dòng"
+                                fieldProps={{ variant: 'filled', rows: 4 }}
+                            />
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <ProFormText name="latitude" label="Latitude" fieldProps={{
                                     variant: 'filled',

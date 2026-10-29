@@ -1499,6 +1499,9 @@ namespace Waffle.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
+                    b.Property<string>("Amenities")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
@@ -1507,6 +1510,20 @@ namespace Waffle.Migrations
 
                     b.Property<Guid?>("InfluencerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OpeningHours")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<decimal?>("PriceFrom")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("PriceTo")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("Latitude")
                         .HasColumnType("decimal(10,7)");

@@ -26,6 +26,30 @@ export interface IPlaceCreate {
     name: string;
     description?: string;
     active: boolean;
+    districtId?: number;
+    address?: string;
+    phoneNumber?: string;
+    openingHours?: string;
+    priceFrom?: number;
+    priceTo?: number;
+    amenities?: string;
+}
+
+export interface IPlaceUpdate {
+    id: string;
+    name?: string;
+    description?: string;
+    active?: boolean;
+    districtId?: number;
+    address?: string;
+    phoneNumber?: string;
+    openingHours?: string;
+    priceFrom?: number;
+    priceTo?: number;
+    amenities?: string;
+    influencerId?: string;
+    affiliateLink?: string;
+    content?: string;
 }
 
 export async function apiPlaceCreate(data: IPlaceCreate) {
@@ -45,7 +69,7 @@ export async function apiPlaceDetails(id?: string) {
     return request(`place/details/${id}`);
 }
 
-export async function apiPlaceUpdate(data: any) {
+export async function apiPlaceUpdate(data: IPlaceUpdate) {
     return request(`place`, {
         method: 'PUT',
         data

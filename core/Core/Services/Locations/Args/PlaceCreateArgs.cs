@@ -8,6 +8,11 @@ public class PlaceCreateArgs
     public string Locale { get; set; } = "vi-VN";
     public int? DistrictId { get; set; }
     public string? Address { get; set; }
+    public string? PhoneNumber { get; set; }
+    public string? OpeningHours { get; set; }
+    public decimal? PriceFrom { get; set; }
+    public decimal? PriceTo { get; set; }
+    public string? Amenities { get; set; }
     public Guid? InfluencerId { get; set; }
     public string? Content { get; set; }
 }

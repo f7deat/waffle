@@ -3,7 +3,7 @@ import { apiPlaceCreate, apiPlaceDelete, apiPlaceDetails, apiPlaceList, apiPlace
 import { apiProvinceOptions } from "@/services/locations/province";
 import { apiInfluencerOptions } from "@/services/user";
 import { CalendarOutlined, DeleteOutlined, EditOutlined, EnvironmentOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
-import { ActionType, ModalForm, PageContainer, ProColumns, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea, ProTable } from "@ant-design/pro-components"
+import { ActionType, ModalForm, PageContainer, ProColumns, ProFormDigit, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea, ProTable } from "@ant-design/pro-components"
 import { Link } from "@umijs/max";
 import { Button, Popconfirm, message } from "antd";
 import dayjs from "dayjs";
@@ -48,6 +48,11 @@ const Index: React.FC = () => {
             provinceId: selectedProvinceId,
             districtId: currentPlaceDetails?.districtId ?? currentPlace?.districtId,
             address: currentPlaceDetails?.address ?? currentPlace?.address,
+            phoneNumber: currentPlaceDetails?.phoneNumber,
+            openingHours: currentPlaceDetails?.openingHours,
+            priceFrom: currentPlaceDetails?.priceFrom,
+            priceTo: currentPlaceDetails?.priceTo,
+            amenities: currentPlaceDetails?.amenities,
             influencerId: currentPlaceDetails?.influencerId,
         });
     }, [openEdit, currentPlace, currentPlaceDetails, selectedProvinceId]);
@@ -181,11 +186,22 @@ const Index: React.FC = () => {
     ];
 
     const handleCreate = async (values: any) => {
-        await apiPlaceCreate({
+        const result = await apiPlaceCreate({
             name: values.name,
             active: values.active,
             description: values.description,
+            districtId: values.districtId,
+            address: values.address,
+            phoneNumber: values.phoneNumber,
+            openingHours: values.openingHours,
+            priceFrom: values.priceFrom,
+            priceTo: values.priceTo,
+            amenities: values.amenities,
         });
+        if (result?.succeeded === false) {
+            message.error(result.message || 'Failed to create place');
+            return false;
+        }
         message.success('Place created successfully');
         setOpenCreate(false);
         actionRef.current?.reload();
@@ -194,16 +210,25 @@ const Index: React.FC = () => {
 
     const handleUpdate = async (values: any) => {
         if (!currentPlace) return false;
-        await apiPlaceUpdate({
+        const result = await apiPlaceUpdate({
             id: currentPlace.id,
             name: values.name,
             active: values.active,
             description: values.description,
             districtId: values.districtId,
             address: values.address,
+            phoneNumber: values.phoneNumber,
+            openingHours: values.openingHours,
+            priceFrom: values.priceFrom,
+            priceTo: values.priceTo,
+            amenities: values.amenities,
             influencerId: values.influencerId,
             content: JSON.stringify(normalizeContent(currentPlaceDetails?.content))
         });
+        if (result?.succeeded === false) {
+            message.error(result.message || 'Failed to update place');
+            return false;
+        }
         message.success('Place updated successfully');
         setOpenEdit(false);
         actionRef.current?.reload();
@@ -230,7 +255,10 @@ const Index: React.FC = () => {
             <ModalForm
                 title="Create Place"
                 open={openCreate}
-                onOpenChange={setOpenCreate}
+                onOpenChange={(open) => {
+                    setOpenCreate(open);
+                    if (!open) setSelectedProvinceId(undefined);
+                }}
                 onFinish={handleCreate}
                 initialValues={{ active: true }}
                 layout="vertical"
@@ -241,6 +269,36 @@ const Index: React.FC = () => {
                     rules={[{ required: true, message: 'Please enter place name' }]}
                 />
                 <ProFormTextArea name="description" label="Description" />
+                <ProFormSelect
+                    name="provinceId"
+                    label="Province"
+                    showSearch
+                    request={apiProvinceOptions}
+                    fieldProps={{
+                        onChange: (value) => {
+                            const parsed = Number(value);
+                            setSelectedProvinceId(Number.isNaN(parsed) ? undefined : parsed);
+                        }
+                    }}
+                />
+                <ProFormSelect
+                    name="districtId"
+                    label="District"
+                    showSearch
+                    disabled={!selectedProvinceId}
+                    request={apiDistrictOptions}
+                    params={{ provinceId: selectedProvinceId }}
+                />
+                <ProFormText name="address" label="Address" />
+                <ProFormText name="phoneNumber" label="Phone number" />
+                <ProFormText name="openingHours" label="Opening hours" placeholder="07:00 - 22:00" />
+                <ProFormDigit name="priceFrom" label="Price from (VND)" min={0} fieldProps={{ precision: 0 }} />
+                <ProFormDigit name="priceTo" label="Price to (VND)" min={0} fieldProps={{ precision: 0 }} />
+                <ProFormTextArea
+                    name="amenities"
+                    label="Amenities"
+                    placeholder="Enter one amenity per line"
+                />
                 <ProFormSelect
                     name="active"
                     label="Status"
@@ -299,6 +357,15 @@ const Index: React.FC = () => {
                     initialValue={currentPlace?.districtId}
                 />
                 <ProFormText name="address" label="Address" initialValue={currentPlace?.address} />
+                <ProFormText name="phoneNumber" label="Phone number" />
+                <ProFormText name="openingHours" label="Opening hours" placeholder="07:00 - 22:00" />
+                <ProFormDigit name="priceFrom" label="Price from (VND)" min={0} fieldProps={{ precision: 0 }} />
+                <ProFormDigit name="priceTo" label="Price to (VND)" min={0} fieldProps={{ precision: 0 }} />
+                <ProFormTextArea
+                    name="amenities"
+                    label="Amenities"
+                    placeholder="Enter one amenity per line"
+                />
                 <ProFormSelect
                     name="influencerId"
                     label="Influencer"

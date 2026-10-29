@@ -41,6 +41,19 @@ declare namespace API {
     }
     interface PlaceDetail extends PlaceListItem {
         content: API.BlockEditor;
+        phoneNumber?: string;
+        openingHours?: string;
+        priceFrom?: number;
+        priceTo?: number;
+        amenities?: string;
+        affiliateLink?: string;
+        images?: PlaceImage[];
+        influencer?: {
+            id: string;
+            userName?: string;
+            name?: string;
+            avatar?: string;
+        };
     }
     interface PlaceImage {
         id: string;
