@@ -26,6 +26,11 @@ export interface ProductFilterOptions extends API.FilterOptions {
     name?: string;
     categoryId?: number;
     brandId?: number;
+    minPrice?: number;
+    maxPrice?: number;
+    onSale?: boolean;
+    inStock?: boolean;
+    sortBy?: "popular" | "price-asc" | "price-desc" | "newest";
 }
 
 export interface ProductCategoryFilterOptions extends API.FilterOptions {

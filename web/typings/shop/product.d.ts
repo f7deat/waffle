@@ -11,6 +11,7 @@ export type ProductItemType = {
     viewCount: number;
     modifiedDate: string;
     categoryName?: string;
+    unitInStock?: number;
 }
 
 export type ProductDetailType = {

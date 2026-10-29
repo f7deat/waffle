@@ -171,7 +171,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
     public async Task<ListResult<ProductListItem>> ListAsync(ProductFilterOptions filterOptions)
     {
         var query = ProductListQuery(filterOptions);
-        query = query.OrderByDescending(x => x.ModifiedDate);
+        query = SortProducts(query, filterOptions.SortBy);
         return await ListResult<ProductListItem>.Success(query, filterOptions);
     }
 
@@ -196,6 +196,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                         ViewCount = product.ViewCount,
                         Price = product.Price,
                         SalePrice = product.SalePrice,
+                        UnitInStock = product.UnitInStock,
                         Description = product.Description,
                         Type = CatalogType.Product,
                         ModifiedDate = product.ModifiedDate ?? product.CreatedDate,
@@ -205,23 +206,7 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                         CategoryName = category.Name,
                         CreatedDate = product.CreatedDate,
                     };
-        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
-        {
-            query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
-        }
-        if (!string.IsNullOrEmpty(filterOptions.Locale))
-        {
-            query = query.Where(x => x.Locale == filterOptions.Locale);
-        }
-        if (filterOptions.CategoryId.HasValue)
-        {
-            query = query.Where(x => x.CategoryId == filterOptions.CategoryId);
-        }
-        if (filterOptions.BrandId.HasValue)
-        {
-            query = query.Where(x => x.BrandId == filterOptions.BrandId);
-        }
-        return query;
+        return ApplyProductFilters(query, filterOptions);
     }
 
     public async Task<ListResult<ProductListItem>> ListByCategoryAsync(string normalizedName, ProductFilterOptions filterOptions)
@@ -240,14 +225,26 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
                         ViewCount = product.ViewCount,
                         Price = product.Price,
                         SalePrice = product.SalePrice,
+                        UnitInStock = product.UnitInStock,
                         Description = product.Description,
                         Type = CatalogType.Product,
                         ModifiedDate = product.ModifiedDate ?? product.CreatedDate,
                         Locale = product.Locale,
                         CategoryId = product.CategoryId,
-                        CategoryName = category.Name
+                        BrandId = product.BrandId,
+                        CategoryName = category.Name,
+                        CreatedDate = product.CreatedDate
                     };
 
+        query = ApplyProductFilters(query, filterOptions);
+        query = SortProducts(query, filterOptions.SortBy);
+        return await ListResult<ProductListItem>.Success(query, filterOptions);
+    }
+
+    private static IQueryable<ProductListItem> ApplyProductFilters(
+        IQueryable<ProductListItem> query,
+        ProductFilterOptions filterOptions)
+    {
         if (!string.IsNullOrWhiteSpace(filterOptions.Name))
         {
             query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
@@ -256,9 +253,41 @@ public class ProductRepository(ApplicationDbContext context, IHCAService hcaServ
         {
             query = query.Where(x => x.Locale == filterOptions.Locale);
         }
-        query = query.OrderByDescending(x => x.ModifiedDate);
-        return await ListResult<ProductListItem>.Success(query, filterOptions);
+        if (filterOptions.CategoryId.HasValue)
+        {
+            query = query.Where(x => x.CategoryId == filterOptions.CategoryId);
+        }
+        if (filterOptions.BrandId.HasValue)
+        {
+            query = query.Where(x => x.BrandId == filterOptions.BrandId);
+        }
+        if (filterOptions.MinPrice.HasValue)
+        {
+            query = query.Where(x => (x.SalePrice ?? x.Price) >= filterOptions.MinPrice.Value);
+        }
+        if (filterOptions.MaxPrice.HasValue)
+        {
+            query = query.Where(x => (x.SalePrice ?? x.Price) <= filterOptions.MaxPrice.Value);
+        }
+        if (filterOptions.OnSale == true)
+        {
+            query = query.Where(x => x.SalePrice.HasValue && x.Price.HasValue && x.SalePrice < x.Price);
+        }
+        if (filterOptions.InStock == true)
+        {
+            query = query.Where(x => x.UnitInStock > 0);
+        }
+        return query;
     }
+
+    private static IQueryable<ProductListItem> SortProducts(IQueryable<ProductListItem> query, string? sortBy) =>
+        sortBy switch
+        {
+            "popular" => query.OrderByDescending(x => x.ViewCount).ThenByDescending(x => x.ModifiedDate),
+            "price-asc" => query.OrderBy(x => x.SalePrice ?? x.Price).ThenByDescending(x => x.ModifiedDate),
+            "price-desc" => query.OrderByDescending(x => x.SalePrice ?? x.Price).ThenByDescending(x => x.ModifiedDate),
+            _ => query.OrderByDescending(x => x.ModifiedDate)
+        };
 
     public async Task<ListResult<ProductListItem>> ListProductsByTagAsync(ProductTagFilterOptions filterOptions)
     {
