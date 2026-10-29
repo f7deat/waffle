@@ -53,6 +53,7 @@ export interface ProductCategoryItem {
 
 export interface PlaceOrderDetail {
     productId: string;
+    productVariantId?: string;
     quantity: number;
     price: number;
 }

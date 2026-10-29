@@ -6,6 +6,8 @@ const CART_STORAGE_KEY = "cart_items";
 
 export interface CartItem {
     productId: string;
+    variantId?: string;
+    variantName?: string;
     quantity: number;
     name?: string;
     thumbnail?: string;
@@ -16,6 +18,8 @@ export interface CartItem {
 
 export interface AddToCartInput {
     productId: string;
+    variantId?: string;
+    variantName?: string;
     quantity?: number;
     name?: string;
     thumbnail?: string;
@@ -30,8 +34,8 @@ interface CartState {
     totalItems: number;
     totalUniqueItems: number;
     addToCart: (item: AddToCartInput) => void;
-    updateQuantity: (productId: string, quantity: number) => void;
-    removeFromCart: (productId: string) => void;
+    updateQuantity: (productId: string, quantity: number, variantId?: string) => void;
+    removeFromCart: (productId: string, variantId?: string) => void;
     clearCart: () => void;
 }
 
@@ -85,7 +89,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         const nextQuantity = Number(item.quantity) > 0 ? Number(item.quantity) : 1;
 
         setItems((currentItems) => {
-            const itemIndex = currentItems.findIndex((cartItem) => cartItem.productId === item.productId);
+            const itemIndex = currentItems.findIndex(
+                (cartItem) => cartItem.productId === item.productId && cartItem.variantId === item.variantId
+            );
 
             if (itemIndex === -1) {
                 return [
@@ -107,14 +113,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         });
     }, []);
 
-    const updateQuantity = useCallback((productId: string, quantity: number) => {
+    const updateQuantity = useCallback((productId: string, quantity: number, variantId?: string) => {
         setItems((currentItems) => {
             if (quantity <= 0) {
-                return currentItems.filter((item) => item.productId !== productId);
+                return currentItems.filter(
+                    (item) => item.productId !== productId || item.variantId !== variantId
+                );
             }
 
             return currentItems.map((item) =>
-                item.productId === productId
+                item.productId === productId && item.variantId === variantId
                     ? {
                         ...item,
                         quantity,
@@ -124,8 +132,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         });
     }, []);
 
-    const removeFromCart = useCallback((productId: string) => {
-        setItems((currentItems) => currentItems.filter((item) => item.productId !== productId));
+    const removeFromCart = useCallback((productId: string, variantId?: string) => {
+        setItems((currentItems) =>
+            currentItems.filter((item) => item.productId !== productId || item.variantId !== variantId)
+        );
     }, []);
 
     const clearCart = useCallback(() => {

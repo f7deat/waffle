@@ -38,9 +38,22 @@ export type ProductDetailType = {
         name: string;
         normalizedName: string;
     };
+    sku?: string;
+    variants?: ProductVariantType[];
 }
 
 export type ProductImageItemType = {
     id: string;
     url: string;
+}
+
+export type ProductVariantType = {
+    id: string;
+    name?: string;
+    sku?: string;
+    price?: number;
+    salePrice?: number;
+    unitInStock?: number;
+    thumbnail?: string;
+    sortOrder: number;
 }

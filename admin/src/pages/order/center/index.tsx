@@ -45,6 +45,11 @@ const OrderCenter: React.FC = () => {
             render: (dom, record) => <Link to={`/catalog/${record.productId}`}>{dom}</Link>
           },
           {
+            title: 'Variant',
+            dataIndex: 'variantName',
+            render: (variantName) => variantName || '-'
+          },
+          {
             title: 'Price',
             dataIndex: 'price'
           },

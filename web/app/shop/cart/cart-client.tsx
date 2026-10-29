@@ -68,6 +68,7 @@ const CartClient: React.FC = () => {
 
         const orderDetails = items.map((item) => ({
             productId: item.productId,
+            productVariantId: item.variantId,
             quantity: item.quantity,
             price: item.salePrice ?? item.price ?? 0,
         }));
@@ -149,7 +150,7 @@ const CartClient: React.FC = () => {
 
                     return (
                         <div
-                            key={item.productId}
+                            key={`${item.productId}:${item.variantId ?? ""}`}
                             className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
                         >
                             <div className="h-24 w-24 overflow-hidden rounded-xl bg-slate-100">
@@ -171,6 +172,9 @@ const CartClient: React.FC = () => {
                                     ) : (
                                         <p className="text-base font-semibold text-slate-900">{item.name ?? item.productId}</p>
                                     )}
+                                    {item.variantName && (
+                                        <p className="mt-1 text-sm text-slate-600">Phân loại: {item.variantName}</p>
+                                    )}
                                     <p className="mt-1 text-sm text-slate-500">Mã sản phẩm: {item.productId}</p>
                                 </div>
 
@@ -178,7 +182,7 @@ const CartClient: React.FC = () => {
                                     <div className="flex items-center rounded-lg border border-slate-200">
                                         <button
                                             type="button"
-                                            onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                                            onClick={() => updateQuantity(item.productId, item.quantity - 1, item.variantId)}
                                             disabled={item.quantity <= 1}
                                             className="h-9 w-9 text-slate-700 disabled:cursor-not-allowed disabled:text-slate-300"
                                         >
@@ -187,7 +191,7 @@ const CartClient: React.FC = () => {
                                         <span className="w-10 text-center text-sm font-semibold text-slate-900">{item.quantity}</span>
                                         <button
                                             type="button"
-                                            onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                                            onClick={() => updateQuantity(item.productId, item.quantity + 1, item.variantId)}
                                             className="h-9 w-9 text-slate-700"
                                         >
                                             +
@@ -196,7 +200,7 @@ const CartClient: React.FC = () => {
 
                                     <button
                                         type="button"
-                                        onClick={() => removeFromCart(item.productId)}
+                                        onClick={() => removeFromCart(item.productId, item.variantId)}
                                         className="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
                                     >
                                         Xóa

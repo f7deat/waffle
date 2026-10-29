@@ -11,4 +11,5 @@ public class OrderDetailViewModel : Order
 public class OrderProductItem : OrderDetail
 {
     public string? ProductName { get; set; }
+    public string? VariantName { get; set; }
 }

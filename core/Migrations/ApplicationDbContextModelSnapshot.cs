@@ -890,6 +890,9 @@ namespace Waffle.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ProductVariantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 

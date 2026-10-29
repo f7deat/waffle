@@ -300,6 +300,8 @@ declare namespace API {
     price: number;
     quantity: number;
     productId: string;
+    productVariantId?: string;
+    variantName?: string;
   }
   type WorkComponent = {
       name: string;
