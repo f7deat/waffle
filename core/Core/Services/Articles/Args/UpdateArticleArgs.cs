@@ -8,4 +8,7 @@ public class UpdateArticleArgs
     public string? Content { get; set; }
     public string? Thumbnail { get; set; }
     public DateTimeOffset? PublishedAt { get; set; }
+    public int? CategoryId { get; set; }
+    public bool IsFeatured { get; set; }
+    public ArticleEditorialDetailArgs? Editorial { get; set; }
 }

@@ -8,6 +8,7 @@ using Waffle.Core.Services.Articles.Filters;
 using Waffle.Core.Services.Articles.Models;
 using Waffle.Entities;
 using Waffle.Models;
+using System.Text.Json;
 
 namespace Waffle.Core.Services.Articles;
 
@@ -82,13 +83,46 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
     {
         try
         {
-            var article = await _articleRepository.FindAsync(args.Id);
+            if (args.Editorial?.ReadingMinutes is < 1 or > 120)
+                return TResult.Failed("Reading time must be between 1 and 120 minutes.");
+
+            var article = await _articleRepository.FindWithEditorialDetailAsync(args.Id);
             if (article is null || article.DeletedAt.HasValue) return TResult.Failed("Article not found");
-            article.NormalizedName = SeoHelper.ToSeoFriendly(article.Name);
+            article.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
             article.Name = args.Name;
             article.Description = args.Description;
             article.Thumbnail = args.Thumbnail;
             article.Content = args.Content;
+            article.CategoryId = args.CategoryId;
+            article.IsFeatured = args.IsFeatured;
+            if (args.Editorial is not null)
+            {
+                var editorial = article.EditorialDetail ?? new ArticleEditorialDetail { ArticleId = article.Id };
+                editorial.SpotlightLabel = args.Editorial.SpotlightLabel;
+                editorial.HeroCaption = args.Editorial.HeroCaption;
+                editorial.AuthorName = args.Editorial.AuthorName;
+                editorial.AuthorHandle = args.Editorial.AuthorHandle;
+                editorial.AuthorTitle = args.Editorial.AuthorTitle;
+                editorial.AuthorAvatar = args.Editorial.AuthorAvatar;
+                editorial.AuthorBio = args.Editorial.AuthorBio;
+                editorial.ReadingMinutes = args.Editorial.ReadingMinutes;
+                editorial.TopicsJson = JsonSerializer.Serialize(
+                    (args.Editorial.Topics ?? [])
+                        .Where(topic => !string.IsNullOrWhiteSpace(topic))
+                        .Select(topic => topic.Trim())
+                        .Distinct()
+                        .ToList());
+                editorial.RouteTitle = args.Editorial.RouteTitle;
+                editorial.RouteDescription = args.Editorial.RouteDescription;
+                editorial.RouteAddress = args.Editorial.RouteAddress;
+                editorial.RouteMapUrl = args.Editorial.RouteMapUrl;
+                editorial.RouteDownloadUrl = args.Editorial.RouteDownloadUrl;
+                editorial.RouteStopsJson = JsonSerializer.Serialize(
+                    (args.Editorial.RouteStops ?? [])
+                        .Where(stop => !string.IsNullOrWhiteSpace(stop.Name))
+                        .ToList());
+                article.EditorialDetail = editorial;
+            }
             if (args.PublishedAt.HasValue && args.PublishedAt.Value > DateTimeOffset.UtcNow)
             {
                 article.PublishedAt = null;
@@ -172,7 +206,7 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
 
     public async Task<TResult> GetByIdAsync(Guid id)
     {
-        var article = await _articleRepository.FindAsync(id);
+        var article = await _articleRepository.FindWithEditorialDetailAsync(id);
         if (article is null || article.DeletedAt.HasValue) return TResult.Failed("Article not found");
 
         return TResult.Ok(new
@@ -186,10 +220,36 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
             article.PublishedAt,
             article.ScheduledAt,
             article.Content,
+            article.CategoryId,
+            article.IsFeatured,
+            Editorial = ToEditorialResponse(article.EditorialDetail),
             article.Locale,
             article.CreatedDate,
             article.ModifiedDate
         });
+    }
+
+    private static object? ToEditorialResponse(ArticleEditorialDetail? detail)
+    {
+        if (detail is null) return null;
+        return new
+        {
+            detail.SpotlightLabel,
+            detail.HeroCaption,
+            detail.AuthorName,
+            detail.AuthorHandle,
+            detail.AuthorTitle,
+            detail.AuthorAvatar,
+            detail.AuthorBio,
+            detail.ReadingMinutes,
+            Topics = JsonSerializer.Deserialize<List<string>>(detail.TopicsJson),
+            detail.RouteTitle,
+            detail.RouteDescription,
+            detail.RouteAddress,
+            detail.RouteMapUrl,
+            detail.RouteDownloadUrl,
+            RouteStops = JsonSerializer.Deserialize<List<ArticleEditorialStopArgs>>(detail.RouteStopsJson)
+        };
     }
 
     public async Task<TResult> GetMetaAsync(string normalizedName)

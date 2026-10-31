@@ -21,6 +21,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<AppSetting> AppSettings { get; set; }
     public DbSet<WebsitePage> WebsitePages { get; set; } = default!;
     public DbSet<Article> Articles { get; set; }
+    public DbSet<ArticleEditorialDetail> ArticleEditorialDetails { get; set; } = default!;
     public DbSet<Catalog> Catalogs { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<CommentReport> CommentReports { get; set; }
@@ -113,6 +114,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<ProductTag>().HasKey(k => new { k.ProductId, k.TagId });
         builder.Entity<WebsitePage>().HasIndex(x => x.PageKey).IsUnique();
         builder.Entity<Article>().HasIndex(x => x.ScheduledAt);
+        builder.Entity<ArticleEditorialDetail>()
+            .HasOne(x => x.Article)
+            .WithOne(x => x.EditorialDetail)
+            .HasForeignKey<ArticleEditorialDetail>(x => x.ArticleId)
+            .OnDelete(DeleteBehavior.Cascade);
         builder.Entity<CommentReport>()
             .HasIndex(x => new { x.CommentId, x.UserId })
             .IsUnique();

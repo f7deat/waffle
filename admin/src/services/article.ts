@@ -21,6 +21,43 @@ export type ArticleListItem = {
 export type ArticleDetailType = ArticleListItem & {
   normalizedName: string;
   content: string;
+  categoryId?: number;
+  isFeatured?: boolean;
+  editorial?: ArticleEditorialDetail;
+}
+
+export type ArticleEditorialStop = {
+  name?: string;
+  imageUrl?: string;
+  address?: string;
+  priceRange?: string;
+  openingHours?: string;
+  mapsUrl?: string;
+  voucher?: string;
+}
+
+export type ArticleEditorialDetail = {
+  spotlightLabel?: string;
+  heroCaption?: string;
+  authorName?: string;
+  authorHandle?: string;
+  authorTitle?: string;
+  authorAvatar?: string;
+  authorBio?: string;
+  readingMinutes?: number;
+  topics?: string[];
+  routeTitle?: string;
+  routeDescription?: string;
+  routeAddress?: string;
+  routeMapUrl?: string;
+  routeDownloadUrl?: string;
+  routeStops?: ArticleEditorialStop[];
+}
+
+export type ArticleMutationResult = {
+  succeeded: boolean;
+  message?: string;
+  data?: object;
 }
 
 export async function getArticleById(id: string) {
@@ -113,15 +150,18 @@ export async function updateArticle(data: {
   content?: string;
   thumbnail?: string;
   publishedAt?: string | null;
+  categoryId?: number;
+  isFeatured?: boolean;
+  editorial?: ArticleEditorialDetail;
 }) {
-  return request<API.TResult<object>>('article', {
+  return request<ArticleMutationResult>('article', {
     method: 'PUT',
     data,
   });
 }
 
 export async function publishArticle(id: string) {
-  return request<API.TResult<object>>(`article/${id}/publish`, {
+  return request<ArticleMutationResult>(`article/${id}/publish`, {
     method: 'POST',
   });
 }

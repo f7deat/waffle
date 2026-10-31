@@ -36,6 +36,35 @@ export type ArticleAuthorItem = {
 
 export type ArticleDetail = ArticleListItem & {
     content: EditorJSType;
+    editorial?: ArticleEditorialDetail;
+}
+
+export type ArticleEditorialStop = {
+    name: string;
+    imageUrl?: string;
+    address?: string;
+    priceRange?: string;
+    openingHours?: string;
+    mapsUrl?: string;
+    voucher?: string;
+}
+
+export type ArticleEditorialDetail = {
+    spotlightLabel?: string;
+    heroCaption?: string;
+    authorName?: string;
+    authorHandle?: string;
+    authorTitle?: string;
+    authorAvatar?: string;
+    authorBio?: string;
+    readingMinutes?: number;
+    topics?: string[];
+    routeTitle?: string;
+    routeDescription?: string;
+    routeAddress?: string;
+    routeMapUrl?: string;
+    routeDownloadUrl?: string;
+    routeStops?: ArticleEditorialStop[];
 }
 
 export type ArticleFilterOptions = FilterOptions & {

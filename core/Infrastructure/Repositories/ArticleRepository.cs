@@ -5,6 +5,7 @@ using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Services.Articles;
+using Waffle.Core.Services.Articles.Args;
 using Waffle.Core.Services.Articles.Filters;
 using Waffle.Core.Services.Articles.Models;
 using Waffle.Data;
@@ -15,6 +16,11 @@ namespace Waffle.Infrastructure.Repositories;
 
 public class ArticleRepository(ApplicationDbContext context, IHCAService hcaService) : EfRepository<Article>(context, hcaService), IArticleRepository
 {
+    public Task<Article?> FindWithEditorialDetailAsync(Guid id) =>
+        _context.Articles
+            .Include(article => article.EditorialDetail)
+            .FirstOrDefaultAsync(article => article.Id == id);
+
     private sealed record ArticleScheduleRaw(
         Guid Id,
         string Name,
@@ -210,7 +216,10 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
 
     public async Task<TResult> GetByNameAsync(string normalizedName)
     {
-        var article = await _context.Articles.FirstOrDefaultAsync(a =>
+        var article = await _context.Articles
+            .Include(a => a.EditorialDetail)
+            .Include(a => a.Category)
+            .FirstOrDefaultAsync(a =>
             a.NormalizedName == normalizedName
             && a.DeletedAt == null
             && a.PublishedAt.HasValue
@@ -234,10 +243,37 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
             article.Locale,
             article.CreatedBy,
             Content = GetArticleContent(article.Content),
+            CategoryId = article.CategoryId,
+            CategoryName = article.Category?.Name,
+            IsFeatured = article.IsFeatured,
+            Editorial = ToEditorialResponse(article.EditorialDetail),
             CreatorName = user?.Name,
             CreatorAvatar = user?.Avatar,
             CreatorUserName = user?.UserName
         });
+    }
+
+    private static object? ToEditorialResponse(ArticleEditorialDetail? detail)
+    {
+        if (detail is null) return null;
+        return new
+        {
+            detail.SpotlightLabel,
+            detail.HeroCaption,
+            detail.AuthorName,
+            detail.AuthorHandle,
+            detail.AuthorTitle,
+            detail.AuthorAvatar,
+            detail.AuthorBio,
+            detail.ReadingMinutes,
+            Topics = JsonSerializer.Deserialize<List<string>>(detail.TopicsJson),
+            detail.RouteTitle,
+            detail.RouteDescription,
+            detail.RouteAddress,
+            detail.RouteMapUrl,
+            detail.RouteDownloadUrl,
+            RouteStops = JsonSerializer.Deserialize<List<ArticleEditorialStopArgs>>(detail.RouteStopsJson)
+        };
     }
 
     public Task<int> GetCurrentMonthAsync(string locale) => _context.Articles.CountAsync(a => a.DeletedAt == null && a.PublishedAt != null && a.PublishedAt <= DateTime.UtcNow && a.Locale == locale && a.PublishedAt.Value.Month == DateTime.UtcNow.Month && a.PublishedAt.Value.Year == DateTime.UtcNow.Year);

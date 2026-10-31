@@ -28,4 +28,5 @@ public class Article : AuditEntity, ISoftDelete, ILocale
     public int? CategoryId { get; set; }
 
     public Category? Category { get; set; }
+    public ArticleEditorialDetail? EditorialDetail { get; set; }
 }

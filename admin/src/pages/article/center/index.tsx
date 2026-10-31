@@ -1,19 +1,22 @@
 import ImagePicker from '@/components/image-library/picker';
-import { getArticleById, updateArticle } from '@/services/article';
+import { getArticleById, publishArticle, updateArticle } from '@/services/article';
 import { uploadRcFile } from '@/services/file-service';
-import { EyeOutlined, PictureOutlined, SaveOutlined, SendOutlined, UploadOutlined } from '@ant-design/icons';
+import { EyeOutlined, PictureOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
 import {
     PageContainer,
     ProCard,
     ProForm,
     ProFormDateTimePicker,
+    ProFormDigit,
     ProFormInstance,
+    ProFormList,
     ProFormSelect,
+    ProFormSwitch,
     ProFormText,
     ProFormTextArea,
 } from '@ant-design/pro-components';
 import { history, useParams, useRequest } from '@umijs/max';
-import { Button, message } from 'antd';
+import { Button, Col, message, Row } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -23,6 +26,7 @@ import { apiCategoryOptions } from '@/services/settings/category';
 const Index: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const formRef = useRef<ProFormInstance>(null);
+    const publishAfterSaveRef = useRef(false);
     const [form] = ProForm.useForm();
     const thumbnailInputRef = useRef<HTMLInputElement>(null);
     const thumbnail = ProForm.useWatch('thumbnail', form);
@@ -47,12 +51,31 @@ const Index: React.FC = () => {
             description: article.description,
             thumbnail: article.thumbnail,
             normalizedName: article.normalizedName,
+            categoryId: article.categoryId,
+            isFeatured: article.isFeatured,
             publishedAt: article.scheduledAt
                 ? dayjs(article.scheduledAt)
                 : article.publishedAt
                     ? dayjs(article.publishedAt)
                     : undefined,
             content: article.content || '',
+            editorial: {
+                spotlightLabel: article.editorial?.spotlightLabel,
+                heroCaption: article.editorial?.heroCaption,
+                authorName: article.editorial?.authorName,
+                authorHandle: article.editorial?.authorHandle,
+                authorTitle: article.editorial?.authorTitle,
+                authorAvatar: article.editorial?.authorAvatar,
+                authorBio: article.editorial?.authorBio,
+                readingMinutes: article.editorial?.readingMinutes,
+                topics: article.editorial?.topics || [],
+                routeTitle: article.editorial?.routeTitle,
+                routeDescription: article.editorial?.routeDescription,
+                routeAddress: article.editorial?.routeAddress,
+                routeMapUrl: article.editorial?.routeMapUrl,
+                routeDownloadUrl: article.editorial?.routeDownloadUrl,
+                routeStops: article.editorial?.routeStops || [],
+            },
         });
     }, [article]);
 
@@ -90,13 +113,29 @@ const Index: React.FC = () => {
 
     const onFinish = async (values: any) => {
         if (!id) return false;
-        await updateArticle({
+        const shouldPublishAfterSave = publishAfterSaveRef.current;
+        publishAfterSaveRef.current = false;
+        const response = await updateArticle({
             ...values,
-            content: JSON.stringify(values.content),
+            content: typeof values.content === 'string' ? values.content : JSON.stringify(values.content),
             id,
             publishedAt: values.publishedAt ? dayjs(values.publishedAt).toISOString() : null,
         });
-        message.success('Cap nhat bai viet thanh cong');
+        if (!response.succeeded) {
+            message.error(response.message || 'Không thể cập nhật bài viết.');
+            return false;
+        }
+
+        if (shouldPublishAfterSave) {
+            const publishResponse = await publishArticle(id);
+            if (!publishResponse.succeeded) {
+                message.error(publishResponse.message || 'Không thể xuất bản bài viết.');
+                return false;
+            }
+            message.success('Đã lưu và xuất bản bài viết.');
+        } else {
+            message.success('Đã lưu bài viết.');
+        }
         return true;
     };
 
@@ -108,8 +147,14 @@ const Index: React.FC = () => {
             extra={(
                 <>
                     <Button type="dashed" icon={<EyeOutlined />}>Xem trước</Button>
-                    <Button icon={<SaveOutlined />}>Lưu nháp</Button>
-                    <Button type="primary" onClick={() => form.submit()} icon={<SendOutlined />}>Xuất bản</Button>
+                    <Button icon={<SaveOutlined />} onClick={() => {
+                        publishAfterSaveRef.current = false;
+                        form.submit();
+                    }}>Lưu nháp</Button>
+                    <Button type="primary" onClick={() => {
+                        publishAfterSaveRef.current = true;
+                        form.submit();
+                    }} icon={<SendOutlined />}>Xuất bản</Button>
                 </>
             )}
         >
@@ -125,7 +170,7 @@ const Index: React.FC = () => {
                             />
                             <ProFormText name="normalizedName" label="Tên chuẩn hóa" disabled />
                             <ProFormTextArea name="description" label="Mô tả" />
-                            <FormEditor name="content" label="Nội dung" initialValue={detailResponse?.content} />
+                            <FormEditor name="content" label="Nội dung" initialValue={article?.content} />
                         </ProCard>
                     </div>
                     <div className="md:w-96">
@@ -133,6 +178,7 @@ const Index: React.FC = () => {
                             <ProCard title="Thông tin phân loại">
                                 <ProFormSelect name="categoryId" showSearch label="Danh mục" request={apiCategoryOptions} />
                                 <ProFormDateTimePicker name="publishedAt" label="Ngày xuất bản" width="xl" />
+                                <ProFormSwitch name="isFeatured" label="Bài viết tiêu điểm" />
                             </ProCard>
                         </div>
                         <ProCard title={<div><span className="text-blue-500 mr-1"><PictureOutlined /></span>Ảnh đại diện (Featured)</div>}>
@@ -158,6 +204,63 @@ const Index: React.FC = () => {
                         </ProCard>
                     </div>
                 </div>
+                <ProCard title="Thông tin bài viết tạp chí" className="mt-4">
+                    <Row gutter={16}>
+                        <Col xs={24} md={12}>
+                            <ProFormText name={['editorial', 'spotlightLabel']} label="Nhãn tiêu điểm" placeholder="Ví dụ: Tiêu điểm Thổ Địa" />
+                            <ProFormText name={['editorial', 'heroCaption']} label="Chú thích ảnh bìa" />
+                            <ProFormDigit name={['editorial', 'readingMinutes']} label="Thời gian đọc (phút)" min={1} max={120} fieldProps={{ precision: 0 }} />
+                            <ProFormSelect
+                                name={['editorial', 'topics']}
+                                label="Chủ đề / hashtag"
+                                mode="tags"
+                                placeholder="Nhập chủ đề rồi nhấn Enter"
+                                fieldProps={{ tokenSeparators: [','] }}
+                            />
+                        </Col>
+                        <Col xs={24} md={12}>
+                            <ProFormText name={['editorial', 'authorName']} label="Tên tác giả hiển thị" />
+                            <ProFormText name={['editorial', 'authorHandle']} label="Tài khoản tác giả" placeholder="@ten-tac-gia" />
+                            <ProFormText name={['editorial', 'authorTitle']} label="Vai trò / danh xưng" />
+                            <ProFormText name={['editorial', 'authorAvatar']} label="URL ảnh tác giả" />
+                            <ProFormTextArea name={['editorial', 'authorBio']} label="Giới thiệu tác giả" />
+                        </Col>
+                    </Row>
+                    <ProCard title="Bản đồ & hành trình" type="inner" className="mb-4">
+                        <Row gutter={16}>
+                            <Col xs={24} md={12}>
+                                <ProFormText name={['editorial', 'routeTitle']} label="Tiêu đề hành trình" />
+                                <ProFormTextArea name={['editorial', 'routeDescription']} label="Mô tả hành trình" />
+                                <ProFormText name={['editorial', 'routeAddress']} label="Khu vực / địa chỉ" />
+                            </Col>
+                            <Col xs={24} md={12}>
+                                <ProFormText name={['editorial', 'routeMapUrl']} label="Liên kết Google Maps" />
+                                <ProFormText name={['editorial', 'routeDownloadUrl']} label="Liên kết tải GPX/KML" />
+                            </Col>
+                        </Row>
+                        <ProFormList
+                            name={['editorial', 'routeStops']}
+                            label="Điểm dừng chân"
+                            creatorButtonProps={{ creatorButtonText: 'Thêm điểm dừng' }}
+                            copyIconProps={false}
+                            itemRender={({ listDom }, { index }) => (
+                                <ProCard key={index} type="inner" className="mb-3" title={`Điểm dừng #${index + 1}`}>
+                                    {listDom}
+                                </ProCard>
+                            )}
+                        >
+                            <Row gutter={12}>
+                                <Col xs={24} md={12}><ProFormText name="name" label="Tên địa điểm" /></Col>
+                                <Col xs={24} md={12}><ProFormText name="imageUrl" label="URL ảnh" /></Col>
+                                <Col xs={24} md={12}><ProFormText name="address" label="Địa chỉ" /></Col>
+                                <Col xs={24} md={12}><ProFormText name="mapsUrl" label="Liên kết chỉ đường" /></Col>
+                                <Col xs={24} md={12}><ProFormText name="priceRange" label="Khoảng giá" /></Col>
+                                <Col xs={24} md={12}><ProFormText name="openingHours" label="Giờ mở cửa" /></Col>
+                                <Col span={24}><ProFormText name="voucher" label="Mã ưu đãi" /></Col>
+                            </Row>
+                        </ProFormList>
+                    </ProCard>
+                </ProCard>
             </ProForm>
         </PageContainer>
     )

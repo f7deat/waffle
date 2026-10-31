@@ -300,6 +300,75 @@ namespace Waffle.Migrations
                     b.ToTable("Articles");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.ArticleEditorialDetail", b =>
+                {
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AuthorAvatar")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<string>("AuthorBio")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<string>("AuthorHandle")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("AuthorName")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("AuthorTitle")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("HeroCaption")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<int?>("ReadingMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RouteAddress")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("RouteDescription")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("RouteDownloadUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<string>("RouteMapUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<string>("RouteStopsJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RouteTitle")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("SpotlightLabel")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("TopicsJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ArticleId");
+
+                    b.ToTable("ArticleEditorialDetails");
+                });
+
             modelBuilder.Entity("Waffle.Entities.Careers.InfluencerJob", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2278,6 +2347,17 @@ namespace Waffle.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.ArticleEditorialDetail", b =>
+                {
+                    b.HasOne("Waffle.Entities.Article", "Article")
+                        .WithOne("EditorialDetail")
+                        .HasForeignKey("Waffle.Entities.ArticleEditorialDetail", "ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+                });
+
             modelBuilder.Entity("Waffle.Entities.Careers.InfluencerJobApplication", b =>
                 {
                     b.HasOne("Waffle.Entities.Careers.InfluencerJob", "Job")
@@ -2555,6 +2635,11 @@ namespace Waffle.Migrations
                     b.Navigation("SocialPlatform");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Article", b =>
+                {
+                    b.Navigation("EditorialDetail");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Careers.InfluencerJob", b =>
