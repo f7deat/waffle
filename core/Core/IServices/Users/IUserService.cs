@@ -20,6 +20,11 @@ public interface IUserService
     Task<ListResult<Contact>> ListContactAsync(SearchFilterOptions filterOptions);
     Task<TResult> UpdateAsync(ApplicationUser user, ApplicationUser args);
     Task<TResult> UpdateProfileAsync(ApplicationUser user, ApplicationUser args);
+    Task<ProfileDetailViewModel?> GetProfileDetailAsync(Guid userId);
+    Task<TResult> UpdateProfileDetailAsync(Guid userId, UpdateProfileDetailArgs args);
+    Task<TResult> ChangeCoverAsync(Guid userId, IFormFile? file, string host);
+    Task<TResult> RemoveCoverAsync(Guid userId);
+    Task<TResult> UploadMediaKitAsync(Guid userId, IFormFile? file, string host);
     Task<List<SocialAccountViewModel>> GetSocialAccountsAsync(Guid userId);
     Task<bool> UpdateSocialAccountsAsync(Guid userId, IReadOnlyCollection<UpdateSocialAccountArgs> accounts);
     Task<ListResult> GetInfluencersAsync(FilterOptions filterOptions);
@@ -28,8 +33,6 @@ public interface IUserService
     Task<TResult> GetByUserNameAsync(string userName);
     Task<object?> GetInfluencerOptionsAsync(SelectOptions selectOptions);
     Task<TResult> TopupAsync(AdminTopupArgs args, Guid adminId);
-    Task<TResult> TopupProfileAsync(Guid userId, ProfileTopupArgs args);
-    Task<TResult> WithdrawProfileAsync(Guid userId, ProfileWithdrawArgs args);
     Task<ListResult<UserTopupTransactionViewModel>> GetTopupHistoryAsync(Guid userId, BasicFilterOptions filterOptions);
     Task<TResult> GetTopupStatsAsync(Guid userId);
     Task<TResult> GetTopupInvoiceAsync(Guid transactionId);

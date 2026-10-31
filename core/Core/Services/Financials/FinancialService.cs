@@ -8,8 +8,14 @@ using Waffle.Models.ViewModels.Financials;
 
 namespace Waffle.Core.Services.Financials;
 
-public class FinancialService(ApplicationDbContext context) : IFinancialService
+public class FinancialService(ApplicationDbContext context, IWalletService walletService) : IFinancialService
 {
+    public Task<ListResult<WalletWithdrawalRequestViewModel>> GetWalletWithdrawalRequestsAsync(BasicFilterOptions filterOptions)
+        => walletService.GetWithdrawalRequestsAsync(filterOptions);
+
+    public Task<TResult> ReviewWalletWithdrawalAsync(Guid id, string action, Guid adminId, string? note)
+        => walletService.ReviewWithdrawalAsync(id, action, adminId, note);
+
     public async Task<TResult> GetOverviewAsync(DateTime? fromDate, DateTime? toDate)
     {
         var query = context.UserTopupTransactions.AsQueryable();

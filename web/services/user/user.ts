@@ -38,11 +38,53 @@ export async function apiUpdateProfile(data: { name: string; email: string; phon
     return request.put<API.TResult<object>>("user/profile", data);
 }
 
-export async function apiTopupProfile(data: { amount: number; note?: string; }) {
-    return request.post<API.TResult<object>>("user/profile/topup", data);
+export async function apiProfileDetail() {
+    return request.get<API.ProfileDetail>("user/profile/detail");
 }
 
-export async function apiWithdrawProfile(data: { amount: number; note?: string; }) {
+export async function apiUpdateProfileDetail(data: API.UpdateProfileDetailArgs) {
+    return request.put<API.TResult<object>>("user/profile/detail", data);
+}
+
+export async function apiUpdateProfileCover(formData: FormData) {
+    return request.put<API.TResult<object>>("user/profile/cover", formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+}
+
+export async function apiRemoveProfileCover() {
+    return request.delete<API.TResult<object>>("user/profile/cover");
+}
+
+export async function apiUploadMediaKit(formData: FormData) {
+    return request.put<API.TResult<object>>("user/profile/media-kit", formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+}
+
+export async function apiSocialPlatformList() {
+    return request.get<{ data: API.SocialPlatformItem[] }>("socialplatform/list");
+}
+
+export async function apiTopupProfile(data: { amount: number; note?: string; }) {
+    return request.post<API.TResult<API.WalletTopupCheckout>>("user/profile/topup", data);
+}
+
+export async function apiWalletTopupStatus(orderCode: number) {
+    return request.get<API.TResult<API.WalletTopupStatus>>(`user/profile/topup/${orderCode}`);
+}
+
+export async function apiMyWalletWithdrawals(params: { current: number; pageSize: number }) {
+    return request.get<API.ListResult<API.WalletWithdrawalRequest>>("user/profile/withdrawals", { params });
+}
+
+export async function apiWithdrawProfile(data: {
+    amount: number;
+    bankName: string;
+    accountHolder: string;
+    accountNumber: string;
+    note?: string;
+}) {
     return request.post<API.TResult<object>>("user/profile/withdraw", data);
 }
 

@@ -103,6 +103,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICollectionService, CollectionService>();
         services.AddScoped<ICollectionRepository, CollectionRepository>();
         services.AddScoped<IFinancialService, FinancialService>();
+        services.AddScoped<IWalletService, WalletService>();
 
         #region Notification
         services.AddScoped<INotificationService, NotificationService>();

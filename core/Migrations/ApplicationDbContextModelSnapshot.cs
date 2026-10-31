@@ -2054,6 +2054,10 @@ namespace Waffle.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CoverImage")
+                        .HasMaxLength(2058)
+                        .HasColumnType("nvarchar(2058)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -2091,6 +2095,9 @@ namespace Waffle.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<bool>("NotifyOnComments")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -2102,6 +2109,13 @@ namespace Waffle.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ShowFavoritePlacesOnMap")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Tagline")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int?>("TeamId")
                         .HasColumnType("int");
@@ -2126,6 +2140,93 @@ namespace Waffle.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.BusinessProfile", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BusinessAddress")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("BusinessType")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("CompanyName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ContactEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ContactPhone")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RepresentativeName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("TaxCode")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("Website")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("BusinessProfiles");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.InfluencerProfile", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BookingEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("BookingPhone")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<bool>("IsOpenForBooking")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MediaKitName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<long?>("MediaKitSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("MediaKitUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MediaKitUrl")
+                        .HasMaxLength(2058)
+                        .HasColumnType("nvarchar(2058)");
+
+                    b.Property<bool>("ShowEngagementStats")
+                        .HasColumnType("bit");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("InfluencerProfiles");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Users.SocialAccount", b =>
@@ -2161,6 +2262,38 @@ namespace Waffle.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("SocialAccounts");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.UserActivityArea", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ProvinceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ProvinceId");
+
+                    b.HasIndex("ProvinceId")
+                        .HasDatabaseName("IDX_UserActivityArea_ProvinceId");
+
+                    b.ToTable("UserActivityAreas");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.UserTag", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "TagId");
+
+                    b.HasIndex("TagId")
+                        .HasDatabaseName("IDX_UserTag_TagId");
+
+                    b.ToTable("UserTags");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Users.UserTopupTransaction", b =>
@@ -2199,6 +2332,124 @@ namespace Waffle.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserTopupTransactions");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.WalletTopupPayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("money");
+
+                    b.Property<string>("CheckoutUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<int>("OrderCode")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("PaidAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentLinkId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderReference")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderCode")
+                        .IsUnique();
+
+                    b.HasIndex("UserId", "CreatedAt");
+
+                    b.ToTable("WalletTopupPayments");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.WalletWithdrawalRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountHolder")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("AdminNote")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("money");
+
+                    b.Property<string>("BankName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceNumber")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("ProtectedAccountNumber")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<Guid?>("ResolvedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Status", "CreatedAt");
+
+                    b.ToTable("WalletWithdrawalRequests");
                 });
 
             modelBuilder.Entity("Waffle.Entities.WebsitePage", b =>
@@ -2653,6 +2904,28 @@ namespace Waffle.Migrations
                     b.Navigation("Team");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.Users.BusinessProfile", b =>
+                {
+                    b.HasOne("Waffle.Entities.Users.ApplicationUser", "User")
+                        .WithOne("BusinessProfile")
+                        .HasForeignKey("Waffle.Entities.Users.BusinessProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.InfluencerProfile", b =>
+                {
+                    b.HasOne("Waffle.Entities.Users.ApplicationUser", "User")
+                        .WithOne("InfluencerProfile")
+                        .HasForeignKey("Waffle.Entities.Users.InfluencerProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Waffle.Entities.Users.SocialAccount", b =>
                 {
                     b.HasOne("Waffle.Entities.Commons.SocialPlatform", "SocialPlatform")
@@ -2670,6 +2943,53 @@ namespace Waffle.Migrations
                     b.Navigation("SocialPlatform");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.UserActivityArea", b =>
+                {
+                    b.HasOne("Waffle.Entities.Locations.Province", "Province")
+                        .WithMany()
+                        .HasForeignKey("ProvinceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Waffle.Entities.Users.ApplicationUser", "User")
+                        .WithMany("ActivityAreas")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Province");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.UserTag", b =>
+                {
+                    b.HasOne("Waffle.Entities.Tags.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Waffle.Entities.Users.ApplicationUser", "User")
+                        .WithMany("UserTags")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Users.WalletWithdrawalRequest", b =>
+                {
+                    b.HasOne("Waffle.Entities.Users.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Waffle.Entities.Article", b =>
@@ -2779,7 +3099,15 @@ namespace Waffle.Migrations
 
             modelBuilder.Entity("Waffle.Entities.Users.ApplicationUser", b =>
                 {
+                    b.Navigation("ActivityAreas");
+
+                    b.Navigation("BusinessProfile");
+
+                    b.Navigation("InfluencerProfile");
+
                     b.Navigation("SocialAccounts");
+
+                    b.Navigation("UserTags");
                 });
 #pragma warning restore 612, 618
         }

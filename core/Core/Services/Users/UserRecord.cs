@@ -13,4 +13,10 @@ public record AdminTopupArgs(Guid UserId, decimal Amount, string? Note);
 
 public record ProfileTopupArgs(decimal Amount, string? Note);
 
-public record ProfileWithdrawArgs(decimal Amount, string? Note);
+public record ProfileWithdrawArgs(
+    decimal Amount,
+    string BankName,
+    string AccountHolder,
+    string AccountNumber,
+    string? Note
+);

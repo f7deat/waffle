@@ -14,4 +14,6 @@ public interface IFinancialService
     Task<TResult> DepositAsync(FinancialActionArgs args, Guid adminId);
     Task<TResult> WithdrawAsync(FinancialActionArgs args, Guid adminId);
     Task<object?> GetUserOptionsAsync(string? keyWords);
+    Task<ListResult<WalletWithdrawalRequestViewModel>> GetWalletWithdrawalRequestsAsync(BasicFilterOptions filterOptions);
+    Task<TResult> ReviewWalletWithdrawalAsync(Guid id, string action, Guid adminId, string? note);
 }

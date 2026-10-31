@@ -13,6 +13,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices.Users;
+using Waffle.Core.IServices.Financials;
 using Waffle.Core.Options;
 using Waffle.Core.Services.Users;
 using Waffle.Entities.Users;
@@ -25,7 +26,7 @@ using Waffle.Modules.Users.Filters;
 
 namespace Waffle.Controllers.Users;
 
-public class UserController(IUserService _userService, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, IConfiguration _configuration, ICatalogService _catalogService, IOptions<SettingOptions> options) : BaseController
+public class UserController(IUserService _userService, IWalletService _walletService, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager, IConfiguration _configuration, ICatalogService _catalogService, IOptions<SettingOptions> options) : BaseController
 {
     private readonly SettingOptions _options = options.Value;
 
@@ -392,14 +393,40 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
         return Ok(TResult.Success);
     }
 
+    [HttpGet("profile/detail")]
+    public async Task<IActionResult> GetProfileDetailAsync()
+    {
+        var profile = await _userService.GetProfileDetailAsync(User.GetId());
+        return profile is null ? NotFound() : Ok(profile);
+    }
+
+    [HttpPut("profile/detail")]
+    public async Task<IActionResult> UpdateProfileDetailAsync([FromBody] UpdateProfileDetailArgs args) => Ok(await _userService.UpdateProfileDetailAsync(User.GetId(), args));
+
+    [HttpPut("profile/cover")]
+    public async Task<IActionResult> UpdateProfileCoverAsync([FromForm] ChangeAvatarProfileArgs args) => Ok(await _userService.ChangeCoverAsync(User.GetId(), args.File, $"{Request.Scheme}://{Request.Host.Value}"));
+
+    [HttpDelete("profile/cover")]
+    public async Task<IActionResult> RemoveProfileCoverAsync() => Ok(await _userService.RemoveCoverAsync(User.GetId()));
+
+    [HttpPut("profile/media-kit")]
+    public async Task<IActionResult> UpdateProfileMediaKitAsync([FromForm] ChangeAvatarProfileArgs args) => Ok(await _userService.UploadMediaKitAsync(User.GetId(), args.File, $"{Request.Scheme}://{Request.Host.Value}"));
+
     [HttpPut("profile/avatar")]
     public async Task<IActionResult> UpdateProfileAvatarAsync([FromForm] ChangeAvatarProfileArgs args) => Ok(await _userService.ChangeAvatarAsync(new ChangeAvatarArgs(User.GetId(), args.File), $"{Request.Scheme}://{Request.Host.Value}"));
 
     [HttpPost("profile/topup")]
-    public async Task<IActionResult> TopupProfileAsync([FromBody] ProfileTopupArgs args) => Ok(await _userService.TopupProfileAsync(User.GetId(), args));
+    public async Task<IActionResult> TopupProfileAsync([FromBody] ProfileTopupArgs args) => Ok(await _walletService.CreateTopupAsync(User.GetId(), args));
+
+    [HttpGet("profile/topup/{orderCode:int}")]
+    public async Task<IActionResult> TopupStatusAsync([FromRoute] int orderCode) => Ok(await _walletService.GetTopupStatusAsync(User.GetId(), orderCode));
 
     [HttpPost("profile/withdraw")]
-    public async Task<IActionResult> WithdrawProfileAsync([FromBody] ProfileWithdrawArgs args) => Ok(await _userService.WithdrawProfileAsync(User.GetId(), args));
+    public async Task<IActionResult> WithdrawProfileAsync([FromBody] ProfileWithdrawArgs args) => Ok(await _walletService.CreateWithdrawalAsync(User.GetId(), args));
+
+    [HttpGet("profile/withdrawals")]
+    public async Task<IActionResult> MyWithdrawalsAsync([FromQuery] BasicFilterOptions filterOptions)
+        => Ok(await _walletService.GetMyWithdrawalsAsync(User.GetId(), filterOptions));
 
     [HttpPost("reset-password"), Authorize(Roles = RoleName.Admin)]
     public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordArgs args)

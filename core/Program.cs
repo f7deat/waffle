@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -30,6 +31,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddHttpContextAccessor();
+var dataProtection = builder.Services.AddDataProtection();
+var keyRingPath = builder.Configuration["DataProtection:KeyRingPath"];
+if (!string.IsNullOrWhiteSpace(keyRingPath))
+{
+    Directory.CreateDirectory(keyRingPath);
+    dataProtection.PersistKeysToFileSystem(new DirectoryInfo(keyRingPath));
+}
 builder.Services.AddTransient<IHCAService, HCAService>();
 builder.Services.AddServices();
 builder.Services.AddHostedService<ArticleSchedulePublisher>();
@@ -81,6 +89,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+if (!app.Environment.IsDevelopment() && string.IsNullOrWhiteSpace(keyRingPath))
+{
+    app.Logger.LogWarning(
+        "DataProtection:KeyRingPath is not configured. Configure a durable shared key ring to keep withdrawal account numbers decryptable across restarts and instances.");
+}
 
 using (var scope = app.Services.CreateScope())
 {

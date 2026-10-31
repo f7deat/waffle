@@ -49,6 +49,21 @@ export async function apiFinancialWithdraw(data: {
   });
 }
 
+export async function apiFinancialWithdrawalRequests(params?: API.IFilter) {
+  return request(`financial/withdrawal-requests`, { params });
+}
+
+export async function apiReviewFinancialWithdrawal(
+  id: string,
+  action: 'approve' | 'paid' | 'reject',
+  note?: string,
+) {
+  return request(`financial/withdrawal-requests/${id}/review/${action}`, {
+    method: 'POST',
+    data: { note },
+  });
+}
+
 export async function apiFinancialUserOptions(params?: {
   keyWords?: string;
 }) {

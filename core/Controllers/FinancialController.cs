@@ -5,6 +5,7 @@ using Waffle.Core.Foundations;
 using Waffle.Core.IServices.Financials;
 using Waffle.Core.Services.Financials;
 using Waffle.Extensions;
+using Waffle.Models;
 
 namespace Waffle.Controllers;
 
@@ -26,6 +27,17 @@ public class FinancialController(IFinancialService financialService) : BaseContr
     [HttpGet("withdraw")]
     public async Task<IActionResult> GetWithdrawsAsync([FromQuery] FinancialTransactionFilterOptions filterOptions)
         => Ok(await financialService.GetWithdrawsAsync(filterOptions));
+
+    [HttpGet("withdrawal-requests")]
+    public async Task<IActionResult> GetWithdrawalRequestsAsync([FromQuery] BasicFilterOptions filterOptions)
+        => Ok(await financialService.GetWalletWithdrawalRequestsAsync(filterOptions));
+
+    [HttpPost("withdrawal-requests/{id:guid}/review/{action}")]
+    public async Task<IActionResult> ReviewWithdrawalRequestAsync(
+        [FromRoute] Guid id,
+        [FromRoute] string action,
+        [FromBody] FinancialWithdrawalReviewArgs args)
+        => Ok(await financialService.ReviewWalletWithdrawalAsync(id, action, User.GetId(), args.Note));
 
     [HttpPost("deposit")]
     public async Task<IActionResult> DepositAsync([FromBody] FinancialActionArgs args)

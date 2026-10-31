@@ -32,6 +32,23 @@ Learn more about Migration: https://learn.microsoft.com/en-us/ef/core/managing-s
 
 Open your browser and visit http://localhost:8000
 
+## Wallet payments
+
+Wallet deposits use PayOS. Configure these server-side settings through environment variables or another secret store; do not commit provider credentials:
+
+```text
+PayOS__ClientId
+PayOS__ApiKey
+PayOS__ChecksumKey
+PayOS__FrontendBaseUrl
+```
+
+`PayOS__FrontendBaseUrl` must be the HTTPS origin of the web app. Register `https://<api-host>/api/wallet/payos/webhook` as the PayOS webhook URL. Apply database migrations before enabling wallet operations.
+
+Withdrawal account numbers are encrypted with ASP.NET Core Data Protection. In production, set `DataProtection__KeyRingPath` to a durable directory shared by all API instances, restrict access to the application identity, and protect the key ring at rest. Back it up with the database: losing the keys makes stored withdrawal account numbers unreadable. Without this setting, the application logs a warning and uses the platform's default key storage.
+
+For local development only, an HTTP frontend URL can be allowed by setting `PayOS__AllowInsecureFrontendUrl=true` in the Development environment.
+
 ## 🚀 Deployment
 
 web.config: allow cors

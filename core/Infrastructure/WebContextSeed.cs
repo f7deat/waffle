@@ -21,7 +21,7 @@ public class WebContextSeed
 
         log.LogTrace("Context Seed is runing!");
 
-        var roles = new[] { RoleName.Admin, RoleName.Member, RoleName.Influencer };
+        var roles = new[] { RoleName.Admin, RoleName.Member, RoleName.Influencer, RoleName.Business };
         foreach (var roleName in roles)
         {
             if (!await roleManager.RoleExistsAsync(roleName))

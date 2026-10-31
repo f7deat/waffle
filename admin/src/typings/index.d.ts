@@ -79,6 +79,24 @@ declare namespace API {
         email?: string;
         balance: number;
     }
+
+    type WalletWithdrawalRequest = {
+        id: string;
+        userId: string;
+        userName?: string;
+        userEmail?: string;
+        amount: number;
+        bankName: string;
+        accountHolder: string;
+        accountNumber: string;
+        invoiceNumber: string;
+        status: 'Pending' | 'Approved' | 'Paid' | 'Rejected';
+        note?: string;
+        adminNote?: string;
+        createdAt: string;
+        updatedAt?: string;
+    }
+
     interface ListResult<T> {
         data: T[];
         total: number;

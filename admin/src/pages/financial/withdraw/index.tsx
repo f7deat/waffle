@@ -1,6 +1,12 @@
-import { apiFinancialUserOptions, apiFinancialWithdraw, apiFinancialWithdraws } from '@/services/financial';
+import {
+    apiFinancialUserOptions,
+    apiFinancialWithdraw,
+    apiFinancialWithdrawalRequests,
+    apiFinancialWithdraws,
+    apiReviewFinancialWithdrawal,
+} from '@/services/financial';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
-import { Alert, Button, Col, Form, Input, InputNumber, message, Row, Select, Table } from 'antd';
+import { Alert, Button, Col, Form, Input, InputNumber, message, Modal, Row, Select, Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
@@ -10,7 +16,9 @@ const WithdrawPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [history, setHistory] = useState<API.FinancialTransaction[]>([]);
+    const [withdrawalRequests, setWithdrawalRequests] = useState<API.WalletWithdrawalRequest[]>([]);
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
+    const [requestPagination, setRequestPagination] = useState({ current: 1, pageSize: 10, total: 0 });
     const [userOptions, setUserOptions] = useState<API.FinancialUserOption[]>([]);
 
     const formatMoney = (value?: number) => {
@@ -43,9 +51,26 @@ const WithdrawPage: React.FC = () => {
         }
     };
 
+    const loadWithdrawalRequests = async (
+        current = requestPagination.current,
+        pageSize = requestPagination.pageSize,
+    ) => {
+        setLoading(true);
+        try {
+            const response = await apiFinancialWithdrawalRequests({ current, pageSize });
+            setWithdrawalRequests(response?.data || []);
+            setRequestPagination({ current, pageSize, total: response?.total || 0 });
+        } catch {
+            message.error('Không thể tải các yêu cầu rút tiền.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         loadUsers();
         loadHistory(1, pagination.pageSize);
+        loadWithdrawalRequests(1, requestPagination.pageSize);
     }, []);
 
     const onFinish = async (values: { userId: string; amount: number; note?: string }) => {
@@ -70,6 +95,41 @@ const WithdrawPage: React.FC = () => {
         } finally {
             setSubmitting(false);
         }
+    };
+
+    const reviewRequest = (record: API.WalletWithdrawalRequest, action: 'approve' | 'paid' | 'reject') => {
+        const actionLabels = {
+            approve: 'Duyệt yêu cầu',
+            paid: 'Xác nhận đã chuyển khoản',
+            reject: 'Từ chối yêu cầu',
+        };
+        Modal.confirm({
+            title: actionLabels[action],
+            content: `${record.invoiceNumber} · ${record.accountHolder} · ${formatMoney(record.amount)}. ${
+                action === 'paid'
+                    ? 'Chỉ xác nhận sau khi đã chuyển khoản thành công.'
+                    : action === 'reject'
+                        ? 'Số tiền đã giữ chỗ sẽ được hoàn lại vào ví.'
+                        : 'Yêu cầu sẽ chuyển sang trạng thái đã duyệt, chưa xác nhận chuyển khoản.'
+            }`,
+            okText: actionLabels[action],
+            cancelText: 'Hủy',
+            okButtonProps: action === 'reject' ? { danger: true } : undefined,
+            onOk: async () => {
+                try {
+                    const response = await apiReviewFinancialWithdrawal(record.id, action);
+                    if (!response?.succeeded) {
+                        message.error(response?.message || 'Không thể cập nhật yêu cầu.');
+                        return;
+                    }
+                    message.success('Đã cập nhật yêu cầu rút tiền.');
+                    await loadWithdrawalRequests(requestPagination.current, requestPagination.pageSize);
+                    await loadHistory(1, pagination.pageSize);
+                } catch {
+                    message.error('Không thể cập nhật yêu cầu rút tiền.');
+                }
+            },
+        });
     };
 
     const columns: ColumnsType<API.FinancialTransaction> = useMemo(
@@ -125,6 +185,77 @@ const WithdrawPage: React.FC = () => {
         [],
     );
 
+    const requestColumns: ColumnsType<API.WalletWithdrawalRequest> = [
+        {
+            title: 'Mã yêu cầu',
+            dataIndex: 'invoiceNumber',
+            width: 190,
+        },
+        {
+            title: 'Người dùng',
+            render: (_, record) => (
+                <div>
+                    <div className='font-semibold'>{record.userName || '-'}</div>
+                    <div className='text-xs text-gray-500'>{record.userEmail || '-'}</div>
+                </div>
+            ),
+        },
+        {
+            title: 'Số tiền',
+            dataIndex: 'amount',
+            align: 'right',
+            width: 150,
+            render: (value: number) => <span className='font-semibold'>{formatMoney(value)}</span>,
+        },
+        {
+            title: 'Tài khoản nhận',
+            width: 260,
+            render: (_, record) => (
+                <div>
+                    <div className='font-medium'>{record.bankName} · {record.accountNumber}</div>
+                    <div className='text-xs text-gray-500'>{record.accountHolder}</div>
+                </div>
+            ),
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'status',
+            width: 140,
+            render: (status: API.WalletWithdrawalRequest['status']) => {
+                const color = status === 'Paid' ? 'green' : status === 'Rejected' ? 'red' : status === 'Approved' ? 'blue' : 'gold';
+                const label = status === 'Paid' ? 'Đã chuyển' : status === 'Rejected' ? 'Đã từ chối' : status === 'Approved' ? 'Đã duyệt' : 'Chờ duyệt';
+                return <Tag color={color}>{label}</Tag>;
+            },
+        },
+        {
+            title: 'Thời gian',
+            dataIndex: 'createdAt',
+            width: 160,
+            render: (value: string) => dayjs(value).format('DD/MM/YYYY HH:mm'),
+        },
+        {
+            title: 'Thao tác',
+            key: 'actions',
+            width: 240,
+            render: (_, record) => (
+                <Space wrap>
+                    {record.status === 'Pending' && (
+                        <>
+                            <Button size='small' type='primary' onClick={() => reviewRequest(record, 'approve')}>Duyệt</Button>
+                            <Button size='small' danger onClick={() => reviewRequest(record, 'reject')}>Từ chối</Button>
+                        </>
+                    )}
+                    {record.status === 'Approved' && (
+                        <>
+                            <Button size='small' type='primary' onClick={() => reviewRequest(record, 'paid')}>Đã chuyển khoản</Button>
+                            <Button size='small' danger onClick={() => reviewRequest(record, 'reject')}>Từ chối</Button>
+                        </>
+                    )}
+                </Space>
+            ),
+        },
+    ];
+
     return (
         <PageContainer title='Financial Withdraw'>
             <ProCard title='Tạo giao dịch rút tiền' className='mb-4'>
@@ -173,6 +304,30 @@ const WithdrawPage: React.FC = () => {
                         </Col>
                     </Row>
                 </Form>
+            </ProCard>
+
+            <ProCard title='Yêu cầu rút tiền từ người dùng' className='mb-4'>
+                <Alert
+                    className='mb-4'
+                    showIcon
+                    type='info'
+                    message='Số dư được giữ chỗ khi người dùng gửi yêu cầu. Chỉ chọn “Đã chuyển khoản” sau khi giao dịch ngân hàng thành công; từ chối sẽ hoàn lại số dư.'
+                />
+                <Table<API.WalletWithdrawalRequest>
+                    rowKey='id'
+                    loading={loading}
+                    columns={requestColumns}
+                    dataSource={withdrawalRequests}
+                    size='small'
+                    scroll={{ x: 1300 }}
+                    pagination={{
+                        current: requestPagination.current,
+                        pageSize: requestPagination.pageSize,
+                        total: requestPagination.total,
+                        showSizeChanger: true,
+                        onChange: (current, pageSize) => loadWithdrawalRequests(current, pageSize),
+                    }}
+                />
             </ProCard>
 
             <ProCard title='Lịch sử rút tiền'>

@@ -23,7 +23,17 @@ public class ApplicationUser : IdentityUser<Guid>
     public int? TeamId { get; set; }
     [StringLength(1024)]
     public string? Bio { get; set; }
+    [StringLength(2058)]
+    public string? CoverImage { get; set; }
+    [StringLength(256)]
+    public string? Tagline { get; set; }
+    public bool ShowFavoritePlacesOnMap { get; set; } = true;
+    public bool NotifyOnComments { get; set; } = true;
 
     public Team? Team { get; set; }
+    public InfluencerProfile? InfluencerProfile { get; set; }
+    public BusinessProfile? BusinessProfile { get; set; }
     public ICollection<SocialAccount>? SocialAccounts { get; set; }
+    public ICollection<UserActivityArea>? ActivityAreas { get; set; }
+    public ICollection<UserTag>? UserTags { get; set; }
 }

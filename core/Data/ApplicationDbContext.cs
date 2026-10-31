@@ -59,6 +59,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<TagCatalog> TagCatalogs { get; set; }
     public DbSet<Partner> Partners { get; set; }
     public DbSet<UserTopupTransaction> UserTopupTransactions { get; set; } = default!;
+    public DbSet<WalletTopupPayment> WalletTopupPayments { get; set; } = default!;
+    public DbSet<WalletWithdrawalRequest> WalletWithdrawalRequests { get; set; } = default!;
     #region Job
     public DbSet<JobOpportunity> JobOpportunities { get; set; } = default!;
     public DbSet<JobApplication> JobApplications { get; set; } = default!;
@@ -91,6 +93,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     #endregion
     #region User
     public DbSet<SocialAccount> SocialAccounts { get; set; }
+    public DbSet<UserActivityArea> UserActivityAreas { get; set; } = default!;
+    public DbSet<UserTag> UserTags { get; set; } = default!;
+    public DbSet<InfluencerProfile> InfluencerProfiles { get; set; } = default!;
+    public DbSet<BusinessProfile> BusinessProfiles { get; set; } = default!;
     #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -183,6 +189,55 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .WithMany(x => x.Members)
             .HasForeignKey(x => x.TeamId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<UserActivityArea>().HasKey(k => new { k.UserId, k.ProvinceId });
+        builder.Entity<UserActivityArea>().HasIndex(x => x.ProvinceId).HasDatabaseName("IDX_UserActivityArea_ProvinceId");
+        builder.Entity<UserActivityArea>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.ActivityAreas)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<UserActivityArea>()
+            .HasOne(x => x.Province)
+            .WithMany()
+            .HasForeignKey(x => x.ProvinceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<UserTag>().HasKey(k => new { k.UserId, k.TagId });
+        builder.Entity<UserTag>().HasIndex(x => x.TagId).HasDatabaseName("IDX_UserTag_TagId");
+        builder.Entity<UserTag>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.UserTags)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<UserTag>()
+            .HasOne(x => x.Tag)
+            .WithMany()
+            .HasForeignKey(x => x.TagId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<InfluencerProfile>()
+            .HasOne(x => x.User)
+            .WithOne(x => x.InfluencerProfile)
+            .HasForeignKey<InfluencerProfile>(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<BusinessProfile>()
+            .HasOne(x => x.User)
+            .WithOne(x => x.BusinessProfile)
+            .HasForeignKey<BusinessProfile>(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<WalletTopupPayment>()
+            .HasIndex(x => x.OrderCode)
+            .IsUnique();
+        builder.Entity<WalletTopupPayment>()
+            .HasIndex(x => new { x.UserId, x.CreatedAt });
+        builder.Entity<WalletWithdrawalRequest>()
+            .HasIndex(x => new { x.Status, x.CreatedAt });
+        builder.Entity<WalletWithdrawalRequest>()
+            .HasOne<ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         base.OnModelCreating(builder);
     }
