@@ -348,7 +348,12 @@ public class UserController(IUserService _userService, UserManager<ApplicationUs
     {
         var user = await _userManager.FindByIdAsync(args.Id.ToString());
         if (user is null) return BadRequest("User not found!");
-        if (await _userManager.IsInRoleAsync(user, RoleName.Admin) && user.Id != User.GetId()) return Unauthorized();
+        if (!User.IsInRole(RoleName.Admin))
+        {
+            if (user.Id != User.GetId()) return Forbid();
+            return Ok(await _userService.UpdateProfileAsync(user, args));
+        }
+
         return Ok(await _userService.UpdateAsync(user, args));
     }
 

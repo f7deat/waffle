@@ -101,12 +101,53 @@ public class UserService(UserManager<ApplicationUser> _userManager, IUserReposit
 
     public async Task<TResult> UpdateAsync(ApplicationUser user, ApplicationUser args)
     {
+        if (string.IsNullOrWhiteSpace(args.UserName)) return TResult.Failed("User name is required.");
+        if (args.UserName.Length > 256 || args.Email?.Length > 256 || args.PhoneNumber?.Length > 256)
+            return TResult.Failed("User name, email, and phone number must not exceed 256 characters.");
+        if (args.Name?.Length > 256 || args.Address?.Length > 512 || args.Avatar?.Length > 2058 || args.Bio?.Length > 1024)
+            return TResult.Failed("One or more profile fields exceed the maximum allowed length.");
+        if (args.AccessFailedCount < 0) return TResult.Failed("Access failed count cannot be negative.");
+        if (args.DistrictId.HasValue && !await _context.Districts.AnyAsync(x => x.Id == args.DistrictId.Value))
+            return TResult.Failed("District not found.");
+        if (args.TeamId.HasValue && !await _context.Teams.AnyAsync(x => x.Id == args.TeamId.Value))
+            return TResult.Failed("Team not found.");
+
+        user.UserName = args.UserName.Trim();
+        user.Email = string.IsNullOrWhiteSpace(args.Email) ? null : args.Email.Trim();
+        user.PhoneNumber = string.IsNullOrWhiteSpace(args.PhoneNumber) ? null : args.PhoneNumber.Trim();
+        user.Name = args.Name?.Trim();
+        user.Gender = args.Gender;
+        user.Address = args.Address;
+        user.DateOfBirth = args.DateOfBirth;
+        user.Amount = args.Amount;
+        user.Avatar = args.Avatar;
+        user.DistrictId = args.DistrictId;
+        user.TeamId = args.TeamId;
+        user.Bio = args.Bio;
+        user.EmailConfirmed = args.EmailConfirmed;
+        user.PhoneNumberConfirmed = args.PhoneNumberConfirmed;
+        user.TwoFactorEnabled = args.TwoFactorEnabled;
+        user.LockoutEnabled = args.LockoutEnabled;
+        user.LockoutEnd = args.LockoutEnd;
+        user.AccessFailedCount = args.AccessFailedCount;
+
+        var result = await _userManager.UpdateAsync(user);
+        return result.Succeeded
+            ? TResult.Success
+            : TResult.Failed(string.Join(" ", result.Errors.Select(error => error.Description)));
+    }
+
+    public async Task<TResult> UpdateProfileAsync(ApplicationUser user, ApplicationUser args)
+    {
         user.Name = args.Name;
         user.Gender = args.Gender;
         user.Address = args.Address;
         user.DateOfBirth = args.DateOfBirth;
-        await _userManager.UpdateAsync(user);
-        return TResult.Success;
+
+        var result = await _userManager.UpdateAsync(user);
+        return result.Succeeded
+            ? TResult.Success
+            : TResult.Failed(string.Join(" ", result.Errors.Select(error => error.Description)));
     }
 
     public Task<List<SocialAccountViewModel>> GetSocialAccountsAsync(Guid userId) => _context.SocialAccounts
@@ -487,9 +528,15 @@ public class UserService(UserManager<ApplicationUser> _userManager, IUserReposit
             user.Address,
             user.Amount,
             user.DistrictId,
+            user.TeamId,
+            user.Bio,
             user.CreatedAt,
             user.EmailConfirmed,
-            user.PhoneNumberConfirmed
+            user.PhoneNumberConfirmed,
+            user.TwoFactorEnabled,
+            user.LockoutEnabled,
+            user.LockoutEnd,
+            user.AccessFailedCount
         });
     }
 
