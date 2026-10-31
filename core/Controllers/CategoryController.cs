@@ -4,6 +4,7 @@ using Waffle.Core.Constants;
 using Waffle.Core.Foundations;
 using Waffle.Core.IServices;
 using Waffle.Core.Services.Categories.Filters;
+using Waffle.Core.Services.Categories.Results;
 using Waffle.Entities.Settings;
 
 namespace Waffle.Controllers;
@@ -23,6 +24,10 @@ public class CategoryController(ICategoryService categoryService) : BaseControll
 
     [HttpGet("list")]
     public async Task<IActionResult> GetListAsync([FromQuery] CategoryFilterOptions filterOptions) => Ok(await _categoryService.GetListAsync(filterOptions));
+
+    [HttpGet("tree")]
+    public async Task<IActionResult> GetTreeAsync([FromQuery] CategoryTreeFilterOptions filterOptions, CancellationToken cancellationToken) =>
+        Ok(new { data = await _categoryService.GetTreeAsync(filterOptions, cancellationToken) });
 
     [HttpGet("options")]
     public async Task<IActionResult> GetOptionsAsync([FromQuery] CategoryOptionFilterOptions filterOptions) => Ok(await _categoryService.GetOptionsAsync(filterOptions));

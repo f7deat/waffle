@@ -7,7 +7,7 @@ import {
   totalFileSize,
   updateFileContent,
 } from '@/services/file-service';
-import { apiFolderDelete, apiFolderList, apiFolderUpdate } from '@/services/folder';
+import { apiFolderDelete, apiFolderList, apiFolderTree, apiFolderUpdate, type FolderTreeItem } from '@/services/folder';
 import {
   ArrowsAltOutlined,
   ArrowUpOutlined,
@@ -55,6 +55,8 @@ import {
   Space,
   Statistic,
   Tag,
+  Tree,
+  type TreeDataNode,
   Typography,
   UploadFile,
 } from 'antd';
@@ -76,6 +78,40 @@ type FolderOption = {
   pathLabel: string;
 };
 
+const findFolderPath = (
+  folders: FolderTreeItem[],
+  targetId: string,
+  parentPath: FolderPathItem[] = [],
+): FolderPathItem[] | undefined => {
+  for (const folder of folders) {
+    const path = [...parentPath, { id: folder.id, name: folder.name }];
+    if (folder.id === targetId) {
+      return path;
+    }
+
+    const childPath = findFolderPath(folder.children, targetId, path);
+    if (childPath) {
+      return childPath;
+    }
+  }
+
+  return undefined;
+};
+
+const getFolderTreeKeys = (folders: FolderTreeItem[]): string[] =>
+  folders.flatMap((folder) => [
+    ...(folder.children.length > 0 ? [folder.id] : []),
+    ...getFolderTreeKeys(folder.children),
+  ]);
+
+const toFolderTreeData = (folders: FolderTreeItem[]): TreeDataNode[] =>
+  folders.map((folder) => ({
+    key: folder.id,
+    title: folder.name,
+    icon: <FolderFilled className="text-orange-500" />,
+    children: toFolderTreeData(folder.children),
+  }));
+
 const FilePage: React.FC = () => {
   const { Text, Title } = Typography;
   const actionRef = useRef<ActionType>(null);
@@ -86,6 +122,8 @@ const FilePage: React.FC = () => {
   const [count, setCount] = useState<number>(0);
   const [size, setSize] = useState<number>(0);
   const [folderTrail, setFolderTrail] = useState<FolderPathItem[]>([]);
+  const [folderTree, setFolderTree] = useState<FolderTreeItem[]>([]);
+  const [expandedFolderKeys, setExpandedFolderKeys] = useState<React.Key[]>([]);
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
   const [previewFile, setPreviewFile] = useState<API.FileListItem | null>(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
@@ -134,13 +172,29 @@ const FilePage: React.FC = () => {
     setSize(sizeResponse || 0);
   }, []);
 
+  const refreshFolderTree = useCallback(async () => {
+    try {
+      const response = await apiFolderTree();
+      const folders = response.data || [];
+      setFolderTree(folders);
+      setExpandedFolderKeys(getFolderTreeKeys(folders));
+    } catch (error: any) {
+      message.error(error?.data?.message || 'Không thể tải cây thư mục.');
+    }
+  }, []);
+
   useEffect(() => {
     refreshStats();
   }, [refreshStats]);
 
+  useEffect(() => {
+    refreshFolderTree();
+  }, [refreshFolderTree]);
+
   const reloadData = () => {
     actionRef.current?.reload();
     refreshStats();
+    refreshFolderTree();
   };
 
   const handleDelete = async (entity: API.FileListItem) => {
@@ -942,6 +996,32 @@ const FilePage: React.FC = () => {
           />
         </Col>
         <Col span={6}>
+          <ProCard className="mb-4" style={{ borderRadius: 14 }}>
+            <Space direction="vertical" size={8} style={{ width: '100%' }}>
+              <div className="flex justify-between items-center">
+                <Text strong>Cây thư mục</Text>
+                <Button type="link" onClick={() => goToFolderByTrailIndex(-1)}>
+                  Root
+                </Button>
+              </div>
+              <Tree
+                blockNode
+                selectedKeys={currentFolderId ? [currentFolderId] : []}
+                expandedKeys={expandedFolderKeys}
+                onExpand={(keys) => setExpandedFolderKeys(keys)}
+                treeData={toFolderTreeData(folderTree)}
+                onSelect={(keys) => {
+                  if (keys.length === 0) return;
+                  const path = findFolderPath(folderTree, String(keys[0]));
+                  if (path) {
+                    setFolderTrail(path);
+                    actionRef.current?.reload();
+                  }
+                }}
+              />
+            </Space>
+          </ProCard>
+
           <div className='mb-4'>
             <ProCard style={{ borderRadius: 14 }}>
               <Text type="secondary">Workspace Totals</Text>

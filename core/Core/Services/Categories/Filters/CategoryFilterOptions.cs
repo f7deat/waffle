@@ -10,6 +10,13 @@ public class CategoryFilterOptions : FilterOptions
     public int? ParentId { get; set; }
 }
 
+public class CategoryTreeFilterOptions
+{
+    public string Locale { get; set; } = "vi-VN";
+    public string? Name { get; set; }
+    public CategoryType? Type { get; set; }
+}
+
 public class CategoryOptionFilterOptions
 {
     public string? Locale { get; set; }

@@ -4,6 +4,7 @@ using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Services.Categories.Filters;
+using Waffle.Core.Services.Categories.Results;
 using Waffle.Data;
 using Waffle.Entities.Settings;
 using Waffle.Models;
@@ -91,6 +92,94 @@ public class CategoryRepository(ApplicationDbContext context, IHCAService hcaSer
                 parentId = c.ParentId
             })
             .ToListAsync<object>();
+    }
+
+    public async Task<IReadOnlyList<CategoryTreeItem>> GetTreeAsync(CategoryTreeFilterOptions filterOptions, CancellationToken cancellationToken)
+    {
+        var query = _context.Categories
+            .AsNoTracking()
+            .Where(category => !category.DeletedAt.HasValue);
+
+        if (!string.IsNullOrWhiteSpace(filterOptions.Locale))
+        {
+            query = query.Where(category => category.Locale == filterOptions.Locale);
+        }
+
+        if (filterOptions.Type.HasValue)
+        {
+            query = query.Where(category => category.Type == filterOptions.Type.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+        {
+            var keyword = filterOptions.Name.Trim().ToLower();
+            query = query.Where(category => category.Name.ToLower().Contains(keyword));
+        }
+
+        var categoryItems = await query
+            .OrderBy(category => category.Name)
+            .Select(category => new
+            {
+                category.Id,
+                category.Name,
+                category.Description,
+                category.NormalizedName,
+                category.ParentId,
+                category.Type,
+                category.Locale
+            })
+            .ToListAsync(cancellationToken);
+
+        var categories = categoryItems
+            .Select(category => new CategoryTreeItem(
+                category.Id,
+                category.Name,
+                category.Description,
+                category.NormalizedName,
+                category.ParentId,
+                category.Type,
+                category.Locale,
+                []))
+            .ToList();
+        var categoriesById = categories.ToDictionary(category => category.Id);
+        var roots = new List<CategoryTreeItem>();
+
+        bool HasCircularParent(int categoryId)
+        {
+            var visited = new HashSet<int>();
+            while (categoriesById.TryGetValue(categoryId, out var current))
+            {
+                if (!visited.Add(categoryId))
+                {
+                    return true;
+                }
+
+                if (current.ParentId is not int parentId)
+                {
+                    return false;
+                }
+
+                categoryId = parentId;
+            }
+
+            return false;
+        }
+
+        foreach (var category in categories)
+        {
+            if (category.ParentId is int parentId
+                && categoriesById.TryGetValue(parentId, out var parent)
+                && !HasCircularParent(category.Id))
+            {
+                parent.Children.Add(category);
+            }
+            else
+            {
+                roots.Add(category);
+            }
+        }
+
+        return roots;
     }
 
     public async Task<TResult> GetRandomsAsync(string locale)

@@ -4,6 +4,7 @@ using Waffle.Core.Foundations.Interfaces;
 using Waffle.Core.Foundations.Models;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.Services.Files.Filters;
+using Waffle.Core.Services.Files.Results;
 using Waffle.Data;
 using Waffle.Entities.Files;
 
@@ -14,7 +15,7 @@ public class FolderService(ApplicationDbContext _context, IHCAService _hcaServic
     public async Task<TResult> AddAsync(Folder args, string locale)
     {
         if (await _context.Folders.AnyAsync(x => x.Name == args.Name && x.Locale == locale && x.ParentId == args.ParentId)) return TResult.Failed("Folder existed!");
-        if (args.ParentId != null && !await _context.Folders.AnyAsync(x => x.Id == args.ParentId)) return TResult.Failed("Parent folder not found!");
+        if (args.ParentId != null && !await _context.Folders.AnyAsync(x => x.Id == args.ParentId && x.Locale == locale)) return TResult.Failed("Parent folder not found!");
         args.CreatedDate = DateTime.Now;
         args.Locale = locale;
         args.CreatedBy = _hcaService.GetUserId();
@@ -61,13 +62,59 @@ public class FolderService(ApplicationDbContext _context, IHCAService _hcaServic
         };
     }
 
+    public async Task<IReadOnlyList<FolderTreeItem>> TreeAsync(string locale, CancellationToken cancellationToken)
+    {
+        var folderItems = await _context.Folders
+            .AsNoTracking()
+            .Where(folder => folder.Locale == locale)
+            .OrderBy(folder => folder.Name)
+            .Select(folder => new { folder.Id, folder.ParentId, folder.Name })
+            .ToListAsync(cancellationToken);
+        var folders = folderItems
+            .Select(folder => new FolderTreeItem(folder.Id, folder.ParentId, folder.Name, []))
+            .ToList();
+
+        var foldersById = folders.ToDictionary(folder => folder.Id);
+        var roots = new List<FolderTreeItem>();
+
+        foreach (var folder in folders)
+        {
+            if (folder.ParentId is Guid parentId && foldersById.TryGetValue(parentId, out var parent))
+            {
+                parent.Children.Add(folder);
+            }
+            else
+            {
+                roots.Add(folder);
+            }
+        }
+
+        return roots;
+    }
+
     public async Task<TResult> UpdateAsync(Folder args)
     {
         var folder = await _context.Folders.FindAsync(args.Id);
         if (folder is null) return TResult.Failed("Folder not found!");
 
-        if (args.ParentId == folder.Id) return TResult.Failed("Parent folder is invalid!");
-        if (args.ParentId != null && !await _context.Folders.AnyAsync(x => x.Id == args.ParentId)) return TResult.Failed("Parent folder not found!");
+        if (args.ParentId != null)
+        {
+            var parentIds = await _context.Folders
+                .AsNoTracking()
+                .Where(x => x.Locale == folder.Locale)
+                .Select(x => new { x.Id, x.ParentId })
+                .ToDictionaryAsync(x => x.Id, x => x.ParentId);
+
+            var ancestorId = args.ParentId;
+            var visited = new HashSet<Guid>();
+            while (ancestorId is Guid id)
+            {
+                if (id == folder.Id || !visited.Add(id) || !parentIds.TryGetValue(id, out ancestorId))
+                {
+                    return TResult.Failed("Parent folder is invalid!");
+                }
+            }
+        }
 
         if (await _context.Folders.AnyAsync(x => x.Id != folder.Id && x.Name == args.Name && x.ParentId == args.ParentId && x.Locale == folder.Locale))
         {

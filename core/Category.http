@@ -1,0 +1,6 @@
+@baseUrl = https://localhost:50863
+@token = replace-with-a-valid-access-token
+
+### Get the category tree
+GET {{baseUrl}}/api/category/tree?locale=vi-VN&type=1
+Authorization: Bearer {{token}}

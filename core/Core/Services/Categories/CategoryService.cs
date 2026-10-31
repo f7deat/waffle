@@ -4,6 +4,7 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices;
 using Waffle.Core.Services.Categories.Filters;
+using Waffle.Core.Services.Categories.Results;
 using Waffle.Entities.Settings;
 using Waffle.Models;
 
@@ -37,6 +38,25 @@ public class CategoryService(ICategoryRepository _categoryRepository, ILogServic
     {
         var category = await _categoryRepository.FindAsync(args.Id);
         if (category is null || category.DeletedAt.HasValue) return TResult.Failed("Category not found!");
+
+        var parentId = args.ParentId;
+        var visitedParentIds = new HashSet<int>();
+        while (parentId is int id)
+        {
+            if (id == category.Id || !visitedParentIds.Add(id))
+            {
+                return TResult.Failed("Category parent is invalid!");
+            }
+
+            var parent = await _categoryRepository.FindAsync(id);
+            if (parent is null || parent.DeletedAt.HasValue || parent.Locale != category.Locale || parent.Type != args.Type)
+            {
+                return TResult.Failed("Category parent is invalid!");
+            }
+
+            parentId = parent.ParentId;
+        }
+
         category.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
         if (await _categoryRepository.IsExistsAsync(category.NormalizedName, category.Id))
         {
@@ -80,6 +100,9 @@ public class CategoryService(ICategoryRepository _categoryRepository, ILogServic
     }
 
     public Task<ListResult> GetListAsync(CategoryFilterOptions filterOptions) => _categoryRepository.GetListAsync(filterOptions);
+
+    public Task<IReadOnlyList<CategoryTreeItem>> GetTreeAsync(CategoryTreeFilterOptions filterOptions, CancellationToken cancellationToken) =>
+        _categoryRepository.GetTreeAsync(filterOptions, cancellationToken);
 
     public Task<IEnumerable<object>> GetOptionsAsync(CategoryOptionFilterOptions filterOptions) => _categoryRepository.GetOptionsAsync(filterOptions);
 

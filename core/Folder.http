@@ -1,0 +1,16 @@
+@baseUrl = https://localhost:50863
+@token = replace-with-a-valid-access-token
+
+### Get the folder tree
+GET {{baseUrl}}/api/folder/tree?locale=vi-VN
+Authorization: Bearer {{token}}
+
+### Create a root folder
+POST {{baseUrl}}/api/folder/add?locale=vi-VN
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Documents",
+  "parentId": null
+}

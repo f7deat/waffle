@@ -2,12 +2,13 @@ import {
     apiCategoryCreate,
     apiCategoryDelete,
     apiCategoryGet,
-    apiCategoryList,
     apiCategoryOptions,
+    apiCategoryTree,
     apiCategoryUpdate,
+    type CategoryTreeItem,
+    type SaveCategoryRequest,
 } from '@/services/settings/category';
 import {
-    ArrowUpOutlined,
     BranchesOutlined,
     CheckOutlined,
     DeleteOutlined,
@@ -39,45 +40,105 @@ const Index: React.FC = () => {
     const actionRef = useRef<ActionType>(null);
     const formRef = useRef<ProFormInstance>(null);
     const [openForm, setOpenForm] = useState<boolean>(false);
-    const [category, setCategory] = useState<any>(null);
+    const [category, setCategory] = useState<CategoryTreeItem | null>(null);
+    const [categories, setCategories] = useState<CategoryTreeItem[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<CategoryTreeItem | null>(null);
+
+    const allCategories = (items: CategoryTreeItem[]): CategoryTreeItem[] =>
+        items.flatMap((item) => [item, ...allCategories(item.children)]);
+    const categoryCount = (items: CategoryTreeItem[]): number =>
+        items.reduce((count, item) => count + 1 + categoryCount(item.children), 0);
+    const nestedCategoryCount = (items: CategoryTreeItem[]): number =>
+        items.reduce((count, item) => count + item.children.length + nestedCategoryCount(item.children), 0);
+    const flattenedCategories = allCategories(categories);
+    const articleCategoryCount = flattenedCategories.filter((item) => item.type === 1).length;
+    const productCategoryCount = flattenedCategories.filter((item) => item.type === 2).length;
+    const productCategoryRate = categoryCount(categories) > 0
+        ? Math.round((productCategoryCount / categoryCount(categories)) * 100)
+        : 0;
 
     useEffect(() => {
-        if (category?.id) {
-            apiCategoryGet(category.id).then((response) => {
+        let isCurrent = true;
+
+        const loadForm = async () => {
+            if (category?.id) {
+                const response = await apiCategoryGet(category.id);
+                if (!isCurrent) return;
+                if (!response.succeeded) {
+                    message.error(response.message || 'Không thể tải danh mục.');
+                    return;
+                }
+
                 const data = response.data;
                 formRef.current?.setFieldsValue({
                     id: data.id,
                     name: data.name,
                     description: data.description,
-                    parentId: data.parentId
+                    parentId: data.parentId,
+                    type: data.type,
+                    locale: data.locale,
                 });
+                return;
+            }
+
+            formRef.current?.setFieldsValue({
+                type: 1,
+                locale: 'vi-VN',
             });
-            return;
+        };
+
+        if (openForm) void loadForm();
+        return () => {
+            isCurrent = false;
+        };
+    }, [category, openForm]);
+
+    const onFinish = async (values: SaveCategoryRequest) => {
+        const response = values.id
+            ? await apiCategoryUpdate(values)
+            : await apiCategoryCreate(values);
+        if (!response.succeeded) {
+            message.error(response.message || 'Không thể lưu danh mục.');
+            return false;
         }
 
-        formRef.current?.setFieldsValue({
-            type: 1,
-            locale: 'vi-VN',
-        });
-    }, [category]);
-
-    const onFinish = async (values: any) => {
-        if (values.id) {
-            await apiCategoryUpdate(values);
-            message.success('Category updated successfully');
-        } else {
-            await apiCategoryCreate(values);
-            message.success('Category created successfully');
-        }
-
+        message.success(values.id ? 'Đã cập nhật danh mục.' : 'Đã tạo danh mục.');
         actionRef.current?.reload();
         setCategory(null);
         return true;
     };
 
     const handleDelete = async (id: number) => {
-        await apiCategoryDelete(id);
-        message.success('Category deleted successfully');
+        const response = await apiCategoryDelete(id);
+        if (!response.succeeded) {
+            message.error(response.message || 'Không thể xóa danh mục.');
+            return;
+        }
+
+        message.success('Đã xóa danh mục.');
+        actionRef.current?.reload();
+        if (selectedCategory?.id === id) {
+            setSelectedCategory(null);
+        }
+    };
+
+    const handleDetailSave = async () => {
+        if (!selectedCategory) return;
+
+        const response = await apiCategoryUpdate({
+            id: selectedCategory.id,
+            name: selectedCategory.name,
+            description: selectedCategory.description ?? undefined,
+            parentId: selectedCategory.parentId,
+            type: selectedCategory.type,
+            locale: selectedCategory.locale,
+        });
+        if (!response.succeeded) {
+            message.error(response.message || 'Không thể cập nhật danh mục.');
+            return;
+        }
+
+        message.success('Đã cập nhật danh mục.');
         actionRef.current?.reload();
     };
 
@@ -130,7 +191,7 @@ const Index: React.FC = () => {
                             </span>
                             <div className="flex items-baseline gap-2">
                                 <span className="font-headline-xl text-headline-xl text-on-surface">
-                                    18
+                                    {categoryCount(categories)}
                                 </span>
                                 <span className="font-label-md text-label-md text-on-surface-variant">
                                     danh mục
@@ -145,8 +206,8 @@ const Index: React.FC = () => {
                     </div>
                     <div className="mt-4 flex items-center gap-2">
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-code-sm text-code-sm">
-                            <span className="w-1.5 h-1.5 rounded-full bg-secondary" />8 mục cha •
-                            10 mục con
+                            <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+                            {categories.length} mục cha • {nestedCategoryCount(categories)} mục con
                         </span>
                     </div>
                 </div>
@@ -155,14 +216,14 @@ const Index: React.FC = () => {
                     <div className="flex items-start justify-between">
                         <div className="space-y-1">
                             <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
-                                Tổng thẻ bài viết
+                                Danh mục Article
                             </span>
                             <div className="flex items-baseline gap-2">
                                 <span className="font-headline-xl text-headline-xl text-on-surface">
-                                    482
+                                    {articleCategoryCount}
                                 </span>
                                 <span className="font-label-md text-label-md text-on-surface-variant">
-                                    hashtag
+                                    danh mục
                                 </span>
                             </div>
                         </div>
@@ -173,13 +234,7 @@ const Index: React.FC = () => {
                         </div>
                     </div>
                     <div className="mt-space-md flex items-center gap-2 text-on-surface-variant font-code-sm text-code-sm">
-                        <span className="inline-flex items-center font-label-sm text-label-sm text-secondary bg-surface-container-high px-1.5 py-0.5 rounded">
-                            <span className="material-symbols-outlined text-[14px]">
-                                <ArrowUpOutlined />
-                            </span>{" "}
-                            +24
-                        </span>
-                        <span>tạo mới trong 7 ngày</span>
+                        <span>Đồng bộ từ API danh mục</span>
                     </div>
                 </div>
                 {/* Stat 3 */}
@@ -187,11 +242,11 @@ const Index: React.FC = () => {
                     <div className="flex items-start justify-between">
                         <div className="space-y-1">
                             <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
-                                Tỷ lệ chuẩn hóa SEO
+                                Danh mục Product
                             </span>
                             <div className="flex items-baseline gap-2">
                                 <span className="font-headline-xl text-headline-xl text-on-surface">
-                                    96.5%
+                                    {productCategoryCount}
                                 </span>
                             </div>
                         </div>
@@ -205,11 +260,11 @@ const Index: React.FC = () => {
                         <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
                             <div
                                 className="bg-secondary h-full rounded-full"
-                                style={{ width: "96.5%" }}
+                                style={{ width: `${productCategoryRate}%` }}
                             />
                         </div>
                         <span className="font-code-sm text-code-sm text-on-surface-variant">
-                            17/18
+                            {productCategoryCount}/{categoryCount(categories)}
                         </span>
                     </div>
                 </div>
@@ -218,13 +273,13 @@ const Index: React.FC = () => {
                     <div className="flex items-start justify-between">
                         <div className="space-y-1 min-w-0">
                             <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
-                                Category sôi nổi nhất
+                                Danh mục đang chọn
                             </span>
                             <div
                                 className="truncate font-headline-md text-headline-md text-on-surface"
-                                title="Gaming & Esports"
+                                title={selectedCategory?.name ?? ''}
                             >
-                                Gaming &amp; Esports
+                                {selectedCategory?.name ?? 'Chưa chọn danh mục'}
                             </div>
                         </div>
                         <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
@@ -234,9 +289,9 @@ const Index: React.FC = () => {
                         </div>
                     </div>
                     <div className="mt-space-md flex items-center justify-between text-on-surface-variant font-code-sm text-code-sm">
-                        <span>512 bài viết</span>
+                        <span>{selectedCategory?.locale ?? 'vi-VN'}</span>
                         <span className="font-label-md text-label-md text-secondary">
-                            42.8% tổng traffic
+                            {selectedCategory ? (selectedCategory.type === 2 ? 'Product' : 'Article') : '—'}
                         </span>
                     </div>
                 </div>
@@ -250,7 +305,7 @@ const Index: React.FC = () => {
                         </span>
                         <span>Cây chuyên mục (Hierarchical Categories)</span>
                         <span className="px-2 py-0.5 rounded-full bg-white/20 font-code-sm text-code-sm text-on-primary">
-                            18
+                            {categoryCount(categories)}
                         </span>
                     </button>
                     <Link to="/setting/tag">
@@ -282,8 +337,29 @@ const Index: React.FC = () => {
                 <div className="xl:col-span-7 space-y-4">
                     <ProTable
                         actionRef={actionRef}
-                        request={apiCategoryList}
+                        request={async (params) => {
+                            const response = await apiCategoryTree({
+                                locale: 'vi-VN',
+                                name: params.name,
+                                type: params.type,
+                            });
+                            const data = response.data ?? [];
+                            setCategories(data);
+                            setSelectedCategory((current) => {
+                                const flatData = allCategories(data);
+                                return current && flatData.some((item) => item.id === current.id)
+                                    ? flatData.find((item) => item.id === current.id) ?? null
+                                    : flatData[0] ?? null;
+                            });
+
+                            return {
+                                data,
+                                success: true,
+                                total: categoryCount(data),
+                            };
+                        }}
                         rowKey={'id'}
+                        pagination={false}
                         columns={[
                             {
                                 title: '#',
@@ -295,6 +371,9 @@ const Index: React.FC = () => {
                             {
                                 title: 'Name',
                                 dataIndex: 'name',
+                                render: (_, record) => (
+                                    <a onClick={() => setSelectedCategory(record)}>{record.name}</a>
+                                ),
                             },
                             {
                                 title: 'Description',
@@ -311,7 +390,6 @@ const Index: React.FC = () => {
                                     2: { text: 'Product' },
                                 },
                                 render: (_, record) => renderType(record.type),
-                                search: false
                             },
                             {
                                 title: <SettingOutlined />,
@@ -326,6 +404,7 @@ const Index: React.FC = () => {
                                         icon={<EditOutlined />}
                                         onClick={() => {
                                             setCategory(record);
+                                            setSelectedCategory(record);
                                             setOpenForm(true);
                                         }}
                                     />,
@@ -355,7 +434,7 @@ const Index: React.FC = () => {
                                 className="text-on-surface font-label-md text-label-md cursor-pointer"
                                 htmlFor="selectAllCats"
                             >
-                                Chọn tất cả 18 chuyên mục
+                                Chọn tất cả {categoryCount(categories)} chuyên mục
                             </label>
                         </div>
                         <div className="flex items-center gap-2">
@@ -376,20 +455,20 @@ const Index: React.FC = () => {
                             <div className="space-y-0.5">
                                 <div className="flex items-center gap-2">
                                     <span className="font-code-sm text-code-sm text-secondary bg-blue-100 px-2 py-0.5 rounded font-medium">
-                                        #CAT-03
+                                        {selectedCategory ? `#CAT-${selectedCategory.id}` : '#CAT'}
                                     </span>
                                     <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm">
                                         <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
-                                        Đang kích hoạt
+                                        {selectedCategory ? selectedCategory.locale : 'Chưa chọn'}
                                     </span>
                                 </div>
                                 <h2 className="font-headline-md text-headline-md text-on-surface pt-1">
-                                    Chỉnh sửa: Gaming &amp; Esports
+                                    {selectedCategory ? `Chỉnh sửa: ${selectedCategory.name}` : 'Chọn danh mục để chỉnh sửa'}
                                 </h2>
                             </div>
                             <a
                                 className="inline-flex items-center gap-1 text-secondary hover:text-on-secondary-container font-label-sm text-label-sm"
-                                href="https://defzone.net/gaming-esports"
+                                href={selectedCategory?.normalizedName ? `https://defzone.net/${selectedCategory.normalizedName}` : undefined}
                                 target="_blank"
                             >
                                 <span>defzone.net</span>
@@ -408,7 +487,8 @@ const Index: React.FC = () => {
                                 <input
                                     className="w-full px-3 py-2 bg-blue-100 rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:bg-white focus:ring-2 focus:ring-secondary transition-all"
                                     type="text"
-                                    defaultValue="Gaming & Esports"
+                                    value={selectedCategory?.name ?? ''}
+                                    onChange={(event) => setSelectedCategory((current) => current ? { ...current, name: event.target.value } : current)}
                                 />
                             </div>
                             <div className="space-y-space-xs">
@@ -422,7 +502,8 @@ const Index: React.FC = () => {
                                     <input
                                         className="w-full px-1.5 py-2 bg-transparent text-body-md font-body-md text-secondary font-medium focus:outline-none"
                                         type="text"
-                                        defaultValue="gaming-esports"
+                                        value={selectedCategory?.normalizedName ?? ''}
+                                        readOnly
                                     />
                                     <button
                                         className="pr-space-md text-on-surface-variant hover:text-on-surface"
@@ -440,11 +521,20 @@ const Index: React.FC = () => {
                                     <label className="block font-label-md text-label-md text-on-surface">
                                         Chuyên mục cha
                                     </label>
-                                    <select className="w-full px-3 py-2 bg-blue-100 rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary cursor-pointer">
-                                        <option selected>[Không có - Là danh mục gốc]</option>
-                                        <option>Công nghệ</option>
-                                        <option>Phần cứng PC (Hardware)</option>
-                                        <option>Xu hướng &amp; Đời sống số</option>
+                                    <select
+                                        className="w-full px-3 py-2 bg-blue-100 rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary cursor-pointer"
+                                        value={selectedCategory?.parentId ?? ''}
+                                        onChange={(event) => setSelectedCategory((current) => current ? {
+                                            ...current,
+                                            parentId: event.target.value ? Number(event.target.value) : null,
+                                        } : current)}
+                                    >
+                                        <option value="">[Không có - Là danh mục gốc]</option>
+                                        {flattenedCategories
+                                            .filter((item) => item.id !== selectedCategory?.id && item.type === selectedCategory?.type)
+                                            .map((item) => (
+                                                <option key={item.id} value={item.id}>{item.name}</option>
+                                            ))}
                                     </select>
                                 </div>
                                 <div className="space-y-space-xs">
@@ -466,15 +556,14 @@ const Index: React.FC = () => {
                                         Mô tả chuyên mục (Sapo / Excerpt)
                                     </label>
                                     <span className="font-code-sm text-code-sm text-on-surface-variant">
-                                        126/250 ký tự
+                                        {(selectedCategory?.description ?? '').length}/512 ký tự
                                     </span>
                                 </div>
                                 <textarea
                                     className="w-full px-3 py-2 bg-blue-100 rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:bg-white focus:ring-2 focus:ring-secondary transition-all resize-none"
                                     rows={3}
-                                    defaultValue={
-                                        "Cập nhật tin tức nhanh nhất về ngành công nghiệp game, cẩm nang game thủ, giải đấu thể thao điện tử trong nước và quốc tế."
-                                    }
+                                    value={selectedCategory?.description ?? ''}
+                                    onChange={(event) => setSelectedCategory((current) => current ? { ...current, description: event.target.value } : current)}
                                 />
                             </div>
                             {/* Category Banner & Icon (Image pipeline standard) */}
@@ -688,14 +777,21 @@ const Index: React.FC = () => {
                         </div>
                         {/* Form Action Buttons */}
                         <div className="flex items-center justify-between pt-space-md border-t border-surface-container">
-                            <button className="px-3 py-2 rounded-lg hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md transition-colors">
+                            <button
+                                className="px-3 py-2 rounded-lg hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md transition-colors"
+                                onClick={() => actionRef.current?.reload()}
+                            >
                                 Hủy thay đổi
                             </button>
                             <div className="flex items-center gap-space-sm">
                                 <button className="px-3 py-2 rounded-lg bg-slate-200 hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors">
                                     Lưu nháp
                                 </button>
-                                <button className="px-space-xl py-2 rounded-lg bg-primary text-on-primary hover:bg-on-surface-variant font-label-md text-label-md transition-all shadow-[0_2px_8px_rgba(11,28,48,0.15)] flex items-center gap-1.5">
+                                <button
+                                    className="px-space-xl py-2 rounded-lg bg-primary text-on-primary hover:bg-on-surface-variant font-label-md text-label-md transition-all shadow-[0_2px_8px_rgba(11,28,48,0.15)] flex items-center gap-1.5"
+                                    disabled={!selectedCategory}
+                                    onClick={() => void handleDetailSave()}
+                                >
                                     <span className="material-symbols-outlined text-[18px] text-tertiary-fixed-dim">
                                         save
                                     </span>
@@ -1106,6 +1202,8 @@ const Index: React.FC = () => {
                 onFinish={onFinish}
             >
                 <ProFormDigit name="id" hidden />
+                <ProFormDigit name="type" hidden />
+                <ProFormText name="locale" hidden />
                 <ProFormText
                     name="name"
                     label="Tên danh mục"
@@ -1121,7 +1219,12 @@ const Index: React.FC = () => {
                     name="parentId"
                     label="Parent Category"
                     showSearch
-                    request={apiCategoryOptions}
+                    request={(params) => apiCategoryOptions({
+                        ...params,
+                        locale: formRef.current?.getFieldValue('locale') || 'vi-VN',
+                        type: formRef.current?.getFieldValue('type') || 1,
+                        excludeId: category?.id,
+                    })}
                 />
             </ModalForm>
         </PageContainer>

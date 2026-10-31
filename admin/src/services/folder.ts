@@ -1,9 +1,22 @@
 import { request } from "@umijs/max";
 
-export async function apiAddFolder(data: any) {
+export type FolderTreeItem = {
+    id: string;
+    parentId?: string | null;
+    name: string;
+    children: FolderTreeItem[];
+};
+
+type CreateFolderRequest = {
+    name: string;
+    parentId?: string | null;
+};
+
+export async function apiAddFolder(data: CreateFolderRequest, locale = 'vi-VN') {
     return request(`folder/add`, {
         method: 'POST',
-        data
+        data,
+        params: { locale },
     });
 }
 
@@ -30,5 +43,12 @@ export async function apiFolderList(params: {
     return request(`folder/list`, {
         method: 'GET',
         params
+    });
+}
+
+export async function apiFolderTree(params: { locale?: string } = {}) {
+    return request<{ data: FolderTreeItem[] }>('folder/tree', {
+        method: 'GET',
+        params,
     });
 }
