@@ -14,6 +14,7 @@ import {
     ProFormSwitch,
     ProFormText,
     ProFormTextArea,
+    ProFormTreeSelect,
 } from '@ant-design/pro-components';
 import { history, useParams, useRequest } from '@umijs/max';
 import { Button, Col, message, Row } from 'antd';
@@ -21,7 +22,8 @@ import type { RcFile } from 'antd/lib/upload';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import FormEditor from '@/components/editorjs/form-editor';
-import { apiCategoryOptions } from '@/services/settings/category';
+import { apiArticleCategoryTreeOptions } from '@/services/settings/category';
+import { apiTagOptions } from '@/services/tag';
 
 const Index: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -53,6 +55,7 @@ const Index: React.FC = () => {
             normalizedName: article.normalizedName,
             categoryId: article.categoryId,
             isFeatured: article.isFeatured,
+            tagIds: article.tagIds || article.tags?.map((tag: { tagId: string }) => tag.tagId) || [],
             publishedAt: article.scheduledAt
                 ? dayjs(article.scheduledAt)
                 : article.publishedAt
@@ -176,7 +179,19 @@ const Index: React.FC = () => {
                     <div className="md:w-96">
                         <div className="mb-4">
                             <ProCard title="Thông tin phân loại">
-                                <ProFormSelect name="categoryId" showSearch label="Danh mục" request={apiCategoryOptions} />
+                                <ProFormTreeSelect
+                                    name="categoryId"
+                                    label="Danh mục"
+                                    request={() => apiArticleCategoryTreeOptions({ locale: article?.locale || 'vi-VN' })}
+                                    fieldProps={{ showSearch: true, treeDefaultExpandAll: true, treeNodeFilterProp: 'label' }}
+                                />
+                                <ProFormSelect
+                                    name="tagIds"
+                                    label="Thẻ bài viết"
+                                    mode="multiple"
+                                    request={apiTagOptions}
+                                    placeholder="Chọn thẻ"
+                                />
                                 <ProFormDateTimePicker name="publishedAt" label="Ngày xuất bản" width="xl" />
                                 <ProFormSwitch name="isFeatured" label="Bài viết tiêu điểm" />
                             </ProCard>

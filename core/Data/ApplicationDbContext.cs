@@ -22,6 +22,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<WebsitePage> WebsitePages { get; set; } = default!;
     public DbSet<Article> Articles { get; set; }
     public DbSet<ArticleEditorialDetail> ArticleEditorialDetails { get; set; } = default!;
+    public DbSet<ArticleTag> ArticleTags { get; set; } = default!;
     public DbSet<Catalog> Catalogs { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<CommentReport> CommentReports { get; set; }
@@ -106,12 +107,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<ProductVariant>().HasIndex(x => x.ProductId).HasDatabaseName("IDX_ProductVariant_ProductId");
         builder.Entity<ProductImage>().HasIndex(x => x.ProductId).HasDatabaseName("IDX_ProductImage_ProductId");
         builder.Entity<ProductTag>().HasIndex(x => x.TagId).HasDatabaseName("IDX_ProductTag_TagId");
+        builder.Entity<ArticleTag>().HasIndex(x => x.TagId).HasDatabaseName("IDX_ArticleTag_TagId");
 
         builder.Entity<WorkItem>().HasKey(k => new { k.WorkId, k.CatalogId });
         builder.Entity<Collection>().HasKey(k => new { k.CatalogId, k.CollectionId });
         builder.Entity<NotificationUser>().HasKey(k => new { k.NotificationId, k.UserId });
         builder.Entity<TagCatalog>().HasKey(tc => new { tc.CatalogId, tc.TagId });
         builder.Entity<ProductTag>().HasKey(k => new { k.ProductId, k.TagId });
+        builder.Entity<ArticleTag>().HasKey(k => new { k.ArticleId, k.TagId });
         builder.Entity<WebsitePage>().HasIndex(x => x.PageKey).IsUnique();
         builder.Entity<Article>().HasIndex(x => x.ScheduledAt);
         builder.Entity<ArticleEditorialDetail>()
@@ -154,6 +157,18 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<ProductTag>()
             .HasOne(x => x.Tag)
             .WithMany()
+            .HasForeignKey(x => x.TagId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ArticleTag>()
+            .HasOne(x => x.Article)
+            .WithMany(x => x.ArticleTags)
+            .HasForeignKey(x => x.ArticleId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<ArticleTag>()
+            .HasOne(x => x.Tag)
+            .WithMany(x => x.ArticleTags)
             .HasForeignKey(x => x.TagId)
             .OnDelete(DeleteBehavior.Cascade);
 

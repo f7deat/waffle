@@ -14,6 +14,7 @@ export type ArticleListItem = {
     categoryName?: string;
     readingMinutes?: number;
     isFeatured?: boolean;
+    tags?: { tagId: string; name: string }[];
     creatorName?: string;
     creatorUserName?: string;
     creatorAvatar?: string;

@@ -10,5 +10,6 @@ public class UpdateArticleArgs
     public DateTimeOffset? PublishedAt { get; set; }
     public int? CategoryId { get; set; }
     public bool IsFeatured { get; set; }
+    public List<Guid>? TagIds { get; set; }
     public ArticleEditorialDetailArgs? Editorial { get; set; }
 }

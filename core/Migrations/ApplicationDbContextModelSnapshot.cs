@@ -1941,6 +1941,22 @@ namespace Waffle.Migrations
                     b.ToTable("ShortLinks");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.Tags.ArticleTag", b =>
+                {
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ArticleId", "TagId");
+
+                    b.HasIndex("TagId")
+                        .HasDatabaseName("IDX_ArticleTag_TagId");
+
+                    b.ToTable("ArticleTags");
+                });
+
             modelBuilder.Entity("Waffle.Entities.Tags.Tag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2589,6 +2605,25 @@ namespace Waffle.Migrations
                     b.Navigation("Notification");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.Tags.ArticleTag", b =>
+                {
+                    b.HasOne("Waffle.Entities.Article", "Article")
+                        .WithMany("ArticleTags")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Waffle.Entities.Tags.Tag", "Tag")
+                        .WithMany("ArticleTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Waffle.Entities.Tags.TagCatalog", b =>
                 {
                     b.HasOne("Waffle.Entities.Catalog", "Catalog")
@@ -2639,6 +2674,8 @@ namespace Waffle.Migrations
 
             modelBuilder.Entity("Waffle.Entities.Article", b =>
                 {
+                    b.Navigation("ArticleTags");
+
                     b.Navigation("EditorialDetail");
                 });
 
@@ -2733,6 +2770,11 @@ namespace Waffle.Migrations
                     b.Navigation("Articles");
 
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.Tags.Tag", b =>
+                {
+                    b.Navigation("ArticleTags");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Users.ApplicationUser", b =>

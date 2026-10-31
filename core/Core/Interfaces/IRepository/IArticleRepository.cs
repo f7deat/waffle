@@ -11,6 +11,7 @@ public interface IArticleRepository : IAsyncRepository<Article>
 {
     Task<Article?> FindByNameAsync(string normalizedName);
     Task<Article?> FindWithEditorialDetailAsync(Guid id);
+    Task<bool> AreTagIdsValidAsync(IEnumerable<Guid> tagIds);
     Task<TResult> GetByNameAsync(string normalizedName);
     Task<TResult> GetChartDataAsync(string locale);
     Task<int> GetCurrentMonthAsync(string locale);

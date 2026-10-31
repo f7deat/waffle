@@ -87,7 +87,8 @@ public class CategoryRepository(ApplicationDbContext context, IHCAService hcaSer
             .Select(c => new
             {
                 label = c.Name,
-                value = c.Id
+                value = c.Id,
+                parentId = c.ParentId
             })
             .ToListAsync<object>();
     }

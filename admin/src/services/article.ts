@@ -23,6 +23,8 @@ export type ArticleDetailType = ArticleListItem & {
   content: string;
   categoryId?: number;
   isFeatured?: boolean;
+  tagIds?: string[];
+  tags?: { tagId: string; name: string }[];
   editorial?: ArticleEditorialDetail;
 }
 
@@ -152,6 +154,7 @@ export async function updateArticle(data: {
   publishedAt?: string | null;
   categoryId?: number;
   isFeatured?: boolean;
+  tagIds?: string[];
   editorial?: ArticleEditorialDetail;
 }) {
   return request<ArticleMutationResult>('article', {

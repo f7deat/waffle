@@ -19,7 +19,15 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
     public Task<Article?> FindWithEditorialDetailAsync(Guid id) =>
         _context.Articles
             .Include(article => article.EditorialDetail)
+            .Include(article => article.ArticleTags)
+                .ThenInclude(articleTag => articleTag.Tag)
             .FirstOrDefaultAsync(article => article.Id == id);
+
+    public async Task<bool> AreTagIdsValidAsync(IEnumerable<Guid> tagIds)
+    {
+        var distinctTagIds = tagIds.Distinct().ToList();
+        return await _context.Tags.CountAsync(tag => distinctTagIds.Contains(tag.Id)) == distinctTagIds.Count;
+    }
 
     private sealed record ArticleScheduleRaw(
         Guid Id,
@@ -218,6 +226,8 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
     {
         var article = await _context.Articles
             .Include(a => a.EditorialDetail)
+            .Include(a => a.ArticleTags)
+                .ThenInclude(articleTag => articleTag.Tag)
             .Include(a => a.Category)
             .FirstOrDefaultAsync(a =>
             a.NormalizedName == normalizedName
@@ -246,6 +256,11 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
             CategoryId = article.CategoryId,
             CategoryName = article.Category?.Name,
             IsFeatured = article.IsFeatured,
+            TagIds = article.ArticleTags.Select(articleTag => articleTag.TagId).ToList(),
+            Tags = article.ArticleTags
+                .Where(articleTag => articleTag.Tag is not null)
+                .Select(articleTag => new { articleTag.TagId, articleTag.Tag!.Name })
+                .ToList(),
             Editorial = ToEditorialResponse(article.EditorialDetail),
             CreatorName = user?.Name,
             CreatorAvatar = user?.Avatar,

@@ -195,6 +195,7 @@ const Page = async ({ params }: { params: Params }) => {
                         {editorial?.spotlightLabel && <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-900">{editorial.spotlightLabel}</span>}
                         {article.categoryName && <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">{article.categoryName}</span>}
                         {article.isFeatured && <span className="rounded-full bg-rose-50 px-3 py-1 text-sm font-semibold text-rose-700">Tiêu điểm</span>}
+                        {article.tags?.map((tag) => <span key={tag.tagId} className="rounded-full bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-800">{tag.name}</span>)}
                     </div>
                     <div className="mt-5 max-w-4xl">
                         <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-950 md:text-5xl">{article.name}</h1>

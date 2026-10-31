@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Waffle.Core.Foundations.Interfaces;
 using Waffle.Entities.Settings;
+using Waffle.Entities.Tags;
 
 namespace Waffle.Entities;
 
@@ -29,4 +30,5 @@ public class Article : AuditEntity, ISoftDelete, ILocale
 
     public Category? Category { get; set; }
     public ArticleEditorialDetail? EditorialDetail { get; set; }
+    public ICollection<ArticleTag> ArticleTags { get; set; } = [];
 }

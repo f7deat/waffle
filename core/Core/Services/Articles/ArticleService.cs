@@ -7,6 +7,7 @@ using Waffle.Core.Services.Articles.Args;
 using Waffle.Core.Services.Articles.Filters;
 using Waffle.Core.Services.Articles.Models;
 using Waffle.Entities;
+using Waffle.Entities.Tags;
 using Waffle.Models;
 using System.Text.Json;
 
@@ -88,6 +89,9 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
 
             var article = await _articleRepository.FindWithEditorialDetailAsync(args.Id);
             if (article is null || article.DeletedAt.HasValue) return TResult.Failed("Article not found");
+            if (args.TagIds is not null && !await _articleRepository.AreTagIdsValidAsync(args.TagIds))
+                return TResult.Failed("One or more selected tags do not exist.");
+
             article.NormalizedName = SeoHelper.ToSeoFriendly(args.Name);
             article.Name = args.Name;
             article.Description = args.Description;
@@ -95,6 +99,15 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
             article.Content = args.Content;
             article.CategoryId = args.CategoryId;
             article.IsFeatured = args.IsFeatured;
+            if (args.TagIds is not null)
+            {
+                var tagIds = args.TagIds.ToHashSet();
+                foreach (var articleTag in article.ArticleTags.Where(articleTag => !tagIds.Contains(articleTag.TagId)).ToList())
+                    article.ArticleTags.Remove(articleTag);
+                var existingTagIds = article.ArticleTags.Select(articleTag => articleTag.TagId).ToHashSet();
+                foreach (var tagId in tagIds.Except(existingTagIds))
+                    article.ArticleTags.Add(new ArticleTag { ArticleId = article.Id, TagId = tagId });
+            }
             if (args.Editorial is not null)
             {
                 var editorial = article.EditorialDetail ?? new ArticleEditorialDetail { ArticleId = article.Id };
@@ -222,6 +235,11 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
             article.Content,
             article.CategoryId,
             article.IsFeatured,
+            TagIds = article.ArticleTags.Select(articleTag => articleTag.TagId).ToList(),
+            Tags = article.ArticleTags
+                .Where(articleTag => articleTag.Tag is not null)
+                .Select(articleTag => new { articleTag.TagId, articleTag.Tag!.Name })
+                .ToList(),
             Editorial = ToEditorialResponse(article.EditorialDetail),
             article.Locale,
             article.CreatedDate,

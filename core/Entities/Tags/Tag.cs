@@ -8,4 +8,5 @@ public class Tag : BaseEntity
     public string Name { get; set; } = default!;
     [StringLength(256)]
     public string NormalizedName { get; set; } = default!;
+    public ICollection<ArticleTag> ArticleTags { get; set; } = [];
 }
