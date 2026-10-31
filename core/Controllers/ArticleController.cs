@@ -26,6 +26,18 @@ public class ArticleController(IArticleService _articleService) : BaseController
     [HttpGet("published-list"), AllowAnonymous]
     public async Task<IActionResult> GetPublishedListAsync([FromQuery] ArticleFilterOptions filterOptions) => Ok(await _articleService.GetPublishedListAsync(filterOptions));
 
+    [HttpGet("featured"), AllowAnonymous]
+    public async Task<IActionResult> GetFeaturedAsync([FromQuery] string locale) => Ok(await _articleService.GetFeaturedAsync(locale));
+
+    [HttpGet("trending"), AllowAnonymous]
+    public async Task<IActionResult> GetTrendingAsync([FromQuery] string locale) => Ok(await _articleService.GetTrendingAsync(locale));
+
+    [HttpGet("published-categories"), AllowAnonymous]
+    public async Task<IActionResult> GetPublishedCategoriesAsync([FromQuery] string locale) => Ok(await _articleService.GetPublishedCategoriesAsync(locale));
+
+    [HttpGet("top-authors"), AllowAnonymous]
+    public async Task<IActionResult> GetTopAuthorsAsync([FromQuery] string locale) => Ok(await _articleService.GetTopAuthorsAsync(locale));
+
     [HttpGet("statistics"), AllowAnonymous]
     public async Task<IActionResult> GetStatisticsAsync([FromQuery] string locale) => Ok(await _articleService.GetStatisticsAsync(locale));
 

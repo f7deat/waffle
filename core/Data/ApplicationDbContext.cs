@@ -33,6 +33,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<WorkContent> WorkContents { get; set; } = default!;
     public DbSet<WorkItem> WorkItems { get; set; } = default!;
     public DbSet<Contact> Contacts { get; set; } = default!;
+    public DbSet<NewsletterSubscriber> NewsletterSubscribers { get; set; } = default!;
     public DbSet<Localization> Localizations { get; set; } = default!;
     public DbSet<Order> Orders { get; set; } = default!;
     public DbSet<OrderDetail> OrderDetails { get; set; }

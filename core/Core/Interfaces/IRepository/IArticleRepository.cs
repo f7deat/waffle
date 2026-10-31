@@ -16,6 +16,10 @@ public interface IArticleRepository : IAsyncRepository<Article>
     Task<ListResult> GetMostViewedAsync(string locale);
     Task<int> GetPreviousMonthAsync(string locale);
     Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions);
+    Task<TResult> GetFeaturedAsync(string locale);
+    Task<TResult> GetTrendingAsync(string locale);
+    Task<TResult> GetPublishedCategoriesAsync(string locale);
+    Task<TResult> GetTopAuthorsAsync(string locale);
     Task<ListResult> GetDeletedListAsync(ArticleFilterOptions filterOptions);
     Task<TResult> GetRandomsAsync(string locale);
     Task<int> GetTotalArticlesAsync(string locale);

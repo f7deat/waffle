@@ -46,6 +46,14 @@ public class ArticleService(IArticleRepository _articleRepository, IHCAService _
         return _articleRepository.GetPublishedListAsync(filterOptions);
     }
 
+    public Task<TResult> GetFeaturedAsync(string locale) => _articleRepository.GetFeaturedAsync(locale);
+
+    public Task<TResult> GetTrendingAsync(string locale) => _articleRepository.GetTrendingAsync(locale);
+
+    public Task<TResult> GetPublishedCategoriesAsync(string locale) => _articleRepository.GetPublishedCategoriesAsync(locale);
+
+    public Task<TResult> GetTopAuthorsAsync(string locale) => _articleRepository.GetTopAuthorsAsync(locale);
+
     public async Task<TResult> AddAsync(CreateArticleArgs args, string locale)
     {
         try

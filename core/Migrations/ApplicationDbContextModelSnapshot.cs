@@ -252,6 +252,9 @@ namespace Waffle.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Locale")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -631,36 +634,6 @@ namespace Waffle.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Waffle.Entities.CommentReport", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasJsonPropertyName("id");
-
-                    b.Property<Guid>("CommentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Reason")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("CommentId", "UserId")
-                        .IsUnique();
-
-                    b.ToTable("CommentReports");
-                });
-
             modelBuilder.Entity("Waffle.Entities.CommentModerationRule", b =>
                 {
                     b.Property<Guid>("Id")
@@ -694,6 +667,36 @@ namespace Waffle.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CommentModerationRules");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.CommentReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasJsonPropertyName("id");
+
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("CommentId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("CommentReports");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Commons.SocialPlatform", b =>
@@ -1514,6 +1517,12 @@ namespace Waffle.Migrations
                     b.Property<Guid?>("InfluencerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal?>("Latitude")
+                        .HasColumnType("decimal(10,7)");
+
+                    b.Property<decimal?>("Longitude")
+                        .HasColumnType("decimal(10,7)");
+
                     b.Property<string>("OpeningHours")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -1527,12 +1536,6 @@ namespace Waffle.Migrations
 
                     b.Property<decimal?>("PriceTo")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("Latitude")
-                        .HasColumnType("decimal(10,7)");
-
-                    b.Property<decimal?>("Longitude")
-                        .HasColumnType("decimal(10,7)");
 
                     b.HasKey("Id");
 
@@ -1678,6 +1681,34 @@ namespace Waffle.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Menus");
+                });
+
+            modelBuilder.Entity("Waffle.Entities.NewsletterSubscriber", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasJsonPropertyName("id");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Locale")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email", "Locale")
+                        .IsUnique();
+
+                    b.ToTable("NewsletterSubscribers");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Notifications.Notification", b =>
@@ -2269,6 +2300,25 @@ namespace Waffle.Migrations
                     b.Navigation("JobOpportunity");
                 });
 
+            modelBuilder.Entity("Waffle.Entities.CommentReport", b =>
+                {
+                    b.HasOne("Waffle.Entities.Comment", "Comment")
+                        .WithMany()
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Waffle.Entities.Users.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Waffle.Entities.Ecommerces.Product", b =>
                 {
                     b.HasOne("Waffle.Entities.Ecommerces.Brand", "Brand")
@@ -2486,25 +2536,6 @@ namespace Waffle.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("Waffle.Entities.CommentReport", b =>
-                {
-                    b.HasOne("Waffle.Entities.Comment", "Comment")
-                        .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Waffle.Entities.Users.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Waffle.Entities.Users.SocialAccount", b =>

@@ -246,26 +246,111 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
 
     public async Task<ListResult> GetPublishedListAsync(ArticleFilterOptions filterOptions)
     {
-        var query = from a in _context.Articles
-                    join c in _context.Categories on a.CategoryId equals c.Id into categoryJoin
-                    from c in categoryJoin.DefaultIfEmpty()
-                    where a.DeletedAt == null && a.PublishedAt != null && a.PublishedAt <= DateTime.UtcNow && a.Locale == filterOptions.Locale
+        var query = PublishedArticleCards(_context.Articles.AsNoTracking()
+            .Where(a => a.DeletedAt == null && a.PublishedAt != null && a.PublishedAt <= DateTime.UtcNow && a.Locale == filterOptions.Locale));
+        if (!string.IsNullOrWhiteSpace(filterOptions.Name))
+            query = query.Where(x => x.NormalizedName.Contains(filterOptions.Name));
+        if (filterOptions.CategoryId.HasValue)
+            query = query.Where(x => x.CategoryId == filterOptions.CategoryId);
+        query = string.Equals(filterOptions.Sort, "most-viewed", StringComparison.OrdinalIgnoreCase)
+            ? query.OrderByDescending(x => x.ViewCount).ThenByDescending(x => x.PublishedAt)
+            : query.OrderByDescending(x => x.PublishedAt);
+        return await ListResult.Success(query, filterOptions);
+    }
+
+    private sealed class ArticleCard
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = default!;
+        public int ViewCount { get; set; }
+        public string NormalizedName { get; set; } = default!;
+        public DateTime? ModifiedDate { get; set; }
+        public string? Thumbnail { get; set; }
+        public string? Description { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? PublishedAt { get; set; }
+        public int? CategoryId { get; set; }
+        public string? CategoryName { get; set; }
+        public int ReadingMinutes { get; set; }
+        public bool IsFeatured { get; set; }
+        public string? CreatorName { get; set; }
+        public string? CreatorUserName { get; set; }
+        public string? CreatorAvatar { get; set; }
+    }
+
+    private IQueryable<ArticleCard> PublishedArticleCards(IQueryable<Article> articles)
+    {
+        return from a in articles
+               join c in _context.Categories on a.CategoryId equals c.Id into categoryJoin
+               from c in categoryJoin.DefaultIfEmpty()
+               join u in _context.Users on a.CreatedBy equals u.Id into userJoin
+               from u in userJoin.DefaultIfEmpty()
+               select new ArticleCard
+               {
+                   Id = a.Id,
+                   Name = a.Name,
+                   ViewCount = a.ViewCount,
+                   NormalizedName = a.NormalizedName,
+                   ModifiedDate = a.ModifiedDate,
+                   Thumbnail = a.Thumbnail,
+                   Description = a.Description,
+                   CreatedDate = a.CreatedDate,
+                   PublishedAt = a.PublishedAt,
+                   CategoryId = a.CategoryId,
+                   CategoryName = c.Name,
+                   ReadingMinutes = a.Content == null ? 1 : a.Content.Length / 1500 + 1,
+                   IsFeatured = a.IsFeatured,
+                   CreatorName = u.Name,
+                   CreatorUserName = u.UserName,
+                   CreatorAvatar = u.Avatar
+               };
+    }
+    public async Task<TResult> GetFeaturedAsync(string locale)
+    {
+        var query = PublishedArticleCards(_context.Articles.AsNoTracking()
+            .Where(a => a.DeletedAt == null && a.PublishedAt != null && a.PublishedAt <= DateTime.UtcNow && a.Locale == locale))
+            .OrderByDescending(x => x.IsFeatured).ThenByDescending(x => x.PublishedAt);
+        return TResult.Ok(await query.Take(3).ToListAsync());
+    }
+
+    public async Task<TResult> GetTrendingAsync(string locale)
+    {
+        var query = PublishedArticleCards(_context.Articles.AsNoTracking()
+            .Where(a => a.DeletedAt == null && a.PublishedAt != null && a.PublishedAt <= DateTime.UtcNow && a.Locale == locale))
+            .OrderByDescending(x => x.ViewCount);
+        return TResult.Ok(await query.Take(5).ToListAsync());
+    }
+
+    public async Task<TResult> GetPublishedCategoriesAsync(string locale)
+    {
+        var query = from c in _context.Categories.AsNoTracking()
+                    where c.DeletedAt == null && c.Locale == locale && c.Type == Waffle.Entities.Settings.CategoryType.Article
                     select new
                     {
-                        a.Id,
-                        a.Name,
-                        a.ViewCount,
-                        a.NormalizedName,
-                        a.ModifiedDate,
-                        a.Thumbnail,
-                        a.Description,
-                        a.CreatedDate,
-                        a.PublishedAt,
-                        a.CategoryId,
-                        CategoryName = c.Name
+                        c.Id,
+                        c.Name,
+                        c.NormalizedName,
+                        Count = _context.Articles.Count(a => a.CategoryId == c.Id && a.DeletedAt == null && a.PublishedAt != null && a.PublishedAt <= DateTime.UtcNow)
                     };
-        query = query.OrderByDescending(x => x.PublishedAt);
-        return await ListResult.Success(query, filterOptions);
+        return TResult.Ok(await query.Where(x => x.Count > 0).OrderByDescending(x => x.Count).ToListAsync());
+    }
+
+    public async Task<TResult> GetTopAuthorsAsync(string locale)
+    {
+        var query = from a in _context.Articles.AsNoTracking()
+                    join u in _context.Users on a.CreatedBy equals u.Id
+                    where a.DeletedAt == null && a.PublishedAt != null && a.PublishedAt <= DateTime.UtcNow && a.Locale == locale
+                    group a by new { u.Id, u.Name, u.UserName, u.Avatar } into g
+                    orderby g.Count() descending
+                    select new
+                    {
+                        g.Key.Id,
+                        g.Key.Name,
+                        g.Key.UserName,
+                        g.Key.Avatar,
+                        ArticleCount = g.Count()
+                    };
+        return TResult.Ok(await query.Take(3).ToListAsync());
     }
 
     public async Task<TResult> GetRandomsAsync(string locale)
