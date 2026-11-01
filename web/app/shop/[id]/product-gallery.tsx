@@ -1,5 +1,7 @@
 "use client";
 
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 
@@ -32,9 +34,9 @@ const ProductGallery = ({ imageSources, productName }: ProductGalleryProps) => {
                         type="button"
                         aria-label="Phóng to ảnh sản phẩm"
                         onClick={() => setIsZoomed(true)}
-                        className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-surface-bright/90 text-on-surface shadow transition hover:bg-surface-bright"
+                        className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-surface-bright/90 text-on-surface shadow transition hover:bg-surface-bright ring-2 ring-orange-200"
                     >
-                        <span className="material-symbols-outlined">zoom_in</span>
+                        <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4 w-4" />
                     </button>
                 )}
             </div>
