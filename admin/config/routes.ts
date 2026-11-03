@@ -144,6 +144,11 @@ export default [
     path: '/user',
     routes: [
       {
+        name: 'branch',
+        path: '/user/branch',
+        component: './hr/branch',
+      },
+      {
         name: 'notification',
         path: '/user/notification',
         component: './users/notification/index',
@@ -209,11 +214,6 @@ export default [
         name: 'statistics',
         path: '/hr/statistics',
         component: './hr/statistics',
-      },
-      {
-        name: 'branch',
-        path: '/hr/branch',
-        component: './hr/branch',
       },
       {
         name: 'department',

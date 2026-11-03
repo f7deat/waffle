@@ -3,9 +3,9 @@ import { apiPlaceCreate, apiPlaceDelete, apiPlaceDetails, apiPlaceList, apiPlace
 import { apiProvinceOptions } from "@/services/locations/province";
 import { apiInfluencerOptions } from "@/services/user";
 import { CalendarOutlined, DeleteOutlined, EditOutlined, EnvironmentOutlined, EyeOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
-import { ActionType, ModalForm, PageContainer, ProColumns, ProFormDigit, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea, ProTable } from "@ant-design/pro-components"
+import { ActionType, DrawerForm, ModalForm, PageContainer, ProColumns, ProFormDigit, ProFormInstance, ProFormSelect, ProFormText, ProFormTextArea, ProTable } from "@ant-design/pro-components"
 import { Link } from "@umijs/max";
-import { Button, Popconfirm, message } from "antd";
+import { Button, Col, Popconfirm, Row, message } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 
@@ -258,7 +258,7 @@ const Index: React.FC = () => {
                 }}
             />
 
-            <ModalForm
+            <DrawerForm
                 title="Create Place"
                 open={openCreate}
                 onOpenChange={(open) => {
@@ -275,33 +275,51 @@ const Index: React.FC = () => {
                     rules={[{ required: true, message: 'Please enter place name' }]}
                 />
                 <ProFormTextArea name="description" label="Description" />
-                <ProFormSelect
-                    name="provinceId"
-                    label="Province"
-                    showSearch
-                    request={apiProvinceOptions}
-                    fieldProps={{
-                        onChange: (value) => {
-                            const parsed = Number(value);
-                            setSelectedProvinceId(Number.isNaN(parsed) ? undefined : parsed);
-                        }
-                    }}
-                />
-                <ProFormSelect
-                    name="districtId"
-                    label="District"
-                    showSearch
-                    disabled={!selectedProvinceId}
-                    request={apiDistrictOptions}
-                    params={{ provinceId: selectedProvinceId }}
-                />
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <ProFormSelect
+                            name="provinceId"
+                            label="Province"
+                            showSearch
+                            request={apiProvinceOptions}
+                            fieldProps={{
+                                onChange: (value) => {
+                                    const parsed = Number(value);
+                                    setSelectedProvinceId(Number.isNaN(parsed) ? undefined : parsed);
+                                }
+                            }}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <ProFormSelect
+                            name="districtId"
+                            label="District"
+                            showSearch
+                            disabled={!selectedProvinceId}
+                            request={apiDistrictOptions}
+                            params={{ provinceId: selectedProvinceId }}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <ProFormDigit name="latitude" label="Latitude" min={-90} max={90} fieldProps={{ precision: 7 }} />
+                    </Col>
+                    <Col span={12}>
+                        <ProFormDigit name="longitude" label="Longitude" min={-180} max={180} fieldProps={{ precision: 7 }} />
+                    </Col>
+                    <Col span={12}>
+                        <ProFormDigit name="priceFrom" label="Price from (VND)" min={0} fieldProps={{ precision: 0 }} />
+                    </Col>
+                    <Col span={12}>
+                        <ProFormDigit name="priceTo" label="Price to (VND)" min={0} fieldProps={{ precision: 0 }} />
+                    </Col>
+                    <Col span={12}>
+                        <ProFormText name="phoneNumber" label="Phone number" />
+                    </Col>
+                    <Col span={12}>
+                        <ProFormText name="openingHours" label="Opening hours" placeholder="07:00 - 22:00" />
+                    </Col>
+                </Row>
                 <ProFormText name="address" label="Address" />
-                <ProFormText name="phoneNumber" label="Phone number" />
-                <ProFormText name="openingHours" label="Opening hours" placeholder="07:00 - 22:00" />
-                <ProFormDigit name="priceFrom" label="Price from (VND)" min={0} fieldProps={{ precision: 0 }} />
-                <ProFormDigit name="priceTo" label="Price to (VND)" min={0} fieldProps={{ precision: 0 }} />
-                <ProFormDigit name="latitude" label="Latitude" min={-90} max={90} fieldProps={{ precision: 7 }} />
-                <ProFormDigit name="longitude" label="Longitude" min={-180} max={180} fieldProps={{ precision: 7 }} />
                 <ProFormTextArea
                     name="amenities"
                     label="Amenities"
@@ -316,7 +334,7 @@ const Index: React.FC = () => {
                     ]}
                     allowClear={false}
                 />
-            </ModalForm>
+            </DrawerForm>
 
             <ModalForm
                 title="Edit Place"
@@ -341,29 +359,35 @@ const Index: React.FC = () => {
                     ]}
                     allowClear={false}
                 />
-                <ProFormSelect
-                    name="provinceId"
-                    label="Province"
-                    showSearch
-                    request={apiProvinceOptions}
-                    fieldProps={{
-                        onChange: (value) => {
-                            const parsed = Number(value);
-                            setSelectedProvinceId(Number.isNaN(parsed) ? undefined : parsed);
-                        }
-                    }}
-                    initialValue={selectedProvinceId}
-                />
-                <ProFormSelect
-                    name="districtId"
-                    label="District"
-                    showSearch
-                    request={apiDistrictOptions}
-                    params={{
-                        provinceId: selectedProvinceId
-                    }}
-                    initialValue={currentPlace?.districtId}
-                />
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <ProFormSelect
+                            name="provinceId"
+                            label="Province"
+                            showSearch
+                            request={apiProvinceOptions}
+                            fieldProps={{
+                                onChange: (value) => {
+                                    const parsed = Number(value);
+                                    setSelectedProvinceId(Number.isNaN(parsed) ? undefined : parsed);
+                                }
+                            }}
+                            initialValue={selectedProvinceId}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <ProFormSelect
+                            name="districtId"
+                            label="District"
+                            showSearch
+                            request={apiDistrictOptions}
+                            params={{
+                                provinceId: selectedProvinceId
+                            }}
+                            initialValue={currentPlace?.districtId}
+                        />
+                    </Col>
+                </Row>
                 <ProFormText name="address" label="Address" initialValue={currentPlace?.address} />
                 <ProFormText name="phoneNumber" label="Phone number" />
                 <ProFormText name="openingHours" label="Opening hours" placeholder="07:00 - 22:00" />
