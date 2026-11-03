@@ -17,6 +17,7 @@ interface LocalComment {
   userName: string;
   userAvatar?: string;
   createdDate: string;
+  isOfficialResponse: boolean;
 }
 
 const ArticleComments: React.FC<ArticleCommentsProps> = ({ articleId, articleSlug }) => {

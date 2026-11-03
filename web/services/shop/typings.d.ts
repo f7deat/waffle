@@ -30,7 +30,7 @@ export interface ProductFilterOptions extends API.FilterOptions {
     maxPrice?: number;
     onSale?: boolean;
     inStock?: boolean;
-    sortBy?: "popular" | "price-asc" | "price-desc" | "newest";
+    sortBy?: "popular" | "price-asc" | "price-desc" | "newest" | string;
 }
 
 export interface ProductCategoryFilterOptions extends API.FilterOptions {

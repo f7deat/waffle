@@ -97,7 +97,7 @@ const Page = async ({ params }: PageProps) => {
             ]}
         >
             <main className="min-h-[calc(100vh-28rem)] bg-surface">
-                <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:py-10">
+                <section className="mx-auto w-full container px-4 py-6 sm:px-6 lg:py-10">
                     <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-surface-variant/50 pb-4">
                         <div className="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
                             {product.category?.name && (
@@ -152,6 +152,7 @@ const Page = async ({ params }: PageProps) => {
                                 unitInStock={product.unitInStock}
                                 sku={product.sku}
                                 variants={product.variants ?? []}
+                                affiliateLink={product.affiliateLink}
                             />
                         </div>
                     </div>
@@ -166,7 +167,7 @@ const Page = async ({ params }: PageProps) => {
 
                 {relatedProducts.length > 0 && (
                     <section className="bg-surface-container-low px-4 py-10 sm:px-6">
-                        <div className="mx-auto flex max-w-7xl flex-col gap-6">
+                        <div className="mx-auto flex container flex-col gap-6">
                             <div>
                                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-secondary">
                                     Khám phá thêm

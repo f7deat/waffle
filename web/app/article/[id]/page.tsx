@@ -189,7 +189,7 @@ const Page = async ({ params }: { params: Params }) => {
             { label: article.name, href: "#" },
         ]}>
             <ReadingProgress />
-            <div className="mx-auto max-w-7xl">
+            <div className="mx-auto container">
                 <header className="rounded-2xl bg-white px-5 py-7 shadow-sm md:px-10 md:py-9">
                     <div className="flex flex-wrap items-center gap-2">
                         {editorial?.spotlightLabel && <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-900">{editorial.spotlightLabel}</span>}

@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { ProductItemType } from "@/typings/shop/product";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 const formatPrice = (value?: number) => {
@@ -67,12 +69,13 @@ const ProductItem: React.FC<ProductItemType> = (product) => {
                             {product.unitInStock > 0 ? "Còn hàng" : "Hết hàng"}
                         </span>
                     ) : null}
+                    {product.viewCount.toLocaleString("vi-VN")} lượt xem
                 </div>
                 <h3 className="line-clamp-2 min-h-11 text-base font-bold leading-6 text-on-surface transition-colors group-hover:text-primary">
                     <Link href={`/shop/${product.normalizedName}`}>{product.name}</Link>
                 </h3>
                 {product.description ? (
-                    <p className="mt-2 line-clamp-2 text-sm leading-5 text-on-surface-variant">{product.description}</p>
+                    <p className="mt-2 line-clamp-2 text-sm mb-2 leading-5 text-on-surface-variant">{product.description}</p>
                 ) : (
                     <p className="mt-2 line-clamp-2 text-sm leading-5 text-on-surface-variant">
                         Xem thông tin chi tiết và lựa chọn phù hợp với nhu cầu của bạn.
@@ -89,7 +92,7 @@ const ProductItem: React.FC<ProductItemType> = (product) => {
                         className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-3.5 py-2.5 text-xs font-bold text-on-primary shadow-sm transition hover:bg-on-primary-container"
                         href={`/shop/${product.normalizedName}`}
                     >
-                        <span aria-hidden="true">＋</span> Chọn mua
+                        <FontAwesomeIcon icon={faShoppingCart} /> Chọn mua
                     </Link>
                 </div>
             </div>

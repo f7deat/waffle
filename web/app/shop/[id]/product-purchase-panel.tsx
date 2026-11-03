@@ -15,6 +15,7 @@ type ProductPurchasePanelProps = {
     unitInStock?: number;
     sku?: string;
     variants: ProductVariantType[];
+    affiliateLink?: string;
 };
 
 const formatPrice = (value?: number) =>
@@ -164,6 +165,17 @@ const ProductPurchasePanel = (product: ProductPurchasePanelProps) => {
                     Thêm vào giỏ
                 </button>
             </div>
+            {
+                product.affiliateLink && (
+                    <button
+                        type="button"
+                        onClick={() => window.open(product.affiliateLink, '_blank')}
+                        className="w-full rounded-full bg-slate-800 px-5 py-3.5 font-semibold text-on-secondary shadow transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        Mua trên sàn thương mại
+                    </button>
+                )
+            }
 
             <button
                 type="button"

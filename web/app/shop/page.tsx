@@ -3,6 +3,7 @@ import { apiBrands, apiProductCategories, apiProducts, apiProductsByCategory } f
 import ProductList from "./components/product-list";
 import { Metadata } from "next";
 import Link from "next/link";
+import { ProductFilterOptions } from "@/services/shop/typings";
 
 const PAGE_SIZE = 12;
 
@@ -50,12 +51,12 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
     const brands = brandResponse.data || [];
     const selectedCategoryItem = categories.find((category) => category.normalizedName === selectedCategory);
     const selectedBrandItem = brands.find((brand) => brand.normalizedName === selectedBrand);
-    const productFilters = {
+    const productFilters: ProductFilterOptions = {
         current: currentPage,
         pageSize: PAGE_SIZE,
         name: keyword || undefined,
         brandId: selectedBrandItem?.id,
-        sortBy,
+        sortBy: sortBy,
         minPrice: validMinPrice,
         maxPrice: validMaxPrice,
         onSale,
@@ -123,7 +124,7 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
     return (
         <PageContainer breadcrumbs={[{ label: "Đặc sản & Quà tặng", href: "/shop" }]} fluid>
             <div className="min-h-screen bg-surface px-3 pb-12 pt-5 text-on-surface md:px-6">
-                <section className="relative mx-auto mb-7 max-w-7xl overflow-hidden rounded-3xl bg-gradient-to-br from-surface-container-high via-surface-container to-surface-container-low p-6 shadow-sm md:p-10">
+                <section className="relative mx-auto mb-7 container overflow-hidden rounded-3xl bg-gradient-to-br from-surface-container-high via-surface-container to-surface-container-low p-6 shadow-sm md:p-10">
                     <div className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
                     <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.7fr)_minmax(260px,0.8fr)] lg:items-center">
                         <div>
@@ -198,7 +199,7 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
                     </div>
                 </section>
 
-                <section aria-label="Danh mục sản phẩm" className="mx-auto mb-7 max-w-7xl">
+                <section aria-label="Danh mục sản phẩm" className="mx-auto mb-7 container">
                     <div className="flex gap-2 overflow-x-auto pb-2">
                         <Link
                             className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold shadow-sm transition ${selectedCategory ? "bg-surface-container-lowest text-on-surface hover:bg-secondary-container" : "bg-primary text-on-primary"}`}
@@ -221,7 +222,7 @@ const Page: React.FC<PageProps> = async ({ searchParams }) => {
                     </div>
                 </section>
 
-                <section className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
+                <section className="mx-auto grid container gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
                     <aside className="space-y-5">
                         <form action="/shop" className="space-y-5 rounded-2xl bg-surface-container-lowest p-5 shadow-sm">
                             <div className="flex items-center justify-between border-b border-outline-variant/40 pb-4">

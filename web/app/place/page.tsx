@@ -113,7 +113,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 		<PageContainer breadcrumbs={[{ label: "Địa điểm", href: "/place" }]}>
 			<div className="-mx-4 -mt-4 min-h-screen bg-surface text-on-surface sm:-mx-6 lg:-mx-8">
 				<section className="border-b border-surface-variant/70 bg-surface-container-low/80 py-6 backdrop-blur-sm">
-					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					<div className="mx-auto container px-4 sm:px-6 lg:px-8">
 						<form action="/place" method="get" className="flex flex-col gap-4 lg:flex-row lg:items-center">
 							{minPrice != null && <input type="hidden" name="minPrice" value={minPrice} />}
 							{maxPrice != null && <input type="hidden" name="maxPrice" value={maxPrice} />}
@@ -201,7 +201,7 @@ const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
 					</div>
 				</section>
 
-				<div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-12 lg:px-8">
+				<div className="mx-auto grid container gap-6 px-4 py-6 sm:px-6 lg:grid-cols-12 lg:px-8">
 					<aside className="flex flex-col gap-5 lg:col-span-4">
 						<section className="rounded-2xl bg-white p-5 shadow-sm">
 							<div className="flex items-center justify-between border-b border-surface-variant/70 pb-4">

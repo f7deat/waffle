@@ -53,7 +53,7 @@ const Page: React.FC<Props> = async ({ params }) => {
 
     return (
         <PageContainer breadcrumbs={breadcrumbs}>
-            <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <div className="mx-auto w-full container px-4 py-6 sm:px-6 lg:px-8">
                 <PlaceDetail place={place} relatedPlaces={relatedPlaces} />
             </div>
         </PageContainer>
