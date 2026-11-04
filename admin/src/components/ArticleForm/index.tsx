@@ -9,7 +9,7 @@ const ArticleForm: React.FC<ModalFormProps> = (props) => {
       name: values.name,
       description: values.description
     });
-    history.push(`/article/${response.data.id}`);
+    history.push(`/article/${response.data}`);
     return true;
   }
 

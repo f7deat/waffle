@@ -70,7 +70,7 @@ const Index: React.FC = () => {
             dataIndex: 'name',
             render: (text, record) => (
                 <div className="flex gap-2">
-                    <div className="w-24 h-24 rounded">
+                    <div className="w-20 h-20 rounded">
                         <img src={record.thumbnail} alt={record.name} className="w-full h-full object-cover rounded" />
                     </div>
                     <div className="flex-1">
@@ -229,7 +229,7 @@ const Index: React.FC = () => {
                 />
                 <ProFormTextArea name="description" label="Description" />
                 <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={6}>
                         <ProFormSelect
                             name="provinceId"
                             label="Province"
@@ -243,7 +243,7 @@ const Index: React.FC = () => {
                             }}
                         />
                     </Col>
-                    <Col span={12}>
+                    <Col span={6}>
                         <ProFormSelect
                             name="districtId"
                             label="District"
@@ -253,40 +253,46 @@ const Index: React.FC = () => {
                             params={{ provinceId: selectedProvinceId }}
                         />
                     </Col>
-                    <Col span={12}>
+                    <Col span={6}>
                         <ProFormDigit name="latitude" label="Latitude" min={-90} max={90} fieldProps={{ precision: 7 }} />
                     </Col>
-                    <Col span={12}>
+                    <Col span={6}>
                         <ProFormDigit name="longitude" label="Longitude" min={-180} max={180} fieldProps={{ precision: 7 }} />
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
+                        <ProFormText name="address" label="Address" />
+                    </Col>
+                    <Col span={8}>
                         <ProFormDigit name="priceFrom" label="Price from (VND)" min={0} fieldProps={{ precision: 0 }} />
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                         <ProFormDigit name="priceTo" label="Price to (VND)" min={0} fieldProps={{ precision: 0 }} />
+                    </Col>
+                    <Col span={8}>
+                        <ProFormText name="openingHours" label="Opening hours" placeholder="07:00 - 22:00" />
+                    </Col>
+                    <Col span={24}>
+                        <ProFormTextArea
+                            name="amenities"
+                            label="Amenities"
+                            placeholder="Enter one amenity per line"
+                        />
                     </Col>
                     <Col span={12}>
                         <ProFormText name="phoneNumber" label="Phone number" />
                     </Col>
                     <Col span={12}>
-                        <ProFormText name="openingHours" label="Opening hours" placeholder="07:00 - 22:00" />
+                        <ProFormSelect
+                            name="active"
+                            label="Status"
+                            options={[
+                                { label: 'Published', value: true as any },
+                                { label: 'Draft', value: false as any },
+                            ]}
+                            allowClear={false}
+                        />
                     </Col>
                 </Row>
-                <ProFormText name="address" label="Address" />
-                <ProFormTextArea
-                    name="amenities"
-                    label="Amenities"
-                    placeholder="Enter one amenity per line"
-                />
-                <ProFormSelect
-                    name="active"
-                    label="Status"
-                    options={[
-                        { label: 'Published', value: true as any },
-                        { label: 'Draft', value: false as any },
-                    ]}
-                    allowClear={false}
-                />
             </DrawerForm>
 
         </PageContainer>

@@ -95,7 +95,8 @@ export default [
       {
         name: 'overview',
         path: '/place/overview',
-        component: './place'
+        component: './place',
+        hideInMenu: true
       },
       {
         name: 'center',

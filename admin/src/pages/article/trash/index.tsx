@@ -121,10 +121,7 @@ const ArticleTrashPage: React.FC = () => {
   ];
 
   return (
-    <PageContainer
-      title="Thùng rác bài viết"
-      extra={<Button onClick={() => history.push('/article/list')}>Danh sách bài viết</Button>}
-    >
+    <PageContainer onBack={() => history.back()}>
       {contextHolder}
       <ProTable
         columns={columns}

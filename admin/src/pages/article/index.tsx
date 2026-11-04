@@ -341,7 +341,7 @@ const ArticlePage: React.FC = () => {
         open={shareOpen}
         onCancel={() => setShareOpen(false)}
         footer={null}
-        destroyOnClose
+        destroyOnHidden
       >
         <Space direction="vertical" size="middle" className="w-full">
           <Typography.Text type="secondary">Liên kết rút gọn</Typography.Text>
