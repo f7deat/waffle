@@ -146,7 +146,7 @@ export default [
       {
         name: 'branch',
         path: '/user/branch',
-        component: './hr/branch',
+        component: './users/branch',
       },
       {
         name: 'notification',
@@ -186,6 +186,16 @@ export default [
         path: '/user/roles/:id',
         component: './users/roles/center',
         hideInMenu: true
+      },
+      {
+        name: 'department',
+        path: '/user/department',
+        component: './users/department',
+      },
+      {
+        name: 'team',
+        path: '/user/team',
+        component: './users/team',
       }
     ],
   },
@@ -200,38 +210,6 @@ export default [
     name: 'partner',
     path: '/partner',
     component: './partner',
-  },
-  {
-    icon: 'ApartmentOutlined',
-    name: 'hr',
-    path: '/hr',
-    routes: [
-      {
-        path: '/hr',
-        redirect: '/hr/statistics',
-      },
-      {
-        name: 'statistics',
-        path: '/hr/statistics',
-        component: './hr/statistics',
-      },
-      {
-        name: 'department',
-        path: '/hr/department',
-        component: './hr/department',
-      },
-      {
-        name: 'team',
-        path: '/hr/team',
-        component: './hr/team',
-      },
-      {
-        name: 'teamMembers',
-        path: '/hr/team/:id/members',
-        component: './hr/team/members',
-        hideInMenu: true,
-      },
-    ],
   },
   {
     icon: 'FolderOutlined',
