@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Waffle.Core.Foundations.Interfaces;
-using Waffle.Entities.Settings;
+using Waffle.Entities.Commons;
 using Waffle.Entities.Tags;
 
 namespace Waffle.Entities;

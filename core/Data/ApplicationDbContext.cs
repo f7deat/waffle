@@ -9,7 +9,6 @@ using Waffle.Entities.Files;
 using Waffle.Entities.HR;
 using Waffle.Entities.Locations;
 using Waffle.Entities.Notifications;
-using Waffle.Entities.Settings;
 using Waffle.Entities.Tags;
 using Waffle.Entities.Users;
 

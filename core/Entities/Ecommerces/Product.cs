@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Waffle.Entities.Settings;
+using Waffle.Entities.Commons;
 
 namespace Waffle.Entities.Ecommerces;
 

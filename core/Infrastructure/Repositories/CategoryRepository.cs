@@ -6,7 +6,7 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Core.Services.Categories.Filters;
 using Waffle.Core.Services.Categories.Results;
 using Waffle.Data;
-using Waffle.Entities.Settings;
+using Waffle.Entities.Commons;
 using Waffle.Models;
 
 namespace Waffle.Infrastructure.Repositories;
@@ -91,14 +91,12 @@ public class CategoryRepository(ApplicationDbContext context, IHCAService hcaSer
                 value = c.Id,
                 parentId = c.ParentId
             })
-            .ToListAsync<object>();
+            .ToListAsync();
     }
 
-    public async Task<IReadOnlyList<CategoryTreeItem>> GetTreeAsync(CategoryTreeFilterOptions filterOptions, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<CategoryTreeItem>> GetTreeAsync(CategoryTreeFilterOptions filterOptions)
     {
-        var query = _context.Categories
-            .AsNoTracking()
-            .Where(category => !category.DeletedAt.HasValue);
+        var query = _context.Categories.AsNoTracking().Where(category => !category.DeletedAt.HasValue);
 
         if (!string.IsNullOrWhiteSpace(filterOptions.Locale))
         {
@@ -128,7 +126,7 @@ public class CategoryRepository(ApplicationDbContext context, IHCAService hcaSer
                 category.Type,
                 category.Locale
             })
-            .ToListAsync(cancellationToken);
+            .ToListAsync();
 
         var categories = categoryItems
             .Select(category => new CategoryTreeItem(

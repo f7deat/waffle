@@ -268,9 +268,9 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <PageContainer title={false} breadcrumbRender={false}>
-      <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 pb-8">
-        <section className="flex flex-col justify-between gap-5 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm lg:flex-row lg:items-center lg:p-6">
+    <PageContainer breadcrumbRender={false}>
+      <main className="mx-auto flex w-full flex-col gap-5 pb-8">
+        <section className="flex flex-col justify-between gap-5 rounded bg-white p-5 lg:flex-row lg:items-center lg:p-6">
           <div className="min-w-0">
             <div className="mb-2 flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-full bg-sky-50 px-3 py-1 text-[11px] font-bold tracking-wider text-sky-800">

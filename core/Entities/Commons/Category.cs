@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Waffle.Entities.Ecommerces;
 
-namespace Waffle.Entities.Settings;
+namespace Waffle.Entities.Commons;
 
 public class Category : BaseEntity<int>, ISoftDelete
 {

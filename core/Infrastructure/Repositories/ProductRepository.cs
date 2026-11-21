@@ -8,10 +8,10 @@ using Waffle.Core.Interfaces.IRepository;
 using Waffle.Data;
 using Waffle.Entities;
 using Waffle.Entities.Ecommerces;
-using Waffle.Entities.Settings;
 using Waffle.Core.Services.Shop.Filters;
 using Waffle.Models;
 using Waffle.Models.ViewModels.Products;
+using Waffle.Entities.Commons;
 
 namespace Waffle.Infrastructure.Repositories;
 

@@ -5,7 +5,7 @@ using Waffle.Core.Interfaces.IService;
 using Waffle.Core.IServices;
 using Waffle.Core.Services.Categories.Filters;
 using Waffle.Core.Services.Categories.Results;
-using Waffle.Entities.Settings;
+using Waffle.Entities.Commons;
 using Waffle.Models;
 
 namespace Waffle.Core.Services.Categories;
@@ -101,8 +101,7 @@ public class CategoryService(ICategoryRepository _categoryRepository, ILogServic
 
     public Task<ListResult> GetListAsync(CategoryFilterOptions filterOptions) => _categoryRepository.GetListAsync(filterOptions);
 
-    public Task<IReadOnlyList<CategoryTreeItem>> GetTreeAsync(CategoryTreeFilterOptions filterOptions, CancellationToken cancellationToken) =>
-        _categoryRepository.GetTreeAsync(filterOptions, cancellationToken);
+    public Task<IReadOnlyList<CategoryTreeItem>> GetTreeAsync(CategoryTreeFilterOptions filterOptions) => _categoryRepository.GetTreeAsync(filterOptions);
 
     public Task<IEnumerable<object>> GetOptionsAsync(CategoryOptionFilterOptions filterOptions) => _categoryRepository.GetOptionsAsync(filterOptions);
 

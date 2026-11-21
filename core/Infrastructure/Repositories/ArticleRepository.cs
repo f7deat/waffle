@@ -10,6 +10,7 @@ using Waffle.Core.Services.Articles.Filters;
 using Waffle.Core.Services.Articles.Models;
 using Waffle.Data;
 using Waffle.Entities;
+using Waffle.Entities.Commons;
 using Waffle.Models;
 
 namespace Waffle.Infrastructure.Repositories;
@@ -120,7 +121,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
 
         var categories = await _context.Categories.AsNoTracking()
             .Where(category => !category.DeletedAt.HasValue && category.Locale == filterOptions.Locale
-                && category.Type == Waffle.Entities.Settings.CategoryType.Article)
+                && category.Type == CategoryType.Article)
             .OrderBy(category => category.Name)
             .Select(category => new ArticleScheduleCategoryResponse(category.Id, category.Name))
             .ToListAsync(cancellationToken);
@@ -375,7 +376,7 @@ public class ArticleRepository(ApplicationDbContext context, IHCAService hcaServ
     public async Task<TResult> GetPublishedCategoriesAsync(string locale)
     {
         var query = from c in _context.Categories.AsNoTracking()
-                    where c.DeletedAt == null && c.Locale == locale && c.Type == Waffle.Entities.Settings.CategoryType.Article
+                    where c.DeletedAt == null && c.Locale == locale && c.Type == CategoryType.Article
                     select new
                     {
                         c.Id,

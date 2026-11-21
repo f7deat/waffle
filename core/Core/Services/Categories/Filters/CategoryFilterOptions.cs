@@ -1,4 +1,4 @@
-using Waffle.Entities.Settings;
+using Waffle.Entities.Commons;
 using Waffle.Models;
 
 namespace Waffle.Core.Services.Categories.Filters;

@@ -135,8 +135,8 @@ const Login: React.FC = () => {
       <Helmet>
         <title>{intl.formatMessage({ id: 'menu.login', defaultMessage: 'Login' })} - {Settings.title}</title>
       </Helmet>
-      <header className="login-header">
-        <div className="login-header-inner">
+      <header className="relative bg-white border-b border-gray-200">
+        <div className="flex container mx-auto items-center justify-between h-16">
           <a className="login-brand" href="/" aria-label={companyName}>
             <span className="login-brand-mark"><UserOutlined /></span>
             <span className="login-brand-copy">
@@ -373,7 +373,7 @@ const Login: React.FC = () => {
         </div>
       </main>
 
-      <footer className="login-footer">
+      <footer className="flex container mx-auto items-center flex-col md:flex-row justify-between h-16 px-4 text-gray-500">
         <span>{companyName} · Nền tảng quản trị nội dung</span>
         <span>Đăng nhập an toàn vào không gian làm việc của bạn</span>
       </footer>

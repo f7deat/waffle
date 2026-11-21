@@ -33,7 +33,7 @@ import {
     ProTable,
 } from '@ant-design/pro-components';
 import { Link } from '@umijs/max';
-import { Button, message, Popconfirm, Tag } from 'antd';
+import { Button, Col, message, Popconfirm, Row, Tag } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 
 const Index: React.FC = () => {
@@ -144,9 +144,9 @@ const Index: React.FC = () => {
 
     const renderType = (type: number) => {
         if (type === 2) {
-            return <Tag color="blue">Product</Tag>;
+            return <Tag color="blue">Sản phẩm</Tag>;
         }
-        return <Tag color="green">Article</Tag>;
+        return <Tag color="green">Bài viết</Tag>;
     };
 
     return (
@@ -362,13 +362,6 @@ const Index: React.FC = () => {
                         pagination={false}
                         columns={[
                             {
-                                title: '#',
-                                valueType: 'indexBorder',
-                                width: 50,
-                                align: 'center',
-                                hideInSearch: true,
-                            },
-                            {
                                 title: 'Name',
                                 dataIndex: 'name',
                                 render: (_, record) => (
@@ -382,14 +375,15 @@ const Index: React.FC = () => {
                                 ellipsis: true,
                             },
                             {
-                                title: 'Type',
+                                title: 'Loại',
                                 dataIndex: 'type',
                                 valueType: 'select',
                                 valueEnum: {
-                                    1: { text: 'Article' },
-                                    2: { text: 'Product' },
+                                    1: { text: 'Bài viết' },
+                                    2: { text: 'Sản phẩm' },
                                 },
                                 render: (_, record) => renderType(record.type),
+                                width: 120,
                             },
                             {
                                 title: <SettingOutlined />,
@@ -1202,7 +1196,6 @@ const Index: React.FC = () => {
                 onFinish={onFinish}
             >
                 <ProFormDigit name="id" hidden />
-                <ProFormDigit name="type" hidden />
                 <ProFormText name="locale" hidden />
                 <ProFormText
                     name="name"
@@ -1215,17 +1208,27 @@ const Index: React.FC = () => {
                     ]}
                 />
                 <ProFormTextArea name="description" label="Description" fieldProps={{ rows: 4 }} />
-                <ProFormSelect
-                    name="parentId"
-                    label="Parent Category"
-                    showSearch
-                    request={(params) => apiCategoryOptions({
-                        ...params,
-                        locale: formRef.current?.getFieldValue('locale') || 'vi-VN',
-                        type: formRef.current?.getFieldValue('type') || 1,
-                        excludeId: category?.id,
-                    })}
-                />
+                <Row gutter={16}>
+                    <Col span={18}>
+                        <ProFormSelect
+                            name="parentId"
+                            label="Danh mục cha"
+                            showSearch
+                            request={(params) => apiCategoryOptions({
+                                ...params,
+                                locale: formRef.current?.getFieldValue('locale') || 'vi-VN',
+                                type: formRef.current?.getFieldValue('type') || 1,
+                                excludeId: category?.id,
+                            })}
+                        />
+                    </Col>
+                    <Col span={6}>
+                        <ProFormSelect name="type" label="Loại" options={[
+                            { label: 'Bài viết', value: 1 },
+                            { label: 'Sản phẩm', value: 2 },
+                        ]} />
+                    </Col>
+                </Row>
             </ModalForm>
         </PageContainer>
     )

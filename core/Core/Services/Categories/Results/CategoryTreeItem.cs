@@ -1,4 +1,4 @@
-using Waffle.Entities.Settings;
+using Waffle.Entities.Commons;
 
 namespace Waffle.Core.Services.Categories.Results;
 
