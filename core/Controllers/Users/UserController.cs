@@ -57,9 +57,7 @@ public class UserController(IUserService _userService, IWalletService _walletSer
     }
 
     [HttpPut("{id:guid}/social-accounts"), Authorize(Roles = RoleName.Admin)]
-    public async Task<IActionResult> UpdateSocialAccountsAsync(
-        [FromRoute] Guid id,
-        [FromBody] List<UpdateSocialAccountArgs>? accounts)
+    public async Task<IActionResult> UpdateSocialAccountsAsync([FromRoute] Guid id, [FromBody] List<UpdateSocialAccountArgs>? accounts)
     {
         if (accounts is null) return BadRequest("Request body is required.");
         if (await _userManager.FindByIdAsync(id.ToString()) is null) return NotFound("User not found.");
@@ -344,19 +342,8 @@ public class UserController(IUserService _userService, IWalletService _walletSer
         return Ok(await _userManager.ConfirmEmailAsync(user, token));
     }
 
-    [HttpPost("update")]
-    public async Task<IActionResult> UpdateAsync([FromBody] ApplicationUser args)
-    {
-        var user = await _userManager.FindByIdAsync(args.Id.ToString());
-        if (user is null) return BadRequest("User not found!");
-        if (!User.IsInRole(RoleName.Admin))
-        {
-            if (user.Id != User.GetId()) return Forbid();
-            return Ok(await _userService.UpdateProfileAsync(user, args));
-        }
-
-        return Ok(await _userService.UpdateAsync(user, args));
-    }
+    [HttpPut, Authorize(Roles = RoleName.Admin)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserArgs args) => Ok(await _userService.UpdateAsync(args));
 
     [HttpGet("options")]
     public async Task<IActionResult> GetOptionsAsync() => Ok(await _userManager.Users.Select(x => new
@@ -381,17 +368,7 @@ public class UserController(IUserService _userService, IWalletService _walletSer
     public async Task<IActionResult> ChangeAvatarAsync([FromForm] ChangeAvatarArgs args) => Ok(await _userService.ChangeAvatarAsync(args, $"{Request.Scheme}://{Request.Host.Value}"));
 
     [HttpPut("profile")]
-    public async Task<IActionResult> UpdateProfileAsync([FromBody] UpdateProfileModel model)
-    {
-        var user = await _userManager.FindByIdAsync(User.GetId().ToString());
-        if (user is null) return BadRequest("User not found!");
-        user.Name = model.Name;
-        user.Email = model.Email;
-        user.PhoneNumber = model.PhoneNumber;
-        var result = await _userManager.UpdateAsync(user);
-        if (!result.Succeeded) return Ok(result);
-        return Ok(TResult.Success);
-    }
+    public async Task<IActionResult> UpdateProfileAsync([FromBody] UpdateProfileArgs args) => Ok(await _userService.UpdateProfileAsync(args));
 
     [HttpGet("profile/detail")]
     public async Task<IActionResult> GetProfileDetailAsync()

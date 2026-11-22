@@ -17,7 +17,7 @@ using Waffle.Modules.Users.Interfaces;
 
 namespace Waffle.Core.Services;
 
-public class UserService(UserManager<ApplicationUser> _userManager, IUserRepository _userRepository, IFileService _fileService, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : IUserService
+public class UserService(UserManager<ApplicationUser> _userManager, ILogService _logService, IUserRepository _userRepository, IFileService _fileService, IHCAService _hcaService, IWebHostEnvironment _webHostEnvironment, RoleManager<ApplicationRole> _roleManager, ApplicationDbContext _context) : IUserService
 {
     private async Task<ApplicationUser?> FindAsync(Guid id) => await _context.Users.FindAsync(id);
 
@@ -100,46 +100,33 @@ public class UserService(UserManager<ApplicationUser> _userManager, IUserReposit
         return result.Succeeded ? TResult.Success : TResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Failed to remove user from role.");
     }
 
-    public async Task<TResult> UpdateAsync(ApplicationUser user, ApplicationUser args)
+    public async Task<TResult> UpdateAsync(UpdateUserArgs args)
     {
-        if (string.IsNullOrWhiteSpace(args.UserName)) return TResult.Failed("User name is required.");
-        if (args.UserName.Length > 256 || args.Email?.Length > 256 || args.PhoneNumber?.Length > 256)
-            return TResult.Failed("User name, email, and phone number must not exceed 256 characters.");
-        if (args.Name?.Length > 256 || args.Address?.Length > 512 || args.Avatar?.Length > 2058 || args.Bio?.Length > 1024)
+        var user = await _userManager.FindByIdAsync(args.Id.ToString());
+        if (user is null) return TResult.Failed("User not found!");
+        if (args.Name?.Length > 256 || args.Address?.Length > 512 || args.Bio?.Length > 1024)
             return TResult.Failed("One or more profile fields exceed the maximum allowed length.");
-        if (args.AccessFailedCount < 0) return TResult.Failed("Access failed count cannot be negative.");
         if (args.DistrictId.HasValue && !await _context.Districts.AnyAsync(x => x.Id == args.DistrictId.Value))
             return TResult.Failed("District not found.");
-        if (args.TeamId.HasValue && !await _context.Teams.AnyAsync(x => x.Id == args.TeamId.Value))
-            return TResult.Failed("Team not found.");
+        if (args.TeamId.HasValue && !await _context.Teams.AnyAsync(x => x.Id == args.TeamId.Value)) return TResult.Failed("Team not found.");
 
-        user.UserName = args.UserName.Trim();
         user.Email = string.IsNullOrWhiteSpace(args.Email) ? null : args.Email.Trim();
         user.PhoneNumber = string.IsNullOrWhiteSpace(args.PhoneNumber) ? null : args.PhoneNumber.Trim();
         user.Name = args.Name?.Trim();
         user.Gender = args.Gender;
         user.Address = args.Address;
         user.DateOfBirth = args.DateOfBirth;
-        user.Amount = args.Amount;
-        user.Avatar = args.Avatar;
         user.DistrictId = args.DistrictId;
         user.TeamId = args.TeamId;
         user.Bio = args.Bio;
-        user.EmailConfirmed = args.EmailConfirmed;
-        user.PhoneNumberConfirmed = args.PhoneNumberConfirmed;
-        user.TwoFactorEnabled = args.TwoFactorEnabled;
-        user.LockoutEnabled = args.LockoutEnabled;
-        user.LockoutEnd = args.LockoutEnd;
-        user.AccessFailedCount = args.AccessFailedCount;
-
         var result = await _userManager.UpdateAsync(user);
-        return result.Succeeded
-            ? TResult.Success
-            : TResult.Failed(string.Join(" ", result.Errors.Select(error => error.Description)));
+        return result.Succeeded ? TResult.Success : TResult.Failed(string.Join(" ", result.Errors.Select(error => error.Description)));
     }
 
-    public async Task<TResult> UpdateProfileAsync(ApplicationUser user, ApplicationUser args)
+    public async Task<TResult> UpdateProfileAsync(UpdateProfileArgs args)
     {
+        var user = await _userManager.FindByIdAsync(_hcaService.GetUserId().ToString());
+        if (user is null) return TResult.Failed("User not found!");
         user.Name = args.Name;
         user.Gender = args.Gender;
         user.Address = args.Address;
@@ -790,7 +777,12 @@ public class UserService(UserManager<ApplicationUser> _userManager, IUserReposit
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user is null) return TResult.Failed("User not found!");
-        if (!string.IsNullOrWhiteSpace(user.Avatar)) return await _fileService.DeletePathAsync(user.Avatar);
+        if (!string.IsNullOrWhiteSpace(user.Avatar))
+        {
+            await _fileService.DeletePathAsync(user.Avatar);
+        }
+        await _logService.AddAsync($"Delete user {user.UserName}");
+        await _userManager.DeleteAsync(user);
         return TResult.Success;
     }
 

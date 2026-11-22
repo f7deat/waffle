@@ -60,7 +60,6 @@ const UserEditForm: React.FC<Props> = ({ userId, reload, ...rest }) => {
     return (
         <DrawerForm {...rest} onFinish={onFinish} title="Chỉnh sửa thành viên" formRef={formRef} drawerProps={{ destroyOnHidden: true }}>
             <ProFormText name="id" hidden />
-            <ProFormText name="createdAt" label="Ngày tạo" disabled />
             <ProFormText
                 name="userName"
                 label="Tên đăng nhập"

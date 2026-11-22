@@ -27,12 +27,8 @@ public class FileService(ApplicationDbContext context, IFileRepository _fileRepo
         var domain = path.Split("/").FirstOrDefault();
         var pathWithoutDomain = path.Replace($"{domain}/", "");
         var file = Path.Combine(_env.WebRootPath, pathWithoutDomain);
-        if (File.Exists(file))
-        {
-            File.Delete(file);
-            return TResult.Success;
-        }
-        return TResult.Failed("File not found!");
+        if (File.Exists(file)) File.Delete(file);
+        return TResult.Success;
     }
 
     public Task<FileContent?> FindAsync(Guid id) => _fileRepository.FindAsync(id);

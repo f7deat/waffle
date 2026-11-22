@@ -9,9 +9,6 @@ namespace Waffle.Core.Interfaces.IService;
 
 public interface ICollectionService
 {
-    Task<TResult> AddAsync(Collection args);
-    Task<TResult> DeleteAsync(Collection args);
-    Task<TResult> DeleteCatalogAsync(Collection args);
     Task<Catalog?> FindByCatalogAsync(Guid id);
     Task<ListResult<CatalogListItem>> GetListCatalogAsync(ListCatalogCollectionFilterOptions filterOptions);
     Task<ListResult<CollectionListItem>> ListAsync(CollectionFilterOptions filterOptions);

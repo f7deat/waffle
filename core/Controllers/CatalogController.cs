@@ -19,7 +19,7 @@ using Waffle.Models.ViewModels;
 
 namespace Waffle.Controllers;
 
-public class CatalogController(ApplicationDbContext _context, ICatalogService _catalogService, ILogService logService) : BaseController
+public class CatalogController(ApplicationDbContext _context, ICatalogService _catalogService) : BaseController
 {
     [HttpGet("view-count")]
     public async Task<IActionResult> GetViewCountAsync([FromQuery] string locale) => Ok(await _catalogService.GetViewCountAsync(locale));
@@ -53,38 +53,7 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     public async Task<IActionResult> ListAsync([FromQuery] CatalogFilterOptions filterOptions) => Ok(await _catalogService.ListAsync(filterOptions));
 
     [HttpDelete("{id}"), Authorize(Roles = RoleName.Admin)]
-    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
-    {
-        try
-        {
-            var catalog = await _catalogService.FindAsync(id);
-            if (catalog is null) return BadRequest("Catalog not found!");
-
-            if (await _catalogService.HasChildAsync(catalog.Id)) return BadRequest("Please remove child catalog!");
-
-            if (await _context.WorkItems.AnyAsync(x => x.CatalogId == id)) return BadRequest("Please remove work item!");
-
-            var tags = await _context.WorkItems.Where(x => x.WorkId == id).ToListAsync();
-            if (tags.Count > 0)
-            {
-                _context.WorkItems.RemoveRange(tags);
-            }
-            var room = await _context.Rooms.FirstOrDefaultAsync(x => x.CatalogId == id);
-            if (room != null)
-            {
-                _context.Rooms.Remove(room);
-            }
-            await logService.AddAsync($"Delete catalog: {catalog.Name}");
-            await _catalogService.DeleteAsync(catalog);
-
-            return Ok(IdentityResult.Success);
-        }
-        catch (Exception ex)
-        {
-            await logService.ExceptionAsync(ex);
-            return BadRequest(ex.ToString());
-        }
-    }
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id) => Ok(await _catalogService.DeleteAsync(id));
 
     [HttpPost("active/{id}")]
     public async Task<IActionResult> ActiveAsync([FromRoute] Guid id) => Ok(await _catalogService.ActiveAsync(id));
@@ -165,24 +134,6 @@ public class CatalogController(ApplicationDbContext _context, ICatalogService _c
     {
         if (ids is null || !ids.Any()) return BadRequest("No catalog selected!");
         return Ok(await _catalogService.DeleteRangeAsync(ids));
-    }
-
-    [HttpPost("setting/save/{id}")]
-    public async Task<IActionResult> SaveSettingAsync([FromRoute] Guid id, [FromBody] CatalogSetting args)
-    {
-        var catalog = await _catalogService.FindAsync(id);
-        if (catalog is null) return BadRequest("Catalog not found");
-        catalog.Setting = JsonConvert.SerializeObject(args);
-        return Ok(await _catalogService.SaveSettingAsync(catalog));
-    }
-
-    [HttpGet("setting/{id}")]
-    public async Task<IActionResult> GetSettingAsync([FromRoute] Guid id)
-    {
-        var catalog = await _catalogService.FindAsync(id);
-        if (catalog is null) return BadRequest("Catalog not found");
-        if (string.IsNullOrEmpty(catalog.Setting)) return Ok(new CatalogSetting());
-        return Ok(JsonConvert.DeserializeObject<CatalogSetting>(catalog.Setting));
     }
 
     [HttpGet("url-options")]

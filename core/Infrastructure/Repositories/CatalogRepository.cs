@@ -107,6 +107,8 @@ public class CatalogRepository(ApplicationDbContext context, IHCAService hcaServ
 
     public async Task<int> GetViewCountAsync(string locale) => await _context.Catalogs.Where(x => x.Locale == locale).SumAsync(x => x.ViewCount);
 
+    public Task<bool> HasChildAsync(Guid id) => _context.Catalogs.AnyAsync(x => x.ParentId == id);
+
     public async Task IncreaseCountAsync(Catalog catalog)
     {
         catalog.ViewCount++;

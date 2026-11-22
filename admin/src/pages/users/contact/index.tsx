@@ -1,12 +1,13 @@
 import { apiDeleteContact, listContact } from "@/services/contact";
 import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
 import { ActionType, PageContainer, ProTable } from "@ant-design/pro-components"
+import XMarkdown from "@ant-design/x-markdown";
 import { Button, message, Popconfirm, Tooltip } from "antd";
 import { useRef } from "react";
 
 const ContactPage: React.FC = () => {
 
-    const actionRef = useRef<ActionType>();
+    const actionRef = useRef<ActionType>(undefined);
 
     const onDelete = async (id: string) => {
         await apiDeleteContact(id);
@@ -51,7 +52,8 @@ const ContactPage: React.FC = () => {
                     {
                         title: 'Ghi chú',
                         dataIndex: 'note',
-                        search: false
+                        search: false,
+                        render: (_, entity) => <XMarkdown content={entity.note} />
                     },
                     {
                         title: <SettingOutlined />,

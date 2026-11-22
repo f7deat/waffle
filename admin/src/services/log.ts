@@ -5,7 +5,7 @@ export async function queryLogs() {
 }
 
 export async function deleteLog(logId: string) {
-  return request(`log/delete/${logId}`, {
-    method: 'POST'
+  return request(`log/${logId}`, {
+    method: 'DELETE'
   });
 }

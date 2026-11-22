@@ -23,6 +23,7 @@ public interface ICatalogRepository : IAsyncRepository<Catalog>
     Task<object> GetTagOptionsAsync(SelectOptions selectOptions);
     Task<IEnumerable<Catalog>> GetTopViewAsync(CatalogType type, string locale);
     Task<int> GetViewCountAsync(string locale);
+    Task<bool> HasChildAsync(Guid id);
     Task IncreaseCountAsync(Catalog catalog);
     Task<ListResult<CatalogListItem>> ListAsync(CatalogFilterOptions filterOptions);
     Task<IEnumerable<CatalogListItem>> ListSpotlightAsync(PageData pageData, int pageSize);

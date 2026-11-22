@@ -23,11 +23,22 @@ public class CreateUserModel : LoginModel
     public string AccountType { get; set; } = RoleName.Member;
 }
 
-public class UpdateProfileModel
+public class UpdateProfileArgs
 {
     public string? Name { get; set; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
+    public string? Address { get; set; }
+    public bool? Gender { get; set; }
+    public int? DistrictId { get; set; }
+    public DateOnly? DateOfBirth { get; set; }
+}
+
+public class UpdateUserArgs : UpdateProfileArgs
+{
+    public string Id { get; set; } = default!;
+    public int? TeamId { get; set; }
+    public string? Bio { get; set; }
 }
 
 public class AddToRoleModel : BaseEntity

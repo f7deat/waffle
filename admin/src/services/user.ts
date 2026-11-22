@@ -71,7 +71,7 @@ export async function apiChangeAvatar(data: FormData) {
 }
 
 export const apiUpdateUser = (data: any) => request(`user/update`, {
-  method: 'POST',
+  method: 'PUT',
   data
 })
 

@@ -650,4 +650,14 @@ public class CatalogService(ApplicationDbContext _context, IHCAService _hcaServi
         await _catalogRepository.UpdateAsync(catalog);
         return TResult.Success;
     }
+
+    public async Task<TResult> DeleteAsync(Guid id)
+    {
+        var catalog = await _catalogRepository.FindAsync(id);
+        if (catalog is null) return TResult.Failed("Catalog not found!");
+        if (await _catalogRepository.HasChildAsync(catalog.Id)) return TResult.Failed("Please remove child catalog!");
+        await _logService.AddAsync($"Delete {catalog.Name}");
+        await _catalogRepository.DeleteAsync(catalog);
+        return TResult.Success;
+    }
 }

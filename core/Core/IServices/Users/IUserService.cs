@@ -18,8 +18,8 @@ public interface IUserService
     Task<dynamic> GetUsersInRoleAsync(string roleName);
     Task<TResult> RemoveFromRoleAsync(Guid userId, string roleName);
     Task<ListResult<Contact>> ListContactAsync(SearchFilterOptions filterOptions);
-    Task<TResult> UpdateAsync(ApplicationUser user, ApplicationUser args);
-    Task<TResult> UpdateProfileAsync(ApplicationUser user, ApplicationUser args);
+    Task<TResult> UpdateAsync(UpdateUserArgs args);
+    Task<TResult> UpdateProfileAsync(UpdateProfileArgs args);
     Task<ProfileDetailViewModel?> GetProfileDetailAsync(Guid userId);
     Task<TResult> UpdateProfileDetailAsync(Guid userId, UpdateProfileDetailArgs args);
     Task<TResult> ChangeCoverAsync(Guid userId, IFormFile? file, string host);
