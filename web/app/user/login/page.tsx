@@ -204,7 +204,7 @@ const Page: React.FC = () => {
                             </div>
 
                             <Form.Item>
-                                <button type="submit" className="rounded-lg px-4 py-2 btn btn-primary w-full text-center">
+                                <button type="submit" className="rounded-lg px-4 py-2 text-on-primary bg-primary w-full text-center hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                                     Đăng nhập
                                 </button>
                             </Form.Item>

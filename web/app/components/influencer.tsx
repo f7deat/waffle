@@ -33,9 +33,9 @@ const Influencer: React.FC = async () => {
                             được yêu thích nhất
                         </p>
                     </div>
-                    <button className="px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-secondary hover:text-on-secondary transition-colors cursor-pointer">
+                    <Link href="/user/register" className="px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-secondary hover:text-on-secondary transition-colors cursor-pointer">
                         Trở thành Creator Đi Đâu Đây →
-                    </button>
+                    </Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {/* Influencer 1 */}

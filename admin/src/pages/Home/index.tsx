@@ -194,7 +194,7 @@ const formatRelativeDate = (value?: string) => {
 };
 
 const getArticlePath = (article: ArticleListItem) =>
-  article.id.startsWith('mock-') ? '/article/list' : `/article/${article.id}`;
+  article.id.startsWith('mock-') ? '/content/article' : `/content/article/${article.id}`;
 
 const articleStatus = (article: ArticleListItem): ArticleStatus => {
   if (!article.publishedAt) return 'draft';
@@ -311,7 +311,7 @@ const HomePage: React.FC = () => {
             <Button icon={<ReloadOutlined />} onClick={refreshDashboard} loading={isLoading}>
               Làm mới
             </Button>
-            <Button type="primary" icon={<ThunderboltOutlined />} onClick={() => history.push('/article/list')}>
+            <Button type="primary" icon={<ThunderboltOutlined />} onClick={() => history.push('/content/article')}>
               Tạo bài viết
             </Button>
           </div>
@@ -616,7 +616,7 @@ const HomePage: React.FC = () => {
                 className="w-full sm:w-64"
               />
               <Button icon={<FilterOutlined />} onClick={() => setWorkflowFilter('all')}>Bộ lọc</Button>
-              <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => history.push('/article/list')}>
+              <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => history.push('/content/article')}>
                 Tất cả bài viết
               </Button>
             </div>
@@ -711,7 +711,7 @@ const HomePage: React.FC = () => {
               Hiển thị <strong className="text-slate-800">{Math.min(visibleArticles.length, 4)}</strong> bài gần đây
               {' '}trong tổng số <strong className="text-slate-800">{formatNumber(displayedStatistics.totalArticles)}</strong>
             </span>
-            <Button type="link" onClick={() => history.push('/article/list')}>Mở danh sách bài viết <span aria-hidden="true">→</span></Button>
+            <Button type="link" onClick={() => history.push('/content/article')}>Mở danh sách bài viết <span aria-hidden="true">→</span></Button>
           </div>
         </section>
 
@@ -768,7 +768,7 @@ function MetricCard({
   }[tone];
 
   return (
-    <article className="flex min-h-36 flex-col justify-between rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+    <article className="flex min-h-36 flex-col justify-between rounded bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-md">
       <div className="flex items-center justify-between gap-2">
         <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">{title}</span>
         <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${toneClass}`}>{icon}</span>

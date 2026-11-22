@@ -1,7 +1,7 @@
 import { apiKolList } from "@/services/kol/kol";
 import { Metadata } from "next";
 import Link from "next/link";
-import { faArrowAltCircleRight, faCheck, faCheckCircle, faChevronLeft, faChevronRight, faEnvelope, faEye, faLocationDot, faMapLocation, faMoneyBill, faPhone, faSearch, faStar, faStore, faTasks, faTrophy, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faArrowAltCircleRight, faCheck, faCheckCircle, faChevronLeft, faChevronRight, faEnvelope, faEye, faLocationDot, faMapLocation, faMoneyBill, faPhone, faSearch, faShareAlt, faStar, faStore, faTasks, faTrophy, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons/faInstagram";
 import { faYoutube } from "@fortawesome/free-brands-svg-icons/faYoutube";
@@ -51,7 +51,7 @@ const Page: React.FC = async () => {
                             Đà Nẵng.
                         </p>
                         {/* Advanced Curated Filter Command Deck */}
-                        <div className="w-full mt-8 bg-surface-container-lowest rounded-xl shadow-md p-4 sm:p-6 max-w-7xl text-left">
+                        <div className="w-full mt-8 bg-surface-container-lowest rounded-xl shadow-md p-4 sm:p-6 text-left">
                             {/* Top Row: Search by Keyword / Handle */}
                             <div className="flex flex-col md:flex-row items-center gap-4 pb-4">
                                 <div className="relative flex-1 w-full bg-surface-container-low rounded-full px-6 py-3 flex items-center">
@@ -108,9 +108,9 @@ const Page: React.FC = async () => {
                                 {/* Niche Subject */}
                                 <div className="flex flex-col gap-1">
                                     <label className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-[16px] text-tertiary">
-                                            category
-                                        </span>{" "}
+                                        <span className="text-tertiary mr-1">
+                                            <FontAwesomeIcon icon={faTasks} />
+                                        </span>
                                         Lĩnh vực chuyên sâu
                                     </label>
                                     <select className="w-full bg-surface-container-low font-body-md text-body-md text-on-surface rounded-lg px-4 py-2.5 focus:outline-none cursor-pointer">
@@ -133,9 +133,9 @@ const Page: React.FC = async () => {
                                 {/* Audience Scale Tier */}
                                 <div className="flex flex-col gap-1">
                                     <label className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-[16px] text-secondary">
-                                            groups
-                                        </span>{" "}
+                                        <span className="text-secondary mr-1">
+                                            <FontAwesomeIcon icon={faUsers} />
+                                        </span>
                                         Quy mô người theo dõi
                                     </label>
                                     <select className="w-full bg-surface-container-low font-body-md text-body-md text-on-surface rounded-lg px-4 py-2.5 focus:outline-none cursor-pointer">
@@ -151,9 +151,9 @@ const Page: React.FC = async () => {
                                 {/* Main Social Channel */}
                                 <div className="flex flex-col gap-1">
                                     <label className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-[16px] text-primary-container">
-                                            share
-                                        </span>{" "}
+                                        <span className="text-primary-container mr-1">
+                                            <FontAwesomeIcon icon={faShareAlt} />
+                                        </span>
                                         Kênh chính
                                     </label>
                                     <select className="w-full bg-surface-container-low font-body-md text-body-md text-on-surface rounded-lg px-4 py-2.5 focus:outline-none cursor-pointer">
@@ -398,12 +398,12 @@ const Page: React.FC = async () => {
                                     </div>
                                     {/* Action CTAs */}
                                     <div className="grid grid-cols-2 gap-2 mt-6 pt-2">
-                                        <button className="w-full py-2.5 px-2 rounded-full bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors text-center flex items-center justify-center gap-1">
+                                        <Link href={`/user/${influencer.userName}`} className="w-full py-2.5 px-2 rounded-full bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors text-center flex items-center justify-center gap-1">
                                             <span className="material-symbols-outlined text-[16px]">
                                                 <FontAwesomeIcon icon={faEye} />
                                             </span>
                                             <span>Xem hồ sơ</span>
-                                        </button>
+                                        </Link>
                                         <button className="w-full py-2.5 px-2 rounded-full bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md shadow-sm transition-all text-center flex items-center justify-center gap-1">
                                             <span className="material-symbols-outlined text-[16px]">
                                                 <FontAwesomeIcon icon={faEnvelope} />
@@ -528,22 +528,6 @@ const Page: React.FC = async () => {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div className="container mx-auto py-8 px-4 md:px-0">
-                {/* Job CTA */}
-                <div className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-lg px-5 py-4 mb-6">
-                    <div>
-                        <p className="font-semibold text-blue-800">Tìm kiếm việc làm Influencer?</p>
-                        <p className="text-sm text-blue-600 mt-0.5">Thương hiệu đang tuyển influencer — ứng tuyển ngay hôm nay!</p>
-                    </div>
-                    <Link
-                        href="/influencer/job"
-                        className="shrink-0 inline-block bg-blue-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                    >
-                        Xem việc làm →
-                    </Link>
                 </div>
             </div>
         </main>

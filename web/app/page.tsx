@@ -63,7 +63,11 @@ export default async function Home() {
             Phòng &amp; khắp mọi miền Việt Nam.
           </p>
           {/* Floating Search Glassmorphism Card */}
-          <div className="w-full max-w-5xl bg-surface-container-lowest/95 backdrop-blur-xl p-4 sm:p-5 rounded-2xl shadow-xl flex flex-col lg:flex-row items-stretch gap-3">
+          <form
+            action="/search"
+            method="get"
+            className="w-full max-w-5xl bg-surface-container-lowest/95 backdrop-blur-xl p-4 sm:p-5 rounded-2xl shadow-xl flex flex-col lg:flex-row items-stretch gap-3"
+          >
             {/* City dropdown */}
             <div className="relative flex-1 bg-surface-container-low rounded-xl px-4 py-3 flex flex-col text-left justify-center cursor-pointer group hover:bg-surface-container transition-colors">
               <span className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
@@ -116,39 +120,43 @@ export default async function Home() {
                 className="w-full bg-transparent font-title text-body-lg text-on-surface placeholder:text-outline/70 focus:outline-none mt-0.5"
                 placeholder="Nhập món ăn, tên quán hoặc địa danh..."
                 type="text"
+                name="q"
               />
             </div>
             {/* CTA Button */}
-            <button className="bg-primary hover:bg-primary-container text-on-primary px-8 py-4 rounded-xl flex items-center justify-center gap-2 font-label-lg text-label-lg shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 flex-shrink-0 cursor-pointer">
+            <button
+              type="submit"
+              className="bg-primary hover:bg-primary-container text-on-primary px-8 py-4 rounded-xl flex items-center justify-center gap-2 font-label-lg text-label-lg shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 flex-shrink-0 cursor-pointer"
+            >
               <span className="material-symbols-outlined text-[20px]">
                 <FontAwesomeIcon icon={faCompass} />
               </span>
               <span>Khám phá ngay</span>
             </button>
-          </div>
+          </form>
           {/* Quick Chips */}
           <div className="flex flex-wrap items-center justify-center gap-2 mt-6 max-w-4xl">
             <span className="font-label-sm text-label-sm text-surface-container-highest uppercase tracking-wider mr-1">
               Tìm nhanh:
             </span>
-            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+            <a href="/search?q=B%C3%A1nh%20%C4%91a%20cua%20H%E1%BA%A3i%20Ph%C3%B2ng" className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
               🍜 Bánh đa cua Hải Phòng
-            </button>
-            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+            </a>
+            <a href="/search?q=Cafe%20view%20s%C3%B4ng%20Tam%20B%E1%BA%A1c" className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
               ☕ Cafe view sông Tam Bạc
-            </button>
-            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+            </a>
+            <a href="/search?q=Ga%20H%E1%BA%A3i%20Ph%C3%B2ng%20check-in" className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
               📸 Ga Hải Phòng check-in
-            </button>
-            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+            </a>
+            <a href="/search?q=Sunset%20C%C3%A1t%20B%C3%A0" className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
               🏖️ Sunset Cát Bà
-            </button>
-            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+            </a>
+            <a href="/search?q=C%C3%A0%20ph%C3%AA%20c%E1%BB%91t%20d%E1%BB%ABa" className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
               🍹 Cà phê cốt dừa
-            </button>
-            <button className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
+            </a>
+            <a href="/search?q=B%C3%A1nh%20m%C3%AC%20que%20ch%C3%ADnh%20g%E1%BB%91c" className="px-3.5 py-1.5 rounded-full bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm backdrop-blur-sm transition-all hover:scale-105 cursor-pointer">
               🥖 Bánh mì que chính gốc
-            </button>
+            </a>
           </div>
         </div>
       </section>

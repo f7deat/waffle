@@ -41,7 +41,7 @@ const destinations = [
 		title: "Theo dấu người truyền cảm hứng",
 		description:
 			"Gặp gỡ những nhà sáng tạo nội dung và tìm thêm cảm hứng cho hành trình của riêng bạn.",
-		href: "/influencer",
+		href: "/user/influencer",
 		linkLabel: "Gặp gỡ nhà sáng tạo",
 		icon: faUsers,
 		tone: "bg-[#dce8f8] text-[#315c91]",

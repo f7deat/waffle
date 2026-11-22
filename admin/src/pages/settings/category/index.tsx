@@ -8,6 +8,7 @@ import {
     type CategoryTreeItem,
     type SaveCategoryRequest,
 } from '@/services/settings/category';
+import { CATEGORY_TYPE } from '@/utils/constants';
 import {
     BranchesOutlined,
     CheckOutlined,
@@ -43,6 +44,7 @@ const Index: React.FC = () => {
     const [category, setCategory] = useState<CategoryTreeItem | null>(null);
     const [categories, setCategories] = useState<CategoryTreeItem[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<CategoryTreeItem | null>(null);
+    const [selectedType, setSelectedType] = useState<number | undefined>(CATEGORY_TYPE.ARTICLE);
 
     const allCategories = (items: CategoryTreeItem[]): CategoryTreeItem[] =>
         items.flatMap((item) => [item, ...allCategories(item.children)]);
@@ -51,8 +53,8 @@ const Index: React.FC = () => {
     const nestedCategoryCount = (items: CategoryTreeItem[]): number =>
         items.reduce((count, item) => count + item.children.length + nestedCategoryCount(item.children), 0);
     const flattenedCategories = allCategories(categories);
-    const articleCategoryCount = flattenedCategories.filter((item) => item.type === 1).length;
-    const productCategoryCount = flattenedCategories.filter((item) => item.type === 2).length;
+    const articleCategoryCount = flattenedCategories.filter((item) => item.type === CATEGORY_TYPE.ARTICLE).length;
+    const productCategoryCount = flattenedCategories.filter((item) => item.type === CATEGORY_TYPE.PRODUCT).length;
     const productCategoryRate = categoryCount(categories) > 0
         ? Math.round((productCategoryCount / categoryCount(categories)) * 100)
         : 0;
@@ -106,6 +108,15 @@ const Index: React.FC = () => {
         actionRef.current?.reload();
         setCategory(null);
         return true;
+    };
+
+    const onTabChange = (key: string) => {
+        if (key === 'article') {
+            setSelectedType(CATEGORY_TYPE.ARTICLE);
+        } else if (key === 'product') {
+            setSelectedType(CATEGORY_TYPE.PRODUCT);
+        }
+        actionRef.current?.reload();
     };
 
     const handleDelete = async (id: number) => {
@@ -299,13 +310,22 @@ const Index: React.FC = () => {
             {/* Navigation Tabs */}
             <div className="flex items-center justify-between bg-white rounded-xl p-1.5 mb-4">
                 <div className="flex items-center gap-1">
-                    <button className="inline-flex items-center gap-2 px-3 py-3 rounded-lg bg-blue-600 text-white font-label-md text-label-md shadow-sm transition-all">
+                    <button onClick={() => onTabChange('article')} className="inline-flex items-center gap-2 px-3 py-3 rounded-lg bg-blue-600 text-white font-label-md text-label-md shadow-sm transition-all">
                         <span className="material-symbols-outlined text-[18px] text-tertiary-fixed-dim">
                             <BranchesOutlined />
                         </span>
-                        <span>Cây chuyên mục (Hierarchical Categories)</span>
-                        <span className="px-2 py-0.5 rounded-full bg-white/20 font-code-sm text-code-sm text-on-primary">
+                        <span>Danh mục bài viết</span>
+                        <span className="px-2 py-0.5 rounded-full bg-white/20 font-code-sm text-code-sm text-white">
                             {categoryCount(categories)}
+                        </span>
+                    </button>
+                    <button onClick={() => onTabChange('product')} className="inline-flex items-center gap-2 px-3 py-3 rounded-lg transition-all hover:bg-slate-200">
+                        <span className="material-symbols-outlined text-[18px] text-tertiary-fixed-dim">
+                            <BranchesOutlined />
+                        </span>
+                        <span>Danh mục sản phẩm</span>
+                        <span className="px-2 py-0.5 rounded-full bg-slate-200 text-on-surface font-code-sm text-code-sm">
+                            0
                         </span>
                     </button>
                     <Link to="/setting/tag">
@@ -341,7 +361,7 @@ const Index: React.FC = () => {
                             const response = await apiCategoryTree({
                                 locale: 'vi-VN',
                                 name: params.name,
-                                type: params.type,
+                                type: selectedType,
                             });
                             const data = response.data ?? [];
                             setCategories(data);
@@ -369,7 +389,7 @@ const Index: React.FC = () => {
                                 ),
                             },
                             {
-                                title: 'Description',
+                                title: 'Mô tả',
                                 dataIndex: 'description',
                                 hideInSearch: true,
                                 ellipsis: true,
@@ -462,19 +482,17 @@ const Index: React.FC = () => {
                             </div>
                             <a
                                 className="inline-flex items-center gap-1 text-secondary hover:text-on-secondary-container font-label-sm text-label-sm"
-                                href={selectedCategory?.normalizedName ? `https://defzone.net/${selectedCategory.normalizedName}` : undefined}
+                                href={selectedCategory?.normalizedName ? `https://defzone.net/category/${selectedCategory.normalizedName}` : undefined}
                                 target="_blank"
                             >
                                 <span>defzone.net</span>
-                                <span className="material-symbols-outlined text-[14px]">
-                                    open_in_new
-                                </span>
+                                <LinkOutlined />
                             </a>
                         </div>
                         {/* Form Elements */}
-                        <div className="space-y-4">
+                        <div className="flex gap-4 flex-col">
                             {/* Name & Slug */}
-                            <div className="space-y-space-xs">
+                            <div className="flex gap-1 flex-col">
                                 <label className="block font-label-md text-label-md text-on-surface">
                                     Tên chuyên mục <span className="text-error">*</span>
                                 </label>
@@ -485,7 +503,7 @@ const Index: React.FC = () => {
                                     onChange={(event) => setSelectedCategory((current) => current ? { ...current, name: event.target.value } : current)}
                                 />
                             </div>
-                            <div className="space-y-space-xs">
+                            <div className="flex gap-1 flex-col">
                                 <label className="block font-label-md text-label-md text-on-surface">
                                     Đường dẫn tĩnh (Slug URL) <span className="text-error">*</span>
                                 </label>
@@ -511,7 +529,7 @@ const Index: React.FC = () => {
                             </div>
                             {/* Parent Category & Display Order Grid */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="space-y-space-xs">
+                                <div className="flex gap-1 flex-col">
                                     <label className="block font-label-md text-label-md text-on-surface">
                                         Chuyên mục cha
                                     </label>
@@ -531,7 +549,7 @@ const Index: React.FC = () => {
                                             ))}
                                     </select>
                                 </div>
-                                <div className="space-y-space-xs">
+                                <div className="flex gap-1 flex-col">
                                     <label className="block font-label-md text-label-md text-on-surface">
                                         Thứ tự hiển thị
                                     </label>
@@ -544,7 +562,7 @@ const Index: React.FC = () => {
                                 </div>
                             </div>
                             {/* Description / Excerpt */}
-                            <div className="space-y-space-xs">
+                            <div className="flex gap-1 flex-col">
                                 <div className="flex items-center justify-between">
                                     <label className="font-label-md text-label-md text-on-surface">
                                         Mô tả chuyên mục (Sapo / Excerpt)
@@ -561,7 +579,7 @@ const Index: React.FC = () => {
                                 />
                             </div>
                             {/* Category Banner & Icon (Image pipeline standard) */}
-                            <div className="space-y-space-xs">
+                            <div className="flex gap-1 flex-col">
                                 <label className="block font-label-md text-label-md text-on-surface">
                                     Ảnh bìa Header &amp; Icon chuyên mục
                                 </label>
@@ -598,7 +616,7 @@ const Index: React.FC = () => {
                                 </div>
                             </div>
                             {/* Display Flags / Checkboxes */}
-                            <div className="pt-space-xs space-y-2.5">
+                            <div className="pt-1 flex gap-2.5 flex-col">
                                 <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block">
                                     Cấu hình hiển thị trang người dùng
                                 </span>
@@ -650,7 +668,7 @@ const Index: React.FC = () => {
                                 </label>
                             </div>
                             {/* Advanced SEO Optimization Block */}
-                            <div className="pt-space-md border-t border-surface-container space-y-4">
+                            <div className="pt-4 border-t border-surface-container space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-1.5">
                                         <span className="material-symbols-outlined text-secondary text-[18px]">
@@ -770,7 +788,7 @@ const Index: React.FC = () => {
                             </div>
                         </div>
                         {/* Form Action Buttons */}
-                        <div className="flex items-center justify-between pt-space-md border-t border-surface-container">
+                        <div className="flex items-center justify-between pt-4 border-t border-surface-container">
                             <button
                                 className="px-3 py-2 rounded-lg hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md transition-colors"
                                 onClick={() => actionRef.current?.reload()}
@@ -797,7 +815,7 @@ const Index: React.FC = () => {
                 </div>
             </div>
             {/* BOTTOM SECTION: TAGS CLOUD & TRENDING HASHTAG MANAGER */}
-            <div className="space-y-4 pt-space-md">
+            <div className="space-y-4 pt-4">
                 {/* Section Header with Badges */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
                     <div className="space-y-0.5">

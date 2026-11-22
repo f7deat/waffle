@@ -608,7 +608,7 @@ const SchedulePage: React.FC = () => {
                   className="self-start p-0"
                   onClick={() => {
                     setModalOpen(false);
-                    history.push('/article/list');
+                    history.push('/content/article');
                   }}
                 >
                   Chưa có bản nháp? Tạo bài viết mới

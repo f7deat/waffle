@@ -553,13 +553,7 @@ const Page: React.FC = () => {
 
     return (
         <PageContainer>
-            <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
-                <nav aria-label="Điều hướng" className="flex items-center gap-2 text-sm text-gray-500">
-                    <Link href="/" className="transition-colors hover:text-emerald-700">Trang chủ</Link>
-                    <span aria-hidden="true">/</span>
-                    <span className="font-medium text-gray-800">Hồ sơ cá nhân</span>
-                </nav>
-                {/* Header */}
+            <div className="mx-auto container space-y-6 px-4 py-8 sm:px-6 lg:px-8">
                 <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                     <div className="relative h-36 overflow-hidden bg-gradient-to-r from-emerald-800 via-teal-700 to-amber-600 sm:h-44">
                         {profileDetail?.coverImage && (

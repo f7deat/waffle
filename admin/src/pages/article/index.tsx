@@ -123,7 +123,7 @@ const ArticlePage: React.FC = () => {
       minWidth: 200,
       render: (_, record) => (
         <div>
-          <Link to={`/article/${record.id}`}>
+          <Link to={`/content/article/${record.id}`}>
             <div className="font-medium">
               {record.name}
             </div>
@@ -230,7 +230,7 @@ const ArticlePage: React.FC = () => {
 
   return (
     <PageContainer extra={<Space>
-      <Button onClick={() => history.push('/article/trash')}>Thùng rác</Button>
+      <Button onClick={() => history.push('/content/article/trash')}>Thùng rác</Button>
       <Button
         type="primary"
         icon={<PlusOutlined />}

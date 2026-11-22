@@ -16,32 +16,32 @@ export default [
   },
   {
     icon: 'FormOutlined',
-    name: 'article',
-    path: '/article',
+    name: 'content',
+    path: '/content',
     routes: [
       {
-        path: '/article',
-        redirect: '/article/list',
+        path: '/content',
+        redirect: '/content/article',
       },
       {
-        name: 'list',
-        path: '/article/list',
+        name: 'article',
+        path: '/content/article',
         component: './article'
       },
       {
         name: 'schedule',
-        path: '/article/schedule',
+        path: '/content/schedule',
         component: './article/schedule',
       },
       {
         name: 'trash',
-        path: '/article/trash',
+        path: '/content/article/trash',
         component: './article/trash',
         hideInMenu: true
       },
       {
         name: 'center',
-        path: '/article/:id',
+        path: '/content/article/:id',
         component: './article/center',
         hideInMenu: true
       }
@@ -92,6 +92,10 @@ export default [
     icon: 'EnvironmentOutlined',
     path: '/place',
     routes: [
+      {
+        path: '/place',
+        redirect: '/place/overview',
+      },
       {
         name: 'overview',
         path: '/place/overview',

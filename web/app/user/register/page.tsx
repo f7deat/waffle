@@ -438,7 +438,7 @@ const Page: React.FC = () => {
                                             <input
                                                 className="w-full bg-surface-container-low focus:bg-surface-container-lowest pl-11 pr-4 py-2.5 rounded-lg font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all shadow-sm"
                                                 id="fullname"
-                                                placeholder="Ví dụ: Nguyễn Phương Mai"
+                                                placeholder="Ví dụ: Đinh Công Tân"
                                                 type="text"
                                             />
                                         </Form.Item>
@@ -458,7 +458,7 @@ const Page: React.FC = () => {
                                             Email
                                         </label>
                                         <div className="relative flex items-center">
-                                            <span className="material-symbols-outlined absolute lef-4 text-outline text-[20px]">
+                                            <span className="absolute ml-2 text-outline text-lg">
                                                 <FontAwesomeIcon icon={faEnvelope} />
                                             </span>
                                             <Form.Item
@@ -472,11 +472,11 @@ const Page: React.FC = () => {
                                                 <input
                                                     className="w-full bg-surface-container-low focus:bg-surface-container-lowest pl-11 pr-4 py-2.5 rounded-lg font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all shadow-sm"
                                                     id="email"
-                                                    placeholder="mai.nguyen@gmail.com"
+                                                    placeholder="tandc@dhhp.edu.vn"
                                                     type="email"
                                                 />
                                             </Form.Item>
-                                            <span className="material-symbols-outlined absolute right-4 text-secondary text-[20px]">
+                                            <span className="absolute right-4 text-secondary text-[20px]">
                                                 <FontAwesomeIcon icon={faCheck} />
                                             </span>
                                         </div>
@@ -498,7 +498,7 @@ const Page: React.FC = () => {
                                                 <input
                                                     className="w-full bg-surface-container-low focus:bg-surface-container-lowest pl-20 pr-4 py-2.5 rounded-lg font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all shadow-sm"
                                                     id="phone"
-                                                    placeholder="0912 345 678"
+                                                    placeholder="762 559 696"
                                                     type="tel"
                                                 />
                                             </Form.Item>

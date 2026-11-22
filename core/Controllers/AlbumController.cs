@@ -29,28 +29,14 @@ public class AlbumController(IWebHostEnvironment webHostEnvironment, Application
         {
             query = query.Where(x => EF.Functions.Like(x.Name, $"%{keyword}%") || (x.Description != null && EF.Functions.Like(x.Description, $"%{keyword}%")));
         }
-
-        var total = await query.CountAsync();
-        var data = await query.OrderByDescending(x => x.Name)
-            .Skip((filterOptions.Current - 1) * filterOptions.PageSize)
-            .Take(filterOptions.PageSize)
-            .Select(x => new
-            {
-                x.Id,
-                x.Name,
-                x.Description,
-                x.NormalizedName,
-                imageCount = _context.Photos.Count(i => i.AlbumId == x.Id)
-            })
-            .ToListAsync();
-
-        return Ok(new
+        return Ok(await ListResult.Success(query.Select(x => new
         {
-            data,
-            total,
-            filterOptions.Current,
-            filterOptions.PageSize
-        });
+            x.Id,
+            x.Name,
+            x.Description,
+            x.NormalizedName,
+            imageCount = _context.Photos.Count(i => i.AlbumId == x.Id)
+        }), filterOptions));
     }
 
     [HttpPost]
@@ -104,7 +90,7 @@ public class AlbumController(IWebHostEnvironment webHostEnvironment, Application
         });
     }
 
-    [HttpDelete("album/{id}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAlbumAsync([FromRoute] Guid id)
     {
         var album = await _context.Albums.FindAsync(id);
@@ -125,7 +111,7 @@ public class AlbumController(IWebHostEnvironment webHostEnvironment, Application
             Directory.Delete(albumFolder, true);
         }
 
-        return Ok(IdentityResult.Success);
+        return Ok();
     }
 
     [HttpGet("photos"), AllowAnonymous]
@@ -206,7 +192,7 @@ public class AlbumController(IWebHostEnvironment webHostEnvironment, Application
         _context.Photos.Remove(image);
         await _context.SaveChangesAsync();
 
-        return Ok(IdentityResult.Success);
+        return Ok();
     }
 
     private string NormalizeName(string input)

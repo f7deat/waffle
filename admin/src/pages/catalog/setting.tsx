@@ -13,7 +13,7 @@ import { Button, Col, Row, Space, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import FormCatalogType from '@/components/form/catalog-type';
 import FormCatalogList from '@/components/form/catalog-list';
-import WfUpload from '@/components/file-explorer/upload';
+import ImagePicker from '@/components/image-library/picker';
 
 type Props = {
   catalog?: API.Catalog;
@@ -22,9 +22,11 @@ type Props = {
 
 const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
   const { id } = useParams();
+  const [form] = ProForm.useForm();
 
-  const formRef = useRef<ProFormInstance>();
-  const [upload, setUpload] = useState<boolean>(false);
+  const formRef = useRef<ProFormInstance>(undefined);
+  const thumbnail = ProForm.useWatch('thumbnail', form);
+  const [openImagePicker, setOpenImagePicker] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -45,7 +47,7 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
 
   return (
     <div>
-      <ProForm formRef={formRef} onFinish={onFinish}>
+      <ProForm formRef={formRef} onFinish={onFinish} form={form}>
         <ProFormText name="id" hidden />
         <ProFormText name="name" label="Name" rules={[
           {
@@ -89,16 +91,18 @@ const CatalogSetting: React.FC<Props> = ({ catalog, reload }) => {
           </Col>
         </Row>
         <FormCatalogList name="parentId" label="Parent" type={catalog?.type} />
-        <ProFormText name="thumbnail" label="Thumbnail" fieldProps={{
-          addonAfter: <Space>
-            <Button type='text' size='small' icon={<UploadOutlined />} onClick={() => setUpload(true)}>Upload</Button>
-            <ImageLibraryPicker
-              onChange={(url) => formRef.current?.setFieldValue('thumbnail', url)}
-            />
-          </Space>
-        }} />
+        <ProFormText name="thumbnail" label="Thumbnail" />
+        <div className="border border-gray-300 rounded p-1 mb-2">
+          <img src={thumbnail} alt="Thumbnail" className="w-full h-52 rounded object-cover" />
+        </div>
+        <Button type="dashed" block className="mb-4" onClick={() => setOpenImagePicker(true)}>Chọn từ thư viện ảnh</Button>
       </ProForm>
-      <WfUpload open={upload} onCancel={setUpload} onFinish={() => { }} />
+      <ImagePicker
+        open={openImagePicker}
+        onOpenChange={setOpenImagePicker}
+        value={thumbnail}
+        onChange={(url) => formRef.current?.setFieldValue('thumbnail', url)}
+      />
     </div>
   );
 };
