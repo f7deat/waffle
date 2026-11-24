@@ -36,7 +36,7 @@ export type ArticleAuthorItem = {
 }
 
 export type ArticleDetail = ArticleListItem & {
-    content: EditorJSType;
+    content: API.BlockEditor;
     editorial?: ArticleEditorialDetail;
 }
 

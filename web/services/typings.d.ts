@@ -28,6 +28,7 @@ declare namespace API {
         embed?: string;
     }
     interface Block {
+        id: string;
         type: BlockType;
         data: BlockData;
     }

@@ -5,8 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { apiPlaceImages } from '@/services/locations/place';
 import { apiCatalogTags } from '@/services/catalog';
-import Block from '@/components/block';
 import PlaceComments from '@/components/place/place-comments';
+import BlockRender from '@/components/editor/block-render';
 
 interface PlaceDetailProps {
     place: API.PlaceDetail;
@@ -213,15 +213,9 @@ const PlaceDetail: React.FC<PlaceDetailProps> = ({ place, relatedPlaces }) => {
                     <section className="rounded-2xl bg-white p-5 shadow-sm sm:p-7">
                         <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-orange-700">Khám phá địa điểm</p>
                         <h2 className="mb-4 text-2xl font-bold text-slate-950">Thông tin &amp; trải nghiệm</h2>
-                        {contentBlocks.length > 0 ? (
-                            <div className="prose max-w-none">
-                                {contentBlocks.map((block, index) => <Block key={`${block.type}-${index}`} {...block} />)}
-                            </div>
-                        ) : place.description ? (
-                            <p className="whitespace-pre-line leading-7 text-slate-600">{place.description}</p>
-                        ) : (
-                            <p className="text-slate-500">Thông tin giới thiệu đang được cập nhật.</p>
-                        )}
+                        <div className="prose max-w-none">
+                            <BlockRender blocks={contentBlocks} />
+                        </div>
                     </section>
 
                     {amenities.length > 0 && (

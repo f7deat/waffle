@@ -21,12 +21,13 @@ import dayjs from "dayjs";
 import sanitizeHtml from "sanitize-html";
 import { Metadata } from "next";
 import Link from "next/link";
+import BlockRender from "@/components/editor/block-render";
 
 type Params = Promise<{ id: string }>;
 
 const cleanHtml = (value?: string) => sanitizeHtml(value || "");
 const plainText = (value?: string) => (value || "").replace(/<[^>]*>/g, "").trim();
-const sectionId = (index: number) => `article-section-${index}`;
+const sectionId = (index: number) => `post-section-${index}`;
 const safeExternalUrl = (value?: string) => {
     if (!value) return undefined;
     try {
@@ -56,74 +57,6 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
         return {};
     }
 }
-
-const renderBlock = (block: EditorJSBlock, index: number) => {
-    switch (block.type) {
-        case "paragraph": {
-            const data = block.data as EditorJSParagraphData;
-            return <p key={block.id || index} className="mb-5 text-base leading-8 text-slate-700" dangerouslySetInnerHTML={{ __html: cleanHtml(data.text) }} />;
-        }
-        case "header": {
-            const data = block.data as EditorJSHeaderData;
-            const Heading = (`h${Math.min(Math.max(data.level, 2), 4)}`) as "h2" | "h3" | "h4";
-            return (
-                <Heading
-                    key={block.id || index}
-                    id={sectionId(index)}
-                    className="scroll-mt-24 mb-4 mt-10 text-2xl font-bold tracking-tight text-slate-900 first:mt-0 md:text-3xl"
-                    dangerouslySetInnerHTML={{ __html: cleanHtml(data.text) }}
-                />
-            );
-        }
-        case "list": {
-            const data = block.data as EditorJSListData;
-            const List = data.style === "ordered" ? "ol" : "ul";
-            return (
-                <List key={block.id || index} className={`mb-6 space-y-2 pl-6 text-base leading-7 text-slate-700 ${data.style === "ordered" ? "list-decimal" : "list-disc"}`}>
-                    {data.items.map((item, itemIndex) => (
-                        <li key={itemIndex}>
-                            <span dangerouslySetInnerHTML={{ __html: cleanHtml(item.content) }} />
-                            {!!item.items?.length && (
-                                <ul className="mt-2 list-disc space-y-1 pl-6">
-                                    {item.items.map((nested, nestedIndex) => (
-                                        <li key={nestedIndex} dangerouslySetInnerHTML={{ __html: cleanHtml(nested.content) }} />
-                                    ))}
-                                </ul>
-                            )}
-                        </li>
-                    ))}
-                </List>
-            );
-        }
-        case "image": {
-            const data = block.data as EditorJSImageData;
-            if (!data.file?.url) return null;
-            return (
-                <figure key={block.id || index} className="my-8">
-                    <img src={data.file.url} alt={data.caption || "Ảnh trong bài viết"} className="max-h-[620px] w-full rounded-2xl object-cover shadow-sm" />
-                    {data.caption && <figcaption className="mt-3 text-center text-sm italic text-slate-500">{data.caption}</figcaption>}
-                </figure>
-            );
-        }
-        case "quote": {
-            const data = block.data as EditorJSQuoteData;
-            return (
-                <figure key={block.id || index} className="my-8 rounded-2xl border-l-4 border-amber-500 bg-amber-50 px-6 py-5">
-                    <blockquote className="text-lg italic leading-8 text-slate-800" dangerouslySetInnerHTML={{ __html: cleanHtml(data.text) }} />
-                    {data.caption && <figcaption className="mt-3 font-semibold text-amber-800">{data.caption}</figcaption>}
-                </figure>
-            );
-        }
-        case "code": {
-            const data = block.data as EditorJSCodeData;
-            return <pre key={block.id || index} className="my-6 overflow-x-auto rounded-xl bg-slate-900 p-5 text-sm text-slate-100"><code>{data.code}</code></pre>;
-        }
-        case "delimiter":
-            return <hr key={block.id || index} className="my-8 border-slate-200" />;
-        default:
-            return null;
-    }
-};
 
 const RouteStopCard = ({ stop, index }: { stop: ArticleEditorialStop; index: number }) => {
     const mapsUrl = safeExternalUrl(stop.mapsUrl);
@@ -240,13 +173,13 @@ const Page = async ({ params }: { params: Params }) => {
                                     <h2 className="mb-3 font-bold text-slate-900">Mục lục bài viết</h2>
                                     <ol className="space-y-2">
                                         {headings.map((heading, index) => (
-                                            <li key={heading.id}><a href={`#${heading.id}`} className="text-sm text-slate-600 hover:text-amber-700">{index + 1}. {heading.label}</a></li>
+                                            <li key={heading.id}><a href={`#${heading.id}`} className="text-sm text-slate-900 hover:text-amber-700">{index + 1}. {heading.label}</a></li>
                                         ))}
                                     </ol>
                                 </nav>
                             )}
                             <div className="article-content">
-                                {blocks.map((block, index) => renderBlock(block, index))}
+                                <BlockRender blocks={blocks} />
                             </div>
                             {editorial?.routeTitle && (
                                 <section className="mt-10 rounded-2xl bg-amber-50 p-5 md:p-7">
@@ -298,7 +231,7 @@ const Page = async ({ params }: { params: Params }) => {
                                 <h2 className="mb-4 border-b border-slate-100 pb-3 font-bold text-slate-900">Mục lục bài viết</h2>
                                 <ol className="space-y-1">
                                     {headings.map((heading, index) => (
-                                        <li key={heading.id}><a href={`#${heading.id}`} className="block rounded-lg px-3 py-2 text-sm leading-5 text-slate-600 transition hover:bg-amber-50 hover:text-amber-800">{index + 1}. {heading.label}</a></li>
+                                        <li key={heading.id}><a href={`#${heading.id}`} className="block rounded-lg px-3 py-2 text-sm leading-5 text-slate-900 transition hover:bg-amber-50 hover:text-amber-800">{index + 1}. {heading.label}</a></li>
                                     ))}
                                 </ol>
                             </nav>
